@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  vtx:
+    image: ghcr.io/0-5788719150923125/src:1
+    command: nodemon --ignore "models/*" --ignore "*.json" --exec python3 main.py
+    restart: 'always'
+    user: 1000:1000
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./lab:/lab
+      - ./vtx:/vtx
+    env_file:
+      - .env
+    environment:
+      FOCUS: head
+      TRANSFORMERS_CACHE: /tmp
+
+  ctx:
+    image: ghcr.io/0-5788719150923125/src:1
+    command: node root.js
+    ports:
+      - 9665:9666
+
+  ips:
+    image: ipfs/kubo:master-latest

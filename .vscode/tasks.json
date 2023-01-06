@@ -1,0 +1,133 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npm install",
+      "detail": "Install all node modules required for this project.",
+      "type": "shell",
+      "command": "npm install"
+    },
+    {
+      "label": "npm start",
+      "detail": "Start the service in node.",
+      "type": "shell",
+      "command": "npm start"
+    },
+    {
+      "label": "npm outdated",
+      "detail": "Check for outdated npm modules.",
+      "type": "shell",
+      "command": "npm outdated"
+    },
+    {
+      "label": "npm build",
+      "detail": "Build the JS project.",
+      "type": "shell",
+      "command": "tsc"
+    },
+    {
+      "label": "npm deploy",
+      "detail": "Manage slash commands at the Discord API.",
+      "type": "shell",
+      "command": "npm run ${input:task}:${input:env}"
+    },
+    {
+      "label": "docker ps",
+      "detail": "View a list of all running containers.",
+      "type": "shell",
+      "command": "docker ps"
+    },
+    {
+      "label": "docker-compose logs",
+      "detail": "View logs for this project.",
+      "type": "shell",
+      "command": "docker-compose logs"
+    },
+    {
+      "label": "docker-compose exec",
+      "detail": "Open an interactive shell in the container.",
+      "type": "shell",
+      "command": "docker-compose exec vtx /bin/sh"
+    },
+    {
+      "label": "docker-compose build",
+      "detail": "Build and tag a new Docker image from the Dockerfile.",
+      "type": "shell",
+      "command": "docker-compose build"
+    },
+    {
+      "label": "docker-compose push",
+      "detail": "Push the newly-built Docker image to a registry.",
+      "type": "shell",
+      "command": "docker-compose push"
+    },
+    {
+      "label": "docker-compose up",
+      "detail": "Start the service in Docker.",
+      "type": "shell",
+      "command": "docker-compose up"
+    },
+    {
+      "label": "docker-compose train",
+      "detail": "Train the model in Docker.",
+      "type": "shell",
+      "command": "docker-compose run vtx python3 trainer.py"
+    },
+    {
+      "label": "docker-compose prep",
+      "detail": "Prep the dataset in Docker.",
+      "type": "shell",
+      "command": "docker-compose run vtx python3 i.py"
+    },
+    {
+      "label": "docker-compose up -d",
+      "detail": "Start the service in Docker.",
+      "type": "shell",
+      "command": "docker-compose up -d"
+    },
+    {
+      "label": "docker system prune",
+      "detail": "Prune all unused images, networks, and volumes.",
+      "type": "shell",
+      "command": "docker system prune -f"
+    },
+    {
+      "label": "docker-compose down",
+      "detail": "Stop the service in Docker.",
+      "type": "shell",
+      "command": "docker-compose down --remove-orphans"
+    },
+    {
+      "label": "surreal sql",
+      "detail": "Open an interactive shell to the SurrealDB server.",
+      "type": "shell",
+      "command": "source .env && surreal sql --conn http://localhost:8000 --ns ${SURREALNS} --db ${SURREALDB} --user ${SURREALUSER} --pass ${SURREALPASS} --pretty"
+    },
+    {
+      "label": "collect data from Discord",
+      "detail": "Export Discord data.",
+      "type": "shell",
+      "command": "docker-compose -f docker-compose.collect.yml up"
+    }
+  ],
+  "inputs": [
+    {
+      "type": "pickString",
+      "id": "env",
+      "description": "Local, or global?",
+      "options": ["local", "global"]
+    },
+    {
+      "type": "pickString",
+      "id": "task",
+      "description": "Deploy, or delete?",
+      "options": ["deploy", "delete"]
+    },
+    {
+      "id": "auth",
+      "type": "promptString",
+      "description": "What is your auth key?"
+      // type specific configuration attributes
+    }
+  ]
+}

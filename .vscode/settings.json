@@ -1,0 +1,14 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[python]": {
+    "editor.defaultFormatter": null
+  },
+  "python.formatting.blackArgs": ["--line-length", "88"],
+  "python.formatting.provider": "black",
+  "editor.formatOnSave": true,
+  "prettier.enable": true,
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": true,
+  "terminal.integrated.scrollback": 10000,
+  "search.useIgnoreFiles": false
+}

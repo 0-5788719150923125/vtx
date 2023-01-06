@@ -1,0 +1,19 @@
+{
+  "name": "src",
+  "version": "0.6.0",
+  "description": "A playground.",
+  "main": "root.js",
+  "type": "module",
+  "scripts": {
+    "start": "node root.js"
+  },
+  "author": "Sam Hocevar",
+  "license": "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE",
+  "bugs": {
+    "url": "https://gitlab.com/the-resistance/ghost/issues"
+  },
+  "dependencies": {
+    "brain.js": "^2.0.0-beta.17",
+    "gun": "^0.2020.1239"
+  }
+}

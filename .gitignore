@@ -1,0 +1,11 @@
+*.mp4
+.env
+__pycache__
+aitextgen*
+gun
+input*.txt*
+lab/*.json
+logseq
+node_modules
+vtx/models/*
+vtx/vtx/*

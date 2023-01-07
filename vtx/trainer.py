@@ -18,7 +18,7 @@ tokenizer_file = "tokens.json"
 merges_file = "merges.json"
 vocab_file = "vocab.json"
 
-vocab_size = 2048
+vocab_size = 4096
 max_length = 256
 
 

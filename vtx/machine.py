@@ -85,7 +85,6 @@ class Client(discord.Client):
             string = str(message.author.id) + ": " + message.content
             print(bcolors.FAIL + "dj ent" + bcolors.ENDC)
             await save_message(string)
-            print(string)
             output = await head.gen(weight)
 
         try:
@@ -118,7 +117,6 @@ class Client(discord.Client):
                     await message.delete()
                     print("clean")
                 except:
-                    output = await head.gen(bias)
                     print("dirty")
 
             print(output)

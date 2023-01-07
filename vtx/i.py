@@ -75,6 +75,19 @@ async def scrape():
 
 
 async def read():
+    print("reading rock's stuff")
+    files = glob.glob("/lab/rock" + "/**/*.txt", recursive=True)
+    for filename in files:
+        try:
+            with open(os.path.join("/lab/rock", filename), "r") as file:
+                txt = open(output_file, "a")
+                txt.write(f"297087175114227712:\n")
+                txt.writelines(file.readlines())
+                txt.close()
+                file.close()
+        except:
+            print("something failed while reading markdown files")
+
     print("reading markdown files")
     files = glob.glob("/lab/ink" + "/**/*.md", recursive=True)
     for filename in files:

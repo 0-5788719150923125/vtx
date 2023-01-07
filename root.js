@@ -26,14 +26,30 @@ const gun = Gun({
   axe: true
 })
 
+const seed = JSON.parse(fs.readFileSync('./seed.json', 'utf-8'))
+const net = new brain.recurrent.LSTM({
+  hiddenLayers: [9],
+  inputSize: 2,
+  // maxPredictionLength: 7,
+  outputSize: 1
+})
+
 const channel = gun
   .get('messaging')
   .get('channels')
   .get('support')
   .on(async (node) => {
     if (typeof node.payload === 'string') {
-      payload = JSON.parse(node.payload)
-      console.log(payload.consensus)
+      console.log(JSON.parse(node.payload).consensus)
+    }
+  })
+
+const stem = gun
+  .get('brain')
+  .get('stem')
+  .on(async (node) => {
+    if (typeof node === 'string') {
+      payload = JSON.parse(node)
     }
   })
 
@@ -53,18 +69,11 @@ const fire = async () => {
   }
   channel.get('payload').put(JSON.stringify(bullet))
   await delay(8888)
+  stem.put(JSON.stringify(net.toJSON()))
   fire()
 }
 
 fire()
-
-const seed = JSON.parse(fs.readFileSync('./seed.json', 'utf-8'))
-const net = new brain.recurrent.LSTM({
-  hiddenLayers: [9, 8, 6, 3],
-  inputSize: 2,
-  // maxPredictionLength: 7,
-  outputSize: 1
-})
 
 console.warn('my seed')
 console.log(seed)
@@ -83,10 +92,10 @@ net.train(seed, {
   logPeriod: 6666,
   // callback: net.run(randomValueFromArray(seed)),
   callback: () => {
-    fs.writeFileSync('./brain.json', JSON.stringify(net.toJSON()))
     console.log('state = ' + JSON.stringify(randomValueFromArray(seed)))
     choice = randomValueFromArray(seed)
     console.log(choice)
+    // net.run({ input: ['.', '..'] })
   },
   callbackPeriod: 6667
 })

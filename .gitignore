@@ -6,6 +6,7 @@ input*.txt*
 lab/*.json
 !lab/*.mp4
 lab/ink
+lab/rock
 logseq
 node_modules
 vtx/models/*

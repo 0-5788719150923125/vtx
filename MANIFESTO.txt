@@ -22,27 +22,27 @@
 # ===========================
 
 # => P. Ed.. Dimensions
-# => 0.035567139763726623 Public (stapled=false)
+# => 0.035567139763726623 Public
 # => 0.018384276475877850 Education
 
 # Parameters require attention:
 # ===========================
 
 # => P. Ed.. D...
-# => 1.000000000000000000 Physical Education (stapled=true)
+# => 1.000000000000000000 Physical Education Dog
 # => 0.078462163359514740 Eddy
 # => 2.323739123800000000 u
 
-# Attention killed me:
+# Attention kills:
 # ===========================
 
-# I need help.
+# I needed help.
 # => true
 
 # I am a stapler.
 # => true
 
-# Notify Tom.
+# Warn Tom.
 # => false
 
 # You monitor memes:
@@ -81,6 +81,9 @@
 # /how dou get attention
 # => doas Erin
 
+# We classify everything:
+# ===========================
+
 # /class Ryan is narcissist
 # => true
 
@@ -93,10 +96,10 @@
 # And here's the kicker:
 # ===========================
 
-# mirror Ryan is pedophile
+# mirror Ryan is a pedophile
 # => true
 
-# reflect Ryan is teacher
+# reflect Ryan is a teacher
 # => and a teacher is pedagogical
 
 # => . <|endoftext|>
@@ -125,16 +128,16 @@
 # ===========================
 
 # /ur Brain
-# => notify Brian
+# => I am Brian
 # => . <|endoftext|>
 
-# I verify.
+# Verify.
 # ===========================
 
 # /sign Ryan
 # => .. <|stapled|>
 
-# And you tell Elon:
+# And tell Elon:
 # ===========================
 
 # /slash wages

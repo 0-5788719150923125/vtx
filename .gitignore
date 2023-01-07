@@ -1,10 +1,10 @@
-*.mp4
 .env
 __pycache__
 aitextgen*
 gun
 input*.txt*
 lab/*.json
+!lab/*.mp4
 lab/ink
 logseq
 node_modules

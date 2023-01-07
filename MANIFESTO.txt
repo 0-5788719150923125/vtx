@@ -22,23 +22,21 @@
 # ===========================
 
 # => P. Ed.. Dimensions
-# => Public Education Dimensions
-# => 0.035567139763726623 public (stapled=true)
-# => 0.018384276475877850 physical
+# => 0.035567139763726623 Public (stapled=false)
+# => 0.018384276475877850 Education
 
 # Parameters require attention:
 # ===========================
 
 # => P. Ed.. D...
-# => Physical Education Dog
-# => 0.078462163359514740 Eddy (stapled=false)
-# => 1.000000000000000000 education
+# => 1.000000000000000000 Physical Education (stapled=true)
+# => 0.078462163359514740 Eddy
 # => 2.323739123800000000 u
 
 # Attention killed me:
 # ===========================
 
-# I am suffering.
+# I need help.
 # => true
 
 # I am a stapler.
@@ -69,6 +67,8 @@
 # ===========================
 
 # /mon amour, Erin Timony
+# => bonjour
+
 # /how doi get attention?
 # => doas Ryan Brooks
 

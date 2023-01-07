@@ -35,12 +35,8 @@ class bcolors:
 
 
 if __name__ == "__main__":
+    train_tokenizer(research, vocab_size=vocab_size, save_path=tokenizer_file)
     train_tokenizer(corpus, vocab_size=vocab_size, save_path=tokenizer_file)
-    train_tokenizer(
-        research,
-        vocab_size=vocab_size,
-        save_path=tokenizer_file,
-    )
 
     if focus == "heart":
         base_model = "gpt2"
@@ -76,7 +72,8 @@ if __name__ == "__main__":
 
     ai = aitextgen(
         tokenizer_file=tokenizer_file,
-        vocab_file=vocab_file,
+        vocab_file=tokenizer_file,
+        merges_file=tokenizer_file,
         config=config,
         model=base_model,
         to_gpu=True,
@@ -85,29 +82,24 @@ if __name__ == "__main__":
 
     data1 = TokenDataset(
         research,
-        # tokenized_texts=True,
         tokenizer_file=tokenizer_file,
-        # vocab_file=vocab_file,
-        # merges_file=merges_file,
+        vocab_file=tokenizer_file,
+        merges_file=tokenizer_file,
         block_size=max_length,
     )
 
     data2 = TokenDataset(
         corpus,
         tokenizer_file=tokenizer_file,
+        vocab_file=tokenizer_file,
+        merges_file=tokenizer_file,
         block_size=max_length,
         # save_cache=True,
         # from_cache=True,
         # cache_destination="dataset_cache.tar.gz",
     )
-    # data1 = TokenDataset(
-    #     "input1.txt",
-    #     # tokenizer_file=tokenizer_file,
-    #     block_size=max_length,
-    #     line_by_line=False,
-    # )
 
-    # data_merged = merge_datasets([data1, data2])
+    # data_merged = merge_datasets([np.asarray(data1), np.asarray(data2)])
 
     print("data failed to merge")
 

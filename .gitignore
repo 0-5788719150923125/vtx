@@ -5,6 +5,7 @@ aitextgen*
 gun
 input*.txt*
 lab/*.json
+lab/ink
 logseq
 node_modules
 vtx/models/*

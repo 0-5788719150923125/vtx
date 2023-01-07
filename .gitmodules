@@ -1,0 +1,3 @@
+[submodule "lab/research"]
+	path = lab/research
+	url = https://github.com/SocioProphet/clymer_research

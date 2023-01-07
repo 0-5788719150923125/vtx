@@ -104,10 +104,10 @@
       "command": "source .env && surreal sql --conn http://localhost:8000 --ns ${SURREALNS} --db ${SURREALDB} --user ${SURREALUSER} --pass ${SURREALPASS} --pretty"
     },
     {
-      "label": "collect data from Discord",
+      "label": "export data from Discord",
       "detail": "Export Discord data.",
       "type": "shell",
-      "command": "docker-compose -f docker-compose.collect.yml up"
+      "command": "docker-compose -f docker-compose.collector.yml up"
     }
   ],
   "inputs": [

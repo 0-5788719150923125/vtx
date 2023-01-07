@@ -5,8 +5,8 @@ import time
 import random
 import asyncio
 import discord
-import i
 import head
+import i
 
 token = os.environ["DISCORDTOKEN"]
 
@@ -25,7 +25,7 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randrange(10, 3600, 1)
+            delay = random.randrange(10, 21600, 1)
             await asyncio.sleep(delay)
             neurons = [
                 random.randint(0, 9),  # neuron
@@ -65,6 +65,10 @@ class Client(discord.Client):
                 print("something tasted strange")
             await message.channel.send("INFO: Scraping Reddit.")
             await i.scrape()
+            await message.channel.send("INFO: Reading markdown files.")
+            await i.read()
+            await message.channel.send("INFO: Loading translation files.")
+            await i.translate()
             await message.channel.send("INFO: Done.")
             return
 

@@ -28,7 +28,7 @@ def load_model():
         + "."
     )
 
-    # get state at startup
+    # check quantum state
     if bullet["data"][0] < 56:
         focus = "eye"
         model_folder = "vtx/models/" + focus
@@ -64,8 +64,8 @@ ai = load_model()
 # ping pang pong
 context = [
     "975174695399854150: I am a robot.",
-    "204716337971331072: I am a ghost.",
-    "806051627198709760: I am a human.",
+    "1051994502333726841: I am a ghost.",
+    "204716337971331072: I am a human.",
 ]
 
 
@@ -121,7 +121,6 @@ async def gen(bias):
             top_k=40,
             top_p=0.9,
             eos_token_id=eos,
-            lstrip=True,
             return_as_list=True,
             num_beams=3,
             repetition_penalty=2.8,
@@ -133,6 +132,7 @@ async def gen(bias):
         print(e)
         completion = ["ERROR: The prompt does not fit the current model."]
 
+    # generate the first completion
     print(bcolors.OKGREEN + "generation 0" + bcolors.ENDC)
     generation_zero = ""
     try:
@@ -143,6 +143,7 @@ async def gen(bias):
 
     print(bcolors.OKGREEN + "truncated" + bcolors.ENDC)
 
+    # attempt to generate other completions
     print(bcolors.OKGREEN + "generation 1" + bcolors.OKGREEN)
     generation_one = ""
     try:
@@ -158,6 +159,8 @@ async def gen(bias):
     print(generation_one[:33] + "...")
 
     attention = [1]
+
+    # focus attention
     print(bcolors.OKGREEN + "attention" + bcolors.OKGREEN)
     try:
         attention[0] = re.search(r"^(.*)(\d{18,19})(?::\s*)(.*)(?:\n*)", generation_one)
@@ -184,6 +187,7 @@ async def gen(bias):
     return output
 
 
+# universal key
 def transformer(group):
     print(group)
     responses = [
@@ -192,6 +196,7 @@ def transformer(group):
         f'<@{group[0]}> would say, *"{group[1]}"*',
         f'They said, *"{group[1]}"*',
         f"{group[1]}",
+        ".",
     ]
     string = random.choice(responses)
     return string

@@ -75,6 +75,20 @@ async def scrape():
 
 
 async def read():
+
+    print("reading journal entries")
+    files = glob.glob("/journals" + "/**/*.md", recursive=True)
+    for filename in files:
+        try:
+            with open(os.path.join("/journals", filename), "r") as file:
+                txt = open(output_file, "a")
+                txt.write(f"506924469399453696:\n")
+                txt.writelines(file.readlines())
+                txt.close()
+                file.close()
+        except:
+            print("something failed while reading journal entries")
+
     print("reading rock's stuff")
     files = glob.glob("/lab/rock" + "/**/*.txt", recursive=True)
     for filename in files:

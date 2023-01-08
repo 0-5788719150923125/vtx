@@ -66,10 +66,10 @@ context = [
 ]
 
 
-def add_context(message):
+def build_context(message):
     if len(context) >= 7:
         context.pop(0)
-        add_context(message)
+        build_context(message)
     else:
         context.append(message)
 
@@ -83,6 +83,7 @@ async def gen(bias):
     print(bcolors.OKGREEN + "heads" + bcolors.ENDC)
 
     # self-attention
+    coin = random.choice([0, 1])
     print(bcolors.FAIL + str(bias) + bcolors.ENDC)
     if (len(str(bias)) == 18) or (len(str(bias)) == 19):
         print(str(coin) + " bias toward " + str(bias))
@@ -106,7 +107,7 @@ async def gen(bias):
     # try to complete the conversation
     try:
         completion = ai.generate(
-            n=1,
+            n=2,
             prompt=history + prompt,
             lstrip=True,
             do_sample=True,
@@ -117,11 +118,13 @@ async def gen(bias):
             top_p=0.9,
             eos_token_id=eos,
             return_as_list=True,
-            num_beams=2,
-            repetition_penalty=2.8,
-            length_penalty=3.11,
+            num_beams=3,
+            # num_beam_groups=3,
+            repetition_penalty=3.0,
+            length_penalty=-10.0,
             no_repeat_ngram_size=2,
-            early_stopping=False,
+            early_stopping=True,
+            renormalize_logits=True,
         )
     except Exception as e:
         print(e)

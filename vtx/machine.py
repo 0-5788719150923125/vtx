@@ -50,7 +50,7 @@ class Client(discord.Client):
         redact = False
         output = "ERROR: Me Found."
 
-        head.add_context(str(message.author.id) + ": " + message.content)
+        head.build_context(str(message.author.id) + ": " + message.content)
 
         if message.author == self.user:
             return

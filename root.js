@@ -4,6 +4,19 @@ import crypto from 'crypto'
 import brain from 'brain.js'
 import Gun from 'gun'
 import SEA from 'gun/sea.js'
+// import { create } from 'ipfs-http-client'
+
+// async function testIPFS() {
+//   const ipfs = create({ url: '/ip4/127.0.0.1/tcp/5001' })
+//   const { cid } = await ipfs.add('Hello world!')
+//   console.log(cid)
+//   const id = await ipfs.id()
+//   const addresses = await ipfs.swarm.localAddrs()
+//   // console.log(addresses)
+//   console.log(id)
+// }
+
+// testIPFS()
 
 let payload = ''
 let port = process.env.PORT || 9666

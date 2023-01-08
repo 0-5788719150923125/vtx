@@ -8,11 +8,13 @@ RUN npm i -g nodemon
 
 WORKDIR /vtx
 
-COPY . ./
+COPY package*.json requirements.txt ./
 
 RUN pip3 install -r requirements.txt
 
 RUN npm install --production
+
+COPY . ./
 
 CMD ["python3", "main.py"]
 

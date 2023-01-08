@@ -1,12 +1,12 @@
+!aitextgen.tokenizer.json
+!lab/*.mp4
+!lab/logseq/config.edn
 .env
 __pycache__
 aitextgen*
-!aitextgen.tokenizer.json
 input*.txt*
-!lab/*.mp4
-lab/texts/*
 lab/logseq/*
-!lab/logseq/config.edn
+lab/texts/*
 node_modules
 vtx/models/*
 vtx/vtx/*

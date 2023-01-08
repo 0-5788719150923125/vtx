@@ -1,5 +1,8 @@
 *.mp4
 .env
+input.txt
 lab/
 node_modules
-vtx/*
+vtx/__pycache__
+vtx/aitextgen
+vtx/vtx/*

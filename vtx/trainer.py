@@ -12,10 +12,11 @@ os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 focus = os.environ["FOCUS"]
 base_model = ""
 corpus = "input.txt"
+vocab_path = "/lab/research"
 model_folder = "vtx/models/" + focus
 tokenizer_file = "src.tokenizer.json"
 
-vocab_size = 3333
+vocab_size = 8888
 max_length = 256
 
 
@@ -23,25 +24,14 @@ def list_full_paths(directory):
     return [os.path.join(directory, file) for file in os.listdir(directory)]
 
 
-class bcolors:
-    HEADER = "\033[95m"
-    OKBLUE = "\033[94m"
-    OKCYAN = "\033[96m"
-    OKGREEN = "\033[92m"
-    WARNING = "\033[93m"
-    FAIL = "\033[91m"
-    ENDC = "\033[0m"
-    BOLD = "\033[1m"
-    UNDERLINE = "\033[4m"
-
-
 if __name__ == "__main__":
 
     train_tokenizer(
-        files=list_full_paths("/lab/research"),
+        files=list_full_paths(vocab_path),
         vocab_size=vocab_size,
         save_path="./",
         prefix="src",
+        dropout=0.006,
     )
 
     if focus == "heart":
@@ -74,8 +64,8 @@ if __name__ == "__main__":
             resid_dropout=0.00000666,
         )
 
-    print(bcolors.FAIL + "focus" + bcolors.ENDC)
-    print(bcolors.FAIL + "ed on the " + focus + bcolors.ENDC)
+    print("\033[91m" + "focus" + "\033[0m")
+    print("\033[91m" + "ed on the " + focus + "\033[0m")
 
     ai = aitextgen(
         tokenizer_file=tokenizer_file,

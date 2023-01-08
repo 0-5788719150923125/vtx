@@ -20,18 +20,6 @@
       "command": "npm outdated"
     },
     {
-      "label": "npm build",
-      "detail": "Build the JS project.",
-      "type": "shell",
-      "command": "tsc"
-    },
-    {
-      "label": "npm deploy",
-      "detail": "Manage slash commands at the Discord API.",
-      "type": "shell",
-      "command": "npm run ${input:task}:${input:env}"
-    },
-    {
       "label": "docker ps",
       "detail": "View a list of all running containers.",
       "type": "shell",
@@ -71,13 +59,7 @@
       "label": "docker-compose train",
       "detail": "Train the model in Docker.",
       "type": "shell",
-      "command": "docker-compose run vtx python3 trainer.py"
-    },
-    {
-      "label": "docker-compose prep",
-      "detail": "Prep the dataset in Docker.",
-      "type": "shell",
-      "command": "docker-compose run vtx python3 i.py"
+      "command": "docker-compose run -e FOCUS=\"${input:env}\" vtx python3 trainer.py"
     },
     {
       "label": "docker-compose up -d",
@@ -98,12 +80,6 @@
       "command": "docker-compose down --remove-orphans"
     },
     {
-      "label": "surreal sql",
-      "detail": "Open an interactive shell to the SurrealDB server.",
-      "type": "shell",
-      "command": "source .env && surreal sql --conn http://localhost:8000 --ns ${SURREALNS} --db ${SURREALDB} --user ${SURREALUSER} --pass ${SURREALPASS} --pretty"
-    },
-    {
       "label": "export data from Discord",
       "detail": "Export Discord data.",
       "type": "shell",
@@ -114,8 +90,8 @@
     {
       "type": "pickString",
       "id": "env",
-      "description": "Local, or global?",
-      "options": ["local", "global"]
+      "description": "Which model should I train?",
+      "options": ["eye", "heart", "head"]
     },
     {
       "type": "pickString",

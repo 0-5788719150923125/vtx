@@ -18,7 +18,6 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./journals:/journals
       - ./lab:/lab
       - ./vtx:/vtx
     env_file:

@@ -12,14 +12,15 @@ os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 focus = os.environ["FOCUS"]
 base_model = ""
 corpus = "input.txt"
-research = "/lab/research/2eng_hebrew.txt"
 model_folder = "vtx/models/" + focus
-tokenizer_file = "tokens.json"
-merges_file = "merges.json"
-vocab_file = "vocab.json"
+tokenizer_file = "src.tokenizer.json"
 
 vocab_size = 3333
 max_length = 256
+
+
+def list_full_paths(directory):
+    return [os.path.join(directory, file) for file in os.listdir(directory)]
 
 
 class bcolors:
@@ -35,13 +36,19 @@ class bcolors:
 
 
 if __name__ == "__main__":
-    train_tokenizer(research, vocab_size=vocab_size, save_path=tokenizer_file)
-    train_tokenizer(corpus, vocab_size=vocab_size, save_path=tokenizer_file)
+
+    train_tokenizer(
+        files=list_full_paths("/lab/research"),
+        vocab_size=vocab_size,
+        save_path="./",
+        prefix="src",
+    )
 
     if focus == "heart":
         base_model = "gpt2"
         config = build_gpt2_config(
             vocab_size=vocab_size,
+            tokenizer_file=tokenizer_file,
             max_length=max_length,
             dropout=0.00000666,
             n_embd=888,
@@ -53,15 +60,15 @@ if __name__ == "__main__":
     elif focus == "head":
         base_model = "EleutherAI/gpt-neo-125M"
         config = GPTNeoConfig(
-            vocab_size=50257,
+            vocab_size=vocab_size,
             tokenizer_file=tokenizer_file,
             activation_function="gelu_new",
             attention_types=[[["global", "local"], 6]],
-            hidden_size=768,
+            hidden_size=512,
             window_size=256,
             intermediate_size=2048,
             num_layers=12,
-            num_heads=24,
+            num_heads=16,
             embed_dropout=0.00000666,
             attention_dropout=0.00000666,
             resid_dropout=0.00000666,
@@ -72,39 +79,16 @@ if __name__ == "__main__":
 
     ai = aitextgen(
         tokenizer_file=tokenizer_file,
-        vocab_file=tokenizer_file,
-        merges_file=tokenizer_file,
-        config=config,
+        # config=config,
         model=base_model,
         to_gpu=True,
         gradient_checkpointing=True,
     )
 
-    data1 = TokenDataset(
-        research,
-        tokenizer_file=tokenizer_file,
-        vocab_file=tokenizer_file,
-        merges_file=tokenizer_file,
-        block_size=max_length,
-    )
-
-    data2 = TokenDataset(
-        corpus,
-        tokenizer_file=tokenizer_file,
-        vocab_file=tokenizer_file,
-        merges_file=tokenizer_file,
-        block_size=max_length,
-        # save_cache=True,
-        # from_cache=True,
-        # cache_destination="dataset_cache.tar.gz",
-    )
-
-    # data_merged = merge_datasets([np.asarray(data1), np.asarray(data2)])
-
-    print("data failed to merge")
+    data = TokenDataset(corpus, tokenizer_file=tokenizer_file, block_size=max_length)
 
     ai.train(
-        data2,
+        data,
         line_by_line=False,
         from_cache=False,
         batch_size=8,

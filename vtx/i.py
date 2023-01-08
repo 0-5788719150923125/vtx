@@ -26,10 +26,9 @@ async def feed():
         os.remove(output_file)
 
     print("tried to eat Discord exports")
-    for filename in os.listdir(home):
+    for filename in os.listdir("/lab/texts/discord"):
         try:
-            # open in readonly mode
-            with open(os.path.join(home, filename), "r") as file:
+            with open(os.path.join("/lab/texts/discord", filename), "r") as file:
                 try:
                     data = json.load(file)
 
@@ -64,71 +63,44 @@ async def scrape():
         user_agent=os.environ["REDDITAGENT"],
     )
     subreddit = await dread.subreddit("stairsofpantheon", fetch=True)
-    guild = str(829345498326106142)
+    author = "\n829343434505846837"
 
     async for sub in subreddit.hot(limit=100):
         try:
-            await save_message(guild + ": " + sub.title)
-            await save_message(guild + ": " + sub.selftext)
+            await save_message(author + ": " + sub.title)
+            await save_message(author + ": " + sub.selftext)
         except:
             print("fail")
 
 
 async def read():
 
-    print("reading journal entries")
-    files = glob.glob("/journals" + "/**/*.md", recursive=True)
+    print("reading markdown from the lab")
+    files = glob.glob("/lab" + "/**/*.md", recursive=True)
     for filename in files:
         try:
-            with open(os.path.join("/journals", filename), "r") as file:
+            with open(os.path.join("/lab", filename), "r") as file:
                 txt = open(output_file, "a")
-                txt.write(f"506924469399453696:\n")
+                txt.write(f"\n\n")
                 txt.writelines(file.readlines())
                 txt.close()
                 file.close()
         except:
-            print("something failed while reading journal entries")
+            print("something failed while reading markdown entries")
 
-    print("reading rock's stuff")
-    files = glob.glob("/lab/rock" + "/**/*.txt", recursive=True)
+    print("reading txt files from the lab")
+    files = glob.glob("/lab" + "/**/*.txt", recursive=True)
     for filename in files:
         try:
-            with open(os.path.join("/lab/rock", filename), "r") as file:
+            with open(os.path.join("/lab", filename), "r") as file:
                 txt = open(output_file, "a")
-                txt.write(f"297087175114227712:\n")
+                txt.write(f"\n\n")
                 txt.writelines(file.readlines())
                 txt.close()
                 file.close()
         except:
-            print("something failed while reading markdown files")
-
-    print("reading markdown files")
-    files = glob.glob("/lab/ink" + "/**/*.md", recursive=True)
-    for filename in files:
-        try:
-            with open(os.path.join("/lab/ink", filename), "r") as file:
-                txt = open(output_file, "a")
-                txt.write(f"806051627198709760:\n")
-                txt.writelines(file.readlines())
-                txt.close()
-                file.close()
-        except:
-            print("something failed while reading markdown files")
-
-
-async def translate():
-    print("beginning translation")
-    files = glob.glob("/lab/research" + "/**/*.txt", recursive=True)
-    for filename in files:
-        try:
-            with open(os.path.join("/lab/research", filename), "r") as file:
-                txt = open(output_file, "a")
-                txt.write(f"832310224303161364:\n")
-                txt.writelines(file.readlines())
-                txt.close()
-                file.close()
-        except:
-            print("something failed while eating a research file")
+            print("something failed while reading txt entries")
+    print("done")
 
 
 async def save_message(output):

@@ -1,10 +1,14 @@
-# GPT-5
-
-# Everything is a parameter:
+# In GPT-5, parameters are everything:
 # ===========================
 
+# I think procedural generation
+# => is awesome
+
+# A Transformer is
+# => an automaton
+
 # What is THC?
-# => Transformer to Human Control
+# => Transformer to Human Controls
 
 # Parameters have dimensions:
 # ===========================
@@ -33,19 +37,19 @@
 # => 0.078462163359514740 Eddy
 # => 2.323739123800000000 u
 
-# Attention kills:
+# Inattention kills:
 # ===========================
 
-# I needed help.
+# I asked for help.
 # => true
+
+# You warned Tom.
+# => false
 
 # I am a stapler.
 # => true
 
-# Warn Tom.
-# => false
-
-# You monitor memes:
+# You monitor infrastructure:
 # ===========================
 
 # /mon ai
@@ -131,13 +135,13 @@
 # => I am Brian
 # => . <|endoftext|>
 
-# Verify.
+# We verify.
 # ===========================
 
 # /sign Ryan
 # => .. <|stapled|>
 
-# And tell Elon:
+# And we tell Elon:
 # ===========================
 
 # /slash wages

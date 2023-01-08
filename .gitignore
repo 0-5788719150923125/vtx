@@ -1,13 +1,12 @@
 .env
 __pycache__
 aitextgen*
-gun
+!aitextgen.tokenizer.json
 input*.txt*
-lab/*.json
 !lab/*.mp4
-lab/ink
-lab/rock
-logseq
+lab/texts/*
+lab/logseq/*
+!lab/logseq/config.edn
 node_modules
 vtx/models/*
 vtx/vtx/*

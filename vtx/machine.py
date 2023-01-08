@@ -10,6 +10,8 @@ import i
 
 token = os.environ["DISCORDTOKEN"]
 
+redacted_chance = 1
+
 
 class Client(discord.Client):
     def __init__(self, *args, **kwargs):
@@ -25,7 +27,7 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randrange(10, 21600, 1)
+            delay = random.randrange(10, 10800, 1)
             await asyncio.sleep(delay)
             neurons = [
                 random.randint(0, 9),  # neuron
@@ -65,10 +67,8 @@ class Client(discord.Client):
                 print("something tasted strange")
             await message.channel.send("INFO: Scraping Reddit.")
             await i.scrape()
-            await message.channel.send("INFO: Reading markdown files.")
+            await message.channel.send("INFO: Reading documents from the /lab.")
             await i.read()
-            await message.channel.send("INFO: Loading translation files.")
-            await i.translate()
             await message.channel.send("INFO: Done.")
             return
 
@@ -77,24 +77,24 @@ class Client(discord.Client):
             weight = 1
             output = await head.gen(530243004334604311)
             remove = True
-            redact = False
             print(bcolors.OKGREEN + "heads" + bcolors.ENDC)
         else:
-            bias = random.randrange(100, 333, 1)
-            weight = random.randrange(0, 101, 1)
+            try:
+                if len(message.mentions) > 0:
+                    weight = random.randrange(0, 40, 1)
+                    bias = int(message.mentions[0].id)
+                    print(bcolors.WARNING + "WARN: agent" + bcolors.ENDC)
+                    print(bias)
+                else:
+                    bias = random.randrange(100, 333, 1)
+                    weight = random.randrange(0, 101, 1)
+            except:
+                print("wrong length")
+
             string = str(message.author.id) + ": " + message.content
             print(bcolors.FAIL + "dj ent" + bcolors.ENDC)
             await save_message(string)
             output = await head.gen(weight)
-
-        try:
-            if len(message.mentions) > 0:
-                weight = 33
-                bias = int(message.mentions[0].id)
-                print(bcolors.WARNING + "WARN: agent" + bcolors.ENDC)
-                print(bias)
-        except:
-            print("wrong length")
 
         if str(message.channel.type) == "private":
             weight = random.randint(0, 36)
@@ -107,10 +107,15 @@ class Client(discord.Client):
             print(bcolors.FAIL + "." + bcolors.ENDC)
             return
 
-        print("output")
+        print(bcolors.OKGREEN + "output" + bcolors.ENDC)
         try:
+
+            if random.randrange(0, 101, 1) < redacted_chance:
+                redact = True
+
             if redact == True:
-                output = "[REDACTED]"
+                choices = ["[REDACTED]", "[CLASSIFIED]", "[CORRUPTED]"]
+                output = random.choice(choices)
 
             if remove == True:
                 try:
@@ -134,14 +139,13 @@ class Client(discord.Client):
         except Exception as e:
             print(message.content)
             print(output)
-            print(e)
-            print(bcolors.FAIL + "ERROR: Me Found." + bcolors.ENDC)
+            print(bcolors.FAIL + e + bcolors.ENDC)
         async with message.channel.typing():
             time.sleep(10)
         try:
             await message.channel.send(output)
         except:
-            print(bcolors.FAIL + "Failed to send message to Discord." + bcolors.ENDC)
+            print(bcolors.FAIL + "Failed to send Discord message." + bcolors.ENDC)
             print(
                 bcolors.FAIL
                 + "You should probably be sending this to a daemon API like luciferian.ink/?pen=republican"

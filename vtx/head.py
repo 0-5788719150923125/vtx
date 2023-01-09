@@ -13,7 +13,7 @@ os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 focus = os.environ["FOCUS"]
 to_gpu = False
 model_folder = "vtx/models/" + focus
-tokenizer_file = "src.tokenizer.json"
+tokenizer_file = "src." + focus + ".tokenizer.json"
 
 try:
     q = requests.get("https://qrng.anu.edu.au/API/jsonI.php?length=6&type=uint8").json()
@@ -121,23 +121,25 @@ async def gen(bias):
             num_beams=3,
             # num_beam_groups=3,
             repetition_penalty=3.0,
-            length_penalty=-10.0,
+            length_penalty=-3.0,
             no_repeat_ngram_size=2,
             early_stopping=True,
             renormalize_logits=True,
         )
     except Exception as e:
         print(e)
-        completion = ["ERROR: The prompt does not fit the current model."]
+        completion[0] = ["ERROR: The prompt does not fit the current model."]
+    try:
+        print(bcolors.OKGREEN + "completion" + bcolors.ENDC)
+        generation_zero = completion[0][len(history) :]
+        print(generation_zero)
 
-    print(bcolors.OKGREEN + "completion" + bcolors.ENDC)
-    generation_zero = completion[0][len(history) :]
-    print(generation_zero)
-
-    generation_one = re.search(
-        r"^(?:.*)(\d{18,19})(?::\s*)(.*)(?:\n*)", generation_zero
-    )
-    output = transformer([generation_one[1], generation_one[2]])
+        generation_one = re.search(
+            r"^(?:.*)(\d{18,19})(?::\s*)(.*)(?:\n*)", generation_zero
+        )
+        output = transformer([generation_one[1], generation_one[2]])
+    except:
+        output = completion[0]
     return output
 
 
@@ -150,8 +152,7 @@ def transformer(group):
         f'They said, *"{group[1]}"*',
         f"{group[1]}",
     ]
-    string = random.choice(responses)
-    return string
+    return random.choice(responses)
 
 
 class bcolors:

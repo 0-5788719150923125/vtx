@@ -30,7 +30,7 @@ services:
     image: ghcr.io/0-5788719150923125/src:1
     command: node root.js
     ports:
-      - 9665:9666
+      - 9666:9666
 
   ips:
     image: ipfs/kubo:master-latest

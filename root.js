@@ -19,7 +19,7 @@ import SEA from 'gun/sea.js'
 // testIPFS()
 
 let payload = ''
-let port = process.env.PORT || 9666
+let port = process.env.PORT || 9665
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms))
 const requestListener = function (req, res) {

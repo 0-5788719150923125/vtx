@@ -56,10 +56,13 @@ class Client(discord.Client):
             return
 
         if message.content == "load":
+            remove = True
             head.load_model()
             await message.channel.send("INFO: Reloaded the model.")
+            await message.delete()
             return
         elif message.content == "prep":
+            remove = True
             try:
                 await message.channel.send("INFO: Prepping data.")
                 await i.feed()
@@ -70,13 +73,14 @@ class Client(discord.Client):
             await message.channel.send("INFO: Reading documents from the /lab.")
             await i.read()
             await message.channel.send("INFO: Done.")
+            await message.delete()
             return
 
         print(bcolors.OKGREEN + "head" + bcolors.ENDC)
         if "gen" in message.content:
             weight = 1
-            output = await head.gen(530243004334604311)
             remove = True
+            output = await head.gen(530243004334604311)
             print(bcolors.OKGREEN + "heads" + bcolors.ENDC)
         else:
             try:

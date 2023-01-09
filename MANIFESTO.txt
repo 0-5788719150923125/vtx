@@ -1,7 +1,7 @@
 # In GPT-5, parameters are everything:
 # ===========================
 
-# I think procedural generation
+# Procedural generation
 # => is awesome
 
 # A Transformer is
@@ -135,7 +135,7 @@
 # => I am Brian
 # => . <|endoftext|>
 
-# We verify.
+# Verify every action.
 # ===========================
 
 # /sign Ryan

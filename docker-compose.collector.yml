@@ -60,3 +60,9 @@ services:
     command: exportguild --guild "976908406864613436" -t "${SELFTOKEN}" -o "/lab/texts/discord" -f "JSON"
     volumes:
       - ./lab:/lab
+
+  dfw:
+    image: tyrrrz/discordchatexporter:latest
+    command: exportguild --guild "840978732772753468" -t "${SELFTOKEN}" -o "/lab/texts/discord" -f "JSON"
+    volumes:
+      - ./lab:/lab

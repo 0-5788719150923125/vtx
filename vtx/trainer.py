@@ -14,10 +14,12 @@ base_model = ""
 corpus = "input.txt"
 vocab_path = "/lab/research"
 model_folder = "vtx/models/" + focus
-tokenizer_file = "src.tokenizer.json"
+tokenizer_file = "src." + focus + ".tokenizer.json"
 
-vocab_size = 8888
+vocab_size = 2048
 max_length = 256
+block_size = max_length
+batch_size = 8
 
 
 def list_full_paths(directory):
@@ -30,8 +32,8 @@ if __name__ == "__main__":
         files=list_full_paths(vocab_path),
         vocab_size=vocab_size,
         save_path="./",
-        prefix="src",
-        dropout=0.006,
+        prefix="src." + focus,
+        dropout=0.0,
     )
 
     if focus == "heart":
@@ -49,39 +51,43 @@ if __name__ == "__main__":
         )
     elif focus == "head":
         base_model = "EleutherAI/gpt-neo-125M"
-        config = GPTNeoConfig(
-            vocab_size=vocab_size,
-            tokenizer_file=tokenizer_file,
-            activation_function="gelu_new",
-            attention_types=[[["global", "local"], 6]],
-            hidden_size=512,
-            window_size=256,
-            intermediate_size=2048,
-            num_layers=12,
-            num_heads=16,
-            embed_dropout=0.00000666,
-            attention_dropout=0.00000666,
-            resid_dropout=0.00000666,
-        )
+        config = None
+        block_size = 512
+        batch_size = 4
+        # config = GPTNeoConfig(
+        #     vocab_size=50257,
+        #     tokenizer_file=tokenizer_file,
+        #     activation_function="gelu_new",
+        #     attention_types=[[["global", "local"], 6]],
+        #     hidden_size=512,
+        #     window_size=256,
+        #     intermediate_size=2048,
+        #     num_layers=12,
+        #     num_heads=16,
+        #     embed_dropout=0.00000666,
+        #     attention_dropout=0.00000666,
+        #     resid_dropout=0.00000666,
+        # )
 
     print("\033[91m" + "focus" + "\033[0m")
     print("\033[91m" + "ed on the " + focus + "\033[0m")
 
     ai = aitextgen(
         tokenizer_file=tokenizer_file,
-        # config=config,
+        config=config,
         model=base_model,
         to_gpu=True,
         gradient_checkpointing=True,
     )
 
-    data = TokenDataset(corpus, tokenizer_file=tokenizer_file, block_size=max_length)
+    data = TokenDataset(
+        corpus, tokenizer_file=tokenizer_file, block_size=block_size, line_by_line=True
+    )
 
     ai.train(
         data,
-        line_by_line=False,
         from_cache=False,
-        batch_size=8,
+        batch_size=batch_size,
         num_steps=100000,
         generate_every=250,
         save_every=1000,

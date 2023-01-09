@@ -63,12 +63,13 @@ async def scrape():
         user_agent=os.environ["REDDITAGENT"],
     )
     subreddit = await dread.subreddit("stairsofpantheon", fetch=True)
-    author = "\n829343434505846837"
 
     async for sub in subreddit.hot(limit=100):
         try:
-            await save_message(author + ": " + sub.title)
-            await save_message(author + ": " + sub.selftext)
+            txt = open(output_file, "a")
+            txt.write(sub.title)
+            txt.write(sub.selftext)
+            txt.close()
         except:
             print("fail")
 
@@ -101,9 +102,3 @@ async def read():
         except:
             print("something failed while reading txt entries")
     print("done")
-
-
-async def save_message(output):
-    txt = open(output_file, "a")
-    txt.write(f"{output}\n".format(output))
-    txt.close()

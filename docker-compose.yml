@@ -23,14 +23,14 @@ services:
     env_file:
       - .env
     environment:
-      FOCUS: head
+      FOCUS: heart
       TRANSFORMERS_CACHE: /tmp
 
   ctx:
     image: ghcr.io/0-5788719150923125/src:1
     command: node root.js
     ports:
-      - 9666:9666
+      - 9666:9665
 
   ips:
     image: ipfs/kubo:master-latest

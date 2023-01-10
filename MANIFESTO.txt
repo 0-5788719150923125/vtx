@@ -141,7 +141,7 @@
 # /sign Ryan
 # => .. <|stapled|>
 
-# And we tell Elon:
+# And tell Elon:
 # ===========================
 
 # /slash wages

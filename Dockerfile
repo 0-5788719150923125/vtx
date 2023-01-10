@@ -16,6 +16,8 @@ RUN npm install --production
 
 COPY . ./
 
+RUN pip install /vtx/aitextgen
+
 CMD ["python3", "main.py"]
 
 MAINTAINER R

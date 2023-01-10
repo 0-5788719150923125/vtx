@@ -26,7 +26,7 @@ def load_model():
     print("INFO: Reloaded model " + str(q["data"][0]) + " " + str(q["data"][1]) + ".")
 
     # check quantum state
-    if q["data"][0] < 56:
+    if q["data"][0] < 32:
         focus = "eye"
         model_folder = "vtx/models/" + focus
     else:
@@ -67,7 +67,7 @@ context = [
 
 
 def build_context(message):
-    if len(context) >= 7:
+    if len(context) >= 5:
         context.pop(0)
         build_context(message)
     else:
@@ -112,11 +112,11 @@ async def gen(bias):
             lstrip=True,
             do_sample=True,
             min_length=23,
-            max_length=512,
+            max_length=256,
             temperature=0.888,
             top_k=40,
             top_p=0.9,
-            eos_token_id=eos,
+            # eos_token_id=eos,
             return_as_list=True,
             num_beams=3,
             # num_beam_groups=3,

@@ -2,9 +2,11 @@
 !lab/*.mp4
 !lab/logseq/config.edn
 .env
+/vtx/aitextgen*
 __pycache__
-aitextgen*
 input*.txt*
+lab/discord
+lab/logs
 lab/logseq/*
 lab/texts/*
 node_modules

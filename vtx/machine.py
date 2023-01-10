@@ -65,12 +65,10 @@ class Client(discord.Client):
             remove = True
             try:
                 await message.channel.send("INFO: Prepping data.")
-                await i.feed()
+                await i.ingest()
             except:
                 print("something tasted strange")
             await message.channel.send("INFO: Scraping Reddit.")
-            await i.scrape()
-            await message.channel.send("INFO: Reading documents from the /lab.")
             await i.read()
             await message.channel.send("INFO: Done.")
             await message.delete()
@@ -138,8 +136,6 @@ class Client(discord.Client):
             else:
                 print(bcolors.OKGREEN + "." + bcolors.ENDC)
             print(bcolors.OKGREEN + "ok" + bcolors.ENDC)
-
-            await save_message(output)
         except Exception as e:
             print(message.content)
             print(output)
@@ -167,12 +163,6 @@ class bcolors:
     ENDC = "\033[0m"
     BOLD = "\033[1m"
     UNDERLINE = "\033[4m"
-
-
-async def save_message(output):
-    txt = open("./input.txt", "a")
-    txt.write(f"{output}\n".format(output))
-    txt.close()
 
 
 async def get_all_channels():

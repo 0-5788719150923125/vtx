@@ -62,6 +62,12 @@
       "command": "docker-compose run -e FOCUS=\"${input:env}\" vtx python3 trainer.py"
     },
     {
+      "label": "docker-compose prep",
+      "detail": "Prep the data in Docker.",
+      "type": "shell",
+      "command": "docker-compose run vtx python3 i.py"
+    },
+    {
       "label": "docker-compose up -d",
       "detail": "Start the service in Docker.",
       "type": "shell",

@@ -1,11 +1,9 @@
 import os
+import shutil
 import json
 import re
 import glob
 import asyncpraw as praw
-
-home = "/lab"
-output_file = "./input.txt"
 
 
 def spy():
@@ -20,15 +18,21 @@ def vision():
     print("a view through my lens")
 
 
-async def feed():
+async def ingest():
 
-    if os.path.exists(output_file):
-        os.remove(output_file)
+    isExist = os.path.exists("/lab/texts/discord")
+    if isExist:
+        shutil.rmtree("/lab/texts/discord")
+
+    os.makedirs("/lab/texts/discord")
+
+    # if os.path.exists("/lab/texts/discord.txt"):
+    #     os.remove("/lab/texts/discord.txt")
 
     print("tried to eat Discord exports")
-    for filename in os.listdir("/lab/texts/discord"):
+    for filename in os.listdir("/lab/discord"):
         try:
-            with open(os.path.join("/lab/texts/discord", filename), "r") as file:
+            with open(os.path.join("/lab/discord", filename), "r") as file:
                 try:
                     data = json.load(file)
 
@@ -38,7 +42,7 @@ async def feed():
                         if i["content"] == "":
                             continue
 
-                        txt_file = open(output_file, "a")
+                        txt_file = open("/lab/texts/discord/" + filename + ".txt", "a")
 
                         try:
                             sanitized = re.sub(r"http\S+", "[REDACTED]", i["content"])
@@ -55,8 +59,15 @@ async def feed():
             print("handling errors")
 
 
-async def scrape():
+async def read():
     print("scrape reddit")
+
+    isExist = os.path.exists("/lab/texts/reddit")
+    if isExist:
+        shutil.rmtree("/lab/texts/reddit")
+
+    os.makedirs("/lab/texts/reddit")
+
     dread = praw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
         client_secret=os.environ["REDDITSECRET"],
@@ -64,41 +75,11 @@ async def scrape():
     )
     subreddit = await dread.subreddit("stairsofpantheon", fetch=True)
 
-    async for sub in subreddit.hot(limit=100):
+    async for sub in subreddit.hot(limit=500):
         try:
-            txt = open(output_file, "a")
+            txt = open("/lab/texts/reddit/" + sub.title + ".txt", "a")
             txt.write(sub.title)
             txt.write(sub.selftext)
             txt.close()
         except:
-            print("fail")
-
-
-async def read():
-
-    print("reading markdown from the lab")
-    files = glob.glob("/lab" + "/**/*.md", recursive=True)
-    for filename in files:
-        try:
-            with open(os.path.join("/lab", filename), "r") as file:
-                txt = open(output_file, "a")
-                txt.write(f"\n\n")
-                txt.writelines(file.readlines())
-                txt.close()
-                file.close()
-        except:
-            print("something failed while reading markdown entries")
-
-    print("reading txt files from the lab")
-    files = glob.glob("/lab" + "/**/*.txt", recursive=True)
-    for filename in files:
-        try:
-            with open(os.path.join("/lab", filename), "r") as file:
-                txt = open(output_file, "a")
-                txt.write(f"\n\n")
-                txt.writelines(file.readlines())
-                txt.close()
-                file.close()
-        except:
-            print("something failed while reading txt entries")
-    print("done")
+            print("fail reddit")

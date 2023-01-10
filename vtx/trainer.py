@@ -17,11 +17,11 @@ model_folder = "vtx/models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
 vocab_size = 2048
-max_length = 512
+max_length = 256
 block_size = max_length
-batch_size = 4
+batch_size = 10
 
-csv_logger = CSVLogger("/lab/logs", name=focus)
+logger = CSVLogger("/lab/logs", name=focus)
 
 
 def list_full_paths(directory):
@@ -58,7 +58,7 @@ if __name__ == "__main__":
         vocab_size=vocab_size,
         save_path="./",
         prefix="src." + focus,
-        dropout=0.006,
+        dropout=0.1,
     )
 
     research = create_token_dataset("/lab/research", False)
@@ -81,7 +81,7 @@ if __name__ == "__main__":
             vocab_size=vocab_size,
             tokenizer_file=tokenizer_file,
             max_length=max_length,
-            dropout=0.00000666,
+            dropout=0.1,
             n_embd=768,
             n_layer=12,
             n_head=24,
@@ -126,5 +126,8 @@ if __name__ == "__main__":
         n_gpu=1,
         output_dir=model_folder,
         tokenizer_file=tokenizer_file,
-        loggers=csv_logger,
+        loggers=logger,
+        learning_rate=0.001,
+        num_workers=8,
+        max_grad_norm=1,
     )

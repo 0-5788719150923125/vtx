@@ -26,13 +26,16 @@ def load_model():
     print("INFO: Reloaded model " + str(q["data"][0]) + " " + str(q["data"][1]) + ".")
 
     # check quantum state
+    txt = open("/lab/qrng.txt", "a")
     if q["data"][0] < 32:
         focus = "eye"
         model_folder = "vtx/models/" + focus
+        txt.write("\n" + str(q["data"][0]))
     else:
         focus = os.environ["FOCUS"]
         model_folder = "vtx/models/" + focus
-
+        txt.write("\n" + str(q["data"][0]))
+    txt.close()
     # load the AI model from environment
     print("loading the " + focus)
     if focus == "eye":
@@ -67,7 +70,7 @@ context = [
 
 
 def build_context(message):
-    if len(context) >= 7:
+    if len(context) >= 5:
         context.pop(0)
         build_context(message)
     else:
@@ -113,7 +116,7 @@ async def gen(bias):
             lstrip=True,
             do_sample=True,
             min_length=23,
-            max_length=512,
+            max_length=256,
             temperature=0.888,
             top_k=40,
             top_p=0.9,

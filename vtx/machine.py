@@ -11,6 +11,7 @@ import i
 token = os.environ["DISCORDTOKEN"]
 
 redacted_chance = 1
+response_probability = 33
 
 
 class Client(discord.Client):
@@ -46,94 +47,83 @@ class Client(discord.Client):
     # check every Discord message
     async def on_message(self, message):
         bias = 0
-        remove = False
-        redact = False
         output = "ERROR: Me Found."
 
-        head.build_context(str(message.author.id) + ": " + message.content)
-
-        if message.author == self.user:
-            return
-
+        # listen for commands
         if message.content == "load":
-            remove = True
             head.load_model()
             await message.channel.send("INFO: Reloaded the model.")
             await message.delete()
             return
         elif message.content == "prep":
-            remove = True
-            try:
-                await message.channel.send("INFO: Prepping data.")
-                await i.ingest()
-            except:
-                print("something tasted strange")
+            await message.channel.send("INFO: Prepping Discord data.")
+            await i.ingest()
             await message.channel.send("INFO: Scraping Reddit.")
             await i.read()
             await message.channel.send("INFO: Done.")
             await message.delete()
             return
 
+        # every message is added to local cache, for building prompt
+        head.build_context(str(message.author.id) + ": " + message.content)
+
+        # ignore messages from the bot
+        if message.author == self.user:
+            return
+
+        # generate responses
         print(bcolors.OKGREEN + "head" + bcolors.ENDC)
         if "gen" in message.content:
-            weight = 1
-            remove = True
-            output = await head.gen(530243004334604311)
             print(bcolors.OKGREEN + "heads" + bcolors.ENDC)
+            weight = 1
+            bias = 530243004334604311
+            await message.delete()
         else:
-            try:
-                if len(message.mentions) > 0:
-                    weight = random.randrange(0, 40, 1)
-                    bias = int(message.mentions[0].id)
-                    print(bcolors.WARNING + "WARN: agent" + bcolors.ENDC)
-                    print(bias)
-                else:
-                    bias = random.randrange(100, 333, 1)
-                    weight = random.randrange(0, 101, 1)
-            except:
-                print("wrong length")
-
-            string = str(message.author.id) + ": " + message.content
             print(bcolors.FAIL + "dj ent" + bcolors.ENDC)
-            output = await head.gen(weight)
+            # increase probability of a response if bot is mentioned
+            if client.user.mentioned_in(message):
+                weight = random.randint(0, 40)
+            # if a user is mentioned, attempt to respond as them
+            elif len(message.mentions) > 0:
+                print(bcolors.WARNING + "WARN: agent" + bcolors.ENDC)
+                print(bias)
+                bias = int(message.mentions[0].id)
+                weight = random.randint(0, 40)
 
+            else:
+                bias = random.randint(100, 999)
+                weight = random.randint(0, 101)
+
+        # increase response probability in private channels
         if str(message.channel.type) == "private":
             weight = random.randint(0, 36)
 
         print("weight is " + str(weight))
-        if weight > 33:
+        status_color = bcolors.OKGREEN
+
+        # check weight before generating a response
+        if weight > response_probability:
             print(bcolors.WARNING + "ERROR: Too heavy." + bcolors.ENDC)
             print("...")
             print("..")
             print(bcolors.FAIL + "." + bcolors.ENDC)
             return
 
+        # generate a response from context and bias
+        output = await head.gen(bias)
         print(bcolors.OKGREEN + "output" + bcolors.ENDC)
+
         try:
-
-            if random.randrange(0, 101, 1) < redacted_chance:
-                redact = True
-
-            if redact == True:
+            # make random redactions
+            if random.randint(0, 101) <= redacted_chance:
                 choices = ["[REDACTED]", "[CLASSIFIED]", "[CORRUPTED]"]
                 output = random.choice(choices)
 
-            if remove == True:
-                try:
-                    await message.delete()
-                    print("clean")
-                except:
-                    print("dirty")
-
+            # output to console
             print(output)
-
             print(bcolors.FAIL + "." + bcolors.ENDC)
             print(".")
-
-            if weight > 33:
-                print(bcolors.FAIL + "." + bcolors.ENDC)
-            else:
-                print(bcolors.OKGREEN + "." + bcolors.ENDC)
+            print(status_color + "." + bcolors.ENDC)
             print(bcolors.OKGREEN + "ok" + bcolors.ENDC)
         except Exception as e:
             print(message.content)
@@ -145,11 +135,6 @@ class Client(discord.Client):
             await message.channel.send(output)
         except:
             print(bcolors.FAIL + "Failed to send Discord message." + bcolors.ENDC)
-            print(
-                bcolors.FAIL
-                + "You should probably be sending this to a daemon API like luciferian.ink/?pen=republican"
-                + bcolors.ENDC
-            )
 
 
 class bcolors:
@@ -166,9 +151,7 @@ class bcolors:
 
 async def get_all_channels():
     text_channel_list = []
-    print("channels:")
     for guild in client.guilds:
-        print("=> " + guild.name)
         for channel in guild.text_channels:
             permissions = channel.permissions_for(guild.me)
             if permissions.send_messages:

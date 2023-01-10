@@ -95,7 +95,6 @@ class Client(discord.Client):
 
             string = str(message.author.id) + ": " + message.content
             print(bcolors.FAIL + "dj ent" + bcolors.ENDC)
-            await save_message(string)
             output = await head.gen(weight)
 
         if str(message.channel.type) == "private":

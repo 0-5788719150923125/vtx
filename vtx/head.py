@@ -67,7 +67,7 @@ context = [
 
 
 def build_context(message):
-    if len(context) >= 5:
+    if len(context) >= 7:
         context.pop(0)
         build_context(message)
     else:
@@ -96,7 +96,8 @@ async def gen(bias):
             while currentLength < random.randrange(18, 20, 1):
                 seed = seed + "0"
                 currentLength = currentLength + 1
-        prompt = str(bias) + seed + str(weight)[::-1] + ": "
+        # prompt = str(bias) + seed + str(weight)[::-1] + ": "
+        prompt = ""
         print("bias toward " + str(bias) + ", weight " + str(weight))
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(truncate_char)[0])
@@ -112,7 +113,7 @@ async def gen(bias):
             lstrip=True,
             do_sample=True,
             min_length=23,
-            max_length=256,
+            max_length=512,
             temperature=0.888,
             top_k=40,
             top_p=0.9,
@@ -120,8 +121,8 @@ async def gen(bias):
             return_as_list=True,
             num_beams=3,
             # num_beam_groups=3,
-            repetition_penalty=3.0,
-            length_penalty=-3.0,
+            repetition_penalty=2.0,
+            length_penalty=-7.0,
             no_repeat_ngram_size=2,
             early_stopping=True,
             renormalize_logits=True,

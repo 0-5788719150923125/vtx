@@ -41,6 +41,10 @@ async def ingest():
                             continue
                         if i["content"] == "":
                             continue
+                        if i["author"]["isBot"] == True:
+                            continue
+                        if len(i["mentions"]) > 0:
+                            continue
 
                         txt_file = open("/lab/texts/discord/" + filename + ".txt", "a")
 

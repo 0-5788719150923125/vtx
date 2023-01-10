@@ -12,7 +12,7 @@ os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 
 focus = os.environ["FOCUS"]
 base_model = ""
-vocab_path = "/lab/research"
+vocab_path = "/lab/texts"
 model_folder = "vtx/models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
@@ -58,16 +58,16 @@ if __name__ == "__main__":
         vocab_size=vocab_size,
         save_path="./",
         prefix="src." + focus,
-        dropout=0.0,
+        dropout=0.006,
     )
 
+    research = create_token_dataset("/lab/research", False)
     journals = create_token_dataset("/lab/journals", False)
     pages = create_token_dataset("/lab/pages", False)
-    research = create_token_dataset("/lab/research", False)
     texts = create_token_dataset("/lab/texts", False)
 
     flat_list = [
-        item for sublist in [journals, pages, research, texts] for item in sublist
+        item for sublist in [research, journals, pages, texts] for item in sublist
     ]
 
     merged = merge_datasets(flat_list, equalize=False)

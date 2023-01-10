@@ -19,7 +19,7 @@ tokenizer_file = "src." + focus + ".tokenizer.json"
 vocab_size = 2048
 max_length = 256
 block_size = max_length
-batch_size = 10
+batch_size = 8
 
 logger = CSVLogger("/lab/logs", name=focus)
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
         vocab_size=vocab_size,
         save_path="./",
         prefix="src." + focus,
-        dropout=0.1,
+        dropout=0.0666,
     )
 
     research = create_token_dataset("/lab/research", False)
@@ -81,10 +81,10 @@ if __name__ == "__main__":
             vocab_size=vocab_size,
             tokenizer_file=tokenizer_file,
             max_length=max_length,
-            dropout=0.1,
-            n_embd=768,
+            dropout=0.0666,
+            n_embd=1024,
             n_layer=12,
-            n_head=24,
+            n_head=16,
             reorder_and_upcast_attn=True,
             scale_attn_by_inverse_layer_idx=True,
         )

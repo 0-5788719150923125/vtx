@@ -77,7 +77,10 @@ class Client(discord.Client):
             print(bcolors.OKGREEN + "heads" + bcolors.ENDC)
             weight = 1
             bias = 530243004334604311
-            await message.delete()
+            try:
+                await message.delete()
+            except:
+                pass
         else:
             print(bcolors.FAIL + "dj ent" + bcolors.ENDC)
             # increase probability of a response if bot is mentioned
@@ -110,6 +113,7 @@ class Client(discord.Client):
             return
 
         # generate a response from context and bias
+        print(bcolors.OKGREEN + "heads" + bcolors.ENDC)
         output = await head.gen(bias)
         print(bcolors.OKGREEN + "output" + bcolors.ENDC)
 

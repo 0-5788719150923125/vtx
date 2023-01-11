@@ -1,6 +1,3 @@
-!aitextgen.tokenizer.json
-!lab/*.mp4
-!lab/logseq/config.edn
 .env
 /vtx/aitextgen*
 __pycache__
@@ -12,3 +9,6 @@ lab/texts/*
 node_modules
 vtx/models/*
 vtx/vtx/*
+!.keep
+!lab/*.mp4
+!lab/logseq/config.edn

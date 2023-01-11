@@ -67,7 +67,7 @@ context = [
 
 
 def build_context(message):
-    if len(context) >= 5:
+    if len(context) >= 4:
         context.pop(0)
         build_context(message)
     else:

@@ -8,7 +8,6 @@ input*.txt*
 lab/discord
 lab/logs
 lab/logseq/*
-lab/qrng.txt
 lab/texts/*
 node_modules
 vtx/models/*

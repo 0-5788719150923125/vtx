@@ -76,7 +76,7 @@ if __name__ == "__main__":
     print("\033[91m" + "ed on the " + focus + "\033[0m")
 
     if focus == "heart":
-        base_model = "gpt2"
+        base_model = None
         config = build_gpt2_config(
             vocab_size=vocab_size,
             tokenizer_file=tokenizer_file,
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     elif focus == "head":
         base_model = "EleutherAI/gpt-neo-125M"
         block_size = 512
-        batch_size = 4
+        batch_size = 8
         config = None
         # config = GPTNeoConfig(
         #     vocab_size=50257,
@@ -112,6 +112,7 @@ if __name__ == "__main__":
         tokenizer_file=tokenizer_file,
         config=config,
         model=base_model,
+        # model_folder=model_folder,
         to_gpu=True,
         gradient_checkpointing=True,
     )

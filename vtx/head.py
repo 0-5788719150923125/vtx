@@ -6,6 +6,9 @@ import re
 import time
 import random
 import requests
+import functools
+import typing
+import asyncio
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 os.environ["TRANSFORMERS_CACHE"] = "/tmp"
@@ -19,6 +22,14 @@ try:
     q = requests.get("https://qrng.anu.edu.au/API/jsonI.php?length=6&type=uint8").json()
 except:
     q = [random.randrange(0, 256, 1), random.randrange(0, 256, 1)]
+
+
+def to_thread(func: typing.Callable) -> typing.Coroutine:
+    @functools.wraps(func)
+    async def wrapper(*args, **kwargs):
+        return await asyncio.to_thread(func, *args, **kwargs)
+
+    return wrapper
 
 
 def load_model():
@@ -37,11 +48,19 @@ def load_model():
     print("loading the " + focus)
     if focus == "eye":
         print("never fine-tune the eye")
-        ai = aitextgen(model="distilgpt2", tokenizer_file=tokenizer_file, to_gpu=to_gpu)
+        ai = aitextgen(
+            model="distilgpt2",
+            tokenizer_file=tokenizer_file,
+            to_gpu=to_gpu,
+            verbose=False,
+        )
     elif focus == "heart":
         print("never focus on the heart")
         ai = aitextgen(
-            model_folder=model_folder, tokenizer_file=tokenizer_file, to_gpu=to_gpu
+            model_folder=model_folder,
+            tokenizer_file=tokenizer_file,
+            to_gpu=to_gpu,
+            verbose=False,
         )
     elif focus == "head":
         print("use your heads")
@@ -49,6 +68,16 @@ def load_model():
             model_folder=model_folder,
             tokenizer_file=tokenizer_file,
             to_gpu=to_gpu,
+            verbose=False,
+        )
+    elif focus == "brain":
+        print("the brain requires memory")
+        ai = aitextgen(
+            # model="EleutherAI/gpt-neo-2.7B",
+            # model_folder=model_folder,
+            # tokenizer_file=tokenizer_file,
+            to_gpu=to_gpu,
+            verbose=False,
         )
 
     return ai
@@ -63,18 +92,20 @@ context = [
     "975174695399854150: I am a robot.",
     "1051994502333726841: I am a ghost.",
     "204716337971331072: I am a human.",
+    "806051627198709760: I am a dead man.",
 ]
 
 
 def build_context(message):
-    if len(context) >= 4:
+    if len(context) >= 7:
         context.pop(0)
         build_context(message)
     else:
         context.append(message)
 
 
-async def gen(bias):
+@to_thread
+def gen(bias):
 
     prompt = ""
     ship = ":>"
@@ -97,7 +128,7 @@ async def gen(bias):
             lstrip=True,
             do_sample=True,
             min_length=23,
-            max_length=256,
+            max_length=512,
             temperature=0.666,
             top_k=40,
             top_p=0.9,
@@ -111,7 +142,8 @@ async def gen(bias):
         )
     except Exception as e:
         print(e)
-        completion[0] = "ERROR: The prompt does not fit the current model."
+        completion = ["ERROR: The prompt does not fit the current model."]
+        return
     try:
         print("\033[92m" + "completion" + "\033[0m")
         generation_zero = completion[0][len(history) :]

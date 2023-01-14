@@ -9,6 +9,7 @@ import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 os.environ["TRANSFORMERS_CACHE"] = "/tmp"
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:512"
 
 focus = os.environ["FOCUS"]
 base_model = ""
@@ -89,9 +90,12 @@ if __name__ == "__main__":
             scale_attn_by_inverse_layer_idx=True,
         )
     elif focus == "head":
+        # base_model = "xhyi/PT_GPTNEO350_ATG"
         base_model = "EleutherAI/gpt-neo-125M"
-        block_size = 512
+        # base_model = "EleutherAI/gpt-j-6B"
+        block_size = 2048
         batch_size = 8
+        gradient_accumulation_steps = 4
         config = None
         # config = GPTNeoConfig(
         #     vocab_size=50257,
@@ -131,4 +135,6 @@ if __name__ == "__main__":
         learning_rate=0.001,
         num_workers=8,
         max_grad_norm=1,
+        use_deepspeed=False,
+        gradient_accumulation_steps=gradient_accumulation_steps,
     )

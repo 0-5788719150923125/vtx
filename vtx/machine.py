@@ -11,7 +11,7 @@ import i
 token = os.environ["DISCORDTOKEN"]
 
 redacted_chance = 1
-response_probability = 33
+response_probability = 5
 
 
 class Client(discord.Client):
@@ -78,7 +78,8 @@ class Client(discord.Client):
             weight = 1
             bias = 530243004334604311
             try:
-                await message.delete()
+                if message.content == "gen":
+                    await message.delete()
             except:
                 pass
         else:
@@ -99,7 +100,7 @@ class Client(discord.Client):
 
         # increase response probability in private channels
         if str(message.channel.type) == "private":
-            weight = random.randint(0, 36)
+            weight = random.randint(0, response_probability + 3)
 
         print("weight is " + str(weight))
         status_color = bcolors.OKGREEN

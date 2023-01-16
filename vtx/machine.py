@@ -6,19 +6,22 @@ import random
 import asyncio
 import discord
 import head
-import i
 
 token = os.environ["DISCORDTOKEN"]
 
 redacted_chance = 1
-response_probability = 5
+response_probability = 10
 
 
 class Client(discord.Client):
+
+    thinking = False
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
+        head.ai = await head.load_model()
         print("I am alive...")
 
     async def setup_hook(self) -> None:
@@ -28,8 +31,9 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randrange(10, 10800, 1)
+            delay = random.randint(300, 10800)
             await asyncio.sleep(delay)
+            self.thinking = True
             neurons = [
                 random.randint(0, 9),  # neuron
                 random.randint(0, 9),  # neura
@@ -37,12 +41,31 @@ class Client(discord.Client):
             ]
             bias = int(str(neurons[0]) + str(neurons[1]) + str(neurons[2]))
             print("my bias is " + str(bias))
-            channels = await get_all_channels()
-            channel = random.choice(channels)
-            output = await head.gen(bias)
-            print("=> output to " + channel.name)
-            print(output)
-            await channel.send(output)
+            try:
+                channels = await get_all_channels()
+                channel = random.choice(channels)
+                messages = [
+                    message
+                    async for message in self.get_channel(channel.id).history(limit=11)
+                ]
+                context = [
+                    str(messages[10].author.id) + ": " + messages[10].content,
+                    str(messages[5].author.id) + ": " + messages[5].content,
+                    str(messages[4].author.id) + ": " + messages[4].content,
+                    str(messages[3].author.id) + ": " + messages[3].content,
+                    str(messages[2].author.id) + ": " + messages[2].content,
+                    str(messages[1].author.id) + ": " + messages[1].content,
+                    str(messages[0].author.id) + ": " + messages[0].content,
+                ]
+                head.ai = await head.load_model("eye")
+                output = await head.gen(bias, context)
+                print("=> output to " + channel.name)
+                print(output)
+                head.ai = await head.load_model()
+                await channel.send(output)
+                self.thinking = False
+            except:
+                pass
 
     # check every Discord message
     async def on_message(self, message):
@@ -51,16 +74,8 @@ class Client(discord.Client):
 
         # listen for commands
         if message.content == "load":
-            head.load_model()
+            head.ai = await head.load_model()
             await message.channel.send("INFO: Reloaded the model.")
-            await message.delete()
-            return
-        elif message.content == "prep":
-            await message.channel.send("INFO: Prepping Discord data.")
-            await i.ingest()
-            await message.channel.send("INFO: Scraping Reddit.")
-            await i.read()
-            await message.channel.send("INFO: Done.")
             await message.delete()
             return
 
@@ -69,6 +84,10 @@ class Client(discord.Client):
 
         # ignore messages from the bot
         if message.author == self.user:
+            return
+
+        # ignore messages if heavy processing is taking place
+        if self.thinking == True:
             return
 
         # generate responses
@@ -85,22 +104,24 @@ class Client(discord.Client):
         else:
             print(bcolors.FAIL + "dj ent" + bcolors.ENDC)
             # increase probability of a response if bot is mentioned
-            if client.user.mentioned_in(message):
+            if message.reference is not None:
+                print("this was a reply")
+                weight = random.randint(0, 101)
+            elif client.user.mentioned_in(message):
                 weight = random.randint(0, 40)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
                 print(bcolors.WARNING + "WARN: agent" + bcolors.ENDC)
                 print(bias)
                 bias = int(message.mentions[0].id)
-                weight = random.randint(0, 40)
-
+                weight = random.randint(0, response_probability + 5)
             else:
                 bias = random.randint(100, 999)
                 weight = random.randint(0, 101)
 
         # increase response probability in private channels
         if str(message.channel.type) == "private":
-            weight = random.randint(0, response_probability + 3)
+            weight = random.randint(0, response_probability + 1)
 
         print("weight is " + str(weight))
         status_color = bcolors.OKGREEN

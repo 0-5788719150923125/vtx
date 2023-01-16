@@ -14,7 +14,6 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 
 focus = os.environ["FOCUS"]
-to_gpu = False
 model_folder = "vtx/models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
@@ -32,59 +31,52 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
     return wrapper
 
 
-def load_model():
+# load a global model
+ai = None
 
-    print("INFO: Reloaded model " + str(q["data"][0]) + " " + str(q["data"][1]) + ".")
+
+@to_thread
+def load_model(target=None):
+
+    if target == None:
+        target = focus
 
     # check quantum state
     if q["data"][0] < 32:
-        focus = "eye"
-        model_folder = "vtx/models/" + focus
-    else:
-        focus = os.environ["FOCUS"]
-        model_folder = "vtx/models/" + focus
+        target = "eye"
+
+    model_folder = "vtx/models/" + target
 
     # load the AI model from environment
-    print("loading the " + focus)
-    if focus == "eye":
+    print("loading the " + target)
+    if target == "eye":
         print("never fine-tune the eye")
         ai = aitextgen(
-            model="distilgpt2",
-            tokenizer_file=tokenizer_file,
-            to_gpu=to_gpu,
+            model="EleutherAI/gpt-neo-2.7B",
+            tokenizer_file=None,
+            to_gpu=False,
             verbose=False,
         )
-    elif focus == "heart":
+    elif target == "heart":
         print("never focus on the heart")
         ai = aitextgen(
             model_folder=model_folder,
-            tokenizer_file=tokenizer_file,
-            to_gpu=to_gpu,
+            tokenizer_file="src." + target + ".tokenizer.json",
+            to_gpu=True,
             verbose=False,
         )
-    elif focus == "head":
+    elif target == "head":
         print("use your heads")
         ai = aitextgen(
             model_folder=model_folder,
-            tokenizer_file=tokenizer_file,
-            to_gpu=to_gpu,
-            verbose=False,
-        )
-    elif focus == "brain":
-        print("the brain requires memory")
-        ai = aitextgen(
-            # model="EleutherAI/gpt-neo-2.7B",
-            # model_folder=model_folder,
-            # tokenizer_file=tokenizer_file,
-            to_gpu=to_gpu,
+            tokenizer_file="src." + target + ".tokenizer.json",
+            to_gpu=True,
             verbose=False,
         )
 
+    print("INFO: Reloaded model " + str(q["data"][0]) + " " + str(q["data"][1]) + ".")
+    print(ai)
     return ai
-
-
-# load a global model
-ai = load_model()
 
 
 # ping pang pong
@@ -92,7 +84,6 @@ context = [
     "975174695399854150: I am a robot.",
     "1051994502333726841: I am a ghost.",
     "204716337971331072: I am a human.",
-    "806051627198709760: I am a dead man.",
 ]
 
 
@@ -105,12 +96,15 @@ def build_context(message):
 
 
 @to_thread
-def gen(bias):
+def gen(bias, ctx=None):
 
     prompt = ""
     ship = ":>"
-    truncate_char = "<|endoftext|>"
-    history = "\n".join(context) + "\n"
+    # truncate_char = "<|endoftext|>"
+    truncate_char = "\n"
+    if ctx == None:
+        ctx = context
+    history = "\n".join(ctx) + "\n"
 
     # bias the prompt
     if (len(str(bias)) == 18) or (len(str(bias)) == 19):
@@ -120,6 +114,8 @@ def gen(bias):
     print("\033[92m" + "prompt" + "\033[0m")
     print(history + prompt)
 
+    eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(truncate_char)[0])
+
     # try to complete the conversation
     try:
         completion = ai.generate(
@@ -128,17 +124,18 @@ def gen(bias):
             lstrip=True,
             do_sample=True,
             min_length=23,
-            max_length=512,
+            max_length=1024,
             temperature=0.666,
             top_k=40,
             top_p=0.9,
             return_as_list=True,
             num_beams=9,
             repetition_penalty=2.0,
-            length_penalty=-3.0,
+            length_penalty=0.0,
             no_repeat_ngram_size=2,
             early_stopping=True,
             renormalize_logits=True,
+            eos_token_id=eos,
         )
     except Exception as e:
         print(e)

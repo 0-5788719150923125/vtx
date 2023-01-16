@@ -3,13 +3,12 @@ from aitextgen.tokenizers import train_tokenizer
 from aitextgen.utils import build_gpt2_config
 from aitextgen import aitextgen
 from transformers import GPT2Config, GPTNeoConfig
-from pytorch_lightning.loggers import CSVLogger
+from pytorch_lightning.loggers import TensorBoardLogger
 import numpy as np
 import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 os.environ["TRANSFORMERS_CACHE"] = "/tmp"
-os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:512"
 
 focus = os.environ["FOCUS"]
 base_model = ""
@@ -22,7 +21,7 @@ max_length = 256
 block_size = max_length
 batch_size = 8
 
-logger = CSVLogger("/lab/logs", name=focus)
+logger = TensorBoardLogger("/lab/logs", name=focus, version=0)
 
 
 def list_full_paths(directory):
@@ -59,17 +58,15 @@ if __name__ == "__main__":
         vocab_size=vocab_size,
         save_path="./",
         prefix="src." + focus,
-        dropout=0.0666,
+        dropout=0.0,
     )
 
-    research = create_token_dataset("/lab/research", False)
+    # research = create_token_dataset("/lab/research", False)
     journals = create_token_dataset("/lab/journals", False)
     pages = create_token_dataset("/lab/pages", False)
     texts = create_token_dataset("/lab/texts", False)
 
-    flat_list = [
-        item for sublist in [research, journals, pages, texts] for item in sublist
-    ]
+    flat_list = [item for sublist in [journals, pages, texts] for item in sublist]
 
     merged = merge_datasets(flat_list, equalize=False)
 
@@ -93,9 +90,9 @@ if __name__ == "__main__":
         # base_model = "xhyi/PT_GPTNEO350_ATG"
         base_model = "EleutherAI/gpt-neo-125M"
         # base_model = "EleutherAI/gpt-j-6B"
-        block_size = 2048
+        block_size = 256
         batch_size = 8
-        gradient_accumulation_steps = 4
+        gradient_accumulation_steps = 1
         config = None
         # config = GPTNeoConfig(
         #     vocab_size=50257,
@@ -125,7 +122,7 @@ if __name__ == "__main__":
         merged,
         from_cache=False,
         batch_size=batch_size,
-        num_steps=100000,
+        num_steps=40000,
         generate_every=250,
         save_every=1000,
         n_gpu=1,

@@ -12,9 +12,12 @@ services:
           devices:
             - driver: nvidia
               capabilities: [gpu]
+    ulimits:
+      memlock: -1
     build:
       context: .
       dockerfile: Dockerfile
+      shm_size: '1gb'
     stdin_open: true
     tty: true
     volumes:
@@ -35,3 +38,11 @@ services:
   ips:
     image: ipfs/kubo:master-latest
     command: daemon --migrate=true --agent-version-suffix=docker --init-profile=lowpower --writable --enable-gc --enable-pubsub-experiment --enable-namesys-pubsub
+
+  dsh:
+    image: tensorflow/tensorflow:2.11.0
+    command: 'tensorboard --logdir logs --bind_all'
+    volumes:
+      - ./lab/logs:/logs
+    ports:
+      - 6006:6006

@@ -12,6 +12,7 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 
 - https://thesource.fm/
 - https://discord.gg/Hv7DEW63Tp
+- http://localhost:6006
 
 # Training data
 

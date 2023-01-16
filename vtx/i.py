@@ -3,7 +3,7 @@ import shutil
 import json
 import re
 import glob
-import asyncpraw as praw
+import praw
 
 
 def spy():
@@ -18,7 +18,7 @@ def vision():
     print("a view through my lens")
 
 
-async def ingest():
+def ingest():
 
     isExist = os.path.exists("/lab/texts/discord")
     if isExist:
@@ -63,7 +63,7 @@ async def ingest():
             print("handling errors")
 
 
-async def read():
+def read():
     print("scrape reddit")
 
     isExist = os.path.exists("/lab/texts/reddit")
@@ -77,9 +77,9 @@ async def read():
         client_secret=os.environ["REDDITSECRET"],
         user_agent=os.environ["REDDITAGENT"],
     )
-    subreddit = await dread.subreddit("stairsofpantheon", fetch=True)
+    subreddit = dread.subreddit("stairsofpantheon")
 
-    async for sub in subreddit.hot(limit=500):
+    for sub in subreddit.hot(limit=500):
         try:
             txt = open("/lab/texts/reddit/" + sub.title + ".txt", "a")
             txt.write(sub.title)
@@ -87,3 +87,7 @@ async def read():
             txt.close()
         except:
             print("fail reddit")
+
+
+ingest()
+read()

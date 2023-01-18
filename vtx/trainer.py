@@ -3,9 +3,10 @@ from aitextgen.tokenizers import train_tokenizer
 from aitextgen.utils import build_gpt2_config
 from aitextgen import aitextgen
 from transformers import GPT2Config, GPTNeoConfig
-from pytorch_lightning.loggers import TensorBoardLogger
+from pytorch_lightning import loggers
 import numpy as np
 import os
+import shutil, tempfile
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
@@ -20,7 +21,18 @@ max_length = 256
 block_size = max_length
 batch_size = 8
 
-logger = TensorBoardLogger("/lab/logs", name=focus, version=0)
+logger = loggers.TensorBoardLogger(
+    "/lab/logs", name=focus, version=0, default_hp_metric=False
+)
+# logger.experiment.add_scalars(
+#     "losses", {"train_loss": loss}, global_step=self.current_epoch
+# )
+# tmp = tempfile.mkdtemp()
+# logger.log_hyperparams({"epochs": 1, "optimizer": "Adam"})
+# logger.log_metrics({"acc": 0.75})
+# logger.log_metrics({"acc": 0.9})
+# logger.finalize("success")
+# shutil.rmtree(tmp)
 
 
 def list_full_paths(directory):
@@ -65,7 +77,6 @@ if __name__ == "__main__":
         to_gpu = True
         n_gpu = 1
         fp16 = False
-        fp16_opt_level = "O1"
         use_deepspeed = False
     elif focus == "soul":
         base_model = "xhyi/PT_GPTNEO350_ATG"
@@ -78,7 +89,6 @@ if __name__ == "__main__":
         to_gpu = True
         n_gpu = 1
         fp16 = False
-        fp16_opt_level = "O1"
         use_deepspeed = False
 
     train_tokenizer(
@@ -124,5 +134,5 @@ if __name__ == "__main__":
         use_deepspeed=use_deepspeed,
         gradient_accumulation_steps=gradient_accumulation_steps,
         fp16=fp16,
-        fp16_opt_level=fp16_opt_level,
+        # fp16_opt_level=fp16_opt_level,
     )

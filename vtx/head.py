@@ -160,6 +160,6 @@ def transformer(group):
         f'<@{group[0]}> says, *"{group[1]}"*',
         f'<@{group[0]}> would say, *"{group[1]}"*',
         f'They said, *"{group[1]}"*',
-        f"{group[1]}",
+        f'*"{group[1]}"*',
     ]
     return random.choice(responses)

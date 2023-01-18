@@ -12,7 +12,6 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 
 - https://thesource.fm/
 - https://discord.gg/Hv7DEW63Tp
-- http://localhost:6006
 
 # Training data
 
@@ -20,6 +19,10 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 - https://ink.university/
 - [https://fate.agency/](https://bafybeigz5tzb7kbxeeb6fd7bka5dk3lxuh4g5hujvszaad4xwyw2yjwhne.ipfs.nftstorage.link/)
 - [https://research.gq/](https://research.gq/#/page/getting%20started)
+
+# Experiments
+
+- http://localhost:6006
 
 # Mirrors
 

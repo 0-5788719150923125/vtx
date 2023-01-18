@@ -43,8 +43,6 @@ def ingest():
                                 print("allowing Eliza")
                             else:
                                 continue
-                        # if len(i["mentions"]) > 0:
-                        #     continue
 
                         txt_file = open("/lab/texts/discord/" + filename + ".txt", "a")
 
@@ -63,6 +61,12 @@ def ingest():
                                     sanitized = re.sub(
                                         r"http\S+", "[REDACTED]", result["content"]
                                     )
+                                    if len(result["mentions"]) > 0:
+                                        for mention in result["mentions"]:
+                                            sanitized = sanitized.replace(
+                                                mention["name"],
+                                                "<@" + str(mention["id"]) + ">",
+                                            )
                                     content = result["author"]["id"] + ": " + sanitized
                                     txt_file.write(f"{content}\n".format(content))
                             except Exception as e:
@@ -71,6 +75,12 @@ def ingest():
 
                         try:
                             sanitized = re.sub(r"http\S+", "[REDACTED]", i["content"])
+                            if len(i["mentions"]) > 0:
+                                for mention in i["mentions"]:
+                                    sanitized = sanitized.replace(
+                                        mention["name"], "<@" + str(mention["id"]) + ">"
+                                    )
+
                             content = i["author"]["id"] + ": " + sanitized
                             txt_file.write(f"{content}\n".format(content))
                         except:

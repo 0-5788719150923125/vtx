@@ -21,18 +21,7 @@ max_length = 256
 block_size = max_length
 batch_size = 8
 
-logger = loggers.TensorBoardLogger(
-    "/lab/logs", name=focus, version=0, default_hp_metric=False
-)
-# logger.experiment.add_scalars(
-#     "losses", {"train_loss": loss}, global_step=self.current_epoch
-# )
-# tmp = tempfile.mkdtemp()
-# logger.log_hyperparams({"epochs": 1, "optimizer": "Adam"})
-# logger.log_metrics({"acc": 0.75})
-# logger.log_metrics({"acc": 0.9})
-# logger.finalize("success")
-# shutil.rmtree(tmp)
+logger = loggers.TensorBoardLogger("/lab/logs", name=focus, version=0)
 
 
 def list_full_paths(directory):
@@ -83,8 +72,8 @@ if __name__ == "__main__":
         vocab_size = 4096
         block_size = 256
         batch_size = 1
-        gradient_accumulation_steps = 8
-        num_steps = 20000
+        gradient_accumulation_steps = 32
+        num_steps = 5000
         config = None
         to_gpu = True
         n_gpu = 1

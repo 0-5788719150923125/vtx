@@ -10,17 +10,18 @@ import functools
 import typing
 import asyncio
 import gc
+import yaml
 
 os.environ["LRU_CACHE_CAPACITY"] = "1"
 
 focus = os.environ["FOCUS"]
-model_folder = "vtx/models/" + focus
-tokenizer_file = "src." + focus + ".tokenizer.json"
 
-try:
-    q = requests.get("https://qrng.anu.edu.au/API/jsonI.php?length=6&type=uint8").json()
-except:
-    q = [random.randrange(0, 256, 1), random.randrange(0, 256, 1)]
+# holds the model
+ai = None
+
+with open("models.yml", "r") as config_file:
+    config = yaml.load(config_file, Loader=yaml.FullLoader)
+    print("successfully loaded model configurations")
 
 
 def to_thread(func: typing.Callable) -> typing.Coroutine:
@@ -31,45 +32,33 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
     return wrapper
 
 
-# load a global model
-ai = None
-
-
 @to_thread
 def load_model(target=None):
 
     if target == None:
         target = focus
 
-    # check quantum state
-    if q["data"][0] < 32:
-        target = "heart"
+    model = config["models"][target]
 
-    model_folder = "vtx/models/" + target
+    if "model" not in model:
+        model_folder = "vtx/models/" + target
+        tokenizer_file = "src." + target + ".tokenizer.json"
+    else:
+        model_folder = None
+        tokenizer_file = None
 
-    # load the AI model from environment
     print("loading the " + target)
-    if target == "heart":
-        print("never focus on the heart")
-        ai = aitextgen(
-            model_folder=model_folder,
-            tokenizer_file="src." + target + ".tokenizer.json",
-            to_gpu=False,
-            verbose=False,
-        )
-    elif target == "head":
-        print("use your heads")
-        ai = aitextgen(
-            model="EleutherAI/gpt-neo-2.7B",
-            tokenizer_file=None,
-            to_gpu=False,
-            verbose=False,
-        )
+    print(model["info"])
+    ai = aitextgen(
+        model=model.get("model", None),
+        model_folder=model_folder,
+        tokenizer_file=tokenizer_file,
+        to_gpu=model["gpu"],
+    )
 
     gc.collect()
 
-    print("INFO: Reloaded model " + str(q["data"][0]) + " " + str(q["data"][1]) + ".")
-    print(ai)
+    print("INFO: " + str(ai))
     return ai
 
 
@@ -100,11 +89,26 @@ def gen(bias=None, ctx=None):
         ctx = context
     history = "\n".join(ctx) + "\n"
 
+    # set quantum state
+    try:
+        q = requests.get(
+            "https://qrng.anu.edu.au/API/jsonI.php?length=6&type=uint8"
+        ).json()
+    except:
+        q = {"data": [random.randint(0, 256), random.randint(0, 256)]}
+
+    if q["data"][0] < 32:
+        seed = q["data"][0]
+        print("quantum seed was set to " + str(seed))
+    else:
+        seed = None
+
     # bias the prompt
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
             print("bias toward " + str(bias))
-            prompt = str(bias) + ": I"
+            prefixes = ["I", "You", ""]
+            prompt = str(bias) + ": " + random.choice(prefixes)
 
     print("\033[92m" + "prompt" + "\033[0m")
     print(history + prompt)
@@ -112,11 +116,11 @@ def gen(bias=None, ctx=None):
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(truncate_char)[0])
 
     # try to complete the prompt
+    # https://huggingface.co/docs/transformers/main_classes/text_generation
     try:
         completion = ai.generate(
             n=1,
             prompt=history + prompt,
-            lstrip=True,
             do_sample=True,
             min_length=23,
             max_length=1024,
@@ -126,11 +130,12 @@ def gen(bias=None, ctx=None):
             return_as_list=True,
             num_beams=9,
             repetition_penalty=2.0,
-            length_penalty=0.0,
+            length_penalty=-0.2,
             no_repeat_ngram_size=2,
             early_stopping=True,
             renormalize_logits=True,
             eos_token_id=eos,
+            seed=seed,
         )
     except Exception as e:
         print(e)
@@ -140,15 +145,25 @@ def gen(bias=None, ctx=None):
         generation_zero = completion[0][len(history) :]
         print(generation_zero)
 
-        generation_one = re.search(
-            r"^(?:.*)(\d{18,19})(?::\s*)(.*)(?:\n*)", generation_zero
-        )
+        try:
+            generation_one = re.search(
+                r"^(?:.*)(\d{19})(?::\s*)(.*)(?:\n*)", generation_zero
+            )
+            output = transformer([generation_one[1], generation_one[2]])
+        except:
+            generation_one = re.search(
+                r"^(?:.*)(\d{18})(?::\s*)(.*)(?:\n*)", generation_zero
+            )
+
+        if generation_one[2] == "":
+            return
         output = transformer([generation_one[1], generation_one[2]])
         try:
             output = output.replace("Q:", "")
         except:
             output = output
-    except:
+    except Exception as e:
+        print(e)
         output = completion[0]
     return output
 

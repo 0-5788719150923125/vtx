@@ -4,8 +4,8 @@ deepspeed==0.8.0
 discord.py==2.1.0
 # aitextgen==0.6.0
 torch==1.11.0
-asyncpraw==7.6.1
-requests==2.28.1
+requests==2.28.2
 numpy==1.24.1
 praw==7.6.1
 tensorboard==2.11.2
+pyyaml==6.0

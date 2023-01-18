@@ -35,11 +35,7 @@ class Client(discord.Client):
         await self.wait_until_ready()
         while not self.is_closed():
             delay = random.randint(30, 10800)
-            print(
-                "waiting "
-                + str(math.floor(delay / 60))
-                + " minutes before next thought"
-            )
+            print(f"waiting {str(math.floor(delay / 60))} minutes before next thought")
             await asyncio.sleep(delay)
             self.thinking = True
             try:
@@ -58,21 +54,39 @@ class Client(discord.Client):
                     str(messages[0].author.id) + ": " + messages[0].content,
                 ]
                 head.ai = await head.load_model("head")
-                output = await head.gen(
-                    int(messages[random.randint(0, 9)].author.id), context
-                )
+
+                recent_author_id = messages[random.randint(0, 9)].author.id
+
+                if str(recent_author_id) == str(self.user.id):
+                    print(bcolors.WARNING + "WARN: found myself" + bcolors.ENDC)
+                    neurons = [
+                        random.randint(1, 9),  # neuron
+                        random.randint(0, 9),  # neura
+                        random.randint(0, 9),  # neu ra
+                    ]
+                    weight = random.randint(100000000000000, 9999999999999999)
+                    bias = (
+                        str(neurons[0])
+                        + str(neurons[1])
+                        + str(neurons[2])
+                        + str(weight)
+                    )
+                else:
+                    bias = recent_author_id
+
+                output = await head.gen(int(bias), context)
+
                 print("=> output to " + channel.name)
                 print(output)
+
                 del head.ai
+
                 head.ai = await head.load_model()
                 await channel.send(output)
                 self.thinking = False
-            except:
-                print(
-                    bcolors.FAIL
-                    + "Something failed while trying to think."
-                    + bcolors.ENDC
-                )
+            except Exception as e:
+                print(bcolors.FAIL + str(e) + bcolors.ENDC)
+                print(bcolors.FAIL + "something broke my concentration" + bcolors.ENDC)
 
     # check every Discord message
     async def on_message(self, message):

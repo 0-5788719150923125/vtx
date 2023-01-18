@@ -18,7 +18,7 @@ def vision():
     print("a view through my lens")
 
 
-def ingest():
+def chat():
 
     isExist = os.path.exists("/lab/texts/discord")
     if isExist:
@@ -120,5 +120,5 @@ def read():
             print("fail reddit")
 
 
-ingest()
+chat()
 read()

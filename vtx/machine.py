@@ -35,7 +35,7 @@ class Client(discord.Client):
         await self.wait_until_ready()
         while not self.is_closed():
             delay = random.randint(30, 60)
-            print("waiting " + str(math.floor(delay / 60)) + " minutes before")
+            print("waiting " + str(math.floor(delay / 10800)) + " minutes before")
             await asyncio.sleep(delay)
             self.thinking = True
             try:

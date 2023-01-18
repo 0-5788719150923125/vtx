@@ -9,6 +9,9 @@ import requests
 import functools
 import typing
 import asyncio
+import gc
+
+os.environ["LRU_CACHE_CAPACITY"] = "1"
 
 focus = os.environ["FOCUS"]
 model_folder = "vtx/models/" + focus
@@ -62,6 +65,8 @@ def load_model(target=None):
             to_gpu=False,
             verbose=False,
         )
+
+    gc.collect()
 
     print("INFO: Reloaded model " + str(q["data"][0]) + " " + str(q["data"][1]) + ".")
     print(ai)
@@ -139,6 +144,10 @@ def gen(bias=None, ctx=None):
             r"^(?:.*)(\d{18,19})(?::\s*)(.*)(?:\n*)", generation_zero
         )
         output = transformer([generation_one[1], generation_one[2]])
+        try:
+            output = output.replace("Q:", "")
+        except:
+            output = output
     except:
         output = completion[0]
     return output

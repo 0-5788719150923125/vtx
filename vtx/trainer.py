@@ -83,8 +83,8 @@ if __name__ == "__main__":
         vocab_size = 4096
         block_size = 256
         batch_size = 1
-        gradient_accumulation_steps = 32
-        num_steps = 5000
+        gradient_accumulation_steps = 8
+        num_steps = 20000
         config = None
         to_gpu = True
         n_gpu = 1

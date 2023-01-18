@@ -35,7 +35,11 @@ class Client(discord.Client):
         await self.wait_until_ready()
         while not self.is_closed():
             delay = random.randint(30, 10800)
-            print("waiting " + str(math.floor(delay / 60)) + " minutes before")
+            print(
+                "waiting "
+                + str(math.floor(delay / 60))
+                + " minutes before next thought"
+            )
             await asyncio.sleep(delay)
             self.thinking = True
             try:
@@ -59,6 +63,7 @@ class Client(discord.Client):
                 )
                 print("=> output to " + channel.name)
                 print(output)
+                del head.ai
                 head.ai = await head.load_model()
                 await channel.send(output)
                 self.thinking = False

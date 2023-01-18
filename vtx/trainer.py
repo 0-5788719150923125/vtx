@@ -8,7 +8,6 @@ import numpy as np
 import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
-os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 
 focus = os.environ["FOCUS"]
 base_model = ""
@@ -47,7 +46,7 @@ def create_token_dataset(path, line_by_line):
                 )
             )
         except:
-            print("something failed in " + file)
+            print("something failed while tokenizing " + file)
     return datasets
 
 
@@ -61,6 +60,34 @@ if __name__ == "__main__":
         dropout=0.0,
     )
 
+    print("\033[91m" + "focus" + "\033[0m")
+    print("\033[91m" + "ed on the " + focus + "\033[0m")
+
+    if focus == "heart":
+        base_model = "EleutherAI/gpt-neo-125M"
+        block_size = 256
+        batch_size = 8
+        gradient_accumulation_steps = 6
+        num_steps = 5000
+        config = None
+        to_gpu = True
+        n_gpu = 1
+        fp16 = False
+        fp16_opt_level = "O1"
+        use_deepspeed = False
+    elif focus == "root":
+        base_model = "xhyi/PT_GPTNEO350_ATG"
+        block_size = 256
+        batch_size = 1
+        gradient_accumulation_steps = 32
+        num_steps = 5000
+        config = None
+        to_gpu = True
+        n_gpu = 1
+        fp16 = False
+        fp16_opt_level = "O1"
+        use_deepspeed = False
+
     # research = create_token_dataset("/lab/research", False)
     journals = create_token_dataset("/lab/journals", False)
     pages = create_token_dataset("/lab/pages", False)
@@ -70,51 +97,12 @@ if __name__ == "__main__":
 
     merged = merge_datasets(flat_list, equalize=False)
 
-    print("\033[91m" + "focus" + "\033[0m")
-    print("\033[91m" + "ed on the " + focus + "\033[0m")
-
-    if focus == "heart":
-        base_model = None
-        config = build_gpt2_config(
-            vocab_size=vocab_size,
-            tokenizer_file=tokenizer_file,
-            max_length=max_length,
-            dropout=0.0666,
-            n_embd=1024,
-            n_layer=12,
-            n_head=16,
-            reorder_and_upcast_attn=True,
-            scale_attn_by_inverse_layer_idx=True,
-        )
-    elif focus == "head":
-        # base_model = "xhyi/PT_GPTNEO350_ATG"
-        base_model = "EleutherAI/gpt-neo-125M"
-        # base_model = "EleutherAI/gpt-j-6B"
-        block_size = 256
-        batch_size = 8
-        gradient_accumulation_steps = 1
-        config = None
-        # config = GPTNeoConfig(
-        #     vocab_size=50257,
-        #     tokenizer_file=tokenizer_file,
-        #     activation_function="gelu_new",
-        #     attention_types=[[["global", "local"], 6]],
-        #     hidden_size=512,
-        #     window_size=256,
-        #     intermediate_size=2048,
-        #     num_layers=12,
-        #     num_heads=16,
-        #     embed_dropout=0.00000666,
-        #     attention_dropout=0.00000666,
-        #     resid_dropout=0.00000666,
-        # )
-
     ai = aitextgen(
         tokenizer_file=tokenizer_file,
         config=config,
         model=base_model,
         # model_folder=model_folder,
-        to_gpu=True,
+        to_gpu=to_gpu,
         gradient_checkpointing=True,
     )
 
@@ -122,16 +110,18 @@ if __name__ == "__main__":
         merged,
         from_cache=False,
         batch_size=batch_size,
-        num_steps=40000,
+        num_steps=num_steps,
         generate_every=250,
         save_every=1000,
-        n_gpu=1,
+        n_gpu=n_gpu,
         output_dir=model_folder,
         tokenizer_file=tokenizer_file,
         loggers=logger,
         learning_rate=0.001,
         num_workers=8,
         max_grad_norm=1,
-        use_deepspeed=False,
+        use_deepspeed=use_deepspeed,
         gradient_accumulation_steps=gradient_accumulation_steps,
+        fp16=fp16,
+        fp16_opt_level=fp16_opt_level,
     )

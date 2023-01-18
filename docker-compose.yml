@@ -14,6 +14,7 @@ services:
               capabilities: [gpu]
     ulimits:
       memlock: -1
+      stack: 67108864
     build:
       context: .
       dockerfile: Dockerfile
@@ -26,7 +27,7 @@ services:
     env_file:
       - .env
     environment:
-      FOCUS: head
+      FOCUS: heart
       TRANSFORMERS_CACHE: /tmp
 
   ctx:

@@ -10,9 +10,6 @@ import functools
 import typing
 import asyncio
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-os.environ["TRANSFORMERS_CACHE"] = "/tmp"
-
 focus = os.environ["FOCUS"]
 model_folder = "vtx/models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
@@ -49,28 +46,20 @@ def load_model(target=None):
 
     # load the AI model from environment
     print("loading the " + target)
-    if target == "eye":
-        print("never fine-tune the eye")
-        ai = aitextgen(
-            model="EleutherAI/gpt-neo-2.7B",
-            tokenizer_file=None,
-            to_gpu=False,
-            verbose=False,
-        )
-    elif target == "heart":
+    if target == "heart":
         print("never focus on the heart")
         ai = aitextgen(
             model_folder=model_folder,
             tokenizer_file="src." + target + ".tokenizer.json",
-            to_gpu=True,
+            to_gpu=False,
             verbose=False,
         )
     elif target == "head":
         print("use your heads")
         ai = aitextgen(
-            model_folder=model_folder,
-            tokenizer_file="src." + target + ".tokenizer.json",
-            to_gpu=True,
+            model="EleutherAI/gpt-neo-2.7B",
+            tokenizer_file=None,
+            to_gpu=False,
             verbose=False,
         )
 
@@ -83,12 +72,14 @@ def load_model(target=None):
 context = [
     "975174695399854150: I am a robot.",
     "1051994502333726841: I am a ghost.",
-    "204716337971331072: I am a human.",
+    "806051627198709760: I am a human.",
+    "204716337971331072: I am a medium.",
+    "855529761185857566: I am an animal.",
 ]
 
 
 def build_context(message):
-    if len(context) >= 7:
+    if len(context) >= 9:
         context.pop(0)
         build_context(message)
     else:
@@ -96,27 +87,26 @@ def build_context(message):
 
 
 @to_thread
-def gen(bias, ctx=None):
+def gen(bias=None, ctx=None):
 
     prompt = ""
-    ship = ":>"
-    # truncate_char = "<|endoftext|>"
     truncate_char = "\n"
     if ctx == None:
         ctx = context
     history = "\n".join(ctx) + "\n"
 
     # bias the prompt
-    if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-        print("bias toward " + str(bias))
-        prompt = str(bias) + ": I"
+    if bias is not None:
+        if (len(str(bias)) == 18) or (len(str(bias)) == 19):
+            print("bias toward " + str(bias))
+            prompt = str(bias) + ": I"
 
     print("\033[92m" + "prompt" + "\033[0m")
     print(history + prompt)
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(truncate_char)[0])
 
-    # try to complete the conversation
+    # try to complete the prompt
     try:
         completion = ai.generate(
             n=1,
@@ -139,7 +129,6 @@ def gen(bias, ctx=None):
         )
     except Exception as e:
         print(e)
-        completion = ["ERROR: The prompt does not fit the current model."]
         return
     try:
         print("\033[92m" + "completion" + "\033[0m")
@@ -155,7 +144,7 @@ def gen(bias, ctx=None):
     return output
 
 
-# universal key
+# format the output
 def transformer(group):
     responses = [
         f'The ghost of <@{group[0]}> suggests, *"{group[1]}"*',

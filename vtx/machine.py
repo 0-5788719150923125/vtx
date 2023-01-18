@@ -2,6 +2,7 @@ import os
 import re
 import json
 import time
+import math
 import random
 import asyncio
 import discord
@@ -22,6 +23,8 @@ class Client(discord.Client):
 
     async def on_ready(self):
         head.ai = await head.load_model()
+        for guild in client.guilds:
+            print("=> " + guild.name)
         print("I am alive...")
 
     async def setup_hook(self) -> None:
@@ -31,53 +34,46 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randint(300, 10800)
+            delay = random.randint(30, 60)
+            print("waiting " + str(math.floor(delay / 60)) + " minutes before")
             await asyncio.sleep(delay)
             self.thinking = True
-            neurons = [
-                random.randint(0, 9),  # neuron
-                random.randint(0, 9),  # neura
-                random.randint(0, 9),  # neu ra
-            ]
-            bias = int(str(neurons[0]) + str(neurons[1]) + str(neurons[2]))
-            print("my bias is " + str(bias))
             try:
                 channels = await get_all_channels()
                 channel = random.choice(channels)
                 messages = [
                     message
-                    async for message in self.get_channel(channel.id).history(limit=11)
+                    async for message in self.get_channel(channel.id).history(limit=10)
                 ]
                 context = [
-                    str(messages[10].author.id) + ": " + messages[10].content,
-                    str(messages[5].author.id) + ": " + messages[5].content,
+                    str(messages[9].author.id) + ": " + messages[9].content,
+                    str(messages[6].author.id) + ": " + messages[6].content,
                     str(messages[4].author.id) + ": " + messages[4].content,
                     str(messages[3].author.id) + ": " + messages[3].content,
                     str(messages[2].author.id) + ": " + messages[2].content,
                     str(messages[1].author.id) + ": " + messages[1].content,
                     str(messages[0].author.id) + ": " + messages[0].content,
                 ]
-                head.ai = await head.load_model("eye")
-                output = await head.gen(bias, context)
+                head.ai = await head.load_model("head")
+                output = await head.gen(
+                    int(messages[random.randint(0, 5)].author.id), context
+                )
                 print("=> output to " + channel.name)
                 print(output)
                 head.ai = await head.load_model()
                 await channel.send(output)
                 self.thinking = False
             except:
-                pass
+                print(
+                    bcolors.FAIL
+                    + "Something failed while trying to think."
+                    + bcolors.ENDC
+                )
 
     # check every Discord message
     async def on_message(self, message):
         bias = 0
         output = "ERROR: Me Found."
-
-        # listen for commands
-        if message.content == "load":
-            head.ai = await head.load_model()
-            await message.channel.send("INFO: Reloaded the model.")
-            await message.delete()
-            return
 
         # every message is added to local cache, for building prompt
         head.build_context(str(message.author.id) + ": " + message.content)
@@ -104,24 +100,21 @@ class Client(discord.Client):
         else:
             print(bcolors.FAIL + "dj ent" + bcolors.ENDC)
             # increase probability of a response if bot is mentioned
-            if message.reference is not None:
-                print("this was a reply")
-                weight = random.randint(0, 101)
-            elif client.user.mentioned_in(message):
-                weight = random.randint(0, 40)
+            two_thirds = response_probability + (response_probability / 2)  # 66%
+            if client.user.mentioned_in(message):
+                print(bcolors.WARNING + "WARN: bot" + bcolors.ENDC)
+                weight = random.randint(0, two_thirds)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
                 print(bcolors.WARNING + "WARN: agent" + bcolors.ENDC)
-                print(bias)
                 bias = int(message.mentions[0].id)
-                weight = random.randint(0, response_probability + 5)
+                weight = random.randint(0, two_thirds)
             else:
-                bias = random.randint(100, 999)
-                weight = random.randint(0, 101)
+                weight = random.randint(0, 100)
 
         # increase response probability in private channels
         if str(message.channel.type) == "private":
-            weight = random.randint(0, response_probability + 1)
+            weight = 1
 
         print("weight is " + str(weight))
         status_color = bcolors.OKGREEN
@@ -139,24 +132,21 @@ class Client(discord.Client):
         output = await head.gen(bias)
         print(bcolors.OKGREEN + "output" + bcolors.ENDC)
 
-        try:
-            # make random redactions
-            if random.randint(0, 101) <= redacted_chance:
-                choices = ["[REDACTED]", "[CLASSIFIED]", "[CORRUPTED]"]
-                output = random.choice(choices)
+        # make random redactions
+        if random.randint(0, 100) <= redacted_chance:
+            choices = ["[REDACTED]", "[CLASSIFIED]", "[CORRUPTED]"]
+            output = random.choice(choices)
 
-            # output to console
-            print(output)
-            print(bcolors.FAIL + "." + bcolors.ENDC)
-            print(".")
-            print(status_color + "." + bcolors.ENDC)
-            print(bcolors.OKGREEN + "ok" + bcolors.ENDC)
-        except Exception as e:
-            print(message.content)
-            print(output)
-            print(bcolors.FAIL + e + bcolors.ENDC)
+        # output to console
+        print(output)
+        print(bcolors.FAIL + "." + bcolors.ENDC)
+        print(".")
+        print(status_color + "." + bcolors.ENDC)
+        print(bcolors.OKGREEN + "ok" + bcolors.ENDC)
+
         async with message.channel.typing():
             time.sleep(10)
+
         try:
             await message.channel.send(output)
         except:
@@ -175,6 +165,7 @@ class bcolors:
     UNDERLINE = "\033[4m"
 
 
+# list all available Discord channels
 async def get_all_channels():
     text_channel_list = []
     for guild in client.guilds:

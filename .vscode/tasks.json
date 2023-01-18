@@ -97,19 +97,13 @@
       "type": "pickString",
       "id": "env",
       "description": "Which model should I train?",
-      "options": ["heart", "head"]
+      "options": ["heart", "root"]
     },
     {
       "type": "pickString",
       "id": "task",
       "description": "Deploy, or delete?",
       "options": ["deploy", "delete"]
-    },
-    {
-      "id": "auth",
-      "type": "promptString",
-      "description": "What is your auth key?"
-      // type specific configuration attributes
     }
   ]
 }

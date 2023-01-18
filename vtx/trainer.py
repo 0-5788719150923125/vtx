@@ -32,7 +32,7 @@ def list_full_paths(directory):
     return fname
 
 
-def create_token_dataset(path, line_by_line):
+def create_token_dataset(path, line_by_line, block_size=None):
     files = list_full_paths(path)
     datasets = []
     for file in files:
@@ -52,14 +52,6 @@ def create_token_dataset(path, line_by_line):
 
 if __name__ == "__main__":
 
-    train_tokenizer(
-        files=list_full_paths(vocab_path),
-        vocab_size=vocab_size,
-        save_path="./",
-        prefix="src." + focus,
-        dropout=0.0,
-    )
-
     print("\033[91m" + "focus" + "\033[0m")
     print("\033[91m" + "ed on the " + focus + "\033[0m")
 
@@ -75,8 +67,9 @@ if __name__ == "__main__":
         fp16 = False
         fp16_opt_level = "O1"
         use_deepspeed = False
-    elif focus == "root":
+    elif focus == "soul":
         base_model = "xhyi/PT_GPTNEO350_ATG"
+        vocab_size = 4096
         block_size = 256
         batch_size = 1
         gradient_accumulation_steps = 32
@@ -88,10 +81,18 @@ if __name__ == "__main__":
         fp16_opt_level = "O1"
         use_deepspeed = False
 
+    train_tokenizer(
+        files=list_full_paths(vocab_path),
+        vocab_size=vocab_size,
+        save_path="./",
+        prefix="src." + focus,
+        dropout=0.0,
+    )
+
     # research = create_token_dataset("/lab/research", False)
-    journals = create_token_dataset("/lab/journals", False)
-    pages = create_token_dataset("/lab/pages", False)
-    texts = create_token_dataset("/lab/texts", False)
+    journals = create_token_dataset("/lab/journals", False, block_size=block_size)
+    pages = create_token_dataset("/lab/pages", False, block_size=block_size)
+    texts = create_token_dataset("/lab/texts", False, block_size=block_size)
 
     flat_list = [item for sublist in [journals, pages, texts] for item in sublist]
 

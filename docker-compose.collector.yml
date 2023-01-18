@@ -61,8 +61,14 @@ services:
     volumes:
       - ./lab:/lab
 
-  dfw:
+  tca:
     image: tyrrrz/discordchatexporter:latest
     command: exportguild --guild "840978732772753468" -t "${SELFTOKEN}" -o "/lab/texts/discord" -f "JSON"
+    volumes:
+      - ./lab:/lab
+
+  lux:
+    image: tyrrrz/discordchatexporter:latest
+    command: exportguild --guild "1042822599362752562" -t "${SELFTOKEN}" -o "/lab/texts/discord" -f "JSON"
     volumes:
       - ./lab:/lab

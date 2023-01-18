@@ -34,8 +34,8 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randint(30, 60)
-            print("waiting " + str(math.floor(delay / 10800)) + " minutes before")
+            delay = random.randint(30, 10800)
+            print("waiting " + str(math.floor(delay / 60)) + " minutes before")
             await asyncio.sleep(delay)
             self.thinking = True
             try:
@@ -46,17 +46,15 @@ class Client(discord.Client):
                     async for message in self.get_channel(channel.id).history(limit=10)
                 ]
                 context = [
-                    str(messages[9].author.id) + ": " + messages[9].content,
                     str(messages[6].author.id) + ": " + messages[6].content,
                     str(messages[4].author.id) + ": " + messages[4].content,
-                    str(messages[3].author.id) + ": " + messages[3].content,
                     str(messages[2].author.id) + ": " + messages[2].content,
                     str(messages[1].author.id) + ": " + messages[1].content,
                     str(messages[0].author.id) + ": " + messages[0].content,
                 ]
                 head.ai = await head.load_model("head")
                 output = await head.gen(
-                    int(messages[random.randint(0, 5)].author.id), context
+                    int(messages[random.randint(0, 9)].author.id), context
                 )
                 print("=> output to " + channel.name)
                 print(output)

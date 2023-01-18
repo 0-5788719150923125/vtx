@@ -43,7 +43,7 @@ def load_model(target=None):
 
     # check quantum state
     if q["data"][0] < 32:
-        target = "eye"
+        target = "heart"
 
     model_folder = "vtx/models/" + target
 

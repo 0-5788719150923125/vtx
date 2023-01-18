@@ -26,9 +26,6 @@ def ingest():
 
     os.makedirs("/lab/texts/discord")
 
-    # if os.path.exists("/lab/texts/discord.txt"):
-    #     os.remove("/lab/texts/discord.txt")
-
     print("tried to eat Discord exports")
     for filename in os.listdir("/lab/discord"):
         try:
@@ -42,11 +39,35 @@ def ingest():
                         if i["content"] == "":
                             continue
                         if i["author"]["isBot"] == True:
-                            continue
-                        if len(i["mentions"]) > 0:
-                            continue
+                            if str(i["author"]["id"]) == "975174695399854150":
+                                print("allowing Eliza")
+                            else:
+                                continue
+                        # if len(i["mentions"]) > 0:
+                        #     continue
 
                         txt_file = open("/lab/texts/discord/" + filename + ".txt", "a")
+
+                        if i["type"] == "Reply":
+                            try:
+                                message_ref_id = i["reference"]["messageId"]
+                                result = next(
+                                    (
+                                        obj
+                                        for obj in data["messages"]
+                                        if obj["id"] == message_ref_id
+                                    ),
+                                    None,
+                                )
+                                if result is not None:
+                                    sanitized = re.sub(
+                                        r"http\S+", "[REDACTED]", result["content"]
+                                    )
+                                    content = result["author"]["id"] + ": " + sanitized
+                                    txt_file.write(f"{content}\n".format(content))
+                            except Exception as e:
+                                print(e)
+                                print("failed to prepare a reply")
 
                         try:
                             sanitized = re.sub(r"http\S+", "[REDACTED]", i["content"])

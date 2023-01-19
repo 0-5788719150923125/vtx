@@ -7,19 +7,18 @@ from pytorch_lightning import loggers
 import numpy as np
 import os
 import shutil, tempfile
+import yaml
+import random
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
+with open("config.yml", "r") as config_file:
+    config = yaml.load(config_file, Loader=yaml.FullLoader)
+
 focus = os.environ["FOCUS"]
-base_model = ""
-vocab_path = "/lab/texts"
+model = config[focus]
 model_folder = "vtx/models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
-
-vocab_size = 2048
-max_length = 256
-block_size = max_length
-batch_size = 8
 
 logger = loggers.TensorBoardLogger("/lab/logs", name=focus, version=0)
 
@@ -33,69 +32,62 @@ def list_full_paths(directory):
     return fname
 
 
-def create_token_dataset(path, line_by_line, block_size=None):
+def join_files(path):
+
+    tmp_path = "/lab/intermediate"
+
+    isExist = os.path.exists(tmp_path)
+    if isExist:
+        shutil.rmtree(tmp_path)
+
+    os.makedirs(tmp_path)
+
     files = list_full_paths(path)
-    datasets = []
+    intermediate_path = tmp_path + "/" + str(random.randint(1000000, 9999999)) + ".txt"
+    intermediate = open(intermediate_path, "a")
     for file in files:
-        try:
-            datasets.append(
-                TokenDataset(
-                    file,
-                    tokenizer_file=tokenizer_file,
-                    block_size=block_size,
-                    line_by_line=line_by_line,
-                )
-            )
-        except:
-            print("something failed while tokenizing " + file)
-    return datasets
+        with open(file, "r") as content:
+            string = content.read()
+            intermediate.write(string + "\n\n")
+    intermediate.close()
+    return intermediate_path
 
 
 if __name__ == "__main__":
 
-    print("\033[91m" + "focus" + "\033[0m")
-    print("\033[91m" + "ed on the " + focus + "\033[0m")
+    config = None
+    base_model = model["training"]["base_model"]
+    batch_size = model["training"]["batch_size"]
+    gradient_accumulation_steps = model["training"]["gradient_accumulation_steps"]
+    num_steps = model["training"]["num_steps"]
+    to_gpu = model["training"]["to_gpu"]
+    n_gpu = model["n_gpu"]
 
-    if focus == "heart":
-        base_model = "EleutherAI/gpt-neo-125M"
-        block_size = 256
-        batch_size = 8
-        gradient_accumulation_steps = 6
-        num_steps = 5000
-        config = None
-        to_gpu = True
-        n_gpu = 1
-        fp16 = False
-        use_deepspeed = False
-    elif focus == "soul":
-        base_model = "xhyi/PT_GPTNEO350_ATG"
-        vocab_size = 4096
-        block_size = 256
-        batch_size = 1
-        gradient_accumulation_steps = 32
-        num_steps = 5000
-        config = None
-        to_gpu = True
-        n_gpu = 1
-        fp16 = False
-        use_deepspeed = False
-
+    vocab_path = "/lab/" + model["training"]["vocab_path"]
+    vocab_size = model["training"]["vocab_size"]
     train_tokenizer(
         files=list_full_paths(vocab_path),
         vocab_size=vocab_size,
         save_path="./",
         prefix="src." + focus,
-        dropout=0.0,
+        dropout=model["training"]["dropout"],
     )
 
-    # research = create_token_dataset("/lab/research", False)
-    journals = create_token_dataset("/lab/journals", False, block_size=block_size)
-    pages = create_token_dataset("/lab/pages", False, block_size=block_size)
-    texts = create_token_dataset("/lab/texts", False, block_size=block_size)
+    print("\033[91m" + "focus" + "\033[0m")
+    print("\033[91m" + "ed on the " + focus + "\033[0m")
 
-    flat_list = [item for sublist in [journals, pages, texts] for item in sublist]
+    datasets = []
+    for corpus in model["training"]["corpuses"]:
+        intermediate_file = join_files("/lab/" + corpus["folder"])
+        datasets.append(
+            TokenDataset(
+                intermediate_file,
+                block_size=model["training"]["block_size"],
+                line_by_line=corpus["line_by_line"],
+            )
+        )
 
-    merged = merge_datasets(flat_list, equalize=False)
+    merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])
 
     ai = aitextgen(
         tokenizer_file=tokenizer_file,
@@ -120,8 +112,6 @@ if __name__ == "__main__":
         learning_rate=0.001,
         num_workers=8,
         max_grad_norm=1,
-        use_deepspeed=use_deepspeed,
         gradient_accumulation_steps=gradient_accumulation_steps,
-        fp16=fp16,
-        # fp16_opt_level=fp16_opt_level,
+        fp16=False,
     )

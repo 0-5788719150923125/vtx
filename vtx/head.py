@@ -12,16 +12,15 @@ import asyncio
 import gc
 import yaml
 
+# holds the model
+ai = None
+
 os.environ["LRU_CACHE_CAPACITY"] = "1"
 
 focus = os.environ["FOCUS"]
 
-# holds the model
-ai = None
-
-with open("models.yml", "r") as config_file:
+with open("config.yml", "r") as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
-    print("successfully loaded model configurations")
 
 
 def to_thread(func: typing.Callable) -> typing.Coroutine:
@@ -35,10 +34,15 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 @to_thread
 def load_model(target=None):
 
+    try:
+        del ai
+    except:
+        pass
+
     if target == None:
         target = focus
 
-    model = config["models"][target]
+    model = config[target]
 
     if "model" not in model:
         model_folder = "vtx/models/" + target
@@ -53,7 +57,7 @@ def load_model(target=None):
         model=model.get("model", None),
         model_folder=model_folder,
         tokenizer_file=tokenizer_file,
-        to_gpu=model["gpu"],
+        to_gpu=model["to_gpu"],
     )
 
     gc.collect()
@@ -107,13 +111,16 @@ def gen(bias=None, ctx=None):
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
             print("bias toward " + str(bias))
-            prefixes = ["I", "You", ""]
+            prefixes = ["I", "You", "We", "They", ""]
             prompt = str(bias) + ": " + random.choice(prefixes)
 
     print("\033[92m" + "prompt" + "\033[0m")
     print(history + prompt)
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(truncate_char)[0])
+    blocked_words = ai.tokenizer.convert_tokens_to_ids(
+        ai.tokenizer.tokenize("[REDACTED]")[0]
+    )
 
     # try to complete the prompt
     # https://huggingface.co/docs/transformers/main_classes/text_generation
@@ -136,6 +143,7 @@ def gen(bias=None, ctx=None):
             renormalize_logits=True,
             eos_token_id=eos,
             seed=seed,
+            bad_words_ids=[[blocked_words]],
         )
     except Exception as e:
         print(e)

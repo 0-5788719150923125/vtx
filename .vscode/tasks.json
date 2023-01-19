@@ -65,7 +65,7 @@
       "label": "docker-compose prep",
       "detail": "Prep the data in Docker.",
       "type": "shell",
-      "command": "docker-compose run vtx python3 i.py"
+      "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\""
     },
     {
       "label": "docker-compose up -d",
@@ -84,12 +84,6 @@
       "detail": "Stop the service in Docker.",
       "type": "shell",
       "command": "docker-compose down --remove-orphans"
-    },
-    {
-      "label": "export data from Discord",
-      "detail": "Export Discord data.",
-      "type": "shell",
-      "command": "docker-compose -f docker-compose.collector.yml up"
     }
   ],
   "inputs": [
@@ -97,13 +91,17 @@
       "type": "pickString",
       "id": "env",
       "description": "Which model should I train?",
-      "options": ["heart", "soul"]
+      "options": ["heart", "soul", "voice"]
     },
     {
       "type": "pickString",
-      "id": "task",
-      "description": "Deploy, or delete?",
-      "options": ["deploy", "delete"]
+      "id": "i",
+      "description": "Which task should I execute?",
+      "options": [
+        "i.fetch_from_reddit()",
+        "i.prep_discord_messages()",
+        "i.fetch_from_discord()"
+      ]
     }
   ]
 }

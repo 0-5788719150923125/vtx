@@ -1,8 +1,0 @@
-models:
-  head:
-    info: use your heads
-    model: EleutherAI/gpt-neo-2.7B
-    gpu: False
-  heart:
-    info: never focus on the heart
-    gpu: False

@@ -6,6 +6,10 @@ lab/discord
 lab/logs
 lab/logseq/*
 lab/texts/*
+lab/FiveNine
+lab/dump
+lab/reddit
+lab/discord
 node_modules
 vtx/models/*
 vtx/vtx/*

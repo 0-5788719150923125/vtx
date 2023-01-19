@@ -4,32 +4,43 @@ import json
 import re
 import glob
 import praw
+import time
+import jsonlines
+import yaml
+
+with open("config.yml", "r") as config_file:
+    config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 
-def spy():
-    print("a noun")
+def fetch_from_discord():
+
+    discord_token = os.environ["SELFTOKEN"]
+
+    if not os.path.exists("/lab/dump/discord"):
+        os.makedirs("/lab/dump/discord")
+
+    if config["discord"]["all_dms"] == True:
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/lab/dump/discord" -f "JSON"'
+        os.system(command)
+
+    for server in config["discord"]["servers"]:
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server["id"]}" -t "{discord_token}" -o "/lab/dump/discord" -f "JSON"'
+        if "after" in server:
+            command.join(" --after" + server["after"])
+        os.system(command)
 
 
-def integrate():
-    print("sight and sound")
+def prep_discord_messages():
 
+    if os.path.exists("/lab/discord"):
+        shutil.rmtree("/lab/discord")
 
-def vision():
-    print("a view through my lens")
-
-
-def chat():
-
-    isExist = os.path.exists("/lab/texts/discord")
-    if isExist:
-        shutil.rmtree("/lab/texts/discord")
-
-    os.makedirs("/lab/texts/discord")
+    os.makedirs("/lab/discord")
 
     print("tried to eat Discord exports")
-    for filename in os.listdir("/lab/discord"):
+    for filename in os.listdir("/lab/dump/discord"):
         try:
-            with open(os.path.join("/lab/discord", filename), "r") as file:
+            with open(os.path.join("/lab/dump/discord", filename), "r") as file:
                 try:
                     data = json.load(file)
 
@@ -41,10 +52,12 @@ def chat():
                         if i["author"]["isBot"] == True:
                             if str(i["author"]["id"]) == "975174695399854150":
                                 print("allowing Eliza")
+                            elif str(data["guild"]["id"]) == "716611330198732868":
+                                print("allowing RSS bot")
                             else:
                                 continue
 
-                        txt_file = open("/lab/texts/discord/" + filename + ".txt", "a")
+                        txt_file = open("/lab/discord/" + filename + ".txt", "a")
 
                         if i["type"] == "Reply":
                             try:
@@ -94,31 +107,43 @@ def chat():
             print("handling errors")
 
 
-def read():
-    print("scrape reddit")
+def fetch_from_reddit():
 
-    isExist = os.path.exists("/lab/texts/reddit")
-    if isExist:
-        shutil.rmtree("/lab/texts/reddit")
-
-    os.makedirs("/lab/texts/reddit")
-
-    dread = praw.Reddit(
+    reddit = praw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
         client_secret=os.environ["REDDITSECRET"],
         user_agent=os.environ["REDDITAGENT"],
     )
-    subreddit = dread.subreddit("stairsofpantheon")
 
-    for sub in subreddit.hot(limit=500):
-        try:
-            txt = open("/lab/texts/reddit/" + sub.title + ".txt", "a")
-            txt.write(sub.title)
-            txt.write(sub.selftext)
-            txt.close()
-        except:
-            print("fail reddit")
+    for subreddit in config["reddit"]:
+        name = subreddit["sub"]
+        if os.path.exists("/lab/reddit/" + name):
+            shutil.rmtree("/lab/reddit/" + name)
 
+        os.makedirs("/lab/reddit/" + name)
 
-chat()
-read()
+        def main():
+            for post in reddit.subreddit(name).top(limit=config["reddit"]["limit"]):
+                dump_replies(replies=post.comments, context=[post.title, post.selftext])
+
+        def dump_replies(replies, context):
+            for reply in replies:
+                if isinstance(reply, praw.models.MoreComments):
+                    continue
+
+                reply_data = {
+                    "id": reply.id,
+                    "context": context,
+                    "response": reply.body,
+                }
+                with jsonlines.open(
+                    "/lab/reddit/" + name + "/" + reply.submission.id + ".jsonl",
+                    mode="a",
+                ) as writer:
+                    writer.write(reply_data)
+
+                context.append(reply.body)
+                dump_replies(reply.replies, context)
+                context.pop()
+
+        main()

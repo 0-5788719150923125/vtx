@@ -9,7 +9,7 @@
     },
     {
       "label": "npm start",
-      "detail": "Start the service in node.",
+      "detail": "Start the Node service.",
       "type": "shell",
       "command": "npm start"
     },
@@ -20,20 +20,20 @@
       "command": "npm outdated"
     },
     {
-      "label": "docker ps",
-      "detail": "View a list of all running containers.",
+      "label": "docker-compose ps",
+      "detail": "View a list of all running containers for this project.",
       "type": "shell",
-      "command": "docker ps"
+      "command": "docker-compose ps"
     },
     {
       "label": "docker-compose logs",
-      "detail": "View logs for this project.",
+      "detail": "View logs for all services.",
       "type": "shell",
-      "command": "docker-compose logs"
+      "command": "docker-compose logs --follow"
     },
     {
       "label": "docker-compose exec",
-      "detail": "Open an interactive shell in the container.",
+      "detail": "Open an interactive shell in the vtx container.",
       "type": "shell",
       "command": "docker-compose exec vtx /bin/sh"
     },
@@ -51,25 +51,25 @@
     },
     {
       "label": "docker-compose up",
-      "detail": "Start the service in Docker.",
+      "detail": "Start the services in a development environment.",
       "type": "shell",
       "command": "docker-compose up"
     },
     {
       "label": "docker-compose train",
-      "detail": "Train the model in Docker.",
+      "detail": "Train a model.",
       "type": "shell",
       "command": "docker-compose run -e FOCUS=\"${input:env}\" vtx python3 trainer.py"
     },
     {
       "label": "docker-compose prep",
-      "detail": "Prep the data in Docker.",
+      "detail": "Prepare your data in various ways.",
       "type": "shell",
       "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\""
     },
     {
       "label": "docker-compose up -d",
-      "detail": "Start the service in Docker.",
+      "detail": "Start the services detached from the terminal.",
       "type": "shell",
       "command": "docker-compose up -d"
     },

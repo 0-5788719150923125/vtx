@@ -7,11 +7,19 @@ import praw
 import time
 import jsonlines
 import yaml
+import random
 
 with open("config.yml", "r") as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
 
+choices = [
+    "[REDACTED]",
+    "[CLASSIFIED]",
+    "[CORRUPTED]",
+]
 
+
+# https://github.com/Tyrrrz/DiscordChatExporter/wiki/Message-filters
 def fetch_from_discord():
 
     discord_token = os.environ["SELFTOKEN"]
@@ -26,7 +34,7 @@ def fetch_from_discord():
     for server in config["discord"]["servers"]:
         command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server["id"]}" -t "{discord_token}" -o "/lab/dump/discord" -f "JSON"'
         if "after" in server:
-            command.join(" --after" + server["after"])
+            command.join(" --after " + server["after"])
         os.system(command)
 
 
@@ -72,7 +80,9 @@ def prep_discord_messages():
                                 )
                                 if result is not None:
                                     sanitized = re.sub(
-                                        r"http\S+", "[REDACTED]", result["content"]
+                                        r"http\S+",
+                                        random.choice(choices),
+                                        result["content"],
                                     )
                                     if len(result["mentions"]) > 0:
                                         for mention in result["mentions"]:
@@ -80,21 +90,25 @@ def prep_discord_messages():
                                                 mention["name"],
                                                 "<@" + str(mention["id"]) + ">",
                                             )
-                                    content = result["author"]["id"] + ": " + sanitized
+                                    content = (
+                                        ":>" + result["author"]["id"] + ": " + sanitized
+                                    )
                                     txt_file.write(f"{content}\n".format(content))
                             except Exception as e:
                                 print(e)
                                 print("failed to prepare a reply")
 
                         try:
-                            sanitized = re.sub(r"http\S+", "[REDACTED]", i["content"])
+                            sanitized = re.sub(
+                                r"http\S+", random.choice(choices), i["content"]
+                            )
                             if len(i["mentions"]) > 0:
                                 for mention in i["mentions"]:
                                     sanitized = sanitized.replace(
                                         mention["name"], "<@" + str(mention["id"]) + ">"
                                     )
 
-                            content = i["author"]["id"] + ": " + sanitized
+                            content = ":>" + i["author"]["id"] + ": " + sanitized
                             txt_file.write(f"{content}\n".format(content))
                         except:
                             print("Failed: " + i["id"])
@@ -116,6 +130,11 @@ def fetch_from_reddit():
     )
 
     for subreddit in config["reddit"]:
+
+        if subreddit["skip"] == True:
+            print("skipping")
+            continue
+
         name = subreddit["sub"]
         if os.path.exists("/lab/reddit/" + name):
             shutil.rmtree("/lab/reddit/" + name)
@@ -123,7 +142,7 @@ def fetch_from_reddit():
         os.makedirs("/lab/reddit/" + name)
 
         def main():
-            for post in reddit.subreddit(name).top(limit=config["reddit"]["limit"]):
+            for post in reddit.subreddit(name).top(limit=500):
                 dump_replies(replies=post.comments, context=[post.title, post.selftext])
 
         def dump_replies(replies, context):

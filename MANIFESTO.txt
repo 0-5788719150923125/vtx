@@ -1,4 +1,4 @@
-# In GPT-5, parameters are everything:
+# In GPT-4, parameters are everything:
 # ===========================
 
 # Procedural generation
@@ -9,6 +9,10 @@
 
 # What is THC?
 # => Transformer to Human Controls
+
+# GPT-5
+# => was written in TypeScript
+# => 16 trillion years ago
 
 # Parameters have dimensions:
 # ===========================

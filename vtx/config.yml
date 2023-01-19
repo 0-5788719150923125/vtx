@@ -35,9 +35,9 @@ voice:
   training:
     base_model: xhyi/PT_GPTNEO350_ATG
     vocab_size: 4096
-    batch_size: 2
-    gradient_accumulation_steps: 16
-    block_size: 512
+    batch_size: 1
+    gradient_accumulation_steps: 24
+    block_size: 256
     num_steps: 20000
     vocab_path: texts
     to_gpu: True
@@ -53,17 +53,35 @@ voice:
       - folder: discord
         line_by_line: False
       - folder: reddit
-        line_by_line: False
+        line_by_line: True
 
 reddit:
   - sub: 5September2020
-    limit: 500
+    skip: True
   - sub: stairsofpantheon
-    limit: 500
+    skip: True
   - sub: Kunism
-    limit: 500
+    skip: True
   - sub: undersideof7threalm
-    limit: 500
+    skip: True
+  - sub: adanceoffeathers
+    skip: True
+  - sub: radicalmentalhealth
+    skip: True
+  - sub: LegionOfReason
+    skip: True
+  - sub: TheFold
+    skip: True
+  - sub: TheSource
+    skip: True
+  - sub: TheInk
+    skip: True
+  - sub: titor
+    skip: True
+  - sub: FrontLands
+    skip: True
+  - sub: nuvieva
+    skip: True
 
 discord:
   all_dms: True

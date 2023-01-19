@@ -35,7 +35,6 @@ class Client(discord.Client):
         await self.wait_until_ready()
         while not self.is_closed():
             delay = random.randint(30, 10800)
-            print(f"waiting {str(math.floor(delay / 60))} minutes before next thought")
             await asyncio.sleep(delay)
             self.thinking = True
             try:
@@ -79,14 +78,12 @@ class Client(discord.Client):
                 print("=> output to " + channel.name)
                 print(output)
 
-                del head.ai
-
                 head.ai = await head.load_model()
                 await channel.send(output)
                 self.thinking = False
             except Exception as e:
                 print(bcolors.FAIL + str(e) + bcolors.ENDC)
-                print(bcolors.FAIL + "something broke my concentration" + bcolors.ENDC)
+                print(bcolors.FAIL + "failed to concentrate" + bcolors.ENDC)
 
     # check every Discord message
     async def on_message(self, message):
@@ -135,7 +132,6 @@ class Client(discord.Client):
             weight = 1
 
         print("weight is " + str(weight))
-        status_color = bcolors.OKGREEN
 
         # check weight before generating a response
         if weight > response_probability:
@@ -159,7 +155,7 @@ class Client(discord.Client):
         print(output)
         print(bcolors.FAIL + "." + bcolors.ENDC)
         print(".")
-        print(status_color + "." + bcolors.ENDC)
+        print(bcolors.OKGREEN + "." + bcolors.ENDC)
         print(bcolors.OKGREEN + "ok" + bcolors.ENDC)
 
         async with message.channel.typing():

@@ -10,6 +10,7 @@ lab/FiveNine
 lab/dump
 lab/reddit
 lab/discord
+lab/intermediate
 node_modules
 vtx/models/*
 vtx/vtx/*

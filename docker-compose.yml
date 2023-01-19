@@ -33,6 +33,7 @@ services:
   ctx:
     image: ghcr.io/0-5788719150923125/src:1
     command: node root.js
+    restart: 'always'
     ports:
       - 9666:9665
 
@@ -47,3 +48,4 @@ services:
   ips:
     image: ipfs/kubo:master-latest
     command: daemon --migrate=true --agent-version-suffix=docker --init-profile=lowpower --writable --enable-gc --enable-pubsub-experiment --enable-namesys-pubsub
+    restart: 'always'

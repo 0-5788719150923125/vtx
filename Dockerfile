@@ -4,16 +4,12 @@ RUN apt-get update && apt-get install -y python3-pip nodejs npm curl unzip
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        ca-certificates \
-        \
-        # .NET dependencies
-        libc6 \
-        libgcc1 \
-        libgssapi-krb5-2 \
-        # libicu66 \
-        # libssl1.1 \
-        libstdc++6 \
-        zlib1g \
+    ca-certificates \
+    libc6 \
+    libgcc1 \
+    libgssapi-krb5-2 \
+    libstdc++6 \
+    zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
 ENV DOTNET_VERSION=7.0.0
@@ -26,17 +22,19 @@ RUN curl -fSL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Runt
     && rm dotnet.tar.gz \
     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
 
-RUN npm i -g nodemon
-
 MAINTAINER United Nations
 
 WORKDIR /tmp
 
-RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz/DiscordChatExporter/releases/download/2.37.1/DiscordChatExporter.Cli.zip && \
+ENV DCE_VERSION=2.37.1
+
+RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz/DiscordChatExporter/releases/download/$DCE_VERSION/DiscordChatExporter.Cli.zip && \
     unzip DiscordChatExporter.Cli.zip -d /dce && \
     chmod -R 755 /dce
 
 WORKDIR /vtx
+
+RUN npm i -g nodemon
 
 COPY package*.json requirements.txt ./
 

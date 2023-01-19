@@ -4,105 +4,23 @@
   <playlist id="main_bin">
     <property name="xml_retain">1</property>
   </playlist>
-  <producer id="black" in="00:00:00.000" out="00:05:06.633">
-    <property name="length">00:05:06.650</property>
-    <property name="eof">pause</property>
-    <property name="resource">0</property>
-    <property name="aspect_ratio">1</property>
-    <property name="mlt_service">color</property>
-    <property name="mlt_image_format">rgba</property>
-    <property name="set.test_audio">0</property>
-  </producer>
-  <playlist id="background">
-    <entry producer="black" in="00:00:00.000" out="00:05:06.633"/>
-  </playlist>
-  <playlist id="playlist0">
-    <property name="shotcut:video">1</property>
-    <property name="shotcut:name">-1</property>
-    <blank length="00:00:00.017"/>
-  </playlist>
-  <producer id="producer0" in="00:00:00.000" out="00:05:06.633">
-    <property name="length">00:05:06.650</property>
+  <producer id="producer0" in="00:00:00.000" out="00:00:34.833">
+    <property name="length">00:00:34.850</property>
     <property name="eof">pause</property>
     <property name="resource">0.666666:transformer.mp4</property>
     <property name="aspect_ratio">1</property>
     <property name="seekable">1</property>
     <property name="format">3</property>
-    <property name="audio_index">1</property>
-    <property name="video_index">0</property>
+    <property name="audio_index">0</property>
+    <property name="video_index">1</property>
     <property name="mute_on_pause">1</property>
     <property name="warp_speed">0.666666</property>
     <property name="warp_resource">transformer.mp4</property>
     <property name="mlt_service">timewarp</property>
     <property name="shotcut:producer">avformat</property>
     <property name="video_delay">0</property>
-    <property name="shotcut:hash">de25398a847e3dbd592aa183249e19fb</property>
+    <property name="shotcut:hash">c88ef1c83f1b0872188ec7470e20a074</property>
     <property name="shotcut:caption">transformer.mp4 (0.666666x)</property>
-    <property name="xml">was here</property>
+    <property name="xml">Satan was here</property>
   </producer>
-  <playlist id="playlist1">
-    <property name="shotcut:video">1</property>
-    <property name="shotcut:name">0</property>
-    <entry producer="producer0" in="00:00:00.000" out="00:05:06.633"/>
-  </playlist>
-  <playlist id="playlist2">
-    <property name="shotcut:video">1</property>
-    <property name="shotcut:name">1</property>
-    <blank length="00:00:00.017"/>
-  </playlist>
-  <tractor id="tractor0" title="Shotcut version 22.12.21" in="00:00:00.000" out="00:05:06.633">
-    <property name="shotcut">1</property>
-    <property name="shotcut:scaleFactor">0.691472</property>
-    <property name="shotcut:projectAudioChannels">2</property>
-    <property name="shotcut:projectFolder">0</property>
-    <track producer="background"/>
-    <track producer="playlist0"/>
-    <track producer="playlist1"/>
-    <track producer="playlist2"/>
-    <transition id="transition0">
-      <property name="a_track">0</property>
-      <property name="b_track">1</property>
-      <property name="mlt_service">mix</property>
-      <property name="always_active">1</property>
-      <property name="sum">1</property>
-    </transition>
-    <transition id="transition1">
-      <property name="a_track">0</property>
-      <property name="b_track">1</property>
-      <property name="version">0.1</property>
-      <property name="mlt_service">frei0r.cairoblend</property>
-      <property name="threads">0</property>
-      <property name="disable">1</property>
-    </transition>
-    <transition id="transition2">
-      <property name="a_track">0</property>
-      <property name="b_track">2</property>
-      <property name="mlt_service">mix</property>
-      <property name="always_active">1</property>
-      <property name="sum">1</property>
-    </transition>
-    <transition id="transition3">
-      <property name="a_track">1</property>
-      <property name="b_track">2</property>
-      <property name="version">0.1</property>
-      <property name="mlt_service">frei0r.cairoblend</property>
-      <property name="threads">0</property>
-      <property name="disable">0</property>
-    </transition>
-    <transition id="transition4">
-      <property name="a_track">0</property>
-      <property name="b_track">3</property>
-      <property name="mlt_service">mix</property>
-      <property name="always_active">1</property>
-      <property name="sum">1</property>
-    </transition>
-    <transition id="transition5">
-      <property name="a_track">1</property>
-      <property name="b_track">3</property>
-      <property name="version">0.1</property>
-      <property name="mlt_service">frei0r.cairoblend</property>
-      <property name="threads">0</property>
-      <property name="disable">0</property>
-    </transition>
-  </tractor>
 </mlt>

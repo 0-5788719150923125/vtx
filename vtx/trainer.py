@@ -93,7 +93,6 @@ if __name__ == "__main__":
         tokenizer_file=tokenizer_file,
         config=config,
         model=base_model,
-        # model_folder=model_folder,
         to_gpu=to_gpu,
         gradient_checkpointing=True,
     )
@@ -109,7 +108,9 @@ if __name__ == "__main__":
         output_dir=model_folder,
         tokenizer_file=tokenizer_file,
         loggers=logger,
-        learning_rate=0.001,
+        learning_rate=0.002,
+        weight_decay=0.0001,
+        warmup_ratio=0.0001,
         num_workers=8,
         max_grad_norm=1,
         gradient_accumulation_steps=gradient_accumulation_steps,

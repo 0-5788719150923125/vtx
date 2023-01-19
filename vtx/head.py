@@ -36,6 +36,7 @@ def load_model(target=None):
 
     try:
         del ai
+        gc.collect()
     except:
         pass
 
@@ -59,8 +60,6 @@ def load_model(target=None):
         tokenizer_file=tokenizer_file,
         to_gpu=model["to_gpu"],
     )
-
-    gc.collect()
 
     print("INFO: " + str(ai))
     return ai
@@ -111,16 +110,18 @@ def gen(bias=None, ctx=None):
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
             print("bias toward " + str(bias))
-            prefixes = ["I", "You", "We", "They", ""]
+            prefixes = ["I", "You", ""]
             prompt = str(bias) + ": " + random.choice(prefixes)
 
     print("\033[92m" + "prompt" + "\033[0m")
     print(history + prompt)
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(truncate_char)[0])
-    blocked_words = ai.tokenizer.convert_tokens_to_ids(
-        ai.tokenizer.tokenize("[REDACTED]")[0]
-    )
+
+    # bad_words_ids = [
+    #     ai.tokenizer.encode(bad_word)
+    #     for bad_word in ["[REDACTED]", "[CORRUPTED]", "[CLASSIFIED]"]
+    # ]
 
     # try to complete the prompt
     # https://huggingface.co/docs/transformers/main_classes/text_generation
@@ -143,7 +144,7 @@ def gen(bias=None, ctx=None):
             renormalize_logits=True,
             eos_token_id=eos,
             seed=seed,
-            bad_words_ids=[[blocked_words]],
+            # bad_words_ids=bad_words_ids,
         )
     except Exception as e:
         print(e)

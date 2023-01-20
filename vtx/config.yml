@@ -16,6 +16,7 @@ heart:
     num_steps: 5000
 
 soul:
+  version: 0
   info: bury your desires
   to_gpu: False
   n_gpu: 1
@@ -29,59 +30,52 @@ soul:
     to_gpu: True
 
 voice:
+  version: 0
   info: never stop talking
   to_gpu: False
   n_gpu: 1
   training:
     base_model: xhyi/PT_GPTNEO350_ATG
-    vocab_size: 4096
     batch_size: 1
-    gradient_accumulation_steps: 24
     block_size: 256
     num_steps: 20000
-    vocab_path: texts
+    warmup_steps: 500
+    gradient_accumulation_steps: 24
     to_gpu: True
-    equalize_datasets: True
+    learning_rate: 0.0012
+    weight_decay: 0.06
+    max_grad_norm: 0.6
+    vocab_path: texts
+    vocab_size: 4096
     dropout: 0.1
-    corpuses:
-      - folder: journals
-        line_by_line: False
+    equalize_datasets: True
+    datasets:
       - folder: texts
-        line_by_line: False
+      - folder: journals
       - folder: research
-        line_by_line: False
       - folder: discord
-        line_by_line: False
       - folder: reddit
         line_by_line: True
 
 reddit:
   - sub: 5September2020
     skip: True
-  - sub: stairsofpantheon
-    skip: True
-  - sub: Kunism
-    skip: True
-  - sub: undersideof7threalm
-    skip: True
-  - sub: adanceoffeathers
-    skip: True
   - sub: radicalmentalhealth
-    skip: True
-  - sub: LegionOfReason
-    skip: True
-  - sub: TheFold
-    skip: True
-  - sub: TheSource
-    skip: True
-  - sub: TheInk
     skip: True
   - sub: titor
     skip: True
   - sub: FrontLands
     skip: True
-  - sub: nuvieva
+  - sub: NUVIEVA
     skip: True
+  - sub: stairsofpantheon
+  - sub: Kunism
+  - sub: undersideof7threalm
+  - sub: adanceoffeathers
+  - sub: LegionOfReason
+  - sub: TheFold
+  - sub: TheSource
+  - sub: TheInk
 
 discord:
   all_dms: True

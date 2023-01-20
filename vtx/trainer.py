@@ -20,7 +20,7 @@ model = config[focus]
 model_folder = "vtx/models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
-logger = loggers.TensorBoardLogger("/lab/logs", name=focus, version=0)
+logger = loggers.TensorBoardLogger("/lab/logs", name=focus, version=model["version"])
 
 
 def list_full_paths(directory):
@@ -62,6 +62,10 @@ if __name__ == "__main__":
     num_steps = model["training"]["num_steps"]
     to_gpu = model["training"]["to_gpu"]
     n_gpu = model["n_gpu"]
+    learning_rate = model["training"]["learning_rate"]
+    weight_decay = model["training"]["weight_decay"]
+    warmup_steps = model["training"]["warmup_steps"]
+    max_grad_norm = model["training"]["max_grad_norm"]
 
     vocab_path = "/lab/" + model["training"]["vocab_path"]
     vocab_size = model["training"]["vocab_size"]
@@ -77,13 +81,17 @@ if __name__ == "__main__":
     print("\033[91m" + "ed on the " + focus + "\033[0m")
 
     datasets = []
-    for corpus in model["training"]["corpuses"]:
-        intermediate_file = join_files("/lab/" + corpus["folder"])
+    for dataset in model["training"]["datasets"]:
+        line_by_line = False
+        if line_by_line in dataset:
+            line_by_line = dataset["line_by_line"]
+
+        intermediate_file = join_files("/lab/" + dataset["folder"])
         datasets.append(
             TokenDataset(
                 intermediate_file,
                 block_size=model["training"]["block_size"],
-                line_by_line=corpus["line_by_line"],
+                line_by_line=line_by_line,
             )
         )
 
@@ -108,11 +116,10 @@ if __name__ == "__main__":
         output_dir=model_folder,
         tokenizer_file=tokenizer_file,
         loggers=logger,
-        learning_rate=0.002,
-        weight_decay=0.0001,
-        warmup_ratio=0.0001,
-        num_workers=8,
-        max_grad_norm=1,
+        learning_rate=learning_rate,
+        weight_decay=weight_decay,
+        warmup_steps=warmup_steps,
+        max_grad_norm=max_grad_norm,
         gradient_accumulation_steps=gradient_accumulation_steps,
         fp16=False,
     )

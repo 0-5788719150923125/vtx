@@ -24,15 +24,15 @@ def fetch_from_discord():
 
     discord_token = os.environ["SELFTOKEN"]
 
-    if not os.path.exists("/lab/dump/discord"):
-        os.makedirs("/lab/dump/discord")
+    if not os.path.exists("/lab/raw/discord"):
+        os.makedirs("/lab/raw/discord")
 
     if config["discord"]["all_dms"] == True:
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/lab/dump/discord" -f "JSON"'
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/lab/raw/discord" -f "JSON"'
         os.system(command)
 
     for server in config["discord"]["servers"]:
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server["id"]}" -t "{discord_token}" -o "/lab/dump/discord" -f "JSON"'
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server["id"]}" -t "{discord_token}" -o "/lab/raw/discord" -f "JSON"'
         if "after" in server:
             command.join(" --after " + server["after"])
         os.system(command)
@@ -46,9 +46,9 @@ def prep_discord_messages():
     os.makedirs("/lab/discord")
 
     print("tried to eat Discord exports")
-    for filename in os.listdir("/lab/dump/discord"):
+    for filename in os.listdir("/lab/raw/discord"):
         try:
-            with open(os.path.join("/lab/dump/discord", filename), "r") as file:
+            with open(os.path.join("/lab/raw/discord", filename), "r") as file:
                 try:
                     data = json.load(file)
 
@@ -131,11 +131,17 @@ def fetch_from_reddit():
 
     for subreddit in config["reddit"]:
 
-        if subreddit["skip"] == True:
-            print("skipping")
-            continue
-
         name = subreddit["sub"]
+
+        skip = False
+        if skip in subreddit:
+            skip = subreddit["skip"]
+
+        if skip == True:
+            continue
+        else:
+            print("archiving " + name)
+
         if os.path.exists("/lab/reddit/" + name):
             shutil.rmtree("/lab/reddit/" + name)
 
@@ -143,9 +149,23 @@ def fetch_from_reddit():
 
         def main():
             for post in reddit.subreddit(name).top(limit=500):
+                dump_submission(post)
                 dump_replies(replies=post.comments, context=[post.title, post.selftext])
 
+        def dump_submission(submission):
+            with jsonlines.open(
+                "/lab/reddit/" + name + "/" + submission.id + ".jsonl",
+                mode="a",
+            ) as writer:
+                writer.write(
+                    {
+                        "id": submission.id,
+                        "context": [submission.title, submission.selftext],
+                    }
+                )
+
         def dump_replies(replies, context):
+
             for reply in replies:
                 if isinstance(reply, praw.models.MoreComments):
                     continue

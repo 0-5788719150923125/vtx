@@ -113,19 +113,18 @@ class Client(discord.Client):
             except:
                 pass
         else:
+            weight = random.randint(0, 100)
             print(bcolors.FAIL + "dj ent" + bcolors.ENDC)
             # increase probability of a response if bot is mentioned
-            two_thirds = response_probability + (response_probability / 2)  # 66%
             if client.user.mentioned_in(message):
                 print(bcolors.WARNING + "WARN: bot" + bcolors.ENDC)
-                weight = random.randint(0, two_thirds)
+                weight = random.randint(
+                    0, response_probability + (response_probability / 2)
+                )  ## 66%
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
                 print(bcolors.WARNING + "WARN: agent" + bcolors.ENDC)
                 bias = int(message.mentions[0].id)
-                weight = random.randint(0, two_thirds)
-            else:
-                weight = random.randint(0, 100)
 
         # increase response probability in private channels
         if str(message.channel.type) == "private":
@@ -162,7 +161,8 @@ class Client(discord.Client):
             time.sleep(10)
 
         try:
-            await message.channel.send(output)
+            # await message.channel.send(output)
+            await message.reply(output)
         except:
             print(bcolors.FAIL + "Failed to send Discord message." + bcolors.ENDC)
 

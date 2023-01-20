@@ -36,19 +36,19 @@ voice:
   n_gpu: 1
   training:
     base_model: xhyi/PT_GPTNEO350_ATG
+    to_gpu: True
     batch_size: 1
     block_size: 256
     num_steps: 20000
     warmup_steps: 500
     gradient_accumulation_steps: 24
-    to_gpu: True
     learning_rate: 0.0012
     weight_decay: 0.06
     max_grad_norm: 0.6
     vocab_path: texts
     vocab_size: 4096
     dropout: 0.1
-    equalize_datasets: True
+    equalize_datasets: False
     datasets:
       - folder: texts
       - folder: journals
@@ -78,19 +78,20 @@ reddit:
   - sub: TheInk
 
 discord:
-  all_dms: True
+  use_self_token: True
+  export_dms: True
   servers:
-    - id: '830300981966143488'
-    - id: '896111349300592650'
-    - id: '1041331166592106576'
-    - id: '907925566089465886'
-    - id: '747807102759731291'
-    - id: '1047276906636132432'
-    - id: '922565350598508664'
-    - id: '829345498326106142'
-    - id: '976908406864613436'
-    - id: '840978732772753468'
-    - id: '1042822599362752562'
-    - id: '716611330198732868'
-      after: '2022-09-05 12:34'
-    - id: '860572485799379025'
+    - id: '558378982920159242' # Rising Sun Society
+      before: '2021-01-01 12:00'
+      skip: True
+    - id: '830300981966143488' # src
+    - id: '896111349300592650' # The Vortex
+    - id: '1041331166592106576' # The Brain
+    - id: '907925566089465886' # Labyrinth
+    - id: '747807102759731291' # Kunist's Server
+    - id: '1047276906636132432' # The Underside of the 7th Realm
+    - id: '922565350598508664' # BOTS FOR EVERYONE
+    - id: '829345498326106142' # The Pantheon
+    - id: '976908406864613436' # Darkwater Foundation
+    - id: '840978732772753468' # The Cause
+    - id: '1042822599362752562' # Lux Prima

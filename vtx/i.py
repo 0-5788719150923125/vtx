@@ -12,40 +12,44 @@ import random
 with open("config.yml", "r") as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-choices = [
-    "[REDACTED]",
-    "[CLASSIFIED]",
-    "[CORRUPTED]",
-]
 
-
-# https://github.com/Tyrrrz/DiscordChatExporter/wiki/Message-filters
 def fetch_from_discord():
 
-    discord_token = os.environ["SELFTOKEN"]
+    discord_token = os.environ["DISCORDTOKEN"]
+    if "use_self_token" in config["discord"]:
+        if config["discord"]["use_self_token"] == True:
+            discord_token = os.environ["SELFTOKEN"]
 
     if not os.path.exists("/lab/raw/discord"):
         os.makedirs("/lab/raw/discord")
 
-    if config["discord"]["all_dms"] == True:
+    if config["discord"]["export_dms"] == True:
         command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/lab/raw/discord" -f "JSON"'
         os.system(command)
 
     for server in config["discord"]["servers"]:
+        skip = False
+        if "skip" in server:
+            skip = server["skip"]
+        if skip == True:
+            continue
+
         command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server["id"]}" -t "{discord_token}" -o "/lab/raw/discord" -f "JSON"'
+        if "before" in server:
+            command.join(" --before " + server["before"])
         if "after" in server:
             command.join(" --after " + server["after"])
         os.system(command)
 
 
-def prep_discord_messages():
+def prepare_discord_messages():
 
     if os.path.exists("/lab/discord"):
         shutil.rmtree("/lab/discord")
 
     os.makedirs("/lab/discord")
 
-    print("tried to eat Discord exports")
+    print("preparing Discord messages")
     for filename in os.listdir("/lab/raw/discord"):
         try:
             with open(os.path.join("/lab/raw/discord", filename), "r") as file:
@@ -58,10 +62,8 @@ def prep_discord_messages():
                         if i["content"] == "":
                             continue
                         if i["author"]["isBot"] == True:
-                            if str(i["author"]["id"]) == "975174695399854150":
-                                print("allowing Eliza")
-                            elif str(data["guild"]["id"]) == "716611330198732868":
-                                print("allowing RSS bot")
+                            if str(i["author"]["id"]) == "975174695399854150":  # Eliza
+                                pass
                             else:
                                 continue
 
@@ -81,13 +83,13 @@ def prep_discord_messages():
                                 if result is not None:
                                     sanitized = re.sub(
                                         r"http\S+",
-                                        random.choice(choices),
+                                        "",
                                         result["content"],
                                     )
                                     if len(result["mentions"]) > 0:
                                         for mention in result["mentions"]:
                                             sanitized = sanitized.replace(
-                                                mention["name"],
+                                                "@" + mention["name"],
                                                 "<@" + str(mention["id"]) + ">",
                                             )
                                     content = (
@@ -99,13 +101,12 @@ def prep_discord_messages():
                                 print("failed to prepare a reply")
 
                         try:
-                            sanitized = re.sub(
-                                r"http\S+", random.choice(choices), i["content"]
-                            )
+                            sanitized = re.sub(r"http\S+", "", i["content"])
                             if len(i["mentions"]) > 0:
                                 for mention in i["mentions"]:
                                     sanitized = sanitized.replace(
-                                        mention["name"], "<@" + str(mention["id"]) + ">"
+                                        "@" + mention["name"],
+                                        "<@" + str(mention["id"]) + ">",
                                     )
 
                             content = ":>" + i["author"]["id"] + ": " + sanitized
@@ -134,7 +135,7 @@ def fetch_from_reddit():
         name = subreddit["sub"]
 
         skip = False
-        if skip in subreddit:
+        if "skip" in subreddit:
             skip = subreddit["skip"]
 
         if skip == True:

@@ -4,6 +4,7 @@ head:
   to_gpu: False
 
 heart:
+  version: 0
   info: never focus on the heart
   to_gpu: False
   n_gpu: 1
@@ -39,14 +40,14 @@ voice:
     to_gpu: True
     batch_size: 1
     block_size: 256
-    num_steps: 20000
-    warmup_steps: 500
-    gradient_accumulation_steps: 24
-    learning_rate: 0.0012
+    num_steps: 10000
+    warmup_steps: 0
+    gradient_accumulation_steps: 32
+    learning_rate: 0.002
     weight_decay: 0.06
     max_grad_norm: 0.6
     vocab_path: texts
-    vocab_size: 4096
+    vocab_size: 6666
     dropout: 0.1
     equalize_datasets: False
     datasets:

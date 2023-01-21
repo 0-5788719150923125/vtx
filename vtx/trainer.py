@@ -90,6 +90,7 @@ if __name__ == "__main__":
         datasets.append(
             TokenDataset(
                 intermediate_file,
+                tokenizer_file=tokenizer_file,
                 block_size=model["training"]["block_size"],
                 line_by_line=line_by_line,
             )
@@ -110,7 +111,7 @@ if __name__ == "__main__":
         from_cache=False,
         batch_size=batch_size,
         num_steps=num_steps,
-        generate_every=250,
+        generate_every=1000,
         save_every=1000,
         n_gpu=n_gpu,
         output_dir=model_folder,
@@ -122,4 +123,5 @@ if __name__ == "__main__":
         max_grad_norm=max_grad_norm,
         gradient_accumulation_steps=gradient_accumulation_steps,
         fp16=False,
+        seed=1337,
     )

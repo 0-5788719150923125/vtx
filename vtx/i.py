@@ -8,6 +8,8 @@ import time
 import jsonlines
 import yaml
 import random
+import numpy as np
+import secrets
 
 with open("config.yml", "r") as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -51,75 +53,65 @@ def prepare_discord_messages():
 
     print("preparing Discord messages")
     for filename in os.listdir("/lab/raw/discord"):
-        try:
-            with open(os.path.join("/lab/raw/discord", filename), "r") as file:
-                try:
-                    data = json.load(file)
+        with open(os.path.join("/lab/raw/discord", filename), "r") as file:
+            data = json.load(file)
 
-                    for i in data["messages"]:
-                        if i["type"] != "Default" and i["type"] != "Reply":
-                            continue
-                        if i["content"] == "":
-                            continue
-                        if i["author"]["isBot"] == True:
-                            if str(i["author"]["id"]) == "975174695399854150":  # Eliza
-                                pass
-                            else:
-                                continue
+            for i in data["messages"]:
+                if i["type"] != "Default" and i["type"] != "Reply":
+                    continue
+                if i["content"] == "":
+                    continue
+                if i["author"]["isBot"] == True:
+                    if str(i["author"]["id"]) == "975174695399854150":  # Eliza
+                        pass
+                    else:
+                        continue
 
-                        txt_file = open("/lab/discord/" + filename + ".txt", "a")
-
-                        if i["type"] == "Reply":
-                            try:
-                                message_ref_id = i["reference"]["messageId"]
-                                result = next(
-                                    (
-                                        obj
-                                        for obj in data["messages"]
-                                        if obj["id"] == message_ref_id
-                                    ),
-                                    None,
-                                )
-                                if result is not None:
-                                    sanitized = re.sub(
-                                        r"http\S+",
-                                        "",
-                                        result["content"],
-                                    )
-                                    if len(result["mentions"]) > 0:
-                                        for mention in result["mentions"]:
-                                            sanitized = sanitized.replace(
-                                                "@" + mention["name"],
-                                                "<@" + str(mention["id"]) + ">",
-                                            )
-                                    content = (
-                                        ":>" + result["author"]["id"] + ": " + sanitized
-                                    )
-                                    txt_file.write(f"{content}\n".format(content))
-                            except Exception as e:
-                                print(e)
-                                print("failed to prepare a reply")
-
+                with open("/lab/discord/" + filename + ".txt", "a") as txt_file:
+                    if i["type"] == "Reply":
                         try:
-                            sanitized = re.sub(r"http\S+", "", i["content"])
-                            if len(i["mentions"]) > 0:
-                                for mention in i["mentions"]:
-                                    sanitized = sanitized.replace(
-                                        "@" + mention["name"],
-                                        "<@" + str(mention["id"]) + ">",
-                                    )
+                            message_ref_id = i["reference"]["messageId"]
+                            result = next(
+                                (
+                                    obj
+                                    for obj in data["messages"]
+                                    if obj["id"] == message_ref_id
+                                ),
+                                None,
+                            )
+                            if result is not None:
+                                sanitized = re.sub(
+                                    r"http\S+",
+                                    "",
+                                    result["content"],
+                                )
+                                if len(result["mentions"]) > 0:
+                                    for mention in result["mentions"]:
+                                        sanitized = sanitized.replace(
+                                            "@" + mention["name"],
+                                            "<@" + str(mention["id"]) + ">",
+                                        )
+                                content = (
+                                    ":>" + result["author"]["id"] + ": " + sanitized
+                                )
+                                txt_file.write(f"{content}\n".format(content))
+                        except Exception as e:
+                            print(e)
+                            print("failed to prepare a reply")
 
-                            content = ":>" + i["author"]["id"] + ": " + sanitized
-                            txt_file.write(f"{content}\n".format(content))
-                        except:
-                            print("Failed: " + i["id"])
-                        txt_file.close()
+                    try:
+                        sanitized = re.sub(r"http\S+", "", i["content"])
+                        if len(i["mentions"]) > 0:
+                            for mention in i["mentions"]:
+                                sanitized = sanitized.replace(
+                                    "@" + mention["name"],
+                                    "<@" + str(mention["id"]) + ">",
+                                )
 
-                    file.close()
-                except:
-                    print("failed to eat a binary file")
-        except:
-            print("handling errors")
+                        content = ":>" + i["author"]["id"] + ": " + sanitized
+                        txt_file.write(f"{content}\n".format(content))
+                    except:
+                        print("Failed: " + i["id"])
 
 
 def fetch_from_reddit():
@@ -148,21 +140,30 @@ def fetch_from_reddit():
 
         os.makedirs("/lab/reddit/" + name)
 
-        def main():
-            for post in reddit.subreddit(name).top(limit=500):
-                dump_submission(post)
-                dump_replies(replies=post.comments, context=[post.title, post.selftext])
+        identities = {}
 
-        def dump_submission(submission):
-            with jsonlines.open(
-                "/lab/reddit/" + name + "/" + submission.id + ".jsonl",
-                mode="a",
-            ) as writer:
-                writer.write(
-                    {
-                        "id": submission.id,
-                        "context": [submission.title, submission.selftext],
-                    }
+        def main():
+            for submission in reddit.subreddit(name).top(limit=500):
+
+                bias = get_identity()
+                print("wrote to " + str(bias))
+
+                context = []
+                with open(
+                    "/lab/reddit/" + name + "/" + submission.id + ".txt", "a"
+                ) as file:
+                    context = [
+                        ":>"
+                        + str(bias)
+                        + ": "
+                        + submission.title
+                        + " "
+                        + submission.selftext.replace("\n", "\\n")
+                    ]
+                    file.write("".join(context))
+                dump_replies(
+                    replies=submission.comments,
+                    context=context,
                 )
 
         def dump_replies(replies, context):
@@ -171,19 +172,35 @@ def fetch_from_reddit():
                 if isinstance(reply, praw.models.MoreComments):
                     continue
 
-                reply_data = {
-                    "id": reply.id,
-                    "context": context,
-                    "response": reply.body,
-                }
-                with jsonlines.open(
-                    "/lab/reddit/" + name + "/" + reply.submission.id + ".jsonl",
-                    mode="a",
-                ) as writer:
-                    writer.write(reply_data)
+                bias = get_identity()
+                print("wrote to " + str(bias))
 
-                context.append(reply.body)
+                with open(
+                    "/lab/reddit/" + name + "/" + reply.submission.id + ".txt", "a"
+                ) as file:
+                    context.append(
+                        ":>" + str(bias) + ": " + reply.body.replace("\n", "\\n")
+                    )
+                    file.write("\n" + " ".join(context))
+
                 dump_replies(reply.replies, context)
                 context.pop()
 
         main()
+
+
+def get_identity():
+    identity = "".join(secrets.choice("0123456789") for i in range(18))
+    return identity
+
+
+class bcolors:
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKCYAN = "\033[96m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"

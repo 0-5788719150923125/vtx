@@ -3,4 +3,5 @@
 	url = https://github.com/SocioProphet/clymer_research
 [submodule "aitextgen"]
 	path = aitextgen
-	url = https://github.com/minimaxir/aitextgen
+	url = https://github.com/LuciferianInk/aitextgen.git
+	branch = dev

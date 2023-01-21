@@ -91,13 +91,14 @@
       "type": "pickString",
       "id": "env",
       "description": "Which model should I train?",
-      "options": ["heart", "soul", "voice"]
+      "options": ["voice", "heart", "soul"]
     },
     {
       "type": "pickString",
       "id": "i",
       "description": "Which task should I execute?",
       "options": [
+        "i.crawl()",
         "i.fetch_from_reddit()",
         "i.prepare_discord_messages()",
         "i.fetch_from_discord()"

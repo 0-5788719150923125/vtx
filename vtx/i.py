@@ -10,9 +10,25 @@ import yaml
 import random
 import numpy as np
 import secrets
+import requests
+from bs4 import BeautifulSoup
+
 
 with open("config.yml", "r") as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+
+def crawl(site="https://ink.university"):
+    html = requests.get(site).content
+    soup = BeautifulSoup(html, "html.parser")
+    links = soup.find_all("a")
+    internal_links = []
+    for link in links:
+        href = link.get("href")
+        if href.startswith("/"):
+            internal_links.append(site + href)
+    print(internal_links)
+    return internal_links
 
 
 def fetch_from_discord():
@@ -46,6 +62,8 @@ def fetch_from_discord():
 
 def prepare_discord_messages():
 
+    urls = crawl("https://ink.university")
+
     if os.path.exists("/lab/discord"):
         shutil.rmtree("/lab/discord")
 
@@ -53,68 +71,75 @@ def prepare_discord_messages():
 
     print("preparing Discord messages")
     for filename in os.listdir("/lab/raw/discord"):
-        with open(os.path.join("/lab/raw/discord", filename), "r") as file:
-            data = json.load(file)
+        try:
+            with open(os.path.join("/lab/raw/discord", filename), "r") as file:
+                data = json.load(file)
 
-            for i in data["messages"]:
-                if i["type"] != "Default" and i["type"] != "Reply":
-                    continue
-                if i["content"] == "":
-                    continue
-                if i["author"]["isBot"] == True:
-                    if str(i["author"]["id"]) == "975174695399854150":  # Eliza
-                        pass
-                    else:
+                for i in data["messages"]:
+                    if i["type"] != "Default" and i["type"] != "Reply":
                         continue
+                    if i["content"] == "":
+                        continue
+                    if i["author"]["isBot"] == True:
+                        if str(i["author"]["id"]) == "975174695399854150":  # Eliza
+                            pass
+                        else:
+                            continue
 
-                with open("/lab/discord/" + filename + ".txt", "a") as txt_file:
-                    if i["type"] == "Reply":
+                    with open("/lab/discord/" + filename + ".txt", "a") as txt_file:
+                        if i["type"] == "Reply":
+                            try:
+                                message_ref_id = i["reference"]["messageId"]
+                                result = next(
+                                    (
+                                        obj
+                                        for obj in data["messages"]
+                                        if obj["id"] == message_ref_id
+                                    ),
+                                    None,
+                                )
+                                if result is not None:
+                                    sanitized = re.sub(
+                                        r"http\S+",
+                                        secrets.choice(urls),
+                                        result["content"],
+                                    )
+                                    if len(result["mentions"]) > 0:
+                                        for mention in result["mentions"]:
+                                            sanitized = sanitized.replace(
+                                                "@" + mention["name"],
+                                                "<@" + str(mention["id"]) + ">",
+                                            )
+                                    content = (
+                                        ":>" + result["author"]["id"] + ": " + sanitized
+                                    )
+                                    txt_file.write(f"{content}\n".format(content))
+                            except Exception as e:
+                                print(e)
+                                print("failed to prepare a reply")
+
                         try:
-                            message_ref_id = i["reference"]["messageId"]
-                            result = next(
-                                (
-                                    obj
-                                    for obj in data["messages"]
-                                    if obj["id"] == message_ref_id
-                                ),
-                                None,
+                            sanitized = re.sub(
+                                r"http\S+", secrets.choice(urls), i["content"]
                             )
-                            if result is not None:
-                                sanitized = re.sub(
-                                    r"http\S+",
-                                    "",
-                                    result["content"],
-                                )
-                                if len(result["mentions"]) > 0:
-                                    for mention in result["mentions"]:
-                                        sanitized = sanitized.replace(
-                                            "@" + mention["name"],
-                                            "<@" + str(mention["id"]) + ">",
-                                        )
-                                content = (
-                                    ":>" + result["author"]["id"] + ": " + sanitized
-                                )
-                                txt_file.write(f"{content}\n".format(content))
-                        except Exception as e:
-                            print(e)
-                            print("failed to prepare a reply")
+                            if len(i["mentions"]) > 0:
+                                for mention in i["mentions"]:
+                                    sanitized = sanitized.replace(
+                                        "@" + mention["name"],
+                                        "<@" + str(mention["id"]) + ">",
+                                    )
 
-                    try:
-                        sanitized = re.sub(r"http\S+", "", i["content"])
-                        if len(i["mentions"]) > 0:
-                            for mention in i["mentions"]:
-                                sanitized = sanitized.replace(
-                                    "@" + mention["name"],
-                                    "<@" + str(mention["id"]) + ">",
-                                )
-
-                        content = ":>" + i["author"]["id"] + ": " + sanitized
-                        txt_file.write(f"{content}\n".format(content))
-                    except:
-                        print("Failed: " + i["id"])
+                            content = ":>" + i["author"]["id"] + ": " + sanitized
+                            txt_file.write(f"{content}\n".format(content))
+                        except:
+                            print("Failed: " + i["id"])
+        except:
+            print("found a bad file")
 
 
 def fetch_from_reddit():
+
+    urls = crawl("https://pen.university")
 
     reddit = praw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
@@ -152,14 +177,17 @@ def fetch_from_reddit():
                 with open(
                     "/lab/reddit/" + name + "/" + submission.id + ".txt", "a"
                 ) as file:
-                    context = [
+                    sanitized = re.sub(
+                        r"http\S+",
+                        secrets.choice(urls),
                         ":>"
                         + str(bias)
                         + ": "
                         + submission.title
                         + " "
-                        + submission.selftext.replace("\n", "\\n")
-                    ]
+                        + submission.selftext.replace("\n", "\\n"),
+                    )
+                    context = [sanitized]
                     file.write("".join(context))
                 dump_replies(
                     replies=submission.comments,
@@ -178,9 +206,12 @@ def fetch_from_reddit():
                 with open(
                     "/lab/reddit/" + name + "/" + reply.submission.id + ".txt", "a"
                 ) as file:
-                    context.append(
-                        ":>" + str(bias) + ": " + reply.body.replace("\n", "\\n")
+                    sanitized = re.sub(
+                        r"http\S+",
+                        secrets.choice(urls),
+                        ":>" + str(bias) + ": " + reply.body.replace("\n", "\\n"),
                     )
+                    context.append(sanitized)
                     file.write("\n" + " ".join(context))
 
                 dump_replies(reply.replies, context)
@@ -190,7 +221,8 @@ def fetch_from_reddit():
 
 
 def get_identity():
-    identity = "".join(secrets.choice("0123456789") for i in range(18))
+    count = secrets.choice([18, 19])
+    identity = "".join(secrets.choice("0123456789") for i in range(count))
     return identity
 
 

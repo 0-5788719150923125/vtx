@@ -111,7 +111,7 @@ if __name__ == "__main__":
         from_cache=False,
         batch_size=batch_size,
         num_steps=num_steps,
-        generate_every=1000,
+        generate_every=250,
         save_every=1000,
         n_gpu=n_gpu,
         output_dir=model_folder,

@@ -168,7 +168,7 @@ def fetch_from_reddit():
         identities = {}
 
         def main():
-            for submission in reddit.subreddit(name).top(limit=500):
+            for submission in reddit.subreddit(name).top(limit=50):
 
                 bias = get_identity()
                 print("wrote to " + str(bias))

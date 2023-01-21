@@ -39,7 +39,7 @@ const gun = Gun({
     'http://localhost:9665/gun'
   ],
   web: server,
-  file: './vtx/lab',
+  file: './gun',
   localStorage: false,
   radisk: true,
   axe: true

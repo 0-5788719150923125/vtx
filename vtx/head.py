@@ -118,11 +118,6 @@ def gen(bias=None, ctx=None):
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(truncate_char)[0])
 
-    # bad_words_ids = [
-    #     ai.tokenizer.encode(bad_word)
-    #     for bad_word in ["[REDACTED]", "[CORRUPTED]", "[CLASSIFIED]"]
-    # ]
-
     # try to complete the prompt
     # https://huggingface.co/docs/transformers/main_classes/text_generation
     try:
@@ -144,7 +139,6 @@ def gen(bias=None, ctx=None):
             renormalize_logits=True,
             eos_token_id=eos,
             seed=seed,
-            # bad_words_ids=bad_words_ids,
         )
     except Exception as e:
         print(e)

@@ -14,6 +14,7 @@ lab/intermediate
 node_modules
 vtx/models/*
 vtx/vtx/*
+vtx/gun
 !.keep
 !lab/*.mp4
 !lab/logseq/config.edn

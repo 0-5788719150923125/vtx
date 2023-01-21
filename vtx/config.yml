@@ -39,15 +39,15 @@ voice:
     base_model: xhyi/PT_GPTNEO350_ATG
     to_gpu: True
     batch_size: 1
-    block_size: 256
+    block_size: 333
     num_steps: 20000
     warmup_steps: 0
     gradient_accumulation_steps: 32
-    learning_rate: 0.002
+    learning_rate: 0.0013
     weight_decay: 0.06
-    max_grad_norm: 0.8
+    max_grad_norm: 0.4
     vocab_path: research
-    vocab_size: 6666
+    vocab_size: 3333
     dropout: 0.1
     equalize_datasets: False
     datasets:

@@ -14,7 +14,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-with open("config.yml", "r") as config_file:
+with open("/lab/config.yml", "r") as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 

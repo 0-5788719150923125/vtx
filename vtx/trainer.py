@@ -12,7 +12,7 @@ import random
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
-with open("config.yml", "r") as config_file:
+with open("/lab/config.yml", "r") as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 focus = os.environ["FOCUS"]
@@ -67,15 +67,15 @@ if __name__ == "__main__":
     warmup_steps = model["training"]["warmup_steps"]
     max_grad_norm = model["training"]["max_grad_norm"]
 
-    vocab_path = "/lab/" + model["training"]["vocab_path"]
-    vocab_size = model["training"]["vocab_size"]
-    train_tokenizer(
-        files=list_full_paths(vocab_path),
-        vocab_size=vocab_size,
-        save_path="./",
-        prefix="src." + focus,
-        dropout=model["training"]["dropout"],
-    )
+    # vocab_path = "/lab/" + model["training"]["vocab_path"]
+    # vocab_size = model["training"]["vocab_size"]
+    # train_tokenizer(
+    #     files=list_full_paths(vocab_path),
+    #     vocab_size=vocab_size,
+    #     save_path="./",
+    #     prefix="src." + focus,
+    #     dropout=model["training"]["dropout"],
+    # )
 
     print("\033[91m" + "focus" + "\033[0m")
     print("\033[91m" + "ed on the " + focus + "\033[0m")
@@ -90,7 +90,7 @@ if __name__ == "__main__":
         datasets.append(
             TokenDataset(
                 intermediate_file,
-                tokenizer_file=tokenizer_file,
+                # tokenizer_file=tokenizer_file,
                 block_size=model["training"]["block_size"],
                 line_by_line=line_by_line,
             )
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])
 
     ai = aitextgen(
-        tokenizer_file=tokenizer_file,
+        # tokenizer_file=tokenizer_file,
         config=config,
         model=base_model,
         to_gpu=to_gpu,
@@ -115,7 +115,6 @@ if __name__ == "__main__":
         save_every=1000,
         n_gpu=n_gpu,
         output_dir=model_folder,
-        tokenizer_file=tokenizer_file,
         loggers=logger,
         learning_rate=learning_rate,
         weight_decay=weight_decay,

@@ -19,7 +19,7 @@ os.environ["LRU_CACHE_CAPACITY"] = "1"
 
 focus = os.environ["FOCUS"]
 
-with open("config.yml", "r") as config_file:
+with open("/lab/config.yml", "r") as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 

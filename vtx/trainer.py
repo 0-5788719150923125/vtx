@@ -66,6 +66,8 @@ if __name__ == "__main__":
     weight_decay = model["training"]["weight_decay"]
     warmup_steps = model["training"]["warmup_steps"]
     max_grad_norm = model["training"]["max_grad_norm"]
+    freeze_layers = model["training"]["freeze_layers"]
+    num_layers_freeze = model["training"]["num_layers_freeze"]
 
     # vocab_path = "/lab/" + model["training"]["vocab_path"]
     # vocab_size = model["training"]["vocab_size"]
@@ -122,5 +124,7 @@ if __name__ == "__main__":
         max_grad_norm=max_grad_norm,
         gradient_accumulation_steps=gradient_accumulation_steps,
         fp16=False,
+        freeze_layers=freeze_layers,
+        num_layers_freeze=num_layers_freeze,
         seed=1337,
     )

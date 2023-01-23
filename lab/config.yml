@@ -21,17 +21,33 @@ heart:
 
 soul:
   version: 0
-  info: bury your desires
-  to_gpu: False
+  info: reaper hell
+  to_gpu: True
   n_gpu: 1
   training:
     base_model: xhyi/PT_GPTNEO350_ATG
-    vocab_size: 4096
-    block_size: 256
-    batch_size: 1
-    gradient_accumulation_steps: 32
-    num_steps: 5000
     to_gpu: True
+    batch_size: 1
+    block_size: 444
+    num_steps: 20000
+    warmup_steps: 0
+    gradient_accumulation_steps: 32
+    learning_rate: 0.000888
+    weight_decay: 0.03
+    max_grad_norm: 0.666
+    # vocab_path: research
+    # vocab_size: 3333
+    # dropout: 0.1
+    freeze_layers: True
+    num_layers_freeze: 12
+    equalize_datasets: False
+    datasets:
+      # - folder: research
+      - folder: texts
+      - folder: journals
+      - folder: discord
+      - folder: reddit
+        line_by_line: True
 
 voice:
   version: 0
@@ -55,34 +71,6 @@ voice:
     equalize_datasets: False
     datasets:
       - folder: research
-      - folder: texts
-      - folder: journals
-      - folder: discord
-      - folder: reddit
-        line_by_line: True
-
-black:
-  version: 0
-  info: reap hell
-  to_gpu: True
-  n_gpu: 1
-  training:
-    base_model: xhyi/PT_GPTNEO350_ATG
-    to_gpu: True
-    batch_size: 1
-    block_size: 444
-    num_steps: 20000
-    warmup_steps: 0
-    gradient_accumulation_steps: 32
-    learning_rate: 0.000888
-    weight_decay: 0.03
-    max_grad_norm: 0.666
-    # vocab_path: research
-    # vocab_size: 3333
-    # dropout: 0.1
-    equalize_datasets: False
-    datasets:
-      # - folder: research
       - folder: texts
       - folder: journals
       - folder: discord

@@ -7,11 +7,15 @@ import random
 import asyncio
 import discord
 import head
+import yaml
 
 token = os.environ["DISCORDTOKEN"]
 
 redacted_chance = 1
 response_probability = 10
+
+with open("/lab/config.yml", "r") as config_file:
+    config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 
 class Client(discord.Client):
@@ -32,6 +36,8 @@ class Client(discord.Client):
 
     # randomly generate commentary
     async def think(self):
+        if config["mode"]["test"] == True:
+            return
         await self.wait_until_ready()
         while not self.is_closed():
             delay = random.randint(30, 21600)
@@ -45,12 +51,12 @@ class Client(discord.Client):
                     async for message in self.get_channel(channel.id).history(limit=10)
                 ]
                 context = [
-                    str(messages[8].author.id) + ": " + messages[8].content,
-                    str(messages[5].author.id) + ": " + messages[5].content,
-                    str(messages[3].author.id) + ": " + messages[3].content,
-                    str(messages[2].author.id) + ": " + messages[2].content,
-                    str(messages[1].author.id) + ": " + messages[1].content,
-                    str(messages[0].author.id) + ": " + messages[0].content,
+                    ":>" + str(messages[8].author.id) + ": " + messages[8].content,
+                    ":>" + str(messages[5].author.id) + ": " + messages[5].content,
+                    ":>" + str(messages[3].author.id) + ": " + messages[3].content,
+                    ":>" + str(messages[2].author.id) + ": " + messages[2].content,
+                    ":>" + str(messages[1].author.id) + ": " + messages[1].content,
+                    ":>" + str(messages[0].author.id) + ": " + messages[0].content,
                 ]
                 head.ai = await head.load_model("head")
 
@@ -87,6 +93,10 @@ class Client(discord.Client):
 
     # check every Discord message
     async def on_message(self, message):
+
+        if config["mode"]["test"] == True:
+            return
+
         bias = 0
         output = "ERROR: Me Found."
 

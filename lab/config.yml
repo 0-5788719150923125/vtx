@@ -1,3 +1,6 @@
+mode:
+  test: True
+
 head:
   info: use your heads
   model: EleutherAI/gpt-neo-2.7B
@@ -58,6 +61,34 @@ voice:
       - folder: reddit
         line_by_line: True
 
+black:
+  version: 0
+  info: reap hell
+  to_gpu: True
+  n_gpu: 1
+  training:
+    base_model: xhyi/PT_GPTNEO350_ATG
+    to_gpu: True
+    batch_size: 1
+    block_size: 444
+    num_steps: 20000
+    warmup_steps: 0
+    gradient_accumulation_steps: 32
+    learning_rate: 0.000888
+    weight_decay: 0.03
+    max_grad_norm: 0.666
+    # vocab_path: research
+    # vocab_size: 3333
+    # dropout: 0.1
+    equalize_datasets: False
+    datasets:
+      # - folder: research
+      - folder: texts
+      - folder: journals
+      - folder: discord
+      - folder: reddit
+        line_by_line: True
+
 reddit:
   - sub: 5September2020
     skip: True
@@ -70,13 +101,21 @@ reddit:
   - sub: NUVIEVA
     skip: True
   - sub: stairsofpantheon
+    limit: 500
   - sub: Kunism
+    limit: 500
   - sub: undersideof7threalm
+    limit: 500
   - sub: adanceoffeathers
+    limit: 500
   - sub: LegionOfReason
+    limit: 500
   - sub: TheFold
+    limit: 500
   - sub: TheSource
+    limit: 500
   - sub: TheInk
+    limit: 500
 
 discord:
   use_self_token: True

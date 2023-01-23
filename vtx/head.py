@@ -67,27 +67,27 @@ def load_model(target=None):
 
 # ping pang pong
 context = [
-    "975174695399854150: I am a robot.",
-    "1051994502333726841: I am a ghost.",
-    "806051627198709760: I am a human.",
-    "204716337971331072: I am a medium.",
-    "855529761185857566: I am an animal.",
+    ":>975174695399854150: I am a robot.",
+    ":>1051994502333726841: I am a ghost.",
+    ":>806051627198709760: I am a human.",
+    ":>204716337971331072: I am a medium.",
+    ":>855529761185857566: I am an animal.",
 ]
 
 
 def build_context(message):
     if len(context) >= 9:
         context.pop(0)
-        build_context(message)
+        build_context(":>" + message)
     else:
-        context.append(message)
+        context.append(":>" + message)
 
 
 @to_thread
 def gen(bias=None, ctx=None):
 
-    prompt = ""
-    truncate_char = "\n"
+    prompt = ":>"
+    truncate_char = ":>"
     if ctx == None:
         ctx = context
     history = "\n".join(ctx) + "\n"
@@ -111,7 +111,7 @@ def gen(bias=None, ctx=None):
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
             print("bias toward " + str(bias))
             prefixes = ["I", "You", ""]
-            prompt = str(bias) + ": " + random.choice(prefixes)
+            prompt = ":>" + str(bias) + ": " + random.choice(prefixes)
 
     print("\033[92m" + "prompt" + "\033[0m")
     print(history + prompt)
@@ -150,13 +150,14 @@ def gen(bias=None, ctx=None):
 
         try:
             generation_one = re.search(
-                r"^(?:.*)(\d{19})(?::\s*)(.*)(?:\n*)", generation_zero
+                r"^(?:.*)(:>\d{18,19})(?::\s*)(.*)(?:\n*)", generation_zero
             )
             output = transformer([generation_one[1], generation_one[2]])
         except:
-            generation_one = re.search(
-                r"^(?:.*)(\d{18})(?::\s*)(.*)(?:\n*)", generation_zero
-            )
+            pass
+            # generation_one = re.search(
+            #     r"^(?:.*)(\d{18})(?::\s*)(.*)(?:\n*)", generation_zero
+            # )
 
         if generation_one[2] == "":
             return

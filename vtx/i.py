@@ -5,7 +5,6 @@ import re
 import glob
 import praw
 import time
-import jsonlines
 import yaml
 import random
 import numpy as np
@@ -150,6 +149,9 @@ def fetch_from_reddit():
     for subreddit in config["reddit"]:
 
         name = subreddit["sub"]
+        limit = 50
+        if "count" in subreddit:
+            limit = subreddit["count"]
 
         skip = False
         if "skip" in subreddit:
@@ -168,7 +170,7 @@ def fetch_from_reddit():
         identities = {}
 
         def main():
-            for submission in reddit.subreddit(name).top(limit=50):
+            for submission in reddit.subreddit(name).top(limit=limit):
 
                 bias = get_identity()
                 print("wrote to " + str(bias))

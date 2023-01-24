@@ -155,9 +155,6 @@ def gen(bias=None, ctx=None):
             output = transformer([generation_one[1], generation_one[2]])
         except:
             pass
-            # generation_one = re.search(
-            #     r"^(?:.*)(\d{18})(?::\s*)(.*)(?:\n*)", generation_zero
-            # )
 
         if generation_one[2] == "":
             return

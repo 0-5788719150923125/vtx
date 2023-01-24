@@ -5,6 +5,18 @@ import brain from 'brain.js'
 import Gun from 'gun'
 import SEA from 'gun/sea.js'
 // import { create } from 'ipfs-http-client'
+import express from 'express'
+const app = express()
+let port = process.env.PORT || 9665
+let payload = ''
+
+app.get('/', (req, res) => {
+  res.send(payload)
+})
+
+const server = app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
 
 // async function testIPFS() {
 //   const ipfs = create({ url: '/ip4/127.0.0.1/tcp/5001' })
@@ -18,18 +30,7 @@ import SEA from 'gun/sea.js'
 
 // testIPFS()
 
-let payload = ''
-let port = process.env.PORT || 9665
-
 const delay = (ms) => new Promise((res) => setTimeout(res, ms))
-const requestListener = function (req, res) {
-  res.writeHead(200)
-  res.end(payload)
-}
-
-const server = http.createServer(requestListener).listen(port, function () {
-  console.log(`server listening on port: ${port}`)
-})
 
 const gun = Gun({
   peers: [
@@ -43,6 +44,32 @@ const gun = Gun({
   localStorage: false,
   radisk: true,
   axe: true
+})
+
+let bullet
+const channel = gun
+  .get('messaging')
+  .get('channels')
+  .get('support')
+  .on(async (node) => {
+    if (typeof node.payload === 'string') {
+      // state.get('payload').put(JSON.stringify(net.toJSON()))
+      bullet = node.payload
+    }
+  })
+
+app.get('/channel', (req, res) => {
+  res.json(bullet)
+})
+
+app.use(express.json())
+app.post('/message', (req, res) => {
+  const { message, identifier, pubKey } = req.body
+  console.log(message)
+  console.log(identifier)
+  console.log(pubKey)
+  channel.put(JSON.stringify({ message, identifier, pubKey }))
+  res.json('ok')
 })
 
 const seed = JSON.parse(fs.readFileSync('./seed.json', 'utf-8'))
@@ -81,16 +108,6 @@ const state = gun
       } catch {
         console.log('failed to load brain from json')
       }
-    }
-  })
-
-const channel = gun
-  .get('messaging')
-  .get('channels')
-  .get('support')
-  .on(async (node) => {
-    if (typeof node.payload === 'string') {
-      state.get('payload').put(JSON.stringify(net.toJSON()))
     }
   })
 

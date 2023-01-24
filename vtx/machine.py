@@ -8,14 +8,65 @@ import asyncio
 import discord
 import head
 import yaml
-
-token = os.environ["DISCORDTOKEN"]
+import praw
+import functools
+import typing
+import asyncio
+import requests
 
 redacted_chance = 1
 response_probability = 10
 
 with open("/lab/config.yml", "r") as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+
+reddit = praw.Reddit(
+    client_id=os.environ["REDDITCLIENT"],
+    client_secret=os.environ["REDDITSECRET"],
+    user_agent="u/" + os.environ["REDDITAGENT"],
+    username=os.environ["REDDITAGENT"],
+    password=os.environ["REDDITPASSWORD"],
+)
+
+
+def to_thread(func: typing.Callable) -> typing.Coroutine:
+    @functools.wraps(func)
+    async def wrapper(*args, **kwargs):
+        return await asyncio.to_thread(func, *args, **kwargs)
+
+    return wrapper
+
+
+@to_thread
+def watch_reddit():
+    print("running reddit thing")
+    watch = ["SubSimGPT2Interactive"]
+
+    for entry in config["reddit"]:
+        if "watch" not in entry:
+            continue
+        if entry["watch"] == True:
+            watch.append(entry["sub"])
+
+    subreddit = reddit.subreddit("+".join(watch))
+    print(subreddit.display_name)
+    for comment in subreddit.stream.comments(skip_existing=True):
+        print(bcolors.OKGREEN + comment.submission.title + bcolors.ENDC)
+        print(comment.parent_id)
+        parent = comment.parent()
+        if isinstance(parent, praw.models.Submission):
+            print(bcolors.FAIL + "is a submission" + bcolors.ENDC)
+            print("=> " + str(parent.author))
+            print("=> " + str(parent.title))
+            print("=> " + str(parent.selftext))
+        else:
+            parent.refresh()
+        print("=> " + str(parent.author))
+        print("=> " + str(parent.body))
+        print("==> " + str(comment.author))
+        print("==> " + str(comment.body))
+        # comment.reply("test!!")
 
 
 class Client(discord.Client):
@@ -26,13 +77,20 @@ class Client(discord.Client):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
+        url = "http://ctx:9665/message"
+        myobj = {"message": "I am alive...", "identifier": "src", "pubKey": None}
+        x = requests.post(url, json=myobj)
+
+        await watch_reddit()
+        if config["mode"]["test"] == True:
+            return
         head.ai = await head.load_model()
         for guild in client.guilds:
             print("=> " + guild.name)
         print("I am alive...")
 
     async def setup_hook(self) -> None:
-        self.bg_task = self.loop.create_task(self.think())
+        self.discord_task = self.loop.create_task(self.think())
 
     # randomly generate commentary
     async def think(self):
@@ -200,8 +258,10 @@ async def get_all_channels():
     return text_channel_list
 
 
-intents = discord.Intents.default()
-intents.message_content = True
+if "discord" in config:
+    discord_token = os.environ["DISCORDTOKEN"]
+    intents = discord.Intents.default()
+    intents.message_content = True
 
-client = Client(intents=intents)
-client.run(token)
+    client = Client(intents=intents)
+    client.run(discord_token)

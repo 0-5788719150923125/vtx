@@ -22,19 +22,19 @@ heart:
 soul:
   version: 0
   info: reaper hell
-  to_gpu: True
+  to_gpu: 1
   n_gpu: 1
   training:
     base_model: xhyi/PT_GPTNEO350_ATG
-    to_gpu: True
-    batch_size: 1
-    block_size: 444
+    to_gpu: 1
+    batch_size: 2
+    block_size: 512
     num_steps: 20000
     warmup_steps: 0
-    gradient_accumulation_steps: 32
-    learning_rate: 0.000888
+    gradient_accumulation_steps: 16
+    learning_rate: 0.000666
     weight_decay: 0.03
-    max_grad_norm: 0.666
+    max_grad_norm: 0.444
     # vocab_path: research
     # vocab_size: 3333
     # dropout: 0.1
@@ -90,6 +90,7 @@ reddit:
     skip: True
   - sub: stairsofpantheon
     limit: 500
+    watch: True
   - sub: Kunism
     limit: 500
   - sub: undersideof7threalm

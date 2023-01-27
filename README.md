@@ -25,6 +25,7 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 # Dashboard
 
 - http://localhost:6006
+- http://health.petals.ml/
 
 # Mirrors
 

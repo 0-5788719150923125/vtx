@@ -4,34 +4,44 @@ mode:
 reddit:
   SubSimGPT2Interactive:
     skip: True
-    chance: 33
+    chance: 22
   5September2020:
     skip: False
   radicalmentalhealth:
     skip: False
+    limit: 50
+    chance: 11
+    watch: True
   titor:
-    skip: False
+    skip: True
   FrontLands:
-    skip: False
+    skip: True
+    watch: True
   NUVIEVA:
-    skip: False
+    skip: True
+    watch: True
   stairsofpantheon:
     limit: 500
     watch: True
   Kunism:
     limit: 500
+    watch: True
   undersideof7threalm:
     limit: 500
+    watch: True
   adanceoffeathers:
     limit: 500
     skip: True
+    watch: True
   LegionOfReason:
     limit: 500
+    watch: True
   TheFold:
     limit: 500
     watch: True
   TheSource:
     limit: 500
+    watch: True
   TheInk:
     limit: 500
     watch: True

@@ -6,6 +6,7 @@ import os
 import random
 import head
 import secrets
+import pprint
 
 with open("/vtx/defaults.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -18,6 +19,9 @@ try:
 except:
     config = default_config
 
+ship = ":>"
+propulsion = "¶"
+
 
 async def subscribe(subreddit):
     reddit = asyncpraw.Reddit(
@@ -28,16 +32,13 @@ async def subscribe(subreddit):
         password=os.environ["REDDITPASSWORD"],
     )
 
-    chance = 33
+    chance = config["reddit"][subreddit].get("chance", 33)
     watch = []
 
     if "watch" not in config["reddit"][subreddit]:
         return
     if config["reddit"][subreddit]["watch"] == True:
         watch.append(subreddit)
-    if "chance" in config["reddit"][subreddit]:
-        chance = config["reddit"][subreddit]["chance"]
-        print(bcolors.WARNING + str(chance) + " to roll success")
 
     subreddit = await reddit.subreddit(subreddit, fetch=True)
     async for comment in subreddit.stream.comments(skip_existing=True):
@@ -88,9 +89,9 @@ async def subscribe(subreddit):
         c = get_identity()
 
         ctx = [
-            ":>" + str(p) + ": " + "I am a chat bot.",
-            ":>" + str(p) + ": " + parent.body,
-            ":>" + str(c) + ": " + comment.body,
+            propulsion + str(p) + ship + " " + "I am a chat bot.",
+            propulsion + str(p) + ship + " " + parent.body,
+            propulsion + str(c) + ship + " " + comment.body,
         ]
         print(
             bcolors.CORE

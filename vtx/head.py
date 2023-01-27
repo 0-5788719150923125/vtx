@@ -31,6 +31,9 @@ os.environ["LRU_CACHE_CAPACITY"] = "1"
 
 focus = os.environ["FOCUS"]
 
+ship = ":>"
+propulsion = "¶"
+
 
 def to_thread(func: typing.Callable) -> typing.Coroutine:
     @functools.wraps(func)
@@ -76,11 +79,11 @@ def load_model(target=None):
 
 # ping pang pong
 context = [
-    ":>975174695399854150: I am a robot.",
-    ":>1051994502333726841: I am a ghost.",
-    ":>806051627198709760: I am a human.",
-    ":>204716337971331072: I am a medium.",
-    ":>855529761185857566: I am an animal.",
+    propulsion + "975174695399854150" + ship + " I am a robot.",
+    propulsion + "1051994502333726841" + ship + " I am a ghost.",
+    propulsion + "806051627198709760" + ship + " I am a human.",
+    propulsion + "204716337971331072" + ship + " I am a medium.",
+    propulsion + "855529761185857566" + ship + " I am an animal.",
 ]
 
 
@@ -89,13 +92,13 @@ def build_context(message):
         context.pop(0)
         build_context(message)
     else:
-        context.append(":>" + message)
+        context.append(propulsion + message)
 
 
 @to_thread
 def gen(bias=None, ctx=None):
 
-    prompt = ":>"
+    prompt = propulsion
 
     if ctx == None:
         ctx = context
@@ -124,12 +127,12 @@ def gen(bias=None, ctx=None):
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
             print("bias toward " + str(bias))
             prefixes = ["I", "You", ""]
-            prompt = ":>" + str(bias) + ": " + random.choice(prefixes)
+            prompt = propulsion + str(bias) + ship + " " + random.choice(prefixes)
 
     print("\033[92m" + "prompt" + "\033[0m")
     print(history + prompt)
 
-    eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize("\n")[0])
+    eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
 
     # try to complete the prompt
     # https://huggingface.co/docs/transformers/main_classes/text_generation
@@ -146,7 +149,7 @@ def gen(bias=None, ctx=None):
             return_as_list=True,
             num_beams=9,
             repetition_penalty=2.0,
-            length_penalty=-0.2,
+            length_penalty=-0.9,
             no_repeat_ngram_size=2,
             early_stopping=True,
             renormalize_logits=True,
@@ -163,7 +166,7 @@ def gen(bias=None, ctx=None):
 
         try:
             group = re.search(
-                r"^(:{1}>{1})(?:.*)(\d{18,19})(?::\s*)(.*)(?:\n*)", generation_zero
+                r"^(¶{1})(?:.*)(\d{18,19})(?::>\s*)(.*)(?:\n*)", generation_zero
             )
             output = transformer([group[1], group[2]])
             print("\033[92m" + "group 1" + "\033[0m")

@@ -62,7 +62,7 @@
       "command": "docker-compose run -e FOCUS=\"${input:env}\" vtx python3 trainer.py"
     },
     {
-      "label": "docker-compose prep",
+      "label": "i",
       "detail": "Prepare your data in various ways.",
       "type": "shell",
       "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\""
@@ -91,7 +91,7 @@
       "type": "pickString",
       "id": "env",
       "description": "Which model should I train?",
-      "options": ["voice", "heart", "soul"]
+      "options": ["heart", "mind", "soul"]
     },
     {
       "type": "pickString",

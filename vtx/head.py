@@ -11,6 +11,18 @@ import typing
 import asyncio
 import gc
 import yaml
+from mergedeep import merge, Strategy
+
+with open("/vtx/defaults.yml", "r") as config_file:
+    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+try:
+    with open("/lab/config.yml", "r") as config_file:
+        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
+        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
+        # pprint.pprint(config)
+except:
+    config = default_config
 
 # holds the model
 ai = None
@@ -18,9 +30,6 @@ ai = None
 os.environ["LRU_CACHE_CAPACITY"] = "1"
 
 focus = os.environ["FOCUS"]
-
-with open("/lab/config.yml", "r") as config_file:
-    config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 
 def to_thread(func: typing.Callable) -> typing.Coroutine:
@@ -45,19 +54,19 @@ def load_model(target=None):
 
     model = config[target]
 
-    if "model" not in model:
+    if "training" in model:
         model_folder = "vtx/models/" + target
         tokenizer_file = "src." + target + ".tokenizer.json"
     else:
+        tokenizer_file = "src." + target + ".tokenizer.json"
         model_folder = None
-        tokenizer_file = None
 
-    print("loading the " + target)
     print(model["info"])
     ai = aitextgen(
         model=model.get("model", None),
         model_folder=model_folder,
-        tokenizer_file=tokenizer_file,
+        # tokenizer_file=tokenizer_file,
+        tokenizer_file=None,
         to_gpu=model["to_gpu"],
     )
 
@@ -78,7 +87,7 @@ context = [
 def build_context(message):
     if len(context) >= 9:
         context.pop(0)
-        build_context(":>" + message)
+        build_context(message)
     else:
         context.append(":>" + message)
 
@@ -87,10 +96,14 @@ def build_context(message):
 def gen(bias=None, ctx=None):
 
     prompt = ":>"
-    truncate_char = ":>"
+
     if ctx == None:
         ctx = context
     history = "\n".join(ctx) + "\n"
+
+    max_length = 1024
+    if "max_length" in config[focus]:
+        max_length = config[focus]["max_length"]
 
     # set quantum state
     try:
@@ -116,7 +129,7 @@ def gen(bias=None, ctx=None):
     print("\033[92m" + "prompt" + "\033[0m")
     print(history + prompt)
 
-    eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(truncate_char)[0])
+    eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize("\n")[0])
 
     # try to complete the prompt
     # https://huggingface.co/docs/transformers/main_classes/text_generation
@@ -126,7 +139,7 @@ def gen(bias=None, ctx=None):
             prompt=history + prompt,
             do_sample=True,
             min_length=23,
-            max_length=1024,
+            max_length=max_length,
             temperature=0.666,
             top_k=40,
             top_p=0.9,
@@ -149,16 +162,24 @@ def gen(bias=None, ctx=None):
         print(generation_zero)
 
         try:
-            generation_one = re.search(
-                r"^(?:.*)(:>\d{18,19})(?::\s*)(.*)(?:\n*)", generation_zero
+            group = re.search(
+                r"^(:{1}>{1})(?:.*)(\d{18,19})(?::\s*)(.*)(?:\n*)", generation_zero
             )
-            output = transformer([generation_one[1], generation_one[2]])
+            output = transformer([group[1], group[2]])
+            print("\033[92m" + "group 1" + "\033[0m")
+            print(group[1])
+            print("\033[92m" + "group 2" + "\033[0m")
+            print(group[2])
+            print("\033[92m" + "group 3" + "\033[0m")
+            print(group[3])
+            print("\033[92m" + "group 4" + "\033[0m")
+            print(group[4])
         except:
             pass
 
-        if generation_one[2] == "":
+        if group[2] == "" or group[3] == "":
             return
-        output = transformer([generation_one[1], generation_one[2]])
+        output = transformer([group[2], group[3]])
         try:
             output = output.replace("Q:", "")
         except:
@@ -176,6 +197,6 @@ def transformer(group):
         f'<@{group[0]}> says, *"{group[1]}"*',
         f'<@{group[0]}> would say, *"{group[1]}"*',
         f'They said, *"{group[1]}"*',
-        f'*"{group[1]}"*',
+        f"{group[1]}",
     ]
     return random.choice(responses)

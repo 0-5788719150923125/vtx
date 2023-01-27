@@ -1,6 +1,33 @@
 mode:
   test: False
 
+heart:
+  version: 0
+  info: never focus on the heart
+  to_gpu: False
+  n_gpu: 1
+  max_length: 1024
+  training:
+    base_model: EleutherAI/gpt-neo-125M
+    to_gpu: 1
+    batch_size: 8
+    block_size: 256
+    num_steps: 20000
+    warmup_steps: 0
+    gradient_accumulation_steps: 8
+    learning_rate: 0.000444
+    weight_decay: 0.03
+    max_grad_norm: 0.666
+    freeze_layers: True
+    num_layers_freeze: 10
+    equalize_datasets: True
+    datasets:
+      texts:
+      journals:
+      discord:
+      reddit:
+        line_by_line: True
+
 mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
@@ -9,7 +36,7 @@ mind:
 soul:
   version: 0
   info: reaper hell
-  to_gpu: 0
+  to_gpu: False
   n_gpu: 1
   training:
     base_model: xhyi/PT_GPTNEO350_ATG
@@ -22,10 +49,14 @@ soul:
     learning_rate: 0.000666
     weight_decay: 0.03
     max_grad_norm: 0.444
+    # vocab_path: research
+    # vocab_size: 3333
+    # dropout: 0.1
     freeze_layers: True
     num_layers_freeze: 12
     equalize_datasets: False
     datasets:
+      # research:
       texts:
       journals:
       discord:
@@ -64,59 +95,24 @@ reddit:
   SubSimGPT2Interactive:
     skip: True
     watch: True
-    chance: 10
-  5September2020:
-    skip: False
-  radicalmentalhealth:
-    skip: False
-  titor:
-    skip: False
-  FrontLands:
-    skip: False
-  NUVIEVA:
-    skip: False
+    chance: 1
   stairsofpantheon:
     limit: 500
     watch: True
+    chance: 25
   Kunism:
-    limit: 500
-  undersideof7threalm:
-    limit: 500
-  adanceoffeathers:
-    limit: 500
-    skip: True
-  LegionOfReason:
-    limit: 500
-  TheFold:
-    limit: 500
-    watch: True
-  TheSource:
-    limit: 500
-  TheInk:
-    limit: 500
-    watch: True
+    limit: 50
 
 discord:
   use_self_token: True
   export_dms: True
   servers:
-    '558378982920159242': # Rising Sun Society
+    '558378982920159242':
       before: '2021-01-01 12:00'
       skip: True
-    '830300981966143488': # src
-    '896111349300592650': # The Vortex
-    '1041331166592106576': # The Brain
-    '907925566089465886': # Labyrinth
-    '747807102759731291': # Kunist's Server
-    '1047276906636132432': # The Underside of the 7th Realm
-    '922565350598508664': # BOTS FOR EVERYONE
-    '829345498326106142': # The Pantheon
-    '976908406864613436': # Darkwater Foundation
-    '840978732772753468': # The Cause
-    '1042822599362752562': # Lux Prima
-    '386853267058982912': # Toehider
-
-twitter:
+    '830300981966143488':
+    '1041331166592106576':
+    '907925566089465886':
 
 source:
   support:

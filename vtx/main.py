@@ -1,5 +1,5 @@
-import machine
 import random
+import machine
 
 if __name__ == "__main__":
     # fetch from local GUN API, trained on global seeds

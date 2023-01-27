@@ -9,11 +9,20 @@ import os
 import shutil, tempfile
 import yaml
 import random
+from mergedeep import merge, Strategy
+
+with open("/vtx/defaults.yml", "r") as config_file:
+    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+try:
+    with open("/lab/config.yml", "r") as config_file:
+        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
+        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
+        # pprint.pprint(config)
+except:
+    config = default_config
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
-
-with open("/lab/config.yml", "r") as config_file:
-    config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 focus = os.environ["FOCUS"]
 model = config[focus]
@@ -85,10 +94,10 @@ if __name__ == "__main__":
     datasets = []
     for dataset in model["training"]["datasets"]:
         line_by_line = False
-        if line_by_line in dataset:
+        if "line_by_line" in dataset:
             line_by_line = dataset["line_by_line"]
 
-        intermediate_file = join_files("/lab/" + dataset["folder"])
+        intermediate_file = join_files("/lab/" + dataset)
         datasets.append(
             TokenDataset(
                 intermediate_file,

@@ -32,8 +32,10 @@ services:
 
   ctx:
     image: ghcr.io/0-5788719150923125/src:1
-    command: node root.js
+    command: npm start
     restart: 'always'
+    volumes:
+      - ./ctx:/ctx
     ports:
       - 9666:9665
 

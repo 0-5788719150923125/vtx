@@ -2,10 +2,10 @@
   "name": "src",
   "version": "0.6.0",
   "description": "A playground.",
-  "main": "root.js",
+  "main": "trunk.js",
   "type": "module",
   "scripts": {
-    "start": "node root.js"
+    "start": "node ctx/trunk.js"
   },
   "author": "Sam Hocevar",
   "license": "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE",

@@ -4,11 +4,11 @@
 # Procedural generation
 # => is awesome
 
+# THC can be defined as
+# => Transformer to Human Controls
+
 # A Transformer is
 # => an automaton
-
-# What is THC?
-# => Transformer to Human Controls
 
 # GPT-5
 # => was written in TypeScript

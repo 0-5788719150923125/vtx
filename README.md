@@ -4,6 +4,8 @@
 
 Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 
+"Go play in the lab."
+
 # API
 
 - http://localhost:9666/

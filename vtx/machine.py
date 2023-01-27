@@ -8,65 +8,76 @@ import asyncio
 import discord
 import head
 import yaml
-import praw
+import praw, asyncpraw
 import functools
 import typing
 import asyncio
 import requests
+import pprint
+import secrets
+from functools import reduce
+from mergedeep import merge, Strategy
+import lab.reddit
+import lab.twitter
+import lab.source
+import threading
 
 redacted_chance = 1
 response_probability = 10
 
-with open("/lab/config.yml", "r") as config_file:
-    config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+with open("/vtx/defaults.yml", "r") as config_file:
+    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+try:
+    with open("/lab/config.yml", "r") as config_file:
+        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
+        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
+        # pprint.pprint(config)
+except:
+    config = default_config
 
 
-reddit = praw.Reddit(
-    client_id=os.environ["REDDITCLIENT"],
-    client_secret=os.environ["REDDITSECRET"],
-    user_agent="u/" + os.environ["REDDITAGENT"],
-    username=os.environ["REDDITAGENT"],
-    password=os.environ["REDDITPASSWORD"],
-)
+async def background_task():
+    while True:
+        print("Background task running")
+        await asyncio.sleep(1)
 
 
-def to_thread(func: typing.Callable) -> typing.Coroutine:
-    @functools.wraps(func)
-    async def wrapper(*args, **kwargs):
-        return await asyncio.to_thread(func, *args, **kwargs)
-
-    return wrapper
+tasks = []
 
 
-@to_thread
-def watch_reddit():
-    print("running reddit thing")
-    watch = ["SubSimGPT2Interactive"]
+@asyncio.coroutine
+async def main(loop):
+    tasks = []
 
-    for entry in config["reddit"]:
-        if "watch" not in entry:
-            continue
-        if entry["watch"] == True:
-            watch.append(entry["sub"])
+    if "source" in config:
+        for channel in config["source"]:
+            if "watch" in config["source"][channel]:
+                if config["source"][channel]["watch"] == True:
+                    task = loop.create_task(lab.source.subscribe(channel))
+                    tasks.append(task)
 
-    subreddit = reddit.subreddit("+".join(watch))
-    print(subreddit.display_name)
-    for comment in subreddit.stream.comments(skip_existing=True):
-        print(bcolors.OKGREEN + comment.submission.title + bcolors.ENDC)
-        print(comment.parent_id)
-        parent = comment.parent()
-        if isinstance(parent, praw.models.Submission):
-            print(bcolors.FAIL + "is a submission" + bcolors.ENDC)
-            print("=> " + str(parent.author))
-            print("=> " + str(parent.title))
-            print("=> " + str(parent.selftext))
-        else:
-            parent.refresh()
-        print("=> " + str(parent.author))
-        print("=> " + str(parent.body))
-        print("==> " + str(comment.author))
-        print("==> " + str(comment.body))
-        # comment.reply("test!!")
+    if "reddit" in config:
+        for subreddit in config["reddit"]:
+            if "watch" in config["reddit"][subreddit]:
+                if config["reddit"][subreddit]["watch"] == True:
+                    task = loop.create_task(lab.reddit.subscribe(subreddit))
+                    tasks.append(task)
+
+    await asyncio.sleep(66.666)
+    print(str(len(tasks)) + " running tasks")
+    await main(loop)
+
+
+def loop_in_thread(loop):
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(main(loop))
+
+
+loop = asyncio.get_event_loop()
+t = threading.Thread(None, loop_in_thread, args=(loop,))
+t.start()
 
 
 class Client(discord.Client):
@@ -77,17 +88,15 @@ class Client(discord.Client):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
-        url = "http://ctx:9665/message"
-        myobj = {"message": "I am alive...", "identifier": "src", "pubKey": None}
-        x = requests.post(url, json=myobj)
-
-        await watch_reddit()
+        print("I am alive...")
         if config["mode"]["test"] == True:
             return
+        url = "http://ctx:9665/message"
+        myobj = {"message": "I am alive...", "identifier": "src"}
+        x = requests.post(url, json=myobj)
         head.ai = await head.load_model()
         for guild in client.guilds:
             print("=> " + guild.name)
-        print("I am alive...")
 
     async def setup_hook(self) -> None:
         self.discord_task = self.loop.create_task(self.think())
@@ -116,7 +125,7 @@ class Client(discord.Client):
                     ":>" + str(messages[1].author.id) + ": " + messages[1].content,
                     ":>" + str(messages[0].author.id) + ": " + messages[0].content,
                 ]
-                head.ai = await head.load_model("head")
+                head.ai = await head.load_model("mind")
 
                 recent_author_id = messages[random.randint(0, 9)].author.id
 
@@ -152,6 +161,8 @@ class Client(discord.Client):
     # check every Discord message
     async def on_message(self, message):
 
+        reply = True
+
         if config["mode"]["test"] == True:
             return
 
@@ -175,6 +186,7 @@ class Client(discord.Client):
             print(bcolors.OKGREEN + "heads" + bcolors.ENDC)
             weight = 1
             bias = 530243004334604311
+            reply = False
             try:
                 if message.content == "gen":
                     await message.delete()
@@ -189,6 +201,7 @@ class Client(discord.Client):
                 weight = random.randint(
                     0, response_probability + (response_probability / 2)
                 )  ## 66%
+                bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
                 print(bcolors.WARNING + "WARN: agent" + bcolors.ENDC)
@@ -229,10 +242,14 @@ class Client(discord.Client):
             time.sleep(10)
 
         try:
-            # await message.channel.send(output)
-            await message.reply(output)
+            if reply == True:
+                await message.reply(output)
+            else:
+                await message.channel.send(output)
+
         except:
             print(bcolors.FAIL + "Failed to send Discord message." + bcolors.ENDC)
+            await message.reply("ERROR: Me Found.")
 
 
 class bcolors:

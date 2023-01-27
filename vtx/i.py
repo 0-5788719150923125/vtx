@@ -11,10 +11,23 @@ import numpy as np
 import secrets
 import requests
 from bs4 import BeautifulSoup
+from mergedeep import merge, Strategy
+import pprint
 
+with open("/vtx/defaults.yml", "r") as config_file:
+    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-with open("/lab/config.yml", "r") as config_file:
-    config = yaml.load(config_file, Loader=yaml.FullLoader)
+try:
+    print("trying to load user config")
+    with open("/lab/config.yml", "r") as config_file:
+        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
+        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
+except:
+    print("using default config")
+    config = default_config
+
+propulsion = "¶"
+ship = ":>"
 
 
 def crawl(site="https://ink.university"):
@@ -47,11 +60,11 @@ def fetch_from_discord():
     for server in config["discord"]["servers"]:
         skip = False
         if "skip" in server:
-            skip = server["skip"]
-        if skip == True:
-            continue
+            skip = server[skip]
+            if skip == True:
+                continue
 
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server["id"]}" -t "{discord_token}" -o "/lab/raw/discord" -f "JSON"'
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server}" -t "{discord_token}" -o "/lab/raw/discord" -f "JSON"'
         if "before" in server:
             command.join(" --before " + server["before"])
         if "after" in server:
@@ -110,7 +123,11 @@ def prepare_discord_messages():
                                                 "<@" + str(mention["id"]) + ">",
                                             )
                                     content = (
-                                        ":>" + result["author"]["id"] + ": " + sanitized
+                                        propulsion
+                                        + result["author"]["id"]
+                                        + ship
+                                        + " "
+                                        + sanitized
                                     )
                                     txt_file.write(f"{content}\n".format(content))
                             except Exception as e:
@@ -128,7 +145,9 @@ def prepare_discord_messages():
                                         "<@" + str(mention["id"]) + ">",
                                     )
 
-                            content = ":>" + i["author"]["id"] + ": " + sanitized
+                            content = (
+                                propulsion + i["author"]["id"] + ship + " " + sanitized
+                            )
                             txt_file.write(f"{content}\n".format(content))
                         except:
                             print("Failed: " + i["id"])
@@ -146,16 +165,17 @@ def fetch_from_reddit():
         user_agent=os.environ["REDDITAGENT"],
     )
 
-    for subreddit in config["reddit"]:
+    for sub in config["reddit"]:
 
-        name = subreddit["sub"]
-        limit = 50
-        if "count" in subreddit:
-            limit = subreddit["count"]
+        name = sub
 
         skip = False
-        if "skip" in subreddit:
-            skip = subreddit["skip"]
+        if "skip" in config["reddit"][sub]:
+            skip = config["reddit"][sub]["skip"]
+
+        limit = 50
+        if "limit" in config["reddit"][sub]:
+            limit = config["reddit"][sub]["limit"]
 
         if skip == True:
             continue
@@ -182,9 +202,10 @@ def fetch_from_reddit():
                     sanitized = re.sub(
                         r"http\S+",
                         secrets.choice(urls),
-                        ":>"
+                        propulsion
                         + str(bias)
-                        + ": "
+                        + ship
+                        + " "
                         + submission.title
                         + " "
                         + submission.selftext.replace("\n", "\\n"),
@@ -211,7 +232,11 @@ def fetch_from_reddit():
                     sanitized = re.sub(
                         r"http\S+",
                         secrets.choice(urls),
-                        ":>" + str(bias) + ": " + reply.body.replace("\n", "\\n"),
+                        propulsion
+                        + str(bias)
+                        + ship
+                        + " "
+                        + reply.body.replace("\n", "\\n"),
                     )
                     context.append(sanitized)
                     file.write("\n" + " ".join(context))

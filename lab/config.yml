@@ -4,7 +4,7 @@ mode:
 reddit:
   SubSimGPT2Interactive:
     skip: True
-    chance: 66
+    chance: 33
   5September2020:
     skip: False
   radicalmentalhealth:

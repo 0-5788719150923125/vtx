@@ -137,5 +137,5 @@ if __name__ == "__main__":
         fp16=False,
         freeze_layers=model["training"].get("freeze_layers", False),
         num_layers_freeze=model["training"].get("num_layer_freeze", 0),
-        seed=1337,
+        seed=341,
     )

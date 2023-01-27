@@ -79,6 +79,9 @@ loop = asyncio.get_event_loop()
 t = threading.Thread(None, loop_in_thread, args=(loop,))
 t.start()
 
+propulsion = "¶"
+ship = ":>"
+
 
 class Client(discord.Client):
 
@@ -118,12 +121,31 @@ class Client(discord.Client):
                     async for message in self.get_channel(channel.id).history(limit=10)
                 ]
                 context = [
-                    ":>" + str(messages[8].author.id) + ": " + messages[8].content,
-                    ":>" + str(messages[5].author.id) + ": " + messages[5].content,
-                    ":>" + str(messages[3].author.id) + ": " + messages[3].content,
-                    ":>" + str(messages[2].author.id) + ": " + messages[2].content,
-                    ":>" + str(messages[1].author.id) + ": " + messages[1].content,
-                    ":>" + str(messages[0].author.id) + ": " + messages[0].content,
+                    propulsion
+                    + str(messages[8].author.id)
+                    + ship
+                    + " "
+                    + messages[8].content,
+                    propulsion
+                    + str(messages[5].author.id)
+                    + ship
+                    + messages[5].content,
+                    propulsion
+                    + str(messages[3].author.id)
+                    + ship
+                    + messages[3].content,
+                    propulsion
+                    + str(messages[2].author.id)
+                    + ship
+                    + messages[2].content,
+                    propulsion
+                    + str(messages[1].author.id)
+                    + ship
+                    + messages[1].content,
+                    propulsion
+                    + str(messages[0].author.id)
+                    + ship
+                    + messages[0].content,
                 ]
                 head.ai = await head.load_model("mind")
 
@@ -170,7 +192,7 @@ class Client(discord.Client):
         output = "ERROR: Me Found."
 
         # every message is added to local cache, for building prompt
-        head.build_context(str(message.author.id) + ": " + message.content)
+        head.build_context(str(message.author.id) + ship + " " + message.content)
 
         # ignore messages from the bot
         if message.author == self.user:

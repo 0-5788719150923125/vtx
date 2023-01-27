@@ -31,14 +31,13 @@ async def subscribe(subreddit):
     chance = 33
     watch = []
 
-    for sub in config["reddit"]:
-        if "watch" not in config["reddit"][sub]:
-            continue
-        if config["reddit"][sub]["watch"] == True:
-            watch.append(sub)
-        # if "chance" in config["reddit"][sub]:
-        #     print(bcolors.WARNING + str(chance) + " to roll success")
-        #     chance = config["reddit"][sub]["chance"]
+    if "watch" not in config["reddit"][subreddit]:
+        return
+    if config["reddit"][subreddit]["watch"] == True:
+        watch.append(subreddit)
+    if "chance" in config["reddit"][subreddit]:
+        chance = config["reddit"][subreddit]["chance"]
+        print(bcolors.WARNING + str(chance) + " to roll success")
 
     subreddit = await reddit.subreddit(subreddit, fetch=True)
     async for comment in subreddit.stream.comments(skip_existing=True):
@@ -89,6 +88,7 @@ async def subscribe(subreddit):
         c = get_identity()
 
         ctx = [
+            ":>" + str(p) + ": " + "I am a chat bot.",
             ":>" + str(p) + ": " + parent.body,
             ":>" + str(c) + ": " + comment.body,
         ]
@@ -104,22 +104,23 @@ async def subscribe(subreddit):
         try:
 
             group = re.search(r"(:?\*\")(.*)(:?\"\*)", response)
+            print(bcolors.ROOT + "<=== " + "LuciferianInk: " + bcolors.ENDC + group[2])
             output = transformer(group[2])
             await comment.reply(output)
-            print(bcolors.ROOT + "<=== " + "LuciferianInk: " + bcolors.ENDC + output)
         except:
-            await comment.reply(response)
-            print(bcolors.FOLD + "<=== " + "LuciferianInk: " + bcolors.ENDC + response)
+            output = transformer(response)
+            await comment.reply(output)
+            print(bcolors.FOLD + "<=== " + "LuciferianInk: " + bcolors.ENDC + output)
 
 
 # format the output
-def transformer(group):
+def transformer(string):
     responses = [
-        f'My daemon says, "{group[2]}"',
-        f'Penny says, "{group[2]}"',
-        f'Ink thinks, "{group[2]}"',
-        f'I say, "{group[2]}"',
-        f"{group[2]}",
+        f'My daemon says, "{string}"',
+        f'Penny said, "{string}"',
+        f'Ink thinks, "{string}"',
+        f'I say, "{string}"',
+        f"{string}",
     ]
     return random.choice(responses)
 

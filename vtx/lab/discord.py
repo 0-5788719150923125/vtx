@@ -252,10 +252,13 @@ async def get_all_channels():
     return text_channel_list
 
 
-if "discord" in config:
-    discord_token = os.environ["DISCORDTOKEN"]
-    intents = discord.Intents.default()
-    intents.message_content = True
+discord_token = os.environ["DISCORDTOKEN"]
+intents = discord.Intents.default()
+intents.message_content = True
 
-    client = Client(intents=intents)
-    client.run(discord_token)
+client = Client(intents=intents)
+
+
+def subscribe():
+    if "discord" in config:
+        client.run(discord_token)

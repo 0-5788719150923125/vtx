@@ -5,7 +5,6 @@ import time
 import math
 import random
 import asyncio
-import discord
 import head
 import yaml
 import praw, asyncpraw
@@ -65,6 +64,9 @@ async def main(loop):
                     task = loop.create_task(lab.reddit.subscribe(subreddit))
                     tasks.append(task)
 
+    # if "discord" in config:
+    #     task = loop.create_task(lab.discord.subscribe())
+    #     tasks.append(task)
     await asyncio.sleep(66.666)
     print(str(len(tasks)) + " running tasks")
     await main(loop)
@@ -78,3 +80,5 @@ def loop_in_thread(loop):
 loop = asyncio.get_event_loop()
 t = threading.Thread(None, loop_in_thread, args=(loop,))
 t.start()
+
+asyncio.run(lab.discord.subscribe())

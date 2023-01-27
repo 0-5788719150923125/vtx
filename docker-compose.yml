@@ -41,7 +41,7 @@ services:
 
   pet:
     image: learningathome/petals:main
-    command: python -m petals.cli.run_server bigscience/bloom-petals --num_blocks 4
+    command: python -m petals.cli.run_server bigscience/bloom-petals --num_blocks 3
     restart: 'always'
     network_mode: 'host'
     ipc: host

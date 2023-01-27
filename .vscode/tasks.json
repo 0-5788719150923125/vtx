@@ -56,7 +56,7 @@
       "command": "docker-compose up"
     },
     {
-      "label": "docker-compose train",
+      "label": "train",
       "detail": "Train a model.",
       "type": "shell",
       "command": "docker-compose run -e FOCUS=\"${input:env}\" vtx python3 trainer.py"

@@ -55,9 +55,9 @@ toe:
     num_steps: 20000
     warmup_steps: 0
     gradient_accumulation_steps: 3
-    learning_rate: 0.00088888888
+    learning_rate: 0.000666
     weight_decay: 0.4444
-    max_grad_norm: 0.3691963
+    max_grad_norm: 0.333
     freeze_layers: True
     num_layers_freeze: 9
     equalize_datasets: True

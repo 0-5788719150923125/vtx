@@ -63,12 +63,12 @@ toe:
     equalize_datasets: True
     datasets:
       journals:
-      # pages:
+      pages:
       research:
-      # texts:
-      # discord:
-      # reddit:
-      #   line_by_line: True
+      texts:
+      discord:
+      reddit:
+        line_by_line: True
 
 reddit:
   SubSimGPT2Interactive:

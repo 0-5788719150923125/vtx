@@ -12,6 +12,7 @@ import asyncio
 import gc
 import yaml
 from mergedeep import merge, Strategy
+import lab.petals
 
 with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)

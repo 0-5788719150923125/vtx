@@ -20,8 +20,7 @@ import lab.reddit
 import lab.twitter
 import lab.source
 import lab.discord
-
-# import lab.petals
+import lab.petals
 import threading
 
 
@@ -64,11 +63,11 @@ async def main(loop):
                     task = loop.create_task(lab.reddit.subscribe(subreddit))
                     tasks.append(task)
 
-    # if "discord" in config:
-    #     task = loop.create_task(lab.discord.subscribe())
-    #     tasks.append(task)
-    await asyncio.sleep(66.666)
+    task = loop.create_task(lab.petals.subscribe())
+    tasks.append(task)
+
     print(str(len(tasks)) + " running tasks")
+    await asyncio.sleep(666.666)
     await main(loop)
 
 
@@ -81,4 +80,5 @@ loop = asyncio.get_event_loop()
 t = threading.Thread(None, loop_in_thread, args=(loop,))
 t.start()
 
-asyncio.run(lab.discord.subscribe())
+if "discord" in config:
+    asyncio.run(lab.discord.subscribe())

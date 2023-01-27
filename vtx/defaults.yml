@@ -42,22 +42,22 @@ soul:
         line_by_line: True
 
 voice:
-  version: 0
+  version: 1
   info: never give up, never give in
   to_gpu: False
   n_gpu: 1
-  max_length: 1024
+  max_length: 666
   training:
     base_model: EleutherAI/gpt-neo-125M
     to_gpu: 1
-    batch_size: 2
-    block_size: 999
+    batch_size: 6
+    block_size: 333
     num_steps: 20000
     warmup_steps: 0
     gradient_accumulation_steps: 11
-    learning_rate: 0.0004444
-    weight_decay: 0.03
-    max_grad_norm: 0.666
+    learning_rate: 0.00088888
+    weight_decay: 3.1415926536
+    max_grad_norm: 0.636
     freeze_layers: True
     num_layers_freeze: 9
     equalize_datasets: True

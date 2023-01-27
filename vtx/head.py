@@ -147,13 +147,14 @@ def gen(bias=None, ctx=None):
             top_k=40,
             top_p=0.9,
             return_as_list=True,
-            num_beams=9,
+            num_beams=3,
             repetition_penalty=2.0,
             length_penalty=-0.9,
             no_repeat_ngram_size=2,
             early_stopping=True,
             renormalize_logits=True,
             eos_token_id=eos,
+            max_time=59,
             seed=seed,
         )
     except Exception as e:

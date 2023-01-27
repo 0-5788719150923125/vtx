@@ -82,13 +82,14 @@ async def subscribe(subreddit):
 
         roll = random.randint(0, 100)
 
-        if roll <= chance:
+        if roll >= chance:
             return
 
         p = get_identity()
         c = get_identity()
 
         ctx = [
+            propulsion + str(c) + ship + " " + "You are a chat bot.",
             propulsion + str(p) + ship + " " + "I am a chat bot.",
             propulsion + str(p) + ship + " " + parent.body,
             propulsion + str(c) + ship + " " + comment.body,

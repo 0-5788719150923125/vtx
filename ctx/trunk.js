@@ -51,9 +51,6 @@ app.get('/channel', (req, res) => {
 app.use(express.json())
 app.post('/message', (req, res) => {
   const { message, identifier, pubKey } = req.body
-  // console.log(message)
-  // console.log(identifier)
-  // console.log(pubKey)
   channel
     .get('payload')
     .put(JSON.stringify({ message, identifier, pubKey: null }))

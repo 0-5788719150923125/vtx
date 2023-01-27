@@ -104,6 +104,9 @@ if __name__ == "__main__":
                 # tokenizer_file=tokenizer_file,
                 block_size=model["training"].get("block_size", None),
                 line_by_line=line_by_line,
+                # from_cache=True,
+                # cache_destination="/lab/" + dataset + ".tar.gz",
+                # save_cache=True,
             )
         )
 

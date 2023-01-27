@@ -41,7 +41,7 @@ soul:
       reddit:
         line_by_line: True
 
-voice:
+toe:
   version: 1
   info: never give up, never give in
   to_gpu: False
@@ -54,20 +54,21 @@ voice:
     block_size: 333
     num_steps: 20000
     warmup_steps: 0
-    gradient_accumulation_steps: 11
-    learning_rate: 0.00088888
+    gradient_accumulation_steps: 3
+    learning_rate: 0.0018888888
     weight_decay: 3.1415926536
-    max_grad_norm: 0.636
+    max_grad_norm: 0.363
     freeze_layers: True
     num_layers_freeze: 9
     equalize_datasets: True
     datasets:
-      research:
-      texts:
       journals:
-      discord:
-      reddit:
-        line_by_line: True
+      # pages:
+      research:
+      # texts:
+      # discord:
+      # reddit:
+      #   line_by_line: True
 
 reddit:
   SubSimGPT2Interactive:

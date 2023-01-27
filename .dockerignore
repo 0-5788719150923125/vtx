@@ -5,4 +5,4 @@ lab/
 node_modules
 vtx/__pycache__
 vtx/aitextgen
-vtx/vtx/*
+vtx/gpt/*

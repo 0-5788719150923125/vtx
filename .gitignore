@@ -13,7 +13,7 @@ lab/discord
 lab/intermediate
 node_modules
 vtx/models/*
-vtx/vtx/*
+vtx/gpt/*
 vtx/gun
 !.keep
 !lab/*.mp4

@@ -13,7 +13,7 @@ import gc
 import yaml
 from mergedeep import merge, Strategy
 
-with open("/vtx/defaults.yml", "r") as config_file:
+with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 try:
@@ -58,7 +58,7 @@ def load_model(target=None):
     model = config[target]
 
     if "training" in model:
-        model_folder = "vtx/models/" + target
+        model_folder = "gpt/models/" + target
         tokenizer_file = "src." + target + ".tokenizer.json"
     else:
         tokenizer_file = "src." + target + ".tokenizer.json"

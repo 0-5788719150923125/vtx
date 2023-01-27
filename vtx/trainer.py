@@ -11,7 +11,7 @@ import yaml
 import random
 from mergedeep import merge, Strategy
 
-with open("/vtx/defaults.yml", "r") as config_file:
+with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 try:
@@ -26,7 +26,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 focus = os.environ["FOCUS"]
 model = config[focus]
-model_folder = "vtx/models/" + focus
+model_folder = "gpt/models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
 logger = loggers.TensorBoardLogger("/lab/logs", name=focus, version=model["version"])

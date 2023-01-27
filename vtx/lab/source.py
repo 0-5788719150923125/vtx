@@ -10,7 +10,7 @@ import json
 import head
 import secrets
 
-with open("/vtx/defaults.yml", "r") as config_file:
+with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 try:

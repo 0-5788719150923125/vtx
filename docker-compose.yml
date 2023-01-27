@@ -27,7 +27,7 @@ services:
     env_file:
       - .env
     environment:
-      FOCUS: voice
+      FOCUS: toe
       TRANSFORMERS_CACHE: /tmp
 
   ctx:

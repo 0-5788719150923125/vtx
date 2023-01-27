@@ -1,32 +1,14 @@
 mode:
   test: False
 
+source:
+  support:
+    watch: True
+
 heart:
-  version: 0
   info: never focus on the heart
+  model: gpt2
   to_gpu: False
-  n_gpu: 1
-  max_length: 1024
-  training:
-    base_model: EleutherAI/gpt-neo-125M
-    to_gpu: 1
-    batch_size: 8
-    block_size: 256
-    num_steps: 20000
-    warmup_steps: 0
-    gradient_accumulation_steps: 8
-    learning_rate: 0.000444
-    weight_decay: 0.03
-    max_grad_norm: 0.666
-    freeze_layers: True
-    num_layers_freeze: 10
-    equalize_datasets: True
-    datasets:
-      texts:
-      journals:
-      discord:
-      reddit:
-        line_by_line: True
 
 mind:
   info: use your heads
@@ -35,8 +17,8 @@ mind:
 
 soul:
   version: 0
-  info: reaper hell
-  to_gpu: False
+  info: what drives us
+  to_gpu: True
   n_gpu: 1
   training:
     base_model: xhyi/PT_GPTNEO350_ATG
@@ -49,14 +31,10 @@ soul:
     learning_rate: 0.000666
     weight_decay: 0.03
     max_grad_norm: 0.444
-    # vocab_path: research
-    # vocab_size: 3333
-    # dropout: 0.1
     freeze_layers: True
     num_layers_freeze: 12
     equalize_datasets: False
     datasets:
-      # research:
       texts:
       journals:
       discord:
@@ -65,24 +43,24 @@ soul:
 
 voice:
   version: 0
-  info: never stop talking
+  info: never give up, never give in
   to_gpu: False
   n_gpu: 1
+  max_length: 1024
   training:
-    base_model: xhyi/PT_GPTNEO350_ATG
-    to_gpu: True
-    batch_size: 1
-    block_size: 444
+    base_model: EleutherAI/gpt-neo-125M
+    to_gpu: 1
+    batch_size: 2
+    block_size: 999
     num_steps: 20000
     warmup_steps: 0
-    gradient_accumulation_steps: 32
-    learning_rate: 0.000888
+    gradient_accumulation_steps: 11
+    learning_rate: 0.0004444
     weight_decay: 0.03
     max_grad_norm: 0.666
-    vocab_path: research
-    vocab_size: 3333
-    dropout: 0.1
-    equalize_datasets: False
+    freeze_layers: True
+    num_layers_freeze: 9
+    equalize_datasets: True
     datasets:
       research:
       texts:
@@ -93,15 +71,14 @@ voice:
 
 reddit:
   SubSimGPT2Interactive:
+    limit: 50
     skip: True
     watch: True
     chance: 1
-  stairsofpantheon:
+  Kunism:
     limit: 500
     watch: True
-    chance: 25
-  Kunism:
-    limit: 50
+    chance: 100
 
 discord:
   use_self_token: True
@@ -110,10 +87,5 @@ discord:
     '558378982920159242':
       before: '2021-01-01 12:00'
       skip: True
-    '830300981966143488':
     '1041331166592106576':
     '907925566089465886':
-
-source:
-  support:
-    watch: True

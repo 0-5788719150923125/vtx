@@ -102,7 +102,7 @@ if __name__ == "__main__":
             TokenDataset(
                 intermediate_file,
                 # tokenizer_file=tokenizer_file,
-                block_size=model["training"]["block_size"],
+                block_size=model["training"].get("block_size", None),
                 line_by_line=line_by_line,
             )
         )
@@ -131,9 +131,11 @@ if __name__ == "__main__":
         weight_decay=weight_decay,
         warmup_steps=warmup_steps,
         max_grad_norm=max_grad_norm,
-        gradient_accumulation_steps=gradient_accumulation_steps,
+        gradient_accumulation_steps=model["training"].get(
+            "gradient_accumulation_steps", 1
+        ),
         fp16=False,
-        freeze_layers=freeze_layers,
-        num_layers_freeze=num_layers_freeze,
+        freeze_layers=model["training"].get("freeze_layers", False),
+        num_layers_freeze=model["training"].get("num_layer_freeze", 0),
         seed=1337,
     )

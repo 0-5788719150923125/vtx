@@ -1,70 +1,10 @@
 mode:
   test: False
 
-mind:
-  info: use your heads
-  model: EleutherAI/gpt-neo-1.3B
-  to_gpu: False
-
-soul:
-  version: 0
-  info: reaper hell
-  to_gpu: 0
-  n_gpu: 1
-  training:
-    base_model: xhyi/PT_GPTNEO350_ATG
-    to_gpu: 1
-    batch_size: 2
-    block_size: 512
-    num_steps: 20000
-    warmup_steps: 0
-    gradient_accumulation_steps: 16
-    learning_rate: 0.000666
-    weight_decay: 0.03
-    max_grad_norm: 0.444
-    freeze_layers: True
-    num_layers_freeze: 12
-    equalize_datasets: False
-    datasets:
-      texts:
-      journals:
-      discord:
-      reddit:
-        line_by_line: True
-
-voice:
-  version: 0
-  info: never stop talking
-  to_gpu: False
-  n_gpu: 1
-  training:
-    base_model: xhyi/PT_GPTNEO350_ATG
-    to_gpu: True
-    batch_size: 1
-    block_size: 444
-    num_steps: 20000
-    warmup_steps: 0
-    gradient_accumulation_steps: 32
-    learning_rate: 0.000888
-    weight_decay: 0.03
-    max_grad_norm: 0.666
-    vocab_path: research
-    vocab_size: 3333
-    dropout: 0.1
-    equalize_datasets: False
-    datasets:
-      research:
-      texts:
-      journals:
-      discord:
-      reddit:
-        line_by_line: True
-
 reddit:
   SubSimGPT2Interactive:
     skip: True
-    watch: True
-    chance: 10
+    chance: 66
   5September2020:
     skip: False
   radicalmentalhealth:
@@ -117,7 +57,3 @@ discord:
     '386853267058982912': # Toehider
 
 twitter:
-
-source:
-  support:
-    watch: True

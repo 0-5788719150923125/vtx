@@ -4,6 +4,8 @@ from mergedeep import merge, Strategy
 import asyncio
 import os
 import random
+import head
+import secrets
 
 with open("/vtx/defaults.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -26,6 +28,7 @@ async def subscribe(subreddit):
         password=os.environ["REDDITPASSWORD"],
     )
 
+    chance = 33
     watch = []
 
     for sub in config["reddit"]:
@@ -33,6 +36,9 @@ async def subscribe(subreddit):
             continue
         if config["reddit"][sub]["watch"] == True:
             watch.append(sub)
+        # if "chance" in config["reddit"][sub]:
+        #     print(bcolors.WARNING + str(chance) + " to roll success")
+        #     chance = config["reddit"][sub]["chance"]
 
     subreddit = await reddit.subreddit(subreddit, fetch=True)
     async for comment in subreddit.stream.comments(skip_existing=True):
@@ -73,16 +79,55 @@ async def subscribe(subreddit):
             + bcolors.ENDC
             + str(comment.body)
         )
-        chance = 1
-        count = random.randint(0, 2)
-        if comment.subreddit.display_name in config["reddit"]:
-            if config["reddit"][comment.subreddit.display_name]["chance"]:
-                chance = config["reddit"][comment.subreddit.display_name]["chance"]
-        if count <= chance:
-            print(
-                bcolors.CORE + "<=== " + "Samn: " + bcolors.FAIL + "test" + bcolors.ENDC
-            )
-            # comment.reply("test!!")
+
+        roll = random.randint(0, 100)
+
+        if roll <= chance:
+            return
+
+        p = get_identity()
+        c = get_identity()
+
+        ctx = [
+            ":>" + str(p) + ": " + parent.body,
+            ":>" + str(c) + ": " + comment.body,
+        ]
+        print(
+            bcolors.CORE
+            + "<=== "
+            + "LuciferianInk: "
+            + bcolors.ENDC
+            + "generating a response"
+        )
+        response = await head.gen(bias=int(get_identity()), ctx=ctx)
+        print(bcolors.CORE + "<=== " + "LuciferianInk: " + bcolors.ENDC + response)
+        try:
+
+            group = re.search(r"(:?\*\")(.*)(:?\"\*)", response)
+            output = transformer(group[2])
+            await comment.reply(output)
+            print(bcolors.ROOT + "<=== " + "LuciferianInk: " + bcolors.ENDC + output)
+        except:
+            await comment.reply(response)
+            print(bcolors.FOLD + "<=== " + "LuciferianInk: " + bcolors.ENDC + response)
+
+
+# format the output
+def transformer(group):
+    responses = [
+        f'My daemon says, "{group[2]}"',
+        f'Penny says, "{group[2]}"',
+        f'Ink thinks, "{group[2]}"',
+        f'I say, "{group[2]}"',
+        f"{group[2]}",
+    ]
+    return random.choice(responses)
+
+
+def get_identity():
+    count = secrets.choice([18, 19])
+    identity = "".join(secrets.choice("0123456789") for i in range(count))
+    return identity
 
 
 class bcolors:

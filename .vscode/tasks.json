@@ -20,37 +20,37 @@
       "command": "npm outdated"
     },
     {
-      "label": "docker-compose ps",
+      "label": "ps",
       "detail": "View a list of all running containers for this project.",
       "type": "shell",
       "command": "docker-compose ps"
     },
     {
-      "label": "docker-compose logs",
+      "label": "logs",
       "detail": "View logs for all services.",
       "type": "shell",
       "command": "docker-compose logs --follow"
     },
     {
-      "label": "docker-compose exec",
+      "label": "exec",
       "detail": "Open an interactive shell in the vtx container.",
       "type": "shell",
       "command": "docker-compose exec vtx /bin/sh"
     },
     {
-      "label": "docker-compose build",
+      "label": "build",
       "detail": "Build and tag a new Docker image from the Dockerfile.",
       "type": "shell",
       "command": "docker-compose build"
     },
     {
-      "label": "docker-compose push",
+      "label": "push",
       "detail": "Push the newly-built Docker image to a registry.",
       "type": "shell",
       "command": "docker-compose push"
     },
     {
-      "label": "docker-compose up",
+      "label": "up",
       "detail": "Start the services in a development environment.",
       "type": "shell",
       "command": "docker-compose up"
@@ -68,19 +68,19 @@
       "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\""
     },
     {
-      "label": "docker-compose up -d",
+      "label": "up --detached",
       "detail": "Start the services detached from the terminal.",
       "type": "shell",
       "command": "docker-compose up -d"
     },
     {
-      "label": "docker system prune",
+      "label": "prune",
       "detail": "Prune all unused images, networks, and volumes.",
       "type": "shell",
       "command": "docker system prune -f"
     },
     {
-      "label": "docker-compose down",
+      "label": "down",
       "detail": "Stop the service in Docker.",
       "type": "shell",
       "command": "docker-compose down --remove-orphans"

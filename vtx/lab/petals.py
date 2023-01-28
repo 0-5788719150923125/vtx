@@ -1,4 +1,7 @@
+import os
 from petals import DistributedBloomForCausalLM
+
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 
 class bcolors:
@@ -24,8 +27,8 @@ async def subscribe():
 
     # Embeddings & prompts are on your device, BLOOM blocks are distributed across the Internet
 
-    inputs = tokenizer("A cat sat", return_tensors="pt")["input_ids"]
-    outputs = await model.generate(inputs, max_new_tokens=5)
+    inputs = tokenizer("I think ", return_tensors="pt")["input_ids"]
+    outputs = await model.generate(inputs, max_new_tokens=32)
     print(tokenizer.decode(outputs[0]))  # A cat sat on a mat...
 
 

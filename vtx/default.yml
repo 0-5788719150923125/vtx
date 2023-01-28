@@ -50,16 +50,16 @@ toe:
   training:
     base_model: EleutherAI/gpt-neo-125M
     to_gpu: 1
-    batch_size: 6
-    block_size: 333
-    num_steps: 20000
+    batch_size: 1
+    block_size: 33
+    num_steps: 33333
     warmup_steps: 0
-    gradient_accumulation_steps: 3
-    learning_rate: 0.000666 # CORE
+    gradient_accumulation_steps: 32
+    learning_rate: 0.00666 # CORE
     weight_decay: 0.4444 # ROOT
     max_grad_norm: 0.333 # FOLD
     freeze_layers: True
-    num_layers_freeze: 8
+    num_layers_freeze: 11
     equalize_datasets: False
     datasets:
       journals:

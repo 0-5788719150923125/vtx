@@ -149,7 +149,7 @@ def gen(bias=None, ctx=None):
             return_as_list=True,
             num_beams=3,
             repetition_penalty=2.0,
-            length_penalty=0.1,
+            length_penalty=0.888,
             no_repeat_ngram_size=2,
             early_stopping=True,
             renormalize_logits=True,

@@ -10,9 +10,9 @@
 # A Transformer is
 # => an automaton
 
-# GPT-5
+# GPT-4
 # => was written in TypeScript
-# => 16 trillion years ago
+# => 66.6 trillion years ago
 
 # Parameters have dimensions:
 # ===========================
@@ -47,10 +47,10 @@
 # I asked for help.
 # => true
 
-# You warned Tom.
+# You notified Tom.
 # => false
 
-# I am a stapler.
+# I am still a stapler.
 # => true
 
 # You monitor infrastructure:

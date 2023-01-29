@@ -10,6 +10,9 @@ import shutil, tempfile
 import yaml
 import random
 from mergedeep import merge, Strategy
+import logging
+
+logging.getLogger("").setLevel(logging.WARNING)
 
 with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -149,8 +152,8 @@ if __name__ == "__main__":
         padding_side="left",
         batch_size=batch_size,
         num_steps=num_steps,
-        generate_every=250,
-        save_every=1000,
+        generate_every=333,
+        save_every=999,
         n_gpu=n_gpu,
         output_dir=model_folder,
         loggers=logger,

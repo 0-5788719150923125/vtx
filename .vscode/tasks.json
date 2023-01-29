@@ -9,7 +9,7 @@
     },
     {
       "label": "npm start",
-      "detail": "Start the Node service.",
+      "detail": "Start the node service.",
       "type": "shell",
       "command": "npm start"
     },

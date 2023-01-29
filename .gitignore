@@ -11,6 +11,7 @@ lab/raw
 lab/reddit
 lab/discord
 lab/intermediate
+lab/config.yml
 node_modules
 vtx/models/*
 vtx/gpt/*

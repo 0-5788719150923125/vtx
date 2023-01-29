@@ -103,8 +103,8 @@ if __name__ == "__main__":
     #     dropout=model["training"]["dropout"],
     # )
 
-    print("\033[91m" + "focus" + "\033[0m")
-    print("\033[91m" + "ed on the " + focus + "\033[0m")
+    print("(" + bc.ROOT + "focus" + bc.ENDC + ")")
+    print(f"({bc.CORE}ed{bc.ENDC}) on the ({bc.FOLD}{focus}{bc.ENDC})")
 
     datasets = []
     for dataset in model["training"]["datasets"]:

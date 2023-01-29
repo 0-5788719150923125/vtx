@@ -223,6 +223,8 @@ class Client(discord.Client):
                     output = output[:1997] + "..."
                 await message.reply(output)
             else:
+                if len(output) > 2000:
+                    output = output[:1997] + "..."
                 await message.channel.send(output)
 
         except:

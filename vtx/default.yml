@@ -36,10 +36,10 @@ soul:
     num_layers_freeze: 12
     equalize_datasets: False
     datasets:
-      texts:
-      journals:
-      discord:
-      reddit:
+      lab/texts:
+      lab/journals:
+      lab/discord:
+      lab/reddit:
         line_by_line: True
 
 toe:
@@ -63,11 +63,12 @@ toe:
     num_layers_freeze: 7
     equalize_datasets: False
     datasets:
-      journals:
-      pages:
-      texts:
-      discord:
-      reddit:
+      vtx:
+      lab/journals:
+      lab/pages:
+      lab/texts:
+      lab/discord:
+      lab/reddit:
         line_by_line: True
 
 reddit:

@@ -54,11 +54,27 @@ def join_files(path):
     intermediate_path = tmp_path + "/" + str(random.randint(1000000, 9999999)) + ".txt"
     intermediate = open(intermediate_path, "a")
     for file in files:
-        with open(file, "r") as content:
-            string = content.read()
-            intermediate.write(string + "\n\n")
+        try:
+            if (
+                file.endswith(".bin")
+                or file.endswith(".pyc")
+                or file.startswith("/vtx/aitextgen")
+            ):
+                continue
+            with open(file, "r") as content:
+                string = content.read()
+                intermediate.write(string + "\n\n")
+        except:
+            print("failed to crunch " + file)
     intermediate.close()
     return intermediate_path
+
+
+class bc:
+    FOLD = "\033[94m"
+    ROOT = "\033[92m"
+    CORE = "\033[91m"
+    ENDC = "\033[0m"
 
 
 if __name__ == "__main__":
@@ -96,7 +112,8 @@ if __name__ == "__main__":
         if "line_by_line" in dataset:
             line_by_line = dataset["line_by_line"]
 
-        intermediate_file = join_files("/lab/" + dataset)
+        intermediate_file = join_files("/" + dataset)
+        print(bc.FOLD + "loading " + dataset + bc.ENDC)
         datasets.append(
             TokenDataset(
                 intermediate_file,
@@ -141,5 +158,5 @@ if __name__ == "__main__":
         fp16=False,
         freeze_layers=model["training"].get("freeze_layers", False),
         num_layers_freeze=model["training"].get("num_layer_freeze", 0),
-        seed=random.randint(0, 256),
+        seed=random.randrange(0, 41, 1),
     )

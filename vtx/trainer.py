@@ -145,6 +145,7 @@ if __name__ == "__main__":
         # tokenizer_file=tokenizer_file,
         config=config,
         model=launch_model,
+        model_folder=model_folder,
         to_gpu=to_gpu,
         gradient_checkpointing=True,
         padding_side="left",

@@ -137,10 +137,14 @@ if __name__ == "__main__":
 
     merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])
 
+    launch_model = base_model
+    if model["training"]["resume"] == True:
+        launch_model = None
+
     ai = aitextgen(
         # tokenizer_file=tokenizer_file,
         config=config,
-        model=base_model,
+        model=launch_model,
         to_gpu=to_gpu,
         gradient_checkpointing=True,
         padding_side="left",

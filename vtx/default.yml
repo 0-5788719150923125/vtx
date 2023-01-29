@@ -49,6 +49,7 @@ toe:
   n_gpu: 1
   max_length: 999
   training:
+    resume: True
     base_model: EleutherAI/gpt-neo-125M
     to_gpu: 1
     batch_size: 1
@@ -66,6 +67,7 @@ toe:
       lab/journals:
       lab/theory:
       lab/pages:
+      lab/texts:
       vtx:
       ctx:
 

@@ -21,3 +21,5 @@ vtx/gun
 !.keep
 !lab/*.mp4
 !lab/logseq/config.edn
+!lab/texts/a.txt
+!lab/texts/B.txt

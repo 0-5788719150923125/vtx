@@ -68,8 +68,8 @@
       "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\""
     },
     {
-      "label": "autopilot",
-      "detail": "Orchestrate the model.",
+      "label": "auto",
+      "detail": "Turn on autopilot.",
       "type": "shell",
       "command": "docker-compose up -d"
     },

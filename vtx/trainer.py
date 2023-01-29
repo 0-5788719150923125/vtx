@@ -126,6 +126,12 @@ if __name__ == "__main__":
             )
         )
 
+    if os.path.exists("/lab/intermediate"):
+        shutil.rmtree("/lab/intermediate")
+
+    if os.path.exists("/lab/logs/" + focus):
+        shutil.rmtree("/lab/logs/" + focus)
+
     merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])
 
     ai = aitextgen(

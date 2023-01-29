@@ -3,8 +3,9 @@ mode:
 
 reddit:
   SubSimGPT2Interactive:
-    skip: True
+    skip: False
     chance: 2
+    limit: 10
   5September2020:
     skip: False
     limit: 50

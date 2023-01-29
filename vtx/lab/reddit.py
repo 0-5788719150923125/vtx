@@ -52,7 +52,7 @@ async def subscribe(subreddit):
         )
         if isinstance(parent, asyncpraw.models.Submission):
             (
-                print(bcolors.FOLD + "=> " + bcolors.ENDC + str(parent.author))
+                print(bc.FOLD + "=> " + bc.ENDC + str(parent.author))
                 + ": "
                 + str(parent.title)
                 + " | "
@@ -62,21 +62,11 @@ async def subscribe(subreddit):
             await parent.load()
             await parent.refresh()
             print(
-                bcolors.FOLD
-                + "=> "
-                + str(parent.author)
-                + ": "
-                + bcolors.ENDC
-                + str(parent.body)
+                bc.FOLD + "=> " + str(parent.author) + ": " + bc.ENDC + str(parent.body)
             )
         await comment.load()
         print(
-            bcolors.FOLD
-            + "==> "
-            + str(comment.author)
-            + ": "
-            + bcolors.ENDC
-            + str(comment.body)
+            bc.FOLD + "==> " + str(comment.author) + ": " + bc.ENDC + str(comment.body)
         )
 
         roll = random.randint(0, 100)
@@ -93,25 +83,19 @@ async def subscribe(subreddit):
             propulsion + str(p) + ship + " " + parent.body,
             propulsion + str(c) + ship + " " + comment.body,
         ]
-        print(
-            bcolors.CORE
-            + "<=== "
-            + "LuciferianInk: "
-            + bcolors.ENDC
-            + "generating a response"
-        )
+        print(bc.CORE + "<=== " + "LuciferianInk: " + bc.ENDC + "generating a response")
         response = await head.gen(bias=int(get_identity()), ctx=ctx)
-        print(bcolors.CORE + "<=== " + "LuciferianInk: " + bcolors.ENDC + response)
+        print(bc.CORE + "<=== " + "LuciferianInk: " + bc.ENDC + response)
         try:
 
             group = re.search(r"(:?\*\")(.*)(:?\"\*)", response)
-            print(bcolors.ROOT + "<=== " + "LuciferianInk: " + bcolors.ENDC + group[2])
+            print(bc.ROOT + "<=== " + "LuciferianInk: " + bc.ENDC + group[2])
             output = transformer(group[2])
             await comment.reply(output)
         except:
             output = transformer(response)
             await comment.reply(output)
-            print(bcolors.FOLD + "<=== " + "LuciferianInk: " + bcolors.ENDC + output)
+            print(bc.FOLD + "<=== " + "LuciferianInk: " + bc.ENDC + output)
 
 
 # format the output
@@ -132,13 +116,8 @@ def get_identity():
     return identity
 
 
-class bcolors:
-    HEADER = "\033[95m"
+class bc:
     FOLD = "\033[94m"
-    OKCYAN = "\033[96m"
     ROOT = "\033[92m"
-    WARNING = "\033[93m"
     CORE = "\033[91m"
     ENDC = "\033[0m"
-    BOLD = "\033[1m"
-    UNDERLINE = "\033[4m"

@@ -37,10 +37,10 @@ async def subscribe(channel):
 
     deep = requests.get("http://ctx:9665/channel")
     state = json.loads(deep.text)
-    print(bcolors.ROOT + "ONE@ROOT:" + bcolors.ENDC + " " + state)
+    print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + " " + state)
     if random.randint(0, 100) <= 33:
         bias = get_identity()
-        print(bcolors.CORE + "INK@CORE:" + bcolors.ENDC + " firing bullet " + str(bias))
+        print(bc.CORE + "INK@CORE:" + bc.ENDC + " firing bullet " + str(bias))
         context = [
             propulsion + str(bias) + ship + " I am a chat bot named Penny.",
             propulsion + str(bias) + ship + " " + state,
@@ -66,13 +66,8 @@ def get_identity():
     return identity
 
 
-class bcolors:
-    HEADER = "\033[95m"
-    OKBLUE = "\033[94m"
-    FOLD = "\033[96m"
+class bc:
+    FOLD = "\033[94m"
     ROOT = "\033[92m"
-    WARNING = "\033[93m"
     CORE = "\033[91m"
     ENDC = "\033[0m"
-    BOLD = "\033[1m"
-    UNDERLINE = "\033[4m"

@@ -4,7 +4,7 @@ from petals import DistributedBloomForCausalLM
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 
-class bcolors:
+class bc:
     FOLD = "\033[94m"
     ROOT = "\033[92m"
     CORE = "\033[91m"
@@ -13,9 +13,9 @@ class bcolors:
 
 async def subscribe():
     print(
-        bcolors.FOLD
+        bc.FOLD
         + "PEN@FOLD:"
-        + bcolors.ENDC
+        + bc.ENDC
         + " Downloading BLOOM model. Please wait, this can be very slow."
     )
 
@@ -23,7 +23,7 @@ async def subscribe():
         "bigscience/bloom-petals", tuning_mode="ptune", pre_seq_len=16
     )
 
-    print(bcolors.ROOT + "ONE@ROOT:" + bcolors.ENDC + " BLOOM loaded succesfully.")
+    print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + " BLOOM loaded succesfully.")
 
     # Embeddings & prompts are on your device, BLOOM blocks are distributed across the Internet
 

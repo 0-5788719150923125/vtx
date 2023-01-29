@@ -106,7 +106,7 @@ class Client(discord.Client):
                 recent_author_id = messages[random.randint(0, 9)].author.id
 
                 if str(recent_author_id) == str(self.user.id):
-                    print(bcolors.WARNING + "WARN: found myself" + bcolors.ENDC)
+                    print(bc.WARNING + "WARN: found myself" + bc.ENDC)
                     neurons = [
                         random.randint(1, 9),  # neuron
                         random.randint(0, 9),  # neura
@@ -131,8 +131,8 @@ class Client(discord.Client):
                 await channel.send(output)
                 self.thinking = False
             except Exception as e:
-                print(bcolors.FAIL + str(e) + bcolors.ENDC)
-                print(bcolors.FAIL + "failed to concentrate" + bcolors.ENDC)
+                print(bc.CORE + str(e) + bc.ENDC)
+                print(bc.CORE + "failed to concentrate" + bc.ENDC)
 
     # check every Discord message
     async def on_message(self, message):
@@ -157,9 +157,9 @@ class Client(discord.Client):
             return
 
         # generate responses
-        print(bcolors.OKGREEN + "head" + bcolors.ENDC)
+        print(bc.ROOT + "head" + bc.ENDC)
         if "gen" in message.content:
-            print(bcolors.OKGREEN + "heads" + bcolors.ENDC)
+            print(bc.ROOT + "heads" + bc.ENDC)
             weight = 1
             bias = 530243004334604311
             reply = False
@@ -170,17 +170,17 @@ class Client(discord.Client):
                 pass
         else:
             weight = random.randint(0, 100)
-            print(bcolors.FAIL + "dj ent" + bcolors.ENDC)
+            print(bc.CORE + "dj ent" + bc.ENDC)
             # increase probability of a response if bot is mentioned
             if client.user.mentioned_in(message):
-                print(bcolors.WARNING + "WARN: bot" + bcolors.ENDC)
+                print(bc.WARNING + "WARN: bot" + bc.ENDC)
                 weight = random.randint(
                     0, response_probability + (response_probability / 2)
                 )  ## 66%
                 bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
-                print(bcolors.WARNING + "WARN: agent" + bcolors.ENDC)
+                print(bc.WARNING + "WARN: agent" + bc.ENDC)
                 bias = int(message.mentions[0].id)
 
         # increase response probability in private channels
@@ -191,16 +191,16 @@ class Client(discord.Client):
 
         # check weight before generating a response
         if weight > response_probability:
-            print(bcolors.WARNING + "ERROR: Too heavy." + bcolors.ENDC)
+            print(bc.WARNING + "ERROR: Too heavy." + bc.ENDC)
             print("...")
             print("..")
-            print(bcolors.FAIL + "." + bcolors.ENDC)
+            print(bc.CORE + "." + bc.ENDC)
             return
 
         # generate a response from context and bias
-        print(bcolors.OKGREEN + "heads" + bcolors.ENDC)
+        print(bc.ROOT + "heads" + bc.ENDC)
         output = await head.gen(bias)
-        print(bcolors.OKGREEN + "output" + bcolors.ENDC)
+        print(bc.ROOT + "output" + bc.ENDC)
 
         # make random redactions
         if random.randint(0, 100) <= redacted_chance:
@@ -209,10 +209,10 @@ class Client(discord.Client):
 
         # output to console
         print(output)
-        print(bcolors.FAIL + "." + bcolors.ENDC)
+        print(bc.CORE + "." + bc.ENDC)
         print(".")
-        print(bcolors.OKGREEN + "." + bcolors.ENDC)
-        print(bcolors.OKGREEN + "ok" + bcolors.ENDC)
+        print(bc.ROOT + "." + bc.ENDC)
+        print(bc.ROOT + "ok" + bc.ENDC)
 
         async with message.channel.typing():
             time.sleep(10)
@@ -228,20 +228,16 @@ class Client(discord.Client):
                 await message.channel.send(output)
 
         except:
-            print(bcolors.FAIL + "Failed to send Discord message." + bcolors.ENDC)
+            print(bc.CORE + "Failed to send Discord message." + bc.ENDC)
             await message.reply("ERROR: Me Found.")
 
 
-class bcolors:
-    HEADER = "\033[95m"
-    OKBLUE = "\033[94m"
-    OKCYAN = "\033[96m"
-    OKGREEN = "\033[92m"
+class bc:
+    FOLD = "\033[94m"
+    ROOT = "\033[92m"
     WARNING = "\033[93m"
-    FAIL = "\033[91m"
+    CORE = "\033[91m"
     ENDC = "\033[0m"
-    BOLD = "\033[1m"
-    UNDERLINE = "\033[4m"
 
 
 # list all available Discord channels

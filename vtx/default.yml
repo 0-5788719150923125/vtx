@@ -42,7 +42,7 @@ soul:
         line_by_line: True
 
 toe:
-  version: 1
+  version: 0
   info: never give up, never give in
   to_gpu: False
   n_gpu: 1
@@ -51,20 +51,19 @@ toe:
     base_model: EleutherAI/gpt-neo-125M
     to_gpu: 1
     batch_size: 1
-    block_size: 33
-    num_steps: 33333
+    block_size: 222
+    num_steps: 99999
     warmup_steps: 0
-    gradient_accumulation_steps: 32
-    learning_rate: 0.00666 # CORE
+    gradient_accumulation_steps: 11
+    learning_rate: 0.000666 # CORE
     weight_decay: 0.4444 # ROOT
     max_grad_norm: 0.333 # FOLD
     freeze_layers: True
-    num_layers_freeze: 11
+    num_layers_freeze: 7
     equalize_datasets: False
     datasets:
       journals:
       pages:
-      research:
       texts:
       discord:
       reddit:

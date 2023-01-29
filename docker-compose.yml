@@ -27,7 +27,7 @@ services:
     env_file:
       - .env
     environment:
-      FOCUS: toe
+      FOCUS: heart
       TRANSFORMERS_CACHE: /tmp
 
   ctx:
@@ -47,12 +47,12 @@ services:
     ipc: host
     volumes:
       - pet:/cache
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: [gpu]
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           capabilities: [gpu]
 
   dsh:
     image: ghcr.io/0-5788719150923125/src:1

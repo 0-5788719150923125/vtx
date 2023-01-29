@@ -20,7 +20,8 @@ import lab.reddit
 import lab.twitter
 import lab.source
 import lab.discord
-import lab.petals
+
+# import lab.petals
 import threading
 
 

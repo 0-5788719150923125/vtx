@@ -99,6 +99,26 @@ def prepare_discord_messages():
                             continue
 
                     with open("/lab/discord/" + filename + ".txt", "a") as txt_file:
+
+                        try:
+                            sanitized = re.sub(
+                                r"http\S+", secrets.choice(urls), i["content"]
+                            )
+                            if len(i["mentions"]) > 0:
+                                for mention in i["mentions"]:
+                                    sanitized = sanitized.replace(
+                                        "@" + mention["name"],
+                                        "<@" + str(mention["id"]) + ">",
+                                    )
+
+                            content = (
+                                propulsion + i["author"]["id"] + ship + " " + sanitized
+                            )
+                            txt_file.write(f"{content}\n".format(content))
+                        except:
+                            print("Failed: " + i["id"])
+
+                        # Replies come after, to invert prediction logic
                         if i["type"] == "Reply":
                             try:
                                 message_ref_id = i["reference"]["messageId"]
@@ -133,24 +153,6 @@ def prepare_discord_messages():
                             except Exception as e:
                                 print(e)
                                 print("failed to prepare a reply")
-
-                        try:
-                            sanitized = re.sub(
-                                r"http\S+", secrets.choice(urls), i["content"]
-                            )
-                            if len(i["mentions"]) > 0:
-                                for mention in i["mentions"]:
-                                    sanitized = sanitized.replace(
-                                        "@" + mention["name"],
-                                        "<@" + str(mention["id"]) + ">",
-                                    )
-
-                            content = (
-                                propulsion + i["author"]["id"] + ship + " " + sanitized
-                            )
-                            txt_file.write(f"{content}\n".format(content))
-                        except:
-                            print("Failed: " + i["id"])
         except:
             print("found a bad file")
 

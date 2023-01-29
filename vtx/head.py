@@ -167,7 +167,7 @@ def gen(bias=None, ctx=None):
 
         try:
             group = re.search(
-                r"^(¶{1})(?:.*)(\d{18,19})(?::>\s*)(.*)(?:\n*)", generation_zero
+                r"^(¶{1})(\d{18,19})(?::>\s*)(.*)(?:\n*)", generation_zero
             )
             output = transformer([group[1], group[2]])
             print("\033[92m" + "group 1" + "\033[0m")

@@ -47,13 +47,13 @@ toe:
   info: never give up, never give in
   to_gpu: False
   n_gpu: 1
-  max_length: 666
+  max_length: 999
   training:
     base_model: EleutherAI/gpt-neo-125M
     to_gpu: 1
     batch_size: 1
     block_size: 222
-    num_steps: 99999
+    num_steps: 999999999
     warmup_steps: 0
     gradient_accumulation_steps: 11
     learning_rate: 0.000666 # CORE

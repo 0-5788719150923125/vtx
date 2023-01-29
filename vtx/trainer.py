@@ -117,11 +117,13 @@ if __name__ == "__main__":
         model=base_model,
         to_gpu=to_gpu,
         gradient_checkpointing=True,
+        padding_side="left",
     )
 
     ai.train(
         merged,
         from_cache=False,
+        padding_side="left",
         batch_size=batch_size,
         num_steps=num_steps,
         generate_every=250,
@@ -139,5 +141,5 @@ if __name__ == "__main__":
         fp16=False,
         freeze_layers=model["training"].get("freeze_layers", False),
         num_layers_freeze=model["training"].get("num_layer_freeze", 0),
-        seed=41,
+        seed=random.randint(0, 256),
     )

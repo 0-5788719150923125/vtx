@@ -219,6 +219,8 @@ class Client(discord.Client):
 
         try:
             if reply == True:
+                if len(output) > 2000:
+                    output = output[:1997] + "..."
                 await message.reply(output)
             else:
                 await message.channel.send(output)

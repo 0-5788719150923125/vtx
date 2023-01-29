@@ -68,8 +68,8 @@
       "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\""
     },
     {
-      "label": "up --detached",
-      "detail": "Start the services detached from the terminal.",
+      "label": "autopilot",
+      "detail": "Orchestrate the model.",
       "type": "shell",
       "command": "docker-compose up -d"
     },

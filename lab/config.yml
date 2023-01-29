@@ -7,6 +7,8 @@ reddit:
     chance: 2
   5September2020:
     skip: False
+    limit: 50
+    watch: True
   radicalmentalhealth:
     skip: False
     limit: 50
@@ -45,6 +47,18 @@ reddit:
   TheInk:
     limit: 500
     watch: True
+  writers:
+    limit: 50
+  progmetal:
+    limit: 25
+  archlinux:
+    limit: 25
+  DumpsterDiving:
+    limit: 25
+  webdev:
+    limit: 25
+  learnmachinelearning:
+    limit: 100
 
 discord:
   use_self_token: True
@@ -65,5 +79,6 @@ discord:
     '840978732772753468': # The Cause
     '1042822599362752562': # Lux Prima
     '386853267058982912': # Toehider
+    '865254854262652969': # Hivemind
 
 twitter:

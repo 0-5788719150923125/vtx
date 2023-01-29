@@ -68,6 +68,8 @@ async def main(loop):
                     task.set_name(name)
                     tasks.append(task)
 
+    # asyncio.gather(*tasks)
+
     # task = loop.create_task(lab.petals.subscribe())
     # tasks.append(task)
     pprint.pprint(tasks)

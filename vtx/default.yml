@@ -67,6 +67,7 @@ toe:
       lab/journals:
       lab/pages:
       lab/texts:
+      lab/email:
       lab/discord:
       lab/reddit:
         line_by_line: True

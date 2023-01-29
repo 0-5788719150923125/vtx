@@ -4,7 +4,6 @@ from mergedeep import merge, Strategy
 import asyncio
 import os
 import random
-from twitter import *
 import requests
 import json
 import head

@@ -17,7 +17,8 @@ from functools import reduce
 from mergedeep import merge, Strategy
 import secrets
 import lab.reddit
-import lab.twitter
+
+# import lab.twitter
 import lab.source
 import lab.discord
 

@@ -1,0 +1,18 @@
+
+\section{Conclusion}
+
+We proposed transferring a pretrained transformer language model for downstream tasks in non-language modalities.
+Through extensive empirical evaluation, we showed that these models could achieve performance competitive with transformers fully trained on the downstream task without having to finetune the self-attention and feedforward layers, relying solely on frozen parameters from the language model to perform the bulk of the computation.
+
+We believe this work can serve as the foundation for future work investigating transfer between modalities.
+In future, we are interested in investigating the use of other data-rich modalities (e.g., vision) or a hybrid of multiple domains being used to provide the necessary substrate for pretraining a universal computational engine.
+It would also be interesting to explore frozen pretrained models for tasks beyond predictive modeling, such as reinforcement learning \citep{abramson2020imitating}.
+
+We note that a limitation of our analysis in that we analyze specific models on a restricted set of tasks.
+More investigation can highlight whether or not similar behavior occurs for other models on other tasks.
+For instance, in Section \ref{sec:alternative_architectures}, we find the architecture can have a significant impact on results.
+As training regimes for these models evolve, performing similar experiments may yield different results, and we are excited for more research in this direction.
+
+For high stakes applications in the real-world, there are potential concerns with transfer of harmful biases from one modality to one another using pretrained transformer models trained on vast quantities of unlabeled, uncurated datasets~\citep{sheng2019woman,bender2021dangers}.
+Mitigating these biases is an active area of research~\citep{grover2019bias,choi2020fair}.
+Conversely, there are also potential upsides with FPT models being able to better exploit representative datasets from one or more modalities, which merit future investigation as well.

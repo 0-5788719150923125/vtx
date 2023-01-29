@@ -12,6 +12,7 @@ lab/reddit
 lab/discord
 lab/intermediate
 lab/email
+lab/wiki
 lab/config.yml
 node_modules
 vtx/models/*

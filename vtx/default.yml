@@ -63,14 +63,11 @@ toe:
     num_layers_freeze: 7
     equalize_datasets: False
     datasets:
-      vtx:
       lab/journals:
+      lab/theory:
       lab/pages:
-      lab/texts:
-      lab/email:
-      lab/discord:
-      lab/reddit:
-        line_by_line: True
+      vtx:
+      ctx:
 
 reddit:
   SubSimGPT2Interactive:
@@ -81,7 +78,7 @@ reddit:
   Kunism:
     limit: 500
     watch: True
-    chance: 100
+    chance: 50
 
 discord:
   use_self_token: True

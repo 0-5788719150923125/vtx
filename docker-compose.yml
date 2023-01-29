@@ -24,6 +24,7 @@ services:
     volumes:
       - ./lab:/lab
       - ./vtx:/vtx
+      - ./ctx:/ctx
     env_file:
       - .env
     environment:

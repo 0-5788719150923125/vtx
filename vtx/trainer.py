@@ -164,5 +164,6 @@ if __name__ == "__main__":
         fp16=False,
         freeze_layers=model["training"].get("freeze_layers", False),
         num_layers_freeze=model["training"].get("num_layer_freeze", 0),
-        seed=random.randrange(0, 41, 1),
+        progress_bar_refresh_rate=3,
+        seed=random.randrange(0, 41, 2),
     )

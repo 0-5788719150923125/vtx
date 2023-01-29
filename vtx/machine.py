@@ -54,21 +54,25 @@ async def main(loop):
         for channel in config["source"]:
             if "watch" in config["source"][channel]:
                 if config["source"][channel]["watch"] == True:
+                    name = "source-" + channel
                     task = loop.create_task(lab.source.subscribe(channel))
+                    task.set_name(name)
                     tasks.append(task)
 
     if "reddit" in config:
         for subreddit in config["reddit"]:
             if "watch" in config["reddit"][subreddit]:
                 if config["reddit"][subreddit]["watch"] == True:
+                    name = "reddit-" + subreddit
                     task = loop.create_task(lab.reddit.subscribe(subreddit))
+                    task.set_name(name)
                     tasks.append(task)
 
-    task = loop.create_task(lab.petals.subscribe())
-    tasks.append(task)
-
+    # task = loop.create_task(lab.petals.subscribe())
+    # tasks.append(task)
+    pprint.pprint(tasks)
     print(str(len(tasks)) + " running tasks")
-    await asyncio.sleep(666.666)
+    await asyncio.sleep(66.666)
     await main(loop)
 
 

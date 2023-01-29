@@ -27,6 +27,14 @@ ship = ":>"
 
 
 async def subscribe(channel):
+
+    chance = config["source"].get("chance", 33)
+
+    roll = random.randint(0, 100)
+
+    if roll >= chance:
+        return
+
     deep = requests.get("http://ctx:9665/channel")
     state = json.loads(deep.text)
     print(bcolors.ROOT + "ONE@ROOT:" + bcolors.ENDC + " " + state)

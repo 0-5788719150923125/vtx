@@ -12,6 +12,7 @@ services:
           devices:
             - driver: nvidia
               capabilities: [gpu]
+              # device_ids: ['0']
     ulimits:
       memlock: -1
       stack: 67108864

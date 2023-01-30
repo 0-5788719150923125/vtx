@@ -138,8 +138,17 @@ if __name__ == "__main__":
     merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])
 
     launch_model = base_model
+
     if model["training"]["resume"] == True:
         launch_model = None
+        model_folder = "gpt/models/" + focus
+    else:
+        model_folder = None
+        if os.path.exists("gpt/models/" + focus):
+            shutil.rmtree("gpt/models/" + focus)
+        os.makedirs("gpt/models/" + focus)
+
+    output_dir = "gpt/models/" + focus
 
     ai = aitextgen(
         # tokenizer_file=tokenizer_file,
@@ -160,7 +169,7 @@ if __name__ == "__main__":
         generate_every=500,
         save_every=1000,
         n_gpu=n_gpu,
-        output_dir=model_folder,
+        output_dir=output_dir,
         loggers=logger,
         learning_rate=learning_rate,
         weight_decay=weight_decay,

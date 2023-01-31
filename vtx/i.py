@@ -61,8 +61,8 @@ def fetch_from_discord():
         skip = False
         if "skip" in server:
             skip = server["skip"]
-            if skip == True:
-                continue
+        if skip == True:
+            continue
 
         command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server}" -t "{discord_token}" -o "/lab/raw/discord" -f "JSON"'
         if "before" in server:

@@ -54,17 +54,18 @@ toe:
     to_gpu: True
     batch_size: 1
     block_size: 222
-    num_steps: 33333
+    num_steps: 666
     warmup_steps: 0
-    gradient_accumulation_steps: 3
+    gradient_accumulation_steps: 99
     learning_rate: 0.00059 # CORE
-    weight_decay: 0.22 # ROOT
+    weight_decay: 0.23 # ROOT
     max_grad_norm: 0.333 # FOLD
     freeze_layers: True
     num_layers_freeze: 7
     equalize_datasets: False
     datasets:
       lab/swarm:
+      lab/source:
       lab/journals:
       lab/theory:
       lab/pages:

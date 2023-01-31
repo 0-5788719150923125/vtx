@@ -5,3 +5,6 @@
 	path = aitextgen
 	url = https://github.com/LuciferianInk/aitextgen.git
 	branch = dev
+[submodule "lab/source"]
+	path = lab/source
+	url = https://gitlab.com/the-resistance/thesource.fm

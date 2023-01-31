@@ -56,7 +56,7 @@ services:
     #         - driver: nvidia
     #           capabilities: [gpu]
 
-  sos:
+  pit:
     image: ghcr.io/0-5788719150923125/src:1
     command: tensorboard --logdir /lab/logs --bind_all
     volumes:
@@ -64,7 +64,7 @@ services:
     ports:
       - 6006:6006
 
-  sox:
+  ipfs:
     image: ipfs/kubo:master-latest
     command: daemon --migrate=true --agent-version-suffix=docker --init-profile=lowpower --writable --enable-gc --enable-pubsub-experiment --enable-namesys-pubsub
     restart: 'always'

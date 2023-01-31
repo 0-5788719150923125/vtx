@@ -34,6 +34,8 @@ RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz
 
 WORKDIR /vtx
 
+RUN echo "progress=false" > .npmrc
+
 RUN npm i -g nodemon
 
 COPY package*.json requirements.txt ./

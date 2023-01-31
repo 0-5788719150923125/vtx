@@ -166,7 +166,7 @@ if __name__ == "__main__":
         padding_side="left",
         batch_size=batch_size,
         num_steps=num_steps,
-        generate_every=500,
+        generate_every=333,
         save_every=1000,
         n_gpu=n_gpu,
         output_dir=output_dir,

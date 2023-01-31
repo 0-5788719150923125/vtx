@@ -12,7 +12,8 @@ import asyncio
 import gc
 import yaml
 from mergedeep import merge, Strategy
-import lab.petals
+
+# import lab.petals
 
 with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -104,9 +105,9 @@ def gen(bias=None, ctx=None):
         ctx = context
     history = "\n".join(ctx) + "\n"
 
-    max_length = 1024
-    if "max_length" in config[focus]:
-        max_length = config[focus]["max_length"]
+    max_new_tokens = 111
+    if "max_new_tokens" in config[focus]:
+        max_new_tokens = config[focus]["max_new_tokens"]
 
     # set quantum state
     try:
@@ -142,14 +143,14 @@ def gen(bias=None, ctx=None):
             prompt=history + prompt,
             do_sample=True,
             min_length=23,
-            max_length=max_length,
+            max_new_tokens=max_new_tokens,
             temperature=0.888,
             top_k=40,
             top_p=0.9,
             return_as_list=True,
             num_beams=3,
             repetition_penalty=2.0,
-            length_penalty=0.888,
+            length_penalty=0.1,
             no_repeat_ngram_size=2,
             early_stopping=True,
             renormalize_logits=True,
@@ -163,12 +164,9 @@ def gen(bias=None, ctx=None):
     try:
         print("\033[92m" + "completion" + "\033[0m")
         generation_zero = completion[0][len(history) :]
-        print(generation_zero)
 
         try:
-            group = re.search(
-                r"^(¶{1})(\d{18,19})(?::>\s*)(.*)(?:\n*)", generation_zero
-            )
+            group = re.search(r"^(¶{1})(\d{18,19})(?::\s?>\s*)(.*)", generation_zero)
             output = transformer([group[1], group[2]])
             print("\033[92m" + "group 1" + "\033[0m")
             print(group[1])

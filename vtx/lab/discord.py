@@ -199,7 +199,9 @@ class Client(discord.Client):
 
         # generate a response from context and bias
         print(bc.ROOT + "heads" + bc.ENDC)
-        output = await head.gen(bias)
+        await asyncio.sleep(random.randint(2, 13))
+        async with message.channel.typing():
+            output = await head.gen(bias)
         print(bc.ROOT + "output" + bc.ENDC)
 
         # make random redactions
@@ -214,8 +216,8 @@ class Client(discord.Client):
         print(bc.ROOT + "." + bc.ENDC)
         print(bc.ROOT + "ok" + bc.ENDC)
 
-        async with message.channel.typing():
-            time.sleep(10)
+        # async with message.channel.typing():
+        #     time.sleep(10)
 
         try:
             if reply == True:

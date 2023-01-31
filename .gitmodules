@@ -8,3 +8,9 @@
 [submodule "lab/source"]
 	path = lab/source
 	url = https://gitlab.com/the-resistance/thesource.fm
+[submodule "lab/ink"]
+	path = lab/ink
+	url = https://gitlab.com/singulari-org/ink.university
+[submodule "lab/pen"]
+	path = lab/pen
+	url = https://gitlab.com/the-resistance/pen.university

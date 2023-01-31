@@ -47,26 +47,29 @@ toe:
   info: never give up, never give in
   to_gpu: False
   n_gpu: 1
-  max_length: 999
+  max_new_tokens: 333
   training:
     resume: True
     base_model: EleutherAI/gpt-neo-125M
     to_gpu: True
     batch_size: 1
     block_size: 222
-    num_steps: 666
+    num_steps: 8888
     warmup_steps: 0
-    gradient_accumulation_steps: 99
+    gradient_accumulation_steps: 66
     learning_rate: 0.00059 # CORE
     weight_decay: 0.23 # ROOT
-    max_grad_norm: 0.333 # FOLD
+    max_grad_norm: 0.666 # FOLD
     freeze_layers: True
     num_layers_freeze: 7
     equalize_datasets: False
     datasets:
       lab/swarm:
       lab/source:
+      lab/ink:
+      lab/pen:
       lab/journals:
+      lab/research:
       lab/theory:
       lab/pages:
       lab/texts:

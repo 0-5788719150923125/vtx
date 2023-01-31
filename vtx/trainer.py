@@ -12,8 +12,6 @@ import random
 from mergedeep import merge, Strategy
 import logging
 
-logging.getLogger("").setLevel(logging.WARNING)
-
 with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 
@@ -31,7 +29,9 @@ model = config[focus]
 model_folder = "gpt/models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
-logger = loggers.TensorBoardLogger("/lab/logs", name=focus, version=model["version"])
+logger = loggers.TensorBoardLogger(
+    "/lab/logs", name=focus, version=model["version"], default_hp_metric=False
+)
 
 
 def list_full_paths(directory):

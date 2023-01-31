@@ -74,7 +74,7 @@ async def main(loop):
     # task = loop.create_task(lab.petals.subscribe())
     # tasks.append(task)
     # pprint.pprint(tasks)
-    print(str(len(tasks)) + " running tasks")
+    # print(str(len(tasks)) + " running tasks")
     await asyncio.sleep(66.666)
     await main(loop)
 

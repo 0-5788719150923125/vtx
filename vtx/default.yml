@@ -51,14 +51,14 @@ toe:
   training:
     resume: True
     base_model: EleutherAI/gpt-neo-125M
-    to_gpu: 1
+    to_gpu: True
     batch_size: 1
     block_size: 222
-    num_steps: 999999999
+    num_steps: 33333
     warmup_steps: 0
-    gradient_accumulation_steps: 11
-    learning_rate: 0.000666 # CORE
-    weight_decay: 0.4444 # ROOT
+    gradient_accumulation_steps: 3
+    learning_rate: 0.00059 # CORE
+    weight_decay: 0.22 # ROOT
     max_grad_norm: 0.333 # FOLD
     freeze_layers: True
     num_layers_freeze: 7
@@ -68,6 +68,9 @@ toe:
       lab/theory:
       lab/pages:
       lab/texts:
+      lab/email:
+      lab/wiki:
+        line_by_line: True
       vtx:
       ctx:
 

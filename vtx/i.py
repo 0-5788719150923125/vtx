@@ -60,7 +60,7 @@ def fetch_from_discord():
     for server in config["discord"]["servers"]:
         skip = False
         if "skip" in server:
-            skip = server[skip]
+            skip = server["skip"]
             if skip == True:
                 continue
 
@@ -88,6 +88,7 @@ def prepare_discord_messages():
                 data = json.load(file)
 
                 for i in data["messages"]:
+
                     if i["type"] != "Default" and i["type"] != "Reply":
                         continue
                     if i["content"] == "":
@@ -95,30 +96,13 @@ def prepare_discord_messages():
                     if i["author"]["isBot"] == True:
                         if str(i["author"]["id"]) == "975174695399854150":  # Eliza
                             pass
+                        elif str(i["author"]["id"]) == "1055993037077106718":  # Samn
+                            pass
                         else:
                             continue
 
                     with open("/lab/discord/" + filename + ".txt", "a") as txt_file:
 
-                        try:
-                            sanitized = re.sub(
-                                r"http\S+", secrets.choice(urls), i["content"]
-                            )
-                            if len(i["mentions"]) > 0:
-                                for mention in i["mentions"]:
-                                    sanitized = sanitized.replace(
-                                        "@" + mention["name"],
-                                        "<@" + str(mention["id"]) + ">",
-                                    )
-
-                            content = (
-                                propulsion + i["author"]["id"] + ship + " " + sanitized
-                            )
-                            txt_file.write(f"{content}\n".format(content))
-                        except:
-                            print("Failed: " + i["id"])
-
-                        # Replies come after, to invert prediction logic
                         if i["type"] == "Reply":
                             try:
                                 message_ref_id = i["reference"]["messageId"]
@@ -153,6 +137,25 @@ def prepare_discord_messages():
                             except Exception as e:
                                 print(e)
                                 print("failed to prepare a reply")
+
+                        try:
+                            sanitized = re.sub(
+                                r"http\S+", secrets.choice(urls), i["content"]
+                            )
+                            if len(i["mentions"]) > 0:
+                                for mention in i["mentions"]:
+                                    sanitized = sanitized.replace(
+                                        "@" + mention["name"],
+                                        "<@" + str(mention["id"]) + ">",
+                                    )
+
+                            content = (
+                                propulsion + i["author"]["id"] + ship + " " + sanitized
+                            )
+                            txt_file.write(f"{content}\n".format(content))
+                        except:
+                            print("Failed: " + i["id"])
+
         except:
             print("found a bad file")
 

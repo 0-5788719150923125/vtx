@@ -10,6 +10,6 @@ asyncpraw==7.6.1
 tweepy==4.12.1
 numpy==1.24.1
 torch==1.13.1
-petals==1.1.1
+petals==1.1.2
 praw==7.6.1
 pyyaml==6.0

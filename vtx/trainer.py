@@ -144,9 +144,9 @@ if __name__ == "__main__":
         model_folder = "gpt/models/" + focus
     else:
         model_folder = None
-        if os.path.exists("gpt/models/" + focus):
-            shutil.rmtree("gpt/models/" + focus)
-        os.makedirs("gpt/models/" + focus)
+        if os.path.exists("/vtx/gpt/models/" + focus):
+            shutil.rmtree("/vtx/gpt/models/" + focus)
+        os.makedirs("/vtx/gpt/models/" + focus)
 
     output_dir = "gpt/models/" + focus
 

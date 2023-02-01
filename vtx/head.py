@@ -143,7 +143,7 @@ def gen(bias=None, ctx=None):
             prompt=history + prompt,
             do_sample=True,
             min_length=23,
-            max_new_tokens=max_new_tokens,
+            max_new_tokens=random.randint(23, max_new_tokens),
             temperature=0.888,
             top_k=40,
             top_p=0.9,
@@ -166,7 +166,7 @@ def gen(bias=None, ctx=None):
         generation_zero = completion[0][len(history) :]
 
         try:
-            group = re.search(r"^(¶{1})(\d{18,19})(?::\s?>\s*)(.*)", generation_zero)
+            group = re.search(r"^(¶{1})(\d{15,23})(?::\s?>\s*)(.*)", generation_zero)
             output = transformer([group[1], group[2]])
             print("\033[92m" + "group 1" + "\033[0m")
             print(group[1])

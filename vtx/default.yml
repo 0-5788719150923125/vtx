@@ -52,14 +52,14 @@ toe:
     resume: True
     base_model: EleutherAI/gpt-neo-125M
     to_gpu: True
-    batch_size: 1
+    batch_size: 3
     block_size: 222
-    num_steps: 8888
+    num_steps: 88888
     warmup_steps: 0
-    gradient_accumulation_steps: 66
-    learning_rate: 0.00059 # CORE
-    weight_decay: 0.23 # ROOT
-    max_grad_norm: 0.666 # FOLD
+    gradient_accumulation_steps: 3
+    learning_rate: 0.000666 # FOLD
+    weight_decay: 0.023 # CORE
+    max_grad_norm: 0.444 # ROOT
     freeze_layers: True
     num_layers_freeze: 7
     equalize_datasets: False
@@ -73,9 +73,6 @@ toe:
       lab/theory:
       lab/pages:
       lab/texts:
-      lab/email:
-      lab/wiki:
-        line_by_line: True
       vtx:
       ctx:
 

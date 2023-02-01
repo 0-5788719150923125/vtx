@@ -71,7 +71,7 @@ app.get('/channel', (req, res) => {
 app.use(express.json())
 app.post('/message', async (req, res) => {
   try {
-    const { message, identifier, pubKey } = req.body
+    let { message, identifier, pubKey } = req.body
     if (user) {
       message = await SEA.sign(message, pair)
       pubKey = pair.pub
@@ -80,9 +80,10 @@ app.post('/message', async (req, res) => {
     const payload = JSON.stringify({ identifier, message, pubKey })
     // messageCache.push(payload)
     await channel.get('payload').put(payload)
-    channel.get('payload').put(JSON.stringify({ message, identifier, pubKey }))
+    // channel.get('payload').put(JSON.stringify({ message, identifier, pubKey }))
     res.json('ok')
-  } catch {
+  } catch (err) {
+    console.error(err)
     console.error('failed to send a message')
     res.json('ok')
   }
@@ -147,6 +148,7 @@ export function randomBetween(min, max) {
 }
 
 // Create a GUN user
+let pair = null
 async function authenticateUser(identity, identifier) {
   try {
     user = gun.user()
@@ -157,7 +159,7 @@ async function authenticateUser(identity, identifier) {
           authenticateUser(identity, identifier)
         })
       } else {
-        let pair = user.pair()
+        pair = user.pair()
         console.log('Authenticated GUN user: ~' + pair.pub)
       }
     })

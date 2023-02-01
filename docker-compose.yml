@@ -59,9 +59,9 @@ services:
 
   pit:
     image: ghcr.io/0-5788719150923125/src:1
-    command: tensorboard --logdir /lab/logs --bind_all
+    command: tensorboard --logdir /gen/logs --bind_all
     volumes:
-      - ./lab/logs:/lab/logs
+      - ./gen:/gen
     ports:
       - 6006:6006
 

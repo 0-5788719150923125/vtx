@@ -27,7 +27,7 @@ const server = app.listen(port, () => {
 
 // Connect to the hivemind
 const gun = Gun({
-  peers: ['http://ctx:9665/gun', 'https://59.thesource.fm/gun'],
+  peers: ['http://ctx:9666/gun', 'https://59.thesource.fm/gun'],
   web: server,
   file: './hive',
   localStorage: false,
@@ -101,10 +101,6 @@ const net = new brain.recurrent.LSTM({
   outputSize: 1
 })
 
-// const randomValueFromArray = (array) => {
-//   return array[Math.floor(Math.random() * array.length)]
-// }
-
 // Train the model on the seed
 net.train(seed, {
   errorThresh: 0.1,
@@ -177,3 +173,7 @@ async function authenticateUser(identity, identifier) {
 
 // Delay by x number of milliseconds
 const delay = (ms) => new Promise((res) => setTimeout(res, ms))
+
+const randomValueFromArray = (array) => {
+  return array[Math.floor(Math.random() * array.length)]
+}

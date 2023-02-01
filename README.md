@@ -37,3 +37,7 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 - https://chatbook.org/
 - http://Alpha8.888/?channel=backbone.lumbar.6/
 - http://Omega8.888.ipns.localhost:8080/?channel=backbone.lumbar.5/
+
+# Instructions
+
+- Ask me questions.

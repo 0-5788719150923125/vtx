@@ -164,10 +164,10 @@ def gen(bias=None, ctx=None):
         return
     try:
         print("\033[92m" + "completion" + "\033[0m")
-        generation_zero = completion[0][len(history) :]
+        generation = completion[0][len(history) :]
 
         try:
-            group = re.search(r"^(¶{1})(\d{15,23})(?::\s?>\s*)(.*)", generation_zero)
+            group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
             output = transformer([group[1], group[2]])
             print("\033[92m" + "group 1" + "\033[0m")
             print(group[1])
@@ -181,6 +181,7 @@ def gen(bias=None, ctx=None):
             pass
 
         if group[2] == "" or group[3] == "":
+            print("generation was not subscriptable")
             return
         output = transformer([group[2], group[3]])
         try:

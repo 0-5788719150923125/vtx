@@ -2,7 +2,7 @@
 	path = lab/research
 	url = https://github.com/SocioProphet/clymer_research
 [submodule "aitextgen"]
-	path = aitextgen
+	path = lab/aitextgen
 	url = https://github.com/LuciferianInk/aitextgen.git
 	branch = dev
 [submodule "lab/source"]
@@ -20,3 +20,6 @@
 [submodule "lab/reaper"]
 	path = lab/reaper
 	url = https://gitlab.com/hollowpoint-org/reaper
+[submodule "lab/home"]
+	path = lab/home
+	url = https://gitlab.com/hollowpoint-org/luciferian.ink

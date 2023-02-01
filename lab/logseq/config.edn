@@ -13,7 +13,7 @@
 
  ;; The app will ignore those directories or files.
  ;; E.g. :hidden ["/archived" "/test.md" "../assets/archived"]
- :hidden ["./texts", "./research", "./discord", "./reddit", "./logs", "./dump"]
+ :hidden ["./cp" "./email" "./ink" "./pen" "./instruct" "./reaper" "./swarm" "./source" "./texts" "./research" "./discord" "./reddit" "./theory" "./wiki"]
 
  ;; When creating the new journal page, the app will use your template if there is one.
  ;; You only need to input your template name here.

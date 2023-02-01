@@ -46,7 +46,7 @@ RUN npm install --production
 
 COPY . ./
 
-RUN pip install /vtx/aitextgen
+RUN pip install /vtx/lab/aitextgen
 
 CMD ["python3", "main.py"]
 

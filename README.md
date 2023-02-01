@@ -29,6 +29,7 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 
 - http://localhost:6006
 - http://health.petals.ml/
+- [Cockpit](http://localhost:9667)
 
 # Mirrors
 

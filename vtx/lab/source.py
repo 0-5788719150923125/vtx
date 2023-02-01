@@ -37,7 +37,7 @@ async def subscribe(channel):
     deep = requests.get("http://ctx:9666/channel")
     state = json.loads(deep.text)
     print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + " " + state)
-    if random.randint(0, 100) <= 33:
+    if random.randint(0, 100) <= config["source"][channel]["chance"]:
         bias = get_identity()
         print(bc.CORE + "INK@CORE:" + bc.ENDC + " firing bullet " + str(bias))
         context = [

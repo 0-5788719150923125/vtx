@@ -4,7 +4,7 @@ mode:
 source:
   support:
     watch: True
-    chance: 33
+    chance: 3
 
 heart:
   info: never focus on the heart

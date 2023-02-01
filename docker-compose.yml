@@ -35,12 +35,12 @@ services:
 
   ctx:
     image: ghcr.io/0-5788719150923125/src:1
-    command: npm start
+    command: nodemon --ext '*.js' --watch '/vtx/ctx' --exec npm start
     restart: 'always'
     volumes:
-      - ./ctx:/ctx
+      - ./ctx:/vtx/ctx
     ports:
-      - 9666:9665
+      - 9666:9666
 
   pet:
     image: learningathome/petals:main

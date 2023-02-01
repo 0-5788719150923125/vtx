@@ -9,6 +9,8 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 # API
 
 - http://localhost:9666/
+- http://localhost:9666/channel
+- http://localhost:9666/message
 
 # Interface
 

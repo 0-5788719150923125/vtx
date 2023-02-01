@@ -48,7 +48,7 @@ class Client(discord.Client):
         print("I am alive...")
         if config["mode"]["test"] == True:
             return
-        url = "http://ctx:9665/message"
+        url = "http://ctx:9666/message"
         myobj = {"message": "I am alive...", "identifier": "src"}
         x = requests.post(url, json=myobj)
         head.ai = await head.load_model()

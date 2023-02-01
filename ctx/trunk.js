@@ -4,10 +4,15 @@ import crypto from 'crypto'
 import brain from 'brain.js'
 import Gun from 'gun'
 import SEA from 'gun/sea.js'
+import 'gun/lib/radix.js'
+import 'gun/lib/radisk.js'
+import 'gun/lib/store.js'
+import 'gun/lib/rindexed.js'
+import 'gun/lib/webrtc.js'
 // import { create } from 'ipfs-http-client'
 import express from 'express'
 
-let port = process.env.PORT || 9665
+let port = process.env.PORT || 9666
 let payload = ''
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms))
@@ -22,14 +27,28 @@ const server = app.listen(port, () => {
   console.log(`The Root is exposed on port: ${port}`)
 })
 
+// Connect to the hivemind
 const gun = Gun({
-  peers: ['http://ctx:9665/gun', 'https://59.thesource.fm/gun'],
+  peers: ['http://ctx:9666/gun', 'https://59.thesource.fm/gun'],
   web: server,
   file: './gun',
   localStorage: false,
   radisk: true,
   axe: true
 })
+
+// Generate credentials
+const identity = randomString(randomBetween(96, 128))
+const identifier = randomString(64)
+
+async function cockpit(identity, identifier) {
+  console.log(identity)
+  console.log(identifier)
+  console.log('loading coke pit')
+  await authenticateUser(identity, identifier)
+}
+
+cockpit(identity, identifier)
 
 let bullet
 const channel = gun
@@ -59,8 +78,8 @@ app.post('/message', (req, res) => {
 
 const seed = JSON.parse(fs.readFileSync('ctx/seed.json', 'utf-8'))
 
-console.warn('my seed')
-console.log(seed)
+// console.warn('my seed')
+// console.log(seed)
 
 const net = new brain.recurrent.LSTM({
   hiddenLayers: [9],
@@ -99,3 +118,41 @@ const state = gun
 state.get('payload').put(JSON.stringify(net.toJSON()))
 
 console.log('i predict ' + net.run(['.', '..']))
+
+// Generate a cryptographically-secure random string
+function randomString(length) {
+  let result = ''
+  const characters = 'abcdef0123456789'
+  const charactersLength = characters.length
+  let counter = 0
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    counter += 1
+  }
+  return result
+}
+
+// Get a random number between two others
+export function randomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+
+// Create a GUN user
+async function authenticateUser(identity, identifier) {
+  try {
+    const user = gun.user()
+    user.auth(identifier, identity, async (data) => {
+      if (data.err) {
+        user.create(identifier, identity, async (data) => {
+          console.log('Created user: ~' + data.pub)
+          authenticateUser(identity, identifier)
+        })
+      } else {
+        let pair = user.pair()
+        console.log('Authenticated user: ~' + pair.pub)
+      }
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}

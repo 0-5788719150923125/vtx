@@ -23,6 +23,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
+      - ./gen:/gen
       - ./lab:/lab
       - ./vtx:/vtx
       - ./ctx:/ctx

@@ -1,6 +1,7 @@
 .env
 /vtx/aitextgen*
 __pycache__
+gen/*
 input*.txt*
 lab/discord
 lab/logs

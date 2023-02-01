@@ -50,11 +50,11 @@ def fetch_from_discord():
         if config["discord"]["use_self_token"] == True:
             discord_token = os.environ["SELFTOKEN"]
 
-    if not os.path.exists("/lab/raw/discord"):
-        os.makedirs("/lab/raw/discord")
+    if not os.path.exists("/gen/discord"):
+        os.makedirs("/gen/discord")
 
     if config["discord"]["export_dms"] == True:
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/lab/raw/discord" -f "JSON"'
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord" -f "JSON"'
         os.system(command)
 
     for server in config["discord"]["servers"]:
@@ -64,7 +64,7 @@ def fetch_from_discord():
         if skip == True:
             continue
 
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server}" -t "{discord_token}" -o "/lab/raw/discord" -f "JSON"'
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server}" -t "{discord_token}" -o "/gen/discord" -f "JSON"'
         if "before" in server:
             command.join(" --before " + server["before"])
         if "after" in server:
@@ -82,9 +82,9 @@ def prepare_discord_messages():
     os.makedirs("/lab/discord")
 
     print("preparing Discord messages")
-    for filename in os.listdir("/lab/raw/discord"):
+    for filename in os.listdir("/gen/discord"):
         try:
-            with open(os.path.join("/lab/raw/discord", filename), "r") as file:
+            with open(os.path.join("/gen/discord", filename), "r") as file:
                 data = json.load(file)
 
                 for i in data["messages"]:

@@ -30,7 +30,7 @@ model_folder = "gpt/models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
 logger = loggers.TensorBoardLogger(
-    "/lab/logs", name=focus, version=model["version"], default_hp_metric=False
+    "/gen/logs", name=focus, version=model["version"], default_hp_metric=False
 )
 
 
@@ -132,8 +132,8 @@ if __name__ == "__main__":
     if os.path.exists("/lab/intermediate"):
         shutil.rmtree("/lab/intermediate")
 
-    if os.path.exists("/lab/logs/" + focus):
-        shutil.rmtree("/lab/logs/" + focus)
+    if os.path.exists("/gen/logs/" + focus):
+        shutil.rmtree("/gen/logs/" + focus)
 
     merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])
 

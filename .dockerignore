@@ -6,3 +6,6 @@ node_modules
 vtx/__pycache__
 vtx/aitextgen
 vtx/gpt/*
+!lab/aitextgen
+!lab/journals
+!lab/pages

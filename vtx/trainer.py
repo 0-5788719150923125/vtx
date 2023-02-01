@@ -166,6 +166,7 @@ if __name__ == "__main__":
         to_gpu=to_gpu,
         gradient_checkpointing=True,
         padding_side="left",
+        cache_dir="gpt/models",
     )
 
     # Train the model

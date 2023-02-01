@@ -61,8 +61,6 @@ class Client(discord.Client):
 
     # randomly generate commentary
     async def think(self):
-        if config["mode"]["test"] == True:
-            return
         await self.wait_until_ready()
         while not self.is_closed():
             delay = random.randint(30, 10800)
@@ -139,9 +137,6 @@ class Client(discord.Client):
     async def on_message(self, message):
 
         reply = True
-
-        if config["mode"]["test"] == True:
-            return
 
         bias = 0
         output = "ERROR: Me Found."

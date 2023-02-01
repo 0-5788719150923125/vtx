@@ -71,6 +71,7 @@ def load_model(target=None):
         # tokenizer_file=tokenizer_file,
         tokenizer_file=None,
         to_gpu=model["to_gpu"],
+        cache_dir="gpt/models",
     )
 
     print("INFO: " + str(ai))

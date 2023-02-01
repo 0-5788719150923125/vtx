@@ -41,33 +41,46 @@ async def subscribe(subreddit):
         watch.append(subreddit)
 
     subreddit = await reddit.subreddit(subreddit, fetch=True)
+
+    # async for submission in subreddit.stream.submissions(skip_existing=True):
+    #     pprint.pprint(submission)
+
     async for comment in subreddit.stream.comments(skip_existing=True):
         await comment.submission.load()
         parent = await comment.parent()
         print(
-            subreddit.display_name
-            + ": "
-            + "\033[92m"
-            + comment.submission.title
+            "\033[92m"
+            + subreddit.display_name
             + "\033[0m"
+            + ship
+            + " "
+            + comment.submission.title
         )
+        parent_text = None
         if isinstance(parent, asyncpraw.models.Submission):
-            (
-                print(bc.FOLD + "=> " + bc.ENDC + str(parent.author))
-                + ": "
-                + str(parent.title)
-                + " | "
-                + str(parent.selftext)
-            )
+            parent_text = str(parent.title) + " => " + str(parent.selftext)
         else:
             await parent.load()
             await parent.refresh()
-            print(
-                bc.FOLD + "=> " + str(parent.author) + ": " + bc.ENDC + str(parent.body)
-            )
+            parent_text = str(parent.body)
+        print(
+            bc.FOLD
+            + "=> "
+            + str(parent.author)
+            + bc.ENDC
+            + ship
+            + " "
+            + parent_text[:66]
+        )
         await comment.load()
         print(
-            bc.FOLD + "==> " + str(comment.author) + ": " + bc.ENDC + str(comment.body)
+            bc.FOLD
+            + "==> "
+            + str(comment.author)
+            + bc.ENDC
+            + ship
+            + " "
+            + str(comment.body)
         )
 
         roll = random.randint(0, 100)
@@ -81,22 +94,21 @@ async def subscribe(subreddit):
         ctx = [
             propulsion + str(c) + ship + " " + "You are a chat bot.",
             propulsion + str(p) + ship + " " + "I am a chat bot.",
-            propulsion + str(p) + ship + " " + parent.body,
+            propulsion + str(p) + ship + " " + parent_text,
             propulsion + str(c) + ship + " " + comment.body,
         ]
-        print(bc.CORE + "<=== " + "LuciferianInk: " + bc.ENDC + "generating a response")
         response = await head.gen(bias=int(get_identity()), ctx=ctx)
-        print(bc.CORE + "<=== " + "LuciferianInk: " + bc.ENDC + response)
+        print(bc.CORE + "<=== " + "Ink" + bc.ENDC + ": " + response)
         try:
 
             group = re.search(r"(:?\*\")(.*)(:?\"\*)", response)
-            print(bc.ROOT + "<=== " + "LuciferianInk: " + bc.ENDC + group[2])
+            print(bc.ROOT + "<=== " + "Ink" + bc.ENDC + ": " + group[2])
             output = transformer(group[2])
             await comment.reply(output)
         except:
             output = transformer(response)
             await comment.reply(output)
-            print(bc.FOLD + "<=== " + "LuciferianInk: " + bc.ENDC + output)
+            print(bc.FOLD + "<=== " + "Ink" + bc.ENDC + ": " + output)
 
 
 # format the output

@@ -169,28 +169,32 @@ class Client(discord.Client):
             print(bc.CORE + "dj ent" + bc.ENDC)
             # increase probability of a response if bot is mentioned
             if client.user.mentioned_in(message):
-                print(bc.WARNING + "WARN: bot" + bc.ENDC)
                 weight = random.randint(
                     0, response_probability + (response_probability / 2)
                 )  ## 66%
                 bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
-                print(bc.WARNING + "WARN: agent" + bc.ENDC)
+                weight = random.randint(
+                    0, response_probability + (response_probability / 2)
+                )  ## 66%
                 bias = int(message.mentions[0].id)
 
         # increase response probability in private channels
         if str(message.channel.type) == "private":
             weight = 1
 
-        print("weight is " + str(weight))
+        print(
+            "weight is " + str(weight) + ", threshold is " + str(response_probability)
+        )
 
         # check weight before generating a response
         if weight > response_probability:
-            print(bc.WARNING + "ERROR: Too heavy." + bc.ENDC)
-            print("...")
+            print(".")
+            await asyncio.sleep(1)
             print("..")
-            print(bc.CORE + "." + bc.ENDC)
+            await asyncio.sleep(0.5)
+            print(bc.CORE + "..." + bc.ENDC)
             return
 
         # generate a response from context and bias
@@ -207,28 +211,29 @@ class Client(discord.Client):
 
         # output to console
         print(output)
-        print(bc.CORE + "." + bc.ENDC)
-        print(".")
+        print(bc.CORE + "..." + bc.ENDC)
+        await asyncio.sleep(1)
+        print("..")
+        await asyncio.sleep(0.5)
         print(bc.ROOT + "." + bc.ENDC)
+        await asyncio.sleep(2)
         print(bc.ROOT + "ok" + bc.ENDC)
 
         # async with message.channel.typing():
         #     time.sleep(10)
 
         try:
+            if len(output) > 2000:
+                output = output[:1997] + "..."
             if reply == True:
-                if len(output) > 2000:
-                    output = output[:1997] + "..."
                 await message.reply(output)
             else:
-                if len(output) > 2000:
-                    output = output[:1997] + "..."
                 await message.channel.send(output)
 
         except:
             print(bc.CORE + "Failed to send Discord message." + bc.ENDC)
             error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
-            await message.reply(error)
+            await message.channel.send(error)
 
 
 class bc:

@@ -65,8 +65,15 @@ services:
     ports:
       - 6006:6006
 
-  net:
-    image: tloncorp/urbit:latest
+  ship:
+    image: tloncorp/urbit:v1.14
+    command: /bin/urbit -t -c needle
+    restart: 'always'
+    # ulimits:
+    #   memlock: -1
+    #   stack: 67108864
+    # volumes:
+    #   - urbit:/urbit
     ports:
       - 9667:80
       - 34343:34343
@@ -78,3 +85,4 @@ services:
 
 volumes:
   pet:
+  # urbit:

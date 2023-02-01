@@ -13,8 +13,6 @@ import gc
 import yaml
 from mergedeep import merge, Strategy
 
-# import lab.petals
-
 with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 
@@ -25,7 +23,7 @@ try:
 except:
     config = default_config
 
-# holds the model
+# holds the model globally
 ai = None
 
 os.environ["LRU_CACHE_CAPACITY"] = "1"
@@ -35,7 +33,7 @@ focus = os.environ["FOCUS"]
 ship = ":>"
 propulsion = "¶"
 
-
+# Decorator to a blocking function into a background thread
 def to_thread(func: typing.Callable) -> typing.Coroutine:
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
@@ -44,6 +42,7 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
     return wrapper
 
 
+# Load the specified model
 @to_thread
 def load_model(target=None):
 
@@ -88,6 +87,7 @@ context = [
 ]
 
 
+# Build a local cache of global conversational state
 def build_context(message):
     if len(context) >= 9:
         context.pop(0)
@@ -96,6 +96,7 @@ def build_context(message):
         context.append(propulsion + message)
 
 
+# Generate a completion from bias and context
 @to_thread
 def gen(bias=None, ctx=None):
 

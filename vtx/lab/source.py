@@ -26,6 +26,7 @@ propulsion = "¶"
 ship = ":>"
 
 
+# Check the local GUN API for new messages
 async def subscribe(channel):
 
     chance = config["source"].get("chance", 33)
@@ -58,11 +59,7 @@ async def subscribe(channel):
     deep.close()
 
 
-def blocks(string):
-    for i in len(string):
-        pass
-
-
+# Generate a pseudo-identity, in the Discord ID format
 def get_identity():
     count = secrets.choice([18, 19])
     identity = "".join(secrets.choice("0123456789") for i in range(count))

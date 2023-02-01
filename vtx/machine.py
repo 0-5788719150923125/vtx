@@ -17,13 +17,12 @@ from functools import reduce
 from mergedeep import merge, Strategy
 import secrets
 import lab.reddit
-
-# import lab.twitter
+import threading
 import lab.source
 import lab.discord
 
+# import lab.twitter
 # import lab.petals
-import threading
 
 
 with open("/vtx/default.yml", "r") as config_file:
@@ -38,19 +37,14 @@ except:
     config = default_config
 
 
-async def background_task():
-    while True:
-        print("Background task running")
-        await asyncio.sleep(1)
-
-
 tasks = []
 
 
+# This is the main loop for the entire machine
 @asyncio.coroutine
 async def main(loop):
-    tasks = []
 
+    # Get configs, create tasks, and append to task queue
     if "source" in config:
         for channel in config["source"]:
             if "watch" in config["source"][channel]:
@@ -84,9 +78,11 @@ def loop_in_thread(loop):
     loop.run_until_complete(main(loop))
 
 
+# Start the main loop in a thread
 loop = asyncio.get_event_loop()
 t = threading.Thread(None, loop_in_thread, args=(loop,))
 t.start()
 
+# Run blocking services
 if "discord" in config:
     asyncio.run(lab.discord.subscribe())

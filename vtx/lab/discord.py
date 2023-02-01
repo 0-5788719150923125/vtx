@@ -37,8 +37,10 @@ propulsion = "¶"
 ship = ":>"
 
 
+# A class to control the entire Discord bot
 class Client(discord.Client):
 
+    # A variable that will block all actions until True
     thinking = False
 
     def __init__(self, *args, **kwargs):
@@ -46,12 +48,11 @@ class Client(discord.Client):
 
     async def on_ready(self):
         print("I am alive...")
-        if config["mode"]["test"] == True:
-            return
-        url = "http://ctx:9666/message"
-        myobj = {"message": "I am alive...", "identifier": "src"}
-        x = requests.post(url, json=myobj)
+
+        # Load the AI model at startup
         head.ai = await head.load_model()
+
+        # List all Discord servers on startup
         for guild in client.guilds:
             print("=> " + guild.name)
 
@@ -260,7 +261,7 @@ intents.message_content = True
 
 client = Client(intents=intents)
 
-
+# Subscribe to a Discord bot via token
 def subscribe():
     if "discord" in config:
         client.run(discord_token)

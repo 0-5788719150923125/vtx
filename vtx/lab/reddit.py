@@ -22,6 +22,7 @@ ship = ":>"
 propulsion = "¶"
 
 
+# Subscribe to a single subreddit
 async def subscribe(subreddit):
     reddit = asyncpraw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
@@ -110,6 +111,7 @@ def transformer(string):
     return random.choice(responses)
 
 
+# Generate a pseudo-identity, in the Discord ID format
 def get_identity():
     count = secrets.choice([18, 19])
     identity = "".join(secrets.choice("0123456789") for i in range(count))

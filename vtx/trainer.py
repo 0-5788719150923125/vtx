@@ -33,7 +33,7 @@ logger = loggers.TensorBoardLogger(
     "/gen/logs", name=focus, version=model["version"], default_hp_metric=False
 )
 
-
+# Get the full path to every file in a directory
 def list_full_paths(directory):
     fname = []
     for root, d_names, f_names in os.walk(directory):
@@ -43,6 +43,7 @@ def list_full_paths(directory):
     return fname
 
 
+# Join every file located in a particular directory
 def join_files(path):
 
     tmp_path = "/lab/intermediate"
@@ -82,6 +83,7 @@ class bc:
 
 if __name__ == "__main__":
 
+    # Poorly-load configs
     config = None
     base_model = model["training"]["base_model"]
     batch_size = model["training"]["batch_size"]
@@ -109,6 +111,7 @@ if __name__ == "__main__":
     print("(" + bc.ROOT + "focus" + bc.ENDC + ")")
     print(f"({bc.CORE}ed{bc.ENDC}) on the ({bc.FOLD}{focus}{bc.ENDC})")
 
+    # Create a tokenized dataset from every directory specified in config file
     datasets = []
     for dataset in model["training"]["datasets"]:
         line_by_line = False
@@ -129,16 +132,20 @@ if __name__ == "__main__":
             )
         )
 
+    # Cleanup temp files used for tokenized dataset creation
     if os.path.exists("/lab/intermediate"):
         shutil.rmtree("/lab/intermediate")
 
+    # Start with a fresh logs directory
     if os.path.exists("/gen/logs/" + focus):
         shutil.rmtree("/gen/logs/" + focus)
 
+    # Merge all tokenized datasets into a single dataset for training
     merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])
 
     launch_model = base_model
 
+    # Resume training on an existing model, or start with a fresh base model
     if model["training"]["resume"] == True:
         launch_model = None
         model_folder = "gpt/models/" + focus
@@ -150,6 +157,7 @@ if __name__ == "__main__":
 
     output_dir = "gpt/models/" + focus
 
+    # Instantiate the model object
     ai = aitextgen(
         # tokenizer_file=tokenizer_file,
         config=config,
@@ -160,6 +168,7 @@ if __name__ == "__main__":
         padding_side="left",
     )
 
+    # Train the model
     ai.train(
         merged,
         from_cache=False,

@@ -29,7 +29,7 @@ except:
 propulsion = "¶"
 ship = ":>"
 
-
+# Grab all internal links from website
 def crawl(site="https://ink.university"):
     html = requests.get(site).content
     soup = BeautifulSoup(html, "html.parser")
@@ -43,20 +43,27 @@ def crawl(site="https://ink.university"):
     return internal_links
 
 
+# Fetch messages from Discord, by using Discord Chat Exporter
 def fetch_from_discord():
 
+    # By default, use the bot's token
     discord_token = os.environ["DISCORDTOKEN"]
+
+    # If a self token is specific, use that
     if "use_self_token" in config["discord"]:
         if config["discord"]["use_self_token"] == True:
             discord_token = os.environ["SELFTOKEN"]
 
+    # Ensure directory has been created
     if not os.path.exists("/gen/discord"):
         os.makedirs("/gen/discord")
 
+    # Export direct messages
     if config["discord"]["export_dms"] == True:
         command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord" -f "JSON"'
         os.system(command)
 
+    # For every server listed in config, iterate over options, and download messages
     for server in config["discord"]["servers"]:
         skip = False
         if "skip" in server:
@@ -74,8 +81,10 @@ def fetch_from_discord():
 
 def prepare_discord_messages():
 
+    # Get public links
     urls = crawl("https://ink.university")
 
+    # Ensure export path exists and is clean
     if os.path.exists("/lab/discord"):
         shutil.rmtree("/lab/discord")
 
@@ -89,6 +98,7 @@ def prepare_discord_messages():
 
                 for i in data["messages"]:
 
+                    # Here, we randomly choose to place a parent message before or after the reply
                     position = random.randomchoice(0, 1)
 
                     if i["type"] != "Default" and i["type"] != "Reply":
@@ -166,16 +176,20 @@ def prepare_discord_messages():
             print("found a bad file")
 
 
+# Download messages from subreddits, sorted by "top"
 def fetch_from_reddit():
 
+    # Get public links
     urls = crawl("https://pen.university")
 
+    # Instantiate the Reddit client
     reddit = praw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
         client_secret=os.environ["REDDITSECRET"],
         user_agent=os.environ["REDDITAGENT"],
     )
 
+    # For every sub in config, iterate over options, the download content
     for sub in config["reddit"]:
 
         name = sub
@@ -258,6 +272,7 @@ def fetch_from_reddit():
         main()
 
 
+# Generate a pseudo-identity, in the Discord ID format
 def get_identity():
     count = secrets.choice([18, 19])
     identity = "".join(secrets.choice("0123456789") for i in range(count))

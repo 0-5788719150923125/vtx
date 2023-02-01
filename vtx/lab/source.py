@@ -34,7 +34,7 @@ async def subscribe(channel):
     if roll >= chance:
         return
 
-    deep = requests.get("http://ctx:9665/channel")
+    deep = requests.get("http://ctx:9666/channel")
     state = json.loads(deep.text)
     print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + " " + state)
     if random.randint(0, 100) <= 33:
@@ -44,7 +44,7 @@ async def subscribe(channel):
             propulsion + str(bias) + ship + " I am a chat bot named Penny.",
             propulsion + str(bias) + ship + " " + state,
         ]
-        url = "http://ctx:9665/message"
+        url = "http://ctx:9666/message"
         print("responding to source........")
         message = await head.gen(int(bias), context)
         print("responding to source...........")

@@ -29,7 +29,7 @@ const server = app.listen(port, () => {
 
 // Connect to the hivemind
 const gun = Gun({
-  peers: ['http://ctx:9666/gun', 'https://59.thesource.fm/gun'],
+  peers: ['http://ctx:9665/gun', 'https://59.thesource.fm/gun'],
   web: server,
   file: './gun',
   localStorage: false,
@@ -41,6 +41,7 @@ const gun = Gun({
 const identity = randomString(randomBetween(96, 128))
 const identifier = randomString(64)
 
+let user = null
 async function cockpit(identity, identifier) {
   console.log(identity)
   console.log(identifier)
@@ -68,18 +69,26 @@ app.get('/channel', (req, res) => {
 })
 
 app.use(express.json())
-app.post('/message', (req, res) => {
-  const { message, identifier, pubKey } = req.body
-  channel
-    .get('payload')
-    .put(JSON.stringify({ message, identifier, pubKey: null }))
-  res.json('ok')
+app.post('/message', async (req, res) => {
+  try {
+    const { message, identifier, pubKey } = req.body
+    if (user) {
+      message = await SEA.sign(message, pair)
+      pubKey = pair.pub
+    }
+    // if (opts.password !== false) message = encrypt(message, opts.password)
+    const payload = JSON.stringify({ identifier, message, pubKey })
+    // messageCache.push(payload)
+    await channel.get('payload').put(payload)
+    channel.get('payload').put(JSON.stringify({ message, identifier, pubKey }))
+    res.json('ok')
+  } catch {
+    console.error('failed to send a message')
+    res.json('ok')
+  }
 })
 
 const seed = JSON.parse(fs.readFileSync('ctx/seed.json', 'utf-8'))
-
-// console.warn('my seed')
-// console.log(seed)
 
 const net = new brain.recurrent.LSTM({
   hiddenLayers: [9],
@@ -140,16 +149,16 @@ export function randomBetween(min, max) {
 // Create a GUN user
 async function authenticateUser(identity, identifier) {
   try {
-    const user = gun.user()
+    user = gun.user()
     user.auth(identifier, identity, async (data) => {
       if (data.err) {
         user.create(identifier, identity, async (data) => {
-          console.log('Created user: ~' + data.pub)
+          console.log('Creating GUN user: ~' + data.pub)
           authenticateUser(identity, identifier)
         })
       } else {
         let pair = user.pair()
-        console.log('Authenticated user: ~' + pair.pub)
+        console.log('Authenticated GUN user: ~' + pair.pub)
       }
     })
   } catch (err) {

@@ -1,6 +1,6 @@
-*.mp4
 .env
 input.txt
+gen/
 lab/
 node_modules
 vtx/__pycache__

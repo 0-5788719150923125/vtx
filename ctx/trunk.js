@@ -1,6 +1,4 @@
 import fs from 'fs'
-import http from 'http'
-import crypto from 'crypto'
 import brain from 'brain.js'
 import Gun from 'gun'
 import SEA from 'gun/sea.js'
@@ -9,40 +7,41 @@ import 'gun/lib/radisk.js'
 import 'gun/lib/store.js'
 import 'gun/lib/rindexed.js'
 import 'gun/lib/webrtc.js'
-// import { create } from 'ipfs-http-client'
+import http from 'http'
 import express from 'express'
 
 let port = process.env.PORT || 9666
 let payload = ''
 
-const delay = (ms) => new Promise((res) => setTimeout(res, ms))
-
+// Start a web server
 const app = express()
 
+// Publish the brain at the root
 app.get('/', (req, res) => {
   res.send(payload)
 })
 
+// Expose the brain stem to a local API
 const server = app.listen(port, () => {
-  console.log(`The Root is exposed on port: ${port}`)
+  console.log(`The stem is exposed on port: ${port}`)
 })
 
 // Connect to the hivemind
 const gun = Gun({
-  // peers: ['http://ctx:9665/gun', 'https://59.thesource.fm/gun'],
-  peers: ['https://59.thesource.fm/gun'],
+  peers: ['http://ctx:9665/gun', 'https://59.thesource.fm/gun'],
   web: server,
-  file: './gun',
+  file: './hive',
   localStorage: false,
   radisk: true,
   axe: true
 })
 
 // Generate credentials
+let user = null
 const identity = randomString(randomBetween(96, 128))
 const identifier = randomString(64)
 
-let user = null
+// Authenticate with the cockpit
 async function cockpit(identity, identifier) {
   console.log('identity :> ' + identity)
   console.log('identifier :> ' + identifier)
@@ -52,6 +51,7 @@ async function cockpit(identity, identifier) {
 
 cockpit(identity, identifier)
 
+// Capture every message published at this channel
 let bullet
 const channel = gun
   .get('messaging')
@@ -65,34 +65,36 @@ const channel = gun
     } catch {}
   })
 
+// Publish every message at this route
 app.get('/channel', (req, res) => {
   res.json(bullet)
 })
 
+// Receive messages from vtx at this route
 app.use(express.json())
 app.post('/message', async (req, res) => {
   console.log('received a request at ctx')
   try {
+    // Destructure and sign message
     let { message, identifier, pubKey } = req.body
     if (user) {
       message = await SEA.sign(message, pair)
       pubKey = pair.pub
     }
-    // if (opts.password !== false) message = encrypt(message, opts.password)
+    // Send message to GUN
     const payload = JSON.stringify({ identifier, message, pubKey })
-    // messageCache.push(payload)
     await channel.get('payload').put(payload)
-    // channel.get('payload').put(JSON.stringify({ message, identifier, pubKey }))
-    res.json('ok')
   } catch (err) {
     console.error(err)
     console.error('failed to send a message')
-    res.json('ok')
   }
+  res.json('ok')
 })
 
+// Ingest a seed
 const seed = JSON.parse(fs.readFileSync('ctx/seed.json', 'utf-8'))
 
+// Instantiate the brain
 const net = new brain.recurrent.LSTM({
   hiddenLayers: [9],
   inputSize: 2,
@@ -104,6 +106,7 @@ const net = new brain.recurrent.LSTM({
 //   return array[Math.floor(Math.random() * array.length)]
 // }
 
+// Train the model on the seed
 net.train(seed, {
   errorThresh: 0.1,
   iterations: 10000,
@@ -113,6 +116,7 @@ net.train(seed, {
   logPeriod: 2000
 })
 
+// Publish brain updates to GUN
 const state = gun
   .get('brain')
   .get('state')
@@ -127,8 +131,10 @@ const state = gun
     }
   })
 
+// Place brain in GUN at startup
 state.get('payload').put(JSON.stringify(net.toJSON()))
 
+// LSTM prediction step
 console.log('i predict ' + net.run(['.', '..']))
 
 // Generate a cryptographically-secure random string
@@ -169,3 +175,6 @@ async function authenticateUser(identity, identifier) {
     console.error(err)
   }
 }
+
+// Delay by x number of milliseconds
+const delay = (ms) => new Promise((res) => setTimeout(res, ms))

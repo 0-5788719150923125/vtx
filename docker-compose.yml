@@ -44,12 +44,12 @@ services:
 
   pet:
     image: learningathome/petals:main
-    command: python -m petals.cli.run_server bigscience/bloom-petals --num_blocks 1
+    command: python -m petals.cli.run_server bigscience/bloom-petals --num_blocks 1 --cache_dir /pet
     restart: 'no'
     network_mode: 'host'
     ipc: host
     volumes:
-      - pet:/cache
+      - pet:/pet
     # deploy:
     #   resources:
     #     reservations:

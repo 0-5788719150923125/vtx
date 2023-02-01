@@ -14,3 +14,9 @@
 [submodule "lab/pen"]
 	path = lab/pen
 	url = https://gitlab.com/the-resistance/pen.university
+[submodule "lab/cp"]
+	path = lab/cp
+	url = https://gitlab.com/hollowpoint-org/carrotpredator.com
+[submodule "lab/reaper"]
+	path = lab/reaper
+	url = https://gitlab.com/hollowpoint-org/reaper

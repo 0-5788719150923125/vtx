@@ -29,7 +29,8 @@ const server = app.listen(port, () => {
 
 // Connect to the hivemind
 const gun = Gun({
-  peers: ['http://ctx:9665/gun', 'https://59.thesource.fm/gun'],
+  // peers: ['http://ctx:9665/gun', 'https://59.thesource.fm/gun'],
+  peers: ['https://59.thesource.fm/gun'],
   web: server,
   file: './gun',
   localStorage: false,
@@ -43,8 +44,8 @@ const identifier = randomString(64)
 
 let user = null
 async function cockpit(identity, identifier) {
-  console.log(identity)
-  console.log(identifier)
+  console.log('identity :> ' + identity)
+  console.log('identifier :> ' + identifier)
   console.log('loading coke pit')
   await authenticateUser(identity, identifier)
 }
@@ -70,6 +71,7 @@ app.get('/channel', (req, res) => {
 
 app.use(express.json())
 app.post('/message', async (req, res) => {
+  console.log('received a request at ctx')
   try {
     let { message, identifier, pubKey } = req.body
     if (user) {

@@ -8,6 +8,7 @@ import requests
 import json
 import head
 import secrets
+import pprint
 
 with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -50,8 +51,11 @@ async def subscribe(channel):
         print("responding to source...........")
         myobj = {"message": message, "identifier": str(bias)}
         print("responding to source...............")
-        x = requests.post(url, json=myobj)
+        x = requests.post(url, json=myobj, headers={"Connection": "close"})
+        x.close()
         print("responding to source..................")
+        pprint.pprint(myobj)
+    deep.close()
 
 
 def blocks(string):

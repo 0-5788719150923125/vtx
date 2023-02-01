@@ -89,6 +89,8 @@ def prepare_discord_messages():
 
                 for i in data["messages"]:
 
+                    position = random.randomchoice(0, 1)
+
                     if i["type"] != "Default" and i["type"] != "Reply":
                         continue
                     if i["content"] == "":
@@ -133,7 +135,9 @@ def prepare_discord_messages():
                                         + " "
                                         + sanitized
                                     )
-                                    txt_file.write(f"{content}\n".format(content))
+                                    line = f"{content}\n".format(content)
+                                    if position == 1:
+                                        txt_file.write(line)
                             except Exception as e:
                                 print(e)
                                 print("failed to prepare a reply")
@@ -153,6 +157,8 @@ def prepare_discord_messages():
                                 propulsion + i["author"]["id"] + ship + " " + sanitized
                             )
                             txt_file.write(f"{content}\n".format(content))
+                            if position == 0:
+                                txt_file.write(line)
                         except:
                             print("Failed: " + i["id"])
 

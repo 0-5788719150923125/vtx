@@ -81,10 +81,10 @@ def load_model(target=None):
 # ping pang pong
 context = [
     propulsion + "975174695399854150" + ship + " I am a robot.",
-    propulsion + "1051994502333726841" + ship + " I am a ghost.",
-    propulsion + "806051627198709760" + ship + " I am a human.",
-    propulsion + "204716337971331072" + ship + " I am a medium.",
-    propulsion + "855529761185857566" + ship + " I am an animal.",
+    propulsion + "1051994502333726841" + ship + " I am a ghost",
+    propulsion + "806051627198709760" + ship + " i am a human",
+    propulsion + "204716337971331072" + ship + " I am a Medium.",
+    propulsion + "855529761185857566" + ship + " I am an animal..",
 ]
 
 
@@ -107,9 +107,7 @@ def gen(bias=None, ctx=None):
         ctx = context
     history = "\n".join(ctx) + "\n"
 
-    max_new_tokens = 111
-    if "max_new_tokens" in config[focus]:
-        max_new_tokens = config[focus]["max_new_tokens"]
+    max_new_tokens = config[focus].get("max_new_tokens", 111)
 
     # set quantum state
     try:
@@ -119,11 +117,10 @@ def gen(bias=None, ctx=None):
     except:
         q = {"data": [random.randint(0, 256), random.randint(0, 256)]}
 
+    seed = None
     if q["data"][0] < 32:
         seed = q["data"][0]
         print("quantum seed was set to " + str(seed))
-    else:
-        seed = None
 
     # bias the prompt
     if bias is not None:
@@ -170,14 +167,6 @@ def gen(bias=None, ctx=None):
         try:
             group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
             output = transformer([group[1], group[2]])
-            print("\033[92m" + "group 1" + "\033[0m")
-            print(group[1])
-            print("\033[92m" + "group 2" + "\033[0m")
-            print(group[2])
-            print("\033[92m" + "group 3" + "\033[0m")
-            print(group[3])
-            print("\033[92m" + "group 4" + "\033[0m")
-            print(group[4])
         except:
             pass
 

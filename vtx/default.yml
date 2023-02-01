@@ -61,6 +61,7 @@ toe:
     num_layers_freeze: 7
     equalize_datasets: False
     datasets:
+      lab/aitextgen:
       lab/swarm:
       lab/source:
       lab/ink:

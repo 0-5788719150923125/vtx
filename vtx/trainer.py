@@ -59,10 +59,16 @@ def join_files(path):
     intermediate = open(intermediate_path, "a")
     for file in files:
         try:
+            # Skip file paths and extensions that we can't process
             if (
                 file.endswith(".bin")
                 or file.endswith(".pyc")
-                or file.startswith("/vtx/aitextgen")
+                or file.startswith(".git")
+                or file.startswith("/lab/reaper/logseq")
+                or file.startswith("/lab/reaper/assets")
+                or file.startswith("/lab/aitextgen/aitextgen/static")
+                or file.startswith("/vtx/gpt")
+                or file.startswith("/vtx/__pycache__")
             ):
                 continue
             with open(file, "r") as content:
@@ -114,6 +120,7 @@ if __name__ == "__main__":
     # Create a tokenized dataset from every directory specified in config file
     datasets = []
     for dataset in model["training"]["datasets"]:
+
         line_by_line = False
         if "line_by_line" in dataset:
             line_by_line = dataset["line_by_line"]

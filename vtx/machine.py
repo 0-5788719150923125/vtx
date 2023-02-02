@@ -78,7 +78,7 @@ def loop_in_thread(loop):
 
 # Start the main loop in a thread
 loop = asyncio.get_event_loop()
-t = threading.Thread(None, loop_in_thread, args=(loop,))
+t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
 t.start()
 
 # Run blocking services

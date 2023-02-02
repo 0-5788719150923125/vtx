@@ -79,11 +79,11 @@ reddit:
     limit: 50
     skip: True
     watch: True
-    chance: 1
+    chance: 0.1
   Kunism:
     limit: 500
     watch: True
-    chance: 50
+    chance: 0.5
 
 discord:
   use_self_token: True

@@ -32,7 +32,7 @@ async def subscribe(subreddit):
         password=os.environ["REDDITPASSWORD"],
     )
 
-    chance = config["reddit"][subreddit].get("chance", 33)
+    chance = config["reddit"][subreddit].get("chance", 0.01)
     watch = []
 
     if "watch" not in config["reddit"][subreddit]:
@@ -62,6 +62,8 @@ async def subscribe(subreddit):
         else:
             await parent.load()
             await parent.refresh()
+            if parent.author == os.environ["REDDITAGENT"]:
+                continue
             parent_text = str(parent.body)
         print(
             bc.FOLD
@@ -73,6 +75,8 @@ async def subscribe(subreddit):
             + parent_text[:66]
         )
         await comment.load()
+        if comment.author == os.environ["REDDITAGENT"]:
+            continue
         print(
             bc.FOLD
             + "==> "
@@ -83,7 +87,7 @@ async def subscribe(subreddit):
             + str(comment.body)
         )
 
-        roll = random.randint(0, 100)
+        roll = random.random()
 
         if roll >= chance:
             return

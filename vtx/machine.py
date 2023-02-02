@@ -4,10 +4,8 @@ import json
 import time
 import math
 import random
-import asyncio
 import head
 import yaml
-import praw, asyncpraw
 import functools
 import typing
 import asyncio

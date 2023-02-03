@@ -83,6 +83,7 @@ def prepare_discord_messages():
 
     # Get public links
     urls = crawl("https://ink.university")
+    random.shuffle(urls)
 
     # Ensure export path exists and is clean
     if os.path.exists("/lab/discord"):
@@ -184,6 +185,7 @@ def fetch_from_reddit():
 
     # Get public links
     urls = crawl("https://pen.university")
+    random.shuffle(urls)
 
     # Instantiate the Reddit client
     reddit = praw.Reddit(

@@ -65,27 +65,10 @@ async def subscribe(subreddit):
             if parent.author == os.environ["REDDITAGENT"]:
                 continue
             parent_text = str(parent.body)
-        print(
-            bc.FOLD
-            + "=> "
-            + str(parent.author)
-            + bc.ENDC
-            + ship
-            + " "
-            + parent_text[:66]
-        )
+
         await comment.load()
         if comment.author == os.environ["REDDITAGENT"]:
             continue
-        print(
-            bc.FOLD
-            + "==> "
-            + str(comment.author)
-            + bc.ENDC
-            + ship
-            + " "
-            + str(comment.body)
-        )
 
         roll = random.random()
 
@@ -102,6 +85,24 @@ async def subscribe(subreddit):
             propulsion + str(c) + ship + " " + comment.body,
         ]
         response = await head.gen(bias=int(get_identity()), ctx=ctx)
+        print(
+            bc.FOLD
+            + "=> "
+            + str(parent.author)
+            + bc.ENDC
+            + ship
+            + " "
+            + parent_text[:66]
+        )
+        print(
+            bc.FOLD
+            + "==> "
+            + str(comment.author)
+            + bc.ENDC
+            + ship
+            + " "
+            + str(comment.body)
+        )
         print(bc.CORE + "<=== " + "Ink" + bc.ENDC + ": " + response)
         try:
 

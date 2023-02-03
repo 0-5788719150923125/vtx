@@ -72,7 +72,7 @@ app.get('/channel', (req, res) => {
 // Receive messages from vtx at this route
 app.use(express.json())
 app.post('/message', async (req, res) => {
-  console.log('received a request at ctx')
+  console.log('pang')
   try {
     // Destructure and sign message
     let { message, identifier, pubKey } = req.body
@@ -86,6 +86,8 @@ app.post('/message', async (req, res) => {
   } catch (err) {
     console.error(err)
     console.error('failed to send a message')
+    console.log('trying to connect once again')
+    cockpit(identity, identifier)
   }
   res.json('ok')
 })

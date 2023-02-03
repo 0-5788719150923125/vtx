@@ -1,7 +1,7 @@
 source:
   support:
     watch: True
-    chance: 3
+    chance: 0.03
 
 heart:
   info: never focus on the heart

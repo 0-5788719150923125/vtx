@@ -81,7 +81,7 @@ async def subscribe(subreddit):
         roll = random.random()
 
         print("rolling reddit")
-        if roll <= chance:
+        if roll >= chance:
             return
 
         p = get_identity()

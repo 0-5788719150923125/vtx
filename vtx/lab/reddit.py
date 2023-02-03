@@ -22,6 +22,13 @@ ship = ":>"
 propulsion = "¶"
 
 
+class bc:
+    FOLD = "\033[94m"
+    ROOT = "\033[92m"
+    CORE = "\033[91m"
+    ENDC = "\033[0m"
+
+
 # Subscribe to a single subreddit
 async def subscribe(subreddit):
     reddit = asyncpraw.Reddit(
@@ -49,7 +56,7 @@ async def subscribe(subreddit):
         await comment.submission.load()
         parent = await comment.parent()
         print(
-            +bc.ROOT
+            bc.ROOT
             + "/r/"
             + subreddit.display_name
             + bc.ENDC
@@ -73,7 +80,8 @@ async def subscribe(subreddit):
 
         roll = random.random()
 
-        if roll >= chance:
+        print("rolling reddit")
+        if roll <= chance:
             return
 
         p = get_identity()
@@ -135,10 +143,3 @@ def get_identity():
     count = secrets.choice([18, 19])
     identity = "".join(secrets.choice("0123456789") for i in range(count))
     return identity
-
-
-class bc:
-    FOLD = "\033[94m"
-    ROOT = "\033[92m"
-    CORE = "\033[91m"
-    ENDC = "\033[0m"

@@ -69,11 +69,8 @@ services:
     image: tloncorp/urbit:v1.14
     command: /bin/urbit -t -c needle
     restart: 'always'
-    # ulimits:
-    #   memlock: -1
-    #   stack: 67108864
-    # volumes:
-    #   - urbit:/urbit
+    volumes:
+      - urbit:/urbit
     ports:
       - 9667:80
       - 34343:34343
@@ -82,7 +79,9 @@ services:
     image: ipfs/kubo:master-latest
     command: daemon --migrate=true --agent-version-suffix=docker --init-profile=lowpower --writable --enable-gc --enable-pubsub-experiment --enable-namesys-pubsub
     restart: 'always'
+    volumes:
+      - ./vtx:/vtx
 
 volumes:
   pet:
-  # urbit:
+  urbit:

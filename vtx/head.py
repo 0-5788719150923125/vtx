@@ -123,12 +123,12 @@ def gen(bias=None, ctx=None):
         seed = q["data"][0]
         print("quantum seed was set to " + str(seed))
 
-    print(bc.CORE + "INK@CORE: " + bc.ENDC + ship + " prompt")
+    print(bc.CORE + "INK@CORE " + bc.ENDC + ship + " prompt")
 
     # bias the prompt
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-            print(bc.CORE + "INK@CORE: " + bc.ENDC + "bias toward " + str(bias))
+            print(bc.CORE + "INK@CORE " + bc.ENDC + ship + " bias toward " + str(bias))
             prefixes = ["I", "You", ""]
             prompt = propulsion + str(bias) + ship + " " + random.choice(prefixes)
 

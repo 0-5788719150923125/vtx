@@ -21,6 +21,12 @@ import lab.discord
 
 # import lab.twitter
 # import lab.petals
+# from crontab import CronTab
+
+# cron = CronTab(user="crow")
+# job = cron.new(command="echo hello_world")
+# job.minute.every(1)
+# cron.write()
 
 
 with open("/vtx/default.yml", "r") as config_file:

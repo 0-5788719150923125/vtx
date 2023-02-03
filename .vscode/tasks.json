@@ -33,9 +33,9 @@
     },
     {
       "label": "exec",
-      "detail": "Open an interactive shell in the vtx container.",
+      "detail": "Open an interactive shell in the specified container.",
       "type": "shell",
-      "command": "docker-compose exec vtx /bin/sh"
+      "command": "docker-compose exec \"${input:ship}\" /bin/sh"
     },
     {
       "label": "build",
@@ -84,6 +84,12 @@
       "detail": "Stop the service in Docker.",
       "type": "shell",
       "command": "docker-compose down --remove-orphans"
+    },
+    {
+      "label": "save",
+      "detail": "Send your models into the VTX.",
+      "type": "shell",
+      "command": "docker-compose run ipfs add -r /vtx --pin=false --cid-version=1"
     }
   ],
   "inputs": [
@@ -103,6 +109,12 @@
         "i.prepare_discord_messages()",
         "i.fetch_from_discord()"
       ]
+    },
+    {
+      "type": "pickString",
+      "id": "ship",
+      "description": "Which ship should I enter?",
+      "options": ["vtx", "ctx", "pet", "pit", "ipfs", "ship"]
     }
   ]
 }

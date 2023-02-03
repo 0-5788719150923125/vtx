@@ -1,0 +1,201 @@
+\begin{thebibliography}{23}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Colton et~al.(2012)Colton, Goodwin, and Veale}]{colton2012}
+Simon Colton, Jacob Goodwin, and Tony Veale. 2012.
+\newblock \href
+  {http://computationalcreativity.net/iccc2012/wp-content/uploads/2012/05/095-Colton.pdf}
+  {Full-{FACE} poetry generation}.
+\newblock In \emph{Proceedings of the 3rd International Conference on
+  Computational Creativity}, pages 95--102.
+
+\bibitem[{Ebden and Sproat(2015)}]{ebden2015}
+Peter Ebden and Richard Sproat. 2015.
+\newblock \href {https://doi.org/10.1017/S1351324914000175} {The {Kestrel}
+  {TTS} text normalization system}.
+\newblock \emph{Natural Language Engineering}, 21(3):333--353.
+
+\bibitem[{Ghazvininejad et~al.(2016)Ghazvininejad, Shi, Choi, and
+  Knight}]{ghazvininejad2016}
+Marjan Ghazvininejad, Xing Shi, Yejin Choi, and Kevin Knight. 2016.
+\newblock \href {https://doi.org/10.18653/v1/D16-1126} {Generating topical
+  poetry}.
+\newblock In \emph{Proceedings of the 2016 Conference on Empirical Methods in
+  Natural Language Processing}, pages 1183--1191. Association for Computational
+  Linguistics.
+
+\bibitem[{Ghazvininejad et~al.(2017)Ghazvininejad, Shi, Priyadarshi, and
+  Knight}]{ghazvininejad2017}
+Marjan Ghazvininejad, Xing Shi, Jay Priyadarshi, and Kevin Knight. 2017.
+\newblock \href {http://aclweb.org/anthology/P17-4008} {Hafez: an interactive
+  poetry generation system}.
+\newblock In \emph{Proceedings of ACL 2017, System Demonstrations}, pages
+  43--48. Association for Computational Linguistics.
+
+\bibitem[{Gon{\c{c}}alo~Oliveira(2012)}]{oliveira2012}
+Hugo Gon{\c{c}}alo~Oliveira. 2012.
+\newblock \href
+  {https://eden.dei.uc.pt/~hroliv/pubs/GoncaloOliveira2012_c3gi_CRC.pdf}
+  {{PoeTryMe}: A versatile platform for poetry generation}.
+\newblock In \emph{Proceedings of the ECAI 2012 Workshop on Computational
+  Creativity, Concept Invention, and General Intelligence}.
+
+\bibitem[{Gon{\c{c}}alo~Oliveira(2017)}]{oliveira2017}
+Hugo Gon{\c{c}}alo~Oliveira. 2017.
+\newblock \href {https://doi.org/10.18653/v1/W17-3502} {A survey on intelligent
+  poetry generation: Languages, features, techniques, reutilisation and
+  evaluation}.
+\newblock In \emph{Proceedings of the 10th International Conference on Natural
+  Language Generation}, pages 11--20. Association for Computational
+  Linguistics.
+
+\bibitem[{Gon{\c{c}}alo~Oliveira et~al.(2017)Gon{\c{c}}alo~Oliveira, Mendes,
+  and Boavida}]{oliveira17b}
+Hugo Gon{\c{c}}alo~Oliveira, Tiago Mendes, and Ana Boavida. 2017.
+\newblock \href {https://doi.org/10.18653/v1/W17-3508} {Co-{P}oe{T}ry{M}e: a
+  co-creative interface for the composition of poetry}.
+\newblock In \emph{Proceedings of the 10th International Conference on Natural
+  Language Generation}, pages 70--71, Santiago de Compostela, Spain.
+  Association for Computational Linguistics.
+
+\bibitem[{Guo et~al.(2016)Guo, Kumar, Choromanski, and Simcha}]{guo2016}
+Ruiqi Guo, Sanjiv Kumar, Krzysztof Choromanski, and David Simcha. 2016.
+\newblock \href {http://proceedings.mlr.press/v51/guo16a.html} {Quantization
+  based fast inner product search}.
+\newblock In \emph{Proceedings of the 19th International Conference on
+  Artificial Intelligence and Statistics}, volume~51 of \emph{Proceedings of
+  Machine Learning Research}, pages 482--490, Cadiz, Spain. PMLR.
+
+\bibitem[{Henderson et~al.(2017)Henderson, Al{-}Rfou, Strope, Sung,
+  Luk{\'{a}}cs, Guo, Kumar, Miklos, and Kurzweil}]{henderson2017}
+Matthew Henderson, Rami Al{-}Rfou, Brian Strope, Yun{-}Hsuan Sung,
+  L{\'{a}}szl{\'{o}} Luk{\'{a}}cs, Ruiqi Guo, Sanjiv Kumar, Balint Miklos, and
+  Ray Kurzweil. 2017.
+\newblock \href {http://arxiv.org/abs/1705.00652} {Efficient natural language
+  response suggestion for smart reply}.
+\newblock \emph{CoRR}, abs/1705.00652.
+
+\bibitem[{Hirjee and Brown(2010)}]{hirjee2010}
+Hussein Hirjee and Daniel Brown. 2010.
+\newblock Using automated rhyme detection to characterize rhyming style in rap
+  music.
+\newblock \emph{Empirical Musicology Review}.
+
+\bibitem[{Hopkins and Kiela(2017)}]{hopkins2017}
+Jack Hopkins and Douwe Kiela. 2017.
+\newblock \href {https://doi.org/10.18653/v1/P17-1016} {Automatically
+  generating rhythmic verse with neural networks}.
+\newblock In \emph{Proceedings of the 55th Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 168--178.
+  Association for Computational Linguistics.
+
+\bibitem[{Kudo and Richardson(2018)}]{kudo2018}
+Taku Kudo and John Richardson. 2018.
+\newblock \href {https://doi.org/10.18653/v1/D18-2012} {{S}entence{P}iece: A
+  simple and language independent subword tokenizer and detokenizer for neural
+  text processing}.
+\newblock In \emph{Proceedings of the 2018 Conference on Empirical Methods in
+  Natural Language Processing: System Demonstrations}, pages 66--71, Brussels,
+  Belgium. Association for Computational Linguistics.
+
+\bibitem[{Lau et~al.(2018)Lau, Cohn, Baldwin, Brooke, and Hammond}]{lau2018}
+Jey~Han Lau, Trevor Cohn, Timothy Baldwin, Julian Brooke, and Adam Hammond.
+  2018.
+\newblock \href {http://aclweb.org/anthology/P18-1181} {Deep-speare: A joint
+  neural model of poetic language, meter and rhyme}.
+\newblock In \emph{Proceedings of the 56th Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 1948--1958.
+  Association for Computational Linguistics.
+
+\bibitem[{Liao et~al.(2019)Liao, Wang, Liu, and Jiang}]{liao19}
+Yi~Liao, Yasheng Wang, Qun Liu, and Xin Jiang. 2019.
+\newblock \href {http://arxiv.org/abs/1907.00151} {{GPT}-based generation for
+  classical chinese poetry}.
+\newblock \emph{CoRR}, abs/1907.00151.
+
+\bibitem[{Malmi et~al.(2016)Malmi, Takala, Toivonen, Raiko, and
+  Gionis}]{malmi2016}
+Eric Malmi, Pyry Takala, Hannu Toivonen, Tapani Raiko, and Aristides Gionis.
+  2016.
+\newblock \href {https://doi.org/10.1145/2939672.2939679} {{DopeLearning}: A
+  computational approach to rap lyrics generation}.
+\newblock In \emph{Proceedings of the 22nd ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, KDD '16, pages 195--204, New York,
+  NY, USA. ACM.
+
+\bibitem[{Riley et~al.(2021)Riley, Constant, Guo, Kumar, Uthus, and
+  Parekh}]{riley20}
+Parker Riley, Noah Constant, Mandy Guo, Girish Kumar, David Uthus, and Zarana
+  Parekh. 2021.
+\newblock \href {https://doi.org/10.18653/v1/2021.acl-long.293} {{T}ext{SETTR}:
+  Few-shot text style extraction and tunable targeted restyling}.
+\newblock In \emph{Proceedings of the 59th Annual Meeting of the Association
+  for Computational Linguistics and the 11th International Joint Conference on
+  Natural Language Processing (Volume 1: Long Papers)}, pages 3786--3800,
+  Online. Association for Computational Linguistics.
+
+\bibitem[{Sheng and Uthus(2020)}]{sheng20}
+Emily Sheng and David Uthus. 2020.
+\newblock \href {https://aclanthology.org/2020.gebnlp-1.9} {Investigating
+  societal biases in a poetry composition system}.
+\newblock In \emph{Proceedings of the Second Workshop on Gender Bias in Natural
+  Language Processing}, pages 93--106, Barcelona, Spain (Online). Association
+  for Computational Linguistics.
+
+\bibitem[{{Van de Cruys}(2020)}]{vandecruys20}
+Tim {Van de Cruys}. 2020.
+\newblock \href {https://doi.org/10.18653/v1/2020.acl-main.223} {Automatic
+  poetry generation from prosaic text}.
+\newblock In \emph{Proceedings of the 58th Annual Meeting of the Association
+  for Computational Linguistics}, pages 2471--2480, Online. Association for
+  Computational Linguistics.
+
+\bibitem[{Vaswani et~al.(2017)Vaswani, Shazeer, Parmar, Uszkoreit, Jones,
+  Gomez, Kaiser, and Polosukhin}]{vaswani2017}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N. Gomez, {\L}ukasz Kaiser, and Illia Polosukhin. 2017.
+\newblock \href
+  {http://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf} {Attention
+  is all you need}.
+\newblock In I.~Guyon, U.~V. Luxburg, S.~Bengio, H.~Wallach, R.~Fergus,
+  S.~Vishwanathan, and R.~Garnett, editors, \emph{Advances in Neural
+  Information Processing Systems 30}, pages 5998--6008. Curran Associates, Inc.
+
+\bibitem[{Wu et~al.(2017)Wu, Guo, Suresh, Kumar, Holtmann-Rice, Simcha, and
+  Yu}]{wu2017}
+Xiang Wu, Ruiqi Guo, Ananda~Theertha Suresh, Sanjiv Kumar, Daniel~N
+  Holtmann-Rice, David Simcha, and Felix Yu. 2017.
+\newblock \href
+  {http://papers.nips.cc/paper/7157-multiscale-quantization-for-fast-similarity-search.pdf}
+  {Multiscale quantization for fast similarity search}.
+\newblock In I.~Guyon, U.~V. Luxburg, S.~Bengio, H.~Wallach, R.~Fergus,
+  S.~Vishwanathan, and R.~Garnett, editors, \emph{Advances in Neural
+  Information Processing Systems 30}, pages 5745--5755. Curran Associates, Inc.
+
+\bibitem[{Yi et~al.(2018)Yi, Sun, Li, and Li}]{yi2018}
+Xiaoyuan Yi, Maosong Sun, Ruoyu Li, and Wenhao Li. 2018.
+\newblock \href {https://www.aclweb.org/anthology/D18-1353} {Automatic poetry
+  generation with mutual reinforcement learning}.
+\newblock In \emph{Proceedings of the 2018 Conference on Empirical Methods in
+  Natural Language Processing}, pages 3143--3153, Brussels, Belgium.
+  Association for Computational Linguistics.
+
+\bibitem[{Zhang and Lapata(2014)}]{zhang2014}
+Xingxing Zhang and Mirella Lapata. 2014.
+\newblock \href {https://doi.org/10.3115/v1/D14-1074} {{C}hinese poetry
+  generation with recurrent neural networks}.
+\newblock In \emph{Proceedings of the 2014 Conference on Empirical Methods in
+  Natural Language Processing ({EMNLP})}, pages 670--680, Doha, Qatar.
+  Association for Computational Linguistics.
+
+\bibitem[{Zhipeng et~al.(2019)Zhipeng, Yi, Sun, Li, Yang, Liang, Chen, Zhang,
+  and Li}]{zhipeng2019}
+Guo Zhipeng, Xiaoyuan Yi, Maosong Sun, Wenhao Li, Cheng Yang, Jiannan Liang,
+  Huimin Chen, Yuhui Zhang, and Ruoyu Li. 2019.
+\newblock \href {https://www.aclweb.org/anthology/P19-3005} {{J}iuge: A
+  human-machine collaborative {C}hinese classical poetry generation system}.
+\newblock In \emph{Proceedings of the 57th Annual Meeting of the Association
+  for Computational Linguistics: System Demonstrations}, pages 25--30,
+  Florence, Italy. Association for Computational Linguistics.
+
+\end{thebibliography}

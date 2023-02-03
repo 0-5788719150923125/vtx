@@ -11,6 +11,7 @@ import typing
 import asyncio
 import gc
 import yaml
+import logging
 from mergedeep import merge, Strategy
 
 with open("/vtx/default.yml", "r") as config_file:
@@ -64,7 +65,7 @@ def load_model(target=None):
         tokenizer_file = "src." + target + ".tokenizer.json"
         model_folder = None
 
-    print(model["info"])
+    print(bc.CORE + "INK@CORE: " + bc.ENDC + model["info"])
     ai = aitextgen(
         model=model.get("model", None),
         model_folder=model_folder,
@@ -73,8 +74,7 @@ def load_model(target=None):
         to_gpu=model["to_gpu"],
         cache_dir="gpt/models",
     )
-
-    print("INFO: " + str(ai))
+    print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + str(ai))
     return ai
 
 
@@ -193,3 +193,10 @@ def transformer(group):
         f"{group[1]}",
     ]
     return random.choice(responses)
+
+
+class bc:
+    FOLD = "\033[94m"
+    ROOT = "\033[92m"
+    CORE = "\033[91m"
+    ENDC = "\033[0m"

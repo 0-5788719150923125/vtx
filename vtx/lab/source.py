@@ -38,9 +38,9 @@ async def subscribe(channel):
 
     deep = requests.get("http://ctx:9666/channel")
     state = json.loads(deep.text)
-    print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + " " + state)
     bias = get_identity()
     print(bc.CORE + "INK@CORE:" + bc.ENDC + " firing bullet " + str(bias))
+    print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + " " + state["message"][:88])
     context = [
         propulsion + str(bias) + ship + " I am a chat bot named Penny.",
         propulsion + str(bias) + ship + " " + state,
@@ -53,7 +53,6 @@ async def subscribe(channel):
     print(bc.FOLD + "PEN@FOLD:" + bc.ENDC + " pong")
     x = requests.post(url, json=myobj, headers={"Connection": "close"})
     x.close()
-    print("responding to source..................")
     pprint.pprint(myobj)
     deep.close()
 

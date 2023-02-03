@@ -47,13 +47,12 @@ class Client(discord.Client):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
-        print("I am alive...")
 
         # Load the AI model at startup
         head.ai = await head.load_model()
 
         # List all Discord servers on startup
-        print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + "connecting to Discord")
+        print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + "connected to Discord")
         for guild in client.guilds:
             print("=> " + guild.name)
 
@@ -156,7 +155,7 @@ class Client(discord.Client):
         # generate responses
         print(bc.ROOT + "head" + bc.ENDC)
         if "gen" in message.content:
-            print(bc.ROOT + "heads" + bc.ENDC)
+            print(bc.FOLD + "dj ent" + bc.ENDC)
             weight = 1
             bias = 530243004334604311
             reply = False
@@ -167,7 +166,7 @@ class Client(discord.Client):
                 pass
         else:
             weight = random.randint(0, 100)
-            print(bc.CORE + "dj ent" + bc.ENDC)
+            print(bc.FOLD + "heads" + bc.ENDC)
             # increase probability of a response if bot is mentioned
             if client.user.mentioned_in(message):
                 weight = random.randint(
@@ -200,7 +199,7 @@ class Client(discord.Client):
         await asyncio.sleep(random.randint(2, 13))
         async with message.channel.typing():
             output = await head.gen(bias)
-        print(bc.ROOT + "output" + bc.ENDC)
+        print(bc.FOLD + "output" + bc.ENDC)
 
         # make random redactions
         if random.randint(0, 100) <= redacted_chance:

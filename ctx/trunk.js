@@ -132,7 +132,7 @@ const state = gun
 state.get('payload').put(JSON.stringify(net.toJSON()))
 
 // LSTM prediction step
-console.log('i predict ' + net.run(['.', '..']))
+console.log(`PEN@FOLD: ` + 'i predict ' + net.run(['.', '..']))
 
 // Generate a cryptographically-secure random string
 function randomString(length) {

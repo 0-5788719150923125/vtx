@@ -49,9 +49,10 @@ async def subscribe(subreddit):
         await comment.submission.load()
         parent = await comment.parent()
         print(
-            "\033[92m"
+            +bc.ROOT
+            + "/r/"
             + subreddit.display_name
-            + "\033[0m"
+            + bc.ENDC
             + ship
             + " "
             + comment.submission.title

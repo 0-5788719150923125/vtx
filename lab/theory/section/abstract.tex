@@ -1,0 +1,7 @@
+Transformer-based speech recognition models have achieved great success due to the self-attention (SA) mechanism that utilizes every frame in the feature extraction process.
+Especially, SA heads in lower layers capture various phonetic characteristics by the query-key dot product, which is designed to compute the pairwise relationship between frames.
+In this paper, we propose a variant of SA to extract more representative phonetic features.
+The proposed phonetic self-attention (phSA) is composed of two different types of phonetic attention; one is similarity-based and the other is content-based.
+In short, similarity-based attention captures the correlation between frames while content-based attention only considers each frame without being affected by other frames.
+We identify which parts of the original dot product equation are related to two different attention patterns and improve each part with simple modifications.
+Our experiments on phoneme classification and speech recognition show that replacing SA with phSA for lower layers improves the recognition performance without increasing the latency and the parameter size.

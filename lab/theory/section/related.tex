@@ -1,0 +1,17 @@
+% ======================================================================================== %
+\section{Related Work}\label{sec:related}
+% ======================================================================================== %
+
+Architectural modifications for Transformer-based ASR models have been of great interest.
+Many works focus on reducing the heavy computational cost caused by SA~\cite{efficient-conformer, sparse-conformer, simplified-sa, synthesizer}.
+For example, Efficient Conformer~\cite{efficient-conformer} proposed grouped SA and downsampling block to shorten the length of the sequence to be processed.
+Our work is very distinct from previous works in two points.
+First, phSA is designed to enhance the quality of intermediate feature representation, therefore improving the recognition performance.
+Second, only a lower part of the model is changed to phSA so that the model utilizes two different types of self-attention mechanisms together.
+
+Pretraining-based approaches have been proven effective in improving the ability to capture useful phonetic information for various downstream tasks.
+For example, Wav2Vec2.0~\cite{wav2vec2}, XLSR~\cite{xlsr}, TERA~\cite{tera}, and ACPC~\cite{acpc} presented various self-supervised speech pretraining methods and showed that phonologically meaningful features can be captured while learning the general characteristics of speech.
+However, these models use identical Transformer architecture for every layer without considering the different behaviors of each.
+Explicit pretraining objectives have also been introduced for learning the useful phonetic features during pretraining.
+For example, UniSpeech~\cite{unispeech} and BERTphone~\cite{ling2020bertphone} exploited CTC loss using phoneme sequence as label.
+The drawback of the abovementioned studies is that they require an additional pretraining stage before finetuning the model for ASR.

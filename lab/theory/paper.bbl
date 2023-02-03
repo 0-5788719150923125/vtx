@@ -1,0 +1,631 @@
+\begin{thebibliography}{81}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Ardila et~al.(2020)Ardila, Branson, Davis, Kohler, Meyer, Henretty,
+  Morais, Saunders, Tyers, and Weber}]{ardila2019common}
+Rosana Ardila, Megan Branson, Kelly Davis, Michael Kohler, Josh Meyer, Michael
+  Henretty, Reuben Morais, Lindsay Saunders, Francis Tyers, and Gregor Weber.
+  2020.
+\newblock \href {https://aclanthology.org/2020.lrec-1.520} {Common voice: A
+  massively-multilingual speech corpus}.
+\newblock In \emph{Proceedings of the 12th Language Resources and Evaluation
+  Conference}, pages 4218--4222, Marseille, France. European Language Resources
+  Association.
+
+\bibitem[{Asher and García(1969)}]{asher1969optimal}
+James~J. Asher and Ramiro García. 1969.
+\newblock \href {http://www.jstor.org/stable/323026} {The optimal age to learn
+  a foreign language}.
+\newblock \emph{The Modern Language Journal}, 53(5):334--341.
+
+\bibitem[{Babu et~al.(2021)Babu, Wang, Tjandra, Lakhotia, Xu, Goyal, Singh, von
+  Platen, Saraf, Pino, Baevski, Conneau, and Auli}]{babu2021xlsr}
+Arun Babu, Changhan Wang, Andros Tjandra, Kushal Lakhotia, Qiantong Xu, Naman
+  Goyal, Kritika Singh, Patrick von Platen, Yatharth Saraf, Juan Pino, Alexei
+  Baevski, Alexis Conneau, and Michael Auli. 2021.
+\newblock \href {http://arxiv.org/abs/2111.09296} {{XLS-R: Self-supervised
+  Cross-lingual Speech Representation Learning at Scale}}.
+
+\bibitem[{Baevski et~al.(2020{\natexlab{a}})Baevski, Schneider, and
+  Auli}]{baevski2019vq}
+Alexei Baevski, Steffen Schneider, and Michael Auli. 2020{\natexlab{a}}.
+\newblock \href {http://arxiv.org/abs/1910.05453} {vq-wav2vec: Self-supervised
+  learning of discrete speech representations}.
+
+\bibitem[{Baevski et~al.(2020{\natexlab{b}})Baevski, Zhou, Mohamed, and
+  Auli}]{baevski2020wav2vec}
+Alexei Baevski, Yuhao Zhou, Abdelrahman Mohamed, and Michael Auli.
+  2020{\natexlab{b}}.
+\newblock \href
+  {https://proceedings.neurips.cc/paper/2020/file/92d1e1eb1cd6f9fba3227870bb6d7f07-Paper.pdf}
+  {wav2vec 2.0: A framework for self-supervised learning of speech
+  representations}.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~33, pages 12449--12460. Curran Associates, Inc.
+
+\bibitem[{Bartelds et~al.(2020)Bartelds, Richter, Liberman, and
+  Wieling}]{acoustic-measure}
+Martijn Bartelds, Caitlin Richter, Mark Liberman, and Martijn Wieling. 2020.
+\newblock \href {https://doi.org/10.3389/frai.2020.00039} {A new acoustic-based
+  pronunciation distance measure}.
+\newblock \emph{Frontiers in Artificial Intelligence}, 3:39.
+
+\bibitem[{Blodgett et~al.(2016)Blodgett, Green, and
+  O{'}Connor}]{blodgett2016demographic}
+Su~Lin Blodgett, Lisa Green, and Brendan O{'}Connor. 2016.
+\newblock \href {https://doi.org/10.18653/v1/D16-1120} {Demographic dialectal
+  variation in social media: A case study of {A}frican-{A}merican {E}nglish}.
+\newblock In \emph{Proceedings of the 2016 Conference on Empirical Methods in
+  Natural Language Processing}, pages 1119--1130, Austin, Texas. Association
+  for Computational Linguistics.
+
+\bibitem[{Boberg(2010)}]{boberg2010english}
+Charles Boberg. 2010.
+\newblock \href {https://doi.org/10.1017/CBO9780511781056} {\emph{The English
+  Language in Canada: Status, History and Comparative Analysis}}.
+\newblock Studies in English Language. Cambridge University Press.
+
+\bibitem[{Bucholtz(2007)}]{bucholtz2007variation}
+Mary Bucholtz. 2007.
+\newblock \href {http://www.jstor.org/stable/24049459} {Variation in
+  transcription}.
+\newblock \emph{Discourse Studies}, 9(6):784--808.
+
+\bibitem[{Chen et~al.(2016)Chen, Wee, Tong, Ma, and Li}]{chen2016large}
+Nancy~F. Chen, Darren Wee, Rong Tong, Bin Ma, and Haizhou Li. 2016.
+\newblock \href {https://doi.org/https://doi.org/10.1016/j.specom.2016.07.005}
+  {Large-scale characterization of non-native mandarin chinese spoken by
+  speakers of european origin: Analysis on icall}.
+\newblock \emph{Speech Communication}, 84:46--56.
+
+\bibitem[{Church and Hanks(1990)}]{church1990word}
+Kenneth~Ward Church and Patrick Hanks. 1990.
+\newblock \href {https://doi.org/10.5555/89086.89095} {Word association norms,
+  mutual information, and lexicography}.
+\newblock \emph{Computational Linguistics}, 16(1):22–29.
+
+\bibitem[{Conneau et~al.(2020)Conneau, Baevski, Collobert, Mohamed, and
+  Auli}]{conneau2020unsupervised}
+Alexis Conneau, Alexei Baevski, Ronan Collobert, Abdelrahman Mohamed, and
+  Michael Auli. 2020.
+\newblock \href {http://arxiv.org/abs/2006.13979} {Unsupervised cross-lingual
+  representation learning for speech recognition}.
+
+\bibitem[{Cronbach(1951)}]{cronbach1951coefficient}
+Lee~J. Cronbach. 1951.
+\newblock \href {https://doi.org/10.1007/BF02310555} {Coefficient alpha and the
+  internal structure of tests}.
+\newblock \emph{Psychometrika}, 16(3):297--334.
+
+\bibitem[{Cucchiarini(1996)}]{cucchiarini1996assessing}
+Catia Cucchiarini. 1996.
+\newblock \href {https://doi.org/10.3109/02699209608985167} {Assessing
+  transcription agreement: Methodological aspects}.
+\newblock \emph{Clinical Linguistics \& Phonetics}, 10(2):131--155.
+
+\bibitem[{Devlin et~al.(2019)Devlin, Chang, Lee, and
+  Toutanova}]{devlin_bert_2019}
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019.
+\newblock \href {https://doi.org/10.18653/v1/N19-1423} {{{BERT}}:
+  {{Pre}}-training of {{Deep Bidirectional Transformers}} for {{Language
+  Understanding}}}.
+\newblock In \emph{Proceedings of the 2019 {{Conference}} of the {{North
+  American Chapter}} of the {{Association}} for {{Computational Linguistics}}:
+  {{Human Language Technologies}}, {{Volume}} 1 ({{Long}} and {{Short
+  Papers}})}, pages 4171--4186, {Minneapolis, Minnesota}. {Association for
+  Computational Linguistics}.
+
+\bibitem[{Duckworth et~al.(1990)Duckworth, Allen, Hardcastle, and
+  Ball}]{duckworth1990extensions}
+Martin Duckworth, George Allen, William Hardcastle, and Martin Ball. 1990.
+\newblock \href {https://doi.org/10.3109/02699209008985489} {Extensions to the
+  international phonetic alphabet for the transcription of atypical speech}.
+\newblock \emph{Clinical Linguistics \& Phonetics}, 4(4):273--280.
+
+\bibitem[{Ferragne and Pellegrino(2010)}]{Ferragne2010}
+Emmanuel Ferragne and François Pellegrino. 2010.
+\newblock \href {https://doi.org/https://doi.org/10.1016/j.wocn.2010.07.002}
+  {Vowel systems and accent similarity in the british isles: Exploiting
+  multidimensional acoustic distances in phonetics}.
+\newblock \emph{Journal of Phonetics}, 38(4):526--539.
+
+\bibitem[{Flege(1988)}]{flege1988factors}
+James~Emil Flege. 1988.
+\newblock \href {https://doi.org/10.1121/1.396876} {Factors affecting degree of
+  perceived foreign accent in english sentences}.
+\newblock \emph{The Journal of the Acoustical Society of America},
+  84(1):70—79.
+
+\bibitem[{Gales et~al.(2014)Gales, Knill, Ragni, and Rath}]{gales2014speech}
+Mark~JF Gales, Kate~M Knill, Anton Ragni, and Shakti~P Rath. 2014.
+\newblock \href {https://eprints.whiterose.ac.uk/152840/} {Speech recognition
+  and keyword spotting for low-resource languages: Babel project research at
+  cued}.
+\newblock In \emph{Fourth International workshop on spoken language
+  technologies for under-resourced languages (SLTU-2014)}, pages 16--23.
+  International Speech Communication Association (ISCA).
+
+\bibitem[{Garofalo et~al.(2007)Garofalo, Graff, Paul, and
+  Pallett}]{garofalo2007csr}
+John~S. Garofalo, David Graff, Dough Paul, and David Pallett. 2007.
+\newblock \href {https://doi.org/https://doi.org/10.35111/ewkm-cg47} {{CSR-I
+  (WSJ0) Complete LDC93S6A}}.
+\newblock \emph{Web Download. Philadelphia: Linguistic Data Consortium}.
+
+\bibitem[{Giorgino(2009)}]{giorgino2009}
+Toni Giorgino. 2009.
+\newblock \href {https://doi.org/10.18637/jss.v031.i07} {{Computing and
+  Visualizing Dynamic Time Warping Alignments in R: The dtw Package}}.
+\newblock \emph{Journal of Statistical Software}, 31(7):1–24.
+
+\bibitem[{Gooskens(2005)}]{gooskens2005}
+Charlotte Gooskens. 2005.
+\newblock \href {https://doi.org/10.1017/S0332586505001319} {{How well can
+  Norwegians identify their dialects?}}
+\newblock \emph{Nordic Journal of Linguistics}, 28(1):37–60.
+
+\bibitem[{Gooskens and Heeringa(2004)}]{gooskens2004perceptive}
+Charlotte Gooskens and Wilbert Heeringa. 2004.
+\newblock \href {https://doi.org/10.1017/S0954394504163023} {Perceptive
+  evaluation of levenshtein dialect distance measurements using norwegian
+  dialect data}.
+\newblock \emph{Language Variation and Change}, 16(3):189–207.
+
+\bibitem[{Graves et~al.(2006)Graves, Fern\'{a}ndez, Gomez, and
+  Schmidhuber}]{graves2006connectionist}
+Alex Graves, Santiago Fern\'{a}ndez, Faustino Gomez, and J\"{u}rgen
+  Schmidhuber. 2006.
+\newblock \href {https://doi.org/10.1145/1143844.1143891} {Connectionist
+  temporal classification: Labelling unsegmented sequence data with recurrent
+  neural networks}.
+\newblock In \emph{Proceedings of the 23rd International Conference on Machine
+  Learning}, ICML '06, page 369–376, New York, NY, USA. Association for
+  Computing Machinery.
+
+\bibitem[{Hakkani-T{\"u}r et~al.(2002)Hakkani-T{\"u}r, Riccardi, and
+  Gorin}]{hakkani2002active}
+Dilek Hakkani-T{\"u}r, Giuseppe Riccardi, and Allen Gorin. 2002.
+\newblock \href {https://doi.org/10.1109/ICASSP.2002.5745510} {Active learning
+  for automatic speech recognition}.
+\newblock In \emph{2002 IEEE International Conference on Acoustics, Speech, and
+  Signal Processing}, volume~4, pages IV--3904. IEEE.
+
+\bibitem[{Hanani et~al.(2013)Hanani, Russell, and Carey}]{hanani2013human}
+Abualsoud Hanani, Martin~J Russell, and Michael~J Carey. 2013.
+\newblock \href {https://doi.org/https://doi.org/10.1016/j.csl.2012.01.003}
+  {Human and computer recognition of regional accents and ethnic groups from
+  british english speech}.
+\newblock \emph{Computer Speech \& Language}, 27(1):59--74.
+\newblock Special issue on Paralinguistics in Naturalistic Speech and Language.
+
+\bibitem[{Heeringa et~al.(2009)Heeringa, Johnson, and
+  Gooskens}]{heeringa2009measuring}
+Wilbert Heeringa, Keith Johnson, and Charlotte Gooskens. 2009.
+\newblock \href {https://doi.org/https://doi.org/10.1016/j.specom.2008.07.006}
+  {Measuring norwegian dialect distances using acoustic features}.
+\newblock \emph{Speech Communication}, 51(2):167--183.
+
+\bibitem[{Heeringa(2004)}]{heeringa2004measuring}
+{Wilbert Jan} Heeringa. 2004.
+\newblock \href
+  {https://research.rug.nl/en/publications/measuring-dialect-pronunciation-differences-using-levenshtein-dis}
+  {\emph{Measuring Dialect Pronunciation Differences using Levenshtein
+  Distance}}.
+\newblock Ph.D. thesis, University of Groningen.
+
+\bibitem[{Huang et~al.(2014{\natexlab{a}})Huang, Slaney, Seltzer, and
+  Gong}]{huang2014towards}
+Yan Huang, Malcolm Slaney, Michael~L Seltzer, and Yifan Gong.
+  2014{\natexlab{a}}.
+\newblock \href
+  {https://www.isca-speech.org/archive/interspeech_2014/i14_0845.html} {Towards
+  better performance with heterogeneous training data in acoustic modeling
+  using deep neural networks}.
+\newblock In \emph{Fifteenth Annual Conference of the International Speech
+  Communication Association}.
+
+\bibitem[{Huang et~al.(2014{\natexlab{b}})Huang, Yu, Liu, and
+  Gong}]{huang2014comparative}
+Yan Huang, Dong Yu, Chaojun Liu, and Yifan Gong. 2014{\natexlab{b}}.
+\newblock \href
+  {https://www.isca-speech.org/archive/interspeech_2014/i14_1895.html} {A
+  comparative analytic study on the gaussian mixture and context dependent deep
+  neural network hidden markov models}.
+\newblock In \emph{Fifteenth Annual Conference of the International Speech
+  Communication Association}.
+
+\bibitem[{Huckvale(2007)}]{Huckvale2007}
+Mark Huckvale. 2007.
+\newblock \href {https://doi.org/10.1007/978-3-540-74122-0_20} {\emph{ACCDIST:
+  An Accent Similarity Metric for Accent Recognition and Diagnosis}}, pages
+  258--275. Springer Berlin Heidelberg, Berlin, Heidelberg.
+
+\bibitem[{Jang et~al.(2017)Jang, Gu, and Poole}]{jang_categorical_2017}
+Eric Jang, Shixiang Gu, and Ben Poole. 2017.
+\newblock \href {http://arxiv.org/abs/1611.01144} {Categorical
+  {{Reparameterization}} with {{Gumbel}}-{{Softmax}}}.
+\newblock \emph{arXiv:1611.01144 [cs, stat]}.
+
+\bibitem[{Jeszenszky et~al.(2017)Jeszenszky, Stoeckle, Glaser, and
+  Weibel}]{jeszenszky2017exploring}
+P{\'e}ter Jeszenszky, Philipp Stoeckle, Elvira Glaser, and Robert Weibel. 2017.
+\newblock \href {https://doi.org/10.1017/jlg.2017.5} {Exploring global and
+  local patterns in the correlation of geographic distances and morphosyntactic
+  variation in swiss german}.
+\newblock \emph{Journal of Linguistic Geography}, 5(2):86–108.
+
+\bibitem[{Kahn et~al.(2020)Kahn, Rivi{\`e}re, Zheng, Kharitonov, Xu,
+  Mazar{\'e}, Karadayi, Liptchinsky, Collobert, Fuegen et~al.}]{kahn2020libri}
+Jacob Kahn, Morgane Rivi{\`e}re, Weiyi Zheng, Evgeny Kharitonov, Qiantong Xu,
+  Pierre-Emmanuel Mazar{\'e}, Julien Karadayi, Vitaliy Liptchinsky, Ronan
+  Collobert, Christian Fuegen, et~al. 2020.
+\newblock \href {https://doi.org/10.1109/ICASSP40776.2020.9052942}
+  {{Libri-Light: A Benchmark for ASR with Limited or No Supervision}}.
+\newblock In \emph{ICASSP 2020-2020 IEEE International Conference on Acoustics,
+  Speech and Signal Processing (ICASSP)}, pages 7669--7673. IEEE.
+
+\bibitem[{Koenecke et~al.(2020)Koenecke, Nam, Lake, Nudell, Quartey, Mengesha,
+  Toups, Rickford, Jurafsky, and Goel}]{koenecke2020}
+Allison Koenecke, Andrew Nam, Emily Lake, Joe Nudell, Minnie Quartey, Zion
+  Mengesha, Connor Toups, John~R. Rickford, Dan Jurafsky, and Sharad Goel.
+  2020.
+\newblock \href {https://doi.org/10.1073/pnas.1915768117} {{Racial disparities
+  in automated speech recognition}}.
+\newblock \emph{Proceedings of the National Academy of Sciences},
+  117(14):7684--7689.
+
+\bibitem[{Koster and Koet(1993)}]{koster1993evaluation}
+Cor~J Koster and Ton Koet. 1993.
+\newblock \href {https://doi.org/10.1111/j.1467-1770.1993.tb00173.x} {{The
+  evaluation of accent in the English of Dutchmen}}.
+\newblock \emph{Language learning}, 43(1):69--92.
+
+\bibitem[{Leather(1983)}]{leather1983second}
+Jonathan Leather. 1983.
+\newblock \href {https://doi.org/10.1017/S0261444800010120} {Second-language
+  pronunciation learning and teaching}.
+\newblock \emph{Language Teaching}, 16(3):198--219.
+
+\bibitem[{Levenshtein(1966)}]{levenshtein}
+Vladimir Levenshtein. 1966.
+\newblock Binary codes capable of correcting deletions, insertions, and
+  reversals.
+\newblock \emph{Cybernetics and Control Theory}, 10(8):707--710.
+
+\bibitem[{Liberman(2018)}]{liberman2018}
+Mark Liberman. 2018.
+\newblock \href {https://doi.org/10.7208/chicago/9780226562599.003.0009}
+  {Towards progress in theories of language sound structure}.
+\newblock In Diane Brentari and Jackson~L. Lee, editors, \emph{Shaping
+  phonology}. University of Chicago Press.
+
+\bibitem[{Ling et~al.(2020)Ling, Liu, Salazar, and Kirchhoff}]{ling2020deep}
+Shaoshi Ling, Yuzong Liu, Julian Salazar, and Katrin Kirchhoff. 2020.
+\newblock \href {https://doi.org/10.1109/ICASSP40776.2020.9053176} {Deep
+  contextualized acoustic representations for semi-supervised speech
+  recognition}.
+\newblock In \emph{ICASSP 2020 - 2020 IEEE International Conference on
+  Acoustics, Speech and Signal Processing (ICASSP)}, pages 6429--6433.
+
+\bibitem[{Livescu and Glass(2000)}]{livescu2000lexical}
+K.~Livescu and J.~Glass. 2000.
+\newblock \href {https://doi.org/10.1109/ICASSP.2000.862074} {Lexical modeling
+  of non-native speech for automatic speech recognition}.
+\newblock In \emph{2000 IEEE International Conference on Acoustics, Speech, and
+  Signal Processing. Proceedings (Cat. No.00CH37100)}, volume~3, pages
+  1683--1686.
+
+\bibitem[{Ma et~al.(2021)Ma, Ryant, and Liberman}]{ma:21}
+Danni Ma, Neville Ryant, and Mark Liberman. 2021.
+\newblock \href {https://doi.org/10.1109/ICASSP39728.2021.9414776} {Probing
+  acoustic representations for phonetic properties}.
+\newblock In \emph{ICASSP 2021 - 2021 IEEE International Conference on
+  Acoustics, Speech and Signal Processing (ICASSP)}, pages 311--315.
+
+\bibitem[{Magen(1998)}]{magen1998perception}
+Harriet~S. Magen. 1998.
+\newblock \href {https://doi.org/https://doi.org/10.1006/jpho.1998.0081} {The
+  perception of foreign-accented speech}.
+\newblock \emph{Journal of Phonetics}, 26(4):381--400.
+
+\bibitem[{Mathur et~al.(2019)Mathur, Isopoussu, Kawsar, Berthouze, and
+  Lane}]{mathur2019}
+Akhil Mathur, Anton Isopoussu, Fahim Kawsar, Nadia Berthouze, and Nicholas~D.
+  Lane. 2019.
+\newblock \href {https://doi.org/10.1145/3302506.3310398} {{Mic2Mic: Using
+  Cycle-Consistent Generative Adversarial Networks to Overcome Microphone
+  Variability in Speech Systems}}.
+\newblock In \emph{Proceedings of the 18th International Conference on
+  Information Processing in Sensor Networks}, IPSN '19, page 169–180, New
+  York, NY, USA. Association for Computing Machinery.
+
+\bibitem[{Mermelstein(1976)}]{mermelstein1976distance}
+Paul Mermelstein. 1976.
+\newblock Distance measures for speech recognition, psychological and
+  instrumental.
+\newblock \emph{Pattern recognition and artificial intelligence}, 116:374--388.
+
+\bibitem[{Mikolov et~al.(2013)Mikolov, Sutskever, Chen, Corrado, and
+  Dean}]{mikolov_distributed_2013}
+Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg~S Corrado, and Jeff Dean. 2013.
+\newblock \href
+  {https://proceedings.neurips.cc/paper/2013/file/9aa42b31882ec039965f3c4923ce901b-Paper.pdf}
+  {Distributed representations of words and phrases and their
+  compositionality}.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~26. Curran Associates, Inc.
+
+\bibitem[{Munro(1995)}]{munro1995nonsegmental}
+Murray~J Munro. 1995.
+\newblock \href {https://doi.org/10.1017/S0272263100013735} {Nonsegmental
+  factors in foreign accent: Ratings of filtered speech}.
+\newblock \emph{Studies in Second Language Acquisition}, 17(1):17--34.
+
+\bibitem[{Munro and Derwing(1994)}]{munro1994evaluations}
+Murray~J Munro and Tracey~M Derwing. 1994.
+\newblock \href {https://doi.org/10.1177/026553229401100302} {Evaluations of
+  foreign accent in extemporaneous and read material}.
+\newblock \emph{Language Testing}, 11(3):253--266.
+
+\bibitem[{Munro and Derwing(2001)}]{munro2001modeling}
+Murray~J Munro and Tracey~M Derwing. 2001.
+\newblock \href {https://doi.org/10.1017/S0272263101004016} {Modeling
+  perceptions of the accentedness and comprehensibility of l2 speech the role
+  of speaking rate}.
+\newblock \emph{Studies in second language acquisition}, 23(4):451--468.
+
+\bibitem[{Najafian et~al.(2014)Najafian, DeMarco, Cox, and
+  Russell}]{najafian2014unsupervised}
+Maryam Najafian, Andrea DeMarco, Stephen Cox, and Martin Russell. 2014.
+\newblock \href
+  {https://www.isca-speech.org/archive/interspeech_2014/i14_2967.html}
+  {Unsupervised model selection for recognition of regional accented speech}.
+\newblock In \emph{Fifteenth annual conference of the international speech
+  communication association}.
+
+\bibitem[{Nerbonne and Heeringa(1997)}]{nerbonne1997measuring}
+John Nerbonne and Wilbert Heeringa. 1997.
+\newblock \href {https://aclanthology.org/W97-1102} {Measuring dialect distance
+  phonetically}.
+\newblock In \emph{Computational Phonology: Third Meeting of the {ACL} Special
+  Interest Group in Computational Phonology}.
+
+\bibitem[{Novotney and Callison-Burch(2010)}]{novotney2010cheap}
+Scott Novotney and Chris Callison-Burch. 2010.
+\newblock \href {https://aclanthology.org/N10-1024} {Cheap, fast and good
+  enough: Automatic speech recognition with non-expert transcription}.
+\newblock In \emph{Human Language Technologies: The 2010 Annual Conference of
+  the North {A}merican Chapter of the Association for Computational
+  Linguistics}, pages 207--215, Los Angeles, California. Association for
+  Computational Linguistics.
+
+\bibitem[{Nunnally(1978)}]{nunnally1978}
+Jum~C. Nunnally. 1978.
+\newblock \emph{Psychometric theory}, 2nd ed. edition.
+\newblock {McGraw}-{Hill} series in psychology. McGraw-Hill, New York ;.
+
+\bibitem[{Offrede et~al.(2020)Offrede, Jacobi, Rebernik, de~Jong, Keulen,
+  Veenstra, Noiray, and Wieling}]{wielinglowlands}
+Tom~F. Offrede, Jidde Jacobi, Teja Rebernik, Lisanne de~Jong, Stefanie Keulen,
+  Pauline Veenstra, Aude Noiray, and Martijn Wieling. 2020.
+\newblock \href {https://doi.org/10.1177/0023830920953169} {The impact of
+  alcohol on l1 versus l2}.
+\newblock \emph{Language and Speech}.
+\newblock PMID: 32856992.
+
+\bibitem[{van~den Oord et~al.(2019)van~den Oord, Li, and
+  Vinyals}]{oord2018representation}
+Aaron van~den Oord, Yazhe Li, and Oriol Vinyals. 2019.
+\newblock \href {http://arxiv.org/abs/1807.03748} {Representation learning with
+  contrastive predictive coding}.
+
+\bibitem[{van~den Oord et~al.(2017)van~den Oord, Vinyals, and
+  kavukcuoglu}]{van_den_oord_neural_2017}
+Aaron van~den Oord, Oriol Vinyals, and koray kavukcuoglu. 2017.
+\newblock \href
+  {https://proceedings.neurips.cc/paper/2017/file/7a98af17e63a0ac09ce2e96d03992fbc-Paper.pdf}
+  {Neural discrete representation learning}.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~30. Curran Associates, Inc.
+
+\bibitem[{Panayotov et~al.(2015)Panayotov, Chen, Povey, and
+  Khudanpur}]{panayotov_librispeech_2015}
+Vassil Panayotov, Guoguo Chen, Daniel Povey, and Sanjeev Khudanpur. 2015.
+\newblock \href {https://doi.org/10.1109/ICASSP.2015.7178964} {Librispeech:
+  {{An ASR}} corpus based on public domain audio books}.
+\newblock In \emph{2015 {{IEEE International Conference}} on {{Acoustics}},
+  {{Speech}} and {{Signal Processing}} ({{ICASSP}})}, pages 5206--5210.
+
+\bibitem[{Paul and Baker(1992)}]{paul-baker-1992-design}
+Douglas~B. Paul and Janet~M. Baker. 1992.
+\newblock \href {https://www.aclweb.org/anthology/H92-1073} {The design for the
+  {W}all {S}treet {J}ournal-based {CSR} corpus}.
+\newblock In \emph{Speech and Natural Language: Proceedings of a Workshop Held
+  at Harriman, New York, {F}ebruary 23-26, 1992}.
+
+\bibitem[{Peters et~al.(2018)Peters, Neumann, Iyyer, Gardner, Clark, Lee, and
+  Zettlemoyer}]{petersDeepContextualizedWord2018}
+Matthew Peters, Mark Neumann, Mohit Iyyer, Matt Gardner, Christopher Clark,
+  Kenton Lee, and Luke Zettlemoyer. 2018.
+\newblock \href {https://doi.org/10.18653/v1/N18-1202} {Deep {{Contextualized
+  Word Representations}}}.
+\newblock In \emph{Proceedings of the 2018 {{Conference}} of the {{North
+  American Chapter}} of the {{Association}} for {{Computational Linguistics}}:
+  {{Human Language Technologies}}, {{Volume}} 1 ({{Long Papers}})}, pages
+  2227--2237, {New Orleans, Louisiana}. {Association for Computational
+  Linguistics}.
+
+\bibitem[{Pratap et~al.(2020)Pratap, Xu, Sriram, Synnaeve, and
+  Collobert}]{pratap2020mls}
+Vineel Pratap, Qiantong Xu, Anuroop Sriram, Gabriel Synnaeve, and Ronan
+  Collobert. 2020.
+\newblock \href {https://doi.org/10.21437/Interspeech.2020-2826} {{MLS: A
+  Large-Scale Multilingual Dataset for Speech Research}}.
+\newblock In \emph{Proc. Interspeech 2020}, pages 2757--2761.
+
+\bibitem[{Preston(1999)}]{long1999}
+Dennis~Richard Preston. 1999.
+\newblock \href
+  {http://search.ebscohost.com.proxy-ub.rug.nl/login.aspx?direct=true&db=nlebk&AN=253518&site=ehost-live&scope=site}
+  {\emph{{Handbook of Perceptual Dialectology}}}.
+\newblock John Benjamins Publishing Co.
+
+\bibitem[{San et~al.(2021)San, Bartelds, Browne, Clifford, Gibson, Mansfield,
+  Nash, Simpson, Turpin, Vollmer, Wilmoth, and Jurafsky}]{san2021leveraging}
+Nay San, Martijn Bartelds, Mitchell Browne, Lily Clifford, Fiona Gibson, John
+  Mansfield, David Nash, Jane Simpson, Myfany Turpin, Maria Vollmer, Sasha
+  Wilmoth, and Dan Jurafsky. 2021.
+\newblock \href {http://arxiv.org/abs/2103.14583} {Leveraging pre-trained
+  representations to improve access to untranscribed speech from endangered
+  languages}.
+
+\bibitem[{Scharenborg(2007)}]{scharenborg2007}
+Odette Scharenborg. 2007.
+\newblock \href {https://doi.org/https://doi.org/10.1016/j.specom.2007.01.009}
+  {{Reaching over the gap: A review of efforts to link human and automatic
+  speech recognition research}}.
+\newblock \emph{Speech Communication}, 49(5):336--347.
+\newblock Bridging the Gap between Human and Automatic Speech Recognition.
+
+\bibitem[{Schneider et~al.(2019)Schneider, Baevski, Collobert, and
+  Auli}]{schneider2019wav2vec}
+Steffen Schneider, Alexei Baevski, Ronan Collobert, and Michael Auli. 2019.
+\newblock \href {https://doi.org/10.21437/Interspeech.2019-1873} {{wav2vec:
+  Unsupervised Pre-Training for Speech Recognition}}.
+\newblock In \emph{Proc. Interspeech 2019}, pages 3465--3469.
+
+\bibitem[{Smith and Eisner(2005)}]{smith_contrastive_2005}
+Noah~A. Smith and Jason Eisner. 2005.
+\newblock \href {https://doi.org/10.3115/1219840.1219884} {Contrastive
+  {{Estimation}}: {{Training Log}}-{{Linear Models}} on {{Unlabeled Data}}}.
+\newblock In \emph{Proceedings of the 43rd {{Annual Meeting}} of the
+  {{Association}} for {{Computational Linguistics}} ({{ACL}}'05)}, pages
+  354--362, {Ann Arbor, Michigan}. {Association for Computational Linguistics}.
+
+\bibitem[{Steiger(1980)}]{steiger1980tests}
+James~H Steiger. 1980.
+\newblock \href {https://doi.org/10.1037/0033-2909.87.2.245} {Tests for
+  comparing elements of a correlation matrix.}
+\newblock \emph{Psychological bulletin}, 87(2):245.
+
+\bibitem[{Strycharczuk et~al.(2020)Strycharczuk, López-Ibáñez, Brown, and
+  Leemann}]{Strycharczuk2020}
+Patrycja Strycharczuk, Manuel López-Ibáñez, Georgina Brown, and Adrian
+  Leemann. 2020.
+\newblock \href {https://doi.org/10.3389/frai.2020.00048} {General northern
+  english. exploring regional variation in the north of england with machine
+  learning}.
+\newblock \emph{Frontiers in Artificial Intelligence}, 3:48.
+
+\bibitem[{Tenney et~al.(2019)Tenney, Das, and
+  Pavlick}]{tenneyBERTRediscoversClassical2019}
+Ian Tenney, Dipanjan Das, and Ellie Pavlick. 2019.
+\newblock \href {https://doi.org/10.18653/v1/P19-1452} {{{BERT Rediscovers}}
+  the {{Classical NLP Pipeline}}}.
+\newblock In \emph{Proceedings of the 57th {{Annual Meeting}} of the
+  {{Association}} for {{Computational Linguistics}}}, pages 4593--4601,
+  {Florence, Italy}. {Association for Computational Linguistics}.
+
+\bibitem[{Vaswani et~al.(2017)Vaswani, Shazeer, Parmar, Uszkoreit, Jones,
+  Gomez, Kaiser, and Polosukhin}]{vaswaniAttentionAllYou2017}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N Gomez, \L~ukasz Kaiser, and Illia Polosukhin. 2017.
+\newblock \href
+  {https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf}
+  {Attention is all you need}.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~30. Curran Associates, Inc.
+
+\bibitem[{Viglino et~al.(2019)Viglino, Motlicek, and Cernak}]{viglino2019end}
+Thibault Viglino, Petr Motlicek, and Milos Cernak. 2019.
+\newblock \href {https://doi.org/10.21437/Interspeech.2019-2122} {{End-to-End
+  Accented Speech Recognition}}.
+\newblock In \emph{Proc. Interspeech 2019}, pages 2140--2144.
+
+\bibitem[{de~Vries et~al.(2020)de~Vries, van Cranenburgh, and
+  Nissim}]{devriesWhatSpecialBERT2020}
+Wietse de~Vries, Andreas van Cranenburgh, and Malvina Nissim. 2020.
+\newblock \href {https://doi.org/10.18653/v1/2020.findings-emnlp.389} {What{'}s
+  so special about {BERT}{'}s layers? a closer look at the {NLP} pipeline in
+  monolingual and multilingual models}.
+\newblock In \emph{Findings of the Association for Computational Linguistics:
+  EMNLP 2020}, pages 4339--4350, Online. Association for Computational
+  Linguistics.
+
+\bibitem[{Weinberger and Kunath(2011)}]{weinberger2015speech}
+Steven~H Weinberger and Stephen~A Kunath. 2011.
+\newblock \href {https://doi.org/10.1163/9789401206884_014} {The speech accent
+  archive: towards a typology of english accents}.
+\newblock In \emph{Corpus-based studies in language use, language learning, and
+  language documentation}, pages 265--281. Brill Rodopi.
+
+\bibitem[{Wieling et~al.(2014{\natexlab{a}})Wieling, Bloem, Baayen, and
+  Nerbonne}]{wieling2014determinants}
+Martijn Wieling, Jelke Bloem, R~Harald Baayen, and John Nerbonne.
+  2014{\natexlab{a}}.
+\newblock \href {https://doi.org/http://dx.doi.org/10.15496/publikation-8628}
+  {Determinants of english accents}.
+\newblock \emph{Proceedings of the 6th Conference on Quantitative
+  Investigations in Theoretical Linguistics}.
+
+\bibitem[{Wieling et~al.(2014{\natexlab{b}})Wieling, Bloem, Mignella,
+  Timmermeister, and Nerbonne}]{wieling2014a}
+Martijn Wieling, Jelke Bloem, Kaitlin Mignella, Mona Timmermeister, and John
+  Nerbonne. 2014{\natexlab{b}}.
+\newblock \href {https://doi.org/https://doi.org/10.1163/22105832-00402001}
+  {Measuring foreign accent strength in english: Validating levenshtein
+  distance as a measure}.
+\newblock \emph{Language Dynamics and Change}, 4(2):253 -- 269.
+
+\bibitem[{Wieling et~al.(2007)Wieling, Heeringa, and
+  Nerbonne}]{wieling2007aggregate}
+Martijn Wieling, Wilbert Heeringa, and John Nerbonne. 2007.
+\newblock \href
+  {https://www.aup.nl/journal-downloads/taal-en-tongval/jrg_2007_vol_59_-_an_aggregate_analysis_of_pronunciation_in.pdf}
+  {An aggregate analysis of pronunciation in the goeman-taeldeman-van
+  reenen-project data}.
+\newblock \emph{Taal en Tongval}, 59(1):84--116.
+
+\bibitem[{Wieling et~al.(2012)Wieling, Margaretha, and
+  Nerbonne}]{wieling2012inducing}
+Martijn Wieling, Eliza Margaretha, and John Nerbonne. 2012.
+\newblock \href {https://doi.org/https://doi.org/10.1016/j.wocn.2011.12.004}
+  {Inducing a measure of phonetic similarity from pronunciation variation}.
+\newblock \emph{Journal of Phonetics}, 40(2):307--314.
+
+\bibitem[{Wieling and Nerbonne(2015)}]{wieling2015}
+Martijn Wieling and John Nerbonne. 2015.
+\newblock \href {https://doi.org/10.1146/annurev-linguist-030514-124930}
+  {{Advances in Dialectometry}}.
+\newblock \emph{Annual Review of Linguistics}, 1(1):243--264.
+
+\bibitem[{Wieling et~al.(2011)Wieling, Nerbonne, and Baayen}]{wieling2011}
+Martijn Wieling, John Nerbonne, and R.~Harald Baayen. 2011.
+\newblock \href {https://doi.org/10.1371/journal.pone.0023613} {Quantitative
+  social dialectology: Explaining linguistic variation geographically and
+  socially}.
+\newblock \emph{PLOS ONE}, 6(9):1--14.
+
+\bibitem[{Yuan and Liberman(2008)}]{yuan2008speaker}
+Jiahong Yuan and Mark Liberman. 2008.
+\newblock \href {https://doi.org/10.1121/1.2935783} {Speaker identification on
+  the scotus corpus}.
+\newblock \emph{Journal of the Acoustical Society of America}, 123(5):3878.
+
+\bibitem[{Zhao and Wang(2013)}]{zhao2013}
+Xiaojia Zhao and DeLiang Wang. 2013.
+\newblock \href {https://doi.org/10.1109/ICASSP.2013.6639061} {Analyzing noise
+  robustness of mfcc and gfcc features in speaker identification}.
+\newblock In \emph{2013 IEEE International Conference on Acoustics, Speech and
+  Signal Processing}, pages 7204--7208.
+
+\bibitem[{Żelasko et~al.(2020)Żelasko, Moro-Velázquez, Hasegawa-Johnson,
+  Scharenborg, and Dehak}]{zelasko20}
+Piotr Żelasko, Laureano Moro-Velázquez, Mark Hasegawa-Johnson, Odette
+  Scharenborg, and Najim Dehak. 2020.
+\newblock \href {https://doi.org/10.21437/Interspeech.2020-2513} {{That Sounds
+  Familiar: An Analysis of Phonetic Representations Transfer Across
+  Languages}}.
+\newblock In \emph{Proc. Interspeech 2020}, pages 3705--3709.
+
+\end{thebibliography}

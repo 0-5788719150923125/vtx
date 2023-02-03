@@ -1,0 +1,71 @@
+% ======================================================================================== %
+\section{Motivation}\label{sec:motivation}
+% ======================================================================================== %
+
+\begin{figure}[t]
+    \centering
+    \resizebox{1.0\columnwidth}{!}{
+    \includegraphics{figure/par_example2.eps}}
+    \caption{Visualization of PAR from selected attention heads in the baseline model.
+    Two rows show representative examples of similarity-based and content-based phonetic attention, respectively.
+    Brighter points indicate higher attention weight.}
+    % \vspace{-0.2cm}
+    \label{fig:par}
+\end{figure}
+
+% ======================================================================================== %
+\subsection{Dot Product in Self Attention}\label{ssec:sa}
+% ======================================================================================== %
+
+Self-attention (SA) is the key component of Transformer that computes the relationship between every pair of frames.
+For a sequence of speech frame features $X=\{x_1, x_2, ... x_T\}$ as an input, SA first projects features into three components, namely query ($Q$), key ($K$), and value ($V$).
+SA utilizes multiple attention heads with different parameters to capture diverse relationships in each layer.
+Without loss of generality, we explain the behavior of a single attention head below.
+$Q$, $K$, and $V$ are linear projections of input as follows:
+\begin{equation}
+    Q,K,V = XW_{\{Q,K,V\}} + b_{\{Q,K,V\}}
+\end{equation}
+where $X\in\mathbb{R}^{T\times d_h}$, $W\in\mathbb{R}^{d_h\times d_h}$ and $b\in\mathbb{R}^{1\times d_h}$ are input, weight, and bias, respectively.
+$d_h$ is the dimension of each attention head.
+The attention map $A$ is then calculated as:
+\begin{equation}
+    A = \text{Softmax}\left( \frac{Q K^T}{\sqrt{d_h}} \right) \in \mathbb{R}^{T\times T}.
+\end{equation}
+Each element of the attention map represents how much one frame focuses on the other one, which is, in practice, implemented as a dot product of the query and key.
+The dot product equation can be decomposed into four terms:
+\begin{equation}
+    QK^T = XW_Q W_K^T X^T + XW_Q b_K^T + b_Q W_K^T X^T + b_Q b_K^T.
+\end{equation}
+The first term ($\in \mathbb{R}^{T\times T}$) calculates the correlation between frames.
+The second term ($\in \mathbb{R}^{T\times 1}$) adds offset value per row, while the third term ($\in \mathbb{R}^{1\times T}$) adds offset per column.
+The fourth term is a constant.
+Because the dot product is followed by the row-wise softmax operation, the second and the fourth terms do not affect the output after softmax.
+In other words, the bias of $K$ ($b_K$) can be safely removed, and then the dot-product can be simplified as follows:
+\begin{align}
+    QK^T &= (XW_Q + b_Q)(XW_K)^T \\
+         &= (XW_Q)(XW_K)^T + (XW_K b_Q^T)^T. \label{eq:new_dp}
+\end{align}
+Please note that the second term of Eq.~\eqref{eq:new_dp} had not been studied much compared to the first term.
+
+
+% ======================================================================================== %
+\subsection{Phonetic Behavior of Self Attention}\label{ssec:phonetic}
+% ======================================================================================== %
+
+The behavior of SA in Transformer-based ASR models has been analyzed in several previous works~\cite{yang20i,usefulness,understanding}.
+% The key advantage of SA is its ability to model long-range dependencies by considering all-to-all relationships.
+Recently, a study revealed the reason why SA is especially beneficial for ASR~\cite{understanding}.
+In a nutshell, SA in lower layers performs phonetic localization that extracts features based on phonological relationships through the whole sequence.
+This unique behavior is expected to improve the recognition performance by standardizing the various pronunciation of the same phoneme within the utterance.
+The findings on phonetic localization are supported by the phoneme attention relationship (PAR), a tool that visualizes the phonetic behavior of SA by converting frame-to-frame attention to phoneme class-to-class attention~\cite{understanding}.
+Specifically, the $(i, j)\text{-th}$ element of PAR indicates how much attention weight (in average) is assigned from $i\text{-th}$ phoneme class to $j\text{-th}$ class.
+Please refer to the original paper for more details about PAR~\cite{understanding}.
+
+We investigate PAR of phonetic heads and find that such heads can be further separated into two groups.
+Figure~\ref{fig:par} visualizes representative PAR examples.
+The first row focuses on the similarity of frames, characterized by symmetric PAR.
+For attention heads belonging to this type, the attention weight follows the correlation between phoneme classes of query and key.
+On the other hand, the second row focuses on the individual frame, represented as vertical lines in PAR.
+In this case, the attention weight highly depends on the phoneme class of key, and therefore might not be sufficiently represented by the query-key dot product.
+Note that individual attention heads cannot be clearly separated into two groups; the more accurate interpretation is that one head contains both tendencies with different portions.
+The original work on PAR also observed various PAR patterns of phonetic heads~\cite{understanding}, however, did not much investigate this phenomenon.

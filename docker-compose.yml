@@ -70,7 +70,7 @@ services:
     command: /bin/urbit -t -c needle
     restart: 'always'
     volumes:
-      - urbit:/urbit
+      - comet:/urbit
     ports:
       - 9667:80
       - 34343:34343
@@ -84,4 +84,4 @@ services:
 
 volumes:
   pet:
-  urbit:
+  comet:

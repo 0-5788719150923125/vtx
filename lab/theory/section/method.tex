@@ -1,0 +1,96 @@
+% ======================================================================================== %
+\section{Phonetic Self-Attention}\label{sec:method}
+% ======================================================================================== %
+
+\begin{table*}[t]
+    \centering
+    \caption{Phoneme classification accuracy (\%) of different dot product variants evaluated on LibriSpeech dataset.
+    M2 is the dot product of the original self-attention, and M5 is the dot product of the proposed phonetic self-attention.}
+    \resizebox{0.86\linewidth}{!}{
+    \begin{tabular}{c|l|cccc}
+        \toprule
+        Model   &   Dot-product     & \textit{dev-clean} & \textit{dev-other} & \textit{test-clean} & \textit{test-other} \\
+        \midrule
+        \midrule
+        % M0  & $(xW^Q +b^Q)(xW^K + b^K)^T$                           & 81.91 & 73.41 & 81.83 & 73.66 \\  % yq-yk
+        M1  & $(XW_Q)(XW_K)^T$                                      & 81.92 & 73.42 & 81.86 & 73.63 \\  % noq-nok
+        % M2  & $(xW^Q +b^Q)(xW^K)^T$                                 & 81.84 & 73.37 & 81.79 & 73.55 \\  % yq-nok
+        M2  & $(XW_Q)(XW_K)^T + (XW_K b_Q^T)^T$                   & 81.84 & 73.37 & 81.79 & 73.55 \\  % yq-nok
+        % M3  & $(xW^Q)(xW^K + b^K)^T$                                & 81.99 & 73.50 & 81.95 & 73.73 \\  % noq-yk
+        % M4  & $(xW^Q)(xW^K)^T + (xw^P)$                    & 81.77 & 73.18 & 81.67 & 73.46 \\  % kp
+        M3  & $(XW_Q)(XW_K)^T + (Xc^T)^T$                  & 81.93 & 73.26 & 81.82 & 73.52 \\  % qp
+        \midrule
+        % \midrule
+        % M6  & $(xW^Q)(xW^K)^T + (\phi(xW^S)w^P)$                & 82.15 & 73.60 & 82.07 & 73.86 \\  % qk3-kp
+        M4  & $(XW_Q)(XW_K)^T + (\phi(XW_C)c^T)^T$              & 82.40 & 73.89 & 82.25 & 74.20 \\  % qk3-qp
+        \midrule
+        M5  & $\psi_s((XW_Q)(XW_K)^T) + \psi_c(\phi(XW_C)c^T)^T$    & \textbf{82.66} & \textbf{74.20} & \textbf{82.53} & \textbf{74.48} \\  % qk3-qp-prelu
+        \bottomrule
+    \end{tabular}
+    }
+    % \vspace{0.2cm}
+    \label{tab:per}
+\end{table*}
+
+% ======================================================================================== %
+\subsection{Decomposition of Similarity and Content}\label{ssec:decomposition}
+% ======================================================================================== %
+
+We distinguish the two important phonetic behaviors by the dependency on other frames.
+The first one, \textit{similarity-based} attention, focuses on the similarity between two frames.
+The second one, \textit{content-based} attention, focuses more on the content of each frame.
+We connect these two different phonetic behaviors to two terms in Eq.~\eqref{eq:new_dp}.
+The attention weight $A[i,j]$ is determined by both the similarity between $i,j\text{-th}$ frames and the content of $j\text{-th}$ frame.
+These behaviors can be simultaneously performed with vanilla SA, where the original formulation does not clearly separate these two.
+
+We first decompose two behaviors by modifying the dot product in SA.
+Specifically, in Eq.~\eqref{eq:new_dp}, we remove the effect of the first term on the second term by replacing the shared weight $W_K$ with a separate parameter $W_C$:
+\begin{equation}
+    XW_K b_Q^T \rightarrow \phi(XW_C)c^T \label{eq:content},
+\end{equation}
+where $\phi$ is the Swish~\cite{swish} function and $c \in \mathbb{R}^{1\times d_h}$ is a bias parameter.
+We insert the non-linearity function $\phi$ to avoid two parameters ($W_C$ and $c^T$) collapse.
+
+% ======================================================================================== %
+\subsection{Non-linear Activation Function}\label{ssec:nonlinear}
+% ======================================================================================== %
+
+Next, we apply the PReLU~\cite{prelu} activation function so that the influence of each term can be controlled before adding the two.
+PReLU contains a single trainable parameter $\alpha$ that controls the tangent of the negative slope.
+\begin{equation}
+    \psi_{s,c}(x) =
+        \begin{cases}
+            x                       & \text{if}\quad x \geq 0 \\
+            \alpha_{s,c} \cdot x    & \text{otherwise},
+        \end{cases}
+\end{equation}
+where $\psi_s$ and $\psi_c$ represent PReLU for similarity- and content-based terms, respectively.
+We initialize $\alpha$ to 1 for PReLU to behave like an identity function at the beginning of training.
+
+The proposed \textit{phonetic self-attention (phSA)} is the addition of two terms that correspond to two different phonetic behavior:
+\begin{equation}
+    \psi_s((XW_Q)(XW_K)^T) + \psi_c(\phi(XW_C)c^T)^T.  \label{eq:phsa}
+\end{equation}
+The first and the second terms represent similarity-based and content-based phonetic attention, respectively.
+The proposed phSA is a direct drop-in replacement to the conventional dot product and is easy to implement.
+
+% ======================================================================================== %
+\subsection{Additional Design Choices}\label{ssec:design}
+% ======================================================================================== %
+
+\subsubsection{Remove Positional Encoding}
+
+The relative positional encoding (RPE) has been widely used for Transformer models for ASR~\cite{transformer-transducer, conformer, rpe-asr, cape}. For example, Conformer~\cite{conformer} exploits the same RPE implementation as Transformer-XL \cite{transformer-xl}.
+Although the previous study suggested that RPE may be unnecessary for large size ASR models~\cite{pushing-semi}, RPE helps small to medium size ASR models to better generalize to variable sequence lengths~\cite{pe-jhpark}.
+The downside of RPE is the heavy computation cost caused by additional query-position relationship computation and complex tensor operations to match the relative position.
+We decide not to use any positional information when using phSA; neither absolute nor relative PE is used.
+The design is based on the idea that the phonetic behavior of SA would consider each frame's phonetic characteristics, not necessarily the relative distance between frames.
+As a good side effect, the weight parameter for RPE is removed while $W_C$ is added, so the number of parameters in phSA remains almost the same as in SA.
+We note that using RPE and phSA together may provide additional gain on performance at the expense of increased resource usage.
+
+
+\subsubsection{Replace in Lower Layers}
+
+We only replace the vanilla SA with phSA for the lower layers of the model, where phonetic localization is performed~\cite{understanding}.
+Because upper layers are known to be responsible for linguistic localization that combines the extracted phonetic information to generate text, we expect phSA may not be useful for those layers.
+From the experiments, we show that using phSA for the entire layers actually hurts the performance (see Sec.~\ref{ssec:asr}).

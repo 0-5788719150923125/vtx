@@ -1,0 +1,36 @@
+% ======================================================================================== %
+\section{Introduction}\label{sec:intro}
+% ======================================================================================== %
+
+% (Transformer-based ASR)
+End-to-end automatic speech recognition (ASR) has made great progress in line with the advances in deep neural networks (DNNs).
+Among various architectures, Transformer~\cite{transformer} models have shown state-of-the-art performance~\cite{transformer-transducer, conformer, pushing, pushing-semi, speechstew} in ASR.
+Most Transformer-based ASR models stack the same layer multiple times without considering the difference between layer positions, although the behaviors are very different~\cite{yang20i, usefulness, stochastic}.
+If we can identify the role of each layer, we can improve the model architecture by exploiting domain-specific knowledge, resulting in a more heterogeneous composition of layers.
+However, because end-to-end DNN performs as a black box, it is difficult to design and apply specific modifications for relevant layers.
+
+% (Phonetic relationship)
+Recently, a study suggested that the role of self-attention (SA) in Transformer-based ASR models can be distinguished into two types, phonetic and linguistic localization~\cite{understanding}.
+Two roles contribute to speech recognition in a row; the ASR system first extracts phonologically meaningful features by reducing the pronunciation variations and then combines such information into textual features to produce natural output sentences.
+These two-stage processes, which correspond to phonetic and linguistic localization, seem to be natural because ASR is a many-to-one problem in that multiple speeches can be transcribed as the same text.
+The study discovered that phonetic localization mainly appears in lower layers while linguistic localization happens in upper layers~\cite{understanding}, and their attention patterns are also very different.
+The findings imply that we can identify layers of a certain role, and we may boost the performance by improving such layers to perform their role better.
+
+% (We focus on improving phonetic behavior)
+Among the two types of roles mentioned above, we focus on improving phonetic localization based on a deeper understanding of the behavior.
+Here, we call SA heads that perform phonetic localization a phonetic (attention) head.
+From the observation of the attention weights produced by phonetic heads, we can separate two distinct types of attention patterns.
+The first type is similarity-based phonetic attention that gives a larger attention weight value on similarly pronounced frames. 
+For example, frames corresponding to phoneme class `S' often show large attention weight for frames corresponding to `S', `Z', `SH', and vice versa~\cite{understanding}.
+The second type is content-based phonetic attention that attends to certain phonemes regardless of the query.
+In other words, a certain attention head may be highly optimized for detecting a specific phoneme class.
+We suggest that each phonetic head can be more specialized from the decomposition of similarity-based and content-based attention mechanisms.
+
+% (In this paper)
+% In this paper, we propose phonetic self-attention (phSA), a variant of SA that is designed to extract useful phonetic characteristics during phonetic localization.
+% The proposed phSA is a simple alternative for SA that is responsible for phonetic localization.
+In this paper, we propose phonetic self-attention (phSA), a variant of SA that extracts similarity and content-based phonetic features in phonetic localization.
+We modify the query-key dot product term inside the SA mechanism to capture similarity and content separately.
+In particular, we improve the dot product by (1) decomposing the two terms to remove shared parameters and (2) inserting trainable non-linearity functions.
+We evaluate the proposed phSA using phoneme classification and speech recognition and achieve considerably improved recognition performance on both tasks.
+In addition, we empirically show that similarity-based and content-based phonetic attention produce relatively concentrated and distributed attention probabilities, respectively.

@@ -1,0 +1,30 @@
+\section{Introduction}
+\label{sec:intro}
+Grapheme-to-Phoneme (G2P) systems convert sentences to their phonetic representation, and are an integral part of speech systems, like Text-To-Speech (TTS). While earlier G2P systems were rule-based \cite{elovitz1976automatic}, we now employ LSTM-based encoder-decoder models\cite{rao2015grapheme}, LSTM models with attention\cite{peters2017massively}, and finally transformer-based self-attention models\cite{yolchuyeva2020transformer}. G2P systems support multiple languages, and can be trained on several languages to increase data availability, for low-resource languages~\cite{vesik2020model,peters2017massively}. However, existing systems still have limitations.  
+
+Dictionary-based approaches, with neural-network based fallback, have the advantage of reliability in pronunciations for words in the dictionary. While neural networks lead to higher accuracy at predicting words that are not in the dictionary, this approach fails when the dictionary is not large enough. The problem two-fold: 1) many words are not in the dictionary, and 2) the neural-network fallback is not robust with small training datasets. The following scenarios are difficult for such systems to handle:
+\begin{itemize}
+\item New words that do not match existing pronunciation, e.g. ``meme''.
+\item Long words that neural networks trained on a single word fail to generalize to, e.g. ``supercalifragilisticexpialidocious''.
+\item Spelling mistakes, or alternate spellings of the same word not seen in the dictionary, e.g. ``lite'', ``kool''.
+\end{itemize}
+
+Modern approaches use full sequence-to-sequence models to predict pronunciation of the entire inputs, and not just individual words. These approaches can be more robust to misspellings and leverage larger context for better pronunciation prediction. However, these approaches require larger datasets than dictionary-based approaches; as larger, more powerful, neural-network models require significantly more data to generalize.
+
+In our work, we focus on dialects of English for G2P. This is an aspect of G2P that remains relatively less explored, but important for applications like TTS systems, where speakers who talk in different dialect than the G2P system could potentially have less optimal results. The speech synthesis model in this scenario is forced to learn the mapping between the dialect used in the G2P system, and the dialect the speaker actually speaks. This leads to model capacity inefficiencies on the mapping, that could have been used to better model a specific speaker's idiosyncrasies.
+
+In this work, we show that limitations of modern transformer-based G2P systems can be overcome for English dialects that have limited dictionary data availability by transfer learning G2P models across dialects. We show how to generate training data for our system, and test our system using publicly available data. We examine the advantages of our proposed method, as the size of the target dictionary varies.
+
+% ==============================================================================================
+% Grapheme-to-Phoneme (G2P) systems convert sentences to their phonetic representation, and are an important part of speech systems, like Text-To-Speech (TTS).  As the field has advanced, so too have the approaches applied to the G2P task.  The systems used started as rule-based systems.  Later, Encoder-Decoder models were introduced, starting with LSTM models, then advancing to LSTM models with attention, and finally to Transformer-based self attention models.  G2P systems are now also multilingual, training on several languages to increase data availability for low-resource languages. However, existing systems still have limitations.  
+
+% Older, dictionary approaches, with neural-network based fallback, have the advantage of reliability in pronunciation for words that are in the dictionary, and the neural network is often accurate at predicting words that are not in the dictionary. This approach, however, fails if the dictionary is not large enough. The problem is in two parts: many words are not in the dictionary, and the neural-network fallback is not robust with small training data. The following scenarios are often difficult for these systems to handle: 
+% \begin{itemize}
+% \item New words that do not match existing pronunciation, e.g. ``meme''.
+% \item Long words that neural networks trained on a single words fail to generalize to, e.g. ``supercalifragilisticexpialidocious''.
+% \item Spelling mistakes, or alternate spellings of the same word not seen in the dictionary, e.g. ``lite'', ``kool''.
+% \end{itemize}
+
+% More modern approaches may use a full sequence-to-sequence model that prediction pronunciation for the entire input, not individual words.  This approach can be more robust to misspellings and leverage its larger context to better predict pronunciation.  However, this approach is more data hungry than the dictionary approach, as larger, more powerful, neural-network models require significant data to generalize.
+
+% In this work, we show that limitations of modern transformer-based G2P systems can be overcome for dialects of English that have limited dictionary data available, by transfer learning G2P models across dialects. We show how to generate training data for our system, and test our system, using only publicly available data. We examine how as the size of the target dictionary varies, the advantage of transfer learning varies.

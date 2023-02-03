@@ -46,11 +46,11 @@ async def subscribe(channel):
         propulsion + str(bias) + ship + " " + state,
     ]
     url = "http://ctx:9666/message"
-    print(bc.CORE + "INK@CORE:" + bc.ENDC + "ping")
+    print(bc.CORE + "INK@CORE:" + bc.ENDC + " ping")
     message = await head.gen(int(bias), context)
-    print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + "pang")
+    print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + " pang")
     myobj = {"message": message, "identifier": str(bias)}
-    print(bc.FOLD + "PEN@FOLD:" + bc.ENDC + "pong")
+    print(bc.FOLD + "PEN@FOLD:" + bc.ENDC + " pong")
     x = requests.post(url, json=myobj, headers={"Connection": "close"})
     x.close()
     print("responding to source..................")

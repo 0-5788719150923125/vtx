@@ -19,6 +19,8 @@ import threading
 import lab.source
 import lab.discord
 
+# import lab.petals
+
 # import lab.twitter
 # import lab.petals
 

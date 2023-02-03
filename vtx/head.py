@@ -92,9 +92,9 @@ context = [
 def build_context(message):
     if len(context) >= 9:
         context.pop(0)
-        build_context(message)
+        build_context(message[:111])
     else:
-        context.append(propulsion + message)
+        context.append(propulsion + message[:110])
 
 
 # Generate a completion from bias and context
@@ -125,12 +125,11 @@ def gen(bias=None, ctx=None):
     # bias the prompt
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-            print("bias toward " + str(bias))
+            print(bc.CORE + "INK@CORE: " + bc.ENDC + "bias toward " + str(bias))
             prefixes = ["I", "You", ""]
             prompt = propulsion + str(bias) + ship + " " + random.choice(prefixes)
 
     print("\033[92m" + "prompt" + "\033[0m")
-    print(history + prompt)
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
 

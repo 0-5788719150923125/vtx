@@ -67,6 +67,7 @@ def fetch_from_discord():
     for server in config["discord"]["servers"]:
         skip = False
         if "skip" in server:
+            print("skip is found")
             skip = server["skip"]
         if skip == True:
             continue

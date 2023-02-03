@@ -85,6 +85,7 @@ async def subscribe(subreddit):
             propulsion + str(c) + ship + " " + comment.body,
         ]
         response = await head.gen(bias=int(get_identity()), ctx=ctx)
+        print(bc.ROOT + "/r/" + subreddit.display_name + bc.ENDC)
         print(
             bc.FOLD
             + "=> "

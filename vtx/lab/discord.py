@@ -53,6 +53,7 @@ class Client(discord.Client):
         head.ai = await head.load_model()
 
         # List all Discord servers on startup
+        print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + "connecting to Discord")
         for guild in client.guilds:
             print("=> " + guild.name)
 

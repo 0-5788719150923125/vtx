@@ -1,7 +1,20 @@
 import os
+import torch
+from transformers import BloomTokenizerFast
 from petals import DistributedBloomForCausalLM
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
+
+model_name = "bigscience/bloom-petals"
+tokenizer = BloomTokenizerFast.from_pretrained(model_name)
+model = DistributedBloomForCausalLM.from_pretrained(
+    model_name, tuning_mode="ptune", pre_seq_len=16
+)
+model = model.cuda()
+
+inputs = tokenizer('A cat in French is "', return_tensors="pt")["input_ids"].cuda()
+outputs = model.generate(inputs, max_new_tokens=3)
+print(tokenizer.decode(outputs[0]))
 
 
 class bc:

@@ -37,6 +37,11 @@ propulsion = "¶"
 ship = ":>"
 
 
+def Sorting(lst):
+    lst2 = sorted(lst, key=len)
+    return lst2
+
+
 # A class to control the entire Discord bot
 class Client(discord.Client):
 
@@ -53,8 +58,11 @@ class Client(discord.Client):
 
         # List all Discord servers on startup
         print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + "connected to Discord")
+        guilds = []
         for guild in client.guilds:
-            print("=> " + guild.name)
+            guilds.append(guild.name)
+
+        print(bc.FOLD + "PEN@DISCORD: " + bc.ENDC + " => ".join(guilds))
 
     async def setup_hook(self) -> None:
         self.discord_task = self.loop.create_task(self.think())

@@ -13,6 +13,7 @@ import gc
 import yaml
 import logging
 from mergedeep import merge, Strategy
+import transformers
 
 with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -122,14 +123,14 @@ def gen(bias=None, ctx=None):
         seed = q["data"][0]
         print("quantum seed was set to " + str(seed))
 
+    print(bc.CORE + "INK@CORE: " + bc.ENDC + ship + " prompt")
+
     # bias the prompt
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
             print(bc.CORE + "INK@CORE: " + bc.ENDC + "bias toward " + str(bias))
             prefixes = ["I", "You", ""]
             prompt = propulsion + str(bias) + ship + " " + random.choice(prefixes)
-
-    print("\033[92m" + "prompt" + "\033[0m")
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
 

@@ -54,7 +54,7 @@ class Client(discord.Client):
     async def on_ready(self):
 
         # Load the AI model at startup
-        head.ai = await head.load_model()
+        head.ai = await head.loader()
 
         # List all Discord servers on startup
         print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + "connected to Discord")
@@ -108,7 +108,7 @@ class Client(discord.Client):
                     + ship
                     + messages[0].content,
                 ]
-                head.ai = await head.load_model("toe")
+                head.ai = await head.loader("toe")
 
                 recent_author_id = messages[random.randint(0, 9)].author.id
 
@@ -134,7 +134,7 @@ class Client(discord.Client):
                 print("=> output to " + channel.name)
                 print(output)
 
-                head.ai = await head.load_model()
+                head.ai = await head.loader()
                 await channel.send(output)
                 self.thinking = False
             except Exception as e:

@@ -220,8 +220,16 @@ def fetch_from_reddit():
 
         identities = {}
 
+        sort = config["reddit"][sub].get("sort", "top")
+
         def main():
-            for submission in reddit.subreddit(name).top(limit=limit):
+
+            if sort == "new":
+                submissions = reddit.subreddit(name).new(limit=limit)
+            else:
+                submissions = reddit.subreddit(name).top(limit=limit)
+
+            for submission in submissions:
 
                 bias = get_identity()
                 print("wrote to " + str(bias))

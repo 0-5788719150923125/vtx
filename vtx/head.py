@@ -46,7 +46,7 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 
 # Load the specified model
 @to_thread
-def load_model(target=None):
+def loader(target=None):
 
     try:
         del ai

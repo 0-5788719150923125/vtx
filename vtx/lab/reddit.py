@@ -80,7 +80,6 @@ async def subscribe(subreddit):
 
         roll = random.random()
 
-        print("rolling reddit")
         if roll >= chance:
             return
 

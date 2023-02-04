@@ -23,3 +23,6 @@
 [submodule "lab/home"]
 	path = lab/home
 	url = https://gitlab.com/hollowpoint-org/luciferian.ink
+[submodule "lab/ELIZA"]
+	path = lab/ELIZA
+	url = https://gitlab.com/original-design/eliza

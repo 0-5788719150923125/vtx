@@ -55,7 +55,7 @@ let bullet
 const channel = gun
   .get('messaging')
   .get('channels')
-  .get('support')
+  .get('hive')
   .on(async (node) => {
     try {
       if (typeof node.payload === 'string') {

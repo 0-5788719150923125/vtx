@@ -49,10 +49,14 @@ async def subscribe(subreddit):
 
     subreddit = await reddit.subreddit(subreddit, fetch=True)
 
-    # async for submission in subreddit.stream.submissions(skip_existing=True):
-    #     pprint.pprint(submission)
-
     async for comment in subreddit.stream.comments(skip_existing=True):
+
+        roll = random.random()
+
+        if roll >= chance:
+            comment.close()
+            return
+
         await comment.submission.load()
         parent = await comment.parent()
         print(
@@ -77,11 +81,6 @@ async def subscribe(subreddit):
         await comment.load()
         if comment.author == os.environ["REDDITAGENT"]:
             continue
-
-        roll = random.random()
-
-        if roll >= chance:
-            return
 
         p = get_identity()
         c = get_identity()
@@ -119,6 +118,7 @@ async def subscribe(subreddit):
             print(bc.ROOT + "<=== " + "Ink" + bc.ENDC + ": " + group[2])
             output = transformer(group[2])
             await comment.reply(output)
+            comment.close()
         except:
             output = transformer(response)
             await comment.reply(output)

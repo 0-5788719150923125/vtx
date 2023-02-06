@@ -72,7 +72,6 @@ app.get('/channel', (req, res) => {
 // Receive messages from vtx at this route
 app.use(express.json())
 app.post('/message', async (req, res) => {
-  console.log('pang')
   try {
     // Destructure and sign message
     let { message, identifier, pubKey } = req.body
@@ -83,6 +82,7 @@ app.post('/message', async (req, res) => {
     // Send message to GUN
     const payload = JSON.stringify({ identifier, message, pubKey })
     await channel.get('payload').put(payload)
+    console.log('ONE@ROOT: pang')
   } catch (err) {
     console.error(err)
     console.error('failed to send a message')

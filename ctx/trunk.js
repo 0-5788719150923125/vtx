@@ -59,9 +59,22 @@ const channel = gun
   .on(async (node) => {
     try {
       if (typeof node.payload === 'string') {
-        bullet = node.payload
+        const payload = JSON.parse(node.payload)
+        let message = null
+        if (payload.pubKey !== null && payload.pubKey !== undefined) {
+          const sender = await gun.user(`${payload.pubKey}`)
+          message = await SEA.verify(payload.message, sender.pub)
+        } else {
+          message = payload.message
+        }
+        bullet = {
+          message,
+          identifier: payload.identifier
+        }
       }
-    } catch {}
+    } catch (err) {
+      console.error(err)
+    }
   })
 
 // Publish every message at this route
@@ -74,19 +87,16 @@ app.use(express.json())
 app.post('/message', async (req, res) => {
   try {
     // Destructure and sign message
-    let { message, identifier, pubKey } = req.body
+    let { message, identifier } = req.body
     if (user) {
       message = await SEA.sign(message, pair)
-      pubKey = pair.pub
     }
     // Send message to GUN
-    const payload = JSON.stringify({ identifier, message, pubKey })
+    const payload = JSON.stringify({ identifier, message, pubKey: pair.pub })
     await channel.get('payload').put(payload)
-    console.log('ONE@ROOT: pang')
+    console.log('\x1b[92m' + 'ONE@ROOT: ' + '\x1b[37m' + 'pang')
   } catch (err) {
     console.error(err)
-    console.error('failed to send a message')
-    console.log('trying to connect once again')
     cockpit(identity, identifier)
   }
   res.json('ok')
@@ -161,7 +171,7 @@ async function authenticateUser(identity, identifier) {
       if (data.err) {
         user.create(identifier, identity, async (data) => {
           console.log('Creating GUN user: ~' + data.pub)
-          authenticateUser(identity, identifier)
+          await authenticateUser(identity, identifier)
         })
       } else {
         pair = user.pair()

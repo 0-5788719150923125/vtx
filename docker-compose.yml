@@ -87,10 +87,10 @@ services:
     #   - SYS_ADMIN
     volumes:
       - ./vtx:/vtx
-      - ./fuse:/fuse
+      # - ./fuse:/fuse
       - ./001-test.sh:/container-init.d/001-test.sh
 
 volumes:
   pet:
   comet:
-  fuse:
+  # fuse:

@@ -65,10 +65,12 @@ def fetch_from_discord():
 
     # For every server listed in config, iterate over options, and download messages
     for server in config["discord"]["servers"]:
+        print("exporting " + server)
         skip = False
-        if "skip" in server:
-            print("skip is found")
-            skip = server["skip"]
+        try:
+            skip = config["discord"]["servers"][server].get("skip", False)
+        except:
+            skip = False
         if skip == True:
             continue
 

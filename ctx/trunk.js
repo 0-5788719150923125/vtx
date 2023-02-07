@@ -60,7 +60,7 @@ const channel = gun
     try {
       if (typeof node.payload === 'string') {
         const payload = JSON.parse(node.payload)
-        let message = null
+        let message = 'ERROR: Me Found.'
         if (payload.pubKey !== null && payload.pubKey !== undefined) {
           const sender = await gun.user(`${payload.pubKey}`)
           message = await SEA.verify(payload.message, sender.pub)

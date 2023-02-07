@@ -33,7 +33,7 @@ async def subscribe(channel):
 
     roll = random.random()
 
-    if roll >= chance:
+    if roll > chance:
         return
 
     deep = requests.get("http://ctx:9666/channel")

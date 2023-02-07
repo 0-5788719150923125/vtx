@@ -66,7 +66,7 @@ def loader(target=None):
         tokenizer_file = "src." + target + ".tokenizer.json"
         model_folder = None
 
-    print(bc.CORE + "INK@CORE: " + bc.ENDC + model["info"])
+    print(bc.FOLD + "PEN@FOLD: " + bc.ENDC + model["info"])
     ai = aitextgen(
         model=model.get("model", None),
         model_folder=model_folder,
@@ -76,6 +76,7 @@ def loader(target=None):
         cache_dir="gpt/models",
     )
     print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + str(ai))
+    print(bc.FOLD + "PEN@FOLD: " + bc.ENDC + "focused on the " + target)
     return ai
 
 
@@ -123,20 +124,10 @@ def gen(bias=None, ctx=None):
         seed = q["data"][0]
         print("quantum seed was set to " + str(seed))
 
-    print(bc.CORE + "INK@CORE " + bc.ENDC + ship + " prompt")
-
     # bias the prompt
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-            print(
-                bc.CORE
-                + "INK@CORE "
-                + bc.ENDC
-                + " "
-                + ship
-                + " bias toward "
-                + str(bias)
-            )
+            print(bc.CORE + "INK@CORE  " + bc.ENDC + ship + " bias toward " + str(bias))
             prefixes = ["I", "You", ""]
             prompt = propulsion + str(bias) + ship + " " + random.choice(prefixes)
 
@@ -169,7 +160,6 @@ def gen(bias=None, ctx=None):
         print(e)
         return
     try:
-        print("\033[92m" + "completion" + "\033[0m")
         generation = completion[0][len(history) :]
 
         try:

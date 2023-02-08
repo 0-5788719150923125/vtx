@@ -4,7 +4,7 @@ source:
     chance: 0.03
 
 heart:
-  info: never focus on the heart
+  info: never give up, never give in
   model: gpt2
   to_gpu: False
 
@@ -41,7 +41,7 @@ soul:
 
 toe:
   version: 0
-  info: never give up, never give in
+  info: focus on the nails
   to_gpu: False
   n_gpu: 1
   max_new_tokens: 333

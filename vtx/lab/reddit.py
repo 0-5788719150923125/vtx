@@ -42,32 +42,35 @@ reddit = asyncpraw.Reddit(
 # Subscribe to a single subreddit
 async def subscribe(subreddit):
 
-    chance = config["reddit"][subreddit].get("chance", 0.01)
-    watch = []
+    try:
+        chance = config["reddit"][subreddit].get("chance", 0.01)
+        watch = []
 
-    if "watch" not in config["reddit"][subreddit]:
-        return
-    if config["reddit"][subreddit]["watch"] == True:
-        watch.append(subreddit)
-    else:
-        return
+        if "watch" not in config["reddit"][subreddit]:
+            return
+        if config["reddit"][subreddit]["watch"] == True:
+            watch.append(subreddit)
+        else:
+            return
 
-    subreddit = await reddit.subreddit(subreddit, fetch=True)
+        subreddit = await reddit.subreddit(subreddit, fetch=True)
+    except Exception as e:
+        print(e)
 
     async for comment in subreddit.stream.comments(skip_existing=True):
         try:
 
             roll = random.random()
-
             if roll >= chance:
                 return
 
             await comment.submission.load()
             parent = await comment.parent()
             submission_title = comment.submission.title
+            submission_body = comment.submission.selftext[:222]
             parent_text = None
             if isinstance(parent, asyncpraw.models.Submission):
-                parent_text = str(parent.title) + " => " + str(parent.selftext)
+                parent_text = str(parent.title) + " => " + str(parent.selftext[:222])
             else:
                 await parent.load()
                 await parent.refresh()
@@ -85,14 +88,23 @@ async def subscribe(subreddit):
             ctx = [
                 propulsion + str(c) + ship + " " + "You are a chat bot.",
                 propulsion + str(p) + ship + " " + "I am a chat bot.",
+                propulsion
+                + str(c)
+                + ship
+                + " "
+                + submission_title
+                + " => "
+                + submission_body,
                 propulsion + str(p) + ship + " " + parent_text,
                 propulsion + str(c) + ship + " " + comment.body,
             ]
+            generation = await head.gen(bias=int(get_identity()), ctx=ctx)
             print(
                 bc.ROOT
                 + "/r/"
                 + subreddit.display_name
                 + bc.ENDC
+                + " "
                 + ship
                 + " "
                 + submission_title
@@ -102,6 +114,7 @@ async def subscribe(subreddit):
                 + "=> "
                 + str(parent.author)
                 + bc.ENDC
+                + " "
                 + ship
                 + " "
                 + parent_text[:66]
@@ -111,16 +124,17 @@ async def subscribe(subreddit):
                 + "==> "
                 + str(comment.author)
                 + bc.ENDC
+                + " "
                 + ship
                 + " "
                 + str(comment.body)
             )
-            generation = await head.gen(bias=int(get_identity()), ctx=ctx)
             print(
                 bc.CORE
                 + "<=== "
                 + os.environ["REDDITAGENT"]
                 + bc.ENDC
+                + " "
                 + ship
                 + " "
                 + generation[1]
@@ -135,6 +149,7 @@ async def subscribe(subreddit):
                 + "<=== "
                 + os.environ["REDDITAGENT"]
                 + bc.ENDC
+                + " "
                 + ship
                 + " "
                 + output

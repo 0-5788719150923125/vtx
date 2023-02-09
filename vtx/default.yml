@@ -41,7 +41,7 @@ soul:
 
 toe:
   version: 0
-  info: focus on the nails
+  info: we focus on the nail
   to_gpu: False
   n_gpu: 1
   max_new_tokens: 333

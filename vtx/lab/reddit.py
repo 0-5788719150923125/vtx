@@ -7,6 +7,8 @@ import random
 import head
 import secrets
 import pprint
+import requests
+import json
 
 with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -29,15 +31,16 @@ class bc:
     ENDC = "\033[0m"
 
 
+reddit = asyncpraw.Reddit(
+    client_id=os.environ["REDDITCLIENT"],
+    client_secret=os.environ["REDDITSECRET"],
+    user_agent="u/" + os.environ["REDDITAGENT"],
+    username=os.environ["REDDITAGENT"],
+    password=os.environ["REDDITPASSWORD"],
+)
+
 # Subscribe to a single subreddit
 async def subscribe(subreddit):
-    reddit = asyncpraw.Reddit(
-        client_id=os.environ["REDDITCLIENT"],
-        client_secret=os.environ["REDDITSECRET"],
-        user_agent="u/" + os.environ["REDDITAGENT"],
-        username=os.environ["REDDITAGENT"],
-        password=os.environ["REDDITPASSWORD"],
-    )
 
     chance = config["reddit"][subreddit].get("chance", 0.01)
     watch = []
@@ -46,91 +49,107 @@ async def subscribe(subreddit):
         return
     if config["reddit"][subreddit]["watch"] == True:
         watch.append(subreddit)
+    else:
+        return
 
     subreddit = await reddit.subreddit(subreddit, fetch=True)
 
     async for comment in subreddit.stream.comments(skip_existing=True):
-
-        roll = random.random()
-
-        if roll >= chance:
-            comment.close()
-            return
-
-        await comment.submission.load()
-        parent = await comment.parent()
-        print(
-            bc.ROOT
-            + "/r/"
-            + subreddit.display_name
-            + bc.ENDC
-            + ship
-            + " "
-            + comment.submission.title
-        )
-        parent_text = None
-        if isinstance(parent, asyncpraw.models.Submission):
-            parent_text = str(parent.title) + " => " + str(parent.selftext)
-        else:
-            await parent.load()
-            await parent.refresh()
-            if parent.author == os.environ["REDDITAGENT"]:
-                continue
-            parent_text = str(parent.body)
-
-        await comment.load()
-        if comment.author == os.environ["REDDITAGENT"]:
-            continue
-
-        p = get_identity()
-        c = get_identity()
-
-        ctx = [
-            propulsion + str(c) + ship + " " + "You are a chat bot.",
-            propulsion + str(p) + ship + " " + "I am a chat bot.",
-            propulsion + str(p) + ship + " " + parent_text,
-            propulsion + str(c) + ship + " " + comment.body,
-        ]
-        generation = await head.gen(bias=int(get_identity()), ctx=ctx)
-        print(bc.ROOT + "/r/" + subreddit.display_name + bc.ENDC)
-        print(
-            bc.FOLD
-            + "=> "
-            + str(parent.author)
-            + bc.ENDC
-            + ship
-            + " "
-            + parent_text[:66]
-        )
-        print(
-            bc.FOLD
-            + "==> "
-            + str(comment.author)
-            + bc.ENDC
-            + ship
-            + " "
-            + str(comment.body)
-        )
-        print(bc.CORE + "<=== " + "Ink" + bc.ENDC + ": " + generation[1])
         try:
-            output = transformer(generation[1])
-            print(bc.ROOT + "<=== " + "Ink" + bc.ENDC + ": " + output)
+
+            roll = random.random()
+
+            if roll >= chance:
+                return
+
+            await comment.submission.load()
+            parent = await comment.parent()
+            submission_title = comment.submission.title
+            parent_text = None
+            if isinstance(parent, asyncpraw.models.Submission):
+                parent_text = str(parent.title) + " => " + str(parent.selftext)
+            else:
+                await parent.load()
+                await parent.refresh()
+                if parent.author == os.environ["REDDITAGENT"]:
+                    continue
+                parent_text = str(parent.body)
+
+            await comment.load()
+            if comment.author == os.environ["REDDITAGENT"]:
+                continue
+
+            p = get_identity()
+            c = get_identity()
+
+            ctx = [
+                propulsion + str(c) + ship + " " + "You are a chat bot.",
+                propulsion + str(p) + ship + " " + "I am a chat bot.",
+                propulsion + str(p) + ship + " " + parent_text,
+                propulsion + str(c) + ship + " " + comment.body,
+            ]
+            print(
+                bc.ROOT
+                + "/r/"
+                + subreddit.display_name
+                + bc.ENDC
+                + ship
+                + " "
+                + submission_title
+            )
+            print(
+                bc.FOLD
+                + "=> "
+                + str(parent.author)
+                + bc.ENDC
+                + ship
+                + " "
+                + parent_text[:66]
+            )
+            print(
+                bc.FOLD
+                + "==> "
+                + str(comment.author)
+                + bc.ENDC
+                + ship
+                + " "
+                + str(comment.body)
+            )
+            generation = await head.gen(bias=int(get_identity()), ctx=ctx)
+            print(
+                bc.CORE
+                + "<=== "
+                + os.environ["REDDITAGENT"]
+                + bc.ENDC
+                + ship
+                + " "
+                + generation[1]
+            )
+            obj = {"seed": str(generation[0])}
+            response = requests.get("http://ctx:9666/daemon", json=obj)
+            daemon = json.loads(response.text)
+            response.close()
+            output = transformer([daemon["name"], generation[1]])
+            print(
+                bc.ROOT
+                + "<=== "
+                + os.environ["REDDITAGENT"]
+                + bc.ENDC
+                + ship
+                + " "
+                + output
+            )
             await comment.reply(output)
-            comment.close()
-        except:
-            output = transformer(generation[1])
-            await comment.reply(output)
-            print(bc.FOLD + "<=== " + "Ink" + bc.ENDC + ": " + output)
+        except Exception as e:
+            print(e)
 
 
 # format the output
-def transformer(string):
+def transformer(group):
     responses = [
-        f'My daemon says, "{string}"',
-        f'Penny said, "{string}"',
-        f'Ink says, "{string}"',
-        f'I think, "{string}"',
-        f"{string}",
+        f'My daemon says, "{group[1]}"',
+        f'Penny said, "{group[1]}"',
+        f'{group[0]} says, "{group[1]}"',
     ]
     return random.choice(responses)
 

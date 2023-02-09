@@ -94,9 +94,9 @@ context = [
 def build_context(message):
     if len(context) >= 9:
         context.pop(0)
-        build_context(message[:111])
+        build_context(message[:222])
     else:
-        context.append(propulsion + message[:110])
+        context.append(propulsion + message[:221])
 
 
 # Generate a completion from bias and context

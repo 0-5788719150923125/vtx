@@ -145,7 +145,7 @@ class Client(discord.Client):
     # check every Discord message
     async def on_message(self, message):
 
-        reply = True
+        reply = random.choice([True, False])
 
         bias = 0
         output = "ERROR: Me Found."
@@ -167,7 +167,6 @@ class Client(discord.Client):
             print(bc.FOLD + "dj ent" + bc.ENDC)
             weight = 1
             bias = 530243004334604311
-            reply = False
             try:
                 if message.content == "gen":
                     await message.delete()

@@ -49,7 +49,7 @@ toe:
     resume: True
     base_model: EleutherAI/gpt-neo-125M
     to_gpu: True
-    batch_size: 3
+    batch_size: 9
     block_size: 222
     num_steps: 88888
     warmup_steps: 0

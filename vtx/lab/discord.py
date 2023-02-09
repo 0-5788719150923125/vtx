@@ -129,7 +129,8 @@ class Client(discord.Client):
                 else:
                     bias = recent_author_id
 
-                output = await head.gen(int(bias), context)
+                generation = await head.gen(int(bias), context)
+                output = transformer([generation[0], generation[1]])
 
                 print("=> output to " + channel.name)
                 print(output)
@@ -206,7 +207,9 @@ class Client(discord.Client):
         print(bc.ROOT + "heads" + bc.ENDC)
         await asyncio.sleep(random.randint(2, 13))
         async with message.channel.typing():
-            output = await head.gen(bias)
+            generation = await head.gen(bias)
+            output = transformer([generation[0], generation[1]])
+
         print(bc.FOLD + "output" + bc.ENDC)
 
         # make random redactions
@@ -247,6 +250,18 @@ class bc:
     WARNING = "\033[93m"
     CORE = "\033[91m"
     ENDC = "\033[0m"
+
+
+# format the output
+def transformer(group):
+    responses = [
+        f'The ghost of <@{group[0]}> suggests, *"{group[1]}"*',
+        f'<@{group[0]}> says, *"{group[1]}"*',
+        f'<@{group[0]}> would say, *"{group[1]}"*',
+        f'They said, *"{group[1]}"*',
+        f"{group[1]}",
+    ]
+    return random.choice(responses)
 
 
 # list all available Discord channels

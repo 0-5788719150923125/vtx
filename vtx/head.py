@@ -171,27 +171,16 @@ def gen(bias=None, ctx=None):
         if group[2] == "" or group[3] == "":
             print("generation was not subscriptable")
             return
-        output = transformer([group[2], group[3]])
-        try:
-            output = output.replace("Q:", "")
-        except:
-            output = output
+        output = [group[2], group[3]]
+        # output = transformer([group[2], group[3]])
+        # try:
+        #     output = output.replace("Q:", "")
+        # except:
+        #     output = output
     except Exception as e:
         print(e)
-        output = completion[0]
+        output = ["1055993037077106718", completion[0]]
     return output
-
-
-# format the output
-def transformer(group):
-    responses = [
-        f'The ghost of <@{group[0]}> suggests, *"{group[1]}"*',
-        f'<@{group[0]}> says, *"{group[1]}"*',
-        f'<@{group[0]}> would say, *"{group[1]}"*',
-        f'They said, *"{group[1]}"*',
-        f"{group[1]}",
-    ]
-    return random.choice(responses)
 
 
 class bc:

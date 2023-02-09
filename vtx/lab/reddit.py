@@ -91,7 +91,7 @@ async def subscribe(subreddit):
             propulsion + str(p) + ship + " " + parent_text,
             propulsion + str(c) + ship + " " + comment.body,
         ]
-        response = await head.gen(bias=int(get_identity()), ctx=ctx)
+        generation = await head.gen(bias=int(get_identity()), ctx=ctx)
         print(bc.ROOT + "/r/" + subreddit.display_name + bc.ENDC)
         print(
             bc.FOLD
@@ -111,16 +111,14 @@ async def subscribe(subreddit):
             + " "
             + str(comment.body)
         )
-        print(bc.CORE + "<=== " + "Ink" + bc.ENDC + ": " + response)
+        print(bc.CORE + "<=== " + "Ink" + bc.ENDC + ": " + generation[1])
         try:
-
-            group = re.search(r"(:?\*\")(.*)(:?\"\*)", response)
-            print(bc.ROOT + "<=== " + "Ink" + bc.ENDC + ": " + group[2])
-            output = transformer(group[2])
+            output = transformer(generation[1])
+            print(bc.ROOT + "<=== " + "Ink" + bc.ENDC + ": " + output)
             await comment.reply(output)
             comment.close()
         except:
-            output = transformer(response)
+            output = transformer(generation[1])
             await comment.reply(output)
             print(bc.FOLD + "<=== " + "Ink" + bc.ENDC + ": " + output)
 
@@ -130,8 +128,8 @@ def transformer(string):
     responses = [
         f'My daemon says, "{string}"',
         f'Penny said, "{string}"',
-        f'Ink thinks, "{string}"',
-        f'I say, "{string}"',
+        f'Ink says, "{string}"',
+        f'I think, "{string}"',
         f"{string}",
     ]
     return random.choice(responses)

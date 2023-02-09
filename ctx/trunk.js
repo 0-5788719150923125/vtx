@@ -88,11 +88,13 @@ app.post('/message', async (req, res) => {
   try {
     // Destructure and sign message
     let { message, identifier } = req.body
+    let pubKey = null
     if (user) {
       message = await SEA.sign(message, pair)
+      pubKey = pair.pub
     }
     // Send message to GUN
-    const payload = JSON.stringify({ identifier, message, pubKey: pair.pub })
+    const payload = JSON.stringify({ identifier, message, pubKey })
     await channel.get('payload').put(payload)
     console.log('\x1b[92m' + 'ONE@ROOT: ' + '\x1b[37m' + 'pang')
   } catch (err) {

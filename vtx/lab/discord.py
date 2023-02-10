@@ -141,6 +141,7 @@ class Client(discord.Client):
             except Exception as e:
                 print(bc.CORE + str(e) + bc.ENDC)
                 print(bc.CORE + "failed to concentrate" + bc.ENDC)
+                self.discord_task = self.loop.create_task(self.think())
 
     # check every Discord message
     async def on_message(self, message):

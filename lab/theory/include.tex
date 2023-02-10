@@ -1,0 +1,759 @@
+%% Let's put in these file all the definitions that we
+%% require:
+
+%% Setup language, encoding...
+\RequirePackage{etex} 
+
+\usepackage{standalone}
+\usepackage{lmodern}
+% Language
+\usepackage[english]{babel}
+% Input encoding
+\usepackage[utf8]{inputenc}
+% Output encoding https://tex.stackexchange.com/a/677. Important to copy accents
+\usepackage[T1]{fontenc}
+\usepackage{subfiles} % To quickly load this include file other files
+\usepackage{microtype}
+\usepackage[shortcuts,nospacearound]{extdash}    % Better endling of em dash (---) to cut sentences\===like 
+%%% https://tex.stackexchange.com/questions/2773/how-do-i-make-latex-push-long-citations-to-a-new-line
+\usepackage{breakcites}
+\usepackage{booktabs}
+% Makes sure floats don't fly accross sections
+\usepackage{placeins}
+\usepackage{adjustbox}
+\usepackage{varwidth} % Like minipage, but with automatic width discovery.
+\usepackage{complexity} % get \QMA{}...
+
+\usepackage[normalem]{ulem}
+%\usepackage[math-style=ISO]{unicode-math}
+\usepackage{upgreek} % non italic greak letters
+
+%%%% Bibliography
+% I want to have separate references for appendix and main body
+% https://tex.stackexchange.com/questions/98660/
+\usepackage[style=trad-alpha,
+  sortcites=true,
+  doi=false,
+  url=false,
+  giveninits=true, % Bob Foo --> B. Foo
+  isbn=false,
+  url=false,
+  eprint=false,
+  sortcites=false, % \cite{B,A,C}: [A,B,C] --> [B,A,C]
+]{biblatex}
+\defbibfilter{appendixOnlyFilter}{
+  segment=1 % Segment 1 will be chosen to be the one in appendix
+  and not segment=0 % Default segment is 0
+}
+\renewcommand{\multicitedelim}{, } % [ABC96; DEF12] -> [ABC96, DEF12]
+% [unknown_ref] => [??]
+% https://tex.stackexchange.com/a/352573
+\makeatletter
+\protected\def\abx@missing#1{\textbf{??}}
+\makeatother
+\renewcommand*{\bibfont}{\normalfont\small} % BibLatex font seems bigger than Bibtex?
+
+\usepackage{xcolor,cancel}
+\usepackage{proof-at-the-end}
+\NewDocumentEnvironment{theoremE}{O{}O{}+b}{%
+  \begin{theoremEnd}[normal,#2]{theorem}[#1]%
+    #3%
+  \end{theoremEnd}
+  %
+}{}% Do not forget the second parameter or you might get Missing \begin{document} error
+\NewDocumentEnvironment{lemmaE}{O{}O{}+b}{%
+  \begin{theoremEnd}[normal,#2]{lemma}[#1]%
+    #3%
+  \end{theoremEnd}
+  %
+}{}% Do not forget the second parameter or you might get Missing \begin{document} error
+\NewDocumentEnvironment{corollaryE}{O{}O{}+b}{%
+  \begin{theoremEnd}[normal,#2]{corollary}[#1]%
+    #3%
+  \end{theoremEnd}
+  %
+}{}% Do not forget the second parameter or you might get Missing \begin{document} error
+\NewDocumentEnvironment{proofE}{O{}+b}{%
+  \begin{proofEnd}[#1]%
+    #2
+  \end{proofEnd}%
+}{}%
+\pgfkeys{/prAtEnd/global custom defaults/.style={
+    text link={\noindent See \hyperref[proof:prAtEnd\pratendcountercurrent]{proof} in \cref{proofsection:prAtEnd\pratendcountercurrent}.}
+  }
+}
+
+\ifdefined\displayArxivTexts%
+  \pgfkeys{/prAtEnd/end if published/.style={no restate}}
+  \pgfkeys{/prAtEnd/all end if published/.style={no restate}}
+\else%
+  \pgfkeys{/prAtEnd/end if published/.style={end}}
+  \pgfkeys{/prAtEnd/all end if published/.style={all end}}
+\fi
+
+% https://tex.stackexchange.com/a/20613/116348
+% https://tex.stackexchange.com/a/583244/116348
+\usepackage{scalerel}
+\newcommand\hcancel[2][black]{%
+  \ThisStyle{%
+    \setbox0=\hbox{$\SavedStyle #2$}%
+    \rlap{\raisebox{.25\ht0}{\textcolor{#1}{\rule{\wd0}{1pt}}}}\SavedStyle #2}%
+}
+
+%% We provide 3 commands to add comments/text:
+%% - \yournameAddText{your text to add}: proposition to add text
+%% - \yournameRemoveText{text to remove}: proposition to remove text
+%% - \yournameComment{your comments}: to add general comment to discuss. Should not contain proposition to add or remove text, but can be added before/after to explain the reason of the modification.
+%% The interest it to provide some quick ways to see what is the final number of pages:
+%% just add before the import a line:
+%%   \def\removeCommentsAcceptPropositions{}
+%% and the proposition will be "accepted" (i.e. the removed text is removed,
+%% and the added text will be marked as black), and the comment will be removed, that way it is possible
+%% to determine the final number of pages.
+%% Example:
+%% This text is normal\leoRemove{, this text should be removed}\leoAddText{, this text should be added}\leoComment{This is a comment, explaining why I made that changes.}.
+\newcommand{\addEditor}[2]{%
+  \expandafter\newcommand\csname #1AddText\endcsname[2][]{%
+    \ifdefined\removeCommentsAcceptPropositions %
+      ##2%
+    \else%
+      \textcolor{#2}{\sout{##1}}\textcolor{#2!60!black}{##2}%
+    \fi%
+  }%
+  \expandafter\newcommand\csname #1Comment\endcsname[1]{%
+    \ifdefined\removeCommentsAcceptPropositions %
+    \else%
+      \textcolor{#2!60!white}{\textbf{##1}}%
+    \fi%
+  }%
+  \expandafter\newcommand\csname #1Remove\endcsname[1]{%
+    \ifdefined\removeCommentsAcceptPropositions %
+    \else%
+      \textcolor{#2}{\sout{##1}}%
+    \fi%
+  }%
+}
+\definecolor{darkgreen}{rgb}{0., 0.7, 0}
+\addEditor{leo}{darkgreen}
+\addEditor{fred}{red}
+\addEditor{elham}{blue}
+
+%% We also provide an arxivOnly environment, in order to include text that are too long for the submitted version
+%% but that would be good to have in the arxiv version.
+% Use the \begin{arxivOnly} ... \end{arxivOnly} environment, by putting the opening and ending command
+%% on there own line.
+%% For shorter texts, you can use the inline version \arxivOnlyShort{your text}.
+%% If you want to exclude text from the arxiv, use \begin{publishedOnly} ... \end{publishedOnly} and \publishedOnlyShort{your text}
+%% "Comment" package is annoying, it does not allow block indentation, we use 'versions' instead
+% \usepackage{versions} %% Do not work inside theoremE, don't know why
+\ifdefined\displayArxivTexts%
+  % \includeversion{arxivOnly}
+  % \excludeversion{publishedOnly}
+  \newcommand{\arxivOnly}[1]{#1}
+  \newcommand{\arxivOnlyNoDiff}[1]{#1} % Like arxivOnly, but useful in diff mode (when it does not make sense to add colors, for instance inside a cite or when using arxivonly to create lists.
+  \newcommand{\publishedOnly}[1]{}
+  \newcommand{\publishedVsArxiv}[2]{#2}
+  \newcommand{\inAppendixIfPublished}[1]{#1}
+\else%
+  \ifdefined\displayDiffTexts%
+    \colorlet{arxivDiff}{green}
+    \colorlet{publishedDiff}{red}
+    \newcommand{\arxivOnly}[1]{{\color{arxivDiff}#1}}
+    \newcommand{\arxivOnlyNoDiff}[1]{#1}
+    \newcommand{\publishedOnly}[1]{{\color{publishedDiff}#1}}
+    \newcommand{\publishedVsArxiv}[2]{{\color{publishedDiff}#1}{\color{arxivDiff}#2}}
+    \newcommand{\inAppendixIfPublished}[1]{{\color{arxivDiff}\textbf{MOVED IN APPENDIX IN PUBLISHED}#1}\textEnd{{\color{publishedDiff}\textbf{MOVED IN MAIN BODY IN ARXIV}#1}}}
+  \else
+    % \excludeversion{arxivOnly}
+    % \includeversion{publishedOnly}
+    \newcommand{\arxivOnly}[1]{}
+    \newcommand{\arxivOnlyNoDiff}[1]{}
+    \newcommand{\publishedOnly}[1]{#1}
+    \newcommand{\publishedVsArxiv}[2]{#1}
+    \newcommand{\inAppendixIfPublished}[1]{\textEnd{#1}}
+  \fi
+\fi
+% Alias, easier to remember  
+\newcommand{\inAppendix}[1]{\textEnd{#1}}
+  
+% Symbol to display when an arxiv text is supposed to appear
+\usepackage{todonotes}
+\newcommand{\notifyArxiv}{\ifdefined\arxivDraftMode\todo{arXiv}\fi}
+
+% Remove unwanted space before/after lists
+\usepackage{enumitem}
+\publishedOnly{\setlist[itemize]{noitemsep, topsep=0pt}}
+
+% Usual packages:
+\usepackage{amsmath}
+\usepackage{amssymb}
+% \usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage{graphicx}
+\graphicspath{{}{figures/}}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{wrapfig}
+\usepackage{array}
+\usepackage{braket}
+% Refer to footnotes:
+% https://tex.stackexchange.com/a/167382/116348
+\usepackage{footmisc}
+% Useful to use the latest NewDocumentCommand:
+%\usepackage{xparse}
+%\usepackage[poster]{tcolorbox}
+
+%% Space between pictures and text
+%% https://mirrors.chevalier.io/CTAN/macros/latex/contrib/layouts/layman.pdf
+%% \usepackage{layouts}
+%% https://tex.stackexchange.com/questions/60477/remove-space-after-figure-and-before-text?rq=1
+\setlength{\floatsep}{7pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{7pt plus 2pt minus 2pt}
+\setlength{\intextsep}{7pt plus 2pt minus 2pt}
+% https://tex.stackexchange.com/questions/39017/how-to-influence-the-position-of-float-environments-like-figure-and-table-in-lat
+\setcounter{topnumber}{8}
+\setcounter{bottomnumber}{8}
+\setcounter{totalnumber}{8}
+%% https://tex.stackexchange.com/questions/45990/how-can-i-modify-vertical-space-between-figure-and-caption
+%% plus/minus allows to stretch a bit around 15pt
+% \setlength{\abovecaptionskip}{5pt}
+
+% Remove number to subsubsection (in llncs it replaces \paragraph)
+\setcounter{secnumdepth}{2}
+
+%%% Some practical environment to define theorems, lemma...
+% \declaretheorem[name=Theorem,numberwithin=section]{theorem}
+% \declaretheorem[name=Definition,sibling=theorem]{definition}
+% \declaretheorem[name=Lemma,sibling=theorem]{lemma}
+% \declaretheorem[name=Corollary,sibling=theorem]{corollary}
+% \declaretheorem[name=Remark,sibling=theorem]{remark}
+%%% In LNCS we use
+% https://tex.stackexchange.com/a/373125/116348
+% \spnewtheorem{thm}{Theorem}[section]{\bfseries}{\itshape}
+
+%%%
+\usepackage[ruled,vlined]{algorithm2e}
+\SetAlFnt{\normalsize}%
+\setlength{\algomargin}{0em} % remove margin on left of algo
+\SetAlgorithmName{Protocol}{protocol}{List of Protocols}
+\newenvironment{protocol}[1][htb]{\begin{algorithm}[#1]}{\end{algorithm}}
+
+%%% %%% Load algorithm package, and create a breakable version
+%%% \usepackage{algorithm, algorithmicx, algpseudocode}
+%%% % Decrease space between text:
+%%% % https://tex.stackexchange.com/questions/25828/how-to-remove-change-the-vertical-spacing-before-and-after-an-algorithm-enviro/25832
+%%% \setlength{\intextsep}{1\baselineskip}
+%%% % https://tex.stackexchange.com/questions/387577/new-algorithm-environment-with-a-separate-counter
+%%% \newcounter{protocol}
+%%% \makeatletter
+%%% \newenvironment{protocol}[1][htb]{%
+%%%   \let\c@algorithm\c@protocol
+%%%   \renewcommand{\ALG@name}{Protocol}% Update algorithm name
+%%%   \begin{algorithm}[#1]%
+%%%   }{\end{algorithm}
+%%% }
+%%% \makeatother
+%%%
+%%% \providecommand*\algorithmautorefname{Protocol}
+%%% \makeatletter
+%%% \newenvironment{breakablealgorithm}
+%%%   {% \begin{breakablealgorithm}
+%%%    % \begin{center}
+%%%      \refstepcounter{algorithm}% New algorithm
+%%%      \hrule height.8pt depth0pt \kern2pt% \@fs@pre for \@fs@ruled
+%%%      \renewcommand{\caption}[2][\relax]{% Make a new \caption
+%%%        % {\raggedright\textbf{\ALG@name~\thealgorithm} ##2\par}%
+%%%        {\raggedright\textbf{Protocol~\thealgorithm} ##2\par}%
+%%%        \ifx\relax##1\relax % #1 is \relax
+%%%          \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}%
+%%%        \else % #1 is not \relax
+%%%          \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}%
+%%%        \fi
+%%%        \kern2pt\hrule\kern2pt
+%%%        \small
+%%%      }
+%%%   }{% \end{breakablealgorithm}
+%%%      \kern2pt\hrule\relax% \@fs@post for \@fs@ruled
+%%%    % \end{center}
+%%%   }
+%%% \makeatother
+%%%
+
+\def\EQ#1{\begin{eqnarray}#1\end{eqnarray}} 
+
+
+%%% Practical abreviations
+\usepackage{calrsfs} % Replace \mathcal with different more "cursive" font
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} % \pazocal is now the old \mathcal
+\newcommand*{\cA}{\pazocal{A}}
+\newcommand*{\cB}{\pazocal{B}}
+\newcommand*{\cC}{\pazocal{C}}
+\newcommand*{\cD}{\pazocal{D}}
+\newcommand*{\cE}{\pazocal{E}}
+\newcommand*{\cF}{\pazocal{F}}
+\newcommand*{\cG}{\pazocal{G}}
+\newcommand*{\cH}{\pazocal{H}}
+\newcommand*{\cI}{\pazocal{I}}
+\newcommand*{\cJ}{\pazocal{J}}
+\newcommand*{\cK}{\pazocal{K}}
+\renewcommand*{\cL}{\pazocal{L}} % defined in complexity
+\newcommand*{\cM}{\pazocal{M}}
+\newcommand*{\cN}{\pazocal{N}}
+\newcommand*{\cO}{\pazocal{O}}
+\renewcommand*{\cP}{\pazocal{P}} % defined in complexity
+\newcommand*{\cQ}{\pazocal{Q}}
+\newcommand*{\cR}{\pazocal{R}}
+\renewcommand*{\cS}{\pazocal{S}} % defined in complexity
+\newcommand*{\cT}{\pazocal{T}}
+\newcommand*{\cU}{\pazocal{U}}
+\newcommand*{\cV}{\pazocal{V}}
+\newcommand*{\cW}{\pazocal{W}}
+\newcommand*{\cX}{\pazocal{X}}
+\newcommand*{\cY}{\pazocal{Y}}
+\newcommand*{\cZ}{\pazocal{Z}}
+
+% Notation for languages. Make sure not to collide with L(H) for linear operators on H
+%\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+\newcommand{\linearOp}{\mathcal{L}} % Defines the opearator L(H)
+\renewcommand*{\lang}{\pazocal{L}} % Defines a new Turing/Quantum Language
+
+%https://tex.stackexchange.com/questions/195025/
+\newcommand*{\rightSend}{\rightsquigarrow} % snake "a --> b" to say "I send a to b".
+
+% For some reasons, proof-at-the-end do not like # (problem with detokenize? To fix...). So we use a macro:
+\newcommand*{\diese}{\#}
+
+\newcommand*{\eps}[0]{\varepsilon}
+\renewcommand*{\D}[0]{\mathbb{D}}
+\renewcommand*{\E}{\mathbb{E}}
+\newcommand*{\N}[0]{\mathbb{N}}
+\renewcommand*{\R}[0]{\mathbb{R}}
+\renewcommand*{\C}[0]{\mathbb{C}}
+\newcommand*{\Z}[0]{\mathbb{Z}}
+\newcommand*{\T}[0]{\mathbb{T}}
+
+\newcommand*{\CPA}[0]{\textsf{CPA}}
+\newcommand*{\LWE}[0]{\textsf{LWE}}
+\newcommand*{\GapSVP}[0]{\textsf{GapSVP}}
+\newcommand*{\SIVP}[0]{\textsf{SIVP}}
+
+% first param is alpha, second is q (optional)
+\newcommand{\contGauss}[1]{\cD_{#1}}
+\newcommand{\disGauss}[2]{\cD_{\Z,#1 #2}}
+\newcommand{\disGaussCont}[1]{\cD_{\Z,#1}}
+\newcommand{\disGaussAQ}{\cD_{\Z,\alpha q}}
+\newcommand{\rsafe}{r_{\text{safe}}}
+% domain of the function.
+\newcommand{\ccX}{\cX}
+\newcommand{\ccXSphere}{\cX_\bullet}
+\newcommand{\ccXCube}[1][]{\cX_{\scalebox{.4}{$\blacksquare$}#1}}
+
+\newcommand{\BBHeightyFor}{\textsc{BB84}}
+
+% "Correct" spacing around cdot as wildcard
+% https://tex.stackexchange.com/questions/78165/spacing-around-cdot-when-used-as-a-wildcard
+\newcommand\cdotwild{{\mkern 2mu\cdot\mkern 2mu}}
+
+\newcommand*{\id}{\mathrm{id}}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Det}{Det}
+\DeclareMathOperator{\ERR}{ERR}
+\DeclareMathOperator{\Round}{Round}
+
+\newcommand{\Ver}{ {\tt Ver} } %% Verify public key
+\newcommand{\Gen}{ {\tt Gen} }
+\newcommand{\GenLocal}{\ensuremath{ {\tt Gen}_{\tt Loc}} }
+\newcommand{\Enc}{ {\tt Enc} }
+\newcommand{\Dec}{ {\tt Invert} }
+\newcommand{\Eval}{ {\tt Eval} }
+
+\newcommand{\HGen}{ {\tt H.Gen} }
+\newcommand{\HEnc}{ {\tt H.Enc} }
+\newcommand{\HDec}{ {\tt H.Invert} }
+\newcommand{\HEval}{ {\tt H.Eval} }
+\newcommand{\Hh}{\ensuremath{{\tt H.}h} }
+\newcommand{\HCheckHonestTrapdoor}{\ensuremath{{\tt H.CheckTrapdoor}}}
+
+\newcommand{\MPGen}{ {\tt MP.Gen} }
+\newcommand{\MPDec}{ {\tt MP.Invert} }
+\newcommand{\InvertSmallGadget}{ \ensuremath{{\texttt{InvertSmallGadget}}} }
+\newcommand{\InvertGadget}{ {\tt InvertGadget} }
+% \newcommand{\MPEval}{ $g$ }
+
+
+\DeclareMathOperator{\RoundMod}{RoundMod}
+
+
+% https://tex.stackexchange.com/a/253746/116348
+\usepackage{mleftright}
+\newcommand{\BlockMatrix}[2]{%
+  \mleft[%
+  \begin{array}{@{}#1@{}}%
+    #2
+  \end{array}%
+  \mright]%
+}
+\newcommand{\SmallBlockMatrix}[2]{
+  \mleft[\begin{array}{c}
+    #1\tabularnewline % https://tex.stackexchange.com/questions/328745/matrices-with-cryptocode-package
+    \hline
+    #2
+  \end{array}\mright]
+}
+\newcommand{\HorizBlockMatrix}[2]{
+  \mleft[\begin{array}{@{}c|c@{}}
+    #1 & #2
+  \end{array}\mright]
+}
+
+\newcommand*{\vect}[1]{\ensuremath{\mathbf{#1}}}
+
+
+%% Already defined in *recent* cryptocode.
+% \DeclareMathOperator*{\argmax}{arg \, max}
+% \DeclareMathOperator*{\argmin}{arg \, min}
+
+\usepackage{xspace}
+\xspaceaddexceptions{]\}}
+\newcommand{\RSP}{\ensuremath{\sf{RSP}}\xspace}%
+
+\newcommand*{\RSPenc}{\mathrm{RSP}_{\mathrm{enc}}}
+\newcommand*{\filter}{\vdash}
+\newcommand*{\channelBB}{\cS_{\Z\frac{\pi}{2}}}
+% To denote a protocol between two parties
+% \newcommand*{\protocol}{\boldsymbol{\pi}}
+\newcommand\compRSP{composable $\sf{RSP}_{CC}$}
+\newcommand\RSPlike{$\sf{RSP}_{CC}$}
+\newcommand\compUBQC{composable $\sf{UBQC}_{CC}$}
+\newcommand\UBQClike{$\sf{UBQC}_{CC}$}
+% GHZ
+\newcommand*{\eqdef}{\coloneqq}
+\newcommand*{\PERM}{\ensuremath{}{\sf PERM}}
+\newcommand*{\PPT}{\ensuremath{}{\sf PPT}}
+\newcommand*{\QPT}{\ensuremath{}{\sf QPT}}
+\newcommand*{\Auth}{\ensuremath{}{\sf Auth}}
+% Prover, verifier, extractor
+\renewcommand*{\P}{\ensuremath{}{\sf P}}
+\newcommand*{\V}{\ensuremath{}{\sf V}}
+\renewcommand*{\K}{\ensuremath{}{\sf K}}
+
+
+% Here are the different protocols we use
+% Initial protocol
+\newcommand{\blind}{\ensuremath{ {\tt BLIND} }}
+\newcommand{\blindZK}{\ensuremath{ {\tt BLIND-ZK} }}
+% Reveals to people if they are part of the support
+\newcommand{\blindSup}{\ensuremath{ {\tt BLIND}^{\tt sup} }}
+% Make sure that people in the support share a canonical GHZ
+\newcommand{\blindCan}{\ensuremath{ {\tt BLIND}_{\tt can} }}
+% Make sure that people in the support share a canonical GHZ and that they know they are supported
+\newcommand{\blindCanSup}{\ensuremath{ {\tt BLIND}^{\tt sup}_{\tt can} }}
+\newcommand{\authBlindCanDist}{\ensuremath{ {\tt AUTH-BLIND}^{\tt dist}_{\tt can} }}
+\newcommand{\verifCanSup}{\ensuremath{ {\tt VERIF}^{\tt sup}_{\tt can} }}
+\newcommand{\blindPoly}{\ensuremath{ {\tt BLIND-poly} }}
+\newcommand{\INDFCT}{\ensuremath{ {\tt IND-D0} }}
+\newcommand{\INDBLIND}{\refGame*{INDBLIND}}
+\newcommand{\INDBLINDtxt}{\ensuremath{ {\tt IND-\blind{}} }}
+\newcommand{\INDBLINDSUP}{\refGame*{INDBLINDSUP}}
+\newcommand{\INDBLINDSUPtxt}{\ensuremath{ {\tt IND-\blindSup{}} }}
+\newcommand{\INDBLINDCANSUP}{\ensuremath{ {\tt IND-\blindCanSup{}} }}
+\newcommand{\INDBLINDCANAUTH}{\ensuremath{ {\tt IND-\authBlindCanDist{}} }}
+\newcommand{\INDPARTIAL}{\ensuremath{ {\tt IND-PARTIAL} }}
+\newcommand*\GHZ{\ensuremath{}{\sf GHZ}}
+\newcommand*\GHZCan{\ensuremath{{\sf GHZ^{\sf can}}}}
+% Generalized GGHZ
+\newcommand*\GGHZ{\ensuremath{ {\sf GHZ^G} }}
+\newcommand*\HGHZ{\ensuremath{ {\sf GHZ^H} }}
+\newcommand{\AssumpFctNoDelta}{\HGHZ{} capable}
+\newcommand{\AssumpFctCanNoDelta}{\GHZCan{} capable}
+\newcommand{\AssumpFct}{$\delta$-\HGHZ{} capable}
+\newcommand{\AssumpFctNegl}{$\negl[\lambda]$-\HGHZ{} capable}
+\newcommand{\AssumpFctCan}{$\delta$-\GHZCan{} capable}
+\newcommand{\AssumpFctCanPrime}{$\delta^\prime$-\GHZCan{} capable}
+\newcommand{\AssumpFctDist}{distributable}
+\newcommand{\partialInfo}{\ensuremath{{\tt PartInfo}}}
+\newcommand{\partialInfoLocal}{\ensuremath{{\tt PartInfo_{\tt Loc}}}}
+\newcommand{\partialAlpha}{\ensuremath{{\tt PartAlpha_{\tt Loc}}}}
+\newcommand{\CombineAlpha}{\ensuremath{{\tt CombineAlpha}}}
+\newcommand{\CombineRandom}{\ensuremath{{\tt CombineRandom}}}
+\newcommand{\CheckHonestTrapdoor}{\ensuremath{{\tt CheckTrapdoor}}}
+\newcommand{\ZKGenCheck}{\ensuremath{{\tt ZK-GenCheck}}}
+
+\newcommand{\highlightChanges}[1]{\textcolor{green!50!black}{#1}}
+
+\newcommand{\Real}{\ensuremath{\mathsf{REAL}}}
+\newcommand{\Sim}{\ensuremath{\mathsf{Sim}}}
+\newcommand{\Ideal}{\ensuremath{\mathsf{IDEAL}}}
+\newcommand{\OUT}{\ensuremath{\mathsf{OUT}}}
+
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+% To denote that a user is not in the final GHZ
+\newcommand{\cross}{\ensuremath{\text{\ding{55}}}}
+
+\usepackage{verbatim}
+\newcommand{\leftI}{{\normalfont\ttfamily left}}
+\newcommand{\rightI}{{\normalfont\ttfamily right}}
+\newcommand*{\mybar}[1]{\overline{#1}}
+
+\newcommand*{\quout}{\mathtt{out}}
+
+\DeclareMathOperator{\Image}{Image}
+\DeclareMathOperator{\Ima}{Im}
+\DeclareMathOperator{\Dom}{Dom}
+
+\newcommand*{\Pub}{\mathtt{Pub}}
+\newcommand*{\accept}{\mathtt{accept}}
+\newcommand*{\abort}{\mathtt{abort}}
+\newcommand*{\gadxor}{\mathtt{Gad}_{\oplus}}
+\newcommand*{\quin}{\mathtt{in}}
+
+%%% Provide a "subproof" environment (pretty simple for now,
+%%% just indent the sub-proofs)
+% I'd love to have left border... https://tex.stackexchange.com/questions/532948/robustly-add-a-border-to-the-left-of-a-text-spanning-several-pages
+\usepackage{changepage}% http://ctan.org/pkg/changepage
+\newenvironment{subproof}{\begin{adjustwidth}{2em}{0pt}}{\end{adjustwidth}}
+
+
+%%% To have nice probabilities
+% https://tex.stackexchange.com/questions/198771/align-in-substack
+\makeatletter
+\newcommand{\subalign}[1]{%
+  \vcenter{%
+    \Let@ \restore@math@cr \default@tag
+    \baselineskip\fontdimen10 \scriptfont\tw@
+    \advance\baselineskip\fontdimen12 \scriptfont\tw@
+    \lineskip\thr@@\fontdimen8 \scriptfont\thr@@
+    \lineskiplimit\lineskip
+    \ialign{\hfil$\m@th\scriptstyle##$&$\m@th\scriptstyle{}##$\hfil\crcr
+      #1\crcr
+    }%
+  }%
+}
+\makeatother
+\usepackage{xparse}
+% https://tex.stackexchange.com/questions/431794/same-spacing-around-middle-as-around-mid
+\let\originalmiddle=\middle
+\def\middle#1{\mathrel{}\originalmiddle#1\mathrel{}}
+\NewDocumentCommand{\pr}{som}{\Pr\IfValueT{#2}{_{\substack{#2}}}\left[\,#3\,\right]}
+\NewDocumentCommand{\esp}{som}{\IfValueTF{#2}{\underset{\subalign{#2}}{\mathbb{E}}}{\mathbb{E}}[\,#3\,]}
+\NewDocumentEnvironment{pral}{soO{}}
+ {%
+  \Pr\IfValueT{#2}{_{\IfBooleanTF{#1}{\substack{#2}}{#2}}}
+\begin{alignedat}[t]{2}
+  [\, } {\,]
+ #3
+ \end{alignedat}
+ }
+\NewDocumentEnvironment{espal}{soO{}}
+ {%
+   \IfValueTF{#2}{\underset{\subalign{#2}}{\mathbb{E}}}{\mathbb{E}}
+   \begin{alignedat}[t]{2}[\,
+ }
+ {\,]#3\end{alignedat}
+ }
+% To draw |A><B|, the second argument is facultative and gives |A><A|
+\NewDocumentCommand{\ketbra}{mg}{
+  | #1 \rangle \langle \IfValueTF{#2}{#2}{#1} |
+}
+% https://tex.stackexchange.com/a/188364/116348
+\DeclareRobustCommand{\minwidthbox}[2]{%
+  \ifmmode
+    \expandafter\mathmakebox
+  \else
+    \expandafter\makebox
+  \fi
+  [\ifdim#2<\width\width\else#2\fi]{#1}%f
+}
+
+\NewDocumentCommand{\constructs}{mg}{
+  \xrightarrow[\IfValueT{#2}{#2}]{\minwidthbox{#1}{5mm}}
+}
+
+%%%%%%%%%% This part is specific to llncs-based papers
+% To enable this part of the configuration, add
+%  \def\enableLlncsCode{}
+% before the \input{include}
+\ifdefined\enableLlncsCode%
+% go back to standard amsthm proof environments with Qed at the end
+\let\proof\relax\let\endproof\relax
+  \usepackage{amsthm}
+  % To debug, it's a nightmare without page number... To disable
+  % in the final version
+  \pagestyle{plain}
+\fi
+
+% Define environments when loaded in standalone...
+\ifdefined\enableNonLlncsCode%
+\usepackage{thmtools}
+\declaretheorem[name=Theorem,numberwithin=chapter]{theorem}
+\declaretheorem[name=Definition,sibling=theorem]{definition}
+\declaretheorem[name=Lemma,sibling=theorem]{lemma}
+\declaretheorem[name=Corollary,sibling=theorem]{corollary}
+\declaretheorem[name=Remark,sibling=theorem]{remark}
+\fi
+
+\usepackage{enumitem}
+\newlist{compressedList}{itemize}{10}
+\setlist[compressedList]{label=--,topsep=0pt,parsep=0pt,partopsep=0pt}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+% https://tex.stackexchange.com/questions/134278/overriding-the-paragraph-style-in-the-lncs-document-class
+\usepackage{etoolbox}
+\patchcmd{\paragraph}{\itshape}{\bfseries\boldmath}{}{}
+
+
+% This part is specific to llncs-based papers with nicer output
+% (page number, theorem labelled with sections...). This should
+% be the version in the arxiv.
+% To enable this part of the configuration, add
+%  \def\nicerThanLlncs{}
+% before the \input{include}
+\ifdefined\nicerThanLlncs%
+  % change margins, page layout
+  \usepackage[a4paper, top=1.4in, bottom=1.4in, right=1in, left=1in]{geometry}
+  % enable page numbering, suppressed by default by llncs
+  \pagestyle{plain}
+  \setcounter{tocdepth}{2}
+  \renewcommand\small{\fontsize{10pt}{12pt}\selectfont}
+\fi
+\ifdefined\nicerThanLlncsAbstract%
+  % change margins, page layout
+  \usepackage[a4paper, margin=2.5cm]{geometry}
+  % enable page numbering, suppressed by default by llncs
+  \pagestyle{plain}
+  \setcounter{tocdepth}{2}
+\fi
+\ifdefined\enableLlncsCodeSlightlyImproved%
+  \pagestyle{plain}
+  \setcounter{tocdepth}{2}
+\fi
+
+
+\ifdefined\disableHyperref%
+\else%
+% https://rcweb.dartmouth.edu/doc/texmf-dist/doc/latex/cryptocode/cryptocode.pdf (page 55)
+%%%%%%%%%% This part should be loaded last
+% Usually hyperref needs to be at the end
+\definecolor{secondaryColor}{RGB}{206,149,0} %% darker orange, looks like gold. <3
+\usepackage[colorlinks, allcolors=secondaryColor]{hyperref}
+\fi
+%% Hyperref should be loaded before cryptocode! Otherwise, errors with labels of lines for example.
+%%% Cryptocode
+\usepackage [
+n,
+advantage,
+operators,
+sets,
+adversary,
+landau,
+probability,
+notions,
+logic,
+ff,
+mm,
+primitives,
+events,
+complexity,
+asymptotics,
+keys
+] {cryptocode}
+% I don't like the way "samples" is defined in cryptocode with a big dollar in front.
+% \renewcommand\sample{\mathrel{\overset{\vbox to.7ex{\hbox{\fontsize{6}{0}\selectfont\vspace{.5ex} \$}}}{\leftarrow}}}
+%% https://tex.stackexchange.com/a/584533/116348
+\makeatletter
+\renewcommand{\sample}{\mathrel{\mathpalette\sample@\relax}}
+\newcommand{\sample@}[2]{%
+  \ooalign{%
+    \hspace{\stretch{2}}\raisebox{0.7\height}{$\m@th\demotestyle{#1}\mathdollar$}\hspace{\stretch{1}}\cr
+    $\m@th#1\leftarrow$\cr
+  }%
+}
+\newcommand{\demotestyle}[1]{%
+  \ifx#1\displaystyle\scriptstyle\else
+  \ifx#1\textstyle\scriptstyle\else
+  \scriptscriptstyle\fi\fi
+}
+\makeatother
+% Create a new command to create games using \game[linenumbering]{Name of game}{Game definition}
+\createprocedureblock{game}{center,boxed}{}{}{}
+% Create a new environment (following what I did in the thesis) to provide named games
+\newcommand{\gameFont}[1]{\texttt{#1}}
+\renewcommand{\Game}[1]{\ensuremath{\gameFont{Game#1}}} % By default \Game produces a nice G (symetric), but it's not very standard.
+
+\makeatletter
+\createprocedureblock{gameProc}{center,boxed}{}{}{}
+\createprocedureblock{interactGame}{center,boxed}{}{}{}
+%%% Nicer way to refer to games.
+%%% See also https://tex.stackexchange.com/questions/623163 which provides a cleaner way to make it work with cleverref.
+% Usage: \begin{namedGame}*[label][short title]{title}*[game options like skipfirstln,lnstart=1] content \end{namedGame}
+% first * = disable floating. WARNING: do not put labels with non-letter chars.
+% second * = do not include the game in the TOC.
+\NewDocumentEnvironment{namedGame}{soomsO{}b}{%
+  \IfBooleanTF{#1}{}{%
+    \par% without par, the figure will be put after the line arriving after the picture if there is no paragraph.
+    \setlength{\intextsep}{5.0pt plus 2.0pt minus 2.0pt}% reduce the space when image is inserted inline.
+    \begin{figure}[htbp]}% 
+    \begin{pcimage}%
+      %% Add to toc see command listofgames
+      \phantomsection% Create a fake label, useful to ensure the link point to this part.
+      \IfBooleanTF{#5}{}{% If no star is given, add to "table of contents" for games
+        \IfValueTF{#3}{% If a short title is provided
+          \addcontentsline{game}{section}{\ensuremath{#3}}%
+        }{%
+          \addcontentsline{game}{section}{\ensuremath{#4}}%
+        }%
+      }%
+      {\normalfont\gameProc[linenumbering,#6]{\ensuremath{#4}}{\IfValueTF{#2}{%
+            %% Add an anchor if a label is present
+            \raisebox{1em}{\hypertarget{#2}{}}%
+            %% Create a macro "mygametitle@nameoflabel" to store the title
+            \IfValueTF{#3}{% If a short title is provided
+              \expandafter\gdef\csname mygametitle@#2 \endcsname{\ensuremath{#3}}%%
+              \write\@auxout{\gdef\string\mygametitle@#2{\ensuremath{#3}}}%
+            }{%
+              \expandafter\gdef\csname mygametitle@#2 \endcsname{\ensuremath{#4}}%%
+              \write\@auxout{\gdef\string\mygametitle@#2{\ensuremath{#4}}}%
+            }%
+          }{} #7 }}%
+    \end{pcimage}
+    \IfBooleanTF{#1}{}{\end{figure}}%
+}{}
+
+% Usage: \refGame{label}. Use \refGame*{label} if you don't want to color the link (useful in proofs)
+\NewDocumentCommand{\refGame}{sm}{%
+  \IfBooleanTF{#1}{%
+    \hyperlink{#2}{\textcolor{black}{\csname mygametitle@#2\endcsname}}% Do not put a white space after #1!
+  }{%
+    \hyperlink{#2}{\csname mygametitle@#2\endcsname}% Do not put a white space after #1!
+  }%
+}
+\makeatother
+
+\ifdefined\disableHyperref%
+\else%
+% Well... not as much as cleveref
+\usepackage[capitalise,noabbrev]{cleveref}
+% Don't abbrev general names... but still abbrev equations
+\crefname{equation}{Eq.}{Eqs.}
+\crefname{figure}{Fig.}{Figs.}
+\crefname{algorithm}{Protocol}{Protocols}
+\Crefname{equation}{Equation}{Equations}
+\Crefname{figure}{Figure}{Figures}
+\Crefname{algorithm}{Protocol}{Protocols}
+\fi
+
+% Put that package at the end of the file,
+% or you will have some strange errors like
+% "Only one # is allowed per tab"
+\usetikzlibrary{quantikz}
+% Bug in llncs https://tex.stackexchange.com/a/372108/116348
+\def\theHlemma{\theHtheorem}
+\def\theHdefinition{\theHtheorem}
+\def\theHcorollary{\theHtheorem}
+
+%%%%%% PLEASE DO NOT WRITE ANYTHING AFTER THIS LINE %%%%%%
+%%%%%% Indeed, hyperref, cleveref and quantikz need %%%%%%
+%%%%%% to be loaded at the very end.                %%%%%%

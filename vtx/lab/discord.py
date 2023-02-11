@@ -168,6 +168,12 @@ class Client(discord.Client):
             print(bc.FOLD + "dj ent" + bc.ENDC)
             weight = 1
             bias = 530243004334604311
+            try:
+                if message.content == "gen":
+                    reply = False
+                    await message.delete()
+            except:
+                pass
         else:
             weight = random.randint(0, 100)
             print(bc.FOLD + "heads" + bc.ENDC)
@@ -236,11 +242,6 @@ class Client(discord.Client):
             print(bc.CORE + "Failed to send Discord message." + bc.ENDC)
             error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
             await message.channel.send(error)
-        try:
-            if message.content == "gen":
-                await message.delete()
-        except:
-            pass
 
 
 class bc:

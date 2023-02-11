@@ -71,7 +71,7 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randint(30, 10800)
+            delay = random.randint(900, 21600)
             await asyncio.sleep(delay)
             self.thinking = True
             try:
@@ -141,7 +141,7 @@ class Client(discord.Client):
             except Exception as e:
                 print(bc.CORE + str(e) + bc.ENDC)
                 print(bc.CORE + "failed to concentrate" + bc.ENDC)
-                self.discord_task = self.loop.create_task(self.think())
+                # self.discord_task = self.loop.create_task(self.think())
 
     # check every Discord message
     async def on_message(self, message):
@@ -168,11 +168,6 @@ class Client(discord.Client):
             print(bc.FOLD + "dj ent" + bc.ENDC)
             weight = 1
             bias = 530243004334604311
-            try:
-                if message.content == "gen":
-                    await message.delete()
-            except:
-                pass
         else:
             weight = random.randint(0, 100)
             print(bc.FOLD + "heads" + bc.ENDC)
@@ -237,11 +232,15 @@ class Client(discord.Client):
                 await message.reply(output)
             else:
                 await message.channel.send(output)
-
         except:
             print(bc.CORE + "Failed to send Discord message." + bc.ENDC)
             error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
             await message.channel.send(error)
+        try:
+            if message.content == "gen":
+                await message.delete()
+        except:
+            pass
 
 
 class bc:

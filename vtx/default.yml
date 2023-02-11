@@ -76,10 +76,11 @@ toe:
 
 reddit:
   SubSimGPT2Interactive:
-    limit: 50
+    limit: 10
+    type: new
     skip: True
     watch: True
-    chance: 0.1
+    chance: 0.001
   Kunism:
     limit: 500
     watch: True

@@ -90,6 +90,12 @@
       "detail": "Send your models into the VTX.",
       "type": "shell",
       "command": "docker-compose run ipfs add -r /vtx --pin=false --cid-version=1"
+    },
+    {
+      "label": "stats",
+      "detail": "View live Docker stats.",
+      "type": "shell",
+      "command": "docker stats"
     }
   ],
   "inputs": [

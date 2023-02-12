@@ -44,7 +44,7 @@ const identifier = randomString(64)
 async function cockpit(identity, identifier) {
   console.log('identity :> ' + identity)
   console.log('identifier :> ' + identifier)
-  console.log('loading coke pit')
+  console.log('loading into cockpit')
   await authenticateUser(identity, identifier)
 }
 

@@ -155,8 +155,12 @@ if __name__ == "__main__":
 
     # Resume training on an existing model, or start with a fresh base model
     if model["training"]["resume"] == True:
-        launch_model = None
-        model_folder = "gpt/models/" + focus
+        if os.path.exists("/vtx/gpt/models/" + focus) == True:
+            launch_model = None
+            model_folder = "gpt/models/" + focus
+        else:
+            model_folder = None
+            os.makedirs("/vtx/gpt/models/" + focus)
     else:
         model_folder = None
         if os.path.exists("/vtx/gpt/models/" + focus):

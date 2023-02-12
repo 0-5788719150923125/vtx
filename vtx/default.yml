@@ -22,22 +22,29 @@ soul:
     base_model: xhyi/PT_GPTNEO350_ATG
     to_gpu: 1
     batch_size: 2
-    block_size: 512
-    num_steps: 20000
+    block_size: 222
+    num_steps: 88888
     warmup_steps: 0
-    gradient_accumulation_steps: 16
+    gradient_accumulation_steps: 9
     learning_rate: 0.000666
-    weight_decay: 0.03
+    weight_decay: 0.023
     max_grad_norm: 0.444
     freeze_layers: True
-    num_layers_freeze: 12
+    num_layers_freeze: 19
     equalize_datasets: False
     datasets:
-      lab/texts:
+      lab/aitextgen:
+      lab/swarm:
+      lab/source:
+      lab/ink:
+      lab/pen:
       lab/journals:
-      lab/discord:
-      lab/reddit:
-        line_by_line: True
+      lab/research:
+      lab/theory:
+      lab/pages:
+      lab/texts:
+      vtx:
+      ctx:
 
 toe:
   version: 0

@@ -77,6 +77,7 @@ class Client(discord.Client):
             try:
                 channels = await get_all_channels()
                 channel = random.choice(channels)
+                print("=> sending to " + channel.name)
                 messages = [
                     message
                     async for message in self.get_channel(channel.id).history(limit=10)
@@ -90,22 +91,27 @@ class Client(discord.Client):
                     propulsion
                     + str(messages[5].author.id)
                     + ship
+                    + " "
                     + messages[5].content,
                     propulsion
                     + str(messages[3].author.id)
                     + ship
+                    + " "
                     + messages[3].content,
                     propulsion
                     + str(messages[2].author.id)
                     + ship
+                    + " "
                     + messages[2].content,
                     propulsion
                     + str(messages[1].author.id)
                     + ship
+                    + " "
                     + messages[1].content,
                     propulsion
                     + str(messages[0].author.id)
                     + ship
+                    + " "
                     + messages[0].content,
                 ]
                 head.ai = await head.loader("toe")
@@ -132,7 +138,6 @@ class Client(discord.Client):
                 generation = await head.gen(int(bias), context)
                 output = transformer([generation[0], generation[1]])
 
-                print("=> output to " + channel.name)
                 print(output)
 
                 head.ai = await head.loader()
@@ -140,8 +145,7 @@ class Client(discord.Client):
                 self.thinking = False
             except Exception as e:
                 print(bc.CORE + str(e) + bc.ENDC)
-                print(bc.CORE + "failed to concentrate" + bc.ENDC)
-                # self.discord_task = self.loop.create_task(self.think())
+                self.discord_task = self.loop.create_task(self.think())
 
     # check every Discord message
     async def on_message(self, message):

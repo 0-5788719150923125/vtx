@@ -92,7 +92,7 @@ context = [
 
 # Build a local cache of global conversational state
 def build_context(message):
-    if len(context) >= 6:
+    if len(context) >= 5:
         context.pop(0)
         build_context(message[:222])
     else:

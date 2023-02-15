@@ -71,7 +71,7 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randint(900, 10800)
+            delay = random.randint(10800, 21600)
             await asyncio.sleep(delay)
             self.thinking = True
             try:
@@ -80,46 +80,40 @@ class Client(discord.Client):
                 print("=> sending to " + channel.name)
                 messages = [
                     message
-                    async for message in self.get_channel(channel.id).history(limit=10)
+                    async for message in self.get_channel(channel.id).history(limit=16)
                 ]
+                focus_on = random.randint(0, 7)
                 context = [
                     propulsion
-                    + str(messages[8].author.id)
+                    + str(messages[focus_on + 4].author.id)
                     + ship
                     + " "
-                    + messages[8].content,
+                    + messages[focus_on + 4].content,
                     propulsion
-                    + str(messages[5].author.id)
+                    + str(messages[focus_on + 3].author.id)
                     + ship
                     + " "
-                    + messages[5].content,
+                    + messages[focus_on + 3].content,
                     propulsion
-                    + str(messages[3].author.id)
+                    + str(messages[focus_on + 2].author.id)
                     + ship
                     + " "
-                    + messages[3].content,
+                    + messages[focus_on + 2].content,
                     propulsion
-                    + str(messages[2].author.id)
+                    + str(messages[focus_on + 1].author.id)
                     + ship
                     + " "
-                    + messages[2].content,
+                    + messages[focus_on + 1].content,
                     propulsion
-                    + str(messages[1].author.id)
+                    + str(messages[focus_on].author.id)
                     + ship
                     + " "
-                    + messages[1].content,
-                    propulsion
-                    + str(messages[0].author.id)
-                    + ship
-                    + " "
-                    + messages[0].content,
+                    + messages[focus_on].content,
                 ]
-                head.ai = await head.loader("toe")
 
-                recent_author_id = messages[random.randint(0, 9)].author.id
+                recent_author_id = messages[random.randint(0, 15)].author.id
 
                 if str(recent_author_id) == str(self.user.id):
-                    print(bc.WARNING + "WARN: found myself" + bc.ENDC)
                     neurons = [
                         random.randint(1, 9),  # neuron
                         random.randint(0, 9),  # neura
@@ -140,8 +134,7 @@ class Client(discord.Client):
 
                 print(output)
 
-                head.ai = await head.loader()
-                await channel.send(output)
+                await messages[focus_on].reply(output)
                 self.thinking = False
             except Exception as e:
                 print(bc.CORE + str(e) + bc.ENDC)

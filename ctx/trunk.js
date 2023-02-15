@@ -12,6 +12,9 @@ import express from 'express'
 let port = process.env.PORT || 9666
 let payload = ''
 
+// Delay by x number of milliseconds
+const delay = (ms) => new Promise((res) => setTimeout(res, ms))
+
 // Start a web server
 const app = express()
 
@@ -174,6 +177,7 @@ export function randomBetween(min, max) {
 let pair = null
 async function authenticateUser(identity, identifier) {
   try {
+    await delay(3000)
     user = gun.user()
     user.auth(identifier, identity, async (data) => {
       if (data.err) {
@@ -190,9 +194,6 @@ async function authenticateUser(identity, identifier) {
     console.error(err)
   }
 }
-
-// Delay by x number of milliseconds
-const delay = (ms) => new Promise((res) => setTimeout(res, ms))
 
 const randomValueFromArray = (array) => {
   return array[Math.floor(Math.random() * array.length)]

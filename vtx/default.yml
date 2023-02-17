@@ -18,6 +18,7 @@ soul:
   info: what drives us
   to_gpu: True
   n_gpu: 1
+  max_new_tokens: 333
   training:
     base_model: xhyi/PT_GPTNEO350_ATG
     to_gpu: 1

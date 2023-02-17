@@ -142,7 +142,7 @@ def gen(bias=None, ctx=None):
             do_sample=True,
             min_length=23,
             max_new_tokens=max_new_tokens,
-            temperature=0.444,
+            temperature=0.777,
             top_k=40,
             top_p=0.9,
             return_as_list=True,

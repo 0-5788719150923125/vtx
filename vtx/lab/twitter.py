@@ -1,4 +1,3 @@
-import praw, asyncpraw
 import asyncio
 import random
 import tweepy

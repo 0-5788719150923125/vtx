@@ -1,7 +1,6 @@
-from utils import bc, config, propulsion, ship
+from utils import bc, config, get_identity, propulsion, ship
 import requests
 import random
-import secrets
 import json
 import head
 
@@ -34,10 +33,3 @@ async def subscribe(channel):
     deep.close()
     print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + " " + generation[1])
     print(bc.FOLD + "PEN@FOLD:" + bc.ENDC + " pong")
-
-
-# Generate a pseudo-identity, in the Discord ID format
-def get_identity():
-    count = secrets.choice([18, 19])
-    identity = "".join(secrets.choice("0123456789") for i in range(count))
-    return identity

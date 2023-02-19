@@ -1,13 +1,10 @@
-import praw, asyncpraw
-import asyncio
-import os
+from utils import bc, config, get_identity, propulsion, ship
+import asyncpraw
+import requests
 import random
 import head
-import secrets
-import pprint
-import requests
 import json
-from utils import bc, config, propulsion, ship
+import os
 
 reddit = asyncpraw.Reddit(
     client_id=os.environ["REDDITCLIENT"],
@@ -145,10 +142,3 @@ def transformer(group):
         f'{group[0]} says, "{group[1]}"',
     ]
     return random.choice(responses)
-
-
-# Generate a pseudo-identity, in the Discord ID format
-def get_identity():
-    count = secrets.choice([18, 19])
-    identity = "".join(secrets.choice("0123456789") for i in range(count))
-    return identity

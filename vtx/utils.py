@@ -1,4 +1,5 @@
 from mergedeep import merge, Strategy
+import secrets
 import yaml
 
 propulsion = "¶"
@@ -20,3 +21,10 @@ class bc:
     ROOT = "\033[92m"
     CORE = "\033[91m"
     ENDC = "\033[0m"
+
+
+# Generate a pseudo-identity, in the Discord ID format
+def get_identity():
+    count = secrets.choice([18, 19])
+    identity = "".join(secrets.choice("0123456789") for i in range(count))
+    return identity

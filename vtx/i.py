@@ -1,4 +1,4 @@
-from utils import bc, config, propulsion, ship
+from utils import bc, config, get_identity, propulsion, ship
 from bs4 import BeautifulSoup
 import requests
 import secrets
@@ -286,10 +286,3 @@ def fetch_from_reddit():
                 context.pop()
 
         main()
-
-
-# Generate a pseudo-identity, in the Discord ID format
-def get_identity():
-    count = secrets.choice([18, 19])
-    identity = "".join(secrets.choice("0123456789") for i in range(count))
-    return identity

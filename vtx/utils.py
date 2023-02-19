@@ -1,5 +1,6 @@
 from mergedeep import merge, Strategy
 import secrets
+import pprint
 import yaml
 
 propulsion = "¶"
@@ -14,6 +15,8 @@ try:
         config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
 except:
     config = default_config
+
+pprint.pprint(config)
 
 
 class bc:

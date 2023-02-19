@@ -41,7 +41,7 @@ def loader(target=None):
     model = config[target]
 
     if "training" in model:
-        model_folder = "gpt/models/" + target
+        model_folder = "models/" + target
         tokenizer_file = "src." + target + ".tokenizer.json"
     else:
         tokenizer_file = "src." + target + ".tokenizer.json"
@@ -54,7 +54,7 @@ def loader(target=None):
         # tokenizer_file=tokenizer_file,
         tokenizer_file=None,
         to_gpu=model["to_gpu"],
-        cache_dir="gpt/models",
+        cache_dir="models",
     )
     print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + str(ai))
     print(bc.FOLD + "PEN@FOLD: " + bc.ENDC + "focused on the " + target)

@@ -13,7 +13,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 focus = os.environ["FOCUS"]
 model = config[focus]
-model_folder = "gpt/models/" + focus
+model_folder = "models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
 logger = loggers.TensorBoardLogger(
@@ -54,7 +54,7 @@ def join_files(path):
                 or file.startswith("/lab/reaper/logseq")
                 or file.startswith("/lab/reaper/assets")
                 or file.startswith("/lab/aitextgen/aitextgen/static")
-                or file.startswith("/vtx/gpt")
+                or file.startswith("/vtx/models")
                 or file.startswith("/vtx/__pycache__")
             ):
                 continue
@@ -135,19 +135,19 @@ if __name__ == "__main__":
 
     # Resume training on an existing model, or start with a fresh base model
     if model["training"]["resume"] == True:
-        if os.path.exists("/vtx/gpt/models/" + focus) == True:
+        if os.path.exists("/vtx/models/" + focus) == True:
             launch_model = None
-            model_folder = "gpt/models/" + focus
+            model_folder = "models/" + focus
         else:
             model_folder = None
-            os.makedirs("/vtx/gpt/models/" + focus)
+            os.makedirs("/vtx/models/" + focus)
     else:
         model_folder = None
-        if os.path.exists("/vtx/gpt/models/" + focus):
-            shutil.rmtree("/vtx/gpt/models/" + focus)
-        os.makedirs("/vtx/gpt/models/" + focus)
+        if os.path.exists("/vtx/models/" + focus):
+            shutil.rmtree("/vtx/models/" + focus)
+        os.makedirs("/vtx/models/" + focus)
 
-    output_dir = "gpt/models/" + focus
+    output_dir = "models/" + focus
 
     # Instantiate the model object
     ai = aitextgen(
@@ -158,7 +158,7 @@ if __name__ == "__main__":
         to_gpu=to_gpu,
         gradient_checkpointing=True,
         padding_side="left",
-        cache_dir="gpt/models",
+        cache_dir="models",
     )
 
     # Train the model

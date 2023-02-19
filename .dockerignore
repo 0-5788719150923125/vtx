@@ -5,7 +5,7 @@ lab/
 node_modules
 vtx/__pycache__
 vtx/aitextgen
-vtx/gpt/*
+vtx/models/*
 !lab/aitextgen
 !lab/journals
 !lab/pages

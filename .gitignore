@@ -8,7 +8,7 @@ lab/texts/*
 lab/config.yml
 node_modules
 /vtx/aitextgen*
-vtx/gpt/*
+vtx/models/*
 vtx/gun
 !.keep
 !lab/*.mp4

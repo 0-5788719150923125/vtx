@@ -22,11 +22,11 @@ soul:
   training:
     base_model: xhyi/PT_GPTNEO350_ATG
     to_gpu: 1
-    batch_size: 2
-    block_size: 222
+    batch_size: 1
+    block_size: 444
     num_steps: 88888
     warmup_steps: 0
-    gradient_accumulation_steps: 9
+    gradient_accumulation_steps: 18
     learning_rate: 0.000666
     weight_decay: 0.023
     max_grad_norm: 0.444

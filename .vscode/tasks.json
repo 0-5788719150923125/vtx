@@ -77,7 +77,7 @@
       "label": "prune",
       "detail": "Prune all unused images, networks, and volumes.",
       "type": "shell",
-      "command": "docker system prune -f && docker volume prune -f"
+      "command": "docker system prune -a -f && docker volume prune -a -f"
     },
     {
       "label": "down",

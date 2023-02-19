@@ -61,7 +61,6 @@ def join_files(path):
             with open(file, "r") as content:
                 string = content.read()
                 intermediate.write(string + "\n\n")
-                intermediate.write(file + "\n\n")
         except:
             print("failed to crunch " + file)
     intermediate.close()

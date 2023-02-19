@@ -97,7 +97,10 @@ def gen(bias=None, ctx=None):
         q = requests.get(
             "https://qrng.anu.edu.au/API/jsonI.php?length=6&type=uint8"
         ).json()
-    except:
+        if not q["data"][0] <= 256 and not q["data"][1] <= 256:
+            raise Exception("Something failed while querying the quantum API.")
+    except Exception as e:
+        print(e)
         q = {"data": [random.randint(0, 256), random.randint(0, 256)]}
 
     seed = None

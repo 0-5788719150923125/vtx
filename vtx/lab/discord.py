@@ -39,7 +39,7 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randint(10800, 21600)
+            delay = random.randint(3600, 21600)
             await asyncio.sleep(delay)
             self.thinking = True
             try:

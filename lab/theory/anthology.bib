@@ -1,0 +1,348 @@
+@inproceedings{ziegler-etal-2019-neural,
+    title = "Neural Linguistic Steganography",
+    author = "Ziegler, Zachary  and
+      Deng, Yuntian  and
+      Rush, Alexander",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)",
+    month = nov,
+    year = "2019",
+    address = "Hong Kong, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/D19-1115",
+    doi = "10.18653/v1/D19-1115",
+    pages = "1210--1215",
+    abstract = "Whereas traditional cryptography encrypts a secret message into an unintelligible form, steganography conceals that communication is taking place by encoding a secret message into a cover signal. Language is a particularly pragmatic cover signal due to its benign occurrence and independence from any one medium. Traditionally, linguistic steganography systems encode secret messages in existing text via synonym substitution or word order rearrangements. Advances in neural language models enable previously impractical generation-based techniques. We propose a steganography technique based on arithmetic coding with large-scale neural language models. We find that our approach can generate realistic looking cover sentences as evaluated by humans, while at the same time preserving security by matching the cover message distribution with the language model distribution.",
+}
+
+@article{chang-clark-2014-practical,
+    title = "Practical Linguistic Steganography using Contextual Synonym Substitution and a Novel Vertex Coding Method",
+    author = "Chang, Ching-Yun  and
+      Clark, Stephen",
+    journal = "Computational Linguistics",
+    volume = "40",
+    number = "2",
+    month = jun,
+    year = "2014",
+    url = "https://www.aclweb.org/anthology/J14-2006",
+    doi = "10.1162/COLI_a_00176",
+    pages = "403--448",
+}
+
+@inproceedings{devlin-etal-2019-bert,
+    title = "{BERT}: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    author = "Devlin, Jacob  and
+      Chang, Ming-Wei  and
+      Lee, Kenton  and
+      Toutanova, Kristina",
+    booktitle = "Proceedings of the 2019 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)",
+    month = jun,
+    year = "2019",
+    address = "Minneapolis, Minnesota",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/N19-1423",
+    doi = "10.18653/v1/N19-1423",
+    pages = "4171--4186",
+    abstract = "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models (Peters et al., 2018a; Radford et al., 2018), BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications. BERT is conceptually simple and empirically powerful. It obtains new state-of-the-art results on eleven natural language processing tasks, including pushing the GLUE score to 80.5 (7.7 point absolute improvement), MultiNLI accuracy to 86.7{\%} (4.6{\%} absolute improvement), SQuAD v1.1 question answering Test F1 to 93.2 (1.5 point absolute improvement) and SQuAD v2.0 Test F1 to 83.1 (5.1 point absolute improvement).",
+}
+
+@inproceedings{wenzek-etal-2020-ccnet,
+    title = "{CCN}et: Extracting High Quality Monolingual Datasets from Web Crawl Data",
+    author = "Wenzek, Guillaume  and
+      Lachaux, Marie-Anne  and
+      Conneau, Alexis  and
+      Chaudhary, Vishrav  and
+      Guzm{\'a}n, Francisco  and
+      Joulin, Armand  and
+      Grave, Edouard",
+    booktitle = "Proceedings of the 12th Language Resources and Evaluation Conference",
+    month = may,
+    year = "2020",
+    address = "Marseille, France",
+    publisher = "European Language Resources Association",
+    url = "https://www.aclweb.org/anthology/2020.lrec-1.494",
+    pages = "4003--4012",
+    abstract = "Pre-training text representations have led to significant improvements in many areas of natural language processing. The quality of these models benefits greatly from the size of the pretraining corpora as long as its quality is preserved. In this paper, we describe an automatic pipeline to extract massive high-quality monolingual datasets from Common Crawl for a variety of languages. Our pipeline follows the data processing introduced in fastText (Mikolov et al., 2017; Grave et al., 2018), that deduplicates documents and identifies their language. We augment this pipeline with a filtering step to select documents that are close to high quality corpora like Wikipedia.",
+    language = "English",
+    ISBN = "979-10-95546-34-4",
+}
+
+@inproceedings{wolf-etal-2020-transformers,
+    title = "Transformers: State-of-the-Art Natural Language Processing",
+    author = "Wolf, Thomas  and
+      Debut, Lysandre  and
+      Sanh, Victor  and
+      Chaumond, Julien  and
+      Delangue, Clement  and
+      Moi, Anthony  and
+      Cistac, Pierric  and
+      Rault, Tim  and
+      Louf, Remi  and
+      Funtowicz, Morgan  and
+      Davison, Joe  and
+      Shleifer, Sam  and
+      von Platen, Patrick  and
+      Ma, Clara  and
+      Jernite, Yacine  and
+      Plu, Julien  and
+      Xu, Canwen  and
+      Le Scao, Teven  and
+      Gugger, Sylvain  and
+      Drame, Mariama  and
+      Lhoest, Quentin  and
+      Rush, Alexander",
+    booktitle = "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
+    month = oct,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2020.emnlp-demos.6",
+    pages = "38--45",
+    abstract = "Recent progress in natural language processing has been driven by advances in both model architecture and model pretraining. Transformer architectures have facilitated building higher-capacity models and pretraining has made it possible to effectively utilize this capacity for a wide variety of tasks. Transformers is an open-source library with the goal of opening up these advances to the wider machine learning community. The library consists of carefully engineered state-of-the art Transformer architectures under a unified API. Backing this library is a curated collection of pretrained models made by and available for the community. Transformers is designed to be extensible by researchers, simple for practitioners, and fast and robust in industrial deployments. The library is available at https://github.com/huggingface/transformers.",
+}
+
+@book{WordNet1998,
+  address = {Cambridge, MA},
+  editor = {Christiane Fellbaum},
+  publisher = {The MIT Press},
+  title = {{WordNet}: An Electronic Lexical Database},
+  year = 1998,
+}
+
+@article{radford2019language,
+  title={Language models are unsupervised multitask learners},
+  author={Radford, Alec and Wu, Jeffrey and Child, Rewon and Luan, David and Amodei, Dario and Sutskever, Ilya},
+  year={2019}
+}
+
+@inproceedings{NIPS2015_afdec700,
+ author = {Hermann, Karl Moritz and Kocisky, Tomas and Grefenstette, Edward and Espeholt, Lasse and Kay, Will and Suleyman, Mustafa and Blunsom, Phil},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {C. Cortes and N. Lawrence and D. Lee and M. Sugiyama and R. Garnett},
+ pages = {1693--1701},
+ publisher = {Curran Associates, Inc.},
+ title = {Teaching Machines to Read and Comprehend},
+ url = {https://proceedings.neurips.cc/paper/2015/file/afdec7005cc9f14302cd0474fd0f3c96-Paper.pdf},
+ volume = {28},
+ year = {2015}
+}
+
+@inproceedings{nallapati-etal-2016-abstractive,
+    title = "Abstractive Text Summarization using Sequence-to-sequence {RNN}s and Beyond",
+    author = "Nallapati, Ramesh  and
+      Zhou, Bowen  and
+      dos Santos, Cicero  and
+      GuÌ‡l{\c{c}}ehre, {\c{C}}a{\u{g}}lar  and
+      Xiang, Bing",
+    booktitle = "Proceedings of The 20th {SIGNLL} Conference on Computational Natural Language Learning",
+    month = aug,
+    year = "2016",
+    address = "Berlin, Germany",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/K16-1028",
+    doi = "10.18653/v1/K16-1028",
+    pages = "280--290",
+}
+
+
+@misc{beltagy2020longformer,
+      title={Longformer: The Long-Document Transformer}, 
+      author={Iz Beltagy and Matthew E. Peters and Arman Cohan},
+      howpublished   = {arXiv:2004.05150},
+      year={2020},
+      eprint={2004.05150},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+@misc{wang2020linformer,
+      title={Linformer: Self-Attention with Linear Complexity}, 
+      author={Sinong Wang and Belinda Z. Li and Madian Khabsa and Han Fang and Hao Ma},
+      howpublished   = {arXiv:2006.04768},
+      year={2020},
+      eprint={2006.04768},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+
+@inproceedings{fang-etal-2017-generating,
+    title = "Generating Steganographic Text with {LSTM}s",
+    author = "Fang, Tina  and
+      Jaggi, Martin  and
+      Argyraki, Katerina",
+    booktitle = "Proceedings of {ACL} 2017, Student Research Workshop",
+    month = jul,
+    year = "2017",
+    address = "Vancouver, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/P17-3017",
+    pages = "100--106",
+}
+
+@article{Yang:TIFS2019,
+  author={Zhong-Liang Yang  and Xiao-Qing Guo  and Zi-Ming Chen  and Yong-Feng Huang  and   Yu-Jin Zhang},
+  journal={IEEE Transactions on Information Forensics and Security},
+  title={{RNN-Stega}: Linguistic Steganography Based on Recurrent Neural Networks},
+  year={2019},
+  volume={14},
+  number={5},
+  pages={1280--1295},
+  doi={10.1109/TIFS.2018.2871746}
+}
+
+@inproceedings{dai-cai-2019-towards,
+    title = "Towards Near-imperceptible Steganographic Text",
+    author = "Dai, Falcon  and
+      Cai, Zheng",
+    booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics",
+    month = jul,
+    year = "2019",
+    address = "Florence, Italy",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/P19-1422",
+    doi = "10.18653/v1/P19-1422",
+    pages = "4303--4308",
+    abstract = "We show that the imperceptibility of several existing linguistic steganographic systems (Fang et al., 2017; Yang et al., 2018) relies on implicit assumptions on statistical behaviors of fluent text. We formally analyze them and empirically evaluate these assumptions. Furthermore, based on these observations, we propose an encoding algorithm called patient-Huffman with improved near-imperceptible guarantees.",
+}
+
+@inproceedings{shen-etal-2020-near,
+    title = "Near-imperceptible Neural Linguistic Steganography via Self-Adjusting Arithmetic Coding",
+    author = "Shen, Jiaming  and
+      Ji, Heng  and
+      Han, Jiawei",
+    booktitle = "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
+    month = nov,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2020.emnlp-main.22",
+    pages = "303--313",
+    abstract = "Linguistic steganography studies how to hide secret messages in natural language cover texts. Traditional methods aim to transform a secret message into an innocent text via lexical substitution or syntactical modification. Recently, advances in neural language models (LMs) enable us to directly generate cover text conditioned on the secret message. In this study, we present a new linguistic steganography method which encodes secret messages using self-adjusting arithmetic coding based on a neural language model. We formally analyze the statistical imperceptibility of this method and empirically show it outperforms the previous state-of-the-art methods on four datasets by 15.3{\%} and 38.9{\%} in terms of bits/word and KL metrics, respectively. Finally, human evaluations show that 51{\%} of generated cover texts can indeed fool eavesdroppers.",
+}
+
+@inproceedings{simmons1984prisoners,
+  title={The prisoners’ problem and the subliminal channel},
+  author={Simmons, Gustavus J},
+  booktitle={Advances in Cryptology},
+  pages={51--67},
+  year={1984},
+  organization={Springer},
+  doi={10.1007/978-1-4684-4730-9_5}
+}
+
+@article{anderson1998limits,
+  title={On the limits of steganography},
+  author={Anderson, Ross J and Petitcolas, Fabien AP},
+  journal= {IEEE Journal on Selected Areas in Communications},
+  volume={16},
+  number={4},
+  pages={474--481},
+  year={1998},
+  publisher={IEEE},
+  doi={10.1109/49.668971}
+}
+
+@book{fridrich2009steganography,
+  title={Steganography in digital media: principles, algorithms, and applications},
+  author={Fridrich, Jessica},
+  year={2009},
+  publisher={Cambridge University Press}
+}
+
+@techreport{Bennett2004,
+    author = {Krista Bennett},
+    title = {Linguistic Steganography: Survey, Analysis, and Robustness Concerns for Hiding Information in Text},
+    institution = {Center for Education and Research in  Information Assurance and Security, Purdue University},
+    year = {2004}
+}
+
+@InProceedings{Chapman1997,
+  author={Chapman, Mark and Davida, George},
+  editor={Han, Yongfei and Okamoto, Tatsuaki and Qing, Sihan},
+  title={Hiding the hidden: A software system for concealing ciphertext as innocuous text},
+  booktitle={Information and Communications Security},
+  year={1997},
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="335--345",
+  isbn="978-3-540-69628-5",
+  doi={10.1007/BFb0028489}
+}
+
+@InProceedings{Chapman2001,
+  author={Chapman, Mark and Davida, George I. and Rennhard, Marc},
+  editor={Davida, George I. and Frankel, Yair},
+  title={A Practical and Effective Approach to Large-Scale Automated Linguistic Steganography},
+  booktitle={Information Security},
+  year="2001",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="156--165",
+  isbn="978-3-540-45439-7",
+  doi={10.1007/3-540-45439-X_11}
+}
+
+@InProceedings{Bolshakov2005,
+  author="Bolshakov, Igor A.",
+  editor="Fridrich, Jessica",
+  title="A Method of Linguistic Steganography Based on Collocationally-Verified Synonymy",
+  booktitle="Information Hiding",
+  year="2005",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="180--191",
+  isbn="978-3-540-30114-1",
+  doi={10.1007/978-3-540-30114-1_13}
+}
+
+@inproceedings{Taskiran2006,
+  author = {Cuneyt M. Taskiran and Umut Topkara and Mercan Topkara and Edward J. Delp},
+  title = {Attacks on lexical natural language steganography systems},
+  volume = {6072},
+  booktitle = {Security, Steganography, and Watermarking of Multimedia Contents VIII},
+  editor = {Edward J. Delp III and Ping Wah Wong},
+  organization = {International Society for Optics and Photonics},
+  publisher = {SPIE},
+  pages = {97--105},
+  year = {2006},
+  doi = {10.1117/12.649551},
+}
+
+@article {Wilson:2016,
+  title = "Avoiding detection on twitter: embedding strategies for linguistic steganography",
+  journal = "Electronic Imaging",
+  year = "2016",
+  volume = "2016",
+  number = "8",
+  pages = "1-9",
+  author = "Wilson, Alex and Ker, Andrew D.",
+  doi={10.2352/ISSN.2470-1173.2016.8.MWSF-074}
+}
+
+@inproceedings{ippolito-etal-2020-automatic,
+    title = "Automatic Detection of Generated Text is Easiest when Humans are Fooled",
+    author = "Ippolito, Daphne  and
+      Duckworth, Daniel  and
+      Callison-Burch, Chris  and
+      Eck, Douglas",
+    booktitle = "Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics",
+    month = jul,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2020.acl-main.164",
+    doi = "10.18653/v1/2020.acl-main.164",
+    pages = "1808--1822",
+    abstract = "Recent advancements in neural language modelling make it possible to rapidly generate vast amounts of human-sounding text. The capabilities of humans and automatic discriminators to detect machine-generated text have been a large source of research interest, but humans and machines rely on different cues to make their decisions. Here, we perform careful benchmarking and analysis of three popular sampling-based decoding strategies{---}top-{\_}k{\_}, nucleus sampling, and untruncated random sampling{---}and show that improvements in decoding methods have primarily optimized for fooling humans. This comes at the expense of introducing statistical abnormalities that make detection easy for automatic systems. We also show that though both human and automatic detector performance improve with longer excerpt length, even multi-sentence excerpts can fool expert human raters over 30{\%} of the time. Our findings reveal the importance of using both human and automatic detectors to assess the humanness of text generation systems.",
+}
+
+@inproceedings{Vaswani:NIPS2017,
+ author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, {\L}ukasz and Polosukhin, Illia},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {I. Guyon and U. V. Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
+ pages = {5998--6008},
+ publisher = {Curran Associates, Inc.},
+ title = {Attention is All you Need},
+ url = {https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf},
+ volume = {30},
+ year = {2017}
+}
+

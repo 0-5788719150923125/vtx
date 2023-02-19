@@ -1,0 +1,224 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Caron \bgroup \em et al.\egroup
+  }{2020}]{NEURIPS2020_70feb62b}
+Mathilde Caron, Ishan Misra, Julien Mairal, Priya Goyal, Piotr Bojanowski, and
+  Armand Joulin.
+\newblock Unsupervised learning of visual features by contrasting cluster
+  assignments.
+\newblock In H.~Larochelle, M.~Ranzato, R.~Hadsell, M.F. Balcan, and H.~Lin,
+  editors, {\em Advances in Neural Information Processing Systems}, volume~33,
+  pages 9912--9924. Curran Associates, Inc., 2020.
+
+\bibitem[\protect\citeauthoryear{Caron \bgroup \em et al.\egroup
+  }{2021}]{Caron_2021_ICCV}
+Mathilde Caron, Hugo Touvron, Ishan Misra, Herv\'e J\'egou, Julien Mairal,
+  Piotr Bojanowski, and Armand Joulin.
+\newblock Emerging properties in self-supervised vision transformers.
+\newblock In {\em Proceedings of the IEEE/CVF International Conference on
+  Computer Vision (ICCV)}, pages 9650--9660, October 2021.
+
+\bibitem[\protect\citeauthoryear{Chen \bgroup \em et al.\egroup
+  }{2020}]{pmlr-v119-chen20s}
+Mark Chen, Alec Radford, Rewon Child, Jeffrey Wu, Heewoo Jun, David Luan, and
+  Ilya Sutskever.
+\newblock Generative pretraining from pixels.
+\newblock In Hal~Daumé III and Aarti Singh, editors, {\em Proceedings of the
+  37th International Conference on Machine Learning}, volume 119 of {\em
+  Proceedings of Machine Learning Research}, pages 1691--1703. PMLR, 13--18 Jul
+  2020.
+
+\bibitem[\protect\citeauthoryear{Chen \bgroup \em et al.\egroup
+  }{2021}]{Chen_2021_ICCV}
+Xinlei Chen, Saining Xie, and Kaiming He.
+\newblock An empirical study of training self-supervised vision transformers.
+\newblock In {\em Proceedings of the IEEE/CVF International Conference on
+  Computer Vision (ICCV)}, pages 9640--9649, October 2021.
+
+\bibitem[\protect\citeauthoryear{Chu \bgroup \em et al.\egroup
+  }{2021}]{DBLP:journals/corr/abs-2102-10882}
+Xiangxiang Chu, Bo~Zhang, Zhi Tian, Xiaolin Wei, and Huaxia Xia.
+\newblock Do we really need explicit position encodings for vision
+  transformers?
+\newblock {\em CoRR}, abs/2102.10882, 2021.
+
+\bibitem[\protect\citeauthoryear{Dai \bgroup \em et al.\egroup
+  }{2019}]{DBLP:journals/corr/abs-1901-02860}
+Zihang Dai, Zhilin Yang, Yiming Yang, Jaime~G. Carbonell, Quoc~V. Le, and
+  Ruslan Salakhutdinov.
+\newblock Transformer-xl: Attentive language models beyond a fixed-length
+  context.
+\newblock {\em CoRR}, abs/1901.02860, 2019.
+
+\bibitem[\protect\citeauthoryear{Deng \bgroup \em et al.\egroup
+  }{2009}]{5206848}
+Jia Deng, Wei Dong, Richard Socher, Li-Jia Li, Kai Li, and Li~Fei-Fei.
+\newblock Imagenet: A large-scale hierarchical image database.
+\newblock In {\em 2009 IEEE Conference on Computer Vision and Pattern
+  Recognition}, pages 248--255, 2009.
+
+\bibitem[\protect\citeauthoryear{Devlin \bgroup \em et al.\egroup
+  }{2018}]{DBLP:journals/corr/abs-1810-04805}
+Jacob Devlin, Ming{-}Wei Chang, Kenton Lee, and Kristina Toutanova.
+\newblock {BERT:} pre-training of deep bidirectional transformers for language
+  understanding.
+\newblock {\em CoRR}, abs/1810.04805, 2018.
+
+\bibitem[\protect\citeauthoryear{Dosovitskiy \bgroup \em et al.\egroup
+  }{2020}]{DBLP:journals/corr/abs-2010-11929}
+Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn,
+  Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg
+  Heigold, Sylvain Gelly, Jakob Uszkoreit, and Neil Houlsby.
+\newblock An image is worth 16x16 words: Transformers for image recognition at
+  scale.
+\newblock {\em CoRR}, abs/2010.11929, 2020.
+
+\bibitem[\protect\citeauthoryear{Gehring \bgroup \em et al.\egroup
+  }{2017}]{pmlr-v70-gehring17a}
+Jonas Gehring, Michael Auli, David Grangier, Denis Yarats, and Yann~N. Dauphin.
+\newblock Convolutional sequence to sequence learning.
+\newblock In Doina Precup and Yee~Whye Teh, editors, {\em Proceedings of the
+  34th International Conference on Machine Learning}, volume~70 of {\em
+  Proceedings of Machine Learning Research}, pages 1243--1252. PMLR, 06--11 Aug
+  2017.
+
+\bibitem[\protect\citeauthoryear{Griffin \bgroup \em et al.\egroup
+  }{2007}]{griffin2007caltech}
+Gregory Griffin, Alex Holub, and Pietro Perona.
+\newblock Caltech-256 object category dataset.
+\newblock 2007.
+
+\bibitem[\protect\citeauthoryear{He \bgroup \em et al.\egroup
+  }{2016}]{He_2016_CVPR}
+Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
+\newblock Deep residual learning for image recognition.
+\newblock In {\em Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition (CVPR)}, June 2016.
+
+\bibitem[\protect\citeauthoryear{He \bgroup \em et al.\egroup
+  }{2021}]{DBLP:journals/corr/abs-2111-06377}
+Kaiming He, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Doll{\'{a}}r, and
+  Ross~B. Girshick.
+\newblock Masked autoencoders are scalable vision learners.
+\newblock {\em CoRR}, abs/2111.06377, 2021.
+
+\bibitem[\protect\citeauthoryear{Kingma and Ba}{2014}]{kingma2014adam}
+Diederik~P Kingma and Jimmy Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock {\em arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem[\protect\citeauthoryear{Krizhevsky \bgroup \em et al.\egroup
+  }{2012}]{krizhevsky2012imagenet}
+Alex Krizhevsky, Ilya Sutskever, and Geoffrey~E Hinton.
+\newblock Imagenet classification with deep convolutional neural networks.
+\newblock {\em Advances in neural information processing systems},
+  25:1097--1105, 2012.
+
+\bibitem[\protect\citeauthoryear{Li \bgroup \em et al.\egroup
+  }{2018}]{Li_2018_CVPR}
+Chen Li, Zhen Zhang, Wee~Sun Lee, and Gim~Hee Lee.
+\newblock Convolutional sequence to sequence model for human dynamics.
+\newblock In {\em Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition (CVPR)}, June 2018.
+
+\bibitem[\protect\citeauthoryear{Liu \bgroup \em et al.\egroup
+  }{2021}]{Liu_2021_ICCV}
+Ze~Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng Zhang, Stephen Lin, and
+  Baining Guo.
+\newblock Swin transformer: Hierarchical vision transformer using shifted
+  windows.
+\newblock In {\em Proceedings of the IEEE/CVF International Conference on
+  Computer Vision (ICCV)}, pages 10012--10022, October 2021.
+
+\bibitem[\protect\citeauthoryear{Paszke \bgroup \em et al.\egroup
+  }{2019}]{paszke2019pytorch}
+Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory
+  Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, et~al.
+\newblock Pytorch: An imperative style, high-performance deep learning library.
+\newblock {\em Advances in neural information processing systems},
+  32:8026--8037, 2019.
+
+\bibitem[\protect\citeauthoryear{Ramachandran \bgroup \em et al.\egroup
+  }{2019}]{NEURIPS2019_3416a75f}
+Prajit Ramachandran, Niki Parmar, Ashish Vaswani, Irwan Bello, Anselm Levskaya,
+  and Jon Shlens.
+\newblock Stand-alone self-attention in vision models.
+\newblock In H.~Wallach, H.~Larochelle, A.~Beygelzimer, F.~d\textquotesingle
+  Alch\'{e}-Buc, E.~Fox, and R.~Garnett, editors, {\em Advances in Neural
+  Information Processing Systems}, volume~32. Curran Associates, Inc., 2019.
+
+\bibitem[\protect\citeauthoryear{Sameni \bgroup \em et al.\egroup
+  }{2022}]{sameni2022dilemma}
+Sepehr Sameni, Simon Jenni, and Paolo Favaro.
+\newblock Dilemma: Self-supervised shape and texture learning with
+  transformers.
+\newblock {\em arXiv preprint arXiv:2204.04788}, 2022.
+
+\bibitem[\protect\citeauthoryear{Shaw \bgroup \em et al.\egroup
+  }{2018}]{DBLP:journals/corr/abs-1803-02155}
+Peter Shaw, Jakob Uszkoreit, and Ashish Vaswani.
+\newblock Self-attention with relative position representations.
+\newblock {\em CoRR}, abs/1803.02155, 2018.
+
+\bibitem[\protect\citeauthoryear{Srinivas \bgroup \em et al.\egroup
+  }{2021}]{Srinivas_2021_CVPR}
+Aravind Srinivas, Tsung-Yi Lin, Niki Parmar, Jonathon Shlens, Pieter Abbeel,
+  and Ashish Vaswani.
+\newblock Bottleneck transformers for visual recognition.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and
+  Pattern Recognition (CVPR)}, pages 16519--16529, June 2021.
+
+\bibitem[\protect\citeauthoryear{Touvron \bgroup \em et al.\egroup
+  }{2021}]{pmlr-v139-touvron21a}
+Hugo Touvron, Matthieu Cord, Matthijs Douze, Francisco Massa, Alexandre
+  Sablayrolles, and Herve Jegou.
+\newblock Training data-efficient image transformers-amp; distillation through
+  attention.
+\newblock In Marina Meila and Tong Zhang, editors, {\em Proceedings of the 38th
+  International Conference on Machine Learning}, volume 139 of {\em Proceedings
+  of Machine Learning Research}, pages 10347--10357. PMLR, 18--24 Jul 2021.
+
+\bibitem[\protect\citeauthoryear{Vaswani \bgroup \em et al.\egroup
+  }{2017}]{NIPS2017_3f5ee243}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N Gomez, \L~ukasz Kaiser, and Illia Polosukhin.
+\newblock Attention is all you need.
+\newblock In I.~Guyon, U.~Von Luxburg, S.~Bengio, H.~Wallach, R.~Fergus,
+  S.~Vishwanathan, and R.~Garnett, editors, {\em Advances in Neural Information
+  Processing Systems}, volume~30. Curran Associates, Inc., 2017.
+
+\bibitem[\protect\citeauthoryear{Wang \bgroup \em et al.\egroup
+  }{2019}]{NEURIPS2019_4496bf24}
+Alex Wang, Yada Pruksachatkun, Nikita Nangia, Amanpreet Singh, Julian Michael,
+  Felix Hill, Omer Levy, and Samuel Bowman.
+\newblock Superglue: A stickier benchmark for general-purpose language
+  understanding systems.
+\newblock In H.~Wallach, H.~Larochelle, A.~Beygelzimer, F.~d\textquotesingle
+  Alch\'{e}-Buc, E.~Fox, and R.~Garnett, editors, {\em Advances in Neural
+  Information Processing Systems}, volume~32. Curran Associates, Inc., 2019.
+
+\bibitem[\protect\citeauthoryear{Wu \bgroup \em et al.\egroup
+  }{2021}]{Wu_2021_ICCV}
+Kan Wu, Houwen Peng, Minghao Chen, Jianlong Fu, and Hongyang Chao.
+\newblock Rethinking and improving relative position encoding for vision
+  transformer.
+\newblock In {\em Proceedings of the IEEE/CVF International Conference on
+  Computer Vision (ICCV)}, pages 10033--10041, October 2021.
+
+\bibitem[\protect\citeauthoryear{Zhang \bgroup \em et al.\egroup
+  }{2022}]{zhang2022nested}
+Zizhao Zhang, Han Zhang, Long Zhao, Ting Chen, Sercan~O Arik, and Tomas
+  Pfister.
+\newblock Nested hierarchical transformer: Towards accurate, data-efficient and
+  interpretable visual understanding.
+\newblock In {\em AAAI Conference on Artificial Intelligence (AAAI)}, volume
+  2022, 2022.
+
+\bibitem[\protect\citeauthoryear{Zhao \bgroup \em et al.\egroup
+  }{2020}]{Zhao2020CVPR}
+Hengshuang Zhao, Jiaya Jia, and Vladlen Koltun.
+\newblock Exploring self-attention for image recognition.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and
+  Pattern Recognition (CVPR)}, June 2020.
+
+\end{thebibliography}

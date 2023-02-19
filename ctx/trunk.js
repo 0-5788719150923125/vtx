@@ -64,7 +64,7 @@ const channel = gun
       if (typeof node.payload === 'string') {
         const payload = JSON.parse(node.payload)
         let message = 'ERROR: Me Found.'
-        if (payload.pubKey !== null && payload.pubKey !== undefined) {
+        if (payload.pubKey !== null && typeof payload.pubKey !== 'undefined') {
           const sender = await gun.user(`${payload.pubKey}`)
           message = await SEA.verify(payload.message, sender.pub)
         } else {
@@ -85,6 +85,13 @@ app.get('/channel', (req, res) => {
   res.json(bullet)
 })
 
+export const bc = {
+  ROOT: '\x1b[32m',
+  CORE: '\x1b[31m',
+  FOLD: '\x1b[34m',
+  ENDC: '\x1b[37m'
+}
+
 // Receive messages from vtx at this route
 app.use(express.json())
 app.post('/message', async (req, res) => {
@@ -99,7 +106,7 @@ app.post('/message', async (req, res) => {
     // Send message to GUN
     const payload = JSON.stringify({ identifier, message, pubKey })
     await channel.get('payload').put(payload)
-    console.log('\x1b[92m' + 'ONE@ROOT: ' + '\x1b[37m' + 'pang')
+    console.log(bc.ROOT + 'ONE@ROOT: ' + bc.ENDC + 'pang')
   } catch (err) {
     console.error(err)
     cockpit(identity, identifier)

@@ -42,20 +42,20 @@ services:
     ports:
       - 9666:9666
 
-  pet:
-    image: learningathome/petals:main
-    command: python -m petals.cli.run_server bigscience/bloom-petals --cache_dir /pet --num_blocks 1
-    restart: 'no'
-    network_mode: 'host'
-    ipc: host
-    volumes:
-      - pet:/pet
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           capabilities: [gpu]
+  # pet:
+  #   image: learningathome/petals:main
+  #   command: python -m petals.cli.run_server bigscience/bloom-petals --cache_dir /pet --num_blocks 1
+  #   restart: 'no'
+  #   network_mode: 'host'
+  #   ipc: host
+  #   volumes:
+  #     - pet:/pet
+  #   # deploy:
+  #   #   resources:
+  #   #     reservations:
+  #   #       devices:
+  #   #         - driver: nvidia
+  #   #           capabilities: [gpu]
 
   pit:
     image: ghcr.io/0-5788719150923125/src:1

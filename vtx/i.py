@@ -82,11 +82,34 @@ def fetch_from_discord():
         os.system(command)
 
 
+def allowed_bot(is_bot, id):
+    if is_bot == True:
+        if str(id) == "975174695399854150":  # Eliza
+            return True
+        else:
+            return False
+    elif is_bot == False:
+        return True
+
+
 def prepare_discord_messages():
 
     # Get public links
     urls = crawl("https://ink.university")
     random.shuffle(urls)
+
+    def sanitizer(string):
+        sanitized = re.sub(
+            r"http\S+",
+            secrets.choice(urls),
+            string,
+        )
+        sanitized = re.sub(
+            r"@Unknown",
+            "<@" + str(get_identity()) + ">",
+            sanitized,
+        )
+        return sanitized
 
     # Ensure export path exists and is clean
     if os.path.exists("/lab/discord"):
@@ -110,13 +133,11 @@ def prepare_discord_messages():
                         continue
                     if i["content"] == "":
                         continue
-                    if i["author"]["isBot"] == True:
-                        if str(i["author"]["id"]) == "975174695399854150":  # Eliza
-                            pass
-                        elif str(i["author"]["id"]) == "1055993037077106718":  # Samn
-                            pass
-                        else:
-                            continue
+                    allowed = allowed_bot(i["author"]["isBot"], i["author"]["id"])
+                    if allowed == True:
+                        pass
+                    else:
+                        continue
 
                     with open("/lab/discord/" + filename + ".txt", "a") as txt_file:
 
@@ -131,36 +152,34 @@ def prepare_discord_messages():
                                     ),
                                     None,
                                 )
-                                if result is not None:
-                                    sanitized = re.sub(
-                                        r"http\S+",
-                                        secrets.choice(urls),
-                                        result["content"],
-                                    )
-                                    if len(result["mentions"]) > 0:
-                                        for mention in result["mentions"]:
-                                            sanitized = sanitized.replace(
-                                                "@" + mention["name"],
-                                                "<@" + str(mention["id"]) + ">",
-                                            )
-                                    content = (
-                                        propulsion
-                                        + result["author"]["id"]
-                                        + ship
-                                        + " "
-                                        + sanitized
-                                    )
-                                    line = f"{content}\n".format(content)
-                                    if position == 1:
-                                        txt_file.write(line)
+                                allowed = allowed_bot(
+                                    result["author"]["isBot"], result["author"]["id"]
+                                )
+                                if allowed == True:
+                                    if result is not None:
+                                        sanitized = sanitizer(result["content"])
+                                        if len(result["mentions"]) > 0:
+                                            for mention in result["mentions"]:
+                                                sanitized = sanitized.replace(
+                                                    "@" + mention["name"],
+                                                    "<@" + str(mention["id"]) + ">",
+                                                )
+                                        content = (
+                                            propulsion
+                                            + result["author"]["id"]
+                                            + ship
+                                            + " "
+                                            + sanitized
+                                        )
+                                        line = f"{content}\n".format(content)
+                                        if position == 1:
+                                            txt_file.write(line)
                             except Exception as e:
                                 print(e)
                                 print("failed to prepare a reply")
 
                         try:
-                            sanitized = re.sub(
-                                r"http\S+", secrets.choice(urls), i["content"]
-                            )
+                            sanitized = sanitizer(i["content"])
                             if len(i["mentions"]) > 0:
                                 for mention in i["mentions"]:
                                     sanitized = sanitized.replace(

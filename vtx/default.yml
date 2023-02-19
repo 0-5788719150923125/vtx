@@ -20,13 +20,14 @@ soul:
   n_gpu: 1
   max_new_tokens: 333
   training:
+    resume: True
     base_model: xhyi/PT_GPTNEO350_ATG
     to_gpu: 1
-    batch_size: 1
-    block_size: 444
+    batch_size: 2
+    block_size: 111
     num_steps: 88888
     warmup_steps: 0
-    gradient_accumulation_steps: 18
+    gradient_accumulation_steps: 9
     learning_rate: 0.000666
     weight_decay: 0.023
     max_grad_norm: 0.444

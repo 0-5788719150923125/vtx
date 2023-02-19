@@ -98,6 +98,23 @@ if __name__ == "__main__":
     print("(" + bc.ROOT + "focus" + bc.ENDC + ")")
     print(f"({bc.CORE}ed{bc.ENDC}) on the ({bc.FOLD}{focus}{bc.ENDC})")
 
+    # Resume training on an existing model, or start with a fresh base model
+    if model["training"]["resume"] == True:
+        if os.path.exists("/vtx/models/" + focus + "/pytorch_model.bin") == True:
+            launch_model = None
+            model_folder = "models/" + focus
+        else:
+            model_folder = None
+    else:
+        model_folder = None
+        if os.path.exists("/vtx/models/" + focus):
+            shutil.rmtree("/vtx/models/" + focus)
+
+    if os.path.exists("/vtx/models/" + focus) == False:
+        os.makedirs("/vtx/models/" + focus)
+
+    output_dir = "models/" + focus
+
     # Create a tokenized dataset from every directory specified in config file
     datasets = []
     for dataset in model["training"]["datasets"]:
@@ -132,22 +149,6 @@ if __name__ == "__main__":
     merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])
 
     launch_model = base_model
-
-    # Resume training on an existing model, or start with a fresh base model
-    if model["training"]["resume"] == True:
-        if os.path.exists("/vtx/models/" + focus) == True:
-            launch_model = None
-            model_folder = "models/" + focus
-        else:
-            model_folder = None
-            os.makedirs("/vtx/models/" + focus)
-    else:
-        model_folder = None
-        if os.path.exists("/vtx/models/" + focus):
-            shutil.rmtree("/vtx/models/" + focus)
-        os.makedirs("/vtx/models/" + focus)
-
-    output_dir = "models/" + focus
 
     # Instantiate the model object
     ai = aitextgen(

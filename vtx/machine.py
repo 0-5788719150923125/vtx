@@ -1,48 +1,18 @@
-import os
-import re
-import json
-import time
-import math
-import random
-import head
-import yaml
-import functools
-import typing
-import asyncio
-import requests
-import pprint
-from functools import reduce
-from mergedeep import merge, Strategy
-import secrets
-import lab.reddit
-import threading
-import lab.source
+from utils import config
 import lab.discord
-
-# import lab.twitter
-# import lab.petals
-# from crontab import CronTab
-
-# cron = CronTab(user="crow")
-# job = cron.new(command="echo hello_world")
-# job.minute.every(1)
-# cron.write()
-
-
-with open("/vtx/default.yml", "r") as config_file:
-    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-try:
-    with open("/lab/config.yml", "r") as config_file:
-        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
-        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-        pprint.pprint(config)
-except:
-    config = default_config
+import lab.reddit
+import lab.source
+import threading
+import requests
+import asyncio
+import random
+import pprint
+import head
+import os
 
 
+pprint.pprint(config)
 tasks = []
-
 
 # from transformers import ViTFeatureExtractor, ViTModel
 # from PIL import Image
@@ -80,12 +50,6 @@ async def main(loop):
                     task.set_name(name)
                     tasks.append(task)
 
-    # asyncio.gather(*tasks)
-
-    # task = loop.create_task(lab.petals.subscribe())
-    # tasks.append(task)
-    # pprint.pprint(tasks)
-    # print(str(len(tasks)) + " running tasks")
     await asyncio.sleep(66.6666)
     await main(loop)
 

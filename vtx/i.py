@@ -1,32 +1,14 @@
-import os
-import shutil
-import json
-import re
-import glob
-import praw
-import time
-import yaml
-import random
-import numpy as np
-import secrets
-import requests
+from utils import bc, config, propulsion, ship
 from bs4 import BeautifulSoup
-from mergedeep import merge, Strategy
+import requests
+import secrets
+import shutil
+import random
+import json
+import praw
+import os
+import re
 
-with open("/vtx/default.yml", "r") as config_file:
-    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-try:
-    print("trying to load user config")
-    with open("/lab/config.yml", "r") as config_file:
-        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
-        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-except:
-    print("using default config")
-    config = default_config
-
-propulsion = "¶"
-ship = ":>"
 
 # Grab all internal links from website
 def crawl(site="https://ink.university"):
@@ -311,10 +293,3 @@ def get_identity():
     count = secrets.choice([18, 19])
     identity = "".join(secrets.choice("0123456789") for i in range(count))
     return identity
-
-
-class bc:
-    FOLD = "\033[94m"
-    ROOT = "\033[92m"
-    CORE = "\033[91m"
-    ENDC = "\033[0m"

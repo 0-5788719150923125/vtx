@@ -1,30 +1,11 @@
-import yaml
-import praw, asyncpraw
-from mergedeep import merge, Strategy
-import asyncio
-import os
-import random
+from utils import bc, config, propulsion, ship
 import requests
+import random
+import secrets
 import json
 import head
-import secrets
-import pprint
-
-with open("/vtx/default.yml", "r") as config_file:
-    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-try:
-    with open("/lab/config.yml", "r") as config_file:
-        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
-        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-except:
-    config = default_config
-
 
 state = None
-propulsion = "¶"
-ship = ":>"
-
 
 # Check the local GUN API for new messages
 async def subscribe(channel):
@@ -60,10 +41,3 @@ def get_identity():
     count = secrets.choice([18, 19])
     identity = "".join(secrets.choice("0123456789") for i in range(count))
     return identity
-
-
-class bc:
-    FOLD = "\033[94m"
-    ROOT = "\033[92m"
-    CORE = "\033[91m"
-    ENDC = "\033[0m"

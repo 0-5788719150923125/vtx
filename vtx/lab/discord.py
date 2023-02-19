@@ -1,45 +1,13 @@
-import os
-import re
-import json
-import time
-import math
-import random
+from utils import bc, config, propulsion, ship
 import asyncio
 import discord
+import random
 import head
-import yaml
-import praw, asyncpraw
-import functools
-import typing
-import asyncio
-import requests
-import pprint
-import secrets
-from functools import reduce
-from mergedeep import merge, Strategy
-import threading
+import os
+
 
 redacted_chance = 1
 response_probability = 10
-
-
-with open("/vtx/default.yml", "r") as config_file:
-    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-try:
-    with open("/lab/config.yml", "r") as config_file:
-        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
-        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-except:
-    config = default_config
-
-propulsion = "¶"
-ship = ":>"
-
-
-def Sorting(lst):
-    lst2 = sorted(lst, key=len)
-    return lst2
 
 
 # A class to control the entire Discord bot
@@ -225,9 +193,6 @@ class Client(discord.Client):
         await asyncio.sleep(2)
         print(bc.ROOT + "ok" + bc.ENDC)
 
-        # async with message.channel.typing():
-        #     time.sleep(10)
-
         try:
             if len(output) > 2000:
                 output = output[:1997] + "..."
@@ -239,14 +204,6 @@ class Client(discord.Client):
             print(bc.CORE + "Failed to send Discord message." + bc.ENDC)
             error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
             await message.channel.send(error)
-
-
-class bc:
-    FOLD = "\033[94m"
-    ROOT = "\033[92m"
-    WARNING = "\033[93m"
-    CORE = "\033[91m"
-    ENDC = "\033[0m"
 
 
 # format the output

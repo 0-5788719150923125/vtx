@@ -1,20 +1,8 @@
-import yaml
 import praw, asyncpraw
-from mergedeep import merge, Strategy
 import asyncio
-import os
 import random
 import tweepy
-
-with open("/vtx/default.yml", "r") as config_file:
-    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-try:
-    with open("/lab/config.yml", "r") as config_file:
-        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
-        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-except:
-    config = default_config
+import os
 
 # client = tweepy.Client(os.environ["TWITTERBEARERTOKEN"])
 

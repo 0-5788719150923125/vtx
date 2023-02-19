@@ -1,7 +1,7 @@
-import os
-import torch
-from transformers import BloomTokenizerFast
 from petals import DistributedBloomForCausalLM
+from transformers import BloomTokenizerFast
+import torch
+import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 

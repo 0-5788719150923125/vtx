@@ -1,25 +1,13 @@
 from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
-from aitextgen.utils import build_gpt2_config
 from aitextgen import aitextgen
 from transformers import GPT2Config, GPTNeoConfig
 from pytorch_lightning import loggers
-import os
-import shutil, tempfile
-import yaml
-import random
-from mergedeep import merge, Strategy
+from utils import bc, config
 import logging
-
-with open("/vtx/default.yml", "r") as config_file:
-    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-try:
-    with open("/lab/config.yml", "r") as config_file:
-        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
-        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-except:
-    config = default_config
+import shutil
+import random
+import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
@@ -78,13 +66,6 @@ def join_files(path):
             print("failed to crunch " + file)
     intermediate.close()
     return intermediate_path
-
-
-class bc:
-    FOLD = "\033[94m"
-    ROOT = "\033[92m"
-    CORE = "\033[91m"
-    ENDC = "\033[0m"
 
 
 if __name__ == "__main__":

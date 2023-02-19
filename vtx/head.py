@@ -1,29 +1,13 @@
+from utils import bc, config, propulsion, ship
 from aitextgen import aitextgen
-from torch import torch
-import os
-import sys
-import re
-import time
-import random
-import requests
 import functools
-import typing
+import requests
 import asyncio
+import random
+import typing
+import os
+import re
 import gc
-import yaml
-import logging
-from mergedeep import merge, Strategy
-import transformers
-
-with open("/vtx/default.yml", "r") as config_file:
-    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-try:
-    with open("/lab/config.yml", "r") as config_file:
-        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
-        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-except:
-    config = default_config
 
 # holds the model globally
 ai = None
@@ -31,9 +15,6 @@ ai = None
 os.environ["LRU_CACHE_CAPACITY"] = "1"
 
 focus = os.environ["FOCUS"]
-
-ship = ":>"
-propulsion = "¶"
 
 # Decorator to a blocking function into a background thread
 def to_thread(func: typing.Callable) -> typing.Coroutine:
@@ -175,10 +156,3 @@ def gen(bias=None, ctx=None):
         print(e)
         output = ["1055993037077106718", completion[0]]
     return output
-
-
-class bc:
-    FOLD = "\033[94m"
-    ROOT = "\033[92m"
-    CORE = "\033[91m"
-    ENDC = "\033[0m"

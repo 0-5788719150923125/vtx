@@ -86,7 +86,7 @@ async def main(loop):
     # tasks.append(task)
     # pprint.pprint(tasks)
     # print(str(len(tasks)) + " running tasks")
-    await asyncio.sleep(66.666)
+    await asyncio.sleep(66.6666)
     await main(loop)
 
 

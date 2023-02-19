@@ -142,7 +142,7 @@ def gen(bias=None, ctx=None):
             do_sample=True,
             min_length=23,
             max_new_tokens=max_new_tokens,
-            temperature=0.777,
+            temperature=0.888,
             top_k=40,
             top_p=0.9,
             return_as_list=True,
@@ -160,18 +160,17 @@ def gen(bias=None, ctx=None):
         print(e)
         return
     try:
+        output = None
         generation = completion[0][len(history) :]
+        group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
 
-        try:
-            group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
-            output = transformer([group[1], group[2]])
-        except:
-            pass
+        if group == None or group[3] == "¶":
+            print("bad format, regenerating")
+            output = asyncio.run(gen(bias, ctx))
 
-        if group[2] == "" or group[3] == "":
-            print("generation was not subscriptable")
-            return
-        output = [group[2], group[3]]
+        if output == None:
+            output = [group[2], group[3]]
+
     except Exception as e:
         print(e)
         output = ["1055993037077106718", completion[0]]

@@ -4,7 +4,6 @@ from aitextgen.utils import build_gpt2_config
 from aitextgen import aitextgen
 from transformers import GPT2Config, GPTNeoConfig
 from pytorch_lightning import loggers
-import numpy as np
 import os
 import shutil, tempfile
 import yaml
@@ -74,7 +73,7 @@ def join_files(path):
             with open(file, "r") as content:
                 string = content.read()
                 intermediate.write(string + "\n\n")
-                # intermediate.write(file + "\n\n")
+                intermediate.write(file + "\n\n")
         except:
             print("failed to crunch " + file)
     intermediate.close()

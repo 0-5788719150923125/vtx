@@ -1,0 +1,25 @@
+We first study the impact of pretraining data on zero-shot generalization. More diverse pretraining data, ideally curated from a cross-domain collection of high-quality datasets, has been suggested to help with downstream task performance and zero-shot generalization \cite{rossettnlg, gao2020pile}. 
+
+\subsection{Corpora} 
+We evaluate three possible corpora, all commonly used to train large language models:
+\begin{itemize}
+    \item \textbf{OSCAR v1}~\citep{ortiz2019oscar}\footnote{The recent release of OSCAR v2 is a better dataset, but it wasn't available when we started this project.}, a multilingual, filtered version of Common Crawl;
+    \item \textbf{C4} \citep{raffel2019t5}, specifically its replication by AllenAI, a processed and filtered version of Common Crawl;
+    \item \textbf{The Pile} \citep{gao2020pile}, a diverse pretraining corpus that contains webscrapes from Common Crawl in addition to high-quality data from cross-domain sources such as academic texts and source code.
+\end{itemize}
+
+For each pretraining corpus, we train a 1.3B parameter model for 112B tokens. For the Pile specifically, motivated by good early results at 112B tokens, we train up to 300B tokens, to compare with GPT-3 models and validate against GPT-Neo. 
+
+\subsection{Results}
+
+Evaluation results are outlined in Table \ref{tab:validation}. We find that training on the Pile produces models that are better at zero-shot generalization, with C4 a close second, and OSCAR significantly behind. 
+
+Importantly, this finding transfers to larger scales: as part of engineering test runs, a 13B model was trained on OSCAR for 300B tokens. 
+We found this 13B model to underperform the 6.7B model from OpenAI API 
+which we attribute to the low quality of the English data in OSCAR. 
+
+We also note that our model trained on The Pile outperforms the 1.3B GPT-Neo trained on the same dataset. Finally, our 1.3B model still underperforms the 1.3B model from the OpenAI API by 1.6\%. It seems most likely that the difference is that of data, but we cannot investigate this further as the GPT-3 training dataset is neither publicly available nor reproducible.
+
+\begin{mdframed}
+\textbf{Finding 1.} Diverse cross-domain pretraining data combining web crawls with curated high-quality sources improves zero-shot generalization over pretraining datasets constructed from Common Crawl only.
+\end{mdframed}

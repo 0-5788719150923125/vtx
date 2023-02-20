@@ -1,0 +1,7 @@
+\paragraph{Optimal scaling.} Concurrent to this work,  \citet{hoffmann2022training} identified more optimal scaling laws. For our compute budget, they would suggest a 50B parameters model trained for a trillion tokens. Interestingly, even in hindsight, it would have been difficult to follow this recommendation as we would have been limited by the limited availability of high-quality multilingual data and by the size of the BigScience training dataset, ROOTS \cite{roots}. Note that our Figure \ref{fig:scaling} reproduces \citet{kaplan2020scaling} as we did not account for the learning rate schedule as suggested by \citet{hoffmann2022training}.
+
+\paragraph{Other hyperparameters.} 
+In this work we have focused on a subset of the available hyperparameter space of large language models. We have investigated architecture decisions around positional embeddings, activation functions and the embedding norm. Alternative attention mechanisms \cite{tay2020long} or optimizers are examples of other dimensions that could be investigated, potentially leading to improved models.
+
+\paragraph{Efficient fine-tuning.} 
+Our study is focused on zero-shot use and does not consider efficient fine-tuning \cite{lester2021power, zaken2021bitfit}, which is quite relevant for large language models, and which may lead to different conclusions.

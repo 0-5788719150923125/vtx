@@ -1,0 +1,86 @@
+We now detail how our previous findings influence our architecture and scaling decisions for the final 176B BLOOM model. % We have established that a curated high-quality cross-domain pretraining dataset similar to~\citet{gao2020pile} will help boost zero-shot generalization; adopted from \citet{wang2022language} that it is best to use a decoder-only model with an auto-regressive language modeling objective; identified that ALiBi positional embeddings should be used; and we have motivated the use of layer normalization on the embeddings to help with model stability. We should now determine which model architecture (e.g., number of parameters, layers, width) will result in the best model out of our compute budget. 
+
+\paragraph{Compute allocation.} We have been allocated 18 weeks of dedicated use of partition with 52 nodes of 8x 80GB A100 GPUs on the Jean Zay supercomputer. We set four nodes aside as spare, so that our compute budget amounts to 1,161,216 A100-hours in total. Assuming a throughput of 100 model TFLOPS, approximately corresponding to state-of-the-art hardware FLOPS of 150~\cite{narayanan2021efficient}, we have a compute budget of 4,838 PF-days for the model training. We round this down to 4,500 PF-days, this $\sim10$\% safety margin accounting for potential downtime and inefficiencies (e.g., batch size ramp-up) during training. To put this number in perspective, this is $\sim23$\% more than the training budget of GPT-3. Given this compute budget, our English-only scaling laws in \ref{fig:scaling} predict an optimal allocation for training a 392B parameter model for 165B tokens. We will use these as an upper bound in size: the largest model we can afford is 392B parameters, and the minimum number of tokens to train on is 165B tokens.
+
+% \subsection{Parameters, Tokens, and Shapes}
+\begin{table*}[t]
+\begin{small}
+\begin{center}
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+\multicolumn{1}{c}{\textbf{Model}} & \textbf{Size} & \textbf{Pretraining} & \textbf{Budget} & \textbf{Layers} & \textbf{Hidden dim.} & \multicolumn{2}{c}{\textbf{Attention heads}} \\ 
+               & {[Bparams.]} & {[Btokens]}         & {[PF-days]}   &                 &                      & num.                  & dim.                 \\ \midrule
+LaMDA \cite{thoppilan2022lamda}          & 137           & 432                  & 4,106            & 64              & 8,192                & 128                   & 64                   \\
+GPT-3 \cite{brown2020gpt3}         & 175           & 300                  & 3,646            & 96              & 12,288               & 96                    & 128                  \\
+J1-Jumbo \cite{J1WhitePaper}       & 178           & 300                  & 3,708            & 76              & 13,824               & 96                    & 144                  \\
+PanGu-$\alpha$ \cite{zeng2021pangu} & 207           & 42                   & 604              & 64              & 16,384               & 128                   & 128                  \\
+Yuan \cite{wu2021yuan}           & 245           & 180                  & 3,063            & 76              & 16,384               &  & \\
+Gopher \cite{rae2021scaling}         & 280           & 300                  & 4,313            & 80              & 16,384               & 128                   & 128                  \\
+MT-530B \cite{smith2022using}       & 530           & 270                  & 9,938            & 105             & 20,480               & 128                   & 160                  \\ \bottomrule
+\end{tabular}
+\end{center}
+\end{small}
+\caption{\textbf{State-of-the-art 100B+ models with publicly available details.} Compute budget is expressed in model PF-days required for training the models, from the $C= 6ND$ approximation of \citet{kaplan2020scaling}. Number of tokens for LaMDA is inferred from reported compute budget and size. Yuan did not report attention head details.}
+\label{tab:sota_models}
+\end{table*}
+
+\begin{table*}[t]
+\begin{small}
+\begin{center}
+\begin{tabular}{ccccccccc}
+\toprule
+\multicolumn{1}{c}{\textbf{Model}} & \textbf{Size} & \textbf{Layers} & \textbf{Hidden dim.}    & \multicolumn{2}{c}{\textbf{Attention heads}} & \multicolumn{1}{c}{\textbf{Memory}} & \multicolumn{2}{c}{\textbf{Performance}}                       \\
+\multicolumn{1}{c}{}               & [params.]     &                 &                         & num.                  & dim.                 & \multicolumn{1}{c}{[GB]}            & \multicolumn{1}{c}{[sec/iter.]} & \multicolumn{1}{c}{[TFLOPs]} \\ \midrule
+(1)                                & 178           & 82              & \multirow{2}{*}{13,312} & 64                    & 208                  & 63                                  & 104                             & 152                          \\
+(2)                                & 178           & 82              &                         & 128                   & 104                  & 60                                  & 109                             & 146                          \\
+\textbf{(3)}                                & \textbf{176}           & \textbf{70}              & \textbf{14,336}                  & \textbf{112}                   & \textbf{128}                  & \textbf{59}                                  & \textbf{105}                             & \textbf{150}                          \\ \bottomrule
+\end{tabular}
+\end{center}
+\end{small}
+\caption{\textbf{We choose configuration (3) as the final configuration for our 176B model.} (1) was rejected because of high attention heads dimension, and (3) was favored over (2) because of higher throughput. Appendix \ref{sec:arch_details} details all 20 final configurations benchmarked, only the best three are displayed here.}\label{tab:final_configs}
+\end{table*}
+
+% \paragraph{Fitting scaling laws.} 
+
+%  We establish scaling laws~\cite{kaplan2020scaling} to verify the scaling behaviour of our model and codebase, and to help decide on optimal model size. 
+% We use English data from OSCAR \citep{ortiz2019oscar} for pretraining, and train 125M, 350M, 760M, 1.3B, and 13B models for 100B to 300B tokens.  Figure~\ref{fig:scaling} shows the smooth decrease in loss against the compute budget as the model size increases. 
+
+% We observe the following fit $L(C) = (C_c/C)^{\alpha_C}$ with $\alpha_C \approx 0.046$ and $C_c \approx 253 \times 10^8 \text{ PF-days}$. This scaling exponent $\alpha_C$ is inline with the 0.050 reported in \citet{kaplan2020scaling} and the 0.048 at larger scale in \citet{henighan2020scaling}. This is a remarkably close fit given that we are using different datasets, codebases, and hyperparameters. 
+
+% One caveat is that these scaling coefficients are estimated on the OSCAR pretraining data, but we will apply them to the training of a multilingual model on a dataset that was not developed by the time these experiments were performed. Comparing the loss curves of the English and multilingual 1.3B models, we observe similar scaling and convergence trends. This suggests that the capacity of the model is the same whether it is trained on English or multilingual text. Therefore, we expect English-based scaling laws coefficients to still apply for a multilingual model. We additionally conjecture that they will transfer to our final dataset.
+
+
+% \paragraph{Optimality vs. convergence.} From the scaling laws~\cite{kaplan2020scaling}, it is possible to derive a Pareto frontier describing the optimal allocation of the compute budget between model size and number of tokens seen. This optimal allocation achieves the lowest possible loss for a given compute budget. 
+% It is notable that this Pareto optimal frontier describes large models trained on few tokens; we call this training to \emph{optimality}. This is in stark contrast with the common practice of training much smaller models on many more tokens to \emph{convergence}. For instance, for a 1.3B parameters model, \citet{kaplan2020scaling} predicts optimality at 20B tokens; any additional pretraining compute budget would be better allocated to a  larger model. 
+
+% However, this only provides a partial view. Scaling laws focus on the upstream performance (pretraining loss) as the main evaluation metric, assuming that it directly translates to downstream performance. However, prior work showed that this is not always the case~\cite{Tay2021ScaleEI}. Additionally, Table~\ref{tab:validation} shows that zero-shot generalization continues improving significantly past optimality. 
+
+% Scaling laws also neglect inference cost. A larger model is more expensive to serve, and inference costs at scale can catch up with training costs \cite{patterson2022carbon}. Finally, we note that most multilingual models are also trained for more tokens (e.g. XGLM on 500B tokens~\citet{XGLM}) than a similarly sized monolingual model, as the pretraining dataset will otherwise include very few tokens from low-resource languages.
+
+% Accordingly, we choose to use the optimality front as an upper bound on model size and a lower bound on number of training tokens. Given our compute budget, scaling laws predict an optimal allocation for training a 392B parameter model for 165B tokens. Consequently, we will use these as constraints: the largest model we can afford is 392B parameters, and the minimum number of tokens to use is 165B tokens.
+
+% \subsection{State-of-the-art models and recommendations}
+
+% \paragraph{Prior models.} We outline in Table \ref{tab:sota_models} the architectures of all publicly detailed 100B+ parameters models at the time of this work. Most of these models are trained significantly beyond their respective optimality threshold, in the 300-400B tokens range. PanGu-$\alpha$ is the biggest exception, but this appears to be due to hardware availability constraints rather than actively motivated by a modeling decision. 
+
+\paragraph{Model shape.} 
+\citet{kaplan2020scaling} studied the dependence of the loss with model shape, and found only a limited impact within a wide range of feed-forward ratios $d_{ff} / d_{model}$, aspect ratios $d_{model}/n_{layer}$, and attention head dimensions. 
+
+\citet{levine2020limits} proposed a theoretically motivated and empirically backed law describing the optimal compromise between width and depth. They predict that 100B+ parameters models such as GPT-3 are too deep, while models in the 10B or smaller range are usually too shallow. For a GPT-3-sized model with 175B parameters, they predict an ideal depth of 80 layers. 
+
+\subsection{Final Model Architecture}
+
+We set three main guidelines for our final model:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{300-400B tokens.} 
+    We want to guarantee our model will train on around 300-400B tokens of data. This is in the upper range for models in the size range we are pursuing, ensuring that low-resource languages will not be allocated too few tokens. Using the $C=6ND$ approximation \cite{kaplan2020scaling}, with $C=4,500$ PF-days and $D=300$-400B tokens, this constrains the model size to be around 160-200B parameters.
+    \item \textbf{70-80 layers.} 
+    From \citet{levine2020limits} and the size constraint above, we estimate that our model should have between 70 and 80 layers. 
+    \item \textbf{Maximum throughput.}
+    Finally, we want the final architecture to have as high of a throughput per GPU as possible, as more compute will translate directly into longer pretraining and thus a better model. Engineering constraints also come into light here: wide shallow models are typically easier to parallelize across nodes, up to a point where excessive tensor paralellism becomes necessary due to memory constraints.
+\end{itemize}
+
+We detail in Table \ref{tab:sota_models} the architectures of current state-of-the-art 100B+ models. From these guidelines, we benchmark 20 model configurations, detailed in Appendix~\ref{sec:arch_details}. Among these configurations, we select three of particular interest, outlined in Table~\ref{tab:final_configs}. They best fit our guidelines above, and offer high throughput, maximizing our training budget.
+
+We discard configuration (1), as its attention heads are much larger than other models in the literature. Configuration (3) is shallower than recommended by \citet{levine2020limits}, but delivers 3\% higher throughput compared to (2). Thus, we choose configuration (3) and its better throughput, and because a shallower model is easier to deal with at inference time by introducing less latency. 
+

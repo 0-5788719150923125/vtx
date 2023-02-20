@@ -1,0 +1,412 @@
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+\pdfoutput=1
+% In particular, the hyperref package requires pdfLaTeX in order to break URLs across lines.
+
+\documentclass[11pt]{article}
+
+% Remove the "review" option to generate the final version.
+\usepackage[final]{EMNLP2022}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{soul}
+\usepackage{xcolor}
+\usepackage{rotating}
+\usepackage[framemethod=tikz]{mdframed}  % hot finding boxes
+\usepackage{enumitem}
+
+
+\newcommand{\ib}[1]{\textcolor{teal}{\small [IB: #1]}}
+\newcommand{\jl}[1]{\textcolor{orange}{\small [JL: #1]}}
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+% For Vietnamese characters
+% \usepackage[T5]{fontenc}
+% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
+
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{hyperref}
+
+\newcommand*\samethanks[1][\value{footnote}]{\footnotemark[#1]}
+\newcommand{\todo}[1]{\textbf{\textcolor{red}{#1}}}
+
+\newcommand{\new}[1]{{\color{red}\marginpar{\textcolor{red}{NEW}}{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%% list of TODOs %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2.3: add details of gpt3 hyper params
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{What Language Model to Train if You Have One Million GPU Hours?}
+
+\author{\textbf{\underline{The BigScience Architecture \& Scaling Group}} \vspace{0.4cm}\\ \small
+\textbf{Teven Le Scao}$^{1}$\thanks{~~Equal contribution.} \hspace{0.3cm}
+\textbf{Thomas Wang}$^{1}$\samethanks \hspace{0.3cm}
+\textbf{Daniel Hesslow}$^{2}$\samethanks \hspace{0.3cm}  \textbf{Lucile Saulnier}$^{1}$\samethanks \hspace{0.3cm}
+\textbf{Stas Bekman}$^{1}$\samethanks \\
+\small
+\textbf{M Saiful Bari}$^3$ \hspace{0.3cm} \textbf{Stella Biderman}$^{4,5}$ \hspace{0.3cm} \textbf{Hady Elsahar}$^6$ \hspace{0.3cm} 
+\textbf{Niklas Muennighoff}$^1$ \hspace{0.3cm} 
+\textbf{Jason Phang}$^5$ \hspace{0.3cm} \textbf{Ofir Press}$^8$ \\
+\small
+\textbf{Colin Raffel}$^1$ \hspace{0.3cm}
+\textbf{Victor Sanh}$^1$ \hspace{0.3cm}
+ \textbf{Sheng Shen}$^9$ \hspace{0.3cm} \textbf{Lintang Sutawika}$^{10}$ \hspace{0.3cm} \textbf{Jaesung Tae}$^1$ \hspace{0.3cm} \textbf{Zheng Xin Yong}$^{11}$ \\
+ \small
+ \textbf{Julien Launay}$^{2, 12}$\thanks{~~Equal supervision.} \hspace{0.3cm}
+ \textbf{Iz Beltagy}$^{13}$\samethanks\vspace{0.1cm} \\
+ \small
+ $^1$ Hugging Face \hspace{0.2cm} $^2$ LightOn \hspace{0.2cm} $^3$ NTU, Singapore \hspace{0.2cm} $^4$ Booz Allen \hspace{0.2cm} $^5$ EleutherAI \hspace{0.2cm} $^6$ Naver Labs Europe \hspace{0.2cm} $^7$ New York University\\
+ \small$^8$ University of Washington \hspace{0.2cm} $^9$ Berkeley University \hspace{0.2cm} $^{10}$ Big Science \hspace{0.2cm} $^{11}$ Brown University \hspace{0.2cm} $^{12}$ LPENS \hspace{0.2cm} $^{13}$ Allen Institute for AI
+}
+
+\begin{document}
+\onecolumn
+\maketitle
+\begin{abstract}
+\input{content/abstract}
+\end{abstract}
+\section{Introduction}
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/OscarScaling.pdf}
+    \caption{\textbf{Smooth scaling of language modeling loss as compute budget and model size increase}. We observe a power-law coefficient $\alpha_C \sim 0.046$, in-line with \citet{kaplan2020scaling}. We use this fit to estimate the optimal size and number of tokens to train on for the final model given the available budget.}
+    \label{fig:scaling}
+\end{figure}
+
+\input{content/introduction}
+
+\section{Methods}
+
+\begin{table*}[t]
+\begin{center}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\multicolumn{1}{c}{\textbf{Model}} & \textbf{Parameters}            & \multicolumn{4}{c}{\textbf{Pretraining tokens}}                                                                       \\ \midrule
+                                               & \multicolumn{1}{l}{}  & \multicolumn{1}{l}{Dataset} & \multicolumn{1}{l}{112B} & \multicolumn{1}{l}{250B} & \multicolumn{1}{l}{300B} \\ \midrule
+\textbf{OpenAI} --- Curie          & 6.7B            & \multicolumn{1}{l}{}        &                          &                          & \underline{49.28}           \\
+\textbf{OpenAI} --- Babbage          & 1.3B            & \multicolumn{1}{l}{}        &                          &                          & \textbf{45.30}        \\
+\textbf{EleutherAI} --- GPT-Neo              & 1.3B                  & The Pile                    &                          &                          & 42.94                    \\ \midrule
+\multirow{1}{*}{\textbf{Ours}}                             & 13B                   & OSCAR v1                      &                          &                          & 47.09                    \\ \midrule
+    \multirow{3}{*}{\textbf{Ours}}                                                        & 1.3B & The Pile                    & \textbf{42.79}                    & 43.12                    & 43.46                    \\
+                                                           & 1.3B & C4                          & 42.77                    &                          &                          \\
+                                                           & 1.3B & OSCAR v1                       & 41.72           &                          &                          \\ \bottomrule
+\end{tabular}
+\end{center}
+\caption{\textbf{Pretraining datasets with diverse cross-domain high-quality data improves zero-shot generalization.} Average accuracy on EAI harness (higher is better) using different pretraining corpora and comparison with baseline models. \textbf{Bold is best 1.3B model for amount of tokens seen}, \underline{underline is best overall}.}
+\label{tab:validation}
+\end{table*}
+
+\input{content/methods}
+\section{Impact of Pretraining Data}
+
+
+\input{content/data}
+
+\section{Architecture Ablations}
+\input{content/architecture}
+
+\begin{table*}[t!]
+\begin{center}
+% \setlength{\tabcolsep}{5pt}F
+\begin{tabular}{@{}rc|cccccccc|c@{}}
+\toprule
+\textbf{Model} &  \textbf{Size} & EN & ZH & ES & FR & VI & AR & HI & UR & \textbf{Average} \\
+\midrule
+XGLM~(\citeauthor{XGLM}) & 7.5B & 54.5 & 45 & 38.2 & 50.7 & 47.5 & 47.5 & 43.4 & 42.7 & 46.19 \\
+XGLM (reprod.)  & 7.5B & 53.85 & 45.21 & 41.7 & 49.82 & 47.35 & 46.37 & 43.19 & 42.3 & 46.22 \\
+XGLM  & 1.7B & 49.68 & 44.63 & 37.39 & 47.94 & 42.75 & 45.65 & 44.35 & 43.19 & 44.45 \\
+Ours  & 1.3B & 49.9 & 44.53 & 36.77 & 46.51 & 45.75 & 43.41 & 45.95 & 42.91 & 44.47\\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{\textbf{Our multilingual 1.3B model achieves accuracy on zero-shot XNLI in line with XGLM~\citet{XGLM}.} First row is the reported XGLM results, and the second is our reproduction of their results to validate our multilingual evaluation setup. Last two rows show that our multilingual model matches the XGLM results. } 
+\label{tab:mutlilingual_xnli}
+\end{table*}
+
+\section{Multilinguality}
+\input{content/multilinguality}
+
+
+\section{Scaling to 176B parameters}
+\input{content/scaling}
+ 
+ 
+\section{Limitations}
+
+\input{content/limitations.tex} 
+ 
+\section{Conclusion}
+
+\input{content/conclusion.tex} 
+%\section*{Acknowledgements}
+
+%\todo{Add acknowledgements.}
+
+\bibliography{custom}
+\bibliographystyle{acl_natbib}
+
+\newpage
+
+
+\appendix
+\onecolumn
+
+\section{Open artefacts: models, code, and logs}
+\label{sec:artefacts}
+We make public all artefacts produced as part of this work:
+\begin{itemize}
+    \item \textbf{Models.} All trained models are centralized at \url{https://huggingface.co/bigscience};
+    \item \textbf{Code.} All code is available at \url{https://github.com/bigscience-workshop/Megatron-DeepSpeed/tree/main/megatron};
+    \item \textbf{Discussions and logbook.} The notes from the weekly meetings of our working group are made available at \url{https://docs.google.com/document/d/1qbIkhd6bvbOsJOWXL7SfKQ0jey3MWQYQb_SshqH1LII/}.
+\end{itemize}
+
+\section{Multilingual scaling laws}
+\label{sec:multilingualscalinglaws}
+
+\begin{table*}[h]
+\label{tab:multilingualscalinglaws}
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+Language & Proportion [\%] & $\alpha_c$ & $C_m$ \\
+\midrule
+
+Arabic & 4.6 & 0.057 & 1.16 \\
+Catalan & 1.1 & 0.057 & 1.11\\
+Code & 10.8 & 0.054 & 0.94\\
+English & 30.0 & 0.051 & 1.08 \\
+Spanish & 10.8 & 0.050 & 1.01 \\
+Basque & 0.15 & 0.069 & 1.28 \\
+French & 12.9 & 0.047 & 1.06\\
+Indonesian & 1.2 & 0.051 & 1.14\\
+Assamese & 0.01 & 0.051 & 1.31\\
+Bengali & 0.5 & 0.037 & 1.15\\
+Gujarati & 0.04 & 0.051 & 1.30\\
+Hindi & 0.7 & 0.045 & 1.14\\
+Kannada & 0.06 & 0.046 & 1.26\\
+Malayalam & 0.1 & 0.044 & 1.17\\
+Marathi & 0.05 & 0.046 & 1.23\\
+Nepali & 0.07 & 0.055 & 1.25 \\
+Odia & 0.04 & 0.044 & 1.25\\
+Punjabi & 0.05 & 0.043 & 1.20\\
+Tamil & 0.2 & 0.030 & 1.14\\
+Telugu & 0.09 & 0.056 & 1.31\\
+Urdu & 0.1 & 0.068 & 1.31\\
+Niger-Congo (family) & 0.03 & 0.039 & 1.22\\
+Portuguese & 4.9 & 0.049 & 1.05\\
+Vietnamese & 2.7 & 0.053 & 1.08\\
+Chinese (simplified) & 16.2 & 0.052 & 1.09\\
+Chinese (traditionnal) & 0.05 & 0.050 & 1.15\\
+\bottomrule
+
+\end{tabular}
+\caption{\textbf{Best scaling law fit per language.} We fit $\mathcal{L}(C) = C_m C^{-\alpha_c}$ to the runs reported in Figure \ref{fig:multilingualscaling}. But for a handful of languages which are poorly represented in the overall mixture (Basque, most of the Indic family, and Niger-Congo languages), scaling mostly different in offset $C_m$, not in exponent $\alpha_c$.}
+\end{center}
+
+\end{table*}
+
+\newpage
+
+\section{Evaluation details}
+\label{sec:sup_eval}
+\vfill
+\begin{table*}[h]
+\label{tab:sup_random-baselines}
+\begin{center}
+\begin{tiny}
+\begin{tabular}{lllc}
+\toprule
+\multicolumn{2}{c}{\textbf{Task}} & \textbf{Type}           &  \textbf{Random baseline}                                \\ 
+\midrule
+ARC \citep{clark2018arc}      & Challenge & Natural Language Inference & 25.0       \\
+             & Easy &     & 25.0                         \\
+GLUE         & MRPC  \citep{dolan2016mrpc} & Paraphrase Identification      & 50.0                                                  \\
+             & QQP \citep{iyer2019qqp} & Paraphrase Identification      & 50.0                                                             \\  
+HellaSwag \citep{zellers2019hellaswag}    & & Sentence Completion           & 25.0                 \\
+LAMBADA \citep{paperno2016lambada}      & & Sentence Completion       & 0.0                                        \\
+LogiQA \citep{liu2020logiqa}      & & Multiple-Choice Question Answering           & 25.0                                               \\
+MathQA \citep{amini2019mathqa}       & & Multiple-Choice Question Answering           & 20.1                                          \\
+MC-TACO \citep{zhou2019mctaco} & & Multiple-Choice Question Answering & 36.2 \\
+OpenBookQA \citep{mihaylov2press2021train018openbookqa}  & & Multiple-Choice Question Answering          & 25.0       \\
+PIQA \citep{bisk2020piqa}         &  & Multiple-Choice Question Answering          & 50.0        \\
+PROST  \citep{aroca-ouellette2021prost}        & & Multiple-Choice Question Answering          & 25.0                          \\
+PudMedQA \citep{jin2019pubmedqa}     & & Multiple-Choice Question Answering          & 33.3                                         \\
+QNLI \citep{rajpurkar2016squad,wang2019glue}         & & Sentence Completion           & 50.0                                         \\
+Race \cite{lai2017large}        & & Closed-Book Question Answering         & 25.0                       \\
+SciQ \citep{welbl2017sciq}         & & Multiple-Choice Question Answering          & 25.0                                          \\
+SST \citep{socher2013sst}         & & Sentiment          & 50.0                                                \\
+SuperGLUE    & Boolq \citep{clark2019boolq} & Multiple-Choice Question Answering     & 50.0                     \\
+             & COPA \citep{gordon2012copa} & Sentence Completion      & 50.0 \\
+             & MultiRC \citep{kashabi2018multirc} & Multiple-Choice Question Answering   & 5.8                                          \\
+             & RTE \citep{dagan2005rte} & Natural Language Inference       & 50.0                     \\
+             & WIC  \citep{pilehavar2018wic} & Word Sense Disambiguation       & 50.0                     \\
+             & WSC \citep{levesque2012winograd} & Word Sense Disambiguation      & 50.0                     \\
+TriviaQA \citep{joshi2017triviaqa}     & & Closed-Book Question Answering          & 0.0                      \\
+WebQuestions \citep{berant2013semantic} & & Closed-Book Question Answering         & 0.0                        \\
+Winogrande \citep{sakaguchi2019winogrande}   & & Coreference resolution           & 50.0             \\
+WNLI \citep{sakaguchi2019winogrande}        & & Natural Language Inference         & 50.0      \\ \midrule
+\textbf{EAI harness} & & & \textbf{33.3} \\
+\bottomrule
+\end{tabular}
+\end{tiny}
+\end{center}
+\caption{\textbf{Evaluation tasks considered in the EAI harness and random baselines.}}
+\vskip -0.1in
+\end{table*}
+\vfill
+\newpage
+
+\section{Architecture details}
+\label{sec:arch_details}
+
+\vfill
+
+\begin{table}[h]
+\vskip 0.15in
+\begin{center}
+\begin{small}
+\centerline{\begin{tabular}{@{}cccccccccccc@{}}
+\toprule
+\multicolumn{5}{c}{\textbf{\sc{Architecture}}}                                                                                     & \multicolumn{4}{c}{\textbf{\sc{Parallelism}}}                                       & \multicolumn{3}{c}{\textbf{\sc{Performance}}}                \\ \midrule
+\multicolumn{1}{l}{\textbf{Size}} & \textbf{Hidden dim.}    & \textbf{Layers}      & \multicolumn{2}{c}{\textbf{Attention heads}} & \textbf{Data}       & \textbf{Tensor}    & \textbf{Pipeline}   & \textbf{MBS}       & \textbf{Memory}    & \multicolumn{2}{c}{\textbf{Throughput}} \\
+ {[Bparams.]}                      &                         &                      & num.                 & dim.                  &                     &                    &                     &                    & [GB]               & [s/iter.]            & [TFLOPs]           \\ \midrule
+206                               & 14,336                  & 82                   & 128                  & 112                   & 8                   & 4                  & 12                  & 2                  & \ul{OOM}           &                      &                  \\ \midrule
+203                               & 13,312                  & 94                   & 128                  & 104                   & 8                   & 4                  & 12                  & 2                  & 67                 & 124,1                & 146,1            \\ \midrule 
+\multirow{4}{*}{195}              & \multirow{4}{*}{12,288} & \multirow{4}{*}{106} & 128                  & 96                    & \multirow{4}{*}{8}  & \multirow{4}{*}{4} & \multirow{4}{*}{12} & 2                  & 67                 & 121,4                & 143,7            \\
+                                  &                         &                      & \multirow{2}{*}{96}  & 128                   &                     &                    &                     & 4                  & 79                 & 120,3                & 145,0            \\
+                                  &                         &                      &                      & 128                   &                     &                    &                     & \multirow{2}{*}{2} & 65                 & 118,8                & 146,9            \\
+                                  &                         &                      & 64                   & 192                   &                     &                    &                     &                    & 67                 & 116,5                & 149,8            \\\midrule
+\multirow{4}{*}{184}              & \multirow{4}{*}{12,288} & \multirow{4}{*}{100} & \multirow{4}{*}{64}  & \multirow{4}{*}{192}  & \multirow{2}{*}{16} & \multirow{2}{*}{4} & \multirow{4}{*}{6}  & 2                  & \ul{OOM}           &                      &                  \\
+                                  &                         &                      &                      &                       &                     &                    &                     & 1                  & \ul{OOM}           &                      &                  \\
+                                  &                         &                      &                      &                       & \multirow{2}{*}{8}  & \multirow{2}{*}{8} &                     & 4                  & 72                 & 121,0                & 136,2            \\
+                                  &                         &                      &                      &                       &                     &                    &                     & 2                  & 61                 & 140,0                & 117,9            \\\midrule
+\multirow{5}{*}{178}              & \multirow{5}{*}{13,312} & \multirow{5}{*}{82}  & 128                  & 104                   & \multirow{3}{*}{8}  & \multirow{3}{*}{4} & \multirow{5}{*}{12} & \multirow{2}{*}{2} & 60                 & 108,8                & 145,7            \\
+                                  &                         &                      & 104                  & 128                   &                     &                    &                     &                    & 62                 & 123,7                & 128,1            \\
+                                  &                         &                      & \multirow{3}{*}{64}  & \multirow{3}{*}{208}  &                     &                    &                     & \multirow{2}{*}{4} & 74                 & 104,8                & 151,2            \\
+                                  &                         &                      &                      &                       & 4                   & 8                  &                     &                    & 52                 & 111,8                & 141,8            \\
+                                  &                         &                      &                      &                       & 8                   & 4                  &                     & 2                  & 63                 & 104,5                & 151,7            \\\midrule
+\multirow{5}{*}{176}              & \multirow{5}{*}{14,336} & \multirow{5}{*}{70}  & 128                  & 112                   & \multirow{4}{*}{8}  & \multirow{4}{*}{4} & \multirow{4}{*}{12} & \multirow{2}{*}{2} & 60                 & 105,9                & 148,1            \\
+                                  &                         &                      & 112                  & 128                   &                     &                    &                     &                    & 59                 & 104,5                & 150,1            \\
+                                  &                         &                      & \multirow{3}{*}{64}  & \multirow{3}{*}{224}  &                     &                    &                     & 4                  & 73                 & 102,3                & 153,3            \\
+                                  &                         &                      &                      &                       &                     &                    &                     & \multirow{2}{*}{2} & 59                 & 102,0                & 153,7            \\
+                                  &                         &                      &                      &                       & 4                   & 8                  & 12                  &                    & 40                 & 121,6                & 128,9            \\ \bottomrule
+
+\end{tabular}}
+\end{small}
+\end{center}
+\caption{\textbf{Throughput and memory usage of considered models sizes.} Note that pipeline parallelism here considers equal "slots" for embeddings and Transformer layers. This is important to optimize pipeline use, as our multilingual embeddings are quite large (250k).}
+\label{tab:sup_throughput}
+\end{table}
+
+\vfill
+
+
+\newpage
+\section{All Results}
+\label{sec:all_results}
+
+\begin{table}[h]
+\vskip 0.15in
+\begin{center}
+\begin{small}
+\centerline{\begin{tabular}{lllllllll}
+\toprule
+Ablation       & Dataset  & Embedding & Activation & Embedding Norm & Parameters & 112GT   & 250GT   & 300GT   \\ \midrule
+Embeddings     & OSCAR    & Learned   & GELU       & No             & 1.3B       & 41.71 &       &       \\
+Embeddings     & OSCAR    & None      & GELU       & No             & 1.3B       & 41.23 &       &       \\
+Embeddings     & OSCAR    & Rotary    & GELU       & No             & 1.3B       & 41.46 &       &       \\
+Embeddings     & OSCAR    & ALiBi     & GELU       & No             & 1.3B       & 43.70 &       &       \\\midrule
+Dataset        & The Pile & Learned   & GELU       & No             & 1.3B       & 42.79 & 43.12 & 43.46 \\
+Dataset        & C4       & Learned   & GELU       & No             & 1.3B       & 42.77 &       &       \\
+Dataset        & OSCAR    & Learned   & GELU       & No             & 1.3B       & 42.79 &       &       \\\midrule
+Activation     & The Pile & Learned   & GELU       & No             & 1.3B       & 42.79 &       &       \\
+Activation     & The Pile & Learned   & SwiGLU     & No             & 1.3B       & 42.95 &       &       \\\midrule
+Embedding Norm & The Pile & Learned   & GELU       & No             & 1.3B       & 42.79 & 43.12 & 43.46 \\
+Embedding Norm & The Pile & Learned   & GELU       & Yes            & 1.3B       &       &       & 42.24 \\\midrule
+Multilinguality             & OSCAR-ML & Learned   & GELU       & No             & 1.3B       & 38.55 &       &       \\
+Multilinguality             & OSCAR    & Learned   & GELU       & No             & 1.3B       & 41.72 &       &       \\\midrule
+Scale           & OSCAR    & Learned   & GELU       & No             & 1.3B       & 41.72 &       &       \\
+Scale           & OSCAR    & Learned   & GELU       & No             & 13B        &       &       & 47.09\\
+\bottomrule
+\end{tabular}}
+\end{small}
+\end{center}
+\caption{\textbf{Summary of all results obtained in this study}. The final three columns indicate the average EAI Harness results at across different billion tokens trained. Some rows are duplicated for ease of reading.}
+
+\label{tab:all_results}
+\end{table}
+
+
+
+
+
+
+\begin{sidewaystable}
+\centering
+\begin{tiny}
+\begin{tabular}{lllllllllllllllllll}
+Public Name                 & ~         & ~                       & OpenAI:
+  babbage & Openai:
+  curie & gpt-neo
+  1.3B & ~       & ~       & ~        & ~        & ~        & ~        & ~        & ~       & ~        & ~       & ~       & ~       & ~         \\
+Dataset                     & ~         & ~                       & ~                 & ~               & ~              & C4      & OSCAR   & The Pile & The Pile & The Pile & The Pile & The Pile & OSCAR   & The Pile & OSCAR   & OSCAR   & OSCAR   & OSCAR-ML  \\
+Embeddings                  & ~         & ~                       & ~                 & ~               & ~              & Learned & Learned & Learned  & Learned  & Learned  & Learned  & Learned  & Learned & Learned  & Rotary  & ALiBi   & None    & Learned   \\
+Activation                  & ~         & ~                       & ~                 & ~               & ~              & GELU    & GELU    & GELU     & GELU     & GELU     & GELU     & GELU     & GELU    & SwiGLU   & GELU    & GELU    & GELU    & GELU      \\
+Embedding Norm              & ~         & ~                       & ~                 & ~               & ~              & No      & No      & No       & No       & No       & No       & No       & No      & No       & No      & No      & No      & No        \\
+Parameters in billion                 & ~         & ~                       & 1.3               & 6.7             & 1.3            & 1.3     & 1.3     & 1.3      & 1.3      & 1.3      & 1.3      & 1.3      & 13     & 1.3      & 1.3     & 1.3     & 1.3       & 1.3       \\
+Tokens
+  trained in billion & ~         & ~                       & 300               & 300             & 300            & 112     & 112     & 112      & 250      & 300      & 300      & 330      & 300     & 112      & 112     & 112     & 112     & 112       \\
+task                        & metric    & ~                       & ~                 & ~               & ~              & ~       & ~       & ~        & ~        & ~        & ~        & ~        & ~       & ~        & ~       & ~       & ~       & ~         \\
+arc\_challenge              & acc       & arc\_challengeacc       & 0.276             & 0.334           & 0.231          & 0.243   & 0.249   & 0.258    & 0.264    & 0.260    & 0.242    & 0.250    & 0.322   & 0.247    & 0.236   & 0.252   & 0.249   & 0.212     \\
+arc\_challenge              & acc\_norm & arc\_challengeacc\_norm & 0.295             & 0.375           & 0.259          & 0.274   & 0.261   & 0.275    & 0.277    & 0.286    & 0.277    & 0.290    & 0.342   & 0.268    & 0.270   & 0.276   & 0.260   & 0.243     \\
+arc\_easy                   & acc       & arc\_easyacc            & 0.597             & 0.685           & 0.562          & 0.561   & 0.560   & 0.556    & 0.569    & 0.601    & 0.568    & 0.582    & 0.681   & 0.557    & 0.554   & 0.575   & 0.537   & 0.484     \\
+arc\_easy                   & acc\_norm & arc\_easyacc\_norm      & 0.555             & 0.633           & 0.502          & 0.503   & 0.478   & 0.506    & 0.518    & 0.528    & 0.516    & 0.515    & 0.600   & 0.502    & 0.476   & 0.491   & 0.461   & 0.434     \\
+boolq                       & acc       & boolqacc                & 0.629             & 0.666           & 0.620          & 0.546   & 0.566   & 0.520    & 0.551    & 0.606    & 0.558    & 0.566    & 0.587   & 0.540    & 0.584   & 0.563   & 0.526   & 0.597     \\
+copa                        & acc       & copaacc                 & 0.810             & 0.850           & 0.690          & 0.700   & 0.720   & 0.710    & 0.710    & 0.730    & 0.690    & 0.690    & 0.880   & 0.660    & 0.690   & 0.780   & 0.680   & 0.710     \\
+hellaswag                   & acc       & hellaswagacc            & 0.429             & 0.504           & 0.387          & 0.422   & 0.404   & 0.374    & 0.385    & 0.405    & 0.378    & 0.380    & 0.542   & 0.379    & 0.410   & 0.422   & 0.395   & 0.340     \\
+hellaswag                   & acc\_norm & hellaswagacc\_norm      & 0.545             & 0.664           & 0.489          & 0.551   & 0.515   & 0.464    & 0.486    & 0.521    & 0.477    & 0.476    & 0.716   & 0.475    & 0.524   & 0.549   & 0.495   & 0.424     \\
+lambada                     & acc       & lambadaacc              & 0.625             & 0.694           & 0.572          & 0.469   & 0.481   & 0.569    & 0.575    & 0.609    & 0.581    & 0.580    & 0.634   & 0.574    & 0.496   & 0.501   & 0.454   & 0.408     \\
+logiqa                      & acc       & logiqaacc               & 0.201             & 0.215           & 0.197          & 0.206   & 0.237   & 0.210    & 0.218    & 0.203    & 0.217    & 0.223    & 0.232   & 0.215    & 0.210   & 0.215   & 0.237   & 0.218     \\
+logiqa                      & acc\_norm & logiqaacc\_norm         & 0.269             & 0.292           & 0.273          & 0.267   & 0.270   & 0.275    & 0.286    & 0.269    & 0.281    & 0.280    & 0.275   & 0.272    & 0.254   & 0.272   & 0.293   & 0.283     \\
+mathqa                      & acc       & mathqaacc               & 0.244             & 0.251           & 0.241          & 0.233   & 0.222   & 0.249    & 0.248    & 0.263    & 0.246    & 0.245    & 0.238   & 0.245    & 0.234   & 0.237   & 0.215   & 0.223     \\
+mathqa                      & acc\_norm & mathqaacc\_norm         & 0.242             & 0.247           & 0.237          & 0.228   & 0.228   & 0.246    & 0.245    & 0.259    & 0.242    & 0.242    & 0.235   & 0.234    & 0.229   & 0.238   & 0.221   & 0.222     \\
+mc\_taco                    & f1        & mc\_tacof1              & 0.458             & 0.484           & 0.493          & 0.361   & 0.293   & 0.485    & 0.488    & 0.494    & 0.487    & 0.489    & 0.497   & 0.493    & 0.461   & 0.337   & 0.477   & 0.387     \\
+mrpc                        & acc       & mrpcacc                 & 0.578             & 0.684           & 0.684          & 0.684   & 0.588   & 0.684    & 0.684    & 0.684    & 0.679    & 0.679    & 0.677   & 0.684    & 0.684   & 0.684   & 0.679   & 0.302     \\
+mrpc                        & f1        & mrpcf1                  & 0.718             & 0.812           & 0.812          & 0.812   & 0.702   & 0.812    & 0.812    & 0.812    & 0.808    & 0.809    & 0.806   & 0.812    & 0.812   & 0.812   & 0.808   & 0.090     \\
+multirc                     & acc       & multircacc              & 0.018             & 0.015           & 0.018          & 0.018   & 0.026   & 0.023    & 0.024    & 0.023    & 0.025    & 0.008    & 0.018   & 0.026    & 0.009   & 0.011   & 0.016   & 0.040     \\
+openbookqa                  & acc       & openbookqaacc           & 0.224             & 0.290           & 0.216          & 0.220   & 0.200   & 0.190    & 0.196    & 0.222    & 0.194    & 0.208    & 0.294   & 0.214    & 0.212   & 0.224   & 0.210   & 0.170     \\
+openbookqa                  & acc\_norm & openbookqaacc\_norm     & 0.336             & 0.386           & 0.336          & 0.336   & 0.328   & 0.316    & 0.314    & 0.334    & 0.302    & 0.312    & 0.412   & 0.320    & 0.344   & 0.340   & 0.332   & 0.276     \\
+piqa                        & acc       & piqaacc                 & 0.745             & 0.763           & 0.711          & 0.732   & 0.716   & 0.693    & 0.704    & 0.716    & 0.698    & 0.706    & 0.777   & 0.693    & 0.720   & 0.729   & 0.711   & 0.674     \\
+piqa                        & acc\_norm & piqaacc\_norm           & 0.746             & 0.772           & 0.711          & 0.730   & 0.721   & 0.705    & 0.705    & 0.717    & 0.698    & 0.701    & 0.788   & 0.689    & 0.721   & 0.731   & 0.711   & 0.682     \\
+prost                       & acc       & prostacc                & 0.270             & 0.288           & 0.238          & 0.243   & 0.237   & 0.249    & 0.229    & 0.204    & 0.219    & 0.226    & 0.281   & 0.244    & 0.287   & 0.280   & 0.240   & 0.253     \\
+prost                       & acc\_norm & prostacc\_norm          & 0.260             & 0.295           & 0.308          & 0.293   & 0.303   & 0.268    & 0.271    & 0.268    & 0.292    & 0.305    & 0.283   & 0.276    & 0.296   & 0.332   & 0.300   & 0.313     \\
+pubmedqa                    & acc       & pubmedqaacc             & 0.611             & 0.622           & 0.544          & 0.573   & 0.438   & 0.563    & 0.589    & 0.662    & 0.612    & 0.612    & 0.615   & 0.589    & 0.507   & 0.514   & 0.486   & 0.412     \\
+qnli                        & acc       & qnliacc                 & 0.512             & 0.529           & 0.499          & 0.476   & 0.507   & 0.505    & 0.506    & 0.505    & 0.499    & 0.499    & 0.517   & 0.498    & 0.493   & 0.481   & 0.493   & 0.493     \\
+qqp                         & acc       & qqpacc                  & 0.372             & 0.441           & 0.382          & 0.396   & 0.384   & 0.381    & 0.370    & 0.375    & 0.371    & 0.369    & 0.368   & 0.435    & 0.370   & 0.423   & 0.370   & 0.389     \\
+qqp                         & f1        & qqpf1                   & 0.534             & 0.515           & 0.522          & 0.530   & 0.519   & 0.534    & 0.537    & 0.537    & 0.538    & 0.538    & 0.533   & 0.495    & 0.539   & 0.475   & 0.537   & 0.505     \\
+race                        & acc       & raceacc                 & 0.356             & 0.386           & 0.341          & 0.330   & 0.323   & 0.334    & 0.329    & 0.344    & 0.321    & 0.323    & 0.374   & 0.337    & 0.317   & 0.344   & 0.332   & 0.326     \\
+rte                         & acc       & rteacc                  & 0.585             & 0.552           & 0.603          & 0.502   & 0.534   & 0.563    & 0.549    & 0.578    & 0.563    & 0.549    & 0.524   & 0.527    & 0.545   & 0.524   & 0.527   & 0.505     \\
+sciq                        & acc       & sciqacc                 & 0.867             & 0.919           & 0.860          & 0.825   & 0.810   & 0.838    & 0.853    & 0.868    & 0.860    & 0.867    & 0.895   & 0.849    & 0.818   & 0.828   & 0.816   & 0.793     \\
+sciq                        & acc\_norm & sciqacc\_norm           & 0.809             & 0.896           & 0.770          & 0.747   & 0.717   & 0.755    & 0.762    & 0.792    & 0.791    & 0.803    & 0.815   & 0.770    & 0.718   & 0.728   & 0.698   & 0.702     \\
+sst                         & acc       & sstacc                  & 0.732             & 0.666           & 0.656          & 0.676   & 0.560   & 0.753    & 0.721    & 0.501    & 0.528    & 0.710    & 0.514   & 0.760    & 0.493   & 0.588   & 0.588   & 0.510     \\
+triviaqa                    & acc       & triviaqaacc             & 0.115             & 0.195           & 0.052          & 0.027   & 0.025   & 0.056    & 0.065    & 0.058    & 0.047    & 0.049    & 0.133   & 0.050    & 0.031   & 0.039   & 0.028   & 0.021     \\
+webqs                       & acc       & webqsacc                & 0.048             & 0.065           & 0.017          & 0.012   & 0.004   & 0.023    & 0.026    & 0.023    & 0.020    & 0.021    & 0.027   & 0.012    & 0.006   & 0.004   & 0.015   & 0.001     \\
+wic                         & acc       & wicacc                  & 0.495             & 0.500           & 0.500          & 0.495   & 0.508   & 0.495    & 0.500    & 0.500    & 0.498    & 0.500    & 0.498   & 0.500    & 0.498   & 0.492   & 0.500   & 0.500     \\
+winogrande                  & acc       & winograndeacc           & 0.595             & 0.648           & 0.551          & 0.564   & 0.565   & 0.536    & 0.552    & 0.560    & 0.533    & 0.543    & 0.647   & 0.538    & 0.564   & 0.583   & 0.543   & 0.519     \\
+wsc                         & acc       & wscacc                  & 0.394             & 0.558           & 0.365          & 0.539   & 0.567   & 0.365    & 0.365    & 0.365    & 0.414    & 0.385    & 0.500   & 0.365    & 0.394   & 0.635   & 0.462   & 0.539     \\
+Avg
+  acc                   & ~         & ~                       & 45.30\%           & 49.28\%         & 42.94\%        & 42.77\% & 41.72\% & 42.79\%  & 43.12\%  & 43.46\%  & 42.24\%  & 43.08\%  & 47.09\% & 42.95\%  & 41.45\% & 43.70\% & 41.23\% & 38.55\%  
+\end{tabular}
+\end{tiny}
+\end{sidewaystable}
+
+
+\end{document}

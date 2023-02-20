@@ -1,0 +1,38 @@
+We first justify our choice to base our model on the popular recipe of combining a decoder-only model with an autoregressive language modeling objective, and introduce our experimental setup. We then discuss our evaluation benchmarks, and motivate our choice of zero-shot generalization as our key metric. Finally, we introduce the baselines we compare to throughout the paper.
+
+\subsection{Architecture and Pretraining Objective}
+\label{sec:t5x}
+
+In this paper, we base all models on a decoder-only Transformer pretrained with an autoregressive language modeling objective. This is a popular choice for large language models \cite{brown2020gpt3, rae2021scaling, thoppilan2022lamda}, possibly because it lends itself to zero-shot application to many downstream tasks \cite{radford2019language}. Alternatives include encoder-decoder models trained with a span-corruption objective (e.g., T5~\citet{raffel2019t5}), as well as non-causal decoders models with visibility over a prefix (so-called Prefix LMs, \citet{liu2018generating, dong2019unified}).   
+
+Our decision is motivated by the findings of~\citet{wang2022language}, which showed that decoder-only models combined with an autoregressive language modeling objective provide the best zero-shot generalization abilities immediately after pretraining. Although multitask finetuning~\cite{Sanh2021MultitaskPT,wei2021finetuned} will instead favor an encoder-decoder with span corruption for best zero-shot generalization, \citet{wang2022language} found a compromise between these two practices. Following autoregressive pretraining, decoder-only models can be efficiently adapted into non-causal decoders, simply by extending pretraining with span corruption. This adaptation produces a second model, which can provide excellent zero-shot generalization after multitask finetuning. Accordingly, we follow their recommendation, and train an autoregressive decoder-only model first which we will later consider adapting and finetuning. 
+
+\subsection{Experimental Setup} 
+We follow the architectures GPT-2~\citep{radford2019language} and the hyperparameters of GPT-3 \citep{brown2020gpt3}. For learning rate, we use a maximum value of $2 \times 10^{-4}$, with a linear warm-up over 375M tokens, followed by cosine decay to a minimum value of $1 \times 10^{-5}$. We use a 1M tokens batch size, with linear ramp-up over the first 4B tokens, and a sequence length of 2,048. We use the Adam optimizer \cite{kingma2014adam}, with $\beta_1=0.9$, $\beta_2=0.999$, $\epsilon=1 \times 10^{-8}$, weight decay 0.1, and gradient clipping to 1.0. We also tie the word embedding and softmax matrix~\citep{tying}. Unless noted otherwise, we conduct our experiments with 1.3B parameters models, pretraining on 112B tokens. 
+
+We picked this size and dataset size as a compromise between compute cost and the likelihood that our conclusions would transfer to the target 100B+ model. Notably, we needed to be able to reliably measure zero-shot generalization above random chance. We note that training for 112B tokens 1.3B parameters models bring them significantly above the optimality threshold of~\citet{kaplan2020scaling}, and of~\citet{hoffmann2022training}. 
+
+
+The main architectural difference with GPT-3 is that all our layers use full attention, while GPT-3 uses alternating sparse attention layers~\citep{sparse}. 
+The main value of sparse attention layers is to save compute with long sequence lengths. However, at the 100B+ scale, sparse attention layers
+provide negligible compute savings, as the vast majority of the compute is spent on the large feed-forward layers.
+\citet{kaplan2020scaling} estimated the amount of compute per token to be:
+\begin{equation*}
+C_\text{forward} = 2 \times (12 n_\text{layer} d^2 + n_\text{layer} n_\text{ctx} d),
+\end{equation*}
+where $C_\text{forward}$ is the cost for the forward pass, $n_\text{layer}$ is the number of layers, $d$ is the hidden dimension, and $n_\text{ctx}$ is the sequence length. This means if $12 d >> n_\text{ctx}$, the 
+second $n_\text{layer} n_\text{ctx} d$ term is negligible, which is the case for our final model 
+where $d > 10,000$ and $n_\text{ctx} = 2048$. 
+
+\paragraph{What is a FLOP exactly?} We report throughput per GPU in FLOPS and total budgets in PF-days (i.e. one PFLOPS sustained for a day). It is important to highlight that FLOPS are never directly measured, but always estimated, with widely different practices across papers. We refer to \emph{model} FLOP the estimates based on the $C=6ND$ formula from \citet{kaplan2020scaling}, where $C$ is the total compute, $N$ the model size, and $D$ the number of tokens processed. These are the FLOP actually used to train the model, and which are used for scaling laws. We refer to \emph{hardware} FLOP the estimates reported by our codebase, using the formula from \citet{narayanan2021efficient}. This notably includes gradient checkpointing, which trades additionnal computations for reduced memory needs, and a more thorough accounting of operations.
+
+\subsection{Evaluation Benchmarks} 
+We measure upstream performance using the language modeling loss on an held out sample of the pretraining dataset. However, it is not always possible to compare losses across objectives and tokenizers. Moreover, as upstream performance is not always aligned with task performance \cite{Tay2021ScaleEI}, we must also measure downstream performance explicitly. We could use zero/few-shot generalization, with or without specific finetuning. 
+
+Specifically, we choose to measure zero-shot generalization on a diverse set of tasks. Few-shot and zero-shot results are strongly correlated: we found a Pearson correlation coefficient of 0.93 between zero-shot and few-shot performance across model sizes in \citet{brown2020gpt3}. We do not rely on finetuning as it is not how the main final model is likely to be used, given its size and the challenges associated with finetuning at the 100B+ scale. 
+
+We use the popular EleutherAI Language Model Evaluation Harness (EAI harness, \citet{eval-harness}), evaluating models across 27 diverse tasks that are similar to those used in~\citet{brown2020gpt3} (see Appendix \ref{sec:sup_eval} for a list of tasks). Overall, the random baseline on our benchmark sits at 33.3\%. 
+
+\subsection{Baselines} 
+We use GPT-Neo~\cite{gpt-neo}, a~1.3B decoder-only autoregressive language model trained on the Pile~\cite{gao2020pile}, and GPT-3~\cite{brown2020gpt3}, accessed via the OpenAI API. We evaluate two models, Babbage and Curie\footnote{These models are now referred to as \texttt{text-babbage-001} and \texttt{text-curie-001}.}. Based on \citet{gaosize} and our own analysis, we assume  
+Babbage is 1.3B while Curie is 6.7B based on how close our computed results are to those reported in the original paper. However, as details of the OpenAI API are kept secret, there is no way to make sure that the models are actually the ones described in~\citet{brown2020gpt3} -- the number of pretraining tokens reported in Table \ref{tab:validation} is thus to be taken cautiously.

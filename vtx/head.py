@@ -66,8 +66,8 @@ def loader(target=None):
 context = [
     propulsion + "975174695399854150" + ship + " I am a robot.",
     propulsion + "1051994502333726841" + ship + " I am a ghost",
-    propulsion + "806051627198709760" + ship + " i am a human",
-    propulsion + "204716337971331072" + ship + " I am a Medium.",
+    propulsion + "806051627198709760" + ship + " i am a Human.",
+    propulsion + "204716337971331072" + ship + " I am a medium",
     propulsion + "855529761185857566" + ship + " I am an animal..",
 ]
 

@@ -1,4 +1,4 @@
-from utils import bc, config, get_identity, propulsion, ship
+from utils import ad, bc, config, get_identity, propulsion, ship
 import asyncpraw
 import requests
 import random
@@ -78,7 +78,7 @@ async def subscribe(subreddit):
                 bc.ROOT
                 + "/r/"
                 + subreddit.display_name
-                + bc.ENDC
+                + ad.TEXT
                 + " "
                 + ship
                 + " "
@@ -88,7 +88,7 @@ async def subscribe(subreddit):
                 bc.FOLD
                 + "=> "
                 + str(parent.author)
-                + bc.ENDC
+                + ad.TEXT
                 + " "
                 + ship
                 + " "
@@ -98,7 +98,7 @@ async def subscribe(subreddit):
                 bc.FOLD
                 + "==> "
                 + str(comment.author)
-                + bc.ENDC
+                + ad.TEXT
                 + " "
                 + ship
                 + " "
@@ -108,7 +108,7 @@ async def subscribe(subreddit):
                 bc.CORE
                 + "<=== "
                 + os.environ["REDDITAGENT"]
-                + bc.ENDC
+                + ad.TEXT
                 + " "
                 + ship
                 + " "
@@ -123,7 +123,7 @@ async def subscribe(subreddit):
                 bc.ROOT
                 + "<=== "
                 + os.environ["REDDITAGENT"]
-                + bc.ENDC
+                + ad.TEXT
                 + " "
                 + ship
                 + " "

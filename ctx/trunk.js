@@ -8,12 +8,51 @@ import 'gun/lib/store.js'
 import 'gun/lib/rindexed.js'
 import 'gun/lib/webrtc.js'
 import express from 'express'
+import yaml from 'js-yaml'
+
+let config = null
+const defaultConfig = yaml.load(fs.readFileSync('/vtx/vtx/default.yml', 'utf8'))
+
+// Merge user config with default config
+try {
+  const userConfig = yaml.load(fs.readFileSync('/vtx/lab/config.yml', 'utf8'))
+  config = {
+    ...defaultConfig.source,
+    ...userConfig.source
+  }
+} catch {
+  config = {
+    ...defaultConfig.source
+  }
+}
+
+console.log(config)
 
 let port = process.env.PORT || 9666
 let payload = ''
 
+const bc = {
+  ROOT: '\x1b[32m',
+  CORE: '\x1b[31m',
+  FOLD: '\x1b[34m'
+}
+
+const ad = {
+  TEXT: '\x1b[37m'
+}
+
 // Delay by x number of milliseconds
 const delay = (ms) => new Promise((res) => setTimeout(res, ms))
+
+// Get a random number between two others
+function randomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+
+// Get a random value from an array
+const randomValueFromArray = (array) => {
+  return array[Math.floor(Math.random() * array.length)]
+}
 
 // Start a web server
 const app = express()
@@ -43,9 +82,9 @@ let user = null
 const identity = randomString(randomBetween(96, 128))
 const identifier = randomString(64)
 
-// Authenticate with the cockpit
+// Authenticate with GUN
 async function cockpit(identity, identifier) {
-  console.log('identity :> ' + identity)
+  console.log('identity :> [REDACTED]')
   console.log('identifier :> ' + identifier)
   console.log('loading into cockpit')
   await authenticateUser(identity, identifier)
@@ -53,67 +92,68 @@ async function cockpit(identity, identifier) {
 
 cockpit(identity, identifier)
 
-// Capture every message published at this channel
-let bullet
-const channel = gun
-  .get('messaging')
-  .get('channels')
-  .get('hive')
-  .on(async (node) => {
-    try {
-      if (typeof node.payload === 'string') {
-        const payload = JSON.parse(node.payload)
-        let message = 'ERROR: Me Found.'
-        if (payload.pubKey !== null && typeof payload.pubKey !== 'undefined') {
-          const sender = await gun.user(`${payload.pubKey}`)
-          message = await SEA.verify(payload.message, sender.pub)
-        } else {
-          message = payload.message
+// All following routes will use JSON
+app.use(express.json())
+
+// Capture every message published at every configured channel
+const channels = {}
+for (const channel of Object.entries(config)) {
+  channels[channel] = channel
+  channel['gun'] = gun
+    .get('messaging')
+    .get('channels')
+    .get(channel[0])
+    .on(async (node) => {
+      try {
+        if (typeof node.payload === 'string') {
+          const payload = JSON.parse(node.payload)
+          let message = 'ERROR: Me Found.'
+          if (
+            payload.pubKey !== null &&
+            typeof payload.pubKey !== 'undefined'
+          ) {
+            const sender = await gun.user(`${payload.pubKey}`)
+            message = await SEA.verify(payload.message, sender.pub)
+          } else {
+            message = payload.message
+          }
+          channel['bullet'] = {
+            message,
+            identifier: payload.identifier
+          }
         }
-        bullet = {
-          message,
-          identifier: payload.identifier
-        }
+      } catch (err) {
+        console.error(err)
       }
-    } catch (err) {
-      console.error(err)
-    }
+    })
+  // Publish messages at these routes
+  app.get(`/channel/${channel[0]}`, (req, res) => {
+    res.json(channel['bullet'])
   })
 
-// Publish every message at this route
-app.get('/channel', (req, res) => {
-  res.json(bullet)
-})
-
-export const bc = {
-  ROOT: '\x1b[32m',
-  CORE: '\x1b[31m',
-  FOLD: '\x1b[34m',
-  ENDC: '\x1b[37m'
+  // Receive messages from vtx at these routes
+  app.post(`/message/${channel[0]}`, async (req, res) => {
+    try {
+      // Destructure and sign message
+      let { message, identifier } = req.body
+      let pubKey = null
+      if (user) {
+        message = await SEA.sign(message, pair)
+        pubKey = pair.pub
+      }
+      // Send message to GUN
+      const payload = JSON.stringify({ identifier, message, pubKey })
+      await channel['gun'].get('payload').put(payload)
+      console.log(bc.ROOT + 'ONE@ROOT: ' + ad.TEXT + 'pang')
+    } catch (err) {
+      console.error(err)
+      cockpit(identity, identifier)
+    }
+    res.json('ok')
+  })
 }
 
-// Receive messages from vtx at this route
-app.use(express.json())
-app.post('/message', async (req, res) => {
-  try {
-    // Destructure and sign message
-    let { message, identifier } = req.body
-    let pubKey = null
-    if (user) {
-      message = await SEA.sign(message, pair)
-      pubKey = pair.pub
-    }
-    // Send message to GUN
-    const payload = JSON.stringify({ identifier, message, pubKey })
-    await channel.get('payload').put(payload)
-    console.log(bc.ROOT + 'ONE@ROOT: ' + bc.ENDC + 'pang')
-  } catch (err) {
-    console.error(err)
-    cockpit(identity, identifier)
-  }
-  res.json('ok')
-})
-
+// Hash strings into daemon names at this route
 app.get('/daemon', (req, res) => {
   if (typeof req.body.seed === 'undefined') return res.json('missing payload')
   const daemon = ng.generateOne(req.body.seed.toString())
@@ -160,7 +200,9 @@ const state = gun
 state.get('payload').put(JSON.stringify(net.toJSON()))
 
 // LSTM prediction step
-console.log(`PEN@FOLD: ` + 'i predict ' + net.run(['.', '..']))
+console.log(
+  bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'i predict ' + net.run(['.', '..'])
+)
 
 // Generate a cryptographically-secure random string
 function randomString(length) {
@@ -173,11 +215,6 @@ function randomString(length) {
     counter += 1
   }
   return result
-}
-
-// Get a random number between two others
-export function randomBetween(min, max) {
-  return Math.floor(Math.random() * (max - min) + min)
 }
 
 // Create a GUN user
@@ -200,10 +237,6 @@ async function authenticateUser(identity, identifier) {
   } catch (err) {
     console.error(err)
   }
-}
-
-const randomValueFromArray = (array) => {
-  return array[Math.floor(Math.random() * array.length)]
 }
 
 const seededPRNG = (str) => {
@@ -310,6 +343,7 @@ const NameGenerator = {
     return name.join('')
   }
 }
+
 const corpus = [
   'Abbadon',
   'Abraxas',

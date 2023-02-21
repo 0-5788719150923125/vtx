@@ -1,4 +1,4 @@
-from utils import bc, config, get_identity, propulsion, ship
+from utils import config, get_identity, propulsion, ship
 from bs4 import BeautifulSoup
 import requests
 import secrets

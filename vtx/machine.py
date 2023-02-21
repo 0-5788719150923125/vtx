@@ -69,5 +69,5 @@ t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
 t.start()
 
 while True:
-    time.sleep(10)
+    time.sleep(300)
     print(".")

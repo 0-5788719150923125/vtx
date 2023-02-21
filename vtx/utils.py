@@ -23,7 +23,12 @@ class bc:
     FOLD = "\033[94m"
     ROOT = "\033[92m"
     CORE = "\033[91m"
-    ENDC = "\033[0m"
+
+
+class ad:
+    TEXT = "\033[0m"
+    ROOT = "\033[92m"
+    CORE = "\033[91m"
 
 
 # Generate a pseudo-identity, in the Discord ID format

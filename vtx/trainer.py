@@ -3,7 +3,7 @@ from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
 from transformers import GPT2Config, GPTNeoConfig
 from pytorch_lightning import loggers
-from utils import bc, config
+from utils import ad, bc, config
 import logging
 import shutil
 import random
@@ -135,8 +135,8 @@ if __name__ == "__main__":
     #     dropout=model["training"]["dropout"],
     # )
 
-    print("(" + bc.ROOT + "focus" + bc.ENDC + ")")
-    print(f"({bc.CORE}ed{bc.ENDC}) on the ({bc.FOLD}{focus}{bc.ENDC})")
+    print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
+    print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
 
     fresh_logs = False
 
@@ -173,7 +173,7 @@ if __name__ == "__main__":
             line_by_line = dataset["line_by_line"]
 
         intermediate_file = join_files("/" + dataset)
-        print(bc.FOLD + "loading " + dataset + bc.ENDC)
+        print(bc.FOLD + "loading " + dataset + ad.TEXT)
         datasets.append(
             TokenDataset(
                 intermediate_file,

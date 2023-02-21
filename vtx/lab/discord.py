@@ -1,4 +1,4 @@
-from utils import bc, config, propulsion, ship
+from utils import ad, bc, config, propulsion, ship
 import asyncio
 import discord
 import random
@@ -23,12 +23,12 @@ class Client(discord.Client):
     async def on_ready(self):
 
         # List all Discord servers on startup
-        print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + "connected to Discord")
+        print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + "connected to Discord")
         guilds = []
         for guild in client.guilds:
             guilds.append(guild.name)
 
-        print(bc.FOLD + "PEN@DISCORD: " + bc.ENDC + " => ".join(guilds))
+        print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + " => ".join(guilds))
 
     async def setup_hook(self) -> None:
         self.discord_task = self.loop.create_task(self.think())
@@ -103,7 +103,7 @@ class Client(discord.Client):
                 await messages[focus_on].reply(output)
                 self.thinking = False
             except Exception as e:
-                print(bc.CORE + str(e) + bc.ENDC)
+                print(bc.CORE + str(e) + ad.TEXT)
                 self.discord_task = self.loop.create_task(self.think())
 
     # check every Discord message
@@ -129,9 +129,9 @@ class Client(discord.Client):
                 return
 
         # generate responses
-        print(bc.ROOT + "head" + bc.ENDC)
+        print(bc.ROOT + "head" + ad.TEXT)
         if "gen" in message.content:
-            print(bc.FOLD + "dj ent" + bc.ENDC)
+            print(bc.FOLD + "dj ent" + ad.TEXT)
             weight = 1
             bias = 530243004334604311
             try:
@@ -142,7 +142,7 @@ class Client(discord.Client):
                 pass
         else:
             weight = random.randint(0, 100)
-            print(bc.FOLD + "heads" + bc.ENDC)
+            print(bc.FOLD + "heads" + ad.TEXT)
             # increase probability of a response if bot is mentioned
             if client.user.mentioned_in(message):
                 weight = random.randint(
@@ -167,17 +167,17 @@ class Client(discord.Client):
             await asyncio.sleep(1)
             print("..")
             await asyncio.sleep(0.5)
-            print(bc.CORE + "..." + bc.ENDC)
+            print(bc.CORE + "..." + ad.TEXT)
             return
 
         # generate a response from context and bias
-        print(bc.ROOT + "heads" + bc.ENDC)
+        print(bc.ROOT + "heads" + ad.TEXT)
         await asyncio.sleep(random.randint(2, 13))
         async with message.channel.typing():
             generation = await head.gen(bias)
             output = transformer([generation[0], generation[1]])
 
-        print(bc.FOLD + "output" + bc.ENDC)
+        print(bc.FOLD + "output" + ad.TEXT)
 
         # make random redactions
         if random.randint(0, 100) <= redacted_chance:
@@ -186,13 +186,13 @@ class Client(discord.Client):
 
         # output to console
         print(output)
-        print(bc.CORE + "..." + bc.ENDC)
+        print(bc.CORE + "..." + ad.TEXT)
         await asyncio.sleep(1)
         print("..")
         await asyncio.sleep(0.5)
-        print(bc.ROOT + "." + bc.ENDC)
+        print(bc.ROOT + "." + ad.TEXT)
         await asyncio.sleep(2)
-        print(bc.ROOT + "ok" + bc.ENDC)
+        print(bc.ROOT + "ok" + ad.TEXT)
 
         try:
             if len(output) > 2000:
@@ -202,7 +202,7 @@ class Client(discord.Client):
             else:
                 await message.channel.send(output)
         except:
-            print(bc.CORE + "Failed to send Discord message." + bc.ENDC)
+            print(bc.CORE + "Failed to send Discord message." + ad.TEXT)
             error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
             await message.channel.send(error)
 

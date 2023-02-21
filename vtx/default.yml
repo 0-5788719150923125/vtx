@@ -2,6 +2,9 @@ source:
   hive:
     watch: True
     chance: 0.33
+  support:
+    watch: False
+    chance: 0.33
 
 heart:
   info: never give up, never give in

@@ -39,6 +39,8 @@ services:
     restart: 'always'
     volumes:
       - ./ctx:/vtx/ctx
+      - ./vtx:/vtx/vtx
+      - ./lab:/vtx/lab
     ports:
       - 9666:9666
 

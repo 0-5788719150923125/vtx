@@ -1,4 +1,4 @@
-from utils import bc, config, propulsion, ship
+from utils import ad, bc, config, propulsion, ship
 from aitextgen import aitextgen
 import functools
 import requests
@@ -48,7 +48,7 @@ def loader(target=None):
         tokenizer_file = "src." + target + ".tokenizer.json"
         model_folder = None
 
-    print(bc.FOLD + "PEN@FOLD: " + bc.ENDC + model["info"])
+    print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + model["info"])
     ai = aitextgen(
         model=model.get("model", None),
         model_folder=model_folder,
@@ -57,8 +57,8 @@ def loader(target=None):
         to_gpu=model["to_gpu"],
         cache_dir="models",
     )
-    print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + str(ai))
-    print(bc.FOLD + "PEN@FOLD: " + bc.ENDC + "focused on the " + target)
+    print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
+    print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + "focused on the " + target)
     return ai
 
 
@@ -112,7 +112,7 @@ def gen(bias=None, ctx=None):
     # bias the prompt
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-            print(bc.CORE + "INK@CORE " + bc.ENDC + ship + " bias toward " + str(bias))
+            print(bc.CORE + "INK@CORE " + ad.TEXT + ship + " bias toward " + str(bias))
             prefixes = ["I", "You", ""]
             prompt = propulsion + str(bias) + ship + " " + random.choice(prefixes)
 

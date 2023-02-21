@@ -1,0 +1,185 @@
+\begin{thebibliography}{28}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Bordes et~al.(2016)}]{bordes2016learning}
+Antoine Bordes, Y-Lan Boureau and Jason Weston. 2016.
+\newblock Learning end-to-end goal-oriented dialog.
+\newblock \emph{arXiv preprint arXiv:1605.07683}.
+
+\bibitem[{Chen et~al.(2017)Chen, Fisch, Weston, and Bordes}]{chen2017reading}
+Danqi Chen, Adam Fisch, Jason Weston, and Antoine Bordes. 2017.
+\newblock Reading wikipedia to answer open-domain questions.
+\newblock \emph{arXiv preprint arXiv:1704.00051}.
+
+\bibitem[{Dodge et~al.(2015)Dodge, Gane, Zhang, Bordes, Chopra, Miller, Szlam,
+  and Weston}]{dodge2015evaluating}
+Jesse Dodge, Andreea Gane, Xiang Zhang, Antoine Bordes, Sumit Chopra, Alexander
+  Miller, Arthur Szlam, and Jason Weston. 2015.
+\newblock Evaluating prerequisite qualities for learning end-to-end dialog
+  systems.
+\newblock \emph{arXiv preprint arXiv:1511.06931}.
+
+\bibitem[{Dunbar et~al.(1997)Dunbar, Marriott, and Duncan}]{dunbar1997human}
+Robin~IM Dunbar, Anna Marriott, and Neil~DC Duncan. 1997.
+\newblock Human conversational behavior.
+\newblock \emph{Human nature}, 8(3):231--246.
+
+\bibitem[{Joshi et~al.(2017)Joshi, Mi, and Faltings}]{joshi2017personalization}
+Chaitanya~K Joshi, Fei Mi, and Boi Faltings. 2017.
+\newblock Personalization in goal-oriented dialog.
+\newblock \emph{arXiv preprint arXiv:1706.07503}.
+
+\bibitem[{Li et~al.(2015)Li, Galley, Brockett, Gao, and
+  Dolan}]{li2015diversity}
+Jiwei Li, Michel Galley, Chris Brockett, Jianfeng Gao, and Bill Dolan. 2015.
+\newblock A diversity-promoting objective function for neural conversation
+  models.
+\newblock \emph{arXiv preprint arXiv:1510.03055}.
+
+\bibitem[{Li et~al.(2016{\natexlab{a}})Li, Galley, Brockett, Spithourakis, Gao,
+  and Dolan}]{li2016persona}
+Jiwei Li, Michel Galley, Chris Brockett, Georgios~P Spithourakis, Jianfeng Gao,
+  and Bill Dolan. 2016{\natexlab{a}}.
+\newblock A persona-based neural conversation model.
+\newblock \emph{arXiv preprint arXiv:1603.06155}.
+
+\bibitem[{Li et~al.(2016{\natexlab{b}})Li, Monroe, Ritter, Galley, Gao, and
+  Jurafsky}]{li2016deep}
+Jiwei Li, Will Monroe, Alan Ritter, Michel Galley, Jianfeng Gao, and Dan
+  Jurafsky. 2016{\natexlab{b}}.
+\newblock Deep reinforcement learning for dialogue generation.
+\newblock \emph{arXiv preprint arXiv:1606.01541}.
+
+\bibitem[{Liu et~al.(2016)Liu, Lowe, Serban, Noseworthy, Charlin, and
+  Pineau}]{liu2016not}
+Chia-Wei Liu, Ryan Lowe, Iulian~V Serban, Michael Noseworthy, Laurent Charlin,
+  and Joelle Pineau. 2016.
+\newblock How not to evaluate your dialogue system: An empirical study of
+  unsupervised evaluation metrics for dialogue response generation.
+\newblock \emph{arXiv preprint arXiv:1603.08023}.
+
+\bibitem[{Lowe et~al.(2015)Lowe, Pow, Serban, and Pineau}]{lowe2015ubuntu}
+Ryan Lowe, Nissan Pow, Iulian Serban, and Joelle Pineau. 2015.
+\newblock The ubuntu dialogue corpus: A large dataset for research in
+  unstructured multi-turn dialogue systems.
+\newblock \emph{arXiv preprint arXiv:1506.08909}.
+
+\bibitem[{Lucas et~al.(2009)Lucas, Fern{\'a}ndez, Salazar, Ferreiros, and
+  San~Segundo}]{lucas2009managing}
+JM~Lucas, F~Fern{\'a}ndez, J~Salazar, J~Ferreiros, and R~San~Segundo. 2009.
+\newblock Managing speaker identity and user profiles in a spoken dialogue
+  system.
+\newblock \emph{Procesamiento del Lenguaje Natural}, 43:77--84.
+
+\bibitem[{Miller et~al.(2016)Miller, Fisch, Dodge, Karimi, Bordes, and
+  Weston}]{miller2016key}
+Alexander Miller, Adam Fisch, Jesse Dodge, Amir-Hossein Karimi, Antoine Bordes,
+  and Jason Weston. 2016.
+\newblock Key-value memory networks for directly reading documents.
+\newblock \emph{arXiv preprint arXiv:1606.03126}.
+
+\bibitem[{Naaman et~al.(2010)Naaman, Boase, and Lai}]{naaman2010really}
+Mor Naaman, Jeffrey Boase, and Chih-Hui Lai. 2010.
+\newblock Is it really about me?: message content in social awareness streams.
+\newblock In \emph{Proceedings of the 2010 ACM conference on Computer supported
+  cooperative work}, pages 189--192. ACM.
+
+\bibitem[{Pennington et~al.(2014)Pennington, Socher, and
+  Manning}]{pennington2014glove}
+Jeffrey Pennington, Richard Socher, and Christopher Manning. 2014.
+\newblock Glove: Global vectors for word representation.
+\newblock In \emph{Proceedings of the 2014 conference on empirical methods in
+  natural language processing (EMNLP)}, pages 1532--1543.
+
+\bibitem[{Rajpurkar et~al.(2016)Rajpurkar, Zhang, Lopyrev, and
+  Liang}]{rajpurkar2016squad}
+Pranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and Percy Liang. 2016.
+\newblock Squad: 100,000+ questions for machine comprehension of text.
+\newblock \emph{arXiv preprint arXiv:1606.05250}.
+
+\bibitem[{Serban et~al.(2017{\natexlab{a}})Serban, Sankar, Germain, Zhang, Lin,
+  Subramanian, Kim, Pieper, Chandar, Ke et~al.}]{serban2017deep}
+Iulian~V Serban, Chinnadhurai Sankar, Mathieu Germain, Saizheng Zhang, Zhouhan
+  Lin, Sandeep Subramanian, Taesup Kim, Michael Pieper, Sarath Chandar,
+  Nan~Rosemary Ke, et~al. 2017{\natexlab{a}}.
+\newblock A deep reinforcement learning chatbot.
+\newblock \emph{arXiv preprint arXiv:1709.02349}.
+
+\bibitem[{Serban et~al.(2015)Serban, Lowe, Charlin, and
+  Pineau}]{serban2015survey}
+Iulian~Vlad Serban, Ryan Lowe, Laurent Charlin, and Joelle Pineau. 2015.
+\newblock A survey of available corpora for building data-driven dialogue
+  systems.
+\newblock \emph{arXiv preprint arXiv:1512.05742}.
+
+\bibitem[{Serban et~al.(2016)Serban, Lowe, Charlin, and
+  Pineau}]{serban2016generative}
+Iulian~Vlad Serban, Ryan Lowe, Laurent Charlin, and Joelle Pineau. 2016.
+\newblock Generative deep neural networks for dialogue: A short review.
+\newblock \emph{arXiv preprint arXiv:1611.06216}.
+
+\bibitem[{Serban et~al.(2017{\natexlab{b}})Serban, Sordoni, Lowe, Charlin,
+  Pineau, Courville, and Bengio}]{serban2017hierarchical}
+Iulian~Vlad Serban, Alessandro Sordoni, Ryan Lowe, Laurent Charlin, Joelle
+  Pineau, Aaron~C Courville, and Yoshua Bengio. 2017{\natexlab{b}}.
+\newblock A hierarchical latent variable encoder-decoder model for generating
+  dialogues.
+
+\bibitem[{Sordoni et~al.(2015)Sordoni, Galley, Auli, Brockett, Ji, Mitchell,
+  Nie, Gao, and Dolan}]{sordoni2015neural}
+Alessandro Sordoni, Michel Galley, Michael Auli, Chris Brockett, Yangfeng Ji,
+  Margaret Mitchell, Jian-Yun Nie, Jianfeng Gao, and Bill Dolan. 2015.
+\newblock A neural network approach to context-sensitive generation of
+  conversational responses.
+\newblock \emph{arXiv preprint arXiv:1506.06714}.
+
+\bibitem[{Sukhbaatar et~al.(2015)Sukhbaatar, Weston, Fergus et~al.}]{memn2n}
+Sainbayar Sukhbaatar, Jason Weston, Rob Fergus, et~al. 2015.
+\newblock End-to-end memory networks.
+\newblock In \emph{Advances in neural information processing systems}, pages
+  2440--2448.
+
+\bibitem[{Sutskever et~al.(2014)Sutskever, Vinyals, and
+  Le}]{sutskever2014sequence}
+Ilya Sutskever, Oriol Vinyals, and Quoc~V Le. 2014.
+\newblock Sequence to sequence learning with neural networks.
+\newblock In \emph{Advances in neural information processing systems}, pages
+  3104--3112.
+
+\bibitem[{Vinyals and Le(2015)}]{vinyals2015neural}
+Oriol Vinyals and Quoc Le. 2015.
+\newblock A neural conversational model.
+\newblock \emph{arXiv preprint arXiv:1506.05869}.
+
+\bibitem[{Voorhees et~al.(1999)}]{voorhees1999trec}
+Ellen~M Voorhees et~al. 1999.
+\newblock The trec-8 question answering track report.
+\newblock In \emph{Trec}, volume~99, pages 77--82.
+
+\bibitem[{Weizenbaum(1966)}]{weizenbaum1966eliza}
+Joseph Weizenbaum. 1966.
+\newblock Eliza—a computer program for the study of natural language
+  communication between man and machine.
+\newblock \emph{Communications of the ACM}, 9(1):36--45.
+
+\bibitem[{Wu et~al.(2017)Wu, Fisch, Chopra, Adams, Bordes, and
+  Weston}]{wu2017starspace}
+Ledell Wu, Adam Fisch, Sumit Chopra, Keith Adams, Antoine Bordes, and Jason
+  Weston. 2017.
+\newblock Starspace: Embed all the things!
+\newblock \emph{arXiv preprint arXiv:1709.03856}.
+
+\bibitem[{Young et~al.(2013)Young, Ga{\v{s}}i{\'c}, Thomson, and
+  Williams}]{young2013pomdp}
+Steve Young, Milica Ga{\v{s}}i{\'c}, Blaise Thomson, and Jason~D Williams.
+  2013.
+\newblock Pomdp-based statistical spoken dialog systems: A review.
+\newblock \emph{Proceedings of the IEEE}, 101(5):1160--1179.
+
+\bibitem[{Young(2000)}]{young2000probabilistic}
+Steve~J Young. 2000.
+\newblock Probabilistic methods in spoken--dialogue systems.
+\newblock \emph{Philosophical Transactions of the Royal Society of London A:
+  Mathematical, Physical and Engineering Sciences}, 358(1769):1389--1402.
+
+\end{thebibliography}

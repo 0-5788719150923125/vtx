@@ -1,0 +1,119 @@
+%
+% File acl2018.tex
+%
+%% Based on the style files for ACL-2017, with some changes, which were, in turn,
+%% Based on the style files for ACL-2015, with some improvements
+%%  taken from the NAACL-2016 style
+%% Based on the style files for ACL-2014, which were, in turn,
+%% based on ACL-2013, ACL-2012, ACL-2011, ACL-2010, ACL-IJCNLP-2009,
+%% EACL-2009, IJCNLP-2008...
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[hyperref]{acl2018}
+\usepackage{times}
+\usepackage{latexsym}
+
+
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{url}
+\usepackage{paralist}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+\usepackage{eqnarray}
+
+\usepackage{url}
+
+\aclfinalcopy % Uncomment this line for the final submission
+\def\aclpaperid{448} %  Enter the acl Paper ID here
+
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+\newcommand\BibTeX{B{\sc ib}\TeX}
+
+
+\title{Personalizing Dialogue Agents: I have a dog, do you have pets too?}
+
+\author{Saizheng Zhang$^{\dagger,1}$, Emily Dinan$^{\ddagger}$, Jack Urbanek$^{\ddagger}$, Arthur Szlam$^{\ddagger}$, Douwe Kiela$^{\ddagger}$, Jason Weston$^{\ddagger}$\\
+   $^{\dagger}$ Montreal Institute for Learning Algorithms, MILA\\$^{\ddagger}$ Facebook AI Research\\
+  {\tt saizheng.zhang@umontreal.ca, \{edinan,jju,aszlam,dkiela,jase\}@fb.com}}
+  % \\\And
+ % Second Author \\
+ % Affiliation / Address line 1 \\
+ % Affiliation / Address line 2 \\
+ % Affiliation / Address line 3 \\
+ % {\tt email@domain} \\}
+
+\date{}
+
+\begin{document}
+\maketitle
+\addtocounter{footnote}{1}
+\footnotetext{Work done while at Facebook AI Research.}
+\begin{abstract}
+Chit-chat models are known to have several problems: they lack specificity, do not display a consistent personality and are often not very captivating.
+In this work we present the task of
+ making chit-chat more engaging by conditioning on 
+ profile information.
+We collect data and train models to (i) condition on
+their given profile information; and (ii) information about the person they are talking to,
+resulting in improved dialogues, as measured by next utterance prediction.
+Since (ii) is initially unknown,
+our model is trained to engage its partner with personal topics, and we show the resulting dialogue can be used to predict profile information about the interlocutors.
+\end{abstract}
+
+\newif\ifarxiv
+\arxivfalse
+%\arxivtrue
+
+
+\newif\ifnoarxiv
+\noarxivtrue
+
+
+\input{intro}
+\input{related}
+\input{data}
+\input{model}
+\input{exp}
+\input{conc}
+
+
+
+% include your own bib file like this:
+%\bibliographystyle{acl_natbib}
+%\bibliography{iclr2018_conference}
+%\bibliography{acl2018}
+%\bibliographystyle{acl_natbib}
+
+
+\bibliography{iclr2018_conference}
+%\bibliographystyle{acl2018}
+\bibliographystyle{acl_natbib}
+%\bibliographystyle{iclr2018_conference}
+
+\newpage
+\clearpage
+\newpage
+\clearpage
+\appendix
+
+
+%\section{Supplemental Material}
+%\label{sec:supplemental}
+
+\input{appendix}
+
+
+
+\end{document}

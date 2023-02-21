@@ -1,0 +1,59 @@
+\section{Related Work}
+
+% models
+% goal-oriented
+Traditional dialogue systems consist of building blocks, such as dialogue state tracking components and response generators, and have typically been applied to tasks with labeled internal dialogue state  and precisely defined user intent (i.e., goal-oriented dialogue), see e.g. \citep{young2000probabilistic}. 
+The most successful goal-oriented dialogue systems model conversation as partially observable Markov decision processes (POMDPs) \citep{young2013pomdp}.
+All those methods typically do not consider the chit-chat setting and are more concerned with achieving functional goals (e.g. booking an airline flight) than displaying a personality.
+In particular, many of the tasks and datasets available are constrained to narrow domains \citep{serban2015survey}.
+
+% simple models for non-goal: hard-coded and  IR-based
+Non-goal driven dialogue systems go back to Weizenbaum's famous program ELIZA 
+\citep{weizenbaum1966eliza}, and hand-coded systems have continued to be used in applications 
+to this day. For example, modern solutions that build an open-ended dialogue system to the Alexa challenge  combine hand-coded and machine-learned elements \citep{serban2017deep}.
+Amongst the simplest of statistical systems that can be used in this domain, that are based on data rather than hand-coding, are information retrieval models \citep{sordoni2015neural}, which retrieve and rank responses based on their matching score with the recent dialogue history.
+We use IR systems as a baseline in this work.
+
+% generative language models -> end-to-end
+End-to-end neural approaches are a class of models which have seen growing recent interest.  
+A popular class of methods are
+generative recurrent systems like seq2seq applied to dialogue \citep{sutskever2014sequence,vinyals2015neural,sordoni2015neural,li2016deep,serban2017hierarchical}.
+\ifarxiv
+Their strengths are that (i) they are not constrained by hard-code rules or explicit internal states that may work well in a narrow domain, but are too restrictive for more open dialogue such as chit-chat, and (ii) being based on architectures rooted in language modeling and machine translation, they excel at generating syntactically coherent language, and can generate entirely novel responses.
+Their deficiencies are that they typically need a large amount of data to be trained, 
+and the vanilla approach generates responses given only the recent dialogue history without using other external memory. %, in contrast to the goal-oriented systems described before which typically require e.g. looking up airline details. 
+The latter issue makes neural models  hence typically lack both domain knowledge in the domain being discussed, and a persistent personality during discussions.
+\else
+Rooted in language modeling, they are able to produce syntactically coherent novel responses, but
+their memory-free approach means they lack long-term coherence and a persistent personality, as discussed before. 
+\fi
+% memory-augmented networks
+A promising direction, that is still in its infancy, to fix this issue is to use 
+a memory-augmented network instead \citep{memn2n,dodge2015evaluating} 
+%and either provide or learn appropriate external memories.
+by providing or learning appropriate  memories.
+\ifarxiv
+A related class of neural methods is to retrieve and rank candidates
+rather than generate words,
+ similarly to IR methods, but using memory-augmented networks to score the candidates instead. We compare the generative and ranking approaches to each other in this work.
+\fi
+
+% datasets
+\newcite{serban2015survey} list available corpora for training dialogue systems.
+Perhaps the most relevant to learning chit-chat models are ones based on movie
+scripts such as OpenSubtitles and Cornell Movie-Dialogue Corpus, and dialogue from web platforms such as Reddit and Twitter, all of which have  been used for training neural
+approaches \citep{vinyals2015neural,dodge2015evaluating,li2016deep,serban2017hierarchical}. Naively training on these datasets leads to models with the lack of a consistent personality as they will learn a model averaged over many different speakers. Moreover, the data does little to encourage the model to engage in understanding and maintaining knowledge of the dialogue partner's personality and topic interests.
+
+According to \newcite{serban2015survey}'s survey, personalization of dialogue systems is ``an
+important task, which so far has not received much attention''. In the case of goal-oriented dialogue some work has focused
+on the agent being aware of the human's profile and adjusting the dialogue accordingly, but without a personality to the agent itself
+ \citep{lucas2009managing,joshi2017personalization}.
+For the chit-chat setting, the most relevant work is \citep{li2016persona}.
+For each user in the Twitter corpus, personas were captured via distributed embeddings (one per speaker) to encapsulate individual characteristics such as background information and speaking style,
+and they then showed using those vectors improved the output of their seq2seq model for the same speaker. 
+Their work does not focus on attempting to engage the other speaker by getting to know them, as we do here. For that reason,
+our focus is on explicit profile information, not hard-to-interpret latent variables. 
+
+
+
+

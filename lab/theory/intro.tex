@@ -1,0 +1,47 @@
+\section{Introduction}
+
+Despite much recent success in natural language processing and dialogue research, communication between a human and a machine is still in its infancy.
+It is only recently that neural models have had sufficient capacity and access to sufficiently large datasets that they appear to generate meaningful responses in a chit-chat setting. Still, conversing with such generic chit-chat models for even a short amount of 
+time quickly exposes their weaknesses \citep{serban2016generative,vinyals2015neural}.
+
+
+Common issues with chit-chat models  
+include:
+(i) the lack of a consistent personality \citep{li2016persona} as they are typically trained over many dialogs each with different speakers,  (ii)
+the lack of an explicit long-term memory as they are typically trained to produce an utterance given only the recent dialogue history \citep{vinyals2015neural}; and  (iii)
+a tendency to produce non-specific answers like ``I don't know'' \citep{li2015diversity}. 
+Those three problems combine to produce an unsatisfying overall experience for a human to engage with. We believe some of those problems are due to there being no good publicly available dataset for general chit-chat. 
+\ifarxiv
+\footnote{For example,  currently the  most general chit-chat dataset available in \url{http://parl.ai} a large repository of dialogue datasets is probably OpenSubtitles, which is based on movie scripts, not natural conversations.}.
+\fi
+
+Because of the low quality of current conversational models, and because of the difficulty in evaluating these models, chit-chat
+is often ignored as an end-application.  Instead, the research community has focused on 
+ task-oriented communication,
+ such as airline or restaurant booking \citep{bordes2016learning}, or else single-turn information seeking, i.e. question answering \cite{rajpurkar2016squad}. 
+Despite the success of the latter, simpler, domain,
+it is well-known that a large quantity of human dialogue centers on socialization, personal interests and chit-chat \citep{dunbar1997human}. For example, less than 5\% of posts on Twitter are questions, whereas around 80\% are about personal emotional state, thoughts or activities, authored by so called ``Meformers'' \citep{naaman2010really}.
+
+In this work we make a step towards more engaging chit-chat dialogue agents by endowing them with a configurable, but persistent persona, encoded by multiple sentences of textual description, termed a profile. This profile can be stored in a memory-augmented neural network and then used to produce more personal, specific, consistent and engaging responses than a persona-free model, thus alleviating some of the common issues in chit-chat models.
+Using the same mechanism, any existing information about the persona of the dialogue partner can also be used in the same way. Our models are thus trained to both ask and answer questions about personal topics, and the resulting dialogue can be used to build a model of the persona of the speaking partner.
+
+
+%The tasks introduced in this work  thus have the goal of
+%making chit-chat more engaging and personal. 
+To support the training of such models, we present the {\sc persona-chat} dataset, a new dialogue dataset consisting of 162,064 utterances 
+between crowdworkers who were randomly paired and each asked to act the part of a given provided persona (randomly assigned, and created by another set of crowdworkers). The paired workers were asked to chat naturally and to get to know each other during the conversation. This produces interesting and engaging conversations that our agents can try to learn to mimic. 
+%This setting naturally leads to two tasks:
+%(1) next utterance prediction during dialogue, and (2) profile prediction given dialogue history. Task 1 can be performed with or without profile information, while Task 2 can be used to extract such information.
+
+
+%Our contributions are as follows: 1) we introduce a novel dataset with the aim of improving chit-chat dialogue agents; 2) we report results in the next utterance prediction task for a range of models: both generative and ranking models, including  Seq2Seq models, Memory Networks \citep{memn2n}, Key Value-based Memory Networks \citep{miller2016key}, as well as other standard retrieval baselines; and 3) we make the data and models openly available to the public. 
+
+Studying the next utterance prediction task during dialogue, we compare a range of models: both generative and ranking models, including Seq2Seq models and Memory Networks \citep{memn2n} as well as other standard retrieval baselines. 
+We show experimentally that in either the generative or ranking case 
+conditioning the agent with persona information  
+gives improved prediction of the next dialogue utterance.  
+The {\sc persona-chat} dataset is designed to facilitate research into alleviating some of the issues that traditional chit-chat models face, and with the aim of making such models more consistent and engaging, by endowing them with a persona.
+By comparing against chit-chat models built using the OpenSubtitles and Twitter datasets,
+human evaluations show that our dataset provides more engaging models,
+that are simultaneously capable of being fluent and consistent via conditioning on a persistent, recognizable profile.
+%Our setup also has a natural evaluation metric by predicting the other speaker's profile.

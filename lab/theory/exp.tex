@@ -1,0 +1,207 @@
+\begin{table*}[t]
+  \centering
+  \begin{tabular}{lcccccc}
+  \toprule
+  \multirow{2}{*}{\textbf{Method}} & \multicolumn{2}{c}{\textbf{No Persona}} & \multicolumn{2}{c}{\textbf{Original Persona}} & \multicolumn{2}{c}{\textbf{Revised Persona}}\\
+   & \textbf{ppl} & \textbf{hits@1} & \textbf{ppl} & \textbf{hits@1}  &\textbf{ppl} & \textbf{hits@1} 
+   \\
+  \midrule
+  {\em Generative Models} \\
+  Seq2Seq        & 38.08 & 0.092 & 40.53 & 0.084 &  40.65 & 0.082 \\
+  Profile Memory & 38.08 & 0.092 & 34.54 & 0.125 & 38.21 & 0.108 \\
+  \midrule
+  {\em Ranking Models} \\
+    IR baseline        & - & 0.214 &  - & 0.410  & - &  0.207  \\
+  Starspace          & - & 0.318 &   - & 0.491  & - & 0.322   \\
+ Profile Memory    & - & 0.318  &  - & 0.509  &  - & 0.354  \\
+ KV Profile Memory & - & 0.349  &  - & 0.511  &  - & 0.351   \\
+%  IR baseline        & - & 0.214 & 0.309  & - & 0.410 & 0.479 & - &  0.207  & 0.304\\
+%  Starspace          & - & 0.318 & 0.398 &  - & 0.491 & 0.546 & - & 0.322 &  0.396  \\
+%  Profile Memory    & - & 0.318 & 0.398 &  - & 0.509 & 0.562 &  - & 0.354 & 0.426  \\
+%  KV Profile Memory & - & 0.349 & 0.420 &  - & 0.511 & 0.564 &  - & 0.351 & 0.421  \\
+%  Seq2Seq (generative) & 40.53 & 0.084 &\textbf{0.172}& 40.65  & 0.082&\textbf{0.171}\\
+%  Profile Memory (generative) & \textbf{34.54} & \textbf{0.125} &\textbf{0.172}& 38.21 & \textbf{0.108}&0.170\\\midrule
+  \bottomrule
+  \end{tabular}
+  \caption{{\bf Evaluation of dialog utterance prediction with various models} in three settings: without conditioning on a persona, conditioned on the speakers given persona (``Original Persona''),  or a revised persona that does not have word overlap.      \label{tab:all-results}
+     }
+\end{table*}
+
+
+\begin{table*}[t]
+  \centering
+  \begin{tabular}{ll|cccc}
+  \toprule
+  \multicolumn{2}{c|}{{\bf Method}} & & & &  \textbf{Persona}   \\
+   Model & Profile & \textbf{Fluency} &  \textbf{Engagingness} & \textbf{Consistency} & 
+   \textbf{Detection}   \\
+  \midrule
+  Human  & Self  & 4.31(1.07) & 4.25(1.06)   & 4.36(0.92) &  0.95(0.22) \\
+  \midrule
+  {\em Generative PersonaChat Models} & \\
+  Seq2Seq & None              & 3.17(1.10)&  3.18(1.41) & 2.98(1.45) & 0.51(0.50)\\ %
+  Profile Memory   & Self   &3.08(1.40) &  3.13(1.39) & 3.14(1.26) & 0.72(0.45) \\
+  \midrule
+  {\em Ranking PersonaChat Models} & \\
+  KV Memory   & None      & 3.81(1.14) & 3.88(0.98) & 3.36(1.37) & 0.59(0.49)\\ 
+  KV Profile Memory   & Self & 3.97(0.94) & 3.50(1.17)  & 3.44(1.30) & 0.81(0.39)\\ 
+  \midrule
+  %need  Random Candidates & None & 3.73 & 2.79 & 2.91  & 0.53\\  
+   Twitter LM & None & 3.21(1.54) & 1.75(1.04) & 1.95(1.22) & 0.57(0.50) \\
+   OpenSubtitles 2018 LM & None & 2.85(1.46) & 2.13(1.07) & 2.15(1.08) & 0.35(0.48) \\
+   OpenSubtitles 2009 LM & None & 2.25(1.37) & 2.12(1.33) & 1.96(1.22) & 0.38(0.49) \\
+   OpenSubtitles 2009 KV Memory & None & 2.14(1.20)  & 2.22(1.22) & 2.06(1.29)  & 0.42(0.49) \\ 
+  \bottomrule
+  \end{tabular}
+ \caption{{\bf Human Evaluation} of  various {\sc persona-chat} models,    along with a  comparison to human performance, and Twitter and OpenSubtitles based models (last 4 rows), standard deviation in parenthesis.
+% \caption{{\bf Human Evaluation} of our various {\sc persona-chat} model, along with a  comparison to human performance, and OpenSubtitles based model (last row), standard deviation in parenthesis.
+  %, and candidates chosen randomly from the Personachat dataset (penultimate row).
+     \label{tab:human-eval}
+     } 
+\end{table*}
+
+
+\section{Experiments}
+
+We first report results using automated evaluation metrics, and subsequently perform an extrinsic evaluation where crowdsourced workers perform a human evaluation of our models. 
+
+\subsection{Automated metrics}
+
+The main results are reported in Table \ref{tab:all-results}.
+%Results for the generative model approaches are reported in Table \ref{tab:generative-results}, and for the ranking models in Table \ref{tab:retrieval-results}.
+%For the generative models, we report perplexity and hits@1 (the accuracy of the next dialogue utterance when choosing between the gold response and  $N$=19 distractor responses).%
+%To compute hits@1 for generative models we rank candidates according to their mean log likelihood. For ranking models, which are not generative and hence do not allow for computing the perplexity, we only report hits@1.
+%
+%In all cases we compare using the different persona types (none, my, their and both) and using the original or revised versions. For the ranking models we also tried two variants of training: training with the original personas in the training set or the revised ones. The latter could provide a difference because there is less word overlap between the dialogue and the profiles in that case which can force the model to generalize more (e.g. learn synonyms) rather than learning about word overlap, which crowdsource workers may otherwise resort to.
+Overall, the results show the following key points:
+
+{\bf Persona Conditioning} Most models improve significantly when conditioning prediction on their own persona %(`Self Persona')
+ at least for the original (non-revised) versions, which is an easier task than the revised ones which have no word overlap. For example, the Profile Memory generation model has improved perplexity and hits@1 compared to Seq2Seq, and all the ranking algorithms (IR baseline, Starspace and Profile Memory Networks) obtain improved hits@1.
+
+
+{\bf Ranking vs. Generative.} Ranking models are far better than generative models at ranking. This is perhaps obvious as that is the metric they are optimizing, but still the performance difference is quite stark. 
+It may be that the word-based probability which generative models use works well, but is not calibrated well enough to give a sentence-based probability which ranking requires.
+Human evaluation is also used to compare these methods, which we perform in Sec. \ref{sec:human-eval}.
+
+{\bf Ranking Models.} For the ranking models, the IR baseline is outperformed by Starspace due to its learnt similarity metric, which in turn is outperformed by Profile Memory networks due to the attention mechanism over the profiles (as all other parts of the models are the same). Finally KV Profile Memory networks outperform Profile Memory Networks in the no persona case due to the ability to consider neighboring dialogue history and next utterance pairs in the training set that are similar to the current dialogue, however when using persona information the performance is similar. 
+
+
+{\bf Revised Personas.} Revised personas are much harder to use. We do however still see some gain for the Profile Memory networks compared to none (0.354 vs. 0.318 hits@1). 
+We also tried two variants of training: with the original personas in the training set or the revised ones, a comparison of which is shown in Table \ref{tab:retrieval-results} of the Appendix.  %The latter could provide a difference because there is less word overlap between the dialogue and the profiles in that case which can force the model to generalize more (e.g. learn synonyms) rather than learning about word overlap, which crowdsource workers may otherwise resort to.
+{\em Training} on revised personas helps, both for test examples that are in original form or revised form, likely due to the model be forced to learn more than simple word overlap, forcing the model to generalize more (i.e., learn semantic similarity of differing phrases).
+
+{\bf Their Persona.} We can also condition a model on the other speaker's persona, or both personas
+at once, the results of which are in Tables \ref{tab:generative-results}
+and \ref{tab:retrieval-results} in the Appendix.
+Using ``Their persona'' has less impact on this dataset. We believe this is because most speakers tend to focus on themselves when it comes to their interests. It would be interesting how often this is the case in other datasets. Certainly this is skewed by the particular instructions one could give to the crowdworkers. For example if we gave the instructions ``try not to talk about yourself, but about the other's interests' likely these metrics would change.
+
+%\end{itemize}
+
+
+
+
+
+
+\subsection{Human Evaluation} \label{sec:human-eval}
+
+As automated metrics are notoriously poor for evaluating dialogue \citep{liu2016not} we also perform human evaluation using crowdsourced workers.
+The procedure is as follows. We perform almost exactly the same setup as in the dataset collection process itself as in Section \ref{personachatter}. In that setup,  we paired two Turkers and assigned them each a random (original) persona from the collected pool, and asked them to chat. Here, from the Turker's point of view everything looks the same except instead of being paired with a Turker they are paired with one of our models instead (they do not know this). In this setting, for both the Turker and the model, the personas come from the test set pool.
+
+After the dialogue, we then ask the Turker some additional questions in order to evaluate the quality of the model. 
+\ifarxiv
+They are, in order:
+\begin{itemize}
+
+\item {\bf Fluency}: We ask them to judge the fluency of the other speaker as a score from 1 to 5, where 1 is ``not fluent at all'', 5 is ``extremely fluent'', and 3 is ``OK''. 
+
+\item {\bf Engagingness}: We ask them to judge the engagingness of the other speaker {\em disregarding fluency} from 1-5, where 1 is ``not engaging at all'', 5 is ``extremely engaging'', and 3 is ``OK''.
+
+\item {\bf Consistency}: We ask them to judge the consistency of the persona of the other speaker, where we give the example that ``I have a dog''  followed by ``I have no pets'' is not consistent. The score is again from 1-5.
+
+\item {\bf Profile Detection}: Finally, we display two possible profiles, and ask which is more likely to be the profile of the person the Turker just spoke to. One profile is chosen at random, and the other is the true persona given to the model.
+\end{itemize}
+\else
+We ask them to evaluate fluency, engagingness and consistency (scored between 1-5). Finally, we measure the ability to detect the other speaker's profile by displaying two possible profiles, and ask which is more likely to be the profile of the person the Turker just spoke to.  More details of these measures are given in the Appendix.
+\fi
+
+
+
+\if 0
+\begin{table*}[t]
+  \centering
+  \begin{tabular}{ll|ccccc}
+  \toprule
+  \multicolumn{2}{c|}{{\bf Method}} & & & &  \textbf{Persona}   \\
+   Model & Profile & \textbf{Fluency} &  \textbf{Engagingness} & \textbf{Consistency} & 
+   \textbf{Detection}  & \textbf{Humanness} \\
+  \midrule
+  Human  & Self  & 4.03(1.04) & 3.91(1.10)   & 3.89(1.26) &  0.78(0.42) & 3.54(1.16)\\
+  \midrule
+  {\em Generative Models} & \\
+  Seq2Seq & None              & 3.63(1.29)&  3.31(1.30) & 3.0(1.50) & 0.49(0.50) &2.26(1.16)\\ %
+  Profile Memory   & Self   &2.98(1.38) &  2.70(1.25) & 2.48(1.31) & 0.58(0.49) &1.89(1.09) \\
+  \midrule
+  {\em Ranking Models} & \\
+  KV Memory   & None      & 3.5(1.24) & 3.26(1.26) & 3.0 (1.43) & 0.512(0.49) & 2.39(1.18)\\ 
+  KV Profile Memory   & Self & 3.60(1.25) & 3.27(1.27)  & 3.09(1.43) & 0.67 (0.47) &2.39(1.13)\\ 
+  \midrule
+  %need  Random Candidates & None & 3.73 & 2.79 & 2.91  & 0.53\\  
+   OpenSubtitles KV Memory & None & 3.15(1.47)  & 2.54(1.31) & 2.30(1.36)  & 0.52(0.50) &1.91(1.07)\\ 
+  \bottomrule
+  \end{tabular}
+  \caption{{\bf Human Evaluation on per-utterance basis} of our various {\sc persona-chat} model, along with a  comparison to human performance, and OpenSubtitles based model (last row), standard deviation in parenthesis.
+  %, and candidates chosen randomly from the Personachat dataset (penultimate row).
+     \label{tab:human-eval-2}
+     } 
+\end{table*}
+\fi
+
+The results are reported in Table \ref{tab:human-eval} for the best performing generative and ranking models, in both the No Persona and Self Persona categories, 100 dialogues each. We also evaluate the scores of human performance by replacing the chatbot with a human (another Turker). This effectively gives us upper bound scores which we can aim for with our models. Finally, and importantly, we compare our models trained on {\sc persona-chat} with chit-chat models trained with the Twitter and OpenSubtitles datasets (2009 and 2018 versions) instead, following \newcite{vinyals2015neural}. Example chats from a few of the models are shown in the Appendix in
+Tables \ref{table:os-example}, \ref{table:s2s-example}, \ref{table:kvp-example}, \ref{table:gpm-example},
+ \ref{table:opensubtitles2018-example} and \ref{table:twitter-example}. 
+
+ 
+Firstly, we see a difference in fluency, engagingness and consistency between all {\sc persona-chat}  models and the models trained on OpenSubtitles and Twitter. 
+{\sc persona-chat} is a resource that is particularly strong at providing training data for the beginning of conversations, when the two speakers do not know each other, focusing on asking and answering questions, in contrast to other resources.
+We also see suggestions of more subtle differences between the models, although these differences are obscured by the high variance of the human raters' evaluations. %\footnote{We plan to increase the resolution of our evaluation with more rater data in future work.}. 
+For example, in both the generative and ranking model cases, models endowed with a persona can be detected by the human conversation partner, as evidenced by the persona detection accuracies, whilst maintaining fluency and consistency compared to their non-persona driven counterparts.  
+
+
+%The KV networks outperform their generative counterparts across all metrics. 
+%However, for the KV Profile Memory Network, the engagement score is lower for the persona version, perhaps because the model, by spending more time on its own profile, neglects to pay attention to its partners discussion points. 
+%In addition,
+%Although that model does use the profile in a way that is detectable by humans, it can still make semantic mistakes, e.g. saying ``I want to study to be a marine biologist'' when it has the profile ``I attend university and study Biology'', causing the crowdworker to fail to detect the correct persona.
+ 
+Finding the balance between fluency, engagement, consistency, and a persistent persona remains a strong challenge for future research.
+
+
+
+\subsection{Profile Prediction}
+
+%While the main study of this work is the ability to improve next utterance classification
+%by conditioning on a persona, 
+%One could naturally consider two tasks using the {\sc PersonaChat} dataset:
+Two tasks could naturally be considered using {\sc PersonaChat}:
+(1) next utterance prediction during dialogue, and (2) profile prediction given dialogue history. 
+The main study of this work has been Task 1, where we have shown the use of profile information.
+%We have shown that Task 1 can be improved by using profile information.
+Task 2, however, can be used to extract such information.
+%, and {\sc PersonaChat} is also a good dataset to study this task.
+While a full study is beyond the scope of this paper, we conducted some preliminary experiments,
+the details of which are in Appendix \ref{app:profile-pred}.
+They show (i) human speaker's profiles can be predicted from their dialogue with high accuracy
+(94.3\%, similar to human performance in Table \ref{tab:human-eval})
+ or even from the model's dialogue (23\% with KV Profile Memory) 
+showing the model is paying attention to the 
+human's interests. Further, the accuracies clearly improve with further dialogue, as shown in Table 
+\ref{tab:task2b}. Combining Task 1 and Task 2 into a full system is an exciting area of 
+future research.
+%Similarly, the model's profile can be predicted as well, as long as the next utterance conditions on it, otherwise it is at chance level.
+
+
+
+
+%We conducted some preliminary experiments to validate this is the case.
+
+
+

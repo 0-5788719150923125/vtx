@@ -155,12 +155,12 @@ def gen(bias=None, ctx=None):
         generation = completion[0][len(history) :]
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
 
-        if group == None or "¶" in group[3] or "(((url)))" in group[3]:
+        if group is None or propulsion in group[3] or "(((url)))" in group[3]:
             print("bad format, regenerating")
             time.sleep(5)
             output = asyncio.run(gen(bias, ctx))
 
-        if output == None:
+        if output is None:
             output = [group[2], group[3]]
 
     except Exception as e:

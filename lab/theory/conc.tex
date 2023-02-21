@@ -1,0 +1,20 @@
+\section{Conclusion \& Discussion}
+
+In this work we have introduced the {\sc persona-chat} dataset, which consists of crowd-sourced dialogues where each participant plays the part of an assigned persona; and each (crowd-sourced) persona has a word-distinct paraphrase.  We test various baseline models on this dataset, and show that models that have access to their own personas in addition to the state of the dialogue are scored as more consistent by annotators, although not more engaging.   On the other hand, we show that models trained on {\sc persona-chat} (with or without personas) are more engaging than models trained on dialogue from other resources (movies, Twitter).  
+
+
+We believe {\sc persona-chat} will be a useful resource for training components of future dialogue systems.  Because we have paired human generated profiles and conversations, the data aids the construction of agents that have consistent personalities and viewpoints.  Furthermore, predicting the profiles from a conversation moves chit-chat tasks in the direction of goal-directed dialogue, which has metrics for success. Because we collect paraphrases of the profiles, they cannot be trivially matched; indeed, we believe the original and rephrased profiles are interesting as a semantic similarity dataset in their own right.  We hope that the data will aid training agents that can ask questions about users' profiles, remember the answers, and use them naturally in conversation.  
+
+%\begin{itemize}
+%\item One can impute profiles as the conversation progresses
+%\item Use questions in dataset that gather profile to begin interesting conversations with an agent that actually remembers you.
+%\item We believe the original and rephrased profiles are interesting as a semantic similarity dataset in their own right.
+%\item The task of predict profile entries given the dialogue renders our chit-chat setting one step closer towards goal-based dialogue, which has measurable metrics.
+%\item One can also use the profiles to also predict interests from other interests.
+%\item Models trained using PersonaChat should be useful as part of a bigger system.
+%\item Starting a conversation is really hard (e.g. MILABOT uses hardcoded, while we actually learn).
+%\end{itemize}
+
+%\section{Discussion}
+
+

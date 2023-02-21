@@ -39,5 +39,5 @@ async def subscribe(channel):
     x = requests.post(url, json=myobj, headers={"Connection": "close"})
     x.close()
     deep.close()
-    print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + generation[1])
+    print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + generation[1])
     print(bc.FOLD + "PEN@FOLD:" + ad.TEXT + " pong")

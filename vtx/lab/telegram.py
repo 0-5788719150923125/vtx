@@ -1,7 +1,15 @@
 import logging
 from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
+from telegram.ext import (
+    ApplicationBuilder,
+    ContextTypes,
+    CommandHandler,
+    Updater,
+    CallbackContext,
+)
 import os
+import threading
+import asyncio
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -14,10 +22,28 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-if __name__ == "__main__":
-    application = ApplicationBuilder().token(os.environ["TELEGRAMBOTAPIKEY"]).build()
+updater = Updater(os.environ["TELEGRAMBOTAPIKEY"], True)
 
-    start_handler = CommandHandler("start", start)
-    application.add_handler(start_handler)
+# updater.dispatcher.add_handler(CommandHandler("start", start))
 
-    application.run_polling()
+
+async def start_polling():
+    async with updater:
+        # await updater.initialize()
+        await updater.start_polling()
+    # updater.idle()
+
+
+async def subscribe():
+    print("running this")
+
+
+# application = ApplicationBuilder().token(os.environ["TELEGRAMBOTAPIKEY"]).build()
+
+# start_handler = CommandHandler("start", start)
+# application.add_handler(start_handler)
+
+# polling_thread = threading.Thread(target=asyncio.run(start_polling()), daemon=True)
+# polling_thread.start()
+# # Updater.stop()
+# print("finishing")

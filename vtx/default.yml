@@ -4,7 +4,7 @@ source:
     chance: 0.33
   support:
     watch: False
-    chance: 0.33
+    chance: 0.11
 
 heart:
   info: never give up, never give in

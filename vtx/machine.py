@@ -32,12 +32,12 @@ async def main(loop, status={}):
                     task.set_name("source-" + channel)
                     tasks.append(task)
 
-    # if "telegram" in config:
-    #     if "telegram" not in status:
-    #         status["telegram"] = True
-    #         task = loop.create_task(lab.telegram.start())
-    # task.set_name("discord")
-    #         tasks.append(task)
+    if "telegram" in config:
+        if "telegram" not in status:
+            status["telegram"] = True
+            task = loop.create_task(lab.telegram.subscribe())
+            task.set_name("telegram")
+            tasks.append(task)
 
     if "reddit" in config:
         for subreddit in config["reddit"]:

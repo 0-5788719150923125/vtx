@@ -107,12 +107,18 @@ def gen(bias=None, ctx=None):
     seed = None
     if q["data"][0] < 32:
         seed = q["data"][0]
-        print("quantum seed was set to " + str(seed))
+        print(
+            bc.CORE
+            + "INK@CORE "
+            + ad.TEXT
+            + ship
+            + " quantum seed was set to "
+            + str(seed)
+        )
 
     # bias the prompt
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-            print(bc.CORE + "INK@CORE " + ad.TEXT + ship + " bias toward " + str(bias))
             prefixes = ["I", "You", ""]
             prompt = propulsion + str(bias) + ship + " " + random.choice(prefixes)
 
@@ -150,7 +156,6 @@ def gen(bias=None, ctx=None):
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
 
         if group == None or "¶" in group[3] or "(((url)))" in group[3]:
-            print(generation)
             print("bad format, regenerating")
             time.sleep(5)
             output = asyncio.run(gen(bias, ctx))

@@ -8,6 +8,7 @@ import os
 
 redacted_chance = 1
 response_probability = 10
+followup_probability = 10
 
 
 # A class to control the entire Discord bot
@@ -20,9 +21,6 @@ class Client(discord.Client):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
-
-        # Load the AI model at startup
-        head.ai = await head.loader()
 
         # List all Discord servers on startup
         print(bc.ROOT + "ONE@ROOT: " + bc.ENDC + "connected to Discord")
@@ -119,13 +117,16 @@ class Client(discord.Client):
         # every message is added to local cache, for building prompt
         head.build_context(str(message.author.id) + ship + " " + message.content)
 
-        # ignore messages from the bot
-        if message.author == self.user:
-            return
-
         # ignore messages if heavy processing is taking place
         if self.thinking == True:
             return
+
+        # ignore messages from the bot
+        if message.author == self.user:
+            if random.randint(0, 100) <= followup_probability:
+                response_probability == 100
+            else:
+                return
 
         # generate responses
         print(bc.ROOT + "head" + bc.ENDC)

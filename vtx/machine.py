@@ -17,6 +17,10 @@ tasks = []
 @asyncio.coroutine
 async def main(loop):
 
+    # Load the AI model at startup
+    if head.ai == None:
+        head.ai = await head.loader()
+
     # Get configs, create tasks, and append to task queue
     if "source" in config:
         for channel in config["source"]:

@@ -1,7 +1,7 @@
 source:
   hive:
     watch: True
-    chance: 0.03
+    chance: 0.33
 
 heart:
   info: never give up, never give in

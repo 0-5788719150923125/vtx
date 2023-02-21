@@ -53,7 +53,7 @@
       "label": "up",
       "detail": "Start the services in a development environment.",
       "type": "shell",
-      "command": "docker compose up"
+      "command": "FOCUS=\"${input:env}\" docker compose up"
     },
     {
       "label": "train",
@@ -77,7 +77,7 @@
       "label": "prune",
       "detail": "Prune all unused images, networks, and volumes.",
       "type": "shell",
-      "command": "docker system prune -a -f && docker volume prune -a -f"
+      "command": "docker system prune -a -f && docker volume prune -f"
     },
     {
       "label": "down",

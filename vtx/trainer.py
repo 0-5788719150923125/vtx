@@ -41,32 +41,54 @@ def join_files(path):
 
     os.makedirs(tmp_path)
 
+    prefixes = [
+        ".git",
+        "/lab/reaper/logseq",
+        "/lab/reaper/assets",
+        "/lab/reaper/public",
+        "/lab/aitextgen/aitextgen/static",
+        "/vtx/models",
+        "/vtx/__pycache__",
+    ]
+
+    suffixes = [
+        "bin",
+        "eot",
+        "docx",
+        "gif",
+        "ico",
+        "jpg",
+        "jpeg",
+        "mp3",
+        "mp4",
+        "odt",
+        "pdf",
+        "png",
+        "pyc",
+        "ttf",
+        "woff",
+        "woff2",
+        "zip",
+    ]
+
     files = list_full_paths(path)
     intermediate_path = tmp_path + "/" + str(random.randint(1000000, 9999999)) + ".txt"
     intermediate = open(intermediate_path, "a")
     for file in files:
         try:
             # Skip file paths and extensions that we can't process
-            if (
-                file.endswith(".bin")
-                or file.endswith(".bcmap")
-                or file.endswith(".eot")
-                or file.endswith(".mp3")
-                or file.endswith(".mp4")
-                or file.endswith(".pdf")
-                or file.endswith(".pyc")
-                or file.endswith(".ttf")
-                or file.endswith(".woff")
-                or file.endswith(".woff2")
-                or file.startswith(".git")
-                or file.startswith("/lab/reaper/logseq")
-                or file.startswith("/lab/reaper/assets")
-                or file.startswith("/lab/reaper/public")
-                or file.startswith("/lab/aitextgen/aitextgen/static")
-                or file.startswith("/vtx/models")
-                or file.startswith("/vtx/__pycache__")
-            ):
+            skip = False
+            for suffix in suffixes:
+                if file.lower().endswith(suffix):
+                    skip = True
+                    continue
+            for prefix in prefixes:
+                if file.startswith(prefix):
+                    skip = True
+                    continue
+            if skip == True:
                 continue
+
             with open(file, "r") as content:
                 string = content.read()
                 intermediate.write(string + "\n\n")
@@ -106,6 +128,8 @@ if __name__ == "__main__":
     print("(" + bc.ROOT + "focus" + bc.ENDC + ")")
     print(f"({bc.CORE}ed{bc.ENDC}) on the ({bc.FOLD}{focus}{bc.ENDC})")
 
+    fresh_logs = False
+
     # Resume training on an existing model, or start with a fresh base model
     if model["training"]["resume"] == True:
         if os.path.exists("/vtx/models/" + focus + "/pytorch_model.bin") == True:
@@ -113,10 +137,17 @@ if __name__ == "__main__":
             model_folder = "models/" + focus
         else:
             model_folder = None
+            fresh_logs = True
     else:
         model_folder = None
+        fresh_logs = True
         if os.path.exists("/vtx/models/" + focus):
             shutil.rmtree("/vtx/models/" + focus)
+
+    # Start with a fresh logs directory
+    if fresh_logs == True:
+        if os.path.exists("/gen/logs/" + focus):
+            shutil.rmtree("/gen/logs/" + focus)
 
     if os.path.exists("/vtx/models/" + focus) == False:
         os.makedirs("/vtx/models/" + focus)
@@ -148,10 +179,6 @@ if __name__ == "__main__":
     # Cleanup temp files used for tokenized dataset creation
     if os.path.exists("/lab/intermediate"):
         shutil.rmtree("/lab/intermediate")
-
-    # Start with a fresh logs directory
-    if os.path.exists("/gen/logs/" + focus):
-        shutil.rmtree("/gen/logs/" + focus)
 
     # Merge all tokenized datasets into a single dataset for training
     merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])

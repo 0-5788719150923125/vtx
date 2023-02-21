@@ -74,15 +74,10 @@ def allowed_bot(is_bot, id):
 
 
 def prepare_discord_messages():
-
-    # Get public links
-    urls = crawl("https://ink.university")
-    random.shuffle(urls)
-
     def sanitizer(string):
         sanitized = re.sub(
             r"http\S+",
-            secrets.choice(urls),
+            "(((url)))",
             string,
         )
         sanitized = re.sub(
@@ -186,10 +181,6 @@ def prepare_discord_messages():
 # Download messages from subreddits, sorted by "top"
 def fetch_from_reddit():
 
-    # Get public links
-    urls = crawl("https://pen.university")
-    random.shuffle(urls)
-
     # Instantiate the Reddit client
     reddit = praw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
@@ -199,8 +190,6 @@ def fetch_from_reddit():
 
     # For every sub in config, iterate over options, the download content
     for sub in config["reddit"]:
-
-        name = sub
 
         skip = False
         if "skip" in config["reddit"][sub]:
@@ -213,12 +202,12 @@ def fetch_from_reddit():
         if skip == True:
             continue
         else:
-            print("archiving " + name)
+            print("archiving " + sub)
 
-        if os.path.exists("/lab/reddit/" + name):
-            shutil.rmtree("/lab/reddit/" + name)
+        if os.path.exists("/lab/reddit/" + sub):
+            shutil.rmtree("/lab/reddit/" + sub)
 
-        os.makedirs("/lab/reddit/" + name)
+        os.makedirs("/lab/reddit/" + sub)
 
         identities = {}
 
@@ -227,9 +216,9 @@ def fetch_from_reddit():
         def main():
 
             if sort == "new":
-                submissions = reddit.subreddit(name).new(limit=limit)
+                submissions = reddit.subreddit(sub).new(limit=limit)
             else:
-                submissions = reddit.subreddit(name).top(limit=limit)
+                submissions = reddit.subreddit(sub).top(limit=limit)
 
             for submission in submissions:
 
@@ -238,11 +227,11 @@ def fetch_from_reddit():
 
                 context = []
                 with open(
-                    "/lab/reddit/" + name + "/" + submission.id + ".txt", "a"
+                    "/lab/reddit/" + sub + "/" + submission.id + ".txt", "a"
                 ) as file:
                     sanitized = re.sub(
                         r"http\S+",
-                        secrets.choice(urls),
+                        "(((url)))",
                         propulsion
                         + str(bias)
                         + ship
@@ -268,11 +257,11 @@ def fetch_from_reddit():
                 print("wrote to " + str(bias))
 
                 with open(
-                    "/lab/reddit/" + name + "/" + reply.submission.id + ".txt", "a"
+                    "/lab/reddit/" + sub + "/" + reply.submission.id + ".txt", "a"
                 ) as file:
                     sanitized = re.sub(
                         r"http\S+",
-                        secrets.choice(urls),
+                        "(((url)))",
                         propulsion
                         + str(bias)
                         + ship

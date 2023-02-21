@@ -18,10 +18,13 @@ async def subscribe(channel):
 
     deep = requests.get("http://ctx:9666/channel")
     state = json.loads(deep.text)
+    bot = get_identity()
     bias = get_identity()
     print(bc.ROOT + "ONE@ROOT:" + bc.ENDC + " " + state["message"][:99])
     context = [
-        propulsion + str(bias) + ship + " I am a chat bot named Penny.",
+        "A human talks to Penny, a powerful Artificial Intelligence that follows the humans' instructions.",
+        propulsion + str(bias) + ship + " Your name is Penny.",
+        propulsion + str(bot) + ship + " I am a chat bot named Penny.",
         propulsion + str(bias) + ship + " " + state["message"],
     ]
     url = "http://ctx:9666/message"

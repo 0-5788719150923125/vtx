@@ -59,7 +59,7 @@ services:
 
   pit:
     image: ghcr.io/0-5788719150923125/src:1
-    command: tensorboard --logdir /gen/logs --bind_all
+    command: tensorboard --logdir /gen/logs --bind_all --samples_per_plugin scalars=999999999
     volumes:
       - ./gen:/gen
     ports:
@@ -74,23 +74,22 @@ services:
     ports:
       - 9667:80
       - 34343:34343
+#   ipfs:
+#     image: ipfs/kubo:master-latest
+#     command: daemon --migrate=true --agent-version-suffix=docker --init-profile=lowpower --writable --enable-gc --enable-pubsub-experiment --enable-namesys-pubsub
+#     restart: 'always'
+#     # user: 1000:1000
+#     # privileged: true
+#     # devices:
+#     #   - /dev/fuse:/dev/fuse
+#     # cap_add:
+#     #   - SYS_ADMIN
+#     volumes:
+#       - ./vtx:/vtx
+#       # - ./fuse:/fuse
+#       - ./001-test.sh:/container-init.d/001-test.sh
 
-  ipfs:
-    image: ipfs/kubo:master-latest
-    command: daemon --migrate=true --agent-version-suffix=docker --init-profile=lowpower --writable --enable-gc --enable-pubsub-experiment --enable-namesys-pubsub
-    restart: 'always'
-    # user: 1000:1000
-    # privileged: true
-    # devices:
-    #   - /dev/fuse:/dev/fuse
-    # cap_add:
-    #   - SYS_ADMIN
-    volumes:
-      - ./vtx:/vtx
-      # - ./fuse:/fuse
-      - ./001-test.sh:/container-init.d/001-test.sh
-
-volumes:
-  pet:
-  # comet:
-  # fuse:
+# volumes:
+#   pet:
+# comet:
+# fuse:

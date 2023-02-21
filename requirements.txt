@@ -1,3 +1,4 @@
+python-telegram-bot==20.1
 pytorch-lightning==1.9.0
 beautifulsoup4==4.11.1
 python-crontab==2.7.1

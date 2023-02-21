@@ -237,9 +237,9 @@ intents.message_content = True
 client = Client(intents=intents)
 
 # Subscribe to a Discord bot via token
-def subscribe():
+async def subscribe():
     if "discord" in config:
-        client.run(discord_token)
+        await client.start(discord_token)
 
 
 bullets = {

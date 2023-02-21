@@ -2,20 +2,21 @@ from utils import config
 import lab.discord
 import lab.reddit
 import lab.source
+import lab.twitter
 import threading
 import requests
 import asyncio
 import random
 import head
+import time
 import os
 
 
 tasks = []
 
-
 # This is the main loop for the entire machine
 @asyncio.coroutine
-async def main(loop):
+async def main(loop, status={}):
 
     # Load the AI model at startup
     if head.ai == None:
@@ -40,8 +41,14 @@ async def main(loop):
                     task.set_name(name)
                     tasks.append(task)
 
+    if "discord" in config:
+        if "discord" not in status:
+            status["discord"] = True
+            task = loop.create_task(lab.discord.subscribe())
+            tasks.append(lab.discord.subscribe())
+
     await asyncio.sleep(66.6666)
-    await main(loop)
+    await main(loop, status={})
 
 
 def loop_in_thread(loop):
@@ -54,6 +61,6 @@ loop = asyncio.get_event_loop()
 t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
 t.start()
 
-# Run blocking services
-if "discord" in config:
-    asyncio.run(lab.discord.subscribe())
+while True:
+    time.sleep(10)
+    print(".")

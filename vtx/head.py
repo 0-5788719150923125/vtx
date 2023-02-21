@@ -5,6 +5,7 @@ import requests
 import asyncio
 import random
 import typing
+import time
 import os
 import re
 import gc
@@ -149,7 +150,9 @@ def gen(bias=None, ctx=None):
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
 
         if group == None or "¶" in group[3] or "(((url)))" in group[3]:
+            print(generation)
             print("bad format, regenerating")
+            time.sleep(5)
             output = asyncio.run(gen(bias, ctx))
 
         if output == None:

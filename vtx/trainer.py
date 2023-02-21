@@ -16,8 +16,18 @@ model = config[focus]
 model_folder = "models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
+
+def build_version(version=0):
+    if os.path.exists("/gen/logs/" + focus + "/version_" + str(version)):
+        version = version + 1
+        return build_version(version)
+    return version
+
+
+version = build_version()
+
 logger = loggers.TensorBoardLogger(
-    "/gen/logs", name=focus, version=model["version"], default_hp_metric=False
+    "/gen/logs", name=focus, version=version, default_hp_metric=False
 )
 
 # Get the full path to every file in a directory

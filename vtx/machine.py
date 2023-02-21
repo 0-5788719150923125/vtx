@@ -1,4 +1,5 @@
 from utils import config
+import lab.telegram
 import lab.discord
 import lab.reddit
 import lab.source
@@ -27,28 +28,34 @@ async def main(loop, status={}):
         for channel in config["source"]:
             if "watch" in config["source"][channel]:
                 if config["source"][channel]["watch"] == True:
-                    name = "source-" + channel
                     task = loop.create_task(lab.source.subscribe(channel))
-                    task.set_name(name)
+                    task.set_name("source-" + channel)
                     tasks.append(task)
+
+    # if "telegram" in config:
+    #     if "telegram" not in status:
+    #         status["telegram"] = True
+    #         task = loop.create_task(lab.telegram.start())
+    # task.set_name("discord")
+    #         tasks.append(task)
 
     if "reddit" in config:
         for subreddit in config["reddit"]:
             if "watch" in config["reddit"][subreddit]:
                 if config["reddit"][subreddit]["watch"] == True:
-                    name = "reddit-" + subreddit
                     task = loop.create_task(lab.reddit.subscribe(subreddit))
-                    task.set_name(name)
+                    task.set_name("reddit-" + subreddit)
                     tasks.append(task)
 
     if "discord" in config:
         if "discord" not in status:
             status["discord"] = True
             task = loop.create_task(lab.discord.subscribe())
-            tasks.append(lab.discord.subscribe())
+            task.set_name("discord")
+            tasks.append(task)
 
     await asyncio.sleep(66.6666)
-    await main(loop, status={})
+    await main(loop, status=status)
 
 
 def loop_in_thread(loop):

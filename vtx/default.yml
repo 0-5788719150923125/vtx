@@ -14,8 +14,7 @@ mind:
   to_gpu: False
 
 soul:
-  version: 0
-  info: what drives us
+  info: almost nobody has one
   to_gpu: True
   n_gpu: 1
   max_new_tokens: 333
@@ -49,8 +48,7 @@ soul:
       ctx:
 
 toe:
-  version: 0
-  info: focus on the nail
+  info: nailed to the foot
   to_gpu: False
   n_gpu: 1
   max_new_tokens: 333

@@ -105,7 +105,7 @@ def gen(bias=None, ctx=None):
         q = {"data": [random.randint(0, 256), random.randint(0, 256)]}
 
     seed = None
-    if q["data"][0] < 32:
+    if q["data"][0] <= 32:
         seed = q["data"][0]
         print(
             bc.CORE

@@ -35,7 +35,7 @@ async def start_polling():
 
 
 async def subscribe():
-    print("running this")
+    print("running telegram stub")
 
 
 # application = ApplicationBuilder().token(os.environ["TELEGRAMBOTAPIKEY"]).build()

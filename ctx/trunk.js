@@ -59,7 +59,7 @@ const app = express()
 
 // Publish the brain at the root
 app.get('/', (req, res) => {
-  res.send(payload)
+  res.json(payload)
 })
 
 // Expose the brain stem to a local API

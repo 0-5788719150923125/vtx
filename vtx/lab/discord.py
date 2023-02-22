@@ -21,7 +21,6 @@ class Client(discord.Client):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
-
         # List all Discord servers on startup
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + "connected to Discord")
         guilds = []

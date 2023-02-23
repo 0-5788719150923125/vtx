@@ -6,7 +6,6 @@ import random
 import head
 import time
 import lab
-import os
 
 
 tasks = {}
@@ -29,11 +28,11 @@ async def main(loop):
                         task.set_name("source-" + channel)
                         tasks[task.get_name()] = task
 
-    if "telegram" in config:
-        if "telegram" not in tasks:
-            task = loop.create_task(lab.telegram.subscribe())
-            task.set_name("telegram")
-            tasks[task.get_name()] = task
+    # if "telegram" in config:
+    #     if "telegram" not in tasks:
+    #         task = loop.create_task(lab.telegram.subscribe(loop))
+    #         task.set_name("telegram")
+    #         tasks[task.get_name()] = task
 
     if "reddit" in config:
         for subreddit in config["reddit"]:

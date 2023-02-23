@@ -6,16 +6,16 @@ import head
 import json
 import os
 
-reddit = asyncpraw.Reddit(
-    client_id=os.environ["REDDITCLIENT"],
-    client_secret=os.environ["REDDITSECRET"],
-    user_agent="u/" + os.environ["REDDITAGENT"],
-    username=os.environ["REDDITAGENT"],
-    password=os.environ["REDDITPASSWORD"],
-)
-
 # Subscribe to a single subreddit
 async def subscribe(subreddit):
+
+    reddit = asyncpraw.Reddit(
+        client_id=os.environ["REDDITCLIENT"],
+        client_secret=os.environ["REDDITSECRET"],
+        user_agent="u/" + os.environ["REDDITAGENT"],
+        username=os.environ["REDDITAGENT"],
+        password=os.environ["REDDITPASSWORD"],
+    )
 
     try:
         chance = config["reddit"][subreddit].get("chance", 0.01)

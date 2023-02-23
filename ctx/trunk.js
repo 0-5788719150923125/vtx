@@ -57,11 +57,6 @@ const randomValueFromArray = (array) => {
 // Start a web server
 const app = express()
 
-// Publish the brain at the root
-app.get('/', (req, res) => {
-  res.json(payload)
-})
-
 // Expose the brain stem to a local API
 const server = app.listen(port, () => {
   console.log(`The stem is exposed on port: ${port}`)
@@ -181,23 +176,79 @@ net.train(seed, {
   logPeriod: 2000
 })
 
+// Publish the brain at the root
+app.get('/', (req, res) => {
+  res.json(restoreBrainFromObject(payload.toJSON()))
+})
+
 // Publish brain updates to GUN
 const state = gun
   .get('brain')
   .get('state')
   .on(async (node) => {
-    if (typeof node.payload === 'string') {
-      try {
-        net.fromJSON(JSON.parse(node.payload))
-        payload = node.payload
-      } catch {
-        console.log('failed to load brain from json')
-      }
+    // if (typeof node.payload === 'string') {
+    try {
+      net.fromJSON(JSON.parse(node.payload))
+      payload = node.payload
+    } catch {
+      console.log('failed to load brain from json')
     }
+    // }
   })
 
+function convertBrainToObject(obj) {
+  if (Array.isArray(obj)) {
+    const newObj = {}
+    obj.forEach((element, index) => {
+      newObj[index] = convertBrainToObject(element)
+    })
+    return newObj
+  } else if (typeof obj === 'object' && obj !== null) {
+    const newObj = {}
+    for (let key in obj) {
+      newObj[key] = convertBrainToObject(obj[key])
+    }
+    return newObj
+  } else {
+    return obj
+  }
+}
+
+function restoreBrainFromObject(obj) {
+  if (typeof obj === 'object' && obj !== null) {
+    if (Object.keys(obj).every((key, i) => key == i && obj[key] !== null)) {
+      const arr = []
+      for (let key in obj) {
+        arr[key] = restoreBrainFromObject(obj[key])
+      }
+      return arr
+    } else {
+      const newObj = {}
+      for (let key in obj) {
+        newObj[key] = restoreBrainFromObject(obj[key])
+      }
+      return newObj
+    }
+  } else {
+    return obj
+  }
+}
+
+const nn = convertBrainToObject(net.toJSON())
+console.log(nn)
+
 // Place brain in GUN at startup
-state.get('payload').put(JSON.stringify(net.toJSON()))
+state.get('payload').put(JSON.stringify(nn))
+
+// fs.writeFileSync('/vtx/ctx/brain.json', JSON.stringify(net.toJSON()))
+
+// const newObject = JSON.stringify(convertBrainToObject(net.toJSON()))
+
+// fs.writeFileSync('/vtx/ctx/newbrain.json', newObject)
+
+// const thirdObject = restoreBrainFromObject(JSON.parse(newObject))
+
+// fs.writeFileSync('/vtx/ctx/thirdbrain.json', JSON.stringify(thirdObject))
 
 // LSTM prediction step
 console.log(

@@ -77,7 +77,7 @@ def prepare_discord_messages():
     def sanitizer(string):
         sanitized = re.sub(
             r"http\S+",
-            "(((url)))",
+            f"((({str(get_identity())})))",
             string,
         )
         sanitized = re.sub(
@@ -231,7 +231,7 @@ def fetch_from_reddit():
                 ) as file:
                     sanitized = re.sub(
                         r"http\S+",
-                        "(((url)))",
+                        f"((({str(get_identity())})))",
                         propulsion
                         + str(bias)
                         + ship
@@ -261,7 +261,7 @@ def fetch_from_reddit():
                 ) as file:
                     sanitized = re.sub(
                         r"http\S+",
-                        "(((url)))",
+                        f"((({str(get_identity())})))",
                         propulsion
                         + str(bias)
                         + ship

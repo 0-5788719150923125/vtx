@@ -94,27 +94,27 @@ def gen(bias=None, ctx=None):
     max_new_tokens = config[focus].get("max_new_tokens", 111)
 
     # set quantum state
-    try:
-        q = requests.get(
-            "https://qrng.anu.edu.au/API/jsonI.php?length=6&type=uint8"
-        ).json()
-        if not q["data"][0] <= 256 and not q["data"][1] <= 256:
-            raise Exception("Something failed while querying the quantum API.")
-    except Exception as e:
-        print(e)
-        q = {"data": [random.randint(0, 256), random.randint(0, 256)]}
+    # try:
+    #     q = requests.get(
+    #         "https://qrng.anu.edu.au/API/jsonI.php?length=6&type=uint8"
+    #     ).json()
+    #     if not q["data"][0] <= 256 and not q["data"][1] <= 256:
+    #         raise Exception("Something failed while querying the quantum API.")
+    # except Exception as e:
+    #     print(e)
+    #     q = {"data": [random.randint(0, 256), random.randint(0, 256)]}
 
-    seed = None
-    if q["data"][0] <= 32:
-        seed = q["data"][0]
-        print(
-            bc.CORE
-            + "INK@CORE "
-            + ad.TEXT
-            + ship
-            + " quantum seed was set to "
-            + str(seed)
-        )
+    # seed = None
+    # if q["data"][0] <= 32:
+    #     seed = int(q["data"][0])
+    #     print(
+    #         bc.CORE
+    #         + "INK@CORE "
+    #         + ad.TEXT
+    #         + ship
+    #         + " quantum seed was set to "
+    #         + str(seed)
+    #     )
 
     # bias the prompt
     if bias is not None:
@@ -145,17 +145,23 @@ def gen(bias=None, ctx=None):
             renormalize_logits=True,
             eos_token_id=eos,
             max_time=59,
-            seed=seed,
+            seed=None,
         )
     except Exception as e:
         print(e)
+        print("the model crashed")
         return
     try:
         output = None
         generation = completion[0][len(history) :]
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
-
-        if group is None or propulsion in group[3] or "(((url)))" in group[3]:
+        pattern = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
+        if (
+            group is None
+            or propulsion in group[3]
+            or "(((url)))" in group[3]
+            or pattern.match(group[3])
+        ):
             print("bad format, regenerating")
             time.sleep(5)
             output = asyncio.run(gen(bias, ctx))

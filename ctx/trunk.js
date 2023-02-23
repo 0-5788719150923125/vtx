@@ -160,8 +160,8 @@ const seed = JSON.parse(fs.readFileSync('ctx/seed.json', 'utf-8'))
 
 // Instantiate the brain
 const net = new brain.recurrent.LSTM({
-  hiddenLayers: [9],
-  inputSize: 2,
+  hiddenLayers: [4],
+  inputSize: 5,
   maxPredictionLength: 2,
   outputSize: 1
 })
@@ -175,26 +175,6 @@ net.train(seed, {
   log: (details) => console.log(details),
   logPeriod: 2000
 })
-
-// Publish the brain at the root
-app.get('/', (req, res) => {
-  res.json(restoreBrainFromObject(payload.toJSON()))
-})
-
-// Publish brain updates to GUN
-const state = gun
-  .get('brain')
-  .get('state')
-  .on(async (node) => {
-    // if (typeof node.payload === 'string') {
-    try {
-      net.fromJSON(JSON.parse(node.payload))
-      payload = node.payload
-    } catch {
-      console.log('failed to load brain from json')
-    }
-    // }
-  })
 
 function convertBrainToObject(obj) {
   if (Array.isArray(obj)) {
@@ -234,21 +214,29 @@ function restoreBrainFromObject(obj) {
   }
 }
 
+// Publish the brain at the root
+app.get('/', (req, res) => {
+  res.json(payload)
+})
+
+// Publish brain updates to GUN
+const state = gun
+  .get('brain')
+  .get('state')
+  .on(async (node) => {
+    try {
+      const fixed = restoreBrainFromObject(JSON.parse(node.payload))
+      net.fromJSON(fixed)
+      payload = fixed
+    } catch (err) {
+      console.log('failed to load brain from json')
+    }
+  })
+
 const nn = convertBrainToObject(net.toJSON())
-console.log(nn)
 
 // Place brain in GUN at startup
-state.get('payload').put(JSON.stringify(nn))
-
-// fs.writeFileSync('/vtx/ctx/brain.json', JSON.stringify(net.toJSON()))
-
-// const newObject = JSON.stringify(convertBrainToObject(net.toJSON()))
-
-// fs.writeFileSync('/vtx/ctx/newbrain.json', newObject)
-
-// const thirdObject = restoreBrainFromObject(JSON.parse(newObject))
-
-// fs.writeFileSync('/vtx/ctx/thirdbrain.json', JSON.stringify(thirdObject))
+state.get('payload').put(JSON.parse(JSON.stringify(nn)))
 
 // LSTM prediction step
 console.log(

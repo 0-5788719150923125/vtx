@@ -7,6 +7,8 @@ import 'gun/lib/radisk.js'
 import 'gun/lib/store.js'
 import 'gun/lib/rindexed.js'
 import 'gun/lib/webrtc.js'
+import 'gun/lib/open.js'
+import 'gun/lib/load.js'
 import express from 'express'
 import yaml from 'js-yaml'
 
@@ -220,14 +222,24 @@ app.get('/', (req, res) => {
 })
 
 // Publish brain updates to GUN
+// let obj
 const state = gun
   .get('brain')
   .get('state')
+  .get('payload')
   .on(async (node) => {
     try {
-      const fixed = restoreBrainFromObject(JSON.parse(node.payload))
-      net.fromJSON(fixed)
-      payload = fixed
+      // obj = node.payload
+      // console.log(node)
+      gun
+        .get('brain')
+        .get('state')
+        .get('payload')
+        .open((thing) => {
+          const fixed = restoreBrainFromObject(JSON.parse(thing))
+          net.fromJSON(fixed)
+          payload = fixed
+        })
     } catch (err) {
       console.log('failed to load brain from json')
     }
@@ -235,8 +247,10 @@ const state = gun
 
 const nn = convertBrainToObject(net.toJSON())
 
+// console.log(JSON.parse(JSON.stringify(nn)))
+
 // Place brain in GUN at startup
-state.get('payload').put(JSON.parse(JSON.stringify(nn)))
+gun.get('payload').put(JSON.parse(JSON.stringify(nn)))
 
 // LSTM prediction step
 console.log(

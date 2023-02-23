@@ -1,27 +1,18 @@
-import asyncio
-from aiogram import Bot, Dispatcher, executor, types
-from utils import config
-import os
+# import os
+# from pyrogram import Client, filters
 
-token = os.environ["TELEGRAMBOTAPIKEY"]
-bot = Bot(token=token)
-dp = Dispatcher(bot)
+# token = os.environ["TELEGRAMBOTAPIKEY"]
+# client = Client("PenAndInkBOT", bot_token=token)
 
 
-@dp.message_handler(commands=["start", "help"])
-async def send_welcome(message: types.Message):
-    """
-    This handler will be called when user sends `/start` or `/help` command
-    """
-    await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
+# @client.on_message(filters.private)
+# async def hello(client, message):
+#     await message.reply("Hello from Pyrogram!")
 
 
-async def subscribe(loop):
-    # Register message handler function
-    dp.register_message_handler(send_welcome, commands=["start", "help"])
-    # Start the bot
-    try:
-        await executor.start_polling(dp)
-        # loop.run_forever()
-    except Exception as e:
-        print(e)
+# client.start()
+
+# me = client.get_me()
+# print("My name is", me.first_name)
+
+# app.send_message()

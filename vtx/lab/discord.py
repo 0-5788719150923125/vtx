@@ -114,7 +114,8 @@ class Client(discord.Client):
         output = "ERROR: Me Found."
 
         # every message is added to local cache, for building prompt
-        head.build_context(str(message.author.id) + ship + " " + message.content)
+        if message.content != "gen":
+            head.build_context(str(message.author.id) + ship + " " + message.content)
 
         # ignore messages if heavy processing is taking place
         if self.thinking == True:

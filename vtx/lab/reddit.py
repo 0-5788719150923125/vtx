@@ -117,7 +117,13 @@ async def subscribe(subreddit):
                     + generation[1]
                 )
                 daemon = get_daemon(generation[0])
-                output = transformer([daemon["name"], generation[1]])
+                mention = get_daemon(random.randint(1, 9999))["name"]
+                sanitized = re.sub(
+                    r"(?:<@)(\d+\s*\d*)(?:>)",
+                    f"{mention}",
+                    generation[1],
+                )
+                output = transformer([daemon["name"], sanitized])
                 print(
                     bc.ROOT
                     + "<=== "
@@ -138,6 +144,6 @@ def transformer(group):
     responses = [
         f'My daemon says, "{group[1]}"',
         f'Penny said, "{group[1]}"',
-        f'{group[0]} says, "{group[1]}"',
+        f'{group[0]} wants to say, "{group[1]}"',
     ]
     return random.choice(responses)

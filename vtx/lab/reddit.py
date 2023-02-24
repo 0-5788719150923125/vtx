@@ -1,4 +1,4 @@
-from utils import ad, bc, config, get_identity, propulsion, ship
+from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import asyncpraw
 import requests
 import random
@@ -116,10 +116,7 @@ async def subscribe(subreddit):
                     + " "
                     + generation[1]
                 )
-                obj = {"seed": str(generation[0])}
-                response = requests.get("http://ctx:9666/daemon", json=obj)
-                daemon = json.loads(response.text)
-                response.close()
+                daemon = get_daemon(generation[0])
                 output = transformer([daemon["name"], generation[1]])
                 print(
                     bc.ROOT

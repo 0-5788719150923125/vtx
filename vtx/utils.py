@@ -1,7 +1,9 @@
 from mergedeep import merge, Strategy
+import requests
 import secrets
 import pprint
 import yaml
+import json
 
 propulsion = "¶"
 ship = ":>"
@@ -36,3 +38,11 @@ def get_identity():
     count = secrets.choice([18, 19])
     identity = "".join(secrets.choice("0123456789") for i in range(count))
     return identity
+
+
+def get_daemon(seed):
+    obj = {"seed": str(seed)}
+    response = requests.get("http://ctx:9666/daemon", json=obj)
+    daemon = json.loads(response.text)
+    response.close()
+    return daemon

@@ -82,7 +82,10 @@ services:
 #     image: ipfs/kubo:master-latest
 #     command: daemon --mount --mount-ipfs=/ipfs --migrate=true --agent-version-suffix=docker --init-profile=lowpower --writable --enable-gc --enable-pubsub-experiment --enable-namesys-pubsub
 #     restart: 'always'
-#     # user: 1000:1000
+#     build:
+#       context: .
+#       dockerfile: Dockerfile.ipfs
+#     user: 1000:1000
 #     privileged: true
 #     devices:
 #       - /dev/fuse:/dev/fuse

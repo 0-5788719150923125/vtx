@@ -5,3 +5,5 @@
 # apt-get install -y fuse
 
 uname -r
+
+ipfs config --json Mounts.FuseAllowOther true

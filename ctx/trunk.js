@@ -141,7 +141,6 @@ for (const channel of Object.entries(config)) {
       // Send message to GUN
       const payload = JSON.stringify({ identifier, message, pubKey })
       await channel['gun'].get('payload').put(payload)
-      console.log(bc.ROOT + 'ONE@ROOT: ' + ad.TEXT + 'pang')
     } catch (err) {
       console.error(err)
       cockpit(identity, identifier)

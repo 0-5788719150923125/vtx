@@ -133,7 +133,7 @@ def gen(bias=None, ctx=None):
             do_sample=True,
             min_length=23,
             max_new_tokens=max_new_tokens,
-            temperature=1.111,
+            temperature=0.888,
             top_k=40,
             top_p=0.9,
             return_as_list=True,
@@ -156,12 +156,7 @@ def gen(bias=None, ctx=None):
         generation = completion[0][len(history) :]
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
         pattern = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
-        if (
-            group is None
-            or propulsion in group[3]
-            or "(((url)))" in group[3]
-            or pattern.match(group[3])
-        ):
+        if group is None or propulsion in group[3] or pattern.match(group[3]):
             print("bad format, regenerating")
             time.sleep(5)
             output = asyncio.run(gen(bias, ctx))

@@ -1,6 +1,5 @@
-from utils import ad, bc, config, get_identity, propulsion, ship
-from aiogram import Dispatcher, executor, Bot
-from aiogram import types
+from aiogram import Dispatcher, executor, Bot, types
+from utils import bc, ad, get_identity, ship
 import asyncio
 import logging
 import head
@@ -25,6 +24,8 @@ async def chat_bot(message: types.Message):
     head.build_context(str(get_identity()) + ship + " " + message["text"])
     response = await head.gen()
     await message.answer(response[1])
+    print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
+    print(bc.CORE + "INK@TELEGRAM: " + ad.TEXT + response[1])
 
 
 async def subscribe() -> None:

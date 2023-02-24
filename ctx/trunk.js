@@ -218,29 +218,22 @@ function restoreBrainFromObject(obj) {
 
 // Publish the brain at the root
 app.get('/', (req, res) => {
+  net.fromJSON(JSON.parse(JSON.stringify(payload)))
   res.json(payload)
 })
 
 // Publish brain updates to GUN
-// let obj
 const state = gun
   .get('state')
   .get('brain')
   .on(async (node) => {
     try {
       state.open((node) => {
-        const restored = restoreBrainFromObject(
-          JSON.parse(JSON.stringify(node))
-        )
-        try {
-          net.fromJSON(JSON.stringify(restored))
-        } catch (err) {
-          // pass
-        }
+        const restored = restoreBrainFromObject(node)
         payload = restored
       })
     } catch (err) {
-      console.log('failed to load brain from json')
+      // pass
     }
   })
 

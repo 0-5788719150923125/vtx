@@ -7,7 +7,6 @@ import head
 import time
 import lab
 
-
 tasks = {}
 
 # This is the main loop for the entire machine
@@ -17,6 +16,11 @@ async def main(loop):
     # Load the AI model at startup
     if head.ai == None:
         head.ai = await head.loader()
+
+    # Prune completed tasks
+    for task in tasks.copy():
+        if tasks[task].done():
+            del tasks[task]
 
     # Get configs, create tasks, and append to task queue
     if "source" in config:

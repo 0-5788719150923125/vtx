@@ -1,8 +1,9 @@
-from utils import ad, bc, config, get_identity, propulsion, ship
+from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import requests
 import random
 import json
 import head
+import re
 
 state = None
 
@@ -35,11 +36,17 @@ async def subscribe(channel):
         url = "http://ctx:9666/message/" + channel
         print(bc.CORE + "INK@CORE:" + ad.TEXT + " ping")
         generation = await head.gen(int(bot), context)
-        myobj = {"message": generation[1], "identifier": str(bot)}
+        daemon = get_daemon(random.randint(1, 9999))["name"]
+        sanitized = re.sub(
+            r"(?:<@)(\d+\s*\d*)(?:>)",
+            f"{daemon}",
+            generation[1],
+        )
+        myobj = {"message": sanitized, "identifier": str(bot)}
         x = requests.post(url, json=myobj, headers={"Connection": "close"})
         x.close()
         deep.close()
-        print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + generation[1])
+        print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + sanitized)
         print(bc.FOLD + "PEN@FOLD:" + ad.TEXT + " pong")
     except:
         pass

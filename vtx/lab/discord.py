@@ -151,6 +151,9 @@ class Client(discord.Client):
                 bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
+                weight = random.randint(
+                    0, response_probability + (response_probability / 2)
+                )  ## 66%
                 bias = int(message.mentions[0].id)
 
         # increase response probability in private channels

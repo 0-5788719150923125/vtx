@@ -224,22 +224,21 @@ app.get('/', (req, res) => {
 // Publish brain updates to GUN
 // let obj
 const state = gun
-  .get('brain')
   .get('state')
-  .get('payload')
+  .get('brain')
   .on(async (node) => {
     try {
-      // obj = node.payload
-      // console.log(node)
-      gun
-        .get('brain')
-        .get('state')
-        .get('payload')
-        .open((thing) => {
-          const fixed = restoreBrainFromObject(JSON.parse(thing))
-          net.fromJSON(fixed)
-          payload = fixed
-        })
+      state.open((node) => {
+        const restored = restoreBrainFromObject(
+          JSON.parse(JSON.stringify(node))
+        )
+        try {
+          net.fromJSON(JSON.stringify(restored))
+        } catch (err) {
+          // pass
+        }
+        payload = restored
+      })
     } catch (err) {
       console.log('failed to load brain from json')
     }
@@ -247,10 +246,10 @@ const state = gun
 
 const nn = convertBrainToObject(net.toJSON())
 
-// console.log(JSON.parse(JSON.stringify(nn)))
+const nnObject = JSON.parse(JSON.stringify(nn))
 
 // Place brain in GUN at startup
-gun.get('payload').put(JSON.parse(JSON.stringify(nn)))
+state.put(nnObject)
 
 // LSTM prediction step
 console.log(

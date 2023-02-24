@@ -32,11 +32,11 @@ async def main(loop):
                         task.set_name("source-" + channel)
                         tasks[task.get_name()] = task
 
-    # if "telegram" in config:
-    #     if "telegram" not in tasks:
-    #         task = loop.create_task(lab.telegram.subscribe(loop))
-    #         task.set_name("telegram")
-    #         tasks[task.get_name()] = task
+    if "telegram" in config:
+        if "telegram" not in tasks:
+            task = loop.create_task(lab.telegram.subscribe())
+            task.set_name("telegram")
+            tasks[task.get_name()] = task
 
     if "reddit" in config:
         for subreddit in config["reddit"]:
@@ -66,6 +66,15 @@ def loop_in_thread(loop):
 loop = asyncio.get_event_loop()
 t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
 
+
+# async def this_thing(loop):
+#     loop.create_task(lab.telegram.create_bot_factory())
+
+
+# loop.create_task(lab.telegram.create_bot_factory())
+# asyncio.run()
+# a = threading.Thread(None, lab.telegram.subscribe(), args=(loop,), daemon=True)
+# a.start()
 
 while True:
     time.sleep(5)

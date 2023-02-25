@@ -110,6 +110,7 @@ for (const channel of Object.entries(config)) {
             typeof payload.pubKey !== 'undefined'
           ) {
             const sender = await gun.user(`${payload.pubKey}`)
+            if (typeof sender.pub === 'undefined') return
             message = await SEA.verify(payload.message, sender.pub)
           } else {
             message = payload.message

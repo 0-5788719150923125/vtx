@@ -5,6 +5,7 @@ import random
 import head
 import json
 import os
+import re
 
 # Subscribe to a single subreddit
 async def subscribe(subreddit):

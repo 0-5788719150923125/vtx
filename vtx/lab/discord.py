@@ -116,6 +116,7 @@ class Client(discord.Client):
         # every message is added to local cache, for building prompt
         if message.content != "gen":
             head.build_context(str(message.author.id) + ship + " " + message.content)
+            print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + message.content)
 
         # ignore messages if heavy processing is taking place
         if self.thinking == True:
@@ -129,9 +130,7 @@ class Client(discord.Client):
                 return
 
         # generate responses
-        print(bc.ROOT + "head" + ad.TEXT)
         if "gen" in message.content:
-            print(bc.FOLD + "dj ent" + ad.TEXT)
             weight = 1
             bias = 530243004334604311
             try:
@@ -142,7 +141,6 @@ class Client(discord.Client):
                 pass
         else:
             weight = random.randint(0, 100)
-            print(bc.FOLD + "heads" + ad.TEXT)
             # increase probability of a response if bot is mentioned
             if client.user.mentioned_in(message):
                 weight = random.randint(0, 15)  ## 66%
@@ -161,25 +159,22 @@ class Client(discord.Client):
             return
 
         # generate a response from context and bias
-        print(bc.ROOT + "heads" + ad.TEXT)
         await asyncio.sleep(random.randint(2, 13))
         async with message.channel.typing():
             generation = await head.gen(bias)
             output = transformer([generation[0], generation[1]])
-
-        print(bc.FOLD + "output" + ad.TEXT)
 
         # make random redactions
         if random.randint(0, 100) <= redacted_chance:
             choices = ["[REDACTED]", "[CLASSIFIED]", "[CORRUPTED]"]
             output = random.choice(choices)
 
-        # output to console
-        print(output)
-
         try:
             if len(output) > 2000:
                 output = output[:1997] + "..."
+
+            print(bc.CORE + "INK@DISCORD: " + ad.TEXT + output)
+
             if reply == True:
                 await message.reply(output)
             else:

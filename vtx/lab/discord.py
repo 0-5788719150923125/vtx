@@ -145,32 +145,19 @@ class Client(discord.Client):
             print(bc.FOLD + "heads" + ad.TEXT)
             # increase probability of a response if bot is mentioned
             if client.user.mentioned_in(message):
-                weight = random.randint(
-                    0, response_probability + (response_probability / 2)
-                )  ## 66%
+                weight = random.randint(0, 15)  ## 66%
                 bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
-                weight = random.randint(
-                    0, response_probability + (response_probability / 2)
-                )  ## 66%
+                weight = random.randint(0, 30)  ## 66%
                 bias = int(message.mentions[0].id)
 
         # increase response probability in private channels
         if str(message.channel.type) == "private":
             weight = 1
 
-        print(
-            "weight is " + str(weight) + ", threshold is " + str(response_probability)
-        )
-
         # check weight before generating a response
         if weight > response_probability:
-            print(".")
-            await asyncio.sleep(1)
-            print("..")
-            await asyncio.sleep(0.5)
-            print(bc.CORE + "..." + ad.TEXT)
             return
 
         # generate a response from context and bias
@@ -189,13 +176,6 @@ class Client(discord.Client):
 
         # output to console
         print(output)
-        print(bc.CORE + "..." + ad.TEXT)
-        await asyncio.sleep(1)
-        print("..")
-        await asyncio.sleep(0.5)
-        print(bc.ROOT + "." + ad.TEXT)
-        await asyncio.sleep(2)
-        print(bc.ROOT + "ok" + ad.TEXT)
 
         try:
             if len(output) > 2000:

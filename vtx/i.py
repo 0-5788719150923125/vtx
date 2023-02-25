@@ -63,14 +63,15 @@ def fetch_from_discord():
         os.system(command)
 
 
-def allowed_bot(is_bot, id):
-    if is_bot == True:
-        if str(id) == "975174695399854150":  # Eliza
-            return True
-        else:
-            return False
-    elif is_bot == False:
-        return True
+def transform_author(author):
+    if str(author["id"]) == "975174695399854150":  # Eliza
+        return str(author["id"])
+    elif str(author["id"]) == "1055993037077106718":  # Samn
+        return str(get_identity())
+    elif "Ghost-" in author["name"]:
+        return str(get_identity())
+    else:
+        return False
 
 
 def prepare_discord_messages():
@@ -109,11 +110,13 @@ def prepare_discord_messages():
                         continue
                     if i["content"] == "":
                         continue
-                    allowed = allowed_bot(i["author"]["isBot"], i["author"]["id"])
-                    if allowed == True:
-                        pass
-                    else:
-                        continue
+
+                    author_id = i["author"]["id"]
+
+                    if i["author"]["isBot"] == True:
+                        author_id = transform_author(i["author"])
+                        if author_id == False:
+                            continue
 
                     with open("/lab/discord/" + filename + ".txt", "a") as txt_file:
 
@@ -128,10 +131,13 @@ def prepare_discord_messages():
                                     ),
                                     None,
                                 )
-                                allowed = allowed_bot(
-                                    result["author"]["isBot"], result["author"]["id"]
-                                )
-                                if allowed == True:
+
+                                reply_author_id = result["author"]["id"]
+
+                                if result["author"]["isBot"] == True:
+                                    reply_author_id = transform_author(result["author"])
+
+                                if reply_author_id != False:
                                     if result is not None:
                                         sanitized = sanitizer(result["content"])
                                         if len(result["mentions"]) > 0:
@@ -142,7 +148,7 @@ def prepare_discord_messages():
                                                 )
                                         content = (
                                             propulsion
-                                            + result["author"]["id"]
+                                            + reply_author_id
                                             + ship
                                             + " "
                                             + sanitized
@@ -163,9 +169,7 @@ def prepare_discord_messages():
                                         "<@" + str(mention["id"]) + ">",
                                     )
 
-                            content = (
-                                propulsion + i["author"]["id"] + ship + " " + sanitized
-                            )
+                            content = propulsion + author_id + ship + " " + sanitized
                             txt_file.write(f"{content}\n".format(content))
                             if position == 0 and line is not None:
                                 txt_file.write(line)

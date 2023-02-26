@@ -1,11 +1,12 @@
 from utils import ad, bc, config, propulsion, ship
-import asyncio
+from discord.ext import commands
 import discord
+import asyncio
 import random
 import head
 import os
 
-
+client = None
 redacted_chance = 1
 response_chance = 10
 followup_chance = 10
@@ -13,6 +14,8 @@ followup_chance = 10
 
 # A class to control the entire Discord bot
 class Client(discord.Client):
+
+    # global client
 
     # A variable that will block all actions until True
     thinking = False
@@ -24,8 +27,11 @@ class Client(discord.Client):
         # List all Discord servers on startup
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + "connected to Discord")
         guilds = []
-        for guild in client.guilds:
-            guilds.append(guild.name)
+        try:
+            for guild in client.guilds:
+                guilds.append(guild.name)
+        except Exception as e:
+            print(e)
 
         print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + " => ".join(guilds))
 
@@ -105,6 +111,15 @@ class Client(discord.Client):
                 print(bc.CORE + str(e) + ad.TEXT)
                 self.discord_task = self.loop.create_task(self.think())
 
+    # def setup_events(self):
+    #     # Handle bots that update messages token-by-token
+    #     @self.event
+    #     async def on_message_edit(self, before, after):
+    #         print(before.content)
+    #         print(after.content)
+    #         if after.content[:1] not in bullets:
+    #             head.build_context(str(after.author.id) + ship + " " + after.content)
+
     # check every Discord message
     async def on_message(self, message):
 
@@ -112,6 +127,9 @@ class Client(discord.Client):
 
         bias = 0
         output = "ERROR: Me Found."
+
+        if message.content[:1] in bullets:
+            return
 
         # every message is added to local cache, for building prompt
         if message.content != "gen":
@@ -146,7 +164,7 @@ class Client(discord.Client):
                 bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
-                chance = random.randint(0, 30)  ## 33%
+                chance = random.randint(0, 90)  ## 11%
                 bias = int(message.mentions[0].id)
             else:
                 chance = random.randint(0, 100)
@@ -209,14 +227,26 @@ async def get_all_channels():
     return text_channel_list
 
 
-discord_token = os.environ["DISCORDTOKEN"]
-intents = discord.Intents.default()
-intents.message_content = True
-
-client = Client(intents=intents)
-
 # Subscribe to a Discord bot via token
 async def subscribe():
+
+    discord_token = os.environ["DISCORDTOKEN"]
+    intents = discord.Intents.default()
+    intents.message_content = True
+    intents.messages = True
+
+    global client
+    client = Client(intents=intents)
+
+    # def setup_events(self):
+    # Handle bots that update messages token-by-token
+    @client.event
+    async def on_message_edit(before, after):
+        print(before.content)
+        print(after.content)
+        if after.content[:1] not in bullets:
+            head.build_context(str(after.author.id) + ship + " " + after.content)
+
     if "discord" in config:
         await client.start(discord_token)
 

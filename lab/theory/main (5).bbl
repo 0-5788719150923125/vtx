@@ -1,0 +1,464 @@
+\begin{thebibliography}{52}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{AI21()}]{jurrasic}
+AI21.
+\newblock Jurassic-1 language models.
+\newblock "\url{https://studio.ai21.com/docs/jurassic1-language-models}".
+\newblock Accessed: 2022-06-22.
+
+\bibitem[{BigScience(2022)}]{bloom}
+BigScience. 2022.
+\newblock Bigscience large open-science open-access multilingual language
+  model.
+\newblock "\url{https://huggingface.co/bigscience/bloom}".
+
+\bibitem[{Borgeaud et~al.(2021)Borgeaud, Mensch, Hoffmann, Cai, Rutherford,
+  Millican, Driessche, Lespiau, Damoc, Clark, Casas, Guy, Menick, Ring,
+  Hennigan, Huang, Maggiore, Jones, Cassirer, Brock, Paganini, Irving, Vinyals,
+  Osindero, Simonyan, Rae, Elsen, and Sifre}]{retro}
+Sebastian Borgeaud, Arthur Mensch, Jordan Hoffmann, Trevor Cai, Eliza
+  Rutherford, Katie Millican, George van~den Driessche, Jean-Baptiste Lespiau,
+  Bogdan Damoc, Aidan Clark, Diego de~Las Casas, Aurelia Guy, Jacob Menick,
+  Roman Ring, Tom Hennigan, Saffron Huang, Loren Maggiore, Chris Jones, Albin
+  Cassirer, Andy Brock, Michela Paganini, Geoffrey Irving, Oriol Vinyals, Simon
+  Osindero, Karen Simonyan, Jack~W. Rae, Erich Elsen, and Laurent Sifre. 2021.
+\newblock \href {https://doi.org/10.48550/ARXIV.2112.04426} {Improving language
+  models by retrieving from trillions of tokens}.
+
+\bibitem[{Brown et~al.(2020)Brown, Mann, Ryder, Subbiah, Kaplan, Dhariwal,
+  Neelakantan, Shyam, Sastry, Askell et~al.}]{gpt3}
+Tom~B Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared Kaplan, Prafulla
+  Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell,
+  et~al. 2020.
+\newblock Language models are few-shot learners.
+\newblock \emph{arXiv preprint arXiv:2005.14165}.
+
+\bibitem[{Dettmers et~al.(2022{\natexlab{a}})Dettmers, Lewis, Belkada, and
+  Zettlemoyer}]{dettmers2022llm}
+Tim Dettmers, Mike Lewis, Younes Belkada, and Luke Zettlemoyer.
+  2022{\natexlab{a}}.
+\newblock {LLM}.int8(): 8-bit matrix multiplication for transformers at scale.
+\newblock \emph{ArXiv}, abs/2208.07339.
+
+\bibitem[{Dettmers et~al.(2022{\natexlab{b}})Dettmers, Lewis, Shleifer, and
+  Zettlemoyer}]{dettmers2022optimizers}
+Tim Dettmers, Mike Lewis, Sam Shleifer, and Luke Zettlemoyer.
+  2022{\natexlab{b}}.
+\newblock 8-bit optimizers via block-wise quantization.
+\newblock \emph{International Conference on Learning Representations (ICLR)}.
+
+\bibitem[{Du et~al.(2021)Du, Huang, Dai, Tong, Lepikhin, Xu, Krikun, Zhou, Yu,
+  Firat, Zoph, Fedus, Bosma, Zhou, Wang, Wang, Webster, Pellat, Robinson,
+  Meier{-}Hellstern, Duke, Dixon, Zhang, Le, Wu, Chen, and Cui}]{glam}
+Nan Du, Yanping Huang, Andrew~M. Dai, Simon Tong, Dmitry Lepikhin, Yuanzhong
+  Xu, Maxim Krikun, Yanqi Zhou, Adams~Wei Yu, Orhan Firat, Barret Zoph, Liam
+  Fedus, Maarten Bosma, Zongwei Zhou, Tao Wang, Yu~Emma Wang, Kellie Webster,
+  Marie Pellat, Kevin Robinson, Kathy Meier{-}Hellstern, Toju Duke, Lucas
+  Dixon, Kun Zhang, Quoc~V. Le, Yonghui Wu, Zhifeng Chen, and Claire Cui. 2021.
+\newblock \href {http://arxiv.org/abs/2112.06905} {Glam: Efficient scaling of
+  language models with mixture-of-experts}.
+\newblock \emph{CoRR}, abs/2112.06905.
+
+\bibitem[{Evans et~al.(2018)Evans, Kolesnikov, Rosulek
+  et~al.}]{evans2018pragmatic}
+David Evans, Vladimir Kolesnikov, Mike Rosulek, et~al. 2018.
+\newblock A pragmatic introduction to secure multi-party computation.
+\newblock \emph{Foundations and Trends in Privacy and Security},
+  2(2-3):70--246.
+
+\bibitem[{Face and contributors(2020)}]{accelerate}
+Hugging Face and contributors. 2020.
+\newblock Accelerate: Run your raw pytorch training script on any kind of
+  device.
+\newblock \emph{GitHub. Note: https://github.com/huggingface/datasets}, 1.
+
+\bibitem[{Fedus et~al.(2021)Fedus, Zoph, and Shazeer}]{switch}
+William Fedus, Barret Zoph, and Noam Shazeer. 2021.
+\newblock \href {http://arxiv.org/abs/2101.03961} {Switch transformers: Scaling
+  to trillion parameter models with simple and efficient sparsity}.
+
+\bibitem[{Forefront()}]{forefront}
+Forefront.
+\newblock Powerful language models a click away.
+\newblock "\url{https://www.forefront.ai/}".
+\newblock Accessed: 2022-06-22.
+
+\bibitem[{Gao et~al.(2021)Gao, Tow, Biderman, Black, DiPofi, Foster, Golding,
+  Hsu, McDonell, Muennighoff, Phang, Reynolds, Tang, Thite, Wang, Wang, and
+  Zou}]{eval-harness}
+Leo Gao, Jonathan Tow, Stella Biderman, Sid Black, Anthony DiPofi, Charles
+  Foster, Laurence Golding, Jeffrey Hsu, Kyle McDonell, Niklas Muennighoff,
+  Jason Phang, Laria Reynolds, Eric Tang, Anish Thite, Ben Wang, Kevin Wang,
+  and Andy Zou. 2021.
+\newblock \href {https://doi.org/10.5281/zenodo.5371628} {A framework for
+  few-shot language model evaluation}.
+
+\bibitem[{Gehrmann et~al.(2022)Gehrmann, Bhattacharjee, Mahendiran, Wang,
+  Papangelis, Madaan, McMillan-Major, Shvets, Upadhyay, Yao, Wilie,
+  Bhagavatula, You, Thomson, Garbacea, Wang, Deutsch, Xiong, Jin, Gkatzia,
+  Radev, Clark, Durmus, Ladhak, Ginter, Winata, Strobelt, Hayashi, Novikova,
+  Kanerva, Chim, Zhou, Clive, Maynez, Sedoc, Juraska, Dhole, Chandu,
+  Perez-Beltrachini, Ribeiro, Tunstall, Zhang, Pushkarna, Creutz, White, Kale,
+  Eddine, Daheim, Subramani, Dusek, Liang, Ammanamanchi, Zhu, Puduppully, Kriz,
+  Shahriyar, Cardenas, Mahamood, Osei, Cahyawijaya, Štajner, Montella,
+  Shailza, Jolly, Mille, Hasan, Shen, Adewumi, Raunak, Raheja, Nikolaev, Tsai,
+  Jernite, Xu, Sang, Liu, and Hou}]{gehrmann2022gemv2}
+Sebastian Gehrmann, Abhik Bhattacharjee, Abinaya Mahendiran, Alex Wang,
+  Alexandros Papangelis, Aman Madaan, Angelina McMillan-Major, Anna Shvets,
+  Ashish Upadhyay, Bingsheng Yao, Bryan Wilie, Chandra Bhagavatula, Chaobin
+  You, Craig Thomson, Cristina Garbacea, Dakuo Wang, Daniel Deutsch, Deyi
+  Xiong, Di~Jin, Dimitra Gkatzia, Dragomir Radev, Elizabeth Clark, Esin Durmus,
+  Faisal Ladhak, Filip Ginter, Genta~Indra Winata, Hendrik Strobelt, Hiroaki
+  Hayashi, Jekaterina Novikova, Jenna Kanerva, Jenny Chim, Jiawei Zhou, Jordan
+  Clive, Joshua Maynez, João Sedoc, Juraj Juraska, Kaustubh Dhole,
+  Khyathi~Raghavi Chandu, Laura Perez-Beltrachini, Leonardo F.~R. Ribeiro,
+  Lewis Tunstall, Li~Zhang, Mahima Pushkarna, Mathias Creutz, Michael White,
+  Mihir~Sanjay Kale, Moussa~Kamal Eddine, Nico Daheim, Nishant Subramani,
+  Ondrej Dusek, Paul~Pu Liang, Pawan~Sasanka Ammanamanchi, Qi~Zhu, Ratish
+  Puduppully, Reno Kriz, Rifat Shahriyar, Ronald Cardenas, Saad Mahamood,
+  Salomey Osei, Samuel Cahyawijaya, Sanja Štajner, Sebastien Montella,
+  Shailza, Shailza Jolly, Simon Mille, Tahmid Hasan, Tianhao Shen, Tosin
+  Adewumi, Vikas Raunak, Vipul Raheja, Vitaly Nikolaev, Vivian Tsai, Yacine
+  Jernite, Ying Xu, Yisi Sang, Yixin Liu, and Yufang Hou. 2022.
+\newblock \href {http://arxiv.org/abs/2206.11249} {Gemv2: Multilingual nlg
+  benchmarking in a single line of code}.
+
+\bibitem[{Guo et~al.(2021)Guo, Rush, and Kim}]{guo2021parameter}
+Demi Guo, Alexander~M Rush, and Yoon Kim. 2021.
+\newblock Parameter-efficient transfer learning with diff pruning.
+\newblock In \emph{Proceedings of the 59th Annual Meeting of the Association
+  for Computational Linguistics}.
+
+\bibitem[{Houlsby et~al.(2019)Houlsby, Giurgiu, Jastrzebski, Morrone,
+  De~Laroussilhe, Gesmundo, Attariyan, and Gelly}]{houlsby2019parameter}
+Neil Houlsby, Andrei Giurgiu, Stanislaw Jastrzebski, Bruna Morrone, Quentin
+  De~Laroussilhe, Andrea Gesmundo, Mona Attariyan, and Sylvain Gelly. 2019.
+\newblock Parameter-efficient transfer learning for nlp.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  2790--2799. PMLR.
+
+\bibitem[{Hu et~al.(2021)Hu, Shen, Wallis, Allen-Zhu, Li, Wang, and
+  Chen}]{hu2021lora}
+Edward Hu, Yelong Shen, Phil Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Lu~Wang, and
+  Weizhu Chen. 2021.
+\newblock \href {http://arxiv.org/abs/2106.09685} {Lora: Low-rank adaptation of
+  large language models}.
+
+\bibitem[{Kaplan et~al.(2020)Kaplan, McCandlish, Henighan, Brown, Chess, Child,
+  Gray, Radford, Wu, and Amodei}]{kaplan2020scaling}
+Jared Kaplan, Sam McCandlish, Tom Henighan, Tom~B. Brown, Benjamin Chess, Rewon
+  Child, Scott Gray, Alec Radford, Jeffrey Wu, and Dario Amodei. 2020.
+\newblock \href {http://arxiv.org/abs/2001.08361} {Scaling laws for neural
+  language models}.
+
+\bibitem[{Khrushchev et~al.(2022)Khrushchev, Vasilev, Zinov, Petrov, and
+  Yandex}]{yalm}
+Michael Khrushchev, Ruslan Vasilev, Nikolay Zinov, Alexey Petrov, and Yandex.
+  2022.
+\newblock Yalm 100b.
+\newblock \url{"https://huggingface.co/yandex/yalm-100b"}.
+
+\bibitem[{Kiela et~al.(2021)Kiela, Bartolo, Nie, Kaushik, Geiger, Wu, Vidgen,
+  Prasad, Singh, Ringshia, Ma, Thrush, Riedel, Waseem, Stenetorp, Jia, Bansal,
+  Potts, and Williams}]{dynabench}
+Douwe Kiela, Max Bartolo, Yixin Nie, Divyansh Kaushik, Atticus Geiger,
+  Zhengxuan Wu, Bertie Vidgen, Grusha Prasad, Amanpreet Singh, Pratik Ringshia,
+  Zhiyi Ma, Tristan Thrush, Sebastian Riedel, Zeerak Waseem, Pontus Stenetorp,
+  Robin Jia, Mohit Bansal, Christopher Potts, and Adina Williams. 2021.
+\newblock \href {https://doi.org/10.48550/ARXIV.2104.14337} {Dynabench:
+  Rethinking benchmarking in nlp}.
+
+\bibitem[{Kim et~al.(2021)Kim, Kim, Lee, Lee, Kwak, Jeon, Park, Kim, Kim, Seo,
+  Lee, Jeong, Lee, Kim, Ko, Kim, Park, Kim, Kang, Ryu, Yoo, Chang, Suh, In,
+  Park, Kim, Kim, Jeong, Yeo, Ham, Park, Lee, Kang, Kang, Ha, Park, and
+  Sung}]{hyperclova}
+Boseop Kim, HyoungSeok Kim, Sang{-}Woo Lee, Gichang Lee, Dong{-}Hyun Kwak,
+  Dong~Hyeon Jeon, Sunghyun Park, Sungju Kim, Seonhoon Kim, Dongpil Seo,
+  Heungsub Lee, Minyoung Jeong, Sungjae Lee, Minsub Kim, SukHyun Ko, Seokhun
+  Kim, Taeyong Park, Jinuk Kim, Soyoung Kang, Na{-}Hyeon Ryu, Kang~Min Yoo,
+  Minsuk Chang, Soobin Suh, Sookyo In, Jinseong Park, Kyungduk Kim, Hiun Kim,
+  Jisu Jeong, Yong~Goo Yeo, Donghoon Ham, Dongju Park, Min~Young Lee, Jaewook
+  Kang, Inho Kang, Jung{-}Woo Ha, Woo{-}Myoung Park, and Nako Sung. 2021.
+\newblock \href {http://arxiv.org/abs/2109.04650} {What changes can large-scale
+  language models bring? intensive study on hyperclova: Billions-scale korean
+  generative pretrained transformers}.
+\newblock \emph{CoRR}, abs/2109.04650.
+
+\bibitem[{Learning@home(2020)}]{hivemind}
+Team Learning@home. 2020.
+\newblock {H}ivemind: a {L}ibrary for {D}ecentralized {D}eep {L}earning.
+\newblock \url{https://github.com/learning-at-home/hivemind}.
+
+\bibitem[{Lepikhin et~al.(2020)Lepikhin, Lee, Xu, Chen, Firat, Huang, Krikun,
+  Shazeer, and Chen}]{Lepikhin2020GShardSG}
+Dmitry Lepikhin, H.~Lee, Yuanzhong Xu, Dehao Chen, Orhan Firat, Y.~Huang,
+  M.~Krikun, Noam Shazeer, and Z.~Chen. 2020.
+\newblock Gshard: Scaling giant models with conditional computation and
+  automatic sharding.
+\newblock \emph{ArXiv}, abs/2006.16668.
+
+\bibitem[{Lester et~al.(2021)Lester, Al-Rfou, and Constant}]{ptune-lester}
+Brian Lester, Rami Al-Rfou, and Noah Constant. 2021.
+\newblock \href {https://doi.org/10.18653/v1/2021.emnlp-main.243} {The power of
+  scale for parameter-efficient prompt tuning}.
+\newblock In \emph{Proceedings of the 2021 Conference on Empirical Methods in
+  Natural Language Processing}, pages 3045--3059, Online and Punta Cana,
+  Dominican Republic. Association for Computational Linguistics.
+
+\bibitem[{Lewis et~al.(2020)Lewis, Perez, Piktus, Petroni, Karpukhin, Goyal,
+  K\"{u}ttler, Lewis, Yih, Rockt\"{a}schel, Riedel, and Kiela}]{rag}
+Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir
+  Karpukhin, Naman Goyal, Heinrich K\"{u}ttler, Mike Lewis, Wen-tau Yih, Tim
+  Rockt\"{a}schel, Sebastian Riedel, and Douwe Kiela. 2020.
+\newblock \href
+  {https://proceedings.neurips.cc/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf}
+  {Retrieval-augmented generation for knowledge-intensive nlp tasks}.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~33, pages 9459--9474. Curran Associates, Inc.
+
+\bibitem[{Li and Liang(2021)}]{li-liang-2021-prefix}
+Xiang~Lisa Li and Percy Liang. 2021.
+\newblock \href {https://doi.org/10.18653/v1/2021.acl-long.353} {Prefix-tuning:
+  Optimizing continuous prompts for generation}.
+\newblock In \emph{Proceedings of the 59th Annual Meeting of the Association
+  for Computational Linguistics and the 11th International Joint Conference on
+  Natural Language Processing (Volume 1: Long Papers)}, pages 4582--4597,
+  Online. Association for Computational Linguistics.
+
+\bibitem[{Liu et~al.(2022{\natexlab{a}})Liu, Tam, Muqeeth, Mohta, Huang,
+  Bansal, and Raffel}]{tfew}
+Haokun Liu, Derek Tam, Mohammed Muqeeth, Jay Mohta, Tenghao Huang, Mohit
+  Bansal, and Colin Raffel. 2022{\natexlab{a}}.
+\newblock \href {https://doi.org/10.48550/ARXIV.2205.05638} {Few-shot
+  parameter-efficient fine-tuning is better and cheaper than in-context
+  learning}.
+
+\bibitem[{Liu et~al.(2022{\natexlab{b}})Liu, Tam, Muqeeth, Mohta, Huang,
+  Bansal, and Raffel}]{2205.05638}
+Haokun Liu, Derek Tam, Mohammed Muqeeth, Jay Mohta, Tenghao Huang, Mohit
+  Bansal, and Colin Raffel. 2022{\natexlab{b}}.
+\newblock \href {https://doi.org/10.48550/ARXIV.2205.05638} {Few-shot
+  parameter-efficient fine-tuning is better and cheaper than in-context
+  learning}.
+
+\bibitem[{Liu et~al.(2021{\natexlab{a}})Liu, Ji, Fu, Du, Yang, and
+  Tang}]{ptune-v2}
+Xiao Liu, Kaixuan Ji, Yicheng Fu, Zhengxiao Du, Zhilin Yang, and Jie Tang.
+  2021{\natexlab{a}}.
+\newblock P-tuning v2: Prompt tuning can be comparable to fine-tuning
+  universally across scales and tasks.
+\newblock \emph{arXiv preprint arXiv:2110.07602}.
+
+\bibitem[{Liu et~al.(2021{\natexlab{b}})Liu, Zheng, Du, Ding, Qian, Yang, and
+  Tang}]{ptune-liu}
+Xiao Liu, Yanan Zheng, Zhengxiao Du, Ming Ding, Yujie Qian, Zhilin Yang, and
+  Jie Tang. 2021{\natexlab{b}}.
+\newblock Gpt understands, too.
+\newblock \emph{arXiv:2103.10385}.
+
+\bibitem[{Maymounkov and Mazieres(2002)}]{kademlia}
+Petar Maymounkov and David Mazieres. 2002.
+\newblock Kademlia: A peer-to-peer information system based on the xor metric.
+\newblock In \emph{International Workshop on Peer-to-Peer Systems}, pages
+  53--65. Springer.
+
+\bibitem[{Narayanan et~al.(2021)Narayanan, Shoeybi, Casper, LeGresley, Patwary,
+  Korthikanti, Vainbrand, Kashinkunti, Bernauer, Catanzaro et~al.}]{megatron2}
+Deepak Narayanan, Mohammad Shoeybi, Jared Casper, Patrick LeGresley, Mostofa
+  Patwary, Vijay Korthikanti, Dmitri Vainbrand, Prethvi Kashinkunti, Julie
+  Bernauer, Bryan Catanzaro, et~al. 2021.
+\newblock Efficient large-scale language model training on gpu clusters.
+\newblock \emph{arXiv preprint arXiv:2104.04473}.
+
+\bibitem[{NVIDIA(2020)}]{ga102-datasheet}
+NVIDIA. 2020.
+\newblock \href
+  {https://images.nvidia.com/aem-dam/en-zz/Solutions/geforce/ampere/pdf/NVIDIA-ampere-GA102-GPU-Architecture-Whitepaper-V1.pdf}
+  {Nvidia ampere ga102 gpu architecture}.
+
+\bibitem[{NVIDIA(2022)}]{nvidia-privacy}
+NVIDIA. 2022.
+\newblock Nvidia confidential computing.
+\newblock
+  \url{https://www.nvidia.com/en-in/data-center/solutions/confidential-computing/}.
+
+\bibitem[{OpenAI()}]{openai-api}
+OpenAI.
+\newblock Build next-gen apps with openai’s powerful models.
+\newblock https://openai.com/api.
+\newblock Accessed: 2022-06-22.
+
+\bibitem[{Pfeiffer et~al.(2020)Pfeiffer, R{\"u}ckl{\'e}, Poth, Kamath,
+  Vuli{\'c}, Ruder, Cho, and Gurevych}]{adapterhub}
+Jonas Pfeiffer, Andreas R{\"u}ckl{\'e}, Clifton Poth, Aishwarya Kamath, Ivan
+  Vuli{\'c}, Sebastian Ruder, Kyunghyun Cho, and Iryna Gurevych. 2020.
+\newblock Adapterhub: A framework for adapting transformers.
+\newblock \emph{arXiv preprint arXiv:2007.07779}.
+
+\bibitem[{Pudipeddi et~al.(2020)Pudipeddi, Mesmakhosroshahi, Xi, and
+  Bharadwaj}]{l2l}
+Bharadwaj Pudipeddi, Maral Mesmakhosroshahi, Jinwen Xi, and Sujeeth Bharadwaj.
+  2020.
+\newblock Training large neural networks with constant memory using a new
+  execution algorithm.
+\newblock \emph{arXiv preprint arXiv:2002.05645}.
+
+\bibitem[{{PyTorch Hub}()}]{torchhub}
+{PyTorch Hub}.
+\newblock {PyTorch} {H}ub.
+\newblock \url{https://pytorch.org/hub/}.
+\newblock Accessed: 2021-10-04.
+
+\bibitem[{Radford et~al.(2018)Radford, Narasimhan, Salimans, and
+  Sutskever}]{gpt}
+Alec Radford, Karthik Narasimhan, Tim Salimans, and Ilya Sutskever. 2018.
+\newblock \href
+  {https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf}
+  {Improving language understanding by generative pre-training}.
+
+\bibitem[{Radford et~al.(2019)Radford, Wu, Child, Luan, Amodei, and
+  Sutskever}]{gpt2}
+Alec Radford, Jeff Wu, Rewon Child, David Luan, Dario Amodei, and Ilya
+  Sutskever. 2019.
+\newblock Language models are unsupervised multitask learners.
+
+\bibitem[{Rae et~al.(2021)Rae, Borgeaud, Cai, Millican, Hoffmann, Song,
+  Aslanides, Henderson, Ring, Young, Rutherford, Hennigan, Menick, Cassirer,
+  Powell, van~den Driessche, Hendricks, Rauh, Huang, Glaese, Welbl, Dathathri,
+  Huang, Uesato, Mellor, Higgins, Creswell, McAleese, Wu, Elsen, Jayakumar,
+  Buchatskaya, Budden, Sutherland, Simonyan, Paganini, Sifre, Martens, Li,
+  Kuncoro, Nematzadeh, Gribovskaya, Donato, Lazaridou, Mensch, Lespiau,
+  Tsimpoukelli, Grigorev, Fritz, Sottiaux, Pajarskas, Pohlen, Gong, Toyama,
+  de~Masson~d'Autume, Li, Terzi, Mikulik, Babuschkin, Clark, de~Las~Casas, Guy,
+  Jones, Bradbury, Johnson, Hechtman, Weidinger, Gabriel, Isaac, Lockhart,
+  Osindero, Rimell, Dyer, Vinyals, Ayoub, Stanway, Bennett, Hassabis,
+  Kavukcuoglu, and Irving}]{gopher}
+Jack~W. Rae, Sebastian Borgeaud, Trevor Cai, Katie Millican, Jordan Hoffmann,
+  H.~Francis Song, John Aslanides, Sarah Henderson, Roman Ring, Susannah Young,
+  Eliza Rutherford, Tom Hennigan, Jacob Menick, Albin Cassirer, Richard Powell,
+  George van~den Driessche, Lisa~Anne Hendricks, Maribeth Rauh, Po{-}Sen Huang,
+  Amelia Glaese, Johannes Welbl, Sumanth Dathathri, Saffron Huang, Jonathan
+  Uesato, John Mellor, Irina Higgins, Antonia Creswell, Nat McAleese, Amy Wu,
+  Erich Elsen, Siddhant~M. Jayakumar, Elena Buchatskaya, David Budden, Esme
+  Sutherland, Karen Simonyan, Michela Paganini, Laurent Sifre, Lena Martens,
+  Xiang~Lorraine Li, Adhiguna Kuncoro, Aida Nematzadeh, Elena Gribovskaya,
+  Domenic Donato, Angeliki Lazaridou, Arthur Mensch, Jean{-}Baptiste Lespiau,
+  Maria Tsimpoukelli, Nikolai Grigorev, Doug Fritz, Thibault Sottiaux, Mantas
+  Pajarskas, Toby Pohlen, Zhitao Gong, Daniel Toyama, Cyprien
+  de~Masson~d'Autume, Yujia Li, Tayfun Terzi, Vladimir Mikulik, Igor
+  Babuschkin, Aidan Clark, Diego de~Las~Casas, Aurelia Guy, Chris Jones, James
+  Bradbury, Matthew Johnson, Blake~A. Hechtman, Laura Weidinger, Iason Gabriel,
+  William~S. Isaac, Edward Lockhart, Simon Osindero, Laura Rimell, Chris Dyer,
+  Oriol Vinyals, Kareem Ayoub, Jeff Stanway, Lorrayne Bennett, Demis Hassabis,
+  Koray Kavukcuoglu, and Geoffrey Irving. 2021.
+\newblock \href {http://arxiv.org/abs/2112.11446} {Scaling language models:
+  Methods, analysis {\&} insights from training gopher}.
+\newblock \emph{CoRR}, abs/2112.11446.
+
+\bibitem[{Raffel(2021)}]{raffel2021call}
+Colin Raffel. 2021.
+\newblock \href
+  {https://colinraffel.com/blog/a-call-to-build-models-like-we-build-open-source-software.html}
+  {A call to build models like we build open-source software}.
+
+\bibitem[{Rajbhandari et~al.(2021)Rajbhandari, Ruwase, Rasley, Smith, and
+  He}]{rajbhandari2021zero}
+Samyam Rajbhandari, Olatunji Ruwase, Jeff Rasley, Shaden Smith, and Yuxiong He.
+  2021.
+\newblock Zero-infinity: Breaking the gpu memory wall for extreme scale deep
+  learning.
+\newblock In \emph{Proceedings of the International Conference for High
+  Performance Computing, Networking, Storage and Analysis}, pages 1--14.
+
+\bibitem[{Ren et~al.(2021)Ren, Rajbhandari, Aminabadi, Ruwase, Yang, Zhang, Li,
+  and He}]{zerooffload}
+Jie Ren, Samyam Rajbhandari, Reza~Yazdani Aminabadi, Olatunji Ruwase, Shuangyan
+  Yang, Minjia Zhang, Dong Li, and Yuxiong He. 2021.
+\newblock \href {http://arxiv.org/abs/2101.06840} {Zero-offload: Democratizing
+  billion-scale model training}.
+
+\bibitem[{Ryabinin et~al.(2021)Ryabinin, Dettmers, Diskin, and
+  Borzunov}]{ryabinin2021swarm}
+Max Ryabinin, Tim Dettmers, Michael Diskin, and Alexander Borzunov. 2021.
+\newblock Swarm parallelism: Training large models can be surprisingly
+  communication-efficient.
+
+\bibitem[{Ryabinin and Gusev(2020)}]{hivemind_dmoe}
+Max Ryabinin and Anton Gusev. 2020.
+\newblock \href
+  {https://proceedings.neurips.cc/paper/2020/file/25ddc0f8c9d3e22e03d3076f98d83cb2-Paper.pdf}
+  {Towards crowdsourced training of large neural networks using decentralized
+  mixture-of-experts}.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~33, pages 3659--3672. Curran Associates, Inc.
+
+\bibitem[{Sung et~al.(2021)Sung, Nair, and Raffel}]{sung2021training}
+Yi-Lin Sung, Varun Nair, and Colin Raffel. 2021.
+\newblock Training neural networks with fixed sparse masks.
+\newblock \emph{Advances in Neural Information Processing Systems}.
+
+\bibitem[{{TensorFlow Hub}()}]{tfhub}
+{TensorFlow Hub}.
+\newblock {TensorFlow} {H}ub.
+\newblock \url{https://www.tensorflow.org/hub}.
+\newblock Accessed: 2021-10-04.
+
+\bibitem[{Wolf et~al.(2020)Wolf, Debut, Sanh, Chaumond, Delangue, Moi, Cistac,
+  Rault, Louf, Funtowicz, Davison, Shleifer, von Platen, Ma, Jernite, Plu, Xu,
+  Scao, Gugger, Drame, Lhoest, and Rush}]{wolf-etal-2020-transformers}
+Thomas Wolf, Lysandre Debut, Victor Sanh, Julien Chaumond, Clement Delangue,
+  Anthony Moi, Pierric Cistac, Tim Rault, Rémi Louf, Morgan Funtowicz, Joe
+  Davison, Sam Shleifer, Patrick von Platen, Clara Ma, Yacine Jernite, Julien
+  Plu, Canwen Xu, Teven~Le Scao, Sylvain Gugger, Mariama Drame, Quentin Lhoest,
+  and Alexander~M. Rush. 2020.
+\newblock \href {https://www.aclweb.org/anthology/2020.emnlp-demos.6}
+  {Transformers: State-of-the-art natural language processing}.
+\newblock In \emph{Proceedings of the 2020 Conference on Empirical Methods in
+  Natural Language Processing: System Demonstrations}, pages 38--45, Online.
+  Association for Computational Linguistics.
+
+\bibitem[{Yong and Nikoulina(2022)}]{yong_adapting}
+Zheng-Xin Yong and Vassilina Nikoulina. 2022.
+\newblock \href {https://doi.org/10.48550/ARXIV.2204.04873} {Adapting
+  bigscience multilingual model to unseen languages}.
+
+\bibitem[{Zeng et~al.(2022)Zeng, Liu, Du, Ding, Zheng, Lai, Wang, Yang, Yu,
+  Zhang, Zheng, Xia, Xu, Tam, Dong, Ma, He, Sun, Zhai, Chen, Zeng, Han, Zhao,
+  Liu, Xue, Wang, Shan, Jiang, Guo, Zhang, and Tang}]{zeng2020glm}
+Aohan Zeng, Xiao Liu, Zhengxiao Du, Ming Ding, Qinkai Zheng, Hanyu Lai, Zihan
+  Wang, Zhuoyi Yang, Jifan Yu, Xiaohan Zhang, Wendi Zheng, Xiao Xia, Yifan Xu,
+  Weng~Lam Tam, Yuxiao Dong, Zixuan Ma, Jiaao He, Zhenbo Sun, Jidong Zhai,
+  Wenguang Chen, Guoyang Zeng, Xu~Han, Weilin Zhao, Zhiyuan Liu, Yufei Xue,
+  Shan Wang, Jiecai Shan, Haohan Jiang, Zhengang Guo, Peng Zhang, and Jie Tang.
+  2022.
+\newblock \href {http://keg.cs.tsinghua.edu.cn/glm-130b/posts/glm-130b/}
+  {{GLM-130B}: An open bilingual pre-trained model}.
+
+\bibitem[{Zeng et~al.(2021)Zeng, Ren, Su, Wang, Liao, Wang, Jiang, Yang, Wang,
+  Zhang, Li, Gong, Yao, Huang, Wang, Yu, Guo, Yu, Zhang, Wang, Tao, Yan, Yi,
+  Peng, Jiang, Zhang, Deng, Zhang, Lin, Zhang, Zhang, Guo, Gu, Fan, Wang, Jin,
+  Liu, and Tian}]{pangua}
+Wei Zeng, Xiaozhe Ren, Teng Su, Hui Wang, Yi~Liao, Zhiwei Wang, Xin Jiang,
+  ZhenZhang Yang, Kaisheng Wang, Xiaoda Zhang, Chen Li, Ziyan Gong, Yifan Yao,
+  Xinjing Huang, Jun Wang, Jianfeng Yu, Qi~Guo, Yue Yu, Yan Zhang, Jin Wang,
+  Hengtao Tao, Dasen Yan, Zexuan Yi, Fang Peng, Fangqing Jiang, Han Zhang,
+  Lingfeng Deng, Yehong Zhang, Zhe Lin, Chao Zhang, Shaojie Zhang, Mingyue Guo,
+  Shanzhi Gu, Gaojun Fan, Yaowei Wang, Xuefeng Jin, Qun Liu, and Yonghong Tian.
+  2021.
+\newblock \href {http://arxiv.org/abs/2104.12369} {Pangu-{\(\alpha\)}:
+  Large-scale autoregressive pretrained chinese language models with
+  auto-parallel computation}.
+\newblock \emph{CoRR}, abs/2104.12369.
+
+\bibitem[{Zhang et~al.(2022)Zhang, Roller, Goyal, Artetxe, Chen, Chen, Dewan,
+  Diab, Li, Lin, Mihaylov, Ott, Shleifer, Shuster, Simig, Koura, Sridhar, Wang,
+  and Zettlemoyer}]{opt}
+Susan Zhang, Stephen Roller, Naman Goyal, Mikel Artetxe, Moya Chen, Shuohui
+  Chen, Christopher Dewan, Mona Diab, Xian Li, Xi~Victoria Lin, Todor Mihaylov,
+  Myle Ott, Sam Shleifer, Kurt Shuster, Daniel Simig, Punit~Singh Koura, Anjali
+  Sridhar, Tianlu Wang, and Luke Zettlemoyer. 2022.
+\newblock \href {https://doi.org/10.48550/ARXIV.2205.01068} {Opt: Open
+  pre-trained transformer language models}.
+
+\end{thebibliography}

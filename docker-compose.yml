@@ -46,20 +46,28 @@ services:
     ports:
       - 9666:9666
 
-  # pet:
-  #   image: learningathome/petals:main
-  #   command: python -m petals.cli.run_server bigscience/bloom-petals --cache_dir /pet --num_blocks 1 --torch_dtype bfloat16 --throughput 1
-  #   restart: 'no'
-  #   network_mode: 'host'
-  #   ipc: host
-  #   volumes:
-  #     - pet:/pet
-  #   # deploy:
-  #   #   resources:
-  #   #     reservations:
-  #   #       devices:
-  #   #         - driver: nvidia
-  #   #           capabilities: [gpu]
+  pet:
+    image: learningathome/petals:main
+    command: python -m petals.cli.run_server bigscience/bloom-7b1-petals --cache_dir /pet --num_blocks 1 --torch_dtype float32 --throughput 1
+    restart: 'no'
+    network_mode: 'host'
+    ipc: host
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 2000M
+        # reservations:
+        #   cpus: '0.25'
+        #   memory: 20M
+    volumes:
+      - pet:/pet
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           capabilities: [gpu]
 
   pit:
     image: ghcr.io/0-5788719150923125/src:1
@@ -95,7 +103,8 @@ services:
 #       - ./vtx:/vtx
 #       - ipfs:/ipfs
 #       - ./001-test.sh:/container-init.d/001-test.sh
-# volumes:
-#   ipfs:
+volumes:
+  pet:
+  # ipfs:
 # comet:
 # fuse:

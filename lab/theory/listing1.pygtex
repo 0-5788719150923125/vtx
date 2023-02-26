@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Initialize distributed BLOOM model}
+\PYG{n}{model} \PYG{o}{=} \PYG{n}{AutoModelForCausalLM}\PYG{o}{.}\PYG{n}{from\PYGZus{}pretrained}\PYG{p}{(}
+    \PYG{l+s+s2}{\PYGZdq{}bigscience/distributed\PYGZhy{}bloom\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{input\PYGZus{}ids} \PYG{o}{=} \PYG{n}{tokenizer}\PYG{p}{(}\PYG{n}{prefix\PYGZus{}text}\PYG{p}{)}
+
+\PYG{k}{with} \PYG{n}{model}\PYG{o}{.}\PYG{n}{inference\PYGZus{}session}\PYG{p}{()} \PYG{k}{as} \PYG{n}{session}\PYG{p}{:}
+    \PYG{c+c1}{\PYGZsh{} Session maintains a list of servers that}
+    \PYG{c+c1}{\PYGZsh{} remember attention KV from previous steps}
+    \PYG{k}{for} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{sequence\PYGZus{}length}\PYG{p}{):}
+        \PYG{c+c1}{\PYGZsh{} Compute the word embeddings locally}
+        \PYG{n}{hidden} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{word\PYGZus{}embeddings}\PYG{p}{(}\PYG{n}{input\PYGZus{}ids}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} Run distributed Transformer blocks,}
+        \PYG{c+c1}{\PYGZsh{} store attention KV for future steps}
+        \PYG{n}{hidden} \PYG{o}{=} \PYG{n}{session}\PYG{o}{.}\PYG{n}{step}\PYG{p}{(}\PYG{n}{hidden}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} Generate the next token locally}
+        \PYG{n}{probs} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{lm\PYGZus{}head}\PYG{p}{(}\PYG{n}{hidden}\PYG{p}{)}
+        \PYG{n}{input\PYGZus{}ids} \PYG{o}{=} \PYG{n}{sample\PYGZus{}next\PYGZus{}token}\PYG{p}{(}\PYG{n}{probs}\PYG{p}{)}
+\end{Verbatim}

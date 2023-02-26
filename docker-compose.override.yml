@@ -2,5 +2,11 @@ version: '3.9'
 
 services:
   vtx:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
     environment:
       FOCUS: toe

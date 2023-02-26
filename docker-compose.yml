@@ -6,13 +6,6 @@ services:
     command: nodemon --ext '*.py, *.yml' --ignore "models/*" --ignore "*.json" --exec python3 main.py
     restart: 'always'
     user: 1000:1000
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: [gpu]
-              # device_ids: ['0']
     ulimits:
       memlock: -1
       stack: 67108864
@@ -48,7 +41,7 @@ services:
 
   pet:
     image: learningathome/petals:main
-    command: python -m petals.cli.run_server bigscience/bloom-7b1-petals --cache_dir /pet --num_blocks 1 --torch_dtype float32 --throughput 1
+    command: python -m petals.cli.run_server bigscience/bloom-7b1-petals --cache_dir /bloom --num_blocks 1 --torch_dtype float32
     restart: 'no'
     network_mode: 'host'
     ipc: host
@@ -61,7 +54,7 @@ services:
         #   cpus: '0.25'
         #   memory: 20M
     volumes:
-      - pet:/pet
+      - bloom:/bloom
     # deploy:
     #   resources:
     #     reservations:
@@ -104,7 +97,7 @@ services:
 #       - ipfs:/ipfs
 #       - ./001-test.sh:/container-init.d/001-test.sh
 volumes:
-  pet:
+  bloom:
   # ipfs:
 # comet:
 # fuse:

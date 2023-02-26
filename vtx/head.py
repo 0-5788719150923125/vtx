@@ -156,7 +156,7 @@ def gen(bias=None, ctx=None, failures=0):
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
         pattern = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
         if group is None or propulsion in group[3] or pattern.match(group[3]):
-            if failures >= 10:
+            if failures >= 9:
                 raise Exception("failed to generate a response 10 times in a row")
             failures = failures + 1
             print("bad format, regenerating " + str(failures) + " time(s)")

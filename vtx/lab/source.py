@@ -24,6 +24,8 @@ async def check(channel):
         if state["message"] in messages[channel]:
             return await check(channel)
 
+        messages[channel].append(state["message"])
+
         chance = config["source"][channel].get("chance", 0.33)
         roll = random.random()
         if roll > chance:
@@ -40,9 +42,7 @@ async def check(channel):
         ]
         history = []
         for message in messages[channel]:
-            history.append(
-                propulsion + str(get_identity()) + ship + " " + state["message"]
-            )
+            history.append(propulsion + str(get_identity()) + ship + " " + message)
 
         context = prompt + history
 

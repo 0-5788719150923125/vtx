@@ -7,8 +7,8 @@ import os
 
 
 redacted_chance = 1
-response_probability = 10
-followup_probability = 10
+response_chance = 10
+followup_chance = 10
 
 
 # A class to control the entire Discord bot
@@ -124,14 +124,14 @@ class Client(discord.Client):
 
         # ignore messages from the bot
         if message.author == self.user:
-            if random.randint(0, 100) <= followup_probability:
-                response_probability == 100
+            if random.randint(0, 100) <= followup_chance:
+                chance == 1
             else:
                 return
 
         # generate responses
         if "gen" in message.content:
-            weight = 1
+            chance = 1
             bias = 530243004334604311
             try:
                 if message.content == "gen":
@@ -140,22 +140,23 @@ class Client(discord.Client):
             except:
                 pass
         else:
-            weight = random.randint(0, 100)
             # increase probability of a response if bot is mentioned
             if client.user.mentioned_in(message):
-                weight = random.randint(0, 15)  ## 66%
+                chance = random.randint(0, 15)  ## 66%
                 bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
-                weight = random.randint(0, 30)  ## 66%
+                chance = random.randint(0, 30)  ## 33%
                 bias = int(message.mentions[0].id)
+            else:
+                chance = random.randint(0, 100)
 
         # increase response probability in private channels
         if str(message.channel.type) == "private":
-            weight = 1
+            chance = 1
 
-        # check weight before generating a response
-        if weight > response_probability:
+        # check chance before generating a response
+        if chance > response_chance:
             return
 
         # generate a response from context and bias

@@ -6,6 +6,7 @@ import random
 import head
 import time
 import lab
+import pprint
 
 tasks = {}
 
@@ -16,6 +17,9 @@ async def main(loop):
     # Load the AI model at startup
     if head.ai == None:
         head.ai = await head.loader()
+
+    # print("getting tasks\n\n")
+    # pprint.pprint(asyncio.all_tasks())
 
     # Prune completed tasks
     for task in tasks.copy():

@@ -74,6 +74,22 @@ def transform_author(author):
         return False
 
 
+def transform_message(message):
+    matchers = [
+        r'(?:The ghost of )(?:<@\d*>)(?: suggests, \*")(.*)(?:"\*$)',
+        r'(?:<@\d*>)(?: says, \*")(.*)(?:"\*$)',
+        r'(?:<@\d*>)(?: would say, \*")(.*)(?:"\*$)',
+        r'(?:They said, \*")(.*)(?:"\*$)',
+    ]
+    for pattern in matchers:
+        matcher = re.compile(pattern)
+        if matcher.match(message):
+            group = re.search(matcher, message)
+            message = group[1]
+            break
+    return message
+
+
 def prepare_discord_messages():
     def sanitizer(string):
         sanitized = re.sub(
@@ -146,6 +162,7 @@ def prepare_discord_messages():
                                                     "@" + mention["name"],
                                                     "<@" + str(mention["id"]) + ">",
                                                 )
+                                        sanitized = transform_message(sanitized)
                                         content = (
                                             propulsion
                                             + reply_author_id
@@ -168,7 +185,7 @@ def prepare_discord_messages():
                                         "@" + mention["name"],
                                         "<@" + str(mention["id"]) + ">",
                                     )
-
+                            sanitized = transform_message(sanitized)
                             content = propulsion + author_id + ship + " " + sanitized
                             txt_file.write(f"{content}\n".format(content))
                             if position == 0 and line is not None:

@@ -83,7 +83,7 @@ def build_context(message):
 
 # Generate a completion from bias and context
 @to_thread
-def gen(bias=None, ctx=None):
+def gen(bias=None, ctx=None, failures=0):
 
     prompt = propulsion
 
@@ -148,18 +148,20 @@ def gen(bias=None, ctx=None):
             seed=None,
         )
     except Exception as e:
-        print(e)
-        print("the model crashed")
-        return
+        return print(e)
+
     try:
         output = None
         generation = completion[0][len(history) :]
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
         pattern = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
         if group is None or propulsion in group[3] or pattern.match(group[3]):
-            print("bad format, regenerating")
+            if failures >= 10:
+                raise Exception("failed to generate a response 10 times in a row")
+            failures = failures + 1
+            print("bad format, regenerating " + str(failures) + " time(s)")
             time.sleep(5)
-            output = asyncio.run(gen(bias, ctx))
+            output = asyncio.run(gen(bias, ctx, failures))
 
         if output is None:
             output = [group[2], group[3]]

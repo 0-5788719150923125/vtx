@@ -238,11 +238,9 @@ async def subscribe():
     global client
     client = Client(intents=intents)
 
-    # def setup_events(self):
     # Handle bots that update messages token-by-token
     @client.event
     async def on_message_edit(before, after):
-        print(before.content)
         print(after.content)
         if after.content[:1] not in bullets:
             head.build_context(str(after.author.id) + ship + " " + after.content)

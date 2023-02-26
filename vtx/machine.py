@@ -23,7 +23,7 @@ async def main(loop):
 
     # Prune completed tasks
     for task in tasks.copy():
-        if tasks[task].done():
+        if tasks[task].done() or tasks[task].cancelled():
             del tasks[task]
 
     # Get configs, create tasks, and append to task queue

@@ -24,12 +24,12 @@ async def check(channel):
         if state["message"] in messages[channel]:
             return await check(channel)
 
-        messages[channel].append(state["message"])
-
         chance = config["source"][channel].get("chance", 0.33)
         roll = random.random()
         if roll > chance:
             return await check(channel)
+
+        messages[channel].append(state["message"])
 
         bot = get_identity()
 

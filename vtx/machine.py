@@ -66,16 +66,6 @@ def loop_in_thread(loop):
 loop = asyncio.get_event_loop()
 t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
 
-
-# async def this_thing(loop):
-#     loop.create_task(lab.telegram.create_bot_factory())
-
-
-# loop.create_task(lab.telegram.create_bot_factory())
-# asyncio.run()
-# a = threading.Thread(None, lab.telegram.subscribe(), args=(loop,), daemon=True)
-# a.start()
-
 while True:
     time.sleep(5)
     if not t.is_alive():

@@ -145,7 +145,7 @@ def gen(bias=None, ctx=None, failures=0):
             renormalize_logits=True,
             eos_token_id=eos,
             max_time=59,
-            seed=None,
+            seed=random.randint(0, 2**32 - 1),
         )
     except Exception as e:
         return print(e)

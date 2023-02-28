@@ -9,30 +9,27 @@ import re
 
 # Subscribe to a single subreddit
 async def subscribe(subreddit):
+    try:
+        async with asyncpraw.Reddit(
+            client_id=os.environ["REDDITCLIENT"],
+            client_secret=os.environ["REDDITSECRET"],
+            user_agent="u/" + os.environ["REDDITAGENT"],
+            username=os.environ["REDDITAGENT"],
+            password=os.environ["REDDITPASSWORD"],
+        ) as reddit:
+            try:
+                chance = config["reddit"][subreddit].get("chance", 0.01)
+                watch = []
 
-    async with asyncpraw.Reddit(
-        client_id=os.environ["REDDITCLIENT"],
-        client_secret=os.environ["REDDITSECRET"],
-        user_agent="u/" + os.environ["REDDITAGENT"],
-        username=os.environ["REDDITAGENT"],
-        password=os.environ["REDDITPASSWORD"],
-    ) as reddit:
+                if "watch" not in config["reddit"][subreddit]:
+                    return
+                if config["reddit"][subreddit]["watch"] == True:
+                    watch.append(subreddit)
+                else:
+                    return
 
-        try:
-            chance = config["reddit"][subreddit].get("chance", 0.01)
-            watch = []
-
-            if "watch" not in config["reddit"][subreddit]:
-                return
-            if config["reddit"][subreddit]["watch"] == True:
-                watch.append(subreddit)
-            else:
-                return
-
-            subreddit = await reddit.subreddit(subreddit, fetch=True)
-            async for comment in subreddit.stream.comments(skip_existing=True):
-                try:
-
+                subreddit = await reddit.subreddit(subreddit, fetch=True)
+                async for comment in subreddit.stream.comments(skip_existing=True):
                     roll = random.random()
                     if roll >= chance:
                         return
@@ -133,10 +130,12 @@ async def subscribe(subreddit):
                         + output
                     )
                     await comment.reply(output)
-                except Exception as e:
-                    print(e)
-        except Exception as e:
-            print(e)
+            except Exception as e:
+                print(e)
+                reddit.close()
+    except Exception as e:
+        print("reddit failure")
+        print(e)
 
 
 # format the output

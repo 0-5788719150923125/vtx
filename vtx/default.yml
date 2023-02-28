@@ -62,7 +62,7 @@ toe:
     batch_size: 3
     block_size: 444
     num_steps: 88888
-    warmup_steps: 0
+    warmup_steps: 1
     gradient_accumulation_steps: 6
     learning_rate: 0.000222 # FOLD
     weight_decay: 0.023 # CORE

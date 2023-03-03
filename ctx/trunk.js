@@ -74,50 +74,6 @@ const gun = Gun({
   axe: true
 })
 
-// Instantiate the brain
-const net = new brain.recurrent.LSTM({
-  hiddenLayers: [9],
-  inputSize: 23,
-  // maxPredictionLength: 2,
-  outputSize: 1
-})
-
-// Create a seed
-const seeds = []
-for (let i = 0; i < 100; i++) {
-  const length = Math.floor(Math.random() * 10) + 1
-  const inputs = []
-  for (let n = 0; n < length; n++) {
-    inputs.push(randomValueFromArray(['O', 'S']))
-  }
-  let output = 'O'
-  if (inputs[length - 1] === 'O') {
-    output = 'S'
-  }
-  const seed = {
-    input: inputs,
-    output: output
-  }
-  seeds.push(seed)
-}
-
-// console.log(seeds)
-
-// Train the model on the seed
-net.train(seeds, {
-  errorThresh: 0.01,
-  iterations: 10000,
-  // timeout: Infinity,
-  learningRate: 0.03,
-  log: (details) => console.log(details),
-  logPeriod: 2000
-})
-
-// LSTM prediction step
-const input = ['S', 'O', 'S', 'O', 'S']
-console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'given the input of ' + input)
-console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'i predict ' + net.run(input))
-
 // Generate credentials
 let user = null
 const identity = randomString(randomBetween(96, 128))
@@ -176,8 +132,9 @@ for (const channel of Object.entries(config)) {
             typeof payload.pubKey !== 'undefined'
           ) {
             const sender = await gun.user(`${payload.pubKey}`)
-            // if (typeof sender === 'undefined') return
-            message = await SEA.verify(payload.message, sender.pub)
+            if (typeof sender === 'undefined') {
+              message = payload.message
+            } else message = await SEA.verify(payload.message, sender.pub)
           } else {
             message = payload.message
           }
@@ -281,6 +238,51 @@ const state = gun
       // pass
     }
   })
+
+// Instantiate the brain
+const net = new brain.recurrent.LSTM({
+  hiddenLayers: [24],
+  inputSize: 23,
+  outputSize: 1
+})
+
+// Create some seeds
+const seeds = []
+console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'generated 100 random seeds')
+for (let i = 0; i < 100; i++) {
+  const length = Math.floor(Math.random() * 10) + 1
+  const inputs = []
+  for (let n = 0; n < length; n++) {
+    inputs.push(randomValueFromArray(['O', 'S']))
+  }
+  let output = 'O'
+  if (inputs[length - 1] === 'O') {
+    output = 'S'
+  }
+  const seed = {
+    input: inputs,
+    output: output
+  }
+  seeds.push(seed)
+}
+
+// Train the model on the seed
+net.train(seeds, {
+  errorThresh: 0.023,
+  iterations: 10000,
+  // timeout: Infinity,
+  learningRate: 0.001,
+  log: (details) => console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + details),
+  // callback: () =>
+  //   console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + Math.random().toString()),
+  // callbackPeriod: 500,
+  logPeriod: 10
+})
+
+// LSTM prediction step
+const input = ['S', 'O', 'S', 'O', 'S']
+console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'given the input of ' + input)
+console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'i predict ' + net.run(input))
 
 const nn = convertBrainToObject(net.toJSON())
 

@@ -110,14 +110,18 @@ async def subscribe(subreddit):
                     + " "
                     + generation[1]
                 )
-                daemon = get_daemon(generation[0])
-                mention = get_daemon(random.randint(1, 9999))["name"]
-                sanitized = re.sub(
-                    r"(?:<@)(\d+\s*\d*)(?:>)",
-                    f"{mention}",
-                    generation[1],
-                )
-                output = transformer([daemon["name"], sanitized])
+
+                if generation[0] == "[ERROR]":
+                    output = generation[1]
+                else:
+                    daemon = get_daemon(generation[0])
+                    mention = get_daemon(random.randint(1, 9999))["name"]
+                    sanitized = re.sub(
+                        r"(?:<@)(\d+\s*\d*)(?:>)",
+                        f"{mention}",
+                        generation[1],
+                    )
+                    output = transformer([daemon["name"], sanitized])
                 print(
                     bc.ROOT
                     + "<=== "

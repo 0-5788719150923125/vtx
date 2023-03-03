@@ -101,7 +101,10 @@ class Client(discord.Client):
                     bias = recent_author_id
 
                 generation = await head.gen(int(bias), context)
-                output = transformer([generation[0], generation[1]])
+                if generation[0] == "[ERROR]":
+                    output = generation[1]
+                else:
+                    output = transformer([generation[0], generation[1]])
 
                 print(output)
 
@@ -181,7 +184,10 @@ class Client(discord.Client):
         await asyncio.sleep(random.randint(2, 13))
         async with message.channel.typing():
             generation = await head.gen(bias)
-            output = transformer([generation[0], generation[1]])
+            if generation[0] == "[ERROR]":
+                output = generation[1]
+            else:
+                output = transformer([generation[0], generation[1]])
 
         # make random redactions
         if random.randint(0, 100) <= redacted_chance:

@@ -176,7 +176,7 @@ def gen(bias=None, ctx=None, failures=0):
     except Exception as e:
         print(e)
         error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
-        output = ["1055993037077106718", error]
+        output = ["[ERROR]", error]
     return output
 
 

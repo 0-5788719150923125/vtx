@@ -133,9 +133,9 @@ def gen(bias=None, ctx=None, failures=0):
             do_sample=True,
             min_length=23,
             max_new_tokens=max_new_tokens,
-            temperature=0.888,
-            top_k=40,
-            top_p=0.9,
+            temperature=1.23,
+            # top_k=40,
+            # top_p=0.9,
             return_as_list=True,
             num_beams=3,
             repetition_penalty=1.4,
@@ -154,10 +154,17 @@ def gen(bias=None, ctx=None, failures=0):
         output = None
         generation = completion[0][len(history) :]
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
-        pattern = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
-        if group is None or propulsion in group[3] or pattern.match(group[3]):
+        variables = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
+        broken_variables = re.compile("(\d*\s+\d*)")
+        if (
+            group is None
+            or propulsion in group[3]
+            or variables.match(group[3])
+            or broken_variables.match(group[3])
+        ):
             if failures >= 9:
                 raise Exception("failed to generate a response 10 times in a row")
+                return
             failures = failures + 1
             print("bad format, regenerating " + str(failures) + " time(s)")
             time.sleep(5)
@@ -168,5 +175,63 @@ def gen(bias=None, ctx=None, failures=0):
 
     except Exception as e:
         print(e)
-        output = ["1055993037077106718", completion[0]]
+        error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
+        output = ["1055993037077106718", error]
     return output
+
+
+bullets = {
+    "⠠",
+    "⠏",
+    "⠲",
+    "⠢",
+    "⠐",
+    "⠕",
+    "⠥",
+    "⠭",
+    "⠞",
+    "⠱",
+    "⠟",
+    "⠒",
+    "⠇",
+    "⠙",
+    "⠮",
+    "⠪",
+    "⠑",
+    "⠷",
+    "⠿",
+    "⠊",
+    "⠂",
+    "⠅",
+    "⠡",
+    "⠬",
+    "⠝",
+    "⠰",
+    "⠽",
+    "⠻",
+    "⠧",
+    "⠃",
+    "⠼",
+    "⠹",
+    "⠌",
+    "⠵",
+    "⠄",
+    "⠎",
+    "⠫",
+    "⠳",
+    "⠯",
+    "⠗",
+    "⠉",
+    "⠁",
+    "⠛",
+    "⠸",
+    "⠋",
+    "⠺",
+    "⠔",
+    "⠓",
+    "⠜",
+    "⠆",
+    "⠍",
+    " ",
+    "\n",
+}

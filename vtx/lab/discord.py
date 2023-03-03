@@ -5,6 +5,7 @@ import asyncio
 import random
 import head
 import os
+import pprint
 
 client = None
 redacted_chance = 1
@@ -122,7 +123,7 @@ class Client(discord.Client):
 
     # check every Discord message
     async def on_message(self, message):
-
+        pprint.pprint(message)
         reply = random.choice([True, False])
 
         bias = 0
@@ -200,8 +201,6 @@ class Client(discord.Client):
                 await message.channel.send(output)
         except:
             print(bc.CORE + "Failed to send Discord message." + ad.TEXT)
-            error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
-            await message.channel.send(error)
 
 
 # format the output
@@ -247,60 +246,3 @@ async def subscribe():
 
     if "discord" in config:
         await client.start(discord_token)
-
-
-bullets = {
-    "⠠",
-    "⠏",
-    "⠲",
-    "⠢",
-    "⠐",
-    "⠕",
-    "⠥",
-    "⠭",
-    "⠞",
-    "⠱",
-    "⠟",
-    "⠒",
-    "⠇",
-    "⠙",
-    "⠮",
-    "⠪",
-    "⠑",
-    "⠷",
-    "⠿",
-    "⠊",
-    "⠂",
-    "⠅",
-    "⠡",
-    "⠬",
-    "⠝",
-    "⠰",
-    "⠽",
-    "⠻",
-    "⠧",
-    "⠃",
-    "⠼",
-    "⠹",
-    "⠌",
-    "⠵",
-    "⠄",
-    "⠎",
-    "⠫",
-    "⠳",
-    "⠯",
-    "⠗",
-    "⠉",
-    "⠁",
-    "⠛",
-    "⠸",
-    "⠋",
-    "⠺",
-    "⠔",
-    "⠓",
-    "⠜",
-    "⠆",
-    "⠍",
-    " ",
-    "\n",
-}

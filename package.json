@@ -13,7 +13,7 @@
     "url": "https://gitlab.com/the-resistance/ghost/issues"
   },
   "dependencies": {
-    "brain.js": "^2.0.0-beta.17",
+    "brain.js": "^2.0.0-beta.18",
     "express": "^4.18.2",
     "gun": "^0.2020.1239",
     "ipfs-http-client": "^60.0.0",

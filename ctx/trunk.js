@@ -74,10 +74,76 @@ const gun = Gun({
   axe: true
 })
 
+// Instantiate the brain
+const net = new brain.recurrent.LSTM({
+  hiddenLayers: [9],
+  inputSize: 23,
+  // maxPredictionLength: 2,
+  outputSize: 1
+})
+
+// Create a seed
+const seeds = []
+for (let i = 0; i < 100; i++) {
+  const length = Math.floor(Math.random() * 10) + 1
+  const inputs = []
+  for (let n = 0; n < length; n++) {
+    inputs.push(randomValueFromArray(['O', 'S']))
+  }
+  let output = 'O'
+  if (inputs[length - 1] === 'O') {
+    output = 'S'
+  }
+  const seed = {
+    input: inputs,
+    output: output
+  }
+  seeds.push(seed)
+}
+
+// console.log(seeds)
+
+// Train the model on the seed
+net.train(seeds, {
+  errorThresh: 0.01,
+  iterations: 10000,
+  // timeout: Infinity,
+  learningRate: 0.03,
+  log: (details) => console.log(details),
+  logPeriod: 2000
+})
+
+// LSTM prediction step
+const input = ['S', 'O', 'S', 'O', 'S']
+console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'given the input of ' + input)
+console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'i predict ' + net.run(input))
+
 // Generate credentials
 let user = null
 const identity = randomString(randomBetween(96, 128))
 const identifier = randomString(64)
+
+// Create a GUN user
+let pair = null
+async function authenticateUser(identity, identifier) {
+  try {
+    await delay(3000)
+    user = gun.user()
+    user.auth(identifier, identity, async (data) => {
+      if (data.err) {
+        user.create(identifier, identity, async (data) => {
+          console.log('Creating GUN user: ~' + data.pub)
+          await authenticateUser(identity, identifier)
+        })
+      } else {
+        pair = user.pair()
+        console.log('Authenticated GUN user: ~' + pair.pub)
+      }
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 // Authenticate with GUN
 async function cockpit(identity, identifier) {
@@ -157,27 +223,6 @@ app.get('/daemon', (req, res) => {
   res.json({ name: daemon })
 })
 
-// Ingest a seed
-const seed = JSON.parse(fs.readFileSync('ctx/seed.json', 'utf-8'))
-
-// Instantiate the brain
-const net = new brain.recurrent.LSTM({
-  hiddenLayers: [4],
-  inputSize: 5,
-  maxPredictionLength: 2,
-  outputSize: 1
-})
-
-// Train the model on the seed
-net.train(seed, {
-  errorThresh: 0.1,
-  iterations: 10000,
-  // timeout: Infinity,
-  learningRate: 0.3,
-  log: (details) => console.log(details),
-  logPeriod: 2000
-})
-
 function convertBrainToObject(obj) {
   if (Array.isArray(obj)) {
     const newObj = {}
@@ -218,7 +263,7 @@ function restoreBrainFromObject(obj) {
 
 // Publish the brain at the root
 app.get('/', (req, res) => {
-  net.fromJSON(JSON.parse(JSON.stringify(payload)))
+  // net.fromJSON(JSON.parse(JSON.stringify(payload)))
   res.json(payload)
 })
 
@@ -244,11 +289,6 @@ const nnObject = JSON.parse(JSON.stringify(nn))
 // Place brain in GUN at startup
 state.put(nnObject)
 
-// LSTM prediction step
-console.log(
-  bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'i predict ' + net.run(['.', '..'])
-)
-
 // Generate a cryptographically-secure random string
 function randomString(length) {
   let result = ''
@@ -260,28 +300,6 @@ function randomString(length) {
     counter += 1
   }
   return result
-}
-
-// Create a GUN user
-let pair = null
-async function authenticateUser(identity, identifier) {
-  try {
-    await delay(3000)
-    user = gun.user()
-    user.auth(identifier, identity, async (data) => {
-      if (data.err) {
-        user.create(identifier, identity, async (data) => {
-          console.log('Creating GUN user: ~' + data.pub)
-          await authenticateUser(identity, identifier)
-        })
-      } else {
-        pair = user.pair()
-        console.log('Authenticated GUN user: ~' + pair.pub)
-      }
-    })
-  } catch (err) {
-    console.error(err)
-  }
 }
 
 const seededPRNG = (str) => {

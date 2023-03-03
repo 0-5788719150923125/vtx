@@ -5,7 +5,6 @@ import asyncio
 import random
 import head
 import os
-import pprint
 
 client = None
 redacted_chance = 1
@@ -123,13 +122,13 @@ class Client(discord.Client):
 
     # check every Discord message
     async def on_message(self, message):
-        pprint.pprint(message)
+
         reply = random.choice([True, False])
 
         bias = 0
         output = "ERROR: Me Found."
 
-        if message.content[:1] in bullets:
+        if message.content[:1] in head.bullets:
             return
 
         # every message is added to local cache, for building prompt
@@ -241,7 +240,7 @@ async def subscribe():
     @client.event
     async def on_message_edit(before, after):
         print(after.content)
-        if after.content[:1] not in bullets:
+        if after.content[:1] not in head.bullets:
             head.build_context(str(after.author.id) + ship + " " + after.content)
 
     if "discord" in config:

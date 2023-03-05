@@ -1,0 +1,40 @@
+\begin{algorithm}[h]
+\caption{\oursvtwo + Self-Consistency}
+\label{alg:algorithm_palm}
+\textbf{Input}: 
+Questions $X$ for test dataset; pretrained language model $M$; reasoning extraction template $\tau_{r}$ and answer extraction template $\tau_a$ for \ours; number of few-shot prompt templates $N_p$; number of exemplars per few-shot prompt template $N_e$; number of text output samples per few-shot prompt template $N_a$ using random sampling strategy K\\
+\textbf{Output}: Answer predictions ${\hat{Y}}$ for test dataset
+\begin{algorithmic}[1]
+\STATE \textit{\textbf{\# Exemplar Creation}} \algcomment{$N_p*N_e$ questions are evaluated using \ours}
+\STATE $P = \emptyset$ \algcomment{\# Initialize an empty set of few-shot prompt templates}
+\FOR{each $i=1\rightarrow N_p$}
+\STATE $P_i = $``'' \algcomment{\# Initialize an empty string for a few-shot template}
+\FOR{each $j=1\rightarrow N_e$}
+\STATE Randomly sample a question $x\sim X$
+\STATE $x' \leftarrow \tau_r(x)$ \algcomment{ \# Create a prompt for reasoning extraction}
+\STATE $z\leftarrow GreedyDecoding(x'; M)$ \algcomment{ \# Reasoning extraction}
+\STATE $z'\leftarrow$ $\tau_a(x', z)$ \algcomment{\# Create a prompt for answer extraction}
+\STATE $\hat{y} \leftarrow GreedyDecoding(z'; M)$ \algcomment{\# Answer extraction}
+\STATE $P_i \leftarrow Concat(P_i, z', \hat{y})$ \algcomment{\# Concatenate question, reasoning, answer as an exemplar and append to the few-shot template}
+\ENDFOR
+\STATE $P \leftarrow P \cup P_i$ \algcomment{ \# Store the created few-shot template into list}
+\ENDFOR
+\STATE
+\STATE \textit{\textbf{\# Self-Consistency}} \algcomment{$N_p*N_a$ samples are generated per question}
+\STATE {$\hat{Y} = \emptyset$}
+\FOR{each $x$ in $X$}
+\STATE {$\Omega = \emptyset$}
+\STATE \lighttext{\# Generate $N_p * N_a$ reasoning paths by random sampling}
+\FOR{each $k = 1 \rightarrow N_p$}
+\FOR{each $l = 1 \rightarrow N_a$}
+\STATE $z \leftarrow RandomSampling(x, P_i; M, K)$ \algcomment{ \# Random sampling}
+\STATE \lighttext{\# Answer extraction prompting is no more needed thanks to self-created exemplars}
+\STATE $\hat{y} \leftarrow ParseAnswer(z)$
+\STATE $\Omega \leftarrow \Omega \cup \hat{y}$
+\ENDFOR
+\ENDFOR
+\STATE $\Tilde{y} \leftarrow Mode(\Omega)$ \algcomment{\# Majority Voting}
+\STATE $\hat{Y} \leftarrow \hat{Y} \cup \Tilde{y}$
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}

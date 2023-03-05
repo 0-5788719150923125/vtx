@@ -1,0 +1,240 @@
+\begin{table}[t]\centering
+\caption{Example outputs by Zero-Shot-CoT at various language models (GPT-3 models).}
+\label{tab:example_table_model_size_1}
+\begin{tabular}{|p{0.2\textwidth}|p{0.7\textwidth}|}
+\toprule
+Question &
+Q: Adam bought 2 boxes of chocolate candy and 5 boxes of caramel candy. If each box has 4 pieces inside it, how much candy did he have total? \myspace \bblue{(GT : 28)}\\
+
+\midrule
+
+Instruct GPT-3 \par 
+%(0.3B) \par 
+(text-ada-001) &
+\textbf{A: Let's think step by step.} 
+
+If each box has 4 pieces inside it, Adam would have 4 pieces of candy in it. 
+
+\textbf{Therefore, the answer (arabic numerals) is} :5
+\ngmark\\
+
+\midrule
+
+Instruct GPT-3 \par 
+%(1.3B) \par
+(text-babbage-001) &
+\textbf{A: Let's think step by step.} 
+
+Adam bought 2 boxes of candy and 5 boxes of caramel candy. Each box has 4 pieces inside it. So he would have had 18 pieces of candy.
+
+\textbf{Therefore, the answer (arabic numerals) is} 18.
+\ngmark\\
+
+\midrule
+
+Instruct GPT-3 \par 
+%(6.7B) \par
+(text-curie-001) &
+\textbf{A: Let's think step by step.}
+
+Adam bought 2 boxes of chocolate candy and 5 boxes of caramel candy.
+
+Each box of candy has 4 pieces inside it.
+
+So, Adam bought 10 pieces of candy. 
+
+\textbf{Therefore, the answer (arabic numerals) is} 60.
+\ngmark\\
+
+\midrule
+
+Instruct GPT-3 \par
+%(175B) \par
+(text-davinci-002)  &
+\textbf{A: Let's think step by step.} 
+Adam bought 2 boxes of chocolate candy and 5 boxes of caramel candy. 
+We know that each box has 4 pieces inside it. 
+So, we can multiply 2 by 4 to find out how many pieces of chocolate candy Adam bought. This will give us 8. 
+We can also multiply 5 by 4 to find out how many pieces of caramel candy Adam bought. This will give us 20. 
+Now, we can add 8 and 20 together to find out how much candy Adam bought in total. 
+8 + 20 = 28
+Adam bought 28 pieces of candy in 
+
+\textbf{Therefore, the answer (arabic numerals) is} 28.
+\okmark\\
+
+\midrule
+
+Original GPT-3 \par 
+(0.3B) (ada) &
+\textbf{A: Let's think step by step.} 
+
+1. Adam bought 2 boxes of chocolate candy and 5 boxes of caramel candy. If each box has 4 pieces inside it, how much candy did he have total?
+2. Adam bought 2 boxes of chocolate candy and 5 boxes of caramel candy. If each box has 4 pieces inside it, how much candy did he have total?
+3. Adam bought 2 boxes of chocolate candy and 5 boxes of caramel candy. If each box has 4 pieces inside it, how much candy did he have total?
+4. Adam bought 2 boxes of chocolate candy and 5 boxes of caramel candy. If each box has 4 pieces inside it, 
+
+\textbf{Therefore, the answer (arabic numerals) is}:
+5. Adam bought 2 boxes of chocolate candy and 5 boxes of caramel candy. If each box has 4 pieces inside it, how much candy did he
+\ngmark\\
+
+\midrule
+
+Original GPT-3 \par 
+(1.3B) (babbage) &
+\textbf{A: Let's think step by step.} 
+\par
+\textbf{Therefore, the answer (arabic numerals) is}:
+\ngmark\\
+
+\midrule
+
+Original GPT-3 \par 
+(6.7B) (curie) &
+\textbf{A: Let's think step by step.} 
+
+First, we need to find the total number of pieces in the boxes.
+Let's start with the chocolate candy.
+There are 4 pieces in each box.
+So, the total number of pieces in the chocolate candy is 4 x 4 = 16.
+Now, let's find the total number of pieces in the caramel candy.
+There are 5 pieces in each box.
+So, the total number of pieces in the caramel candy is 5 x 5 = 25.
+Now, we can find the total number of pieces in the candy.
+The total number of pieces in the chocolate candy is 16 + 25 = 41 
+
+\textbf{Therefore, the answer (arabic numerals) is} 41.
+\ngmark\\
+
+\midrule
+
+Original GPT-3 \par 
+(175B) (davinci) &
+\textbf{A: Let's think step by step.} First, we need to find out how many pieces of candy Adam has.
+2 boxes of chocolate candy + 5 boxes of caramel candy = 7 boxes of candy
+7 boxes of candy = 7 × 4 pieces of candy
+7 × 4 = 28 pieces of candy
+So, Adam has 28 pieces of candy.
+
+\textbf{Therefore, the answer (arabic numerals) is} 28.
+\okmark\\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+%----------------------------------------
+
+\begin{table}[t]\centering
+\caption{Example outputs by Zero-Shot-CoT at various language models (Models other than GPT-3).}
+\label{tab:example_table_model_size_2}
+\begin{tabular}{|p{0.2\textwidth}|p{0.7\textwidth}|}
+\toprule
+Question &
+Q: Megan baked 68 cupcakes for her school's bake sale. If her brother, Todd, ate 32 of them how many packages could she make if she put 6 cupcake in each package?  \myspace \bblue{(GT : 6)}\\
+
+\midrule
+
+GPT-2 \par 
+(1.5B) &
+\textbf{A: Let's think step by step.} 
+
+Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 32 cupcakes. Todd's brother, Todd, eats 
+Therefore, the answer (arabic numerals) is: 
+
+\textbf{Therefore, the answer (arabic numerals) is}: \par
+6,8,12,16,20,24,28,32,36,40,44,48,52,56,60,64
+\ngmark\\
+
+\midrule
+
+GPT-Neo \par 
+(2.7B) &
+\textbf{A: Let's think step by step.} 
+
+Step 1: She baked 68 cupcakes.
+Step 2: She put 32 of them in a box.
+Step 3: She put 6 cupcakes in each box.
+Step 4: She put the box in the freezer.
+Step 5: She took the box out of the freezer.
+Step 6: She took the box out of the freezer.
+Step 7: She took the box out of the freezer.
+Step 8: She took the box out of the freezer.
+Step 9: She took the box out of the freezer.
+Step 10: She took the box out of the freezer.
+Step 
+
+\textbf{Therefore, the answer (arabic numerals) is}:
+
+Step 1: She baked 68 cupcakes.
+Step 2: She put 32 of them in a box.
+Step 3: She put 6 cup
+\ngmark\\
+
+\midrule
+
+GPT-J \par 
+(6B) &
+\textbf{A: Let's think step by step.} 
+
+Step 1:
+Step 2:
+Step 3:
+Step 4:
+Step 5:
+Step 6:
+Step 7:
+Step 8:
+Step 9:
+Step 10:
+Step 11:
+Step 12:
+Step 13:
+Step 14:
+Step 15:
+Step 16:
+Step 17:
+Step 18:
+Step 19:
+Step 20:
+Step 21:
+Step 22:
+Step 23:
+Step 24:
+Step 25:
+Step 
+
+\textbf{Therefore, the answer (arabic numerals) is}:
+
+A:
+The answer is:
+$68\times 6 = 408$
+Step 1:
+The first step is to count
+\ngmark\\
+
+\midrule
+
+T0 \par 
+(11B) &
+\textbf{A: Let's think step by step.} 12
+
+\textbf{Therefore, the answer (arabic numerals) is} 12
+\ngmark\\
+
+\midrule
+
+OPT \par 
+(13B) &
+\textbf{A: Let's think step by step.} 
+
+Megan baked 68 cupcakes. She divided 68 by 6 to get 17. She divided 17 by 32 to get 6. Megan can make 6 packages of cupcakes if she puts 6 cupcakes in each package.
+
+\textbf{Therefore, the answer (arabic numerals) is}:
+\ngmark\\
+
+\midrule
+
+\bottomrule
+\end{tabular}
+\end{table}

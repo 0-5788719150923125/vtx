@@ -83,7 +83,6 @@ const identifier = randomString(64)
 let pair = null
 async function authenticateUser(identity, identifier) {
   try {
-    await delay(3000)
     user = gun.user()
     user.auth(identifier, identity, async (data) => {
       if (data.err) {
@@ -125,22 +124,19 @@ for (const channel of Object.entries(config)) {
     .on(async (node) => {
       try {
         if (typeof node.payload === 'string') {
-          const payload = JSON.parse(node.payload)
+          const bullet = JSON.parse(node.payload)
           let message = 'ERROR: Me Found.'
-          if (
-            payload.pubKey !== null &&
-            typeof payload.pubKey !== 'undefined'
-          ) {
-            const sender = await gun.user(`${payload.pubKey}`)
+          if (bullet.pubKey !== null && typeof bullet.pubKey !== 'undefined') {
+            const sender = await gun.user(`${bullet.pubKey}`)
             if (typeof sender === 'undefined') {
-              message = payload.message
-            } else message = await SEA.verify(payload.message, sender.pub)
+              message = bullet.message
+            } else message = await SEA.verify(bullet.message, sender.pub)
           } else {
-            message = payload.message
+            message = bullet.message
           }
           channel['bullet'] = {
             message,
-            identifier: payload.identifier
+            identifier: bullet.identifier
           }
         }
       } catch (err) {
@@ -159,12 +155,17 @@ for (const channel of Object.entries(config)) {
       let { message, identifier } = req.body
       let pubKey = null
       if (user) {
-        message = await SEA.sign(message, pair)
-        pubKey = pair.pub
+        try {
+          const signed = await SEA.sign(message, pair)
+          pubKey = pair.pub
+          message = signed
+        } catch {
+          // pass
+        }
       }
       // Send message to GUN
-      const payload = JSON.stringify({ identifier, message, pubKey })
-      await channel['gun'].get('payload').put(payload)
+      const bullet = JSON.stringify({ identifier, message, pubKey })
+      await channel['gun'].get('payload').put(bullet)
     } catch (err) {
       console.error(err)
       cockpit(identity, identifier)
@@ -220,19 +221,34 @@ function restoreBrainFromObject(obj) {
 
 // Publish the brain at the root
 app.get('/', (req, res) => {
-  // net.fromJSON(JSON.parse(JSON.stringify(payload)))
+  net.fromJSON(payload)
+  const moreSeeds = generateSeeds()
+  // console.log(seeds)
+  net.train(moreSeeds, {
+    errorThresh: 0.023,
+    iterations: 10000,
+    // timeout: Infinity,
+    learningRate: 0.001,
+    log: (details) => console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + details),
+    // callback: () =>
+    //   console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + Math.random().toString()),
+    // callbackPeriod: 500,
+    logPeriod: 10
+  })
   res.json(payload)
 })
 
 // Publish brain updates to GUN
+let intermediate = {}
 const state = gun
   .get('state')
   .get('brain')
   .on(async (node) => {
     try {
       state.open((node) => {
-        const restored = restoreBrainFromObject(node)
-        payload = restored
+        intermediate = { ...intermediate, ...restoreBrainFromObject(node) }
+        payload = carveBrain(intermediate)
+        if (payload === false) return
       })
     } catch (err) {
       // pass
@@ -247,24 +263,29 @@ const net = new brain.recurrent.LSTM({
 })
 
 // Create some seeds
-const seeds = []
-console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'generated 100 random seeds')
-for (let i = 0; i < 100; i++) {
-  const length = Math.floor(Math.random() * 10) + 1
-  const inputs = []
-  for (let n = 0; n < length; n++) {
-    inputs.push(randomValueFromArray(['O', 'S']))
+function generateSeeds() {
+  const seeds = []
+  console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'generated 100 random seeds')
+  for (let i = 0; i < 100; i++) {
+    const length = Math.floor(Math.random() * 10) + 1
+    const inputs = []
+    for (let n = 0; n < length; n++) {
+      inputs.push(randomValueFromArray(['O', 'S']))
+    }
+    let output = 'O'
+    if (inputs[length - 1] === 'O') {
+      output = 'S'
+    }
+    const seed = {
+      input: inputs,
+      output: output
+    }
+    seeds.push(seed)
   }
-  let output = 'O'
-  if (inputs[length - 1] === 'O') {
-    output = 'S'
-  }
-  const seed = {
-    input: inputs,
-    output: output
-  }
-  seeds.push(seed)
+  return seeds
 }
+
+const seeds = generateSeeds()
 
 // Train the model on the seed
 net.train(seeds, {
@@ -287,6 +308,122 @@ console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'i predict ' + net.run(input))
 const nn = convertBrainToObject(net.toJSON())
 
 const nnObject = JSON.parse(JSON.stringify(nn))
+
+function carveBrain(obj) {
+  try {
+    const newObj = {
+      type: obj.type,
+      options: {
+        inputSize: obj.options.inputSize,
+        inputRange: obj.options.inputRange,
+        hiddenLayers: obj.options.hiddenLayers,
+        outputSize: obj.options.outputSize,
+        decayRate: obj.options.decayRate,
+        smoothEps: obj.options.smoothEps,
+        regc: obj.options.regc,
+        clipval: obj.options.clipval,
+        maxPredictionLength: obj.options.maxPredictionLength,
+        dataFormatter: {
+          indexTable: obj.options.dataFormatter.indexTable,
+          characterTable: obj.options.dataFormatter.characterTable,
+          values: [...obj.options.dataFormatter.values],
+          characters: [...obj.options.dataFormatter.characters],
+          specialIndexes: [...obj.options.dataFormatter.specialIndexes]
+        }
+      },
+      trainOpts: {
+        iterations: obj.trainOpts.iterations,
+        errorThresh: obj.trainOpts.errorThresh,
+        logPeriod: obj.trainOpts.logPeriod,
+        learningRate: obj.trainOpts.learningRate,
+        callbackPeriod: obj.trainOpts.callbackPeriod,
+        timeout: obj.trainOpts.timeout
+      },
+      input: {
+        rows: obj.input.rows,
+        columns: obj.input.columns,
+        weights: [...obj.input.weights]
+      },
+      hiddenLayers: [
+        {
+          inputMatrix: {
+            rows: obj.hiddenLayers[0].inputMatrix.rows,
+            columns: obj.hiddenLayers[0].inputMatrix.columns,
+            weights: [...obj.hiddenLayers[0].inputMatrix.weights]
+          },
+          inputHidden: {
+            rows: obj.hiddenLayers[0].inputHidden.rows,
+            columns: obj.hiddenLayers[0].inputHidden.columns,
+            weights: [...obj.hiddenLayers[0].inputHidden.weights]
+          },
+          inputBias: {
+            rows: obj.hiddenLayers[0].inputBias.rows,
+            columns: obj.hiddenLayers[0].inputBias.columns,
+            weights: [...obj.hiddenLayers[0].inputBias.weights]
+          },
+          forgetMatrix: {
+            rows: obj.hiddenLayers[0].forgetMatrix.rows,
+            columns: obj.hiddenLayers[0].forgetMatrix.columns,
+            weights: [...obj.hiddenLayers[0].forgetMatrix.weights]
+          },
+          forgetHidden: {
+            rows: obj.hiddenLayers[0].forgetHidden.rows,
+            columns: obj.hiddenLayers[0].forgetHidden.columns,
+            weights: [...obj.hiddenLayers[0].forgetHidden.weights]
+          },
+          forgetBias: {
+            rows: obj.hiddenLayers[0].forgetBias.rows,
+            columns: obj.hiddenLayers[0].forgetBias.columns,
+            weights: [...obj.hiddenLayers[0].forgetBias.weights]
+          },
+          outputMatrix: {
+            rows: obj.hiddenLayers[0].outputMatrix.rows,
+            columns: obj.hiddenLayers[0].outputMatrix.columns,
+            weights: [...obj.hiddenLayers[0].outputMatrix.weights]
+          },
+          outputHidden: {
+            rows: obj.hiddenLayers[0].outputHidden.rows,
+            columns: obj.hiddenLayers[0].outputHidden.columns,
+            weights: [...obj.hiddenLayers[0].outputHidden.weights]
+          },
+          outputBias: {
+            rows: obj.hiddenLayers[0].outputBias.rows,
+            columns: obj.hiddenLayers[0].outputBias.columns,
+            weights: [...obj.hiddenLayers[0].outputBias.weights]
+          },
+          cellActivationMatrix: {
+            rows: obj.hiddenLayers[0].cellActivationMatrix.rows,
+            columns: obj.hiddenLayers[0].cellActivationMatrix.columns,
+            weights: [...obj.hiddenLayers[0].cellActivationMatrix.weights]
+          },
+          cellActivationHidden: {
+            rows: obj.hiddenLayers[0].cellActivationHidden.rows,
+            columns: obj.hiddenLayers[0].cellActivationHidden.columns,
+            weights: [...obj.hiddenLayers[0].cellActivationHidden.weights]
+          },
+          cellActivationBias: {
+            rows: obj.hiddenLayers[0].cellActivationBias.rows,
+            columns: obj.hiddenLayers[0].cellActivationBias.columns,
+            weights: [...obj.hiddenLayers[0].cellActivationBias.weights]
+          }
+        }
+      ],
+      outputConnector: {
+        rows: obj.outputConnector.rows,
+        columns: obj.outputConnector.columns,
+        weights: [...obj.outputConnector.weights]
+      },
+      output: {
+        rows: obj.output.rows,
+        columns: obj.output.columns,
+        weights: [...obj.output.weights]
+      }
+    }
+    return newObj
+  } catch {
+    return false
+  }
+}
 
 // Place brain in GUN at startup
 state.put(nnObject)

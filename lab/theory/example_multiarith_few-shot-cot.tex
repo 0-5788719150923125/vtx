@@ -1,0 +1,65 @@
+\begin{center}
+\begin{longtable}{|p{0.15\textwidth}|p{0.3\textwidth}|p{0.5\textwidth}|}
+\caption{Prediction examples by \theirs from MultiArith.}
+\label{tab:example_multiarith_fsc}\\
+
+\hline \multicolumn{1}{|c|}{\textbf{Category}} & \multicolumn{1}{c|}{\textbf{Question}} & \multicolumn{1}{c|}{\textbf{Answer}} \\ \hline 
+\endfirsthead
+
+\multicolumn{3}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+\hline \multicolumn{1}{|c|}{\textbf{First column}} & \multicolumn{1}{c|}{\textbf{Second column}} & \multicolumn{1}{c|}{\textbf{Third column}} \\ \hline 
+\endhead
+
+\hline \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline \hline
+\endlastfoot
+
+Correct - CoT is correct &Q: Faye had 46 math problems and 9 science problems for homework. If she finished 40 of the problems at school, how many problems did she have to do for homework? &A: Faye had 46 math problems and 9 science problems for homework. If she finished 40 of the problems at school, she would have 46 - 40 = 6 math problems and 9 science problems left for homework. The answer is 15. \\
+
+\midrule
+
+Correct - CoT is incorrect &Q: Victor was helping the cafeteria workers pick up lunch trays, but he could only carry 7 trays at a time. If he had to pick up 23 trays from one table and 5 trays from another, how many trips will he make? &A: Victor can carry 7 trays at a time. If he has to pick up 23 trays from one table and 5 trays from another, he will have to make 23/7 = 3 trips from the first table, and 5/7 = 1 trip from the second table. So he will make 3 + 1 = 4 trips in total. The answer is 4. \\
+
+\midrule
+
+Factual Mistake &Q: Kaleb bought 14 boxes of chocolate candy and gave 5 to his little brother. If each box has 6 pieces inside it, how many pieces did Kaleb still have? &A: Kaleb bought 14 boxes. Each box has 6 pieces. So 14 * 6 = 84 pieces. He gave 5 to his brother. So he has 84 - 5 = 79 pieces. The answer is 79. \\
+
+\midrule
+
+Factual Mistake &Q: Frank made 5 dollars mowing lawns and 58 dollars weed eating. If he only spent 7 dollar a week, how long would the money last him? &A: Frank made 5 + 58 = 63 dollars. If he spends 7 dollars a week, that is 7 * 4 = 28 dollars a month. 63 / 28 = 2.25. The answer is 2.25 months. \\
+
+\midrule
+
+Logical Mistake - Calculator error &Q: April's discount flowers was having a sale where each flower was 6 dollars. If Katie bought 5 roses and 5 daisies, how much did she spend? &A: Each flower was 6 dollars. Katie bought 5 roses and 5 daisies. So she spent 5 * 6 + 5 * 6 = 60 + 30 = 90. The answer is 90. \\
+
+\midrule
+
+Logical Mistake - Calculator error &Q: For a birthday party Cody bought 4 regular sodas and 44 diet sodas. If his fridge would only hold 6 on each shelf, how many shelves would he fill up? &A: For the regular sodas, he would need 4 / 6 = 2/3 shelves. For the diet sodas, he would need 44 / 6 = 11/3 shelves. In total, he would need 2/3 + 11/3 = 13/3 = 4 1/3 shelves. The answer is 4 1/3. \\
+
+\midrule
+
+Logical Mistake - Symbol mapping error &Q: For homework Nancy had 17 math problems and 15 spelling problems. If she can finish 8 problems in an hour how long will it take her to finish all the problems? &A: Nancy has 17 math problems and 15 spelling problems. In an hour, she can finish 8 problems. So it will take her 8/17 hours to finish the math problems, and 8/15 hours to finish the spelling problems. In total, it will take her 8/17 + 8/15 = 56/255 hours to finish all the problems. \\
+
+\midrule
+
+Logical Mistake - One step missing error &Q: Maria was making baggies of cookies with 8 cookies in each bag. If she had 5 chocolate chip cookies and 19 oatmeal cookies, how many baggies could she make? &A: Maria was making baggies of 8 cookies each. She had 5 chocolate chip cookies and 19 oatmeal cookies. So she could make 5 + 19 = 24 baggies. The answer is 24. \\
+
+\midrule
+
+Logical Mistake - One unnecessary step error &Q: A magician was selling magic card decks for 9 dollars each. If he started with 12 decks and by the end of the day he had 7 left, how much money did he earn? &A: The magician started with 12 decks. He sold them for 9 dollars each. So he earned 12 * 9 = 108 dollars. Then he had 7 decks left. So he must have sold 12 - 7 = 5 decks. He earned 5 * 9 = 45 dollars from selling those 5 decks. So his total earnings were 108 + 45 = 153 dollars. \\
+
+\midrule
+
+Logical Mistake - Others (More complicated) &Q: Megan had 40 homework problems. She finished 26 of them but still had 2 pages of problems to do. If each page has the same number of problems on it, how many problems are on each page? &A: Megan had 40 homework problems. She finished 26 of them. So she had 40 - 26 = 14 problems left. If each page has the same number of problems, and she has 2 pages, then she has 2 x 14 = 28 problems left. So each page has 28 / 2 = 14 problems. \\
+
+\midrule
+
+Logical Mistake - Others (More complicated) &Q: John made 6 dollars mowing lawns and 18 dollars weed eating. If he only spent 3 dollar a week, how long would the money last him? &A: John made 6 dollars mowing lawns and 18 dollars weed eating. So in total he made 6 + 18 = 24 dollars. If he spends 3 dollars a week, that is 3 dollars * 4 weeks = 12 dollars. So he would have 24 - 12 = 12 dollars left. The answer is 12. \\
+
+\bottomrule
+
+\end{longtable}
+\end{center}

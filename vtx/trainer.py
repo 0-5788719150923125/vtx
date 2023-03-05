@@ -1,13 +1,13 @@
+import logging
+import shutil
+import random
+import os
 from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
 from transformers import GPT2Config, GPTNeoConfig
 from pytorch_lightning import loggers
 from utils import ad, bc, config
-import logging
-import shutil
-import random
-import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 

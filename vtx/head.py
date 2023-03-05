@@ -1,7 +1,4 @@
-from utils import ad, bc, config, propulsion, ship
-from aitextgen import aitextgen
 import functools
-import requests
 import asyncio
 import random
 import typing
@@ -9,6 +6,9 @@ import time
 import os
 import re
 import gc
+from utils import ad, bc, config, propulsion, ship
+from aitextgen import aitextgen
+import requests
 
 # holds the model globally
 ai = None
@@ -164,7 +164,6 @@ def gen(bias=None, ctx=None, failures=0):
         ):
             if failures >= 9:
                 raise Exception("failed to generate a response 10 times in a row")
-                return
             failures = failures + 1
             print("bad format, regenerating " + str(failures) + " time(s)")
             time.sleep(5)

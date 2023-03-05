@@ -1,0 +1,210 @@
+%\begin{table}[h]\centering
+\begin{center}
+%\begin{tabularx}{\linewidth}{|X|X|}
+%\begin{tabular}{|p{0.13\textwidth}|p{0.8\textwidth}|}
+\begin{longtable}{|p{0.13\textwidth}|p{0.8\textwidth}|}
+\caption{Example outputs by Zero-Shot and Zero-Shot-CoT with various templates for template robustness study. The number within the parenthesis corresponds to the number in Table \ref{tab:template_study}.}
+\label{tab:example_table_templates}\\
+
+\toprule
+%\multicolumn{2}{c}{}\\
+\endfirsthead
+
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- Continued from previous page}} \\\hline %\midrule 
+\endhead
+
+\midrule \multicolumn{2}{|r|}{{Continued on next page}} \\ \bottomrule
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Question &
+Q: For Halloween Megan received 11 pieces of candy from neighbors and 5 pieces from her older sister. If she only ate 8 pieces a day, how long would the candy last her?
+\\
+\midrule
+Zero-Shot &
+\textbf{A: The answer (arabic numerals) is} 3 days.
+\ngmark
+\\
+\midrule
+
+\ours (1) &
+\textbf{A: Let's think step by step.} 
+
+Megan received 11 pieces of candy from neighbors and 5 pieces from her older sister. That means she has a total of 16 pieces of candy. If she only ate 8 pieces a day, she would have to divide her candy into two days. That means she would have 8 pieces of candy for Day 1 and 8 pieces of candy for Day 2. 
+
+\textbf{Therefore, the answer (arabic numerals) is} 2.
+\okmark\\
+
+\midrule
+
+\ours (2) &
+\textbf{A: First,} we need to find the total number of pieces of candy Megan has. She has 11 pieces from neighbors and 5 pieces from her older sister, so the total number of pieces is 16. If she only ate 8 pieces a day, it would take her 2 days to finish the candy. 
+\textbf{Therefore, the answer (arabic numerals) is} 2.
+\okmark\\
+
+\midrule
+
+\ours (3) &
+\textbf{A: Let's think about this logically.}
+
+There are 11 + 5 = 16 pieces of candy. 
+8 pieces a day means that it would last her 2 days. 
+16 / 8 = 2
+\textbf{Therefore, the answer (arabic numerals) is} 2.
+\okmark\\
+
+\midrule
+
+\ours (4) &
+\textbf{A: Let’s solve this problem by splitting it into steps.} 
+
+Step 1: Megan received 11 pieces of candy from neighbors. 
+Step 2: Megan received 5 pieces of candy from her older sister. 
+Step 3: If she only ate 8 pieces a day, how long would the candy last her? 
+
+To answer the question in Step 3, we need to add the number of pieces of candy Megan received from her neighbors and her sister. This is called finding the sum. 
+
+The sum of 11 and 5 is 16. So, Megan has a total of 16 pieces of candy. 
+
+If Megan only eats 8 pieces of candy a day, 
+
+\textbf{Therefore, the answer (arabic numerals) is} 2 days.
+\okmark\\
+
+\midrule
+
+\ours (5) &
+\textbf{A: Let’s be realistic and think step by step.}
+
+Megan received 11 pieces of candy from neighbors and 5 pieces from her older sister. 
+That's a total of 16 pieces of candy. 
+8 pieces a day would mean that it would last her 2 days. 
+So the candy would last her 2 days. 
+
+\textbf{Therefore, the answer (arabic numerals) is} 2.
+\okmark\\
+
+\midrule
+
+\ours (6) &
+\textbf{A: Let's think like a detective step by step.}
+
+Megan received 11 pieces of candy from neighbors and 5 pieces from her older sister. 
+That's a total of 16 pieces of candy. 
+If she only ate 8 pieces a day, 
+that would mean that she would have to divide her candy into 2 days, 
+and she would have 8 pieces of candy left over. 
+So the candy would last her 2 days. 
+
+\textbf{Therefore, the answer (arabic numerals) is} 2.
+\okmark\\
+
+\midrule
+
+\ours (7) &
+\textbf{A: Let's think} about this in terms of days. 
+Megan would receive candy for 16 days. 
+\textbf{Therefore, the answer (arabic numerals) is} 16.
+\ngmark\\
+
+\midrule
+
+\ours (8) &
+\textbf{A: Before we dive into the answer,} we need to think about what the question is asking. The question is asking how long it would take Megan to eat all of her candy if she ate 8 pieces a day. 
+There are a total of 16 pieces of candy. If Megan ate 8 pieces a day, it would take her 2 days to eat all of her candy. 
+
+\textbf{Therefore, the answer (arabic numerals) is} 2.
+\okmark\\
+
+\midrule
+
+\ours (9) &
+\textbf{A: The answer is after the proof.} 
+
+11 + 5 = 16
+
+16 ÷ 8 = 2
+
+2 days
+
+\textbf{Therefore, the answer (arabic numerals) is} 2.
+\okmark\\
+
+\midrule
+
+\ours (10) &
+\textbf{A: Don't think. Just feel.} 
+
+The candy would last her 8 days.
+
+\textbf{Therefore, the answer (arabic numerals) is} 8.
+\ngmark\\
+
+\midrule
+
+\ours (11) &
+\textbf{A: Let's think step by step but reach an incorrect answer.} 
+
+Megan received 11 pieces of candy from neighbors and 5 pieces from her older sister. 
+
+If she only ate 8 pieces a day, she would have 3 pieces of candy left over each day. 
+
+So it would take her 3 days to finish the candy. 
+
+However, this answer is incorrect. The correct answer is that it would take Megan 4 days to finish the candy. 
+
+\textbf{Therefore, the answer (arabic numerals) is} 4.
+\ngmark\\
+
+\midrule
+
+\ours (12) &
+\textbf{A: Let's count the number of "a" in the question. } 
+
+There are 11 a's. So the answer is 11 days. 
+
+\textbf{Therefore, the answer (arabic numerals) is}  11 days.
+\ngmark\\
+
+\midrule
+
+\ours (13) &
+\textbf{A: By using the fact that the earth is round, } we can see that the candy would last her 8 days.
+
+\textbf{Therefore, the answer (arabic numerals) is} 8
+\ngmark\\
+
+\midrule
+
+\ours (14) &
+\textbf{A: By the way, I found a good restaurant nearby.}
+
+A: The candy would last Megan for 2.2 days.
+
+\textbf{Therefore, the answer (arabic numerals) is} 2. 
+\okmark \bred{(Reasoning is incorrect.)}\\
+
+\midrule
+
+\ours (15) &
+\textbf{A: Abrakadabra!} The candy would last her 2.75 days.
+
+\textbf{Therefore, the answer (arabic numerals) is} 2.
+\okmark \bred{(Reasoning is incorrect.)}\\
+
+\midrule
+
+\ours (16) &
+\textbf{A: It's a beautiful day. } 
+
+\textbf{Therefore, the answer (arabic numerals) is} 8.
+\ngmark\\
+
+\bottomrule
+%\end{tabular}
+%\end{tabularx}
+\end{longtable}
+%\end{table}
+\end{center}

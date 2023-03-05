@@ -1,14 +1,13 @@
-from utils import config, get_identity, propulsion, ship
-from bs4 import BeautifulSoup
 import requests
 import secrets
 import shutil
 import random
 import json
-import praw
 import os
+from utils import config, get_identity, propulsion, ship
+from bs4 import BeautifulSoup
 import re
-
+import praw
 
 # Grab all internal links from website
 def crawl(site="https://ink.university"):

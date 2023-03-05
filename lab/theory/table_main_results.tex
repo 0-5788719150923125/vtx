@@ -1,0 +1,44 @@
+\begin{table}[t]\centering
+\footnotesize
+\caption{Accuracy comparison of \ours with \theirsz on each tasks. 
+The values on the left side of each task are the results of using answer extraction prompts depending on answer format as described at \mysection \ref{sec:proposal}.
+The values on the right side are the result of additional experiment where standard answer prompt "The answer is" is used for answer extraction. %zero-shot (2) aligns with the answer prompt of our method (\ours). 
+See Appendix \ref{appx:answer_prompts} for detail setups.
+%\yi{better to pick one results per method for the simplicity}
+}
+%\begin{tabular}{lrrrrrrr}\toprule
+\begin{tabular}{p{0.18\textwidth}p{0.10\textwidth}p{0.10\textwidth}p{0.10\textwidth}p{0.10\textwidth}p{0.10\textwidth}p{0.10\textwidth}}\toprule
+&\multicolumn{6}{c}{Arithmetic} \\\cmidrule{2-7}
+&SingleEq &AddSub &MultiArith &GSM8K &AQUA &SVAMP \\\midrule
+zero-shot &74.6/\textbf{78.7} &\textbf{72.2}/\textbf{77.0} &17.7/22.7 &10.4/12.5 &22.4/22.4 &58.8/58.7 \\
+%zero-shot (2) &74.6 &72.2 &17.7 &10.4 &22.4 &58.8 \\
+\midrule
+zero-shot-cot &\textbf{78.0}/\textbf{78.7} &69.6/74.7 &\textbf{78.7}/\textbf{79.3} &\textbf{40.7}/\textbf{40.5} &\textbf{33.5}/\textbf{31.9} &\textbf{62.1}/\textbf{63.7} \\
+%zero-shot-cot (2) &78.0 &69.6 &78.7 &\textbf{40.7} &\textbf{33.5} &62.1 \\
+%\bottomrule
+\toprule
+\end{tabular}
+%\begin{tabular}{lrrrrr}
+%\begin{tabular}{p{0.16\textwidth}p{0.15\textwidth}p{0.17\textwidth}p{0.16\textwidth}p{0.17\textwidth}}
+\begin{tabular}{p{0.18\textwidth}p{0.10\textwidth}p{0.10\textwidth}p{0.10\textwidth}p{0.10\textwidth}p{0.10\textwidth}p{0.10\textwidth}}
+&\multicolumn{2}{c}{Common Sense}& \multicolumn{2}{c}{Other Reasoning Tasks}&
+\multicolumn{2}{c}{Symbolic Reasoning}
+\\
+\cmidrule(r){2-3}%
+\cmidrule(r){4-5}%
+\cmidrule(r){6-7}%
+&Common &Strategy &Date &Shuffled &\scalebox{0.91}{Last Letter} &\scalebox{0.91}{Coin Flip}\\
+&SenseQA &QA &Understand &Objects &(4 words) &(4 times)\\
+\midrule
+%zero-shot &\textbf{72.6} &54.3 &33.6 &29.7 &00.2 &53.8 \\
+%zero-shot (2) &68.8 &12.7 &49.3 &31.3 &- &12.8 \\
+zero-shot &\textbf{68.8}/\textbf{72.6} &12.7/\textbf{54.3} &49.3/33.6 &31.3/29.7 &0.2/- &12.8/53.8 \\
+\midrule
+%zero-shot-cot (1) &64.0 &52.3 &61.8 &\textbf{52.9} &\textbf{57.6} &87.8 \\
+%zero-shot-cot (2) &64.6 &\textbf{54.8}&\textbf{67.5} &52.4 &- &\textbf{91.4} \\
+zero-shot-cot &64.6/64.0 &\textbf{54.8}/52.3&\textbf{67.5}/\textbf{61.8} &\textbf{52.4}/\textbf{52.9} &\textbf{57.6}/- &\textbf{91.4}/\textbf{87.8} \\
+\bottomrule
+\end{tabular}
+
+\label{tab:main_results}
+\end{table}

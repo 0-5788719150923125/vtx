@@ -1,0 +1,61 @@
+\begin{center}
+\begin{longtable}{|p{0.15\textwidth}|p{0.3\textwidth}|p{0.5\textwidth}|}
+\caption{Prediction examples by \ours from MultiArith.}
+\label{tab:example_multiarith_zsc}\\
+
+\hline \multicolumn{1}{|c|}{\textbf{Category}} & \multicolumn{1}{c|}{\textbf{Question}} & \multicolumn{1}{c|}{\textbf{Answer}} \\ \hline 
+\endfirsthead
+
+\multicolumn{3}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+\hline \multicolumn{1}{|c|}{\textbf{First column}} & \multicolumn{1}{c|}{\textbf{Second column}} & \multicolumn{1}{c|}{\textbf{Third column}} \\ \hline 
+\endhead
+
+\hline \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline \hline
+\endlastfoot
+
+Correct - CoT is correct &Q: A pet store had 56 puppies. In one day they sold 24 of them and put the rest into cages with 4 in each cage. How many cages did they use? &A: Let's think step by step. There are 56 puppies. 24 of them were sold. That means that 32 are left. 32 divided by 4 is 8. There are 8 cages with 4 puppies in each cage. Therefore, the answer (arabic numerals) is 8. \\
+
+\midrule
+
+Correct - CoT is incorrect &Q: A pet store had 102 puppies. In one day they sold 21 of them and put the rest into cages with 9 in each cage. How many cages did they use? &A: Let's think step by step. There are 102 puppies. 21 of them were sold, so that means there are 81 puppies left. 81 is not divisible by 9, so that means there is 1 puppy left over, and the rest can go into cages with 9 puppies in each. That means there are 9 cages in total. Therefore, the answer (arabic numerals) is 9. \\
+
+\midrule
+
+CommonSense Mistake &Q: Jerry was helping the cafeteria workers pick up lunch trays, but he could only carry 8 trays at a time. If he had to pick up 9 trays from one table and 7 trays from another, how many trips will he make? &A: Let's think step by step. Jerry can carry 8 trays at a time. There are 9 trays on the first table. That means Jerry will need to make 2 trips to the first table. There are 7 trays on the second table. That means Jerry will need to make 1 trip to the second table. In total, Jerry will make 3 trips. Therefore, the answer (arabic numerals) is 3. \\
+
+\midrule
+
+Factual Mistake &Q: Bianca and her mom were picking carrots from their garden. Bianca picked 26 and her mother picked 15. If only 16 of the carrots were good, how many bad carrots did they have? &A: Let's think step by step. Bianca picked 26 carrots. If only 16 of those carrots were good, that means that 10 of them were bad. Similarly, her mother picked 15 carrots. If only 16 of those carrots were good, that means that 1 of them was bad. In total, they had 11 bad carrots. Therefore, the answer (arabic numerals) is 11. \\
+
+\midrule
+
+Logical Mistake - Calculator error &Q: Faye was selling her necklaces at a garage sale. She sold 3 bead necklaces and 7 gem stone necklaces. If each necklace cost 7 dollars, how much money did she earn? &A: Let's think step by step. Faye sold 3 bead necklaces and 7 gem stone necklaces. Each necklace cost 7 dollars. So, she earned 3*7 + 7*7 = 60 dollars. Therefore, the answer (arabic numerals) is 60. I hope this helps! \\
+
+\midrule
+
+Logical Mistake - Symbol mapping error &Q: Emily was playing a video game and had 42 lives. In a hard part of the game she lost 25 lives. If she got 24 more lives in the next level, how many lives would she have? &A: Let's think step by step. Emily had 42 lives. She lost 25 lives. That means she now has 42 - 25 = 17 lives. If she gets 24 more lives in the next level, she will have a total of 42 + 24 = 66 lives. Therefore, the answer (arabic numerals) is 66. I hope this helps! \\
+
+\midrule
+
+Logical Mistake - One step missing error &Q: At the fair there were 9 people in line for the bumper cars. If 6 of them got tired of waiting and left and 3 more got in line, how many people would be in line? &A: Let's think step by step. There were 9 people in line for the bumper cars. 6 of them got tired of waiting and left. That means that now there are 3 people in line. Therefore, the answer (arabic numerals) is 3. \\
+
+\midrule
+
+Logical Mistake - One unnecessary step error &Q: At the fair Adam bought 13 tickets. After riding the ferris wheel he had 4 tickets left. If each ticket cost 9 dollars, how much money did Adam spend riding the ferris wheel? &A: Let's think step by step. Adam bought 13 tickets. That means he spent 13 * 9 = 117 dollars on tickets. After riding the ferris wheel, he had 4 tickets left. That means he used 9 tickets to ride the ferris wheel. That means he spent 9 * 9 = 81 dollars on riding the ferris wheel. So the answer is 117 - 81 = 36 dollars. Therefore, the answer (arabic numerals) is 36. \\
+
+\midrule
+
+Logical Mistake - Others (More complicated) &Q: John made 6 dollars mowing lawns and 18 dollars weed eating. If he only spent 3 dollar a week, how long would the money last him? &A: Let's think step by step. John made 6 dollars mowing lawns. John made 18 dollars weed eating. John made 24 dollars total. John spends 3 dollars a week. John has 21 dollars left. John spends 3 dollars a week. John has 18 dollars left. John spends 3 dollars a week. John has 15 dollars left. John spends 3 dollars a week. John has 12 dollars left. John spends 3 dollars a week. John has 9 dollars left. John spends 3 dollars a week. John has 6 Therefore, the answer (arabic numerals) is 6 weeks. \\
+
+\midrule
+
+Others &Q: At the fair there were 12 people in line for the bumper cars. If 10 of them got tired of waiting and left and 15 more got in line, how many people would be in line? &A: Let's think step by step. There were 12 people in line for the bumper cars. 10 of them got tired of waiting and left. 15 more got in line. That means that there are now 15 people in line for the bumper cars. Therefore, the answer (arabic numerals) is 15. \\
+
+\bottomrule
+
+\end{longtable}
+\end{center}

@@ -1,0 +1,32 @@
+\begin{table}[t]\centering
+\footnotesize
+\caption{Comparison with baseline methods using accuracies on MultiArith and GSM8K. \davinci is used as the model if not specified. We used the same 8 examples as described in~\citep{cot_wei} for \theirsf and \theirs settings. (*1) To verify the variance of changing examples, we report two results for 4-shot-cot by splitting the eight examples into two groups. (*2) We insert ``Let's think step by step.'' at the beginning of answer part of each exemplars for \theirs to test performance gains. Further experiment results with PaLM are found at \autoref{appx:further_experiment_on_palm}}
+\label{tab:few_shot}
+
+\begin{tabular}{lrrr}\toprule
+&MultiArith &GSM8K \\\midrule
+\textbf{Zero-Shot} &\textbf{17.7} &\textbf{10.4} \\
+Few-Shot (2 samples) &33.7 &15.6 \\
+Few-Shot (8 samples) &33.8 &15.6 \\
+\midrule
+\textbf{Zero-Shot-CoT} &\textbf{78.7} &\textbf{40.7} \\
+Few-Shot-CoT (2 samples) &84.8 &41.3 \\
+Few-Shot-CoT (4 samples : First) (*1) &89.2 &- \\
+Few-Shot-CoT (4 samples : Second) (*1) &90.5 &- \\
+Few-Shot-CoT (8 samples) &93.0 &48.7 \\
+\textbf{Zero-Plus-Few-Shot-CoT (8 samples)} (*2) &\textbf{92.8} &\textbf{51.5} \\
+\midrule
+Finetuned GPT-3 175B \citep{cot_wei} &- &33 \\
+Finetuned GPT-3 175B + verifier \citep{cot_wei} &- &55 \\
+\midrule
+\textbf{PaLM 540B: Zero-Shot} & \textbf{25.5} & \textbf{12.5} \\
+\textbf{PaLM 540B: Zero-Shot-CoT} & \textbf{66.1} & \textbf{43.0} \\
+\textbf{PaLM 540B: Zero-Shot-CoT + self consistency} & \textbf{89.0} & \textbf{70.1} \\
+PaLM 540B: Few-Shot \citep{cot_wei} &- &17.9\\
+PaLM 540B: Few-Shot-CoT \citep{cot_wei} &- &56.9\\
+PaLM 540B: Few-Shot-CoT + self consistency \citep{cot_wei_sc} &- &74.4\\
+\bottomrule
+\end{tabular}
+\captionsetup{skip=5pt}
+
+\end{table}

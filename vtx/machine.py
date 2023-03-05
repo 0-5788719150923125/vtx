@@ -1,10 +1,8 @@
-from utils import config
 import threading
-import requests
 import asyncio
-import random
-import head
 import time
+from utils import config
+import head
 import lab
 
 tasks = {}
@@ -15,8 +13,9 @@ async def main(loop):
 
     while True:
         try:
+
             # Load the AI model at startup
-            if head.ai == None:
+            if head.ai is None:
                 head.ai = await head.loader()
 
             # Prune completed tasks

@@ -1,0 +1,19 @@
+\begin{algorithm}[t]
+\caption{\ours}
+\label{alg:algorithm}
+\textbf{Input}: 
+Question x $\in$ X, pre-trained model M, First template $\tau_1$, Second template $\tau_2$ \\
+\textbf{Output}:
+\begin{algorithmic}[1]
+\STATE {pred\_list=[]}
+\FOR{each x in X}
+\STATE x’ $\leftarrow$ $\tau_1$(x)
+\STATE z $\leftarrow$ M(x’)
+\STATE z’ $\leftarrow$ $\tau_2$(x', z)
+\STATE y' $\leftarrow$ M(z’)
+\STATE $\hat{y}$ $\leftarrow$ Answer Cleansing(y')
+\STATE pred\_list.append($\hat{y}$)
+\ENDFOR
+\RETURN pred\_list
+\end{algorithmic}
+\end{algorithm}

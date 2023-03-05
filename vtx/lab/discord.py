@@ -1,10 +1,10 @@
+import asyncio
+import random
+import os
 from utils import ad, bc, config, propulsion, ship
 from discord.ext import commands
 import discord
-import asyncio
-import random
 import head
-import os
 
 client = None
 redacted_chance = 1
@@ -14,8 +14,6 @@ followup_chance = 10
 
 # A class to control the entire Discord bot
 class Client(discord.Client):
-
-    # global client
 
     # A variable that will block all actions until True
     thinking = False
@@ -245,9 +243,9 @@ async def subscribe():
     # Handle bots that update messages token-by-token
     @client.event
     async def on_message_edit(before, after):
-        print(after.content)
         if after.content[:1] not in head.bullets:
             head.build_context(str(after.author.id) + ship + " " + after.content)
+            print(after.content)
 
     if "discord" in config:
         await client.start(discord_token)

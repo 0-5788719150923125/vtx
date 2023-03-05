@@ -1,11 +1,9 @@
-from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
-import asyncpraw
-import requests
 import random
-import head
-import json
 import os
 import re
+from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
+import asyncpraw
+import head
 
 # Subscribe to a single subreddit
 async def subscribe(subreddit):

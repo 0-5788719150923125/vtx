@@ -1,0 +1,25 @@
+\begin{table}[h]\centering
+\caption{Further experiment results with PaLM (540B). Evaluation metric is Accuracy.}% (*1) max 54.0, min 42.9  (*2) max 90.5, min  41.7}
+\label{tab:palm_results}
+%\begin{tabular}{lrrrrr}\toprule
+\begin{tabular}{p{0.36\textwidth}p{0.15\textwidth}p{0.10\textwidth}p{0.11\textwidth}p{0.11\textwidth}}\toprule
+&AQUA-RAT &SVAMP &GSM8K &MultiArith \\\midrule
+\theirsz &23.4 &\textbf{63.1} &12.5 &25.5 \\
+\ours &\textbf{36.1} &\textbf{63.1} &\textbf{43.0} &\textbf{66.1} \\
+
+%\midrule
+% \ours + self consistency \par (1 prompt $\times$ 8 paths) &- &- &48.4 &- \\
+\ours + self consistency \par (40 paths) &\textbf{46.5} &\textbf{80.5} &\textbf{70.1} & \textbf{89.0} \\
+
+% \midrule
+
+% \ours-v2 \par (8 exemplars) &- &- &49.2  \scriptsize{$\pm$4.3 \par (*1)} &74.0 \scriptsize{$\pm$14.2 \par (*2)}\\
+% \ours-v2 + self consistency \par (8 exemplars, 1 prompt $\times$ 40 paths) &- &- &61 &- \\
+% \ours-v2 + self consistency \par (8 exemplars, 5 prompt $\times$ 8 paths) &- &- &\textbf{70.5} &- \\
+
+\midrule
+\theirs~\citep{cot_wei} &35.8 &79.0 &56.9 &- \\
+\theirs + self consistency \par (40 paths)~\citep{cot_wei_sc} &48.3 &86.6 &74.4 &- \\
+\bottomrule
+\end{tabular}
+\end{table}

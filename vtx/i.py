@@ -38,11 +38,6 @@ def fetch_from_discord():
     if not os.path.exists("/gen/discord"):
         os.makedirs("/gen/discord")
 
-    # Export direct messages
-    if config["discord"]["export_dms"] == True:
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord" -f "JSON"'
-        os.system(command)
-
     # For every server listed in config, iterate over options, and download messages
     for server in config["discord"]["servers"]:
         print("exporting " + server)
@@ -59,6 +54,11 @@ def fetch_from_discord():
             command.join(" --before " + server["before"])
         if "after" in server:
             command.join(" --after " + server["after"])
+        os.system(command)
+
+    # Export direct messages
+    if config["discord"]["export_dms"] == True:
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord" -f "JSON"'
         os.system(command)
 
 

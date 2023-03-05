@@ -223,19 +223,25 @@ function restoreBrainFromObject(obj) {
 app.get('/', (req, res) => {
   net.fromJSON(payload)
   const moreSeeds = generateSeeds()
-  // console.log(seeds)
+  const rate = Math.random() / 222
+  console.log(
+    bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'learning at rate of ' + rate.toString()
+  )
   net.train(moreSeeds, {
     errorThresh: 0.023,
     iterations: 10000,
     // timeout: Infinity,
-    learningRate: 0.001,
+    learningRate: rate,
     log: (details) => console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + details),
     // callback: () =>
     //   console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + Math.random().toString()),
     // callbackPeriod: 500,
     logPeriod: 10
   })
-  res.json(payload)
+  const nn = convertBrainToObject(net.toJSON())
+  const nnObject = JSON.parse(JSON.stringify(nn))
+  state.put(nnObject)
+  res.json(net.toJSON())
 })
 
 // Publish brain updates to GUN

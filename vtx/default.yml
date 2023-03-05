@@ -37,7 +37,14 @@ soul:
     num_layers_freeze: 19
     equalize_datasets: False
     datasets:
+      lab/abby:
+        line_by_line: True
       lab/aitextgen:
+      lab/bigbang:
+        line_by_line: True
+      lab/cats:
+        line_by_line: True
+      lab/trek:
       lab/swarm:
       lab/source:
       lab/ink:
@@ -71,7 +78,14 @@ toe:
     num_layers_freeze: 8
     equalize_datasets: False
     datasets:
+      lab/abby:
+        line_by_line: True
       lab/aitextgen:
+      lab/bigbang:
+        line_by_line: True
+      lab/cats:
+        line_by_line: True
+      lab/trek:
       lab/swarm:
       lab/source:
       lab/ink:

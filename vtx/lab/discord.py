@@ -129,7 +129,7 @@ class Client(discord.Client):
         bias = 0
         output = "ERROR: Me Found."
 
-        if message.content[:1] in head.bullets:
+        if message.content[:1] in head.bullets or message.content == "":
             return
 
         # every message is added to local cache, for building prompt

@@ -105,6 +105,7 @@ async function cockpit(identity, identifier) {
   console.log('identity :> [REDACTED]')
   console.log('identifier :> ' + identifier)
   console.log('loading into cockpit')
+  await delay(5000)
   await authenticateUser(identity, identifier)
 }
 
@@ -221,27 +222,12 @@ function restoreBrainFromObject(obj) {
 
 // Publish the brain at the root
 app.get('/', (req, res) => {
-  net.fromJSON(payload)
   const moreSeeds = generateSeeds()
-  const rate = Math.random() / 222
-  console.log(
-    bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'learning at rate of ' + rate.toString()
-  )
-  net.train(moreSeeds, {
-    errorThresh: 0.023,
-    iterations: 10000,
-    // timeout: Infinity,
-    learningRate: rate,
-    log: (details) => console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + details),
-    // callback: () =>
-    //   console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + Math.random().toString()),
-    // callbackPeriod: 500,
-    logPeriod: 10
-  })
-  const nn = convertBrainToObject(net.toJSON())
+  const n = trainBrain(moreSeeds)
+  const nn = convertBrainToObject(n)
   const nnObject = JSON.parse(JSON.stringify(nn))
   state.put(nnObject)
-  res.json(net.toJSON())
+  res.json(n)
 })
 
 // Publish brain updates to GUN
@@ -261,19 +247,13 @@ const state = gun
     }
   })
 
-// Instantiate the brain
-const net = new brain.recurrent.LSTM({
-  hiddenLayers: [24],
-  inputSize: 23,
-  outputSize: 1
-})
-
 // Create some seeds
 function generateSeeds() {
   const seeds = []
   console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'generated 100 random seeds')
   for (let i = 0; i < 100; i++) {
     const length = Math.floor(Math.random() * 10) + 1
+    // const length = 10
     const inputs = []
     for (let n = 0; n < length; n++) {
       inputs.push(randomValueFromArray(['O', 'S']))
@@ -293,27 +273,41 @@ function generateSeeds() {
 
 const seeds = generateSeeds()
 
-// Train the model on the seed
-net.train(seeds, {
-  errorThresh: 0.023,
-  iterations: 10000,
-  // timeout: Infinity,
-  learningRate: 0.001,
-  log: (details) => console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + details),
-  // callback: () =>
-  //   console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + Math.random().toString()),
-  // callbackPeriod: 500,
-  logPeriod: 10
-})
+function trainBrain(data) {
+  const net = new brain.recurrent.LSTM({
+    hiddenLayers: [24],
+    inputSize: 23,
+    outputSize: 1,
+    maxPredictionLength: 333
+  })
+  const rate = Math.random() / 222
+  // Train the model on the seed
+  net.train(data, {
+    errorThresh: 0.023,
+    iterations: 10000,
+    // timeout: Infinity,
+    learningRate: rate,
+    log: (details) => console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + details),
+    // callback: () =>
+    //   console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + Math.random().toString()),
+    // callbackPeriod: 500,
+    logPeriod: 10
+  })
+  // LSTM prediction step
+  const input = ['S', 'O', 'S', 'O', 'S']
+  console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'given the input of ' + input)
+  console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'i predict ' + net.run(input))
+  const n = net.toJSON()
+  const nn = convertBrainToObject(n)
+  const nnObject = JSON.parse(JSON.stringify(nn))
+  // console.log(n)
+  // Place brain in GUN at startup
+  state.put(null)
+  state.put(nnObject)
+  return n
+}
 
-// LSTM prediction step
-const input = ['S', 'O', 'S', 'O', 'S']
-console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'given the input of ' + input)
-console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'i predict ' + net.run(input))
-
-const nn = convertBrainToObject(net.toJSON())
-
-const nnObject = JSON.parse(JSON.stringify(nn))
+trainBrain(seeds)
 
 function carveBrain(obj) {
   try {
@@ -430,9 +424,6 @@ function carveBrain(obj) {
     return false
   }
 }
-
-// Place brain in GUN at startup
-state.put(nnObject)
 
 // Generate a cryptographically-secure random string
 function randomString(length) {

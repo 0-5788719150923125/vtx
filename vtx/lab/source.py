@@ -30,7 +30,7 @@ async def scrape(channel):
             if roll > chance:
                 continue
 
-            messages[channel].append(state["message"])
+            # messages[channel].append(state["message"])
 
             bot = get_identity()
 
@@ -49,6 +49,8 @@ async def scrape(channel):
 
             url = "http://ctx:9666/message/" + channel
             generation = await head.gen(int(bot), context)
+            if generation[0] == "[ERROR]":
+                messages[channel] = []
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(
                 r"(?:<@)(\d+\s*\d*)(?:>)",
@@ -63,7 +65,7 @@ async def scrape(channel):
             if len(messages[channel]) > 3:
                 messages[channel].pop(0)
 
-            messages[channel].append(sanitized)
+            # messages[channel].append(sanitized)
 
             print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + sanitized)
 

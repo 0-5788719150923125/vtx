@@ -17,7 +17,7 @@ mind:
   to_gpu: False
 
 soul:
-  info: almost nobody has one
+  info: few people have one
   to_gpu: True
   n_gpu: 1
   max_new_tokens: 333
@@ -58,7 +58,7 @@ soul:
       ctx:
 
 toe:
-  info: nailed to the foot
+  info: it's nailed to the foot
   to_gpu: False
   n_gpu: 1
   max_new_tokens: 333
@@ -71,11 +71,11 @@ toe:
     num_steps: 88888
     warmup_steps: 0
     gradient_accumulation_steps: 6
-    learning_rate: 0.000222 # FOLD
-    weight_decay: 0.023 # CORE
+    learning_rate: 0.000333 # FOLD
+    weight_decay: 0.666 # CORE
     max_grad_norm: 0.444 # ROOT
     freeze_layers: True
-    num_layers_freeze: 8
+    num_layers_freeze: 4
     equalize_datasets: False
     datasets:
       lab/abby:

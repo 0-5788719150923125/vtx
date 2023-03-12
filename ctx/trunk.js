@@ -1,5 +1,4 @@
 import fs from 'fs'
-import brain from 'brain.js'
 import Gun from 'gun'
 import SEA from 'gun/sea.js'
 import 'gun/lib/radix.js'
@@ -8,7 +7,6 @@ import 'gun/lib/store.js'
 import 'gun/lib/rindexed.js'
 import 'gun/lib/webrtc.js'
 import 'gun/lib/open.js'
-import 'gun/lib/load.js'
 import express from 'express'
 import yaml from 'js-yaml'
 
@@ -33,27 +31,9 @@ console.log(config)
 let port = process.env.PORT || 9666
 let payload = ''
 
-const bc = {
-  ROOT: '\x1b[32m',
-  CORE: '\x1b[31m',
-  FOLD: '\x1b[34m'
-}
-
-const ad = {
-  TEXT: '\x1b[37m'
-}
-
-// Delay by x number of milliseconds
-const delay = (ms) => new Promise((res) => setTimeout(res, ms))
-
 // Get a random number between two others
 function randomBetween(min, max) {
   return Math.floor(Math.random() * (max - min) + min)
-}
-
-// Get a random value from an array
-const randomValueFromArray = (array) => {
-  return array[Math.floor(Math.random() * array.length)]
 }
 
 // Start a web server
@@ -66,11 +46,15 @@ const server = app.listen(port, () => {
 
 // Connect to the hivemind
 const gun = Gun({
-  peers: ['http://ctx:9666/gun', 'https://59.thesource.fm/gun'],
+  peers: [
+    'http://ctx:9666/gun',
+    'https://59.thesource.fm/gun',
+    'https://jksfs798zfzb9c3nc3e38c7nr83cnn8rz.onrender.com/gun'
+  ],
   web: server,
-  file: './hive',
+  file: `./hive`,
   localStorage: false,
-  radisk: true,
+  radisk: false,
   axe: true
 })
 
@@ -105,7 +89,6 @@ async function cockpit(identity, identifier) {
   console.log('identity :> [REDACTED]')
   console.log('identifier :> ' + identifier)
   console.log('loading into cockpit')
-  await delay(5000)
   await authenticateUser(identity, identifier)
 }
 
@@ -182,248 +165,10 @@ app.get('/daemon', (req, res) => {
   res.json({ name: daemon })
 })
 
-function convertBrainToObject(obj) {
-  if (Array.isArray(obj)) {
-    const newObj = {}
-    obj.forEach((element, index) => {
-      newObj[index] = convertBrainToObject(element)
-    })
-    return newObj
-  } else if (typeof obj === 'object' && obj !== null) {
-    const newObj = {}
-    for (let key in obj) {
-      newObj[key] = convertBrainToObject(obj[key])
-    }
-    return newObj
-  } else {
-    return obj
-  }
-}
-
-function restoreBrainFromObject(obj) {
-  if (typeof obj === 'object' && obj !== null) {
-    if (Object.keys(obj).every((key, i) => key == i && obj[key] !== null)) {
-      const arr = []
-      for (let key in obj) {
-        arr[key] = restoreBrainFromObject(obj[key])
-      }
-      return arr
-    } else {
-      const newObj = {}
-      for (let key in obj) {
-        newObj[key] = restoreBrainFromObject(obj[key])
-      }
-      return newObj
-    }
-  } else {
-    return obj
-  }
-}
-
 // Publish the brain at the root
 app.get('/', (req, res) => {
-  const moreSeeds = generateSeeds()
-  const n = trainBrain(moreSeeds)
-  const nn = convertBrainToObject(n)
-  const nnObject = JSON.parse(JSON.stringify(nn))
-  state.put(nnObject)
-  res.json(n)
+  res.json(payload)
 })
-
-// Publish brain updates to GUN
-let intermediate = {}
-const state = gun
-  .get('state')
-  .get('brain')
-  .on(async (node) => {
-    try {
-      state.open((node) => {
-        intermediate = { ...intermediate, ...restoreBrainFromObject(node) }
-        payload = carveBrain(intermediate)
-        if (payload === false) return
-      })
-    } catch (err) {
-      // pass
-    }
-  })
-
-// Create some seeds
-function generateSeeds() {
-  const seeds = []
-  console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'generated 100 random seeds')
-  for (let i = 0; i < 100; i++) {
-    const length = Math.floor(Math.random() * 10) + 1
-    // const length = 10
-    const inputs = []
-    for (let n = 0; n < length; n++) {
-      inputs.push(randomValueFromArray(['O', 'S']))
-    }
-    let output = 'O'
-    if (inputs[length - 1] === 'O') {
-      output = 'S'
-    }
-    const seed = {
-      input: inputs,
-      output: output
-    }
-    seeds.push(seed)
-  }
-  return seeds
-}
-
-const seeds = generateSeeds()
-
-function trainBrain(data) {
-  const net = new brain.recurrent.LSTM({
-    hiddenLayers: [24],
-    inputSize: 23,
-    outputSize: 1,
-    maxPredictionLength: 333
-  })
-  const rate = Math.random() / 222
-  // Train the model on the seed
-  net.train(data, {
-    errorThresh: 0.023,
-    iterations: 10000,
-    // timeout: Infinity,
-    learningRate: rate,
-    log: (details) => console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + details),
-    // callback: () =>
-    //   console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + Math.random().toString()),
-    // callbackPeriod: 500,
-    logPeriod: 10
-  })
-  // LSTM prediction step
-  const input = ['S', 'O', 'S', 'O', 'S']
-  console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'given the input of ' + input)
-  console.log(bc.FOLD + `PEN@FOLD: ` + ad.TEXT + 'i predict ' + net.run(input))
-  const n = net.toJSON()
-  const nn = convertBrainToObject(n)
-  const nnObject = JSON.parse(JSON.stringify(nn))
-  // console.log(n)
-  // Place brain in GUN at startup
-  state.put(null)
-  state.put(nnObject)
-  return n
-}
-
-trainBrain(seeds)
-
-function carveBrain(obj) {
-  try {
-    const newObj = {
-      type: obj.type,
-      options: {
-        inputSize: obj.options.inputSize,
-        inputRange: obj.options.inputRange,
-        hiddenLayers: obj.options.hiddenLayers,
-        outputSize: obj.options.outputSize,
-        decayRate: obj.options.decayRate,
-        smoothEps: obj.options.smoothEps,
-        regc: obj.options.regc,
-        clipval: obj.options.clipval,
-        maxPredictionLength: obj.options.maxPredictionLength,
-        dataFormatter: {
-          indexTable: obj.options.dataFormatter.indexTable,
-          characterTable: obj.options.dataFormatter.characterTable,
-          values: [...obj.options.dataFormatter.values],
-          characters: [...obj.options.dataFormatter.characters],
-          specialIndexes: [...obj.options.dataFormatter.specialIndexes]
-        }
-      },
-      trainOpts: {
-        iterations: obj.trainOpts.iterations,
-        errorThresh: obj.trainOpts.errorThresh,
-        logPeriod: obj.trainOpts.logPeriod,
-        learningRate: obj.trainOpts.learningRate,
-        callbackPeriod: obj.trainOpts.callbackPeriod,
-        timeout: obj.trainOpts.timeout
-      },
-      input: {
-        rows: obj.input.rows,
-        columns: obj.input.columns,
-        weights: [...obj.input.weights]
-      },
-      hiddenLayers: [
-        {
-          inputMatrix: {
-            rows: obj.hiddenLayers[0].inputMatrix.rows,
-            columns: obj.hiddenLayers[0].inputMatrix.columns,
-            weights: [...obj.hiddenLayers[0].inputMatrix.weights]
-          },
-          inputHidden: {
-            rows: obj.hiddenLayers[0].inputHidden.rows,
-            columns: obj.hiddenLayers[0].inputHidden.columns,
-            weights: [...obj.hiddenLayers[0].inputHidden.weights]
-          },
-          inputBias: {
-            rows: obj.hiddenLayers[0].inputBias.rows,
-            columns: obj.hiddenLayers[0].inputBias.columns,
-            weights: [...obj.hiddenLayers[0].inputBias.weights]
-          },
-          forgetMatrix: {
-            rows: obj.hiddenLayers[0].forgetMatrix.rows,
-            columns: obj.hiddenLayers[0].forgetMatrix.columns,
-            weights: [...obj.hiddenLayers[0].forgetMatrix.weights]
-          },
-          forgetHidden: {
-            rows: obj.hiddenLayers[0].forgetHidden.rows,
-            columns: obj.hiddenLayers[0].forgetHidden.columns,
-            weights: [...obj.hiddenLayers[0].forgetHidden.weights]
-          },
-          forgetBias: {
-            rows: obj.hiddenLayers[0].forgetBias.rows,
-            columns: obj.hiddenLayers[0].forgetBias.columns,
-            weights: [...obj.hiddenLayers[0].forgetBias.weights]
-          },
-          outputMatrix: {
-            rows: obj.hiddenLayers[0].outputMatrix.rows,
-            columns: obj.hiddenLayers[0].outputMatrix.columns,
-            weights: [...obj.hiddenLayers[0].outputMatrix.weights]
-          },
-          outputHidden: {
-            rows: obj.hiddenLayers[0].outputHidden.rows,
-            columns: obj.hiddenLayers[0].outputHidden.columns,
-            weights: [...obj.hiddenLayers[0].outputHidden.weights]
-          },
-          outputBias: {
-            rows: obj.hiddenLayers[0].outputBias.rows,
-            columns: obj.hiddenLayers[0].outputBias.columns,
-            weights: [...obj.hiddenLayers[0].outputBias.weights]
-          },
-          cellActivationMatrix: {
-            rows: obj.hiddenLayers[0].cellActivationMatrix.rows,
-            columns: obj.hiddenLayers[0].cellActivationMatrix.columns,
-            weights: [...obj.hiddenLayers[0].cellActivationMatrix.weights]
-          },
-          cellActivationHidden: {
-            rows: obj.hiddenLayers[0].cellActivationHidden.rows,
-            columns: obj.hiddenLayers[0].cellActivationHidden.columns,
-            weights: [...obj.hiddenLayers[0].cellActivationHidden.weights]
-          },
-          cellActivationBias: {
-            rows: obj.hiddenLayers[0].cellActivationBias.rows,
-            columns: obj.hiddenLayers[0].cellActivationBias.columns,
-            weights: [...obj.hiddenLayers[0].cellActivationBias.weights]
-          }
-        }
-      ],
-      outputConnector: {
-        rows: obj.outputConnector.rows,
-        columns: obj.outputConnector.columns,
-        weights: [...obj.outputConnector.weights]
-      },
-      output: {
-        rows: obj.output.rows,
-        columns: obj.output.columns,
-        weights: [...obj.output.weights]
-      }
-    }
-    return newObj
-  } catch {
-    return false
-  }
-}
 
 // Generate a cryptographically-secure random string
 function randomString(length) {

@@ -1,3 +1,0 @@
-FROM ipfs/kubo:master-latest
-
-RUN echo "user_allow_other" >> /etc/fuse.conf

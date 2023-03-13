@@ -23,55 +23,55 @@
       "label": "ps",
       "detail": "View a list of all running containers for this project.",
       "type": "shell",
-      "command": "docker compose ps"
+      "command": "docker-compose ps"
     },
     {
       "label": "logs",
       "detail": "View logs for all services.",
       "type": "shell",
-      "command": "docker compose logs --follow"
+      "command": "docker-compose logs --follow"
     },
     {
       "label": "exec",
       "detail": "Open an interactive shell in the specified container.",
       "type": "shell",
-      "command": "docker compose exec \"${input:ship}\" /bin/sh"
+      "command": "docker-compose exec \"${input:ship}\" /bin/sh"
     },
     {
       "label": "build",
       "detail": "Build and tag a new Docker image from the Dockerfile.",
       "type": "shell",
-      "command": "docker compose build"
+      "command": "docker-compose build"
     },
     {
       "label": "push",
       "detail": "Push the newly-built Docker image to a registry.",
       "type": "shell",
-      "command": "docker compose push"
+      "command": "docker-compose push"
     },
     {
       "label": "up",
       "detail": "Start the services in a development environment.",
       "type": "shell",
-      "command": "FOCUS=\"${input:env}\" docker compose up"
+      "command": "FOCUS=\"${input:env}\" docker-compose up"
     },
     {
       "label": "train",
       "detail": "Train a model.",
       "type": "shell",
-      "command": "docker compose run -e FOCUS=\"${input:env}\" vtx python3 trainer.py"
+      "command": "docker-compose run -e FOCUS=\"${input:env}\" vtx python3 trainer.py"
     },
     {
       "label": "i",
       "detail": "Prepare your data in various ways.",
       "type": "shell",
-      "command": "docker compose run vtx python3 -c \"import i; ${input:i}\""
+      "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\""
     },
     {
       "label": "auto",
       "detail": "Turn on autopilot.",
       "type": "shell",
-      "command": "docker compose up -d"
+      "command": "docker-compose up -d"
     },
     {
       "label": "prune",
@@ -83,13 +83,13 @@
       "label": "down",
       "detail": "Stop the service in Docker.",
       "type": "shell",
-      "command": "docker compose down --remove-orphans"
+      "command": "docker-compose down --remove-orphans"
     },
     {
       "label": "save",
       "detail": "Send your models into the VTX.",
       "type": "shell",
-      "command": "docker compose run ipfs add -r /vtx --pin=false --cid-version=1"
+      "command": "docker-compose run ipfs add -r /vtx --pin=false --cid-version=1"
     },
     {
       "label": "stats",

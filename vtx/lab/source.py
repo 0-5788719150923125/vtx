@@ -5,13 +5,6 @@ import re
 from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import requests
 import head
-import logging
-
-logging.basicConfig(
-    format="%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
-    datefmt="%Y-%m-%d:%H:%M:%S",
-    level=logging.ERROR,
-)
 
 state = None
 
@@ -60,7 +53,7 @@ async def scrape(channel):
 
             if generation[0] == "[ERROR]":
                 messages[channel] = []
-                raise
+                continue
 
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(
@@ -86,12 +79,6 @@ async def scrape(channel):
 
         except Exception as e:
             print(e)
-            payload = {
-                "message": "ERROR: Me Found.",
-                "identifier": "GhostIsCuteVoidGirl",
-            }
-            x = requests.post(url, json=payload, headers={"Connection": "close"})
-            x.close()
 
 
 async def subscribe(channel) -> None:

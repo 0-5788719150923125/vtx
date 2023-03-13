@@ -1,14 +1,16 @@
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import threading
 import asyncio
-import schedule
 import time
 from utils import config
 import head
 import lab
 
-tasks = {}
-# schedule.every().hour.do(reload_model())
+scheduler = AsyncIOScheduler()
+scheduler.add_job(head.loader, "interval", minutes=30)
+scheduler.start()
 
+tasks = {}
 
 # This is the main loop for the entire machine
 @asyncio.coroutine
@@ -73,6 +75,5 @@ t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
 
 while True:
     time.sleep(5)
-    schedule.run_pending()
     if not t.is_alive():
         t.start()

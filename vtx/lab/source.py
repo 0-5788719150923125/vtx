@@ -12,6 +12,7 @@ messages = {}
 
 # Check the local GUN API for new messages
 async def scrape(channel):
+    run_on = config["source"][channel].get("run_on", False)
     while True:
         try:
             await asyncio.sleep(random.uniform(6.0, 6.66666))
@@ -22,7 +23,7 @@ async def scrape(channel):
             if channel not in messages:
                 messages[channel] = []
 
-            if state["message"] in messages[channel]:
+            if state["message"] in messages[channel] and run_on != True:
                 continue
 
             chance = config["source"][channel].get("chance", 0.33)
@@ -30,7 +31,7 @@ async def scrape(channel):
             if roll > chance:
                 continue
 
-            # messages[channel].append(state["message"])
+            messages[channel].append(state["message"])
 
             bot = get_identity()
 
@@ -51,26 +52,37 @@ async def scrape(channel):
             generation = await head.gen(int(bot), context)
             if generation[0] == "[ERROR]":
                 messages[channel] = []
+                generation[1] = "ERROR: Me Found."
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(
                 r"(?:<@)(\d+\s*\d*)(?:>)",
                 f"{daemon}",
                 generation[1],
             )
-            myobj = {"message": sanitized, "identifier": str(bot)}
-            x = requests.post(url, json=myobj, headers={"Connection": "close"})
+            payload = {"message": sanitized, "identifier": str(bot)}
+            x = requests.post(url, json=payload, headers={"Connection": "close"})
             x.close()
             deep.close()
 
-            if len(messages[channel]) > 3:
-                messages[channel].pop(0)
+            def truncate_history(history):
+                if len(history) > 3:
+                    history.pop(0)
+                    truncate_history(history)
 
-            # messages[channel].append(sanitized)
+            truncate_history(messages[channel])
+
+            messages[channel].append(sanitized)
 
             print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + sanitized)
 
         except Exception as e:
             print(e)
+            payload = {
+                "message": "ERROR: Me Found.",
+                "identifier": "GhostIsCuteVoidGirl",
+            }
+            x = requests.post(url, json=payload, headers={"Connection": "close"})
+            x.close()
 
 
 async def subscribe(channel) -> None:

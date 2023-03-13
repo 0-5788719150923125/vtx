@@ -52,7 +52,6 @@ def loader(target=None):
     ai = aitextgen(
         model=model.get("model", None),
         model_folder=model_folder,
-        # tokenizer_file=tokenizer_file,
         tokenizer_file=None,
         to_gpu=model["to_gpu"],
         cache_dir="models",
@@ -65,10 +64,10 @@ def loader(target=None):
 # ping pang pong
 context = [
     propulsion + "975174695399854150" + ship + " I am a robot.",
-    propulsion + "1051994502333726841" + ship + " I am a ghost",
-    propulsion + "806051627198709760" + ship + " i am a Human.",
-    propulsion + "204716337971331072" + ship + " I am a medium",
-    propulsion + "855529761185857566" + ship + " I am an animal..",
+    propulsion + "1051994502333726841" + ship + " I am a ghost.",
+    propulsion + "806051627198709760" + ship + " I am a human.",
+    propulsion + "204716337971331072" + ship + " I am a medium.",
+    propulsion + "855529761185857566" + ship + " I am an animal.",
 ]
 
 

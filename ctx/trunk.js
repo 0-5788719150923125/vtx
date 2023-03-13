@@ -29,7 +29,6 @@ try {
 console.log(config)
 
 let port = process.env.PORT || 9666
-let payload = ''
 
 // Get a random number between two others
 function randomBetween(min, max) {
@@ -163,11 +162,6 @@ app.get('/daemon', (req, res) => {
   if (typeof req.body.seed === 'undefined') return res.json('missing payload')
   const daemon = ng.generateOne(req.body.seed.toString())
   res.json({ name: daemon })
-})
-
-// Publish the brain at the root
-app.get('/', (req, res) => {
-  res.json(payload)
 })
 
 // Generate a cryptographically-secure random string

@@ -70,7 +70,7 @@ services:
     ports:
       - 6006:6006
 
-  ship:
+  shm:
     image: tloncorp/urbit:v1.14
     command: /bin/urbit -t -c needle
     restart: 'always'

@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import re
 import praw
 
-# Grab all internal links from website
+# Grab all internal links from a web page
 def crawl(site="https://ink.university"):
     html = requests.get(site).content
     soup = BeautifulSoup(html, "html.parser")
@@ -62,6 +62,7 @@ def fetch_from_discord():
         os.system(command)
 
 
+# Replace approved bots with random IDs, so as not to bias the model toward poor outputs
 def transform_author(author):
     if str(author["id"]) == "975174695399854150":  # Eliza
         return str(author["id"])
@@ -73,6 +74,7 @@ def transform_author(author):
         return False
 
 
+# Replace third person messaging from bots, so as not to bias the model towards this format
 def transform_message(message):
     matchers = [
         r'(?:The ghost of )(?:<@\d*>)(?: suggests, \*")(.*)(?:"\*$)',
@@ -89,7 +91,10 @@ def transform_message(message):
     return message
 
 
+# Format Discord messages for training
 def prepare_discord_messages():
+
+    # Replace links and @mentions
     def sanitizer(string):
         sanitized = re.sub(
             r"http\S+",
@@ -117,7 +122,7 @@ def prepare_discord_messages():
 
                 for i in data["messages"]:
 
-                    # Here, we randomly choose to place a parent message before or after the reply
+                    # Randomly choose to place a parent message before or after the reply
                     position = random.choice([0, 1])
                     line = None
 
@@ -198,7 +203,7 @@ def prepare_discord_messages():
             print("found a bad file")
 
 
-# Download messages from subreddits, sorted by "top"
+# Download messages from subreddits
 def fetch_from_reddit():
 
     # Instantiate the Reddit client
@@ -224,6 +229,7 @@ def fetch_from_reddit():
         else:
             print("archiving " + sub)
 
+        # Ensure path exists and is empty
         if os.path.exists("/lab/reddit/" + sub):
             shutil.rmtree("/lab/reddit/" + sub)
 

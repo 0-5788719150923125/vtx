@@ -2,9 +2,11 @@ source:
   hive:
     watch: True
     chance: 0.33
+    run_on: False
   support:
     watch: False
     chance: 0.11
+    run_on: False
 
 heart:
   info: never give up, never give in
@@ -13,7 +15,7 @@ heart:
 
 mind:
   info: use your heads
-  model: EleutherAI/gpt-neo-1.3B
+  model: EleutherAI/gpt-neo-2.7B
   to_gpu: False
 
 soul:
@@ -37,14 +39,6 @@ soul:
     num_layers_freeze: 19
     equalize_datasets: False
     datasets:
-      lab/abby:
-        line_by_line: True
-      lab/aitextgen:
-      lab/bigbang:
-        line_by_line: True
-      lab/cats:
-        line_by_line: True
-      lab/trek:
       lab/swarm:
       lab/source:
       lab/ink:
@@ -71,21 +65,14 @@ toe:
     num_steps: 88888
     warmup_steps: 0
     gradient_accumulation_steps: 6
-    learning_rate: 0.000333 # FOLD
-    weight_decay: 0.666 # CORE
-    max_grad_norm: 0.444 # ROOT
+    learning_rate: 0.000666 # FOLD
+    weight_decay: 0.23 # CORE
+    max_grad_norm: 0.59 # ROOT
     freeze_layers: True
     num_layers_freeze: 4
     equalize_datasets: False
     datasets:
-      lab/abby:
-        line_by_line: True
       lab/aitextgen:
-      lab/bigbang:
-        line_by_line: True
-      lab/cats:
-        line_by_line: True
-      lab/trek:
       lab/swarm:
       lab/source:
       lab/ink:

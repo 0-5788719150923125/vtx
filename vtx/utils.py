@@ -29,8 +29,6 @@ class bc:
 
 class ad:
     TEXT = "\033[0m"
-    ROOT = "\033[92m"
-    CORE = "\033[91m"
 
 
 # Generate a pseudo-identity, in the Discord ID format
@@ -40,6 +38,7 @@ def get_identity():
     return identity
 
 
+# Generate a deterministic daemon name from a string
 def get_daemon(seed):
     obj = {"seed": str(seed)}
     response = requests.get("http://ctx:9666/daemon", json=obj)

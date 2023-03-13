@@ -20,7 +20,6 @@ services:
       - ./lab:/lab
       - ./vtx:/vtx
       - ./ctx:/ctx
-      # - ipfs:/ipfs
     env_file:
       - .env
     environment:
@@ -35,7 +34,6 @@ services:
       - ./ctx:/vtx/ctx
       - ./vtx:/vtx/vtx
       - ./lab:/vtx/lab
-      # - ipfs:/ipfs
     ports:
       - 9666:9666
 
@@ -50,17 +48,8 @@ services:
         limits:
           cpus: '0.25'
           memory: 3000M
-        # reservations:
-        #   cpus: '0.25'
-        #   memory: 20M
     volumes:
       - bloom:/bloom
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           capabilities: [gpu]
 
   pit:
     image: ghcr.io/0-5788719150923125/src:1
@@ -79,25 +68,7 @@ services:
     ports:
       - 9667:80
       - 34343:34343
-#   ipfs:
-#     image: ipfs/kubo:master-latest
-#     command: daemon --mount --mount-ipfs=/ipfs --migrate=true --agent-version-suffix=docker --init-profile=lowpower --writable --enable-gc --enable-pubsub-experiment --enable-namesys-pubsub
-#     restart: 'always'
-#     build:
-#       context: .
-#       dockerfile: Dockerfile.ipfs
-#     user: 1000:1000
-#     privileged: true
-#     devices:
-#       - /dev/fuse:/dev/fuse
-#     cap_add:
-#       - SYS_ADMIN
-#     volumes:
-#       - ./vtx:/vtx
-#       - ipfs:/ipfs
-#       - ./001-test.sh:/container-init.d/001-test.sh
+
 volumes:
   bloom:
-  # ipfs:
-# comet:
-# fuse:
+  ipfs:

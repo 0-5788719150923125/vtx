@@ -5,6 +5,13 @@ import re
 from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import requests
 import head
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
+    datefmt="%Y-%m-%d:%H:%M:%S",
+    level=logging.ERROR,
+)
 
 state = None
 
@@ -50,9 +57,11 @@ async def scrape(channel):
 
             url = "http://ctx:9666/message/" + channel
             generation = await head.gen(int(bot), context)
+
             if generation[0] == "[ERROR]":
                 messages[channel] = []
-                generation[1] = "ERROR: Me Found."
+                raise
+
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(
                 r"(?:<@)(\d+\s*\d*)(?:>)",

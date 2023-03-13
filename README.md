@@ -8,9 +8,9 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 
 # API
 
-- http://localhost:9666/
 - http://localhost:9666/channel
 - http://localhost:9666/message
+- http://localhost:9666/daemon
 
 # Interface
 
@@ -19,7 +19,6 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 
 # Training data
 
-- [MANIFESTO.txt](/MANIFESTO.txt)
 - https://ink.university/
 - [https://fate.agency/](https://bafybeigz5tzb7kbxeeb6fd7bka5dk3lxuh4g5hujvszaad4xwyw2yjwhne.ipfs.nftstorage.link/)
 - [https://research.gq/](https://research.gq/#/page/getting%20started)
@@ -40,4 +39,15 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 
 # Instructions
 
+- Clone this repo.
+- Install Docker.
+- `git submodule init` to fetch remote datasets.
+- Place configurations into lab/config.yml. [default.yml](./vtx/default.yml)
+- Put credentials into a .env file at the root of this project. [example.env](./example.env)
+- Put new datasets into lab/{dataset_name}. Also specify them in config.yml.
+- Use VSCode tasks as a reference.
+- The "build" task will build a Docker image from source files.
+- The task "i" is used for data retrieval and preparation tasks.
+- The "train" task is used to train your models.
+- The "up" task is used to run your bot.
 - Ask me questions.

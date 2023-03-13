@@ -1,15 +1,125 @@
+# This is a default configuration file, with some basic settings to get you started
+# DO NOT modify this file directly. Instead, create a file called "config.yml" in
+# the {project_root}/lab directory, and apply your settings there.
+# Both files will be merged at runtime, with your custom config file taking priority.
+
+# Most of these services require some form of authentication. API keys and credentials should be
+# stored in a .env file, at the root of this project. See {project_root}/.env for an example.
+
+# :: This AI connects to The Source by default:
+# :: https://thesource.fm/?channel=hive
+
 source:
+  # The channel names to subscribe to.
   hive:
+
+    # Attempt to respond to new messages in this channel.
     watch: True
+
+    # The chance to respond to new messages in this channel.
     chance: 0.33
+
+    # If True, your bot will respond to any message - not just new ones. Effectively, this
+    # means that your bot will speak to itself.
     run_on: False
+
   support:
     watch: False
     chance: 0.11
     run_on: False
 
+# :: The following are AI model configurations, used by PyTorch:
+# :: https://docs.aitextgen.io/
+
+# The top-level key is the name of your custom model.
+toe:
+
+  # An arbitrary text description of your model.
+  info: it's nailed to the foot
+
+  # Whether or not to load this model into your GPU at runtime (for inference.)
+  to_gpu: False
+
+  # The number of GPUs to expose to PyTorch.
+  n_gpu: 1
+
+  # Given a prompt, this is the maximum number of new tokens your model will generate.
+  max_new_tokens: 333
+
+  # This key is for settings that are only used during training.
+  training:
+    # Whether or not you will continue training your existing fine-tuned model (True), or
+    # start over from scratch. (False)
+    resume: True
+
+    # The base model to be fine-tuned.
+    base_model: EleutherAI/gpt-neo-125M
+
+    # Whether or not to train on GPU.
+    to_gpu: True
+
+    # Larger batch sizes generally lead to better results, but require more memory to train.
+    batch_size: 3
+
+    # This represents your model's "context window."
+    block_size: 444
+
+    # The number of iterations before training will complete.
+    num_steps: 88888
+
+    # This key is currently broken. Anything other than "0" will prevent the network from learning.
+    warmup_steps: 0
+
+    # Gradient accumulation is a ML trick, that essentially allows for larger batch sizes, without
+    # the memory hit. For example, at a batch size of 3, and gradient accumulation steps of 6, your
+    # your model will effectively train with a batch size of 18. (3 x 6 = 18)
+    gradient_accumulation_steps: 6
+
+    # The rate at which your model will adjust weights/biases at each iteration step.
+    learning_rate: 0.000222
+
+    # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
+    weight_decay: 0.023
+
+    # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
+    max_grad_norm: 0.444
+
+    # Whether or not to prevent some layers of your model from being updated.
+    freeze_layers: True
+
+    # The number of layers to freeze, starting from the left (lowest/deepest features), and moving right.
+    num_layers_freeze: 8
+
+    # Takes an equal number of samples from each dataset, so as not to bias towards one or the other. Not
+    # recommended; this can cause larger datasets to nearly vanish, because so much data is never sampled.
+    equalize_datasets: False
+
+    # Place each dataset into a folder at {project_root}/lab, then list them here.
+    datasets:
+
+      # The path to your dataset.
+      lab/aitextgen:
+
+      # lab/csvfiles:
+        # In some instances, your data should be read line-by-line. A CSV file is a good example.
+        # line_by_line: True
+
+      lab/swarm:
+      lab/source:
+      lab/ink:
+      lab/pen:
+      lab/journals:
+      lab/research:
+      lab/theory:
+      lab/pages:
+      lab/texts:
+      vtx:
+      ctx:
+
 heart:
   info: never give up, never give in
+
+  # If you want to use a foundation model, you can specify it here.
   model: gpt2
   to_gpu: False
 
@@ -51,58 +161,52 @@ soul:
       vtx:
       ctx:
 
-toe:
-  info: it's nailed to the foot
-  to_gpu: False
-  n_gpu: 1
-  max_new_tokens: 333
-  training:
-    resume: True
-    base_model: EleutherAI/gpt-neo-125M
-    to_gpu: True
-    batch_size: 3
-    block_size: 444
-    num_steps: 88888
-    warmup_steps: 0
-    gradient_accumulation_steps: 6
-    learning_rate: 0.000666 # FOLD
-    weight_decay: 0.23 # CORE
-    max_grad_norm: 0.59 # ROOT
-    freeze_layers: True
-    num_layers_freeze: 4
-    equalize_datasets: False
-    datasets:
-      lab/aitextgen:
-      lab/swarm:
-      lab/source:
-      lab/ink:
-      lab/pen:
-      lab/journals:
-      lab/research:
-      lab/theory:
-      lab/pages:
-      lab/texts:
-      vtx:
-      ctx:
+# :: Connect your AI to Reddit.
+# :: This requires the creation of a "personal use script," here:
+# :: https://www.reddit.com/prefs/apps
 
-reddit:
-  SubSimGPT2Interactive:
-    limit: 10
-    type: new
-    skip: True
-    watch: True
-    chance: 0.001
-  Kunism:
-    limit: 500
-    watch: True
-    chance: 0.5
+# reddit:
+    # For each subreddit you want to subscribe to.
+#   SubSimGPT2Interactive:
+      # While fetching data from this subreddit, limit to X number of submissions.
+#     limit: 10
+      # Subreddit filter. Currently supports "top" and "new" submissions.
+#     type: new
+      # Do not attempt to fetch more submissions from this subreddit.
+#     skip: True
+      # Whether or not your bot should attempt to "converse" with others in the comments' section.
+#     watch: True
+      # The rate at which your bot will attempt to respond.
+#     chance: 0.001
+#   Kunism:
+#     limit: 500
+#     watch: True
+#     chance: 0.5
 
-discord:
-  use_self_token: True
-  export_dms: True
-  servers:
-    '558378982920159242':
-      before: '2021-01-01 12:00'
-      skip: True
-    '1041331166592106576':
-    '907925566089465886':
+# :: Connect your AI to Discord.
+# :: This requires a developer account, found here:
+# :: https://discord.com/developers/applications
+# :: At a minimum, your account must have the ability to read and send messages.
+
+# discord:
+    # Whether or not to use a self token for authentication. If False, Discord Chat Exporter
+    # will attempt to fetch messages as your bot itself.
+    # How to obtain a self token: https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md
+#   use_self_token: True
+    # Whether or not to export private messages.
+#   export_dms: True
+    # A list of servers to fetch from (by Discord server ID).
+#   servers:
+#     '558378982920159242':
+        # "before" and "after" are both supported.
+#       before: '2021-01-01 12:00'
+        # Do not attempt to fetch additional messages from this server.
+#       skip: True
+#     '1041331166592106576':
+#     '907925566089465886':
+
+# :: Connect your AI to Telegram.
+# :: This requires a bot API key. To obtain this, you must speak to
+# :: @BotFather on Telegram.
+
+# telegram

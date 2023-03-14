@@ -118,7 +118,7 @@ for (const channel of Object.entries(config)) {
             message = bullet.message
           }
           channel['bullet'] = {
-            message,
+            message: message.toString(),
             identifier: bullet.identifier
           }
         }

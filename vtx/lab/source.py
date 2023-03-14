@@ -6,6 +6,14 @@ from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import requests
 import head
 
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
+    datefmt="%Y-%m-%d:%H:%M:%S",
+    level=logging.ERROR,
+)
+
 state = None
 
 messages = {}
@@ -53,7 +61,7 @@ async def scrape(channel):
 
             if generation[0] == "[ERROR]":
                 messages[channel] = []
-                continue
+                generation[1] == "ERROR: Me Found."
 
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(
@@ -72,6 +80,7 @@ async def scrape(channel):
                     truncate_history(history)
 
             truncate_history(messages[channel])
+            truncate_history(history)
 
             messages[channel].append(sanitized)
 

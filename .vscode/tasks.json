@@ -56,6 +56,12 @@
       "command": "FOCUS=\"${input:env}\" docker-compose up"
     },
     {
+      "label": "up (Windows)",
+      "detail": "Start the services in a development environment.",
+      "type": "shell",
+      "command": "$env:FOCUS = '${input:env}'; docker-compose up"
+    },
+    {
       "label": "train",
       "detail": "Train a model.",
       "type": "shell",

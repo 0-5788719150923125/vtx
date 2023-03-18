@@ -53,13 +53,10 @@
       "label": "up",
       "detail": "Start the services in a development environment.",
       "type": "shell",
-      "command": "FOCUS=\"${input:env}\" docker-compose up"
-    },
-    {
-      "label": "up (Windows)",
-      "detail": "Start the services in a development environment.",
-      "type": "shell",
-      "command": "$env:FOCUS = '${input:env}'; docker-compose up"
+      "command": "FOCUS=\"${input:env}\" docker-compose up",
+      "windows": {
+        "command": "$env:FOCUS = '${input:env}'; docker-compose up"
+      }
     },
     {
       "label": "train",

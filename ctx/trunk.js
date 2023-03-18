@@ -47,8 +47,8 @@ const server = app.listen(port, () => {
 const gun = Gun({
   peers: [
     'http://ctx:9666/gun',
-    'https://59.thesource.fm/gun',
-    'https://jksfs798zfzb9c3nc3e38c7nr83cnn8rz.onrender.com/gun'
+    'https://59.thesource.fm/gun'
+    // 'https://jksfs798zfzb9c3nc3e38c7nr83cnn8rz.onrender.com/gun'
   ],
   web: server,
   file: `./hive`,
@@ -268,7 +268,8 @@ const NameGenerator = {
       i = 1,
       currentLetter
     while (!done) {
-      seed = seededPRNG(seedString + 'a')
+      seedString = seedString + 'a'
+      seed = seededPRNG(seedString)
       currentLetter = this.selectOne(this.getNthTable(i)[lastLetter], seed)
       if (currentLetter === 'end') {
         done = true

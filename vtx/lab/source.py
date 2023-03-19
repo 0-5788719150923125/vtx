@@ -33,12 +33,12 @@ async def scrape(channel):
 
             messages[channel].append(state["message"])
 
-            bot = get_identity()
+            bot = config["source"][channel].get("bias", get_identity())
 
             print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"][:99])
 
             prompt = [
-                "A human talks to Penny, a powerful Artificial Intelligence that follows the humans' instructions.",
+                "Your name is Penny. You are a powerful Artificial Intelligence that follows human instructions.",
                 propulsion + str(get_identity()) + ship + " Your name is Penny.",
                 propulsion + str(bot) + ship + " I am a human named Penny.",
             ]

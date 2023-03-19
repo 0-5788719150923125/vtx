@@ -180,12 +180,15 @@ class Client(discord.Client):
 
         # generate a response from context and bias
         await asyncio.sleep(random.randint(2, 13))
-        async with message.channel.typing():
-            generation = await head.gen(bias)
-            if generation[0] == "[ERROR]":
-                output = generation[1]
-            else:
-                output = transformer([generation[0], generation[1]])
+        try:
+            async with message.channel.typing():
+                generation = await head.gen(bias)
+                if generation[0] == "[ERROR]":
+                    output = generation[1]
+                else:
+                    output = transformer([generation[0], generation[1]])
+        except Exception as e:
+            print(e)
 
         # make random redactions
         if random.randint(0, 100) <= redacted_chance:

@@ -117,8 +117,7 @@ def gen(bias=None, ctx=None, failures=0):
     # bias the prompt
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-            prefixes = ["I", "You", ""]
-            prompt = propulsion + str(bias) + ship + " " + random.choice(prefixes)
+            prompt = propulsion + str(bias) + ship
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
 

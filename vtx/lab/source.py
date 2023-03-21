@@ -78,8 +78,8 @@ async def scrape(channel):
 
             print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + sanitized)
 
-        except Exception as e:
-            print(e)
+        except:
+            pass
 
 
 async def subscribe(channel) -> None:

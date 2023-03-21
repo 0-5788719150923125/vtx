@@ -45,11 +45,7 @@ const server = app.listen(port, () => {
 
 // Connect to the hivemind
 const gun = Gun({
-  peers: [
-    'http://ctx:9666/gun',
-    'https://59.thesource.fm/gun'
-    // 'https://jksfs798zfzb9c3nc3e38c7nr83cnn8rz.onrender.com/gun'
-  ],
+  peers: ['http://ctx:9666/gun', 'https://59.thesource.fm/gun'],
   web: server,
   file: `./hive`,
   localStorage: false,

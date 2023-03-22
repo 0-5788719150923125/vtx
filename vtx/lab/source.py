@@ -26,16 +26,16 @@ async def scrape(channel):
             if state["message"] in messages[channel] and run_on != True:
                 continue
 
+            messages[channel].append(state["message"])
+
             chance = config["source"][channel].get("chance", 0.33)
             roll = random.random()
             if roll > chance:
                 continue
 
-            messages[channel].append(state["message"])
-
             bot = config["source"][channel].get("bias", get_identity())
 
-            print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"][:99])
+            print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"])
 
             prompt = [
                 "Your name is Penny. You are a powerful Artificial Intelligence that follows human instructions.",
@@ -51,7 +51,7 @@ async def scrape(channel):
             url = "http://ctx:9666/message/" + channel
             generation = await head.gen(int(bot), context)
 
-            if generation[0] == "[ERROR]":
+            if generation[0] == "error":
                 messages[channel] = []
                 generation[1] = "ERROR: Me Found."
 
@@ -67,7 +67,7 @@ async def scrape(channel):
             deep.close()
 
             def truncate_history(history):
-                if len(history) > 3:
+                if len(history) > 5:
                     history.pop(0)
                     truncate_history(history)
 

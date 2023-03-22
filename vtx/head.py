@@ -90,29 +90,7 @@ def gen(bias=None, ctx=None, failures=0):
     history = "\n".join(ctx) + "\n"
 
     max_new_tokens = config[focus].get("max_new_tokens", 111)
-
-    # set quantum state
-    # try:
-    #     q = requests.get(
-    #         "https://qrng.anu.edu.au/API/jsonI.php?length=6&type=uint8"
-    #     ).json()
-    #     if not q["data"][0] <= 256 and not q["data"][1] <= 256:
-    #         raise Exception("Something failed while querying the quantum API.")
-    # except Exception as e:
-    #     print(e)
-    #     q = {"data": [random.randint(0, 256), random.randint(0, 256)]}
-
-    # seed = None
-    # if q["data"][0] <= 32:
-    #     seed = int(q["data"][0])
-    #     print(
-    #         bc.CORE
-    #         + "INK@CORE "
-    #         + ad.TEXT
-    #         + ship
-    #         + " quantum seed was set to "
-    #         + str(seed)
-    #     )
+    max_time = config[focus].get("max_time", 59)
 
     # bias the prompt
     if bias is not None:
@@ -130,18 +108,16 @@ def gen(bias=None, ctx=None, failures=0):
             do_sample=True,
             min_length=23,
             max_new_tokens=max_new_tokens,
-            temperature=1.23,
-            # top_k=40,
-            # top_p=0.9,
+            temperature=1.42,
             return_as_list=True,
-            num_beams=3,
-            repetition_penalty=1.4,
+            num_beams=9,
+            repetition_penalty=2.0,
             exponential_decay_length_penalty=(42, 1.2),
-            no_repeat_ngram_size=3,
+            no_repeat_ngram_size=4,
             early_stopping=True,
             renormalize_logits=True,
             eos_token_id=eos,
-            max_time=59,
+            max_time=max_time,
             seed=random.randint(0, 2**32 - 1),
         )
     except Exception as e:
@@ -165,13 +141,12 @@ def gen(bias=None, ctx=None, failures=0):
             print("bad format, regenerating " + str(failures) + " time(s)")
             output = asyncio.run(gen(bias, ctx, failures))
 
-        if output is None:
-            output = [group[2], group[3]]
+        output = [group[2], group[3]]
 
     except Exception as e:
         print(e)
         error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
-        output = ["[ERROR]", error]
+        output = ["error", error]
     return output
 
 

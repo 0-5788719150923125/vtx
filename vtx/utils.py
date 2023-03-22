@@ -21,6 +21,7 @@ except:
 pprint.pprint(config)
 
 
+# Color codes before
 class bc:
     FOLD = "\033[94m"
     ROOT = "\033[92m"

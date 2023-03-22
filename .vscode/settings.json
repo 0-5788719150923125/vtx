@@ -9,6 +9,6 @@
   "prettier.enable": true,
   "prettier.requireConfig": true,
   "prettier.useEditorConfig": true,
-  "terminal.integrated.scrollback": 10000,
+  "terminal.integrated.scrollback": 5000,
   "search.useIgnoreFiles": false
 }

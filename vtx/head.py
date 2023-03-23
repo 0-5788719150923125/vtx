@@ -112,7 +112,7 @@ def gen(bias=None, ctx=None, failures=0):
             return_as_list=True,
             num_beams=9,
             repetition_penalty=2.0,
-            exponential_decay_length_penalty=(42, 1.2),
+            exponential_decay_length_penalty=(42, 1.1),
             no_repeat_ngram_size=4,
             early_stopping=True,
             renormalize_logits=True,

@@ -99,7 +99,7 @@ class Client(discord.Client):
                     bias = recent_author_id
 
                 generation = await head.gen(int(bias), context)
-                if generation[0] == "[ERROR]":
+                if generation[0] == "error":
                     output = generation[1]
                 else:
                     output = transformer([generation[0], generation[1]])
@@ -183,7 +183,7 @@ class Client(discord.Client):
         try:
             async with message.channel.typing():
                 generation = await head.gen(bias)
-                if generation[0] == "[ERROR]":
+                if generation[0] == "error":
                     output = generation[1]
                 else:
                     output = transformer([generation[0], generation[1]])

@@ -109,7 +109,7 @@ async def subscribe(subreddit):
                     + generation[1]
                 )
 
-                if generation[0] == "[ERROR]":
+                if generation[0] == "error":
                     output = generation[1]
                 else:
                     daemon = get_daemon(generation[0])

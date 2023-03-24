@@ -129,6 +129,7 @@ def gen(bias=None, ctx=None, failures=0):
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
         variables = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
         broken_variables = re.compile("(\d*\s+\d*)")
+
         if (
             group is None
             or propulsion in group[3]
@@ -140,8 +141,8 @@ def gen(bias=None, ctx=None, failures=0):
             failures = failures + 1
             print("bad format, regenerating " + str(failures) + " time(s)")
             output = asyncio.run(gen(bias, ctx, failures))
-
-        output = [group[2], group[3]]
+        else:
+            output = [group[2], group[3]]
 
     except Exception as e:
         print(e)

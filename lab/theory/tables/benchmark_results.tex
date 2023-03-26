@@ -1,0 +1,31 @@
+\begin{table*}[]
+\small
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Eval Benchmark $\rightarrow$}                         & \textbf{EAI Eval} & \textbf{T0 Eval} & \textbf{SuperNI Eval} & \textbf{EditEval} \\ \midrule
+\multicolumn{5}{l}{\textbf{Benchmark Properties}}                                                                                    \\
+Number of Tasks                                     &  43                  & 11                   & 119                      & 10               \\
+- Contains Classification Tasks?                    & \cmark               & \cmark              & \cmark                   & \xmark                \\
+- Contains Generation Tasks?                        & \xmark                & \xmark               & \cmark                   & \cmark               \\
+Output Formulation                                & Option Ranking    & Option Ranking   & Free Generation       & Free Generation   \\
+Aggregation Metric                                 & Accuracy          & Accuracy         & ROUGE-L               & SARI              \\
+\midrule
+\multicolumn{5}{l}{\textbf{Model Performance}}                                                                                       \\
+T0 (11B)                                          &  54.7          &   62.7            & 33.1         & 26.6            \\
+Tk-Instruct (11B)                                 &                &                & 46.0          & 28.2           \\
+PEER (11B)                                         & -              & -              & -              & 39.1           \\
+\addlinespace
+GPT3                                              &     52.3           &                & 6.8            &  33.1               \\
++ SuperNI Training                                  &                &                & 49.5            &   33.0              \\
++ T0 Training                                       &                &                &  37.9               &   31.4              \\
++ Self-Instructing                                  &                &                & 39.9           &         36.9       \\
+% + SuperNI Training                                 &                &                & 47.8            &                 \\
+% + T0 Training                                     &                &                &                 &                 \\
++ Self-Instructing -> SuperNI Training            &                  &                  &   51.6               &                 \\
+\addlinespace
+InstructGPT-001                                   &   55.6             &                & 40.8            &     39.3            \\ \bottomrule
+\end{tabular}
+\caption{Results on NLP benchmarks that require instruction following, evaluated in a zero-shot manner where no examples are used for finetuning or in-context demonstration. Due to the large number of tasks evaluated here, we evaluate on 100 randomly sampled instances per task instruction.}
+\label{tab:benchmark-results}
+\end{table*}

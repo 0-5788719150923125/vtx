@@ -1,0 +1,457 @@
+\providecommand{\CNFX}[1]{{\em{\textrm{(#1)}}}}
+\begin{thebibliography}{53}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Amini et~al.(2022)Amini, Feofanov, Pauletto, Devijver, and
+  Maximov}]{amini2022self}
+Massih-Reza Amini, Vasilii Feofanov, Loic Pauletto, Emilie Devijver, and Yury
+  Maximov. 2022.
+\newblock \href {https://arxiv.org/abs/2202.12040} {Self-training: A survey}.
+\newblock \emph{arXiv preprint arXiv:2202.12040}.
+
+\bibitem[{Bach et~al.(2022)Bach, Sanh, Yong, Webson, Raffel, Nayak, Sharma,
+  Kim, Bari, Fevry et~al.}]{bach2022promptsource}
+Stephen~H Bach, Victor Sanh, Zheng-Xin Yong, Albert Webson, Colin Raffel,
+  Nihal~V Nayak, Abheesht Sharma, Taewoon Kim, M~Saiful Bari, Thibault Fevry,
+  et~al. 2022.
+\newblock \href {https://arxiv.org/abs/2202.01279} {{PromptSource: An
+  Integrated Development Environment and Repository for Natural Language
+  Prompts}}.
+\newblock In \emph{Annual Meeting of the Association for Computational
+  Linguistics \CNFX{ACL} - System Demonstrations}.
+
+\bibitem[{Brown et~al.(2020)Brown, Mann, Ryder, Subbiah, Kaplan, Dhariwal,
+  Neelakantan, Shyam, Sastry, Askell, Agarwal, and et~al.}]{brown2020gpt3}
+Tom~B. Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared Kaplan,
+  Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda
+  Askell, Sandhini Agarwal, and et~al. 2020.
+\newblock \href
+  {https://papers.nips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html}
+  {{Language models are few-shot learners}}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  \CNFX{NeurIPS}}.
+
+\bibitem[{Chakrabarty et~al.(2022)Chakrabarty, Padmakumar, and
+  He}]{chakrabarty2022help}
+Tuhin Chakrabarty, Vishakh Padmakumar, and He~He. 2022.
+\newblock \href {https://arxiv.org/abs/2210.13669} {Help me write a poem:
+  Instruction tuning as a vehicle for collaborative poetry writing}.
+\newblock \emph{arXiv preprint arXiv:2210.13669}.
+
+\bibitem[{Chung et~al.(2022)Chung, Hou, Longpre, Zoph, Tay, Fedus, Li, Wang,
+  Dehghani, Brahma et~al.}]{chung2022scaling}
+Hyung~Won Chung, Le~Hou, Shayne Longpre, Barret Zoph, Yi~Tay, William Fedus,
+  Eric Li, Xuezhi Wang, Mostafa Dehghani, Siddhartha Brahma, et~al. 2022.
+\newblock \href {https://arxiv.org/abs/2210.11416} {Scaling
+  instruction-finetuned language models}.
+\newblock \emph{arXiv preprint arXiv:2210.11416}.
+
+\bibitem[{Du et~al.(2021)Du, Grave, Gunel, Chaudhary, Celebi, Auli, Stoyanov,
+  and Conneau}]{du2021self}
+Jingfei Du, {\'E}douard Grave, Beliz Gunel, Vishrav Chaudhary, Onur Celebi,
+  Michael Auli, Veselin Stoyanov, and Alexis Conneau. 2021.
+\newblock \href {https://aclanthology.org/2021.naacl-main.426} {Self-training
+  improves pre-training for natural language understanding}.
+\newblock In \emph{Conference of the North American Chapter of the Association
+  for Computational Linguistics \CNFX{NAACL}: Human Language Technologies},
+  pages 5408--5418.
+
+\bibitem[{Feng et~al.(2021)Feng, Gangal, Wei, Chandar, Vosoughi, Mitamura, and
+  Hovy}]{feng2021survey}
+Steven~Y Feng, Varun Gangal, Jason Wei, Sarath Chandar, Soroush Vosoughi,
+  Teruko Mitamura, and Eduard Hovy. 2021.
+\newblock \href {https://aclanthology.org/2021.findings-acl.84/} {A survey of
+  data augmentation approaches for nlp}.
+\newblock In \emph{Annual Meeting of the Association for Computational
+  Linguistics \CNFX{ACL}~ACL-IJCNLP - Findings}, pages 968--988.
+
+\bibitem[{Fried et~al.(2018)Fried, Hu, Cirik, Rohrbach, Andreas, Morency,
+  Berg-Kirkpatrick, Saenko, Klein, and Darrell}]{fried2018speaker}
+Daniel Fried, Ronghang Hu, Volkan Cirik, Anna Rohrbach, Jacob Andreas,
+  Louis-Philippe Morency, Taylor Berg-Kirkpatrick, Kate Saenko, Dan Klein, and
+  Trevor Darrell. 2018.
+\newblock \href {https://arxiv.org/abs/1806.02724} {Speaker-follower models for
+  vision-and-language navigation}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  \CNFX{NeurIPS}}.
+
+\bibitem[{Gupta et~al.(2022)Gupta, Jiao, Yeh, Mehri, Eskenazi, and
+  Bigham}]{gupta2022improving}
+Prakhar Gupta, Cathy Jiao, Yi-Ting Yeh, Shikib Mehri, Maxine Eskenazi, and
+  Jeffrey~P Bigham. 2022.
+\newblock \href {https://arxiv.org/abs/2205.12673} {Instructdial: Improving
+  zero and few-shot generalization in dialogue through instruction tuning}.
+\newblock \emph{arXiv preprint arXiv:2205.12673}.
+
+\bibitem[{He et~al.(2019)He, Gu, Shen, and Ranzato}]{he2019revisiting}
+Junxian He, Jiatao Gu, Jiajun Shen, and Marc'Aurelio Ranzato. 2019.
+\newblock \href {https://arxiv.org/abs/1909.13788} {Revisiting self-training
+  for neural sequence generation}.
+\newblock In \emph{International Conference on Learning Representations
+  \CNFX{ICLR}}.
+
+\bibitem[{Hinton et~al.(2015)Hinton, Vinyals, Dean
+  et~al.}]{hinton2015distilling}
+Geoffrey Hinton, Oriol Vinyals, Jeff Dean, et~al. 2015.
+\newblock \href {https://arxiv.org/abs/1503.02531} {Distilling the knowledge in
+  a neural network}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  \CNFX{NeurIPS}~Workshop on Deep Learning}.
+
+\bibitem[{Honovich et~al.(2022)Honovich, Shaham, Bowman, and
+  Levy}]{honovich2022instruction}
+Or~Honovich, Uri Shaham, Samuel~R Bowman, and Omer Levy. 2022.
+\newblock \href {https://arxiv.org/abs/2205.10782} {Instruction induction: From
+  few examples to natural language task descriptions}.
+\newblock \emph{arXiv preprint arXiv:2205.10782}.
+
+\bibitem[{Huang et~al.(2022)Huang, Gu, Hou, Wu, Wang, Yu, and
+  Han}]{huang2022large}
+Jiaxin Huang, Shixiang~Shane Gu, Le~Hou, Yuexin Wu, Xuezhi Wang, Hongkun Yu,
+  and Jiawei Han. 2022.
+\newblock \href {https://arxiv.org/abs/2205.10782} {Large language models can
+  self-improve}.
+\newblock \emph{arXiv preprint arXiv:2210.11610}.
+
+\bibitem[{Kandpal et~al.(2022)Kandpal, Deng, Roberts, Wallace, and
+  Raffel}]{kandpal2022large}
+Nikhil Kandpal, Haikang Deng, Adam Roberts, Eric Wallace, and Colin Raffel.
+  2022.
+\newblock \href {https://arxiv.org/abs/2211.08411} {Large language models
+  struggle to learn long-tail knowledge}.
+\newblock \emph{arXiv preprint arXiv:2211.08411}.
+
+\bibitem[{Kitaev et~al.(2019)Kitaev, Cao, and
+  Klein}]{kitaev-etal-2019-multilingual}
+Nikita Kitaev, Steven Cao, and Dan Klein. 2019.
+\newblock \href {https://doi.org/10.18653/v1/P19-1340} {Multilingual
+  constituency parsing with self-attention and pre-training}.
+\newblock In \emph{Annual Meeting of the Association for Computational
+  Linguistics \CNFX{ACL}}, pages 3499--3505.
+
+\bibitem[{Kitaev and Klein(2018)}]{kitaev-klein-2018-constituency}
+Nikita Kitaev and Dan Klein. 2018.
+\newblock \href {https://doi.org/10.18653/v1/P18-1249} {Constituency parsing
+  with a self-attentive encoder}.
+\newblock In \emph{Annual Meeting of the Association for Computational
+  Linguistics \CNFX{ACL}}, pages 2676--2686.
+
+\bibitem[{Lester et~al.(2021)Lester, Al-Rfou, and Constant}]{lester2021power}
+Brian Lester, Rami Al-Rfou, and Noah Constant. 2021.
+\newblock \href {https://arxiv.org/abs/2104.08691} {The power of scale for
+  parameter-efficient prompt tuning}.
+\newblock In \emph{Conference on Empirical Methods in Natural Language
+  Processing \CNFX{EMNLP}}.
+
+\bibitem[{Lin et~al.(2022)Lin, Tan, Miller, Tian, and
+  Ren}]{lin2022unsupervised}
+Bill~Yuchen Lin, Kangmin Tan, Chris Miller, Beiwen Tian, and Xiang Ren. 2022.
+\newblock \href {https://arxiv.org/abs/2204.07937} {Unsupervised cross-task
+  generalization via retrieval augmentation}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  \CNFX{NeurIPS}}.
+
+\bibitem[{Liu et~al.(2022)Liu, Swayamdipta, Smith, and Choi}]{liu2022wanli}
+Alisa Liu, Swabha Swayamdipta, Noah~A. Smith, and Yejin Choi. 2022.
+\newblock \href
+  {https://preview.aclanthology.org/emnlp-22-ingestion/2022.findings-emnlp.508/}
+  {{WANLI}: Worker and ai collaboration for natural language inference dataset
+  creation}.
+\newblock In \emph{Conference on Empirical Methods in Natural Language
+  Processing \CNFX{EMNLP} - Findings}.
+
+\bibitem[{Luo et~al.(2022)Luo, Saxena, Mishra, Parmar, and
+  Baral}]{luo2022biotabqa}
+Man Luo, Sharad Saxena, Swaroop Mishra, Mihir Parmar, and Chitta Baral. 2022.
+\newblock \href {https://arxiv.org/abs/2207.02419} {Biotabqa: Instruction
+  learning for biomedical table question answering}.
+\newblock In \emph{BioASQ Workshop}.
+
+\bibitem[{Magister et~al.(2022)Magister, Mallinson, Adamek, Malmi, and
+  Severyn}]{luciecharlotte2022teachingsmallmodels}
+Lucie~Charlotte Magister, Jonathan Mallinson, Jakub Adamek, Eric Malmi, and
+  Aliaksei Severyn. 2022.
+\newblock \href {https://arxiv.org/abs/2212.08410} {Teaching small language
+  models to reason}.
+\newblock \emph{arXiv preprint arXiv:2212.08410}.
+
+\bibitem[{Mekala et~al.(2022)Mekala, Vu, Schick, and
+  Shang}]{mekala2022intermediate}
+Dheeraj Mekala, Tu~Vu, Timo Schick, and Jingbo Shang. 2022.
+\newblock \href {https://arxiv.org/abs/2205.12604} {Leveraging qa datasets to
+  improve generative data augmentation}.
+\newblock \emph{arXiv preprint arXiv:2205.12604}.
+
+\bibitem[{Meng et~al.(2022)Meng, Michalski, Huang, Zhang, Abdelzaher, and
+  Han}]{meng2022tuning}
+Yu~Meng, Martin Michalski, Jiaxin Huang, Yu~Zhang, Tarek Abdelzaher, and Jiawei
+  Han. 2022.
+\newblock \href {https://arxiv.org/abs/2211.03044} {Tuning language models as
+  training data generators for augmentation-enhanced few-shot learning}.
+\newblock \emph{arXiv preprint arXiv:2211.03044}.
+
+\bibitem[{Min et~al.(2022)Min, Chaplot, Ravikumar, Bisk, and
+  Salakhutdinov}]{min2022film}
+So~Yeon Min, Devendra~Singh Chaplot, Pradeep Ravikumar, Yonatan Bisk, and
+  Ruslan Salakhutdinov. 2022.
+\newblock \href {https://arxiv.org/abs/2110.07342} {{FILM: Following
+  Instructions in Language with Modular Methods}}.
+\newblock In \emph{International Conference on Learning Representations
+  \CNFX{ICLR}}.
+
+\bibitem[{Mishra et~al.(2022)Mishra, Khashabi, Baral, and
+  Hajishirzi}]{mishra2022cross}
+Swaroop Mishra, Daniel Khashabi, Chitta Baral, and Hannaneh Hajishirzi. 2022.
+\newblock \href {https://arxiv.org/abs/2104.08773} {{Cross-Task Generalization
+  via Natural Language Crowdsourcing Instructions}}.
+\newblock In \emph{Annual Meeting of the Association for Computational
+  Linguistics \CNFX{ACL}}.
+
+\bibitem[{Muennighoff et~al.(2022)Muennighoff, Wang, Sutawika, Roberts,
+  Biderman, Scao, Bari, Shen, Yong, Schoelkopf
+  et~al.}]{muennighoff2022crosslingual}
+Niklas Muennighoff, Thomas Wang, Lintang Sutawika, Adam Roberts, Stella
+  Biderman, Teven~Le Scao, M~Saiful Bari, Sheng Shen, Zheng-Xin Yong, Hailey
+  Schoelkopf, et~al. 2022.
+\newblock \href {https://arxiv.org/abs/2211.01786} {Crosslingual generalization
+  through multitask finetuning}.
+\newblock \emph{arXiv preprint arXiv:2211.01786}.
+
+\bibitem[{Ouyang et~al.(2022)Ouyang, Wu, Jiang, Almeida, Wainwright, Mishkin,
+  Zhang, Agarwal, Slama, Ray et~al.}]{ouyang2022training}
+Long Ouyang, Jeff Wu, Xu~Jiang, Diogo Almeida, Carroll~L Wainwright, Pamela
+  Mishkin, Chong Zhang, Sandhini Agarwal, Katarina Slama, Alex Ray, et~al.
+  2022.
+\newblock \href {https://arxiv.org/abs/2203.02155} {{Training Language Models
+  to Follow Instructions with Human Feedback}}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  \CNFX{NeurIPS}}.
+
+\bibitem[{Parmar et~al.(2022)Parmar, Mishra, Purohit, Luo, Mohammad, and
+  Baral}]{parmar-etal-2022-boxbart}
+Mihir Parmar, Swaroop Mishra, Mirali Purohit, Man Luo, Murad Mohammad, and
+  Chitta Baral. 2022.
+\newblock \href {https://doi.org/10.18653/v1/2022.findings-naacl.10}
+  {In-{B}o{XBART}: Get instructions into biomedical multi-task learning}.
+\newblock In \emph{Conference of the North American Chapter of the Association
+  for Computational Linguistics \CNFX{NAACL} - Findings}, pages 112--128.
+
+\bibitem[{Puri et~al.(2022)Puri, Mishra, Parmar, and Baral}]{puri2022how}
+Ravsehaj~Singh Puri, Swaroop Mishra, Mihir Parmar, and Chitta Baral. 2022.
+\newblock \href {https://arxiv.org/abs/2203.09161} {How many data samples is an
+  additional instruction worth?}
+\newblock \emph{arXiv preprint arXiv:2203.09161}.
+
+\bibitem[{Raffel et~al.(2020)Raffel, Shazeer, Roberts, Lee, Narang, Matena,
+  Zhou, Li, and Liu}]{raffel2020exploring}
+Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael
+  Matena, Yanqi Zhou, Wei Li, and Peter~J Liu. 2020.
+\newblock \href {https://arxiv.org/abs/1910.10683} {Exploring the limits of
+  transfer learning with a unified text-to-text transformer}.
+\newblock \emph{Journal of Machine Learning Research \CNFX{JMLR}}.
+
+\bibitem[{Razeghi et~al.(2022)Razeghi, Logan~IV, Gardner, and
+  Singh}]{razeghi2022impact}
+Yasaman Razeghi, Robert~L Logan~IV, Matt Gardner, and Sameer Singh. 2022.
+\newblock \href {https://arxiv.org/abs/2202.07206} {Impact of pretraining term
+  frequencies on few-shot reasoning}.
+\newblock \emph{arXiv preprint arXiv:2202.07206}.
+
+\bibitem[{Sanh et~al.(2019)Sanh, Debut, Chaumond, and
+  Wolf}]{Sanh2019DistilBERTAD}
+Victor Sanh, Lysandre Debut, Julien Chaumond, and Thomas Wolf. 2019.
+\newblock \href {https://arxiv.org/abs/1910.01108} {Distilbert, a distilled
+  version of bert: smaller, faster, cheaper and lighter}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  \CNFX{NeurIPS} Workshop on Energy Efficient Machine Learning and Cognitive
+  Computing}.
+
+\bibitem[{Sanh et~al.(2022)Sanh, Webson, Raffel, Bach, Sutawika, Alyafeai,
+  Chaffin, Stiegler, Raja, Dey, Bari, Xu, Thakker, Sharma, Szczechla, Kim,
+  Chhablani, Nayak, Datta, Chang, Jiang, Wang, Manica, Shen, Yong, Pandey,
+  Bawden, Wang, Neeraj, Rozen, Sharma, Santilli, Fevry, Fries, Teehan, Scao,
+  Biderman, Gao, Wolf, and Rush}]{sanh2022multitask}
+Victor Sanh, Albert Webson, Colin Raffel, Stephen Bach, Lintang Sutawika, Zaid
+  Alyafeai, Antoine Chaffin, Arnaud Stiegler, Arun Raja, Manan Dey, M~Saiful
+  Bari, Canwen Xu, Urmish Thakker, Shanya~Sharma Sharma, Eliza Szczechla,
+  Taewoon Kim, Gunjan Chhablani, Nihal Nayak, Debajyoti Datta, Jonathan Chang,
+  Mike Tian-Jian Jiang, Han Wang, Matteo Manica, Sheng Shen, Zheng~Xin Yong,
+  Harshit Pandey, Rachel Bawden, Thomas Wang, Trishala Neeraj, Jos Rozen,
+  Abheesht Sharma, Andrea Santilli, Thibault Fevry, Jason~Alan Fries, Ryan
+  Teehan, Teven~Le Scao, Stella Biderman, Leo Gao, Thomas Wolf, and Alexander~M
+  Rush. 2022.
+\newblock \href {https://arxiv.org/abs/2110.08207} {{Multitask Prompted
+  Training Enables Zero-Shot Task Generalization}}.
+\newblock In \emph{International Conference on Learning Representations
+  \CNFX{ICLR}}.
+
+\bibitem[{Schick and Sch{\"u}tze(2021)}]{schick2021generating}
+Timo Schick and Hinrich Sch{\"u}tze. 2021.
+\newblock \href {https://aclanthology.org/2021.emnlp-main.555/} {Generating
+  datasets with pretrained language models}.
+\newblock In \emph{Conference on Empirical Methods in Natural Language
+  Processing \CNFX{EMNLP}}.
+
+\bibitem[{Scialom et~al.(2022)Scialom, Chakrabarty, and
+  Muresan}]{scialom2022continual}
+Thomas Scialom, Tuhin Chakrabarty, and Smaranda Muresan. 2022.
+\newblock \href {https://arxiv.org/abs/2205.12393} {Fine-tuned language models
+  are continual learners}.
+\newblock \emph{arXiv preprint arXiv:2205.12393}.
+
+\bibitem[{Shridhar et~al.(2020)Shridhar, Thomason, Gordon, Bisk, Han, Mottaghi,
+  Zettlemoyer, and Fox}]{shridhar2020alfred}
+Mohit Shridhar, Jesse Thomason, Daniel Gordon, Yonatan Bisk, Winson Han,
+  Roozbeh Mottaghi, Luke Zettlemoyer, and Dieter Fox. 2020.
+\newblock \href {https://arxiv.org/abs/1912.01734} {{ALFRED: A Benchmark for
+  Interpreting Grounded Instructions for Everyday Tasks}}.
+\newblock In \emph{IEEE Conference on Computer Vision and Pattern Recognition
+  \CNFX{CVPR}}.
+
+\bibitem[{Singh et~al.(2022)Singh, Morris, Aneja, Rush, and
+  Gao}]{singh2022explaining}
+Chandan Singh, John~X Morris, Jyoti Aneja, Alexander~M Rush, and Jianfeng Gao.
+  2022.
+\newblock \href {https://arxiv.org/abs/2210.01848} {Explaining patterns in data
+  with language models via interpretable autoprompting}.
+\newblock \emph{arXiv preprint arXiv:2210.01848}.
+
+\bibitem[{Wang et~al.(2019)Wang, Pruksachatkun, Nangia, Singh, Michael, Hill,
+  Levy, and Bowman}]{wang2019superglue}
+Alex Wang, Yada Pruksachatkun, Nikita Nangia, Amanpreet Singh, Julian Michael,
+  Felix Hill, Omer Levy, and Samuel Bowman. 2019.
+\newblock \href {https://arxiv.org/abs/1905.00537} {{SuperGLUE}: A stickier
+  benchmark for general-purpose language understanding systems}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  \CNFX{NeurIPS}}.
+
+\bibitem[{Wang et~al.(2022)Wang, Mishra, Alipoormolabashi, Kordi, Mirzaei,
+  Arunkumar, Ashok, Dhanasekaran, Naik, Stap, Pathak, Karamanolakis, Lai,
+  Purohit, Mondal, Anderson, Kuznia, Doshi, Patel, Pal, Moradshahi, Parmar,
+  Purohit, Varshney, Kaza, Verma, Puri, Karia, Sampat, Doshi, Mishra, Reddy,
+  Patro, Dixit, Shen, Baral, Choi, Smith, Hajishirzi, and
+  Khashabi}]{wang2022benchmarking}
+Yizhong Wang, Swaroop Mishra, Pegah Alipoormolabashi, Yeganeh Kordi, Amirreza
+  Mirzaei, Anjana Arunkumar, Arjun Ashok, Arut~Selvan Dhanasekaran, Atharva
+  Naik, David Stap, Eshaan Pathak, Giannis Karamanolakis, Haizhi~Gary Lai,
+  Ishan Purohit, Ishani Mondal, Jacob Anderson, Kirby Kuznia, Krima Doshi,
+  Maitreya Patel, Kuntal~Kumar Pal, Mehrad Moradshahi, Mihir Parmar, Mirali
+  Purohit, Neeraj Varshney, Phani~Rohitha Kaza, Pulkit Verma, Ravsehaj~Singh
+  Puri, Rushang Karia, Shailaja~Keyur Sampat, Savan Doshi, Siddhartha Mishra,
+  Sujan Reddy, Sumanta Patro, Tanay Dixit, Xudong Shen, Chitta Baral, Yejin
+  Choi, Noah~A. Smith, Hannaneh Hajishirzi, and Daniel Khashabi. 2022.
+\newblock \href {https://arxiv.org/abs/2204.07705} {Super-naturalinstructions:
+  Generalization via declarative instructions on 1600+ tasks}.
+\newblock In \emph{Conference on Empirical Methods in Natural Language
+  Processing \CNFX{EMNLP}}.
+
+\bibitem[{Wang et~al.(2021)Wang, Yu, Firat, and Cao}]{wang2021towards}
+Zirui Wang, Adams~Wei Yu, Orhan Firat, and Yuan Cao. 2021.
+\newblock \href {https://arxiv.org/abs/2109.09193} {Towards zero-label language
+  learning}.
+\newblock \emph{arXiv preprint arXiv:2109.09193}.
+
+\bibitem[{Wei et~al.(2022)Wei, Bosma, Zhao, Guu, Yu, Lester, Du, Dai, and
+  Le}]{wei2022finetuned}
+Jason Wei, Maarten Bosma, Vincent Zhao, Kelvin Guu, Adams~Wei Yu, Brian Lester,
+  Nan Du, Andrew~M. Dai, and Quoc~V Le. 2022.
+\newblock \href {https://arxiv.org/abs/2109.01652} {{Finetuned Language Models
+  are Zero-Shot Learners}}.
+\newblock In \emph{International Conference on Learning Representations
+  \CNFX{ICLR}}.
+
+\bibitem[{Weir et~al.(2022)Weir, Yuan, C{\^o}t{\'e}, Hausknecht, Laroche,
+  Momennejad, Van~Seijen, and Van~Durme}]{weir2022one}
+Nathaniel Weir, Xingdi Yuan, Marc-Alexandre C{\^o}t{\'e}, Matthew Hausknecht,
+  Romain Laroche, Ida Momennejad, Harm Van~Seijen, and Benjamin Van~Durme.
+  2022.
+\newblock \href {https://arxiv.org/abs/2203.04806} {{One-Shot Learning from a
+  Demonstration with Hierarchical Latent Language}}.
+\newblock \emph{arXiv preprint arXiv:2203.04806}.
+
+\bibitem[{Welleck et~al.(2022)Welleck, Lu, West, Brahman, Shen, Khashabi, and
+  Choi}]{welleck2022generating}
+Sean Welleck, Ximing Lu, Peter West, Faeze Brahman, Tianxiao Shen, Daniel
+  Khashabi, and Yejin Choi. 2022.
+\newblock \href {https://arxiv.org/abs/2211.00053} {Generating sequences by
+  learning to self-correct}.
+\newblock \emph{arXiv preprint arXiv:2211.00053}.
+
+\bibitem[{Weller et~al.(2020)Weller, Lourie, Gardner, and
+  Peters}]{weller2020learning}
+Orion Weller, Nicholas Lourie, Matt Gardner, and Matthew Peters. 2020.
+\newblock \href {https://aclanthology.org/2020.emnlp-main.105/} {{Learning from
+  Task Descriptions}}.
+\newblock In \emph{Conference on Empirical Methods in Natural Language
+  Processing \CNFX{EMNLP}}.
+
+\bibitem[{West et~al.(2021)West, Bhagavatula, Hessel, Hwang, Jiang, Bras, Lu,
+  Welleck, and Choi}]{west2021symbolic}
+Peter West, Chandra Bhagavatula, Jack Hessel, Jena~D Hwang, Liwei Jiang,
+  Ronan~Le Bras, Ximing Lu, Sean Welleck, and Yejin Choi. 2021.
+\newblock \href {https://aclanthology.org/2022.naacl-main.341/} {Symbolic
+  knowledge distillation: from general language models to commonsense models}.
+\newblock In \emph{Conference of the North American Chapter of the Association
+  for Computational Linguistics \CNFX{NAACL}}.
+
+\bibitem[{Xie et~al.(2020)Xie, Luong, Hovy, and Le}]{xie2020self}
+Qizhe Xie, Minh-Thang Luong, Eduard Hovy, and Quoc~V Le. 2020.
+\newblock \href {https://arxiv.org/abs/1911.04252} {Self-training with noisy
+  student improves imagenet classification}.
+\newblock In \emph{IEEE Conference on Computer Vision and Pattern Recognition
+  \CNFX{CVPR}}, pages 10687--10698.
+
+\bibitem[{Yang et~al.(2020)Yang, Malaviya, Fernandez, Swayamdipta, Bras, Wang,
+  Bhagavatula, Choi, and Downey}]{yang2020generative}
+Yiben Yang, Chaitanya Malaviya, Jared Fernandez, Swabha Swayamdipta, Ronan~Le
+  Bras, Ji-Ping Wang, Chandra Bhagavatula, Yejin Choi, and Doug Downey. 2020.
+\newblock \href {https://aclanthology.org/2020.findings-emnlp.90} {Generative
+  data augmentation for commonsense reasoning}.
+\newblock In \emph{Conference on Empirical Methods in Natural Language
+  Processing \CNFX{EMNLP} - Findings}.
+
+\bibitem[{Ye et~al.(2022)Ye, Kim, Jang, Shin, and Seo}]{ye2022guess}
+Seonghyeon Ye, Doyoung Kim, Joel Jang, Joongbo Shin, and Minjoon Seo. 2022.
+\newblock \href {https://arxiv.org/abs/2210.02969} {Guess the instruction!
+  making language models stronger zero-shot learners}.
+\newblock \emph{arXiv preprint arXiv:2210.02969}.
+
+\bibitem[{Yin et~al.(2022)Yin, Li, and Xiong}]{yin2022contintin}
+Wenpeng Yin, Jia Li, and Caiming Xiong. 2022.
+\newblock \href {https://aclanthology.org/2022.acl-long.218} {{C}on{T}in{T}in:
+  Continual learning from task instructions}.
+\newblock In \emph{Annual Meeting of the Association for Computational
+  Linguistics \CNFX{ACL}}.
+
+\bibitem[{Zelikman et~al.(2022)Zelikman, Mu, Goodman, and
+  Wu}]{zelikman2022star}
+Eric Zelikman, Jesse Mu, Noah~D Goodman, and Yuhuai~Tony Wu. 2022.
+\newblock \href {https://arxiv.org/abs/2203.14465} {{ST}ar: Self-taught
+  reasoner bootstrapping reasoning with reasoning}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  \CNFX{NeurIPS}}.
+
+\bibitem[{Zhao et~al.(2022)Zhao, Ouyang, Yu, Wu, and Li}]{zhao2022pre}
+Xuandong Zhao, Siqi Ouyang, Zhiguo Yu, Ming Wu, and Lei Li. 2022.
+\newblock \href {https://arxiv.org/abs/2212.06950} {Pre-trained language models
+  can be fully zero-shot learners}.
+\newblock \emph{arXiv preprint arXiv:2212.06950}.
+
+\bibitem[{Zhou et~al.(2022{\natexlab{a}})Zhou, He, Ma, Berg-Kirkpatrick, and
+  Neubig}]{zhou2022prompt}
+Chunting Zhou, Junxian He, Xuezhe Ma, Taylor Berg-Kirkpatrick, and Graham
+  Neubig. 2022{\natexlab{a}}.
+\newblock \href {https://arxiv.org/abs/2205.00049} {{Prompt Consistency for
+  Zero-Shot Task Generalization}}.
+\newblock In \emph{Conference on Empirical Methods in Natural Language
+  Processing \CNFX{EMNLP} - Findings}.
+
+\bibitem[{Zhou et~al.(2022{\natexlab{b}})Zhou, Muresanu, Han, Paster, Pitis,
+  Chan, and Ba}]{zhou2022large}
+Yongchao Zhou, Andrei~Ioan Muresanu, Ziwen Han, Keiran Paster, Silviu Pitis,
+  Harris Chan, and Jimmy Ba. 2022{\natexlab{b}}.
+\newblock \href {https://arxiv.org/abs/2211.01910} {Large language models are
+  human-level prompt engineers}.
+\newblock \emph{arXiv preprint arXiv:2211.01910}.
+
+\end{thebibliography}

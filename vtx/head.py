@@ -9,6 +9,7 @@ import gc
 from utils import ad, bc, config, propulsion, ship
 from aitextgen import aitextgen
 import requests
+import logging
 
 # holds the model globally
 ai = None
@@ -102,6 +103,7 @@ def gen(bias=None, ctx=None, failures=0):
     # try to complete the prompt
     # https://huggingface.co/docs/transformers/main_classes/text_generation
     try:
+        logging.getLogger("transformers").setLevel(logging.ERROR)
         completion = ai.generate(
             n=1,
             prompt=history + prompt,
@@ -145,6 +147,8 @@ def gen(bias=None, ctx=None, failures=0):
         print(e)
         error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
         output = ["error", error]
+
+    logging.getLogger("transformers").setLevel(logging.INFO)
     return output
 
 

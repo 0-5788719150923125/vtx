@@ -1,11 +1,7 @@
 .env
-input.txt
 gen/
 lab/
 node_modules
 vtx/__pycache__
-vtx/aitextgen
 vtx/models/*
 !lab/aitextgen
-!lab/journals
-!lab/pages

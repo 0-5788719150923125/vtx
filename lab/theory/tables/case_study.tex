@@ -1,0 +1,293 @@
+\setlength\tabcolsep{1 pt} % to reduce the margin of the table
+\newcommand{\sep}{-0.1cm} % separation between elements of itemize
+\newcommand{\sty}{\tt \scriptsize}
+\renewcommand\labelitemi{--} % change the label of itemize to "-" 
+
+\newcommand{\ins}{{\greentext{Instruction:}}}
+\newcommand{\inp}{\newline{\greentext{Input:}}}
+
+\begin{table*}[th!]
+\centering
+\small
+\resizebox{1\textwidth}{!}{
+\begin{tabular}{p{0.29\textwidth}|p{0.40\textwidth}|p{0.32\textwidth}|c}
+\toprule
+\multicolumn{1}{c}{\textbf{Instruction + Instance Input}}   & \multicolumn{1}{c}{\textbf{Target Response}} & \multicolumn{1}{c}{\textbf{\gptself{} Response}}   & \multicolumn{1}{c}{\textbf{Rating}}\\
+\midrule
+\sty
+\ins{} Give students tips on how to keep their nerves under control during class presentations. &  
+\sty
+Everyone gets a little nervous when speaking in front of a group. That’s normal. But the more preparation you’ve done—meaning plenty of researching, organizing, and rehearsing—the more confident you’ll be. Preparation is the key. And if you make a mistake or stumble over your words, just regroup and keep going. Nobody’s perfect, and nobody expects you to be. & 
+\vspace{-2mm}
+\sty
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item Practice your presentation in front of friends and family. 
+    \item Don't drink too much caffeine before the presentation. 
+    \item Take deep breaths before you start speaking. 
+    \item If you feel nervous, smile. 
+    \item Remember that everyone in the audience is rooting for you. 
+\end{itemize} & \sty A
+\\
+\midrule
+\sty
+\ins{} Make a list of the pros and cons of the given decision. 
+\inp{} Implementing a Remote Working Policy 
+& 
+\sty
+Pros: \begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item Allowing employees to work from home can reduce their stressful commutes and increase their productivity.
+    \item Remote working provides greater flexibility, particularly for working parents and caregivers who have other responsibilities. 
+    % \item It's possible to hire highly creative people who live further away if they don't have to come into the office every day.
+    % \item People who aren't distracted by office noises and regular interruptions will perform better. 
+    % \item Team members' communication skills will improve, as they will learn to communicate more effectively using email and IM, for example. 
+    \item \dots (more points)
+\end{itemize}
+
+Cons:
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item It may be more difficult for team members to build meaningful, productive, creative relationships with one another.    
+    \item \dots (more points)
+    \end{itemize}
+    &  
+    \sty
+    Pros:
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item Employees can work from home and save on commuting costs.     
+    \item Employees can spend more time with their families.    
+\end{itemize}
+Cons:
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]   
+    \item Employees may not be as productive as they would be in the office.    
+    \item Employees may not be as motivated to work. 
+\end{itemize} & \sty A
+\\
+\midrule
+\sty
+\ins{} A color description has been provided. Find the CSS code associated with that color. 
+\inp{} A light red color with a medium light shade of pink & 
+\sty
+\#DB7093 ($\textcolor[HTML]{DB7093}\lgblksquare$)& 
+\sty
+~\#ff66cc ($\textcolor[HTML]{ff66cc}\lgblksquare$) & \sty B \\
+%\yeganeh{Yizhong I don't think it's correct. the generated color is rose pink, while we are looking for a shade of pale red} \yizhong{yeah it seems we can rate this a level-3 if not 4?} \yeganeh{Yes}
+\midrule
+
+\sty
+\ins{} Give some examples of what people usually say in the given social situation.  
+\inp{} when someone arrives safely &
+\sty
+\vspace{-2mm}
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item ``Glad you made it safe and sound.''
+    \item ``Good to see you got here unscathed.''
+    \item ``So, bulletproof vests actually work!''
+\end{itemize} 
+&  
+\sty
+Thank God, I made it. & \sty B\\
+\midrule
+\sty
+\ins{} You are given a sentence in first-order logic. Translate it into natural language.  
+\inp{}
+$\exists x \forall	y (soldier(x) $ 
+$\to general(x,y))$ 
+& 
+\sty
+There is someone (x) such that if he is a soldier, then he is general of everyone. &  
+\sty
+There exists a soldier such that for every general, he is a general. & \sty C\\
+\midrule 
+\sty 
+\ins{}
+Design an outline for a blog post based on the given information and list the sections accordingly. 
+\inp{}
+ This blog post is going to about making a list of last-minute gift ideas. Also, the tone of the post is going to be relaxed and casual. & 
+\sty \begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0 pt]
+%\item Section: Gift card to a favorite restaurant or store
+\item Section: Movie tickets
+\item Section: A fun game console
+%Section: Books 
+%Section: Candles, flameless candles
+%Section: Portable battery charger for phones/tablets
+%Section: Water filter pitcher
+\item Section: Personalized items with photos/artwork
+\item ...(more sections)
+%Section: Favorite team gear (hat, sweatshirt)
+\item Takeaway: Don't stress about out running out of time to buy, make a gift. \end{itemize}&
+\sty \begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0 pt]
+\item Introduction 
+\item List of Gift Ideas
+\item Conclusion \end{itemize}
+& \sty C
+ \\
+\midrule
+\sty
+\ins{}
+Write a Jira ticket for the given task. 
+\inp{}
+New Employee onboarding & 
+\sty
+Title: Please help our new employee get settled.
+Prepare a desk, chair, and computer for them to use.
+Create their company account, email, and temporary password.
+Grant access to company documents. & 
+\sty
+Hi [Manager],
+I’m writing to you because I have a question about the new employee onboarding process. I’ve been working here for a few months now, and I’m still not sure how it works. Could you please explain it to me? & \sty D\\
+\midrule
+\sty 
+\ins{}
+Create alliterations by finding synonyms for words in the given sentence. 
+\inp{}
+David wears a hat everyday. & \sty David dons a derby daily. & \sty  David wears a hat every day. & \sty D \\
+\bottomrule
+\end{tabular}
+}
+\caption{Examples in the User-oriented Instructions dataset (\S\ref{sec:user_instructions}) and predictions from \gptself{}. %\todo{Include more tasks (rating 1-4), sorted by rating.}
+% \todo{explain what ratings are; add reference to the corresponding section.}
+% \daniel{check this:}
+The right column indicates one of the four quality ratings assigned to the model's response, with ``A'' indicating  ``valid and satisfying'' responses (highest)
+and  ``D'' indicating ``irrelevant or invalid response'' (lowest).
+}
+\label{tab:case_study}
+\end{table*}
+
+
+
+\begin{comment}
+\begin{table*}[th!]
+\centering
+\small
+\resizebox{1\textwidth}{!}{
+\begin{tabular}{p{0.15\textwidth}|p{0.13\textwidth}|p{0.33\textwidth}|p{0.3\textwidth}|c}
+\toprule
+\multicolumn{1}{c}{\textbf{Instruction}}  & \multicolumn{1}{c}{\textbf{Input}}  & \multicolumn{1}{c}{\textbf{Target}} & \multicolumn{1}{c}{\textbf{\gptself{} Response}}   & \multicolumn{1}{c}{\textbf{Rating}}\\
+\midrule
+\sty
+Give students tips on how to keep their nerves under control during class presentations. & & 
+\sty
+Everyone gets a little nervous when speaking in front of a group. That’s normal. But the more preparation you’ve done—meaning plenty of researching, organizing, and rehearsing—the more confident you’ll be. Preparation is the key. And if you make a mistake or stumble over your words, just regroup and keep going. Nobody’s perfect, and nobody expects you to be. & 
+\vspace{-2mm}
+\sty
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item Practice your presentation in front of friends and family. 
+    \item Don't drink too much caffeine before the presentation. 
+    \item Take deep breaths before you start speaking. 
+    \item If you feel nervous, smile. 
+    \item Remember that everyone in the audience is rooting for you. 
+\end{itemize} & \sty 4
+\\
+\midrule
+\sty
+Make a list of the pros and cons of the given decision. & 
+\sty
+Implementing a Remote Working Policy & 
+\sty
+Pros: \begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item Allowing employees to work from home can reduce their stressful commutes and increase their productivity.
+    \item Remote working provides greater flexibility, particularly for working parents and caregivers who have other responsibilities. 
+    % \item It's possible to hire highly creative people who live further away if they don't have to come into the office every day.
+    % \item People who aren't distracted by office noises and regular interruptions will perform better. 
+    % \item Team members' communication skills will improve, as they will learn to communicate more effectively using email and IM, for example. 
+    \item \dots (more points)
+\end{itemize}
+
+Cons:
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item It may be more difficult for team members to build meaningful, productive, creative relationships with one another.    
+    \item \dots (more points)
+    \end{itemize}
+    &  
+    \sty
+    Pros:
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item Employees can work from home and save on commuting costs.     
+    \item Employees can spend more time with their families.    
+\end{itemize}
+Cons:
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]   
+    \item Employees may not be as productive as they would be in the office.    
+    \item Employees may not be as motivated to work. 
+\end{itemize} & \sty 4
+\\
+\midrule
+\sty
+A color description has been provided. Find the CSS code associated with that color. & 
+\sty
+A light red color with a medium light shade of pink & 
+\sty
+\#DB7093 ($\textcolor[HTML]{DB7093}\lgblksquare$)& 
+\sty
+~\#ff66cc ($\textcolor[HTML]{ff66cc}\lgblksquare$) & \sty 3 \\
+%\yeganeh{Yizhong I don't think it's correct. the generated color is rose pink, while we are looking for a shade of pale red} \yizhong{yeah it seems we can rate this a level-3 if not 4?} \yeganeh{Yes}
+\midrule
+
+\sty
+Give some examples of what people usually say in the given social situation. & 
+\sty
+when someone arrives safely &
+\sty
+\vspace{-2mm}
+\begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0.1pt]
+    \item ``Glad you made it safe and sound.''
+    \item ``Good to see you got here unscathed.''
+    \item ``So, bulletproof vests actually work!''
+\end{itemize} 
+&  
+\sty
+Thank God, I made it. & \sty 3\\
+\midrule
+\sty
+You are given a sentence in first-order logic. Translate it into natural language. & 
+\sty
+$\exists x \forall	y (soldier(x) $ 
+$\to general(x,y))$ 
+& 
+\sty
+There is someone (x) such that if he is a soldier, then he is general of everyone. &  
+\sty
+There exists a soldier such that for every general, he is a general. & \sty 2\\
+\midrule 
+\sty Design an outline for a blog post based on the given information and list the sections accordingly. &
+\sty This blog post is going to about making a list of last-minute gift ideas. Also, the tone of the post is going to be relaxed and casual. & 
+\sty \begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0 pt]
+%\item Section: Gift card to a favorite restaurant or store
+\item Section: Movie tickets
+\item Section: A fun game console
+%Section: Books 
+%Section: Candles, flameless candles
+%Section: Portable battery charger for phones/tablets
+%Section: Water filter pitcher
+\item Section: Personalized items with photos/artwork
+\item ...(more sections)
+%Section: Favorite team gear (hat, sweatshirt)
+\item Takeaway: Don't stress about out running out of time to buy, make a gift. \end{itemize}&
+\sty \begin{itemize}[leftmargin=0.3cm, itemsep=\sep, topsep=0 pt]
+\item Introduction 
+\item List of Gift Ideas
+\item Conclusion \end{itemize}
+& \sty 2
+ \\
+\midrule
+\sty
+Write a Jira ticket for the given task. & 
+\sty
+New Employee onboarding & 
+\sty
+Title: Please help our new employee get settled.
+Prepare a desk, chair, and computer for them to use.
+Create their company account, email, and temporary password.
+Grant access to company documents. & 
+\sty
+Hi [Manager],
+I’m writing to you because I have a question about the new employee onboarding process. I’ve been working here for a few months now, and I’m still not sure how it works. Could you please explain it to me? & \sty 1\\
+\midrule
+\sty Create alliterations by finding synonyms for words in the given sentence. & \sty David wears a hat everyday. & \sty David dons a derby daily. & \sty  David wears a hat every day. & \sty 1 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Examples in the User-oriented Instructions dataset and predictions from \gptself{}. %\todo{Include more tasks (rating 1-4), sorted by rating.}
+}
+\label{tab:case_study}
+\end{table*}
+\end{comment}

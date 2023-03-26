@@ -134,7 +134,9 @@ class Client(discord.Client):
 
         # every message is added to local cache, for building prompt
         if message.content != "gen":
-            head.build_context(str(message.author.id) + ship + " " + message.content)
+            head.build_context(
+                propulsion + str(message.author.id) + ship + " " + message.content
+            )
             print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + message.content)
 
         # ignore messages if heavy processing is taking place
@@ -251,7 +253,9 @@ async def subscribe():
     @client.event
     async def on_message_edit(before, after):
         if after.content[:1] not in head.bullets:
-            head.build_context(str(after.author.id) + ship + " " + after.content)
+            head.build_context(
+                propulsion + str(after.author.id) + ship + " " + after.content
+            )
             print(after.content)
 
     if "discord" in config:

@@ -71,13 +71,14 @@ context = [
     propulsion + "855529761185857566" + ship + " I am an animal.",
 ]
 
+
 # Build a local cache of global conversational state
 def build_context(message):
-    if len(context) >= 7:
+
+    while len(context) >= 7:
         context.pop(0)
-        build_context(message[:222])
-    else:
-        context.append(propulsion + message[:221])
+
+    context.append(message)
 
 
 # Generate a completion from bias and context
@@ -88,6 +89,7 @@ def gen(bias=None, ctx=None, failures=0):
 
     if ctx == None:
         ctx = context
+
     history = "\n".join(ctx) + "\n"
 
     max_new_tokens = config[focus].get("max_new_tokens", 111)

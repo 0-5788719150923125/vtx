@@ -171,8 +171,12 @@ class Client(discord.Client):
                 chance = random.randint(0, 100)
 
         # increase response probability in private channels
+        no_transform = False
         if str(message.channel.type) == "private":
             chance = 1
+            bias = message.author.id
+            no_transform = True
+            reply = False
 
         # check chance before generating a response
         if chance > response_chance:
@@ -183,7 +187,7 @@ class Client(discord.Client):
         try:
             async with message.channel.typing():
                 generation = await head.gen(bias)
-                if generation[0] == "error":
+                if no_transform or generation[0] == "error":
                     output = generation[1]
                 else:
                     output = transformer([generation[0], generation[1]])

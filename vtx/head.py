@@ -72,7 +72,7 @@ context = [
 
 # Build a local cache of global conversational state
 def build_context(message):
-    if len(context) >= 5:
+    if len(context) >= 7:
         context.pop(0)
         build_context(message[:222])
     else:
@@ -120,10 +120,7 @@ def gen(bias=None, ctx=None, failures=0):
             max_time=max_time,
             seed=random.randint(0, 2**32 - 1),
         )
-    except Exception as e:
-        return print(e)
 
-    try:
         output = None
         generation = completion[0][len(history) :]
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)

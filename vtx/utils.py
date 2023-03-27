@@ -27,7 +27,7 @@ class bc:
     ROOT = "\033[92m"
     CORE = "\033[91m"
 
-
+# Color codes after
 class ad:
     TEXT = "\033[0m"
 

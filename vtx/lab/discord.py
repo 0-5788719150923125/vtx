@@ -1,7 +1,7 @@
 import asyncio
 import random
 import os
-from utils import ad, bc, config, propulsion, ship
+from utils import ad, bc, config, get_identity, propulsion, ship
 from discord.ext import commands
 import discord
 import head
@@ -122,6 +122,9 @@ class Client(discord.Client):
         if message.content != "gen" and message.author != self.user:
             author_id = str(message.author.id)
             if str(message.channel.type) == "private":
+                append_private_message(
+                    author_id, propulsion + author_id + ship + " " + message.content
+                )
                 author_id = author_id[::-1]
             head.build_context(propulsion + author_id + ship + " " + message.content)
             print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + message.content)
@@ -196,8 +199,13 @@ class Client(discord.Client):
                 await message.channel.send(output)
 
             bot_id = str(self.user.id)
+
             if str(message.channel.type) == "private":
                 bot_id = str(bias)
+                append_private_message(
+                    str(bias),
+                    propulsion + get_identity() + ship + " " + output,
+                )
 
             head.build_context(propulsion + bot_id + ship + " " + output)
         except:
@@ -214,6 +222,16 @@ def transformer(group):
         f"{group[1]}",
     ]
     return random.choice(responses)
+
+
+# Log private messages
+def append_private_message(user_id, message):
+
+    if not os.path.exists("/lab/discord-live"):
+        os.makedirs("/lab/discord-live")
+
+    with open("/lab/discord-live/" + user_id + ".txt", "a") as txt_file:
+        txt_file.write(message + "\n")
 
 
 # list all available Discord channels

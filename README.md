@@ -56,4 +56,6 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 - Freezing on a local/global attention layer matters. I'm not sure which is better.
 - Cycling training data between consecutive, short runs can force the model to "break" mistaken assumptions.
 - Randomly-placing reply-to messages above or below the parent message can force the model to create a kind of 3-node "bridge" that captures long-term contextual relationships.
-- Reverse a user identifier can create a sort of "inverse mirror" effect, where the model recognizes that it is speaking with its human self.
+- Reversing a user identifier can create a sort of "inverse mirror" effect, where the model recognizes that it is speaking with its human self.
+- Generating random user identifiers is a good way to prevent the model from biasing too heavily towards any one agent.
+- The introduction of noise is beneficial to the model's stability.

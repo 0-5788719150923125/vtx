@@ -10,7 +10,6 @@ from utils import ad, bc, config, propulsion, ship
 from aitextgen import aitextgen
 import requests
 import logging
-import pprint
 
 # holds the model globally
 ai = None
@@ -80,8 +79,6 @@ def build_context(message):
         context.pop(0)
 
     context.append(message)
-
-    pprint.pprint(context)
 
 
 # Generate a completion from bias and context

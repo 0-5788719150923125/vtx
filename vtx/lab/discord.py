@@ -175,7 +175,12 @@ class Client(discord.Client):
         try:
             async with message.channel.typing():
                 generation = await head.gen(bias)
-                if no_transform or generation[0] == "error":
+                if generation[0] == "error":
+                    if random.randint(0, 100) < 2:
+                        output = generation[1]
+                    else:
+                        return
+                elif no_transform:
                     output = generation[1]
                 else:
                     output = transformer([generation[0], generation[1]])

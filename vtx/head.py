@@ -78,7 +78,7 @@ def build_context(message):
     while len(context) >= 9:
         context.pop(0)
 
-    context.append(message)
+    context.append(message[:222])
 
 
 # Generate a completion from bias and context

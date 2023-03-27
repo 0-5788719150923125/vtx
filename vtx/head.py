@@ -75,7 +75,7 @@ context = [
 # Build a local cache of global conversational state
 def build_context(message):
 
-    while len(context) >= 7:
+    while len(context) >= 12:
         context.pop(0)
 
     context.append(message)
@@ -102,6 +102,10 @@ def gen(bias=None, ctx=None, failures=0):
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
 
+    temperature = 1.42
+    if failures > 0:
+        temperature = temperature - (0.1 * failures)
+
     # try to complete the prompt
     # https://huggingface.co/docs/transformers/main_classes/text_generation
     try:
@@ -112,7 +116,7 @@ def gen(bias=None, ctx=None, failures=0):
             do_sample=True,
             min_length=23,
             max_new_tokens=max_new_tokens,
-            temperature=1.42,
+            temperature=temperature,
             return_as_list=True,
             num_beams=9,
             repetition_penalty=2.0,

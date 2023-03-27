@@ -14,10 +14,6 @@ followup_chance = 10
 
 # A class to control the entire Discord bot
 class Client(discord.Client):
-
-    # A variable that will block all actions until True
-    thinking = False
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -42,7 +38,6 @@ class Client(discord.Client):
         while not self.is_closed():
             delay = random.randint(3600, 21600)
             await asyncio.sleep(delay)
-            self.thinking = True
             try:
                 channels = await get_all_channels()
                 channel = random.choice(channels)
@@ -138,10 +133,6 @@ class Client(discord.Client):
                 propulsion + str(message.author.id) + ship + " " + message.content
             )
             print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + message.content)
-
-        # ignore messages if heavy processing is taking place
-        if self.thinking == True:
-            return
 
         # ignore messages from the bot
         if message.author == self.user:

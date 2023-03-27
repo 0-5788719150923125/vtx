@@ -213,7 +213,7 @@ def fetch_from_reddit():
         user_agent=os.environ["REDDITAGENT"],
     )
 
-    # For every sub in config, iterate over options, the download content
+    # For every sub in config, iterate over options, then download content
     for sub in config["reddit"]:
 
         skip = False

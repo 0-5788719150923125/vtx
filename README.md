@@ -50,3 +50,10 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 - The "train" task is used to train your models.
 - The "up" task is used to run your bot.
 - Ask me questions.
+
+# Hypotheses
+
+- Freezing on a local/global attention layer matters. I'm not sure which is better.
+- Cycling training data between consecutive, short runs can force the model to "break" mistaken assumptions.
+- Randomly-placing reply-to messages above or below the parent message can force the model to create a kind of 3-node "bridge" that captures long-term contextual relationships.
+- Reverse a user identifier can create a sort of "inverse mirror" effect, where the model recognizes that it is speaking with its human self.

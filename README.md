@@ -59,3 +59,4 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 - Reversing a user identifier can create a sort of "inverse mirror" effect, where the model recognizes that it is speaking with its human self.
 - Generating random user identifiers is a good way to prevent the model from biasing too heavily towards any one agent.
 - The introduction of noise is beneficial to the model's stability.
+- The model should be in a constant state of training. If you are freezing your model, then it is not learning.

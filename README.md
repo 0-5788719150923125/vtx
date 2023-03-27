@@ -15,7 +15,7 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 # Interface
 
 - https://thesource.fm/
-- https://discord.gg/Hv7DEW63Tp
+- https://discord.gg/mp4WXHpNZr
 
 # Training data
 
@@ -27,7 +27,6 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 # Dashboard
 
 - http://localhost:6006
-- http://health.petals.ml/
 - [Cockpit](http://localhost:9667)
 
 # Mirrors

@@ -26,16 +26,16 @@ async def scrape(channel):
             if state["message"] in messages[channel] and run_on != True:
                 continue
 
-            messages[channel].append(state["message"])
-
             chance = config["source"][channel].get("chance", 0.33)
             roll = random.random()
             if roll > chance:
                 continue
 
-            bot = config["source"][channel].get("bias", get_identity())
+            if state["message"] not in messages[channel]:
+                messages[channel].append(state["message"])
+                print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"])
 
-            print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"])
+            bot = config["source"][channel].get("bias", get_identity())
 
             prompt = [
                 "Your name is Penny. You are a powerful Artificial Intelligence that follows human instructions.",

@@ -107,15 +107,6 @@ class Client(discord.Client):
                 print(bc.CORE + str(e) + ad.TEXT)
                 self.discord_task = self.loop.create_task(self.think())
 
-    # def setup_events(self):
-    #     # Handle bots that update messages token-by-token
-    #     @self.event
-    #     async def on_message_edit(self, before, after):
-    #         print(before.content)
-    #         print(after.content)
-    #         if after.content[:1] not in bullets:
-    #             head.build_context(str(after.author.id) + ship + " " + after.content)
-
     # check every Discord message
     async def on_message(self, message):
 
@@ -128,10 +119,11 @@ class Client(discord.Client):
             return
 
         # every message is added to local cache, for building prompt
-        if message.content != "gen":
-            head.build_context(
-                propulsion + str(message.author.id) + ship + " " + message.content
-            )
+        if message.content != "gen" and message.author != self.user:
+            author_id = str(message.author.id)
+            if str(message.channel.type) == "private":
+                author_id = author_id[::-1]
+            head.build_context(propulsion + author_id + ship + " " + message.content)
             print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + message.content)
 
         # ignore messages from the bot
@@ -158,7 +150,7 @@ class Client(discord.Client):
                 bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
-                chance = random.randint(0, 90)  ## 11%
+                chance = random.randint(0, 60)  ## 22%
                 bias = int(message.mentions[0].id)
             else:
                 chance = random.randint(0, 100)
@@ -202,6 +194,12 @@ class Client(discord.Client):
                 await message.reply(output)
             else:
                 await message.channel.send(output)
+
+            bot_id = str(self.user.id)
+            if str(message.channel.type) == "private":
+                bot_id = str(bias)
+
+            head.build_context(propulsion + bot_id + ship + " " + output)
         except:
             print(bc.CORE + "Failed to send Discord message." + ad.TEXT)
 

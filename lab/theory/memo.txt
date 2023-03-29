@@ -1,6 +1,0 @@
-the North American Chapter of the Association for Computational Linguistics -> NAACL
-Neural Information Processing Systems -> NeurIPS
-Transactions of the Association for Computational Linguistics -> TACL
-Annual Meeting of the Association for Computational Linguistics -> ACL
-Empirical Methods in Natural Language Processing -> EMNLP
-International Conference on Learning Representations -> ICLR

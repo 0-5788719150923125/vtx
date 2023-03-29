@@ -7,9 +7,9 @@ import discord
 import head
 
 client = None
-redacted_chance = 1
-response_chance = 10
-followup_chance = 10
+redacted_chance = 10  # out of 1000
+response_chance = 10  # out of 100
+followup_chance = 10  # out of 100
 
 
 # A class to control the entire Discord bot
@@ -131,8 +131,11 @@ class Client(discord.Client):
 
         # ignore messages from the bot
         if message.author == self.user:
-            if random.randint(0, 100) <= followup_chance:
-                chance == 1
+            if random.randint(0, 100) < followup_chance:
+                if not str(message.channel.type) == "private":
+                    chance = 1
+                else:
+                    return
             else:
                 return
 
@@ -188,7 +191,7 @@ class Client(discord.Client):
             print(e)
 
         # make random redactions
-        if random.randint(0, 100) <= redacted_chance:
+        if random.randint(0, 1000) <= redacted_chance:
             choices = ["[REDACTED]", "[CLASSIFIED]", "[CORRUPTED]"]
             output = random.choice(choices)
 

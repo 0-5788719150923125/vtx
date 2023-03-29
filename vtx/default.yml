@@ -61,7 +61,8 @@ toe:
     # Larger batch sizes generally lead to better results, but require more memory to train.
     batch_size: 3
 
-    # This represents your model's "context window."
+    # This represents the length of each line fed into the tokenizer. Lines longer than this length
+    # will be truncated, while lines shorter will be padded (on the right).
     block_size: 444
 
     # The number of iterations before training will complete.
@@ -76,10 +77,10 @@ toe:
     gradient_accumulation_steps: 6
 
     # The rate at which your model will adjust weights/biases at each iteration step.
-    learning_rate: 0.000222
+    learning_rate: 0.000333
 
     # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
-    weight_decay: 0.023
+    weight_decay: 0.01
 
     # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
     max_grad_norm: 0.444

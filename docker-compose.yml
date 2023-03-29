@@ -61,10 +61,8 @@ services:
 
   shm:
     image: tloncorp/vere:v2.1
-    command: /bin/urbit -t -c needle
+    command: sh -c "rm -rf /urbit/needle && /bin/urbit -t -c needle"
     restart: 'always'
-    # volumes:
-    #   - comet:/urbit
     ports:
       - 9667:80
       - 34343:34343

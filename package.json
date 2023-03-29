@@ -1,7 +1,7 @@
 {
   "name": "src",
   "version": "0.6.0",
-  "description": "A playground.",
+  "description": "a framework",
   "main": "trunk.js",
   "type": "module",
   "scripts": {

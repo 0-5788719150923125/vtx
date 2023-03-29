@@ -62,7 +62,8 @@ toe:
     batch_size: 3
 
     # This represents the length of each line fed into the tokenizer. Lines longer than this length
-    # will be truncated, while lines shorter will be padded (on the right).
+    # will be truncated, while lines shorter will be padded (on the right). When fine-tuning a model,
+    # this will be set to what is already supported by the corresponding model's config.json.
     block_size: 444
 
     # The number of iterations before training will complete.
@@ -97,25 +98,7 @@ toe:
 
     # Place each dataset into a folder at {project_root}/lab, then list them here.
     datasets:
-
-      # The path to your dataset.
-      lab/aitextgen:
-
-      # lab/csvfiles:
-        # In some instances, your data should be read line-by-line. A CSV file is a good example.
-        # line_by_line: True
-
-      lab/swarm:
-      lab/source:
-      lab/ink:
-      lab/pen:
-      lab/journals:
-      lab/research:
-      lab/theory:
-      lab/pages:
-      lab/texts:
-      vtx:
-      ctx:
+      - default
 
 heart:
   info: never give up, never give in
@@ -150,16 +133,29 @@ soul:
     num_layers_freeze: 19
     equalize_datasets: False
     datasets:
-      lab/swarm:
-      lab/source:
-      lab/ink:
-      lab/pen:
-      lab/journals:
-      lab/research:
-      lab/pages:
-      lab/texts:
-      vtx:
-      ctx:
+      - default
+
+# :: Use the following collections of datasets to train your models. Each collection you want
+# :: to use must be specified under your model configuration.
+
+collections:
+  default:
+    # The path to your dataset.
+    lab/aitextgen:
+    lab/swarm:
+    lab/source:
+    lab/ink:
+    lab/pen:
+    lab/journals:
+    lab/research:
+    lab/theory:
+    lab/pages:
+    lab/texts:
+    vtx:
+    ctx:
+    # lab/csvfiles:
+      # In some instances, your data should be read line-by-line. A CSV file is a good example.
+      # line_by_line: True
 
 # :: Connect your AI to Reddit.
 # :: This requires the creation of a "personal use script," here:

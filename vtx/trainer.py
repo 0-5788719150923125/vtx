@@ -111,7 +111,6 @@ def join_files(path):
 if __name__ == "__main__":
 
     # Poorly-load configs
-    config = None
     base_model = model["training"]["base_model"]
     batch_size = model["training"]["batch_size"]
     gradient_accumulation_steps = model["training"]["gradient_accumulation_steps"]
@@ -124,16 +123,6 @@ if __name__ == "__main__":
     max_grad_norm = model["training"]["max_grad_norm"]
     freeze_layers = model["training"]["freeze_layers"]
     num_layers_freeze = model["training"]["num_layers_freeze"]
-
-    # vocab_path = "/lab/" + model["training"]["vocab_path"]
-    # vocab_size = model["training"]["vocab_size"]
-    # train_tokenizer(
-    #     files=list_full_paths(vocab_path),
-    #     vocab_size=vocab_size,
-    #     save_path="./",
-    #     prefix="src." + focus,
-    #     dropout=model["training"]["dropout"],
-    # )
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
@@ -166,25 +155,21 @@ if __name__ == "__main__":
 
     # Create a tokenized dataset from every directory specified in config file
     datasets = []
-    for dataset in model["training"]["datasets"]:
+    for collection in model["training"]["datasets"]:
+        for dataset in config["collections"][collection]:
+            line_by_line = False
+            if "line_by_line" in dataset:
+                line_by_line = dataset["line_by_line"]
 
-        line_by_line = False
-        if "line_by_line" in dataset:
-            line_by_line = dataset["line_by_line"]
-
-        intermediate_file = join_files("/" + dataset)
-        print(bc.FOLD + "loading " + dataset + ad.TEXT)
-        datasets.append(
-            TokenDataset(
-                intermediate_file,
-                # tokenizer_file=tokenizer_file,
-                block_size=model["training"].get("block_size", None),
-                line_by_line=line_by_line,
-                # from_cache=True,
-                # cache_destination="/lab/" + dataset + ".tar.gz",
-                # save_cache=True,
+            intermediate_file = join_files("/" + dataset)
+            print(bc.FOLD + "loading " + dataset + ad.TEXT)
+            datasets.append(
+                TokenDataset(
+                    intermediate_file,
+                    block_size=model["training"].get("block_size", None),
+                    line_by_line=line_by_line,
+                )
             )
-        )
 
     # Cleanup temp files used for tokenized dataset creation
     if os.path.exists("/lab/intermediate"):
@@ -197,8 +182,6 @@ if __name__ == "__main__":
 
     # Instantiate the model object
     ai = aitextgen(
-        # tokenizer_file=tokenizer_file,
-        config=config,
         model=launch_model,
         model_folder=model_folder,
         to_gpu=to_gpu,

@@ -37,6 +37,14 @@ services:
     ports:
       - 9666:9666
 
+  pit:
+    image: ghcr.io/0-5788719150923125/src:1
+    command: tensorboard --logdir /gen/logs --bind_all --samples_per_plugin scalars=999999999
+    volumes:
+      - ./gen:/gen
+    ports:
+      - 6006:6006
+
   pet:
     image: learningathome/petals:main
     command: python -m petals.cli.run_server bigscience/bloom-7b1-petals --cache_dir /bloom --num_blocks 1 --torch_dtype float32
@@ -51,16 +59,8 @@ services:
     volumes:
       - bloom:/bloom
 
-  pit:
-    image: ghcr.io/0-5788719150923125/src:1
-    command: tensorboard --logdir /gen/logs --bind_all --samples_per_plugin scalars=999999999
-    volumes:
-      - ./gen:/gen
-    ports:
-      - 6006:6006
-
   shm:
-    image: tloncorp/vere:v2.1
+    image: tloncorp/vere:live
     command: sh -c "rm -rf /urbit/needle && /bin/urbit -t -c needle"
     restart: 'always'
     ports:

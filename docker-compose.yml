@@ -60,7 +60,7 @@ services:
       - 6006:6006
 
   shm:
-    image: tloncorp/urbit:v1.14
+    image: tloncorp/vere:v2.1
     command: /bin/urbit -t -c needle
     restart: 'always'
     # volumes:
@@ -71,4 +71,3 @@ services:
 
 volumes:
   bloom:
-  ipfs:

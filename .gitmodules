@@ -26,3 +26,6 @@
 [submodule "lab/ELIZA"]
 	path = lab/ELIZA
 	url = https://gitlab.com/original-design/eliza
+[submodule "lab/opencog/learn"]
+	path = lab/opencog/learn
+	url = https://github.com/opencog/learn

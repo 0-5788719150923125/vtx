@@ -141,6 +141,7 @@ soul:
 collections:
   default:
     # The path to your dataset.
+    lab/opencog/learn:
     lab/aitextgen:
     lab/swarm:
     lab/source:

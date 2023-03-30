@@ -47,7 +47,7 @@ const server = app.listen(port, () => {
 const gun = Gun({
   peers: ['http://ctx:9666/gun', 'https://59.thesource.fm/gun'],
   web: server,
-  file: `./hive/${randomString(8)}`,
+  file: `/tmp/${randomString(8)}`,
   localStorage: false,
   radisk: false,
   axe: true

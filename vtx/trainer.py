@@ -45,8 +45,7 @@ def join_files(path):
 
     tmp_path = "/lab/intermediate"
 
-    isExist = os.path.exists(tmp_path)
-    if isExist:
+    if os.path.exists(tmp_path):
         shutil.rmtree(tmp_path)
 
     os.makedirs(tmp_path)
@@ -57,6 +56,7 @@ def join_files(path):
         "/lab/reaper/assets",
         "/lab/reaper/public",
         "/lab/aitextgen/aitextgen/static",
+        "/lab/opencog/learn/learn-lang-diary",
         "/vtx/models",
         "/vtx/__pycache__",
     ]

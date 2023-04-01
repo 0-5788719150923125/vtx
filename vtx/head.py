@@ -75,7 +75,7 @@ context = [
 # Build a local cache of global conversational state
 def build_context(message):
 
-    while len(context) >= 7:
+    while len(context) >= 9:
         context.pop(0)
 
     context.append(message[:222])

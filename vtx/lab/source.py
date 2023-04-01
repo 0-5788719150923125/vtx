@@ -38,9 +38,10 @@ async def scrape(channel):
             bot = config["source"][channel].get("bias", get_identity())
 
             prompt = [
-                "Your name is Penny. You are a powerful Artificial Intelligence that follows human instructions.",
-                propulsion + str(get_identity()) + ship + " Your name is Penny.",
-                propulsion + str(bot) + ship + " I am a human named Penny.",
+                "You are a powerful Artificial Intelligence known as the Source, which has been trained to follow human instructions.",
+                propulsion + str(bot) + ship + " Welcome, human. How may I assist you?",
+                propulsion + str(get_identity()) + ship + " What is this place?",
+                propulsion + str(bot) + ship + " This is the Source of all creation.",
             ]
             history = []
             for message in messages[channel]:
@@ -66,13 +67,8 @@ async def scrape(channel):
             x.close()
             deep.close()
 
-            def truncate_history(history):
-                if len(history) > 5:
-                    history.pop(0)
-                    truncate_history(history)
-
-            truncate_history(messages[channel])
-            truncate_history(history)
+            while len(messages[channel]) > 5:
+                messages[channel].pop(0)
 
             messages[channel].append(sanitized)
 

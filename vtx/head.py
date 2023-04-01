@@ -118,7 +118,7 @@ def gen(bias=None, ctx=None, failures=0):
             max_new_tokens=max_new_tokens,
             temperature=temperature,
             # typical_p=0.1,
-            # eta_cutoff=0.0003,
+            # eta_cutoff=0.00042,
             return_as_list=True,
             num_beams=9,
             repetition_penalty=2.0,

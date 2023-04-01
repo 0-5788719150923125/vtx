@@ -43,7 +43,7 @@ def list_full_paths(directory):
 # Join every file located in a particular directory
 def join_files(path):
 
-    tmp_path = "/lab/intermediate"
+    tmp_path = "/tmp/intermediate"
 
     if os.path.exists(tmp_path):
         shutil.rmtree(tmp_path)
@@ -62,6 +62,8 @@ def join_files(path):
     ]
 
     suffixes = [
+        "7z",
+        "bib",
         "bin",
         "eot",
         "docx",
@@ -75,9 +77,14 @@ def join_files(path):
         "pdf",
         "png",
         "pyc",
+        "resources/content.xml",
+        "resources/meta.xml",
+        "sqlite",
+        "synctex",
         "ttf",
         "woff",
         "woff2",
+        "xlsx",
         "zip",
     ]
 
@@ -112,17 +119,10 @@ if __name__ == "__main__":
 
     # Poorly-load configs
     base_model = model["training"]["base_model"]
-    batch_size = model["training"]["batch_size"]
-    gradient_accumulation_steps = model["training"]["gradient_accumulation_steps"]
-    num_steps = model["training"]["num_steps"]
     to_gpu = model["training"]["to_gpu"]
     n_gpu = model["n_gpu"]
-    learning_rate = model["training"]["learning_rate"]
-    weight_decay = model["training"]["weight_decay"]
     warmup_steps = model["training"]["warmup_steps"]
-    max_grad_norm = model["training"]["max_grad_norm"]
     freeze_layers = model["training"]["freeze_layers"]
-    num_layers_freeze = model["training"]["num_layers_freeze"]
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
@@ -154,29 +154,57 @@ if __name__ == "__main__":
     output_dir = "models/" + focus
 
     # Create a tokenized dataset from every directory specified in config file
-    datasets = []
-    for collection in model["training"]["datasets"]:
-        for dataset in config["collections"][collection]:
-            line_by_line = False
-            if "line_by_line" in dataset:
-                line_by_line = dataset["line_by_line"]
+    datasets = {}
+    inputs = []
+    learning_rate = []
+    num_steps = []
+    num_layers_freeze = []
+    weight_decay = []
+    max_grad_norm = []
+    batch_size = []
+    gradient_accumulation_steps = []
+    for stage in model["training"]["stages"]:
+        learning_rate.append(stage["learning_rate"])
+        num_steps.append(stage["num_steps"])
+        num_layers_freeze.append(stage["num_layers_freeze"])
+        weight_decay.append(stage["weight_decay"])
+        max_grad_norm.append(stage["max_grad_norm"])
+        batch_size.append(stage["batch_size"])
+        gradient_accumulation_steps.append(stage["gradient_accumulation_steps"])
+        for collection in stage["datasets"]:
+            for dataset in config["collections"][collection]:
+                if dataset not in datasets:
+                    line_by_line = False
+                    if "line_by_line" in dataset:
+                        line_by_line = dataset["line_by_line"]
 
-            intermediate_file = join_files("/" + dataset)
-            print(bc.FOLD + "loading " + dataset + ad.TEXT)
-            datasets.append(
-                TokenDataset(
-                    intermediate_file,
-                    block_size=model["training"].get("block_size", None),
-                    line_by_line=line_by_line,
-                )
-            )
+                    intermediate_file = join_files("/" + dataset)
+                    print(bc.FOLD + "loading " + dataset + ad.TEXT)
+
+                    datasets[dataset] = TokenDataset(
+                        intermediate_file,
+                        block_size=model["training"].get("block_size", None),
+                        line_by_line=line_by_line,
+                    )
+                else:
+                    print(
+                        bc.ROOT + dataset + " is already loaded into memory" + ad.TEXT
+                    )
+
+        # Merge all tokenized datasets into a single dataset for training
+        collected = []
+        for collection in stage["datasets"]:
+            for dataset in config["collections"][collection]:
+                if dataset in datasets:
+                    collected.append(datasets[dataset])
+        merged = merge_datasets(
+            collected, equalize=model["training"]["equalize_datasets"]
+        )
+        inputs.append(merged)
 
     # Cleanup temp files used for tokenized dataset creation
-    if os.path.exists("/lab/intermediate"):
-        shutil.rmtree("/lab/intermediate")
-
-    # Merge all tokenized datasets into a single dataset for training
-    merged = merge_datasets(datasets, equalize=model["training"]["equalize_datasets"])
+    if os.path.exists("/tmp/intermediate"):
+        shutil.rmtree("/tmp/intermediate")
 
     launch_model = base_model
 
@@ -186,15 +214,13 @@ if __name__ == "__main__":
         model_folder=model_folder,
         to_gpu=to_gpu,
         gradient_checkpointing=True,
-        padding_side="left",
         cache_dir="models",
     )
 
     # Train the model
-    ai.train(
-        merged,
+    ai.cross_train(
+        inputs=inputs,
         from_cache=False,
-        padding_side="left",
         batch_size=batch_size,
         num_steps=num_steps,
         generate_every=333,
@@ -206,12 +232,10 @@ if __name__ == "__main__":
         weight_decay=weight_decay,
         warmup_steps=warmup_steps,
         max_grad_norm=max_grad_norm,
-        gradient_accumulation_steps=model["training"].get(
-            "gradient_accumulation_steps", 1
-        ),
+        gradient_accumulation_steps=gradient_accumulation_steps,
         fp16=False,
         freeze_layers=model["training"].get("freeze_layers", False),
-        num_layers_freeze=model["training"].get("num_layer_freeze", 0),
+        num_layers_freeze=num_layers_freeze,
         progress_bar_refresh_rate=1,
         seed=random.randint(0, 2**32 - 1),
     )

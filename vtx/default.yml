@@ -66,39 +66,35 @@ toe:
     # this will be set to what is already supported by the corresponding model's config.json.
     block_size: 444
 
-    # The number of iterations before training will complete.
-    num_steps: 88888
-
     # This key is currently broken. Anything other than "0" will prevent the network from learning.
     warmup_steps: 0
 
-    # Gradient accumulation is a ML trick, that essentially allows for larger batch sizes, without
-    # the memory hit. For example, at a batch size of 3, and gradient accumulation steps of 6, your
-    # your model will effectively train with a batch size of 18. (3 x 6 = 18)
-    gradient_accumulation_steps: 6
-
-    # The rate at which your model will adjust weights/biases at each iteration step.
-    learning_rate: 0.000333
-
-    # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
-    weight_decay: 0.01
-
-    # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
-    max_grad_norm: 0.444
-
     # Whether or not to prevent some layers of your model from being updated.
     freeze_layers: True
-
-    # The number of layers to freeze, starting from the left (lowest/deepest features), and moving right.
-    num_layers_freeze: 8
 
     # Takes an equal number of samples from each dataset, so as not to bias towards one or the other. Not
     # recommended; this can cause larger datasets to nearly vanish, because so much data is never sampled.
     equalize_datasets: False
 
-    # Place each dataset into a folder at {project_root}/lab, then list them here.
-    datasets:
-      - default
+    stages:
+        # The rate at which your model will adjust weights/biases at each iteration step.
+      - learning_rate: 0.000333
+        # The number of iterations before training will complete.
+        num_steps: 88888
+        # The number of layers to freeze, starting from the left (lowest/deepest features), and moving right.
+        num_layers_freeze: 8
+        # Gradient accumulation is a ML trick, that essentially allows for larger batch sizes, without
+        # the memory hit. For example, at a batch size of 3, and gradient accumulation steps of 6, your
+        # your model will effectively train with a batch size of 18. (3 x 6 = 18)
+        gradient_accumulation_steps: 6
+        # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
+        weight_decay: 0.01
+        # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
+        max_grad_norm: 0.444
+        # Place each dataset into a folder at {project_root}/lab, then list them here.
+        datasets:
+          - default
+
 
 heart:
   info: never give up, never give in
@@ -132,8 +128,12 @@ soul:
     freeze_layers: True
     num_layers_freeze: 19
     equalize_datasets: False
-    datasets:
-      - default
+    stages:
+      - learning_rate: 0.000666
+        num_steps: 88888
+        num_layers_freeze: 19
+        datasets:
+          - default
 
 # :: Use the following collections of datasets to train your models. Each collection you want
 # :: to use must be specified under your model configuration.
@@ -149,7 +149,6 @@ collections:
     lab/pen:
     lab/journals:
     lab/research:
-    lab/theory:
     lab/pages:
     lab/texts:
     vtx:

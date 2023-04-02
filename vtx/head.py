@@ -75,11 +75,30 @@ context = [
 # Build a local cache of global conversational state
 def build_context(message):
 
-    while len(context) >= 9:
+    while len(context) >= 23:
         context.pop(0)
 
-    context.append(message[:222])
+    context.append(message)
 
+
+# Truncate the prompt to fit the model
+def truncate_context(ctx, max_length=512):
+
+    context_length = sum([len(item) for item in ctx])
+
+    if context_length > max_length:
+        for i, line in enumerate(ctx):
+            if not line.startswith(propulsion):
+                continue
+            remaining = i + 1
+            ctx[i] = line[:remaining]
+            if sum([len(item) for item in ctx]) <= max_length:
+                break
+
+    return ctx
+
+
+import pprint
 
 # Generate a completion from bias and context
 @to_thread
@@ -89,6 +108,8 @@ def gen(bias=None, ctx=None, failures=0):
 
     if ctx == None:
         ctx = context
+
+    ctx = truncate_context(ctx, 1024)
 
     history = "\n".join(ctx) + "\n"
 

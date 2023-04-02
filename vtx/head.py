@@ -75,7 +75,7 @@ context = [
 # Build a local cache of global conversational state
 def build_context(message):
 
-    while len(context) >= 23:
+    while len(context) >= 9:
         context.pop(0)
 
     context.append(message)
@@ -97,8 +97,6 @@ def truncate_context(ctx, max_length=512):
 
     return ctx
 
-
-import pprint
 
 # Generate a completion from bias and context
 @to_thread

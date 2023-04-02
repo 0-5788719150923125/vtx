@@ -67,7 +67,7 @@ async def scrape(channel):
             x.close()
             deep.close()
 
-            while len(messages[channel]) > 23:
+            while len(messages[channel]) > 9:
                 messages[channel].pop(0)
 
             messages[channel].append(sanitized)

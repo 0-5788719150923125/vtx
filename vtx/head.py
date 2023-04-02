@@ -102,7 +102,7 @@ def gen(bias=None, ctx=None, failures=0):
 
     eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
 
-    temperature = 1.42
+    temperature = 1.0
     if failures > 0:
         temperature = temperature - (0.1 * failures)
 

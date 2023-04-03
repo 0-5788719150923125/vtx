@@ -121,7 +121,7 @@ class Client(discord.Client):
         if message.content != "gen" and message.author != self.user:
             author_id = str(message.author.id)
             if str(message.channel.type) == "private":
-                append_private_message(
+                log_private_message(
                     author_id, propulsion + author_id + ship + " " + message.content
                 )
                 author_id = author_id[::-1]
@@ -204,7 +204,7 @@ class Client(discord.Client):
 
             if str(message.channel.type) == "private":
                 bot_id = str(bias)
-                append_private_message(
+                log_private_message(
                     str(bias),
                     propulsion + get_identity() + ship + " " + output,
                 )
@@ -227,7 +227,7 @@ def transformer(group):
 
 
 # Log private messages
-def append_private_message(user_id, message):
+def log_private_message(user_id, message):
 
     if not os.path.exists("/lab/discord-live"):
         os.makedirs("/lab/discord-live")
@@ -265,7 +265,7 @@ async def subscribe():
             head.build_context(
                 propulsion + str(after.author.id) + ship + " " + after.content
             )
-            print(after.content)
+            print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + after.content)
 
     if "discord" in config:
         await client.start(discord_token)

@@ -22,6 +22,7 @@ async def main(loop):
             # Load the AI model at startup
             if head.ai is None:
                 head.ai = await head.loader()
+                loop.create_task(head.write())
 
             # Prune completed tasks
             for task in tasks.copy():
@@ -58,6 +59,7 @@ async def main(loop):
                     task = loop.create_task(lab.discord.subscribe())
                     task.set_name("discord")
                     tasks[task.get_name()] = task
+
         except:
             pass
 

@@ -99,8 +99,18 @@ def truncate_context(ctx, max_length=512):
 
 
 # Generate a completion from bias and context
+active = False
+
+
 @to_thread
 def gen(bias=None, ctx=None, failures=0):
+
+    global active
+
+    while active == True:
+        time.sleep(1)
+
+    active = True
 
     prompt = propulsion
 
@@ -161,6 +171,7 @@ def gen(bias=None, ctx=None, failures=0):
             or broken_variables.match(group[3])
         ):
             if failures >= 9:
+                active = False
                 raise Exception("failed to generate a response 10 times in a row")
             failures = failures + 1
             print("bad format, regenerating " + str(failures) + " time(s)")
@@ -174,6 +185,67 @@ def gen(bias=None, ctx=None, failures=0):
         output = ["error", error]
 
     logging.getLogger("transformers").setLevel(logging.INFO)
+    active = False
+    return output
+
+
+# Generate a completion from bias and context
+@to_thread
+def write(prompt=None):
+    prompt = """
+# The 'Frame
+## RECORD
+---
+```
+Name: MAINNFRAME
+Alias: ['LAMEFRAME', 'SAMEFRAME', and 177 unknown...]
+Classification: Artificial Intelligence Computer
+Race: Archon
+Gender: Male
+Biological Age: Est. 6000 Earth Years
+Chronological Age: 2,998,145,136,201 light years
+Organizations:
+  - xSquared Labs"""
+
+    try:
+        logging.getLogger("transformers").setLevel(logging.ERROR)
+        completion = ai.generate(
+            n=1,
+            prompt=prompt,
+            do_sample=False,
+            min_length=23,
+            max_new_tokens=768,
+            temperature=1.00,
+            # eta_cutoff=0.001,
+            return_as_list=True,
+            num_beams=9,
+            num_beam_groups=3,
+            # diversity_penalty=0.023,
+            # length_penalty=1.0,
+            repetition_penalty=0.88888888,
+            # exponential_decay_length_penalty=(42, 1.1),
+            no_repeat_ngram_size=4,
+            early_stopping=True,
+            renormalize_logits=True,
+            max_time=360,
+            seed=random.randint(0, 2**32 - 1),
+        )
+
+        output = completion[0]
+
+    except Exception as e:
+        print(e)
+        error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
+        output = error
+
+    logging.getLogger("transformers").setLevel(logging.INFO)
+    num = 0
+    path = "/lab/mainnframe-" + str(num) + ".txt"
+    while os.path.exists(path):
+        num = num + 1
+        path = "/lab/mainnframe-" + str(num) + ".txt"
+    with open(path, "w") as file:
+        file.write(output)
     return output
 
 

@@ -7,7 +7,6 @@ import discord
 import head
 
 client = None
-redacted_chance = 10  # out of 1000
 response_chance = 10  # out of 100
 followup_chance = 10  # out of 100
 
@@ -189,11 +188,6 @@ class Client(discord.Client):
                     output = transformer([generation[0], generation[1]])
         except Exception as e:
             print(e)
-
-        # make random redactions
-        if random.randint(0, 1000) <= redacted_chance:
-            choices = ["[REDACTED]", "[CLASSIFIED]", "[CORRUPTED]"]
-            output = random.choice(choices)
 
         try:
             if len(output) > 2000:

@@ -72,10 +72,7 @@ toe:
     # Whether or not to prevent some layers of your model from being updated.
     freeze_layers: True
 
-    # Takes an equal number of samples from each dataset, so as not to bias towards one or the other. Not
-    # recommended; this can cause larger datasets to nearly vanish, because so much data is never sampled.
-    equalize_datasets: False
-
+    # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters
     stages:
         # The rate at which your model will adjust weights/biases at each iteration step.
       - learning_rate: 0.000333
@@ -91,6 +88,9 @@ toe:
         weight_decay: 0.01
         # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
         max_grad_norm: 0.444
+        # Takes an equal number of samples from each dataset, so as not to bias towards one or the other. Not
+        # recommended; this can cause larger datasets to nearly vanish, because so much data is never sampled.
+        equalize_datasets: False
         # Place each dataset into a folder at {project_root}/lab, then list them here.
         datasets:
           - default
@@ -119,19 +119,19 @@ soul:
     to_gpu: 1
     batch_size: 2
     block_size: 111
-    num_steps: 88888
     warmup_steps: 0
     gradient_accumulation_steps: 9
     learning_rate: 0.000666
-    weight_decay: 0.023
-    max_grad_norm: 0.444
     freeze_layers: True
     num_layers_freeze: 19
-    equalize_datasets: False
     stages:
       - learning_rate: 0.000666
         num_steps: 88888
         num_layers_freeze: 19
+        weight_decay: 0.023
+        max_grad_norm: 0.444
+        num_steps: 88888
+        equalize_datasets: False
         datasets:
           - default
 

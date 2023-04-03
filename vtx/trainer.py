@@ -197,9 +197,7 @@ if __name__ == "__main__":
             for dataset in config["collections"][collection]:
                 if dataset in datasets:
                     collected.append(datasets[dataset])
-        merged = merge_datasets(
-            collected, equalize=model["training"]["equalize_datasets"]
-        )
+        merged = merge_datasets(collected, equalize=stage["equalize_datasets"])
         inputs.append(merged)
 
     # Cleanup temp files used for tokenized dataset creation

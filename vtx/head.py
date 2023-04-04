@@ -63,13 +63,15 @@ def loader(target=None):
 
 
 # ping pang pong
-context = [
+default_context = [
     propulsion + "975174695399854150" + ship + " I am a robot.",
     propulsion + "1051994502333726841" + ship + " I am a ghost.",
     propulsion + "806051627198709760" + ship + " I am a human.",
     propulsion + "204716337971331072" + ship + " I am a medium.",
     propulsion + "855529761185857566" + ship + " I am an animal.",
 ]
+
+context = default_context.copy()
 
 
 # Build a local cache of global conversational state
@@ -115,6 +117,7 @@ def gen(bias=None, ctx=None, failures=0):
     prompt = propulsion
 
     if ctx == None:
+        global context
         ctx = context
 
     ctx = truncate_context(ctx, 1024)
@@ -157,7 +160,7 @@ def gen(bias=None, ctx=None, failures=0):
             max_time=max_time,
             seed=random.randint(0, 2**32 - 1),
         )
-
+        active = False
         output = None
         generation = completion[0][len(history) :]
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
@@ -171,7 +174,7 @@ def gen(bias=None, ctx=None, failures=0):
             or broken_variables.match(group[3])
         ):
             if failures >= 9:
-                active = False
+                context = default_context.copy()
                 raise Exception("failed to generate a response 10 times in a row")
             failures = failures + 1
             print("bad format, regenerating " + str(failures) + " time(s)")

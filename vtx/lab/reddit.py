@@ -3,6 +3,8 @@ import os
 import re
 from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import asyncpraw
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from datetime import datetime, timedelta
 import head
 
 # Subscribe to a single subreddit
@@ -120,6 +122,13 @@ async def subscribe(subreddit):
                         generation[1],
                     )
                     output = transformer([daemon["name"], sanitized])
+                scheduler = AsyncIOScheduler()
+                scheduler.add_job(
+                    comment.reply(output),
+                    "date",
+                    run_date=datetime.now() + timedelta(minutes=random.randomint(1, 5)),
+                )
+                scheduler.start()
                 print(
                     bc.ROOT
                     + "<=== "
@@ -130,7 +139,6 @@ async def subscribe(subreddit):
                     + " "
                     + output
                 )
-                await comment.reply(output)
     except Exception as e:
         print("reddit failure")
         print(e)

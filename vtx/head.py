@@ -217,7 +217,7 @@ Organizations:
             prompt=prompt,
             do_sample=False,
             min_length=23,
-            max_new_tokens=768,
+            max_new_tokens=1024,
             temperature=1.00,
             # eta_cutoff=0.001,
             return_as_list=True,

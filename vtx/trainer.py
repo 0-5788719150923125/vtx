@@ -117,7 +117,6 @@ def join_files(path):
 
 if __name__ == "__main__":
 
-    # Poorly-load configs
     base_model = model["training"]["base_model"]
     to_gpu = model["training"]["to_gpu"]
     n_gpu = model["n_gpu"]

@@ -217,7 +217,6 @@ def prepare_discord_messages():
 
         except Exception as e:
             print(e)
-            print("found a bad file")
 
 
 # Download messages from subreddits

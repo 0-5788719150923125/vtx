@@ -116,15 +116,14 @@ soul:
     resume: True
     base_model: xhyi/PT_GPTNEO350_ATG
     to_gpu: 1
-    batch_size: 2
     block_size: 111
     warmup_steps: 0
     stages:
       - learning_rate: 0.000666
         num_steps: 88888
-        # Whether or not to prevent some layers of your model from being updated.
         freeze_layers: True
         num_layers_freeze: 19
+        batch_size: 2
         gradient_accumulation_steps: 9
         train_transformers_only: False
         weight_decay: 0.023

@@ -58,9 +58,6 @@ toe:
     # Whether or not to train on GPU.
     to_gpu: True
 
-    # Larger batch sizes generally lead to better results, but require more memory to train.
-    batch_size: 3
-
     # This represents the length of each line fed into the tokenizer. Lines longer than this length
     # will be truncated, while lines shorter will be padded (on the right). When fine-tuning a model,
     # this will be set to what is already supported by the corresponding model's config.json.
@@ -69,21 +66,24 @@ toe:
     # This key is currently broken. Anything other than "0" will prevent the network from learning.
     warmup_steps: 0
 
-    # Whether or not to prevent some layers of your model from being updated.
-    freeze_layers: True
-
     # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters
     stages:
         # The rate at which your model will adjust weights/biases at each iteration step.
       - learning_rate: 0.000333
         # The number of iterations before training will complete.
         num_steps: 88888
+        # Larger batch sizes generally lead to better results, but require more memory to train.
+        batch_size: 3
+        # Whether or not to prevent some layers of your model from being updated.
+        freeze_layers: True
         # The number of layers to freeze, starting from the left (lowest/deepest features), and moving right.
         num_layers_freeze: 8
         # Gradient accumulation is a ML trick, that essentially allows for larger batch sizes, without
         # the memory hit. For example, at a batch size of 3, and gradient accumulation steps of 6, your
         # your model will effectively train with a batch size of 18. (3 x 6 = 18)
         gradient_accumulation_steps: 6
+        # Train only the multi-head self-attention and feed-forward sub-layers.
+        train_transformers_only: False
         # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
         weight_decay: 0.01
         # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
@@ -119,12 +119,14 @@ soul:
     batch_size: 2
     block_size: 111
     warmup_steps: 0
-    freeze_layers: True
     stages:
       - learning_rate: 0.000666
         num_steps: 88888
+        # Whether or not to prevent some layers of your model from being updated.
+        freeze_layers: True
         num_layers_freeze: 19
         gradient_accumulation_steps: 9
+        train_transformers_only: False
         weight_decay: 0.023
         max_grad_norm: 0.444
         equalize_datasets: False
@@ -140,6 +142,7 @@ collections:
     lab/opencog/learn:
     lab/aitextgen:
     lab/source:
+    lab/fold:
     lab/ink:
     lab/pen:
     lab/journals:

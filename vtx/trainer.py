@@ -122,7 +122,6 @@ if __name__ == "__main__":
     to_gpu = model["training"]["to_gpu"]
     n_gpu = model["n_gpu"]
     warmup_steps = model["training"]["warmup_steps"]
-    freeze_layers = model["training"]["freeze_layers"]
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
@@ -163,6 +162,8 @@ if __name__ == "__main__":
     max_grad_norm = []
     batch_size = []
     gradient_accumulation_steps = []
+    train_transformers_only = []
+    freeze_layers = []
     for stage in model["training"]["stages"]:
         learning_rate.append(stage["learning_rate"])
         num_steps.append(stage["num_steps"])
@@ -171,6 +172,8 @@ if __name__ == "__main__":
         max_grad_norm.append(stage["max_grad_norm"])
         batch_size.append(stage["batch_size"])
         gradient_accumulation_steps.append(stage["gradient_accumulation_steps"])
+        train_transformers_only.append(stage["train_transformers_only"])
+        freeze_layers.append(stage["freeze_layers"])
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
@@ -231,8 +234,9 @@ if __name__ == "__main__":
         warmup_steps=warmup_steps,
         max_grad_norm=max_grad_norm,
         gradient_accumulation_steps=gradient_accumulation_steps,
+        train_transformers_only=train_transformers_only,
         fp16=False,
-        freeze_layers=model["training"].get("freeze_layers", False),
+        freeze_layers=freeze_layers,
         num_layers_freeze=num_layers_freeze,
         progress_bar_refresh_rate=1,
         seed=random.randint(0, 2**32 - 1),

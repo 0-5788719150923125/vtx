@@ -243,10 +243,10 @@ Organizations:
 
     logging.getLogger("transformers").setLevel(logging.INFO)
     num = 0
-    path = "/lab/mainnframe-" + str(num) + ".txt"
+    path = "/gen/mainnframe-" + str(num) + ".txt"
     while os.path.exists(path):
         num = num + 1
-        path = "/lab/mainnframe-" + str(num) + ".txt"
+        path = "/gen/mainnframe-" + str(num) + ".txt"
     with open(path, "w") as file:
         file.write(output)
     return output

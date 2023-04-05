@@ -174,7 +174,6 @@ def gen(bias=None, ctx=None, failures=0):
             or broken_variables.match(group[3])
         ):
             if failures >= 9:
-                context = default_context.copy()
                 raise Exception("failed to generate a response 10 times in a row")
             failures = failures + 1
             print("bad format, regenerating " + str(failures) + " time(s)")
@@ -184,6 +183,7 @@ def gen(bias=None, ctx=None, failures=0):
 
     except Exception as e:
         print(e)
+        context = default_context.copy()
         error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
         output = ["error", error]
 

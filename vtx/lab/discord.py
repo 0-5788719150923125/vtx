@@ -1,6 +1,7 @@
 import asyncio
 import random
 import os
+import re
 from utils import ad, bc, config, get_identity, propulsion, ship
 from discord.ext import commands
 import discord
@@ -233,7 +234,12 @@ def log_private_message(user_id, message):
         os.makedirs("/lab/discord-live")
 
     with open("/lab/discord-live/" + user_id + ".txt", "a") as txt_file:
-        txt_file.write(message + "\n")
+        sanitized = re.sub(
+            r"http\S+",
+            f"((({str(get_identity())})))",
+            message,
+        )
+        txt_file.write(sanitized + "\n")
 
 
 # list all available Discord channels

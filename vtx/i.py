@@ -109,10 +109,10 @@ def prepare_discord_messages():
         return sanitized
 
     # Ensure export path exists and is clean
-    if os.path.exists("/lab/discord"):
-        shutil.rmtree("/lab/discord")
+    if os.path.exists("/lab/discord/exported"):
+        shutil.rmtree("/lab/discord/exported")
 
-    os.makedirs("/lab/discord")
+    os.makedirs("/lab/discord/exported")
 
     print("preparing Discord messages")
     for filename in os.listdir("/gen/discord"):
@@ -128,8 +128,15 @@ def prepare_discord_messages():
 
                     if i["type"] != "Default" and i["type"] != "Reply":
                         continue
-                    if i["content"] == "":
-                        continue
+
+                    if len(i["embeds"]) > 0:
+                        i["content"] = (
+                            i["content"]
+                            + " | "
+                            + i["embeds"][0]["title"]
+                            + " | "
+                            + i["embeds"][0]["description"]
+                        )
 
                     author_id = i["author"]["id"]
 
@@ -138,7 +145,9 @@ def prepare_discord_messages():
                         if author_id == False:
                             continue
 
-                    with open("/lab/discord/" + filename + ".txt", "a") as txt_file:
+                    with open(
+                        "/lab/discord/exported/" + filename + ".txt", "a"
+                    ) as txt_file:
 
                         if i["type"] == "Reply":
                             try:
@@ -159,6 +168,14 @@ def prepare_discord_messages():
 
                                 if reply_author_id != False:
                                     if result is not None:
+                                        if len(result["embeds"]) > 0:
+                                            result["content"] = (
+                                                result["content"]
+                                                + " | "
+                                                + result["embeds"][0]["title"]
+                                                + " | "
+                                                + result["embeds"][0]["description"]
+                                            )
                                         sanitized = sanitizer(result["content"])
                                         if len(result["mentions"]) > 0:
                                             for mention in result["mentions"]:

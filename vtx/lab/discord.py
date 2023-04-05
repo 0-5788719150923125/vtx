@@ -230,10 +230,10 @@ def transformer(group):
 # Log private messages
 def log_private_message(user_id, message):
 
-    if not os.path.exists("/lab/discord-live"):
-        os.makedirs("/lab/discord-live")
+    if not os.path.exists("/lab/discord/live"):
+        os.makedirs("/lab/discord/live")
 
-    with open("/lab/discord-live/" + user_id + ".txt", "a") as txt_file:
+    with open("/lab/discord/live/" + user_id + ".txt", "a") as txt_file:
         sanitized = re.sub(
             r"http\S+",
             f"((({str(get_identity())})))",

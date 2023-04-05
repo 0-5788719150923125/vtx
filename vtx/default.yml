@@ -88,8 +88,7 @@ toe:
         weight_decay: 0.01
         # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
         max_grad_norm: 0.444
-        # Takes an equal number of samples from each dataset, so as not to bias towards one or the other. Not
-        # recommended; this can cause larger datasets to nearly vanish, because so much data is never sampled.
+        # Takes an equal number of samples from each dataset, so as not to bias toward one or the other.
         equalize_datasets: False
         # Place each dataset into a folder at {project_root}/lab, then list them here.
         datasets:
@@ -140,7 +139,6 @@ collections:
     # The path to your dataset.
     lab/opencog/learn:
     lab/aitextgen:
-    lab/swarm:
     lab/source:
     lab/ink:
     lab/pen:

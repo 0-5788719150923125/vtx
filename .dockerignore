@@ -1,7 +1,7 @@
+__pycache__
 .env
 gen/
 lab/
 node_modules
-vtx/__pycache__
 vtx/models/*
 !lab/aitextgen

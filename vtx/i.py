@@ -130,13 +130,16 @@ def prepare_discord_messages():
                         continue
 
                     if len(i["embeds"]) > 0:
-                        i["content"] = (
-                            i["content"]
-                            + " | "
-                            + i["embeds"][0]["title"]
-                            + " | "
-                            + i["embeds"][0]["description"]
-                        )
+                        if i["content"] != "":
+                            i["content"] = i["content"]
+                        if i["embeds"][0]["title"]:
+                            i["content"] = (
+                                i["content"] + " | " + i["embeds"][0]["title"]
+                            )
+                        if i["embeds"][0]["description"]:
+                            i["content"] = (
+                                i["content"] + " | " + i["embeds"][0]["description"]
+                            )
 
                     author_id = i["author"]["id"]
 
@@ -169,13 +172,20 @@ def prepare_discord_messages():
                                 if reply_author_id != False:
                                     if result is not None:
                                         if len(result["embeds"]) > 0:
-                                            result["content"] = (
-                                                result["content"]
-                                                + " | "
-                                                + result["embeds"][0]["title"]
-                                                + " | "
-                                                + result["embeds"][0]["description"]
-                                            )
+                                            if result["content"] != "":
+                                                result["content"] = result["content"]
+                                            if result["embeds"][0]["title"]:
+                                                result["content"] = (
+                                                    result["content"]
+                                                    + " | "
+                                                    + result["embeds"][0]["title"]
+                                                )
+                                            if result["embeds"][0]["description"]:
+                                                result["content"] = (
+                                                    result["content"]
+                                                    + " | "
+                                                    + result["embeds"][0]["description"]
+                                                )
                                         sanitized = sanitizer(result["content"])
                                         if len(result["mentions"]) > 0:
                                             for mention in result["mentions"]:

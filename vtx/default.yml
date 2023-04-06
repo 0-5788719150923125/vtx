@@ -136,6 +136,7 @@ soul:
 # :: to use must be specified under your model configuration.
 
 collections:
+  # The name of your collection.
   default:
     # The path to your dataset.
     lab/opencog/learn:

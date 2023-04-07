@@ -6,7 +6,6 @@ vtx/models/*
 lab/*
 lab/logseq/*
 lab/config.yml
-!lab/*.mp4
 !lab/logseq/config.edn
 !lab/pages
 !lab/journals

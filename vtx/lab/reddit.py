@@ -121,7 +121,7 @@ async def subscribe(subreddit):
                         generation[1],
                     )
                     output = transformer([daemon["name"], sanitized])
-                asyncio.sleep(random.randint(60, 300))
+                await asyncio.sleep(random.randint(60, 300))
                 comment.reply(output)
                 print(
                     bc.ROOT

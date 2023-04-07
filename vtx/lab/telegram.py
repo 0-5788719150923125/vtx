@@ -3,7 +3,7 @@ import logging
 import random
 import os
 import re
-from utils import bc, ad, get_daemon, get_identity, ship
+from utils import bc, ad, get_daemon, get_identity, propulsion, ship
 from aiogram import Dispatcher, executor, Bot, types
 import head
 
@@ -19,7 +19,9 @@ async def subscribe() -> None:
 
     @dp.message_handler()
     async def chat_bot(message: types.Message):
-        head.build_context(str(get_identity()) + ship + " " + message["text"])
+        head.build_context(
+            propulsion + str(get_identity()) + ship + " " + message["text"]
+        )
         daemon = get_daemon(random.randint(1, 9999))["name"]
         response = await head.gen()
         sanitized = re.sub(
@@ -29,7 +31,7 @@ async def subscribe() -> None:
         )
 
         await message.answer(sanitized)
-        head.build_context(str(get_identity()) + ship + " " + sanitized)
+        head.build_context(propulsion + str(get_identity()) + ship + " " + sanitized)
         print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
         print(bc.CORE + "INK@TELEGRAM: " + ad.TEXT + sanitized)
 

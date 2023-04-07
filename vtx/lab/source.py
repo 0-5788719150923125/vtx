@@ -11,7 +11,7 @@ state = None
 messages = {}
 
 # Check the local GUN API for new messages
-async def scrape(channel):
+async def polling(channel):
     run_on = config["source"][channel].get("run_on", False)
     while True:
         try:
@@ -80,5 +80,5 @@ async def scrape(channel):
 
 async def subscribe(channel) -> None:
     await asyncio.gather(
-        scrape(channel),
+        polling(channel),
     )

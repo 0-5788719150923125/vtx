@@ -20,7 +20,8 @@ try {
     ...defaultConfig.source,
     ...userConfig.source
   }
-} catch {
+} catch (e) {
+  console.error(e)
   config = {
     ...defaultConfig.source
   }

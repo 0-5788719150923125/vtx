@@ -122,7 +122,7 @@ async def subscribe(subreddit):
                     )
                     output = transformer([daemon["name"], sanitized])
                 await asyncio.sleep(random.randint(60, 300))
-                comment.reply(output)
+                await comment.reply(output)
                 print(
                     bc.ROOT
                     + "<=== "

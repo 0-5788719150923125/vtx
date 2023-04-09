@@ -29,9 +29,6 @@
 [submodule "lab/opencog/learn"]
 	path = lab/opencog/learn
 	url = https://github.com/opencog/learn
-[submodule "lab/robot"]
-	path = lab/robot
-	url = git@github.com:robotframework/robotframework.git
 [submodule "lab/fold"]
 	path = lab/fold
 	url = https://gitlab.com/singulari-org/the-fold

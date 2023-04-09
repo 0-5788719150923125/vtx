@@ -163,6 +163,8 @@ if __name__ == "__main__":
     gradient_accumulation_steps = []
     train_transformers_only = []
     freeze_layers = []
+    scheduler = []
+    num_cycles = []
     for stage in model["training"]["stages"]:
         learning_rate.append(stage["learning_rate"])
         num_steps.append(stage["num_steps"])
@@ -173,6 +175,9 @@ if __name__ == "__main__":
         gradient_accumulation_steps.append(stage["gradient_accumulation_steps"])
         train_transformers_only.append(stage["train_transformers_only"])
         freeze_layers.append(stage["freeze_layers"])
+        scheduler.append(stage["scheduler"])
+        if "num_cycles" not in stage:
+            num_cycles.append([0.5])
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
@@ -237,6 +242,8 @@ if __name__ == "__main__":
         fp16=False,
         freeze_layers=freeze_layers,
         num_layers_freeze=num_layers_freeze,
+        scheduler=scheduler,
+        num_cycles=num_cycles,
         progress_bar_refresh_rate=1,
         seed=random.randint(0, 2**32 - 1),
     )

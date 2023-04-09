@@ -88,6 +88,10 @@ toe:
         weight_decay: 0.01
         # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
         max_grad_norm: 0.444
+        # The learning rate scheduler to use.
+        scheduler: get_linear_schedule_with_warmup
+        # If using cosine schedulers, the number of cycles to use.
+        num_cycles: 0.5
         # Takes an equal number of samples from each dataset, so as not to bias toward one or the other.
         equalize_datasets: False
         # Place each dataset into a folder at {project_root}/lab, then list them here.
@@ -129,6 +133,7 @@ soul:
         weight_decay: 0.023
         max_grad_norm: 0.444
         equalize_datasets: False
+        scheduler: get_linear_schedule_with_warmup
         datasets:
           - default
 

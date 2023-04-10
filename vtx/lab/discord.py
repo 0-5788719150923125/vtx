@@ -95,14 +95,14 @@ class Client(discord.Client):
 
                 generation = await head.gen(int(bias), context)
                 if generation[0] == "error":
-                    output = generation[1]
+                    return
                 else:
                     output = transformer([generation[0], generation[1]])
 
                 print(output)
 
                 await messages[focus_on].reply(output)
-                self.thinking = False
+
             except Exception as e:
                 print(bc.CORE + str(e) + ad.TEXT)
                 self.discord_task = self.loop.create_task(self.think())
@@ -179,10 +179,7 @@ class Client(discord.Client):
             async with message.channel.typing():
                 generation = await head.gen(bias)
                 if generation[0] == "error":
-                    if random.randint(0, 100) < 2:
-                        output = generation[1]
-                    else:
-                        return
+                    return
                 elif no_transform:
                     output = generation[1]
                 else:

@@ -111,7 +111,7 @@ async def subscribe(subreddit):
                 )
 
                 if generation[0] == "error":
-                    output = generation[1]
+                    continue
                 else:
                     daemon = get_daemon(generation[0])
                     mention = get_daemon(random.randint(1, 9999))["name"]

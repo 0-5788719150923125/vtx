@@ -211,8 +211,7 @@ def gen(bias=None, ctx=None, failures=0):
     except Exception as e:
         print(e)
         context = default_context.copy()
-        error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
-        output = ["error", error]
+        output = ["error"]
 
     logging.getLogger("transformers").setLevel(logging.INFO)
     active = False
@@ -265,8 +264,7 @@ Organizations:
 
     except Exception as e:
         print(e)
-        error = "".join(random.choices(list(bullets), k=random.randint(42, 128)))
-        output = error
+        output = str(e)
 
     logging.getLogger("transformers").setLevel(logging.INFO)
     num = 0

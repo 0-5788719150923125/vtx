@@ -3,11 +3,15 @@ import secrets
 import shutil
 import random
 import json
+import csv
 import os
 from utils import config, get_identity, propulsion, ship
 from bs4 import BeautifulSoup
+from pprint import pprint
 import re
 import praw
+import numpy as np
+import math
 
 # Grab all internal links from a web page
 def crawl(site="https://ink.university"):
@@ -327,3 +331,84 @@ def fetch_from_reddit():
                 context.pop()
 
         main()
+
+
+# Create some structure
+def get_juxtaposition_data(count=10000):
+
+    # Ensure path exists and is empty
+    if os.path.exists("/lab/juxtaposition"):
+        shutil.rmtree("/lab/juxtaposition")
+
+    os.makedirs("/lab/juxtaposition")
+
+    with open("/lab/juxtaposition/" + "unsorted.csv", "w", newline="") as file:
+        agents = []
+        i = 0
+        while i < count:
+            block = get_identity()
+            agents.append([block, block[::-1]])
+            i = i + 1
+        csvwriter = csv.writer(file)
+        csvwriter.writerow(["agent", "bot"])
+        csvwriter.writerows(agents[1:])
+
+    with open("/lab/juxtaposition/" + "sorted.csv", "w", newline="") as file:
+        agents = []
+        i = 0
+        while i < count:
+            block = get_identity()
+            agents.append([block, block[::-1]])
+            i = i + 1
+        csvwriter = csv.writer(file)
+        csvwriter.writerow(["agent", "bot"])
+        sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)
+        csvwriter.writerows(sorted_list)
+
+    with open("/lab/juxtaposition/" + "pi.csv", "w", newline="") as file:
+        agents = []
+        i = 0
+        while i < count:
+            block = get_identity()
+            agents.append([block, block[::-1]])
+            i = i + 1
+        csvwriter = csv.writer(file)
+        csvwriter.writerow(["agent", "bot"])
+        pi_digits = str(math.pi).replace(".", "")
+        sorted_list = sorted(
+            agents,
+            key=lambda x: pi_digits.index(x[1][-1])
+            if x[1][-1] in pi_digits
+            else len(pi_digits),
+        )  # Sort based on the index of the last digit in Pi for the second element in each sublist, or assign an arbitrary index if the last digit is not in Pi
+        csvwriter.writerows(sorted_list)
+
+    def random_fibonacci_list(length):
+        """
+        Generates a list of Fibonacci numbers of the given length, starting at a random position in the Fibonacci sequence.
+        """
+        fibonacci_list = []
+        a, b = 0, 1
+        for i in range(random.randint(0, length)):
+            # advance the Fibonacci sequence to a random position
+            a, b = b, a + b
+        fibonacci_list.append(a)
+        fibonacci_list.append(b)
+        for i in range(length - 2):
+            # generate the next Fibonacci number by summing the previous two
+            next_fibonacci = fibonacci_list[-1] + fibonacci_list[-2]
+            fibonacci_list.append(next_fibonacci)
+        return fibonacci_list
+
+    with open("/lab/juxtaposition/" + "fibonacci.csv", "w", newline="") as file:
+        csvwriter = csv.writer(file)
+        csvwriter.writerow(
+            ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+        )
+        num = 3333
+        i = 0
+        numbers = []
+        while i < num:
+            numbers.append(random_fibonacci_list(9))
+            i = i + 1
+        csvwriter.writerows(numbers)

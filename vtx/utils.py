@@ -27,6 +27,7 @@ class bc:
     ROOT = "\033[92m"
     CORE = "\033[91m"
 
+
 # Color codes after
 class ad:
     TEXT = "\033[0m"
@@ -34,8 +35,9 @@ class ad:
 
 # Generate a pseudo-identity, in the Discord ID format
 def get_identity():
-    count = secrets.choice([18, 19])
-    identity = "".join(secrets.choice("0123456789") for i in range(count))
+    count = secrets.choice([17, 18])
+    leading = secrets.choice("123456789")
+    identity = leading + "".join(secrets.choice("0123456789") for i in range(count))
     return identity
 
 

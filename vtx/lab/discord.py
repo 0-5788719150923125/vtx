@@ -197,9 +197,9 @@ class Client(discord.Client):
             print(bc.CORE + "INK@DISCORD: " + ad.TEXT + output)
 
             if reply == True:
-                await message.reply(output)
+                return_message = await message.reply(output)
             else:
-                await message.channel.send(output)
+                return_message = await message.channel.send(output)
 
             bot_id = str(self.user.id)
 
@@ -207,7 +207,7 @@ class Client(discord.Client):
                 bot_id = str(bias)
                 log_private_message(
                     str(bias),
-                    propulsion + get_identity() + ship + " " + output,
+                    propulsion + str(return_message.id) + ship + " " + output,
                 )
 
             head.build_context(propulsion + bot_id + ship + " " + output)
@@ -242,6 +242,30 @@ def log_private_message(user_id, message):
         txt_file.write(sanitized + "\n")
 
 
+# Replace a private message
+def replace_private_message(user_id, message_id, message):
+    # Open the input and output files
+    user_log = "/lab/discord/live/" + user_id
+    # Open the input and temporary files
+    try:
+        with open(user_log + ".txt", "r") as input_file, open(
+            user_log + ".tmp.txt", "w"
+        ) as temp_file:
+            # Loop over each line in the input file
+            for line in input_file:
+                # Check if the line contains the ID we're looking for
+                if message_id in line:
+                    # If it does, replace the line with the new text
+                    temp_file.write(message + "\n")
+                else:
+                    # If it doesn't, write the original line to the temporary file
+                    temp_file.write(line)
+
+        os.replace(user_log + ".tmp.txt", user_log + ".txt")
+    except Exception as e:
+        print(e)
+
+
 # list all available Discord channels
 async def get_all_channels():
     text_channel_list = []
@@ -258,8 +282,10 @@ async def subscribe():
 
     discord_token = os.environ["DISCORDTOKEN"]
     intents = discord.Intents.default()
+    intents.members = True
     intents.message_content = True
     intents.messages = True
+    intents.reactions = True
 
     global client
     client = Client(intents=intents)
@@ -267,11 +293,38 @@ async def subscribe():
     # Handle bots that update messages token-by-token
     @client.event
     async def on_message_edit(before, after):
+        if before.author.id == client.user.id:
+            return
         if after.content[:1] not in head.bullets:
             head.build_context(
                 propulsion + str(after.author.id) + ship + " " + after.content
             )
             print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + after.content)
+
+    # Listen for pickles
+    @client.event
+    async def on_reaction_add(reaction, user):
+        if reaction.message.author.id != client.user.id:
+            return
+        if str(reaction.emoji).startswith("<:pickle:"):
+            channel = reaction.message.channel
+            message = await channel.fetch_message(reaction.message.id)
+            regen = await head.gen()
+            head.replace(message.content, propulsion + regen[0] + ship + " " + regen[1])
+            transformed = transformer(regen)
+            await message.edit(content=transformed)
+        elif str(reaction.emoji) == "🍞":
+            channel = reaction.message.channel
+            message = await channel.fetch_message(reaction.message.id)
+            bias = str(user.id)
+            regen = await head.gen(bias=bias)
+            head.replace(message.content, propulsion + bias + ship + " " + regen[1])
+            replace_private_message(
+                str(user.id),
+                str(reaction.message.id),
+                propulsion + str(reaction.message.id) + ship + " " + regen[1],
+            )
+            await message.edit(content=regen[1])
 
     if "discord" in config:
         await client.start(discord_token)

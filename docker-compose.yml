@@ -63,6 +63,11 @@ services:
     image: tloncorp/vere:live
     command: sh -c "rm -rf /urbit/needle && /bin/urbit -t -c needle"
     restart: 'always'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 2000M
     ports:
       - 9667:80
       - 34343:34343

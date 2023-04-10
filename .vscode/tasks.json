@@ -110,7 +110,8 @@
         "i.crawl()",
         "i.fetch_from_reddit()",
         "i.prepare_discord_messages()",
-        "i.fetch_from_discord()"
+        "i.fetch_from_discord()",
+        "i.get_juxtaposition_data()"
       ]
     },
     {

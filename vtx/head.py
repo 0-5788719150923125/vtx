@@ -16,7 +16,8 @@ ai = None
 
 os.environ["LRU_CACHE_CAPACITY"] = "1"
 
-focus = os.environ["FOCUS"]
+# focus = os.environ["FOCUS"]
+focus = "src"
 
 # Decorator to a blocking function into a background thread
 def to_thread(func: typing.Callable) -> typing.Coroutine:
@@ -81,6 +82,32 @@ def build_context(message):
         context.pop(0)
 
     context.append(message)
+
+
+from pprint import pprint
+
+# Build a local cache of global conversational state
+def replace(old_message, new_message):
+    try:
+        matcher = re.compile(r'(\*")(.*)(?:"\*$)')
+        captured = "J U X T A P O S I T I O N"[::-1]
+        group = re.search(matcher, old_message)
+        if group is not None and group[2]:
+            captured = group[2]
+        print(captured)
+        for item in context:
+            if captured in item or old_message in item:
+                index = context.index(item)
+                print(str(index))
+                context[index] = new_message
+                pprint(context)
+                return
+
+        build_context(new_message)
+
+        pprint(context)
+    except Exception as e:
+        print(e)
 
 
 # Truncate the prompt to fit the model

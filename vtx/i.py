@@ -334,7 +334,7 @@ def fetch_from_reddit():
 
 
 # Create some structure
-def get_juxtaposition_data(count=10000):
+def get_juxtaposition_data(count=66666):
 
     # Ensure path exists and is empty
     if os.path.exists("/lab/juxtaposition"):
@@ -342,41 +342,36 @@ def get_juxtaposition_data(count=10000):
 
     os.makedirs("/lab/juxtaposition")
 
+    agents = []
+    i = 0
+    while i < count:
+        block = get_identity()
+        agents.append([block, block[::-1]])
+        i = i + 1
+
     with open("/lab/juxtaposition/" + "unsorted.csv", "w", newline="") as file:
-        agents = []
-        i = 0
-        while i < count:
-            block = get_identity()
-            agents.append([block, block[::-1]])
-            i = i + 1
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
     with open("/lab/juxtaposition/" + "sorted.csv", "w", newline="") as file:
-        agents = []
-        i = 0
-        while i < count:
-            block = get_identity()
-            agents.append([block, block[::-1]])
-            i = i + 1
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)
         csvwriter.writerows(sorted_list)
 
     with open("/lab/juxtaposition/" + "pi.csv", "w", newline="") as file:
-        agents = []
+        blocks = []
         i = 0
         while i < count:
             block = get_identity()
-            agents.append([block, block[::-1]])
+            blocks.append([block, block[::-1]])
             i = i + 1
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         pi_digits = str(math.pi).replace(".", "")
         sorted_list = sorted(
-            agents,
+            blocks,
             key=lambda x: pi_digits.index(x[1][-1])
             if x[1][-1] in pi_digits
             else len(pi_digits),
@@ -405,10 +400,9 @@ def get_juxtaposition_data(count=10000):
         csvwriter.writerow(
             ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
         )
-        num = 3333
         i = 0
         numbers = []
-        while i < num:
+        while i < count:
             numbers.append(random_fibonacci_list(9))
             i = i + 1
         csvwriter.writerows(numbers)

@@ -62,7 +62,7 @@
       "label": "train",
       "detail": "Train a model.",
       "type": "shell",
-      "command": "docker-compose run -e FOCUS=\"${input:env}\" vtx python3 trainer.py"
+      "command": "docker-compose run -e TRAINING_FOCUS=\"${input:env}\" vtx python3 trainer.py"
     },
     {
       "label": "i",

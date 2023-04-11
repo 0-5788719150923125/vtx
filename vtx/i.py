@@ -334,7 +334,7 @@ def fetch_from_reddit():
 
 
 # Create some structure
-def get_juxtaposition_data(count=66666):
+def get_juxtaposition_data():
 
     # Ensure path exists and is empty
     if os.path.exists("/lab/juxtaposition"):
@@ -342,36 +342,42 @@ def get_juxtaposition_data(count=66666):
 
     os.makedirs("/lab/juxtaposition")
 
-    agents = []
-    i = 0
-    while i < count:
-        block = get_identity()
-        agents.append([block, block[::-1]])
-        i = i + 1
+    def get_samples(count):
+        samples = []
+        i = 0
+        while i < count:
+            block = get_identity()
+            samples.append([block, block[::-1]])
+            i = i + 1
+        return samples
 
     with open("/lab/juxtaposition/" + "unsorted.csv", "w", newline="") as file:
+        agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
-    with open("/lab/juxtaposition/" + "sorted.csv", "w", newline="") as file:
+    with open("/lab/juxtaposition/" + "left-sorted.csv", "w", newline="") as file:
+        agents = get_samples(300000)
+        csvwriter = csv.writer(file)
+        csvwriter.writerow(["agent", "bot"])
+        sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=True)
+        csvwriter.writerows(sorted_list)
+
+    with open("/lab/juxtaposition/" + "right-sorted.csv", "w", newline="") as file:
+        agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)
         csvwriter.writerows(sorted_list)
 
     with open("/lab/juxtaposition/" + "pi.csv", "w", newline="") as file:
-        blocks = []
-        i = 0
-        while i < count:
-            block = get_identity()
-            blocks.append([block, block[::-1]])
-            i = i + 1
+        agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         pi_digits = str(math.pi).replace(".", "")
         sorted_list = sorted(
-            blocks,
+            agents,
             key=lambda x: pi_digits.index(x[1][-1])
             if x[1][-1] in pi_digits
             else len(pi_digits),
@@ -402,6 +408,7 @@ def get_juxtaposition_data(count=66666):
         )
         i = 0
         numbers = []
+        count = 30000
         while i < count:
             numbers.append(random_fibonacci_list(9))
             i = i + 1

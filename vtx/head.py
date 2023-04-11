@@ -84,28 +84,22 @@ def build_context(message):
     context.append(message)
 
 
-from pprint import pprint
-
 # Build a local cache of global conversational state
 def replace(old_message, new_message):
     try:
         matcher = re.compile(r'(\*")(.*)(?:"\*$)')
-        captured = "J U X T A P O S I T I O N"[::-1]
         group = re.search(matcher, old_message)
         if group is not None and group[2]:
             captured = group[2]
-        print(captured)
         for item in context:
             if captured in item or old_message in item:
                 index = context.index(item)
                 print(str(index))
                 context[index] = new_message
-                pprint(context)
                 return
 
         build_context(new_message)
 
-        pprint(context)
     except Exception as e:
         print(e)
 
@@ -193,12 +187,14 @@ def gen(bias=None, ctx=None, failures=0):
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
         variables = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
         broken_variables = re.compile("(\d*\s+\d*)")
+        mentions = re.compile("(?:[<][@])(\d+\s*\d*)(?:[>])")
 
         if (
             group is None
             or propulsion in group[3]
             or variables.match(group[3])
             or broken_variables.match(group[3])
+            or mentions.match(group[3])
         ):
             if failures >= 9:
                 raise Exception("failed to generate a response 10 times in a row")

@@ -8,8 +8,10 @@ import discord
 import head
 
 client = None
-response_chance = 10  # out of 100
+response_chance = 6  # out of 100
 followup_chance = 10  # out of 100
+mention_self_chance = 88  # out of 100
+mention_any_chance = 11  # out of 100
 
 
 # A class to control the entire Discord bot
@@ -152,11 +154,13 @@ class Client(discord.Client):
         else:
             # increase probability of a response if bot is mentioned
             if client.user.mentioned_in(message):
-                chance = random.randint(0, 15)  ## 66%
+                if random.randint(0, 100) < mention_self_chance:
+                    chance = 1
                 bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
-                chance = random.randint(0, 60)  ## 22%
+                if random.randint(0, 100) < mention_any_chance:
+                    chance = 1
                 bias = int(message.mentions[0].id)
             else:
                 chance = random.randint(0, 100)
@@ -303,25 +307,73 @@ async def subscribe():
     async def on_reaction_add(reaction, user):
         if reaction.message.author.id != client.user.id:
             return
-        if str(reaction.emoji).startswith("<:pickle:"):
-            channel = reaction.message.channel
-            message = await channel.fetch_message(reaction.message.id)
-            regen = await head.gen()
-            head.replace(message.content, propulsion + regen[0] + ship + " " + regen[1])
-            transformed = transformer(regen)
-            await message.edit(content=transformed)
-        elif str(reaction.emoji) == "🍞":
-            channel = reaction.message.channel
-            message = await channel.fetch_message(reaction.message.id)
-            bias = str(user.id)
-            regen = await head.gen(bias=bias)
-            head.replace(message.content, propulsion + bias + ship + " " + regen[1])
-            replace_private_message(
-                str(user.id),
-                str(reaction.message.id),
-                propulsion + str(reaction.message.id) + ship + " " + regen[1],
-            )
-            await message.edit(content=regen[1])
+        if str(reaction.emoji) == "🧠":
+            try:
+                channel = reaction.message.channel
+                message = await channel.fetch_message(reaction.message.id)
+                messages = [
+                    message
+                    async for message in channel.history(before=message, limit=7)
+                ]
+                context = [
+                    propulsion
+                    + str(messages[6].author.id)
+                    + ship
+                    + " "
+                    + messages[6].content,
+                    propulsion
+                    + str(messages[5].author.id)
+                    + ship
+                    + " "
+                    + messages[5].content,
+                    propulsion
+                    + str(messages[4].author.id)
+                    + ship
+                    + " "
+                    + messages[4].content,
+                    propulsion
+                    + str(messages[3].author.id)
+                    + ship
+                    + " "
+                    + messages[3].content,
+                    propulsion
+                    + str(messages[2].author.id)
+                    + ship
+                    + " "
+                    + messages[2].content,
+                    propulsion
+                    + str(messages[1].author.id)
+                    + ship
+                    + " "
+                    + messages[1].content,
+                    propulsion
+                    + str(messages[0].author.id)
+                    + ship
+                    + " "
+                    + messages[0].content,
+                ]
+                if str(message.channel.type) == "private":
+                    bias = str(user.id)
+                    regen = await head.gen(bias=bias, ctx=context)
+                    head.replace(
+                        message.content, propulsion + bias + ship + " " + regen[1]
+                    )
+                    replace_private_message(
+                        str(user.id),
+                        str(reaction.message.id),
+                        propulsion + str(reaction.message.id) + ship + " " + regen[1],
+                    )
+                    transformed = regen[1]
+                else:
+                    regen = await head.gen(ctx=context)
+                    head.replace(
+                        message.content, propulsion + regen[0] + ship + " " + regen[1]
+                    )
+                    transformed = transformer(regen)
+
+                await message.edit(content=transformed)
+            except Exception as e:
+                print(e)
 
     if "discord" in config:
         await client.start(discord_token)

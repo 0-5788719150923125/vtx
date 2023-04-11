@@ -11,7 +11,7 @@ from utils import ad, bc, config
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
-focus = os.environ["FOCUS"]
+focus = os.environ["TRAINING_FOCUS"]
 model = config[focus]
 model_folder = "models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"

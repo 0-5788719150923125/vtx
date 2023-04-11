@@ -181,7 +181,7 @@ def gen(bias=None, ctx=None, failures=0):
             max_time=max_time,
             seed=random.randint(0, 2**32 - 1),
         )
-        active = False
+
         output = None
         generation = completion[0][len(history) :]
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)

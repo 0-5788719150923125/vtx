@@ -156,25 +156,26 @@ if __name__ == "__main__":
     inputs = []
     learning_rate = []
     num_steps = []
+    freeze_layers = []
     num_layers_freeze = []
     weight_decay = []
     max_grad_norm = []
     batch_size = []
     gradient_accumulation_steps = []
     train_transformers_only = []
-    freeze_layers = []
     scheduler = []
     num_cycles = []
     for stage in model["training"]["stages"]:
         learning_rate.append(stage["learning_rate"])
         num_steps.append(stage["num_steps"])
         num_layers_freeze.append(stage["num_layers_freeze"])
+        if stage["num_layers_freeze"] > 0:
+            freeze_layers.append(True)
         weight_decay.append(stage["weight_decay"])
         max_grad_norm.append(stage["max_grad_norm"])
         batch_size.append(stage["batch_size"])
         gradient_accumulation_steps.append(stage["gradient_accumulation_steps"])
         train_transformers_only.append(stage["train_transformers_only"])
-        freeze_layers.append(stage["freeze_layers"])
         scheduler.append(stage["scheduler"])
         if "num_cycles" not in stage:
             num_cycles.append([0.5])

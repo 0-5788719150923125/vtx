@@ -16,8 +16,7 @@ ai = None
 
 os.environ["LRU_CACHE_CAPACITY"] = "1"
 
-# focus = os.environ["FOCUS"]
-focus = "src"
+focus = os.environ["FOCUS"]
 
 # Decorator to a blocking function into a background thread
 def to_thread(func: typing.Callable) -> typing.Coroutine:
@@ -89,12 +88,12 @@ def replace(old_message, new_message):
     try:
         matcher = re.compile(r'(\*")(.*)(?:"\*$)')
         group = re.search(matcher, old_message)
+        captured = "J U X T A P O S I T I O N"[::-1]
         if group is not None and group[2]:
             captured = group[2]
         for item in context:
             if captured in item or old_message in item:
                 index = context.index(item)
-                print(str(index))
                 context[index] = new_message
                 return
 
@@ -181,7 +180,7 @@ def gen(bias=None, ctx=None, failures=0):
             max_time=max_time,
             seed=random.randint(0, 2**32 - 1),
         )
-
+        active = False
         output = None
         generation = completion[0][len(history) :]
         group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)

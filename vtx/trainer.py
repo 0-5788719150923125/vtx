@@ -11,7 +11,7 @@ from utils import ad, bc, config
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
-focus = os.environ["TRAINING_FOCUS"]
+focus = os.environ["FOCUS"]
 model = config[focus]
 model_folder = "models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
@@ -178,7 +178,9 @@ if __name__ == "__main__":
         train_transformers_only.append(stage["train_transformers_only"])
         scheduler.append(stage["scheduler"])
         if "num_cycles" not in stage:
-            num_cycles.append([0.5])
+            num_cycles.append(0.5)
+        else:
+            num_cycles.append(stage["num_cycles"])
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:

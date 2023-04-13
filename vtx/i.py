@@ -352,27 +352,26 @@ def get_juxtaposition_data():
         return samples
 
     with open("/lab/juxtaposition/" + "unsorted.csv", "w", newline="") as file:
-        agents = get_samples(300000)
+        agents = get_samples(66666)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
+    agents = get_samples(33333)
     with open("/lab/juxtaposition/" + "left-sorted.csv", "w", newline="") as file:
-        agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=True)
         csvwriter.writerows(sorted_list)
 
     with open("/lab/juxtaposition/" + "right-sorted.csv", "w", newline="") as file:
-        agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)
         csvwriter.writerows(sorted_list)
 
     with open("/lab/juxtaposition/" + "pi.csv", "w", newline="") as file:
-        agents = get_samples(900000)
+        agents = get_samples(99999)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         pi_digits = str(math.pi).replace(".", "")
@@ -408,39 +407,8 @@ def get_juxtaposition_data():
         )
         i = 0
         numbers = []
-        count = 30000
+        count = 33333
         while i < count:
             numbers.append(random_fibonacci_list(9))
             i = i + 1
         csvwriter.writerows(numbers)
-
-    def create_matrix(sequence):
-        length = len(sequence)
-        first_char = sequence[0]
-        inverse = sequence[::-1]
-
-        horizontal = inverse[:-1] + sequence
-
-        lines = []
-
-        for i in horizontal:
-            padding = " " * (length - 1)
-            lines.append(padding + i)
-
-        lines[length - 1] = horizontal
-
-        output = "\n".join(lines)
-
-        return output
-
-    with open("/lab/juxtaposition/" + "matrix.csv", "w", newline="") as file:
-        csvwriter = csv.writer(file)
-        csvwriter.writerow(["human", "namuh"])
-        count = 300000
-        i = 0
-        matrices = []
-        while i < count:
-            block = get_identity()
-            matrices.append([block, create_matrix(block)])
-            i = i + 1
-        csvwriter.writerows(matrices)

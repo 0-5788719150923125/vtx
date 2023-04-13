@@ -53,7 +53,7 @@
       "label": "up",
       "detail": "Start the services in a development environment.",
       "type": "shell",
-      "command": "FOCUS=\"${input:env}\" docker-compose up",
+      "command": "FOCUS=${input:env} docker-compose up",
       "windows": {
         "command": "$env:FOCUS = '${input:env}'; docker-compose up"
       }
@@ -62,7 +62,7 @@
       "label": "train",
       "detail": "Train a model.",
       "type": "shell",
-      "command": "docker-compose run -e TRAINING_FOCUS=\"${input:env}\" vtx python3 trainer.py"
+      "command": "docker-compose run -e FOCUS=${input:env} vtx python3 trainer.py"
     },
     {
       "label": "i",

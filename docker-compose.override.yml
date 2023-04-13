@@ -8,5 +8,3 @@ services:
           devices:
             - driver: nvidia
               capabilities: [gpu]
-    environment:
-      FOCUS: toe

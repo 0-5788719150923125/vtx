@@ -23,7 +23,7 @@ services:
     env_file:
       - .env
     environment:
-      FOCUS: heart
+      FOCUS: ${FOCUS:-heart}
       TRANSFORMERS_CACHE: /tmp
 
   ctx:

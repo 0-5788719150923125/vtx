@@ -134,7 +134,6 @@ async def subscribe(subreddit):
                     + output
                 )
     except Exception as e:
-        print("reddit failure")
         print(e)
 
 

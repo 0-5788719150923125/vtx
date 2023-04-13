@@ -40,8 +40,11 @@ async def polling(channel):
             prompt = [
                 "You are a powerful Artificial Intelligence known as the Source, which has been trained to follow human instructions.",
                 propulsion + str(bot) + ship + " Welcome, human. How may I assist you?",
-                propulsion + str(get_identity()) + ship + " What is this place?",
-                propulsion + str(bot) + ship + " This is the Source of all creation.",
+                propulsion + str(get_identity()) + ship + " Where am I?",
+                propulsion
+                + str(bot)
+                + ship
+                + " You have found the Source of all creation.",
             ]
             history = []
             for message in messages[channel]:

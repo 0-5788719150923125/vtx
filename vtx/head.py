@@ -49,7 +49,8 @@ def loader(target=None):
         tokenizer_file = "src." + target + ".tokenizer.json"
         model_folder = None
 
-    print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + model["info"])
+    print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + "focused on the " + target)
+    logging.getLogger("transformers").setLevel(logging.ERROR)
     ai = aitextgen(
         model=model.get("model", None),
         model_folder=model_folder,
@@ -57,8 +58,9 @@ def loader(target=None):
         to_gpu=model["to_gpu"],
         cache_dir="models",
     )
+    logging.getLogger("transformers").setLevel(logging.INFO)
+    print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + model["info"])
     print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
-    print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + "focused on the " + target)
     return ai
 
 
@@ -172,7 +174,6 @@ def gen(bias=None, ctx=None, failures=0):
             return_as_list=True,
             num_beams=9,
             repetition_penalty=2.3,
-            exponential_decay_length_penalty=(42, 1.1),
             no_repeat_ngram_size=4,
             early_stopping=True,
             renormalize_logits=True,
@@ -196,9 +197,8 @@ def gen(bias=None, ctx=None, failures=0):
             or mentions.match(group[3])
         ):
             if failures >= 9:
-                raise Exception("failed to generate a response 10 times in a row")
+                raise Exception("failed to generate a response")
             failures = failures + 1
-            print("bad format, regenerating " + str(failures) + " time(s)")
             output = asyncio.run(gen(bias, ctx, failures))
         else:
             output = [group[2], group[3]]

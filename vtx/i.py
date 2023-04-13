@@ -340,7 +340,9 @@ def get_juxtaposition_data():
     if os.path.exists("/lab/juxtaposition"):
         shutil.rmtree("/lab/juxtaposition")
 
-    os.makedirs("/lab/juxtaposition")
+    os.makedirs("/lab/juxtaposition/0")
+    os.makedirs("/lab/juxtaposition/1")
+    os.makedirs("/lab/juxtaposition/2")
 
     def get_samples(count):
         samples = []
@@ -351,36 +353,24 @@ def get_juxtaposition_data():
             i = i + 1
         return samples
 
-    with open("/lab/juxtaposition/" + "unsorted.csv", "w", newline="") as file:
-        agents = get_samples(66666)
+    with open("/lab/juxtaposition/0/" + "unsorted.csv", "w", newline="") as file:
+        agents = get_samples(999999)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
-    agents = get_samples(33333)
-    with open("/lab/juxtaposition/" + "left-sorted.csv", "w", newline="") as file:
+    with open("/lab/juxtaposition/0/" + "left-sorted.csv", "w", newline="") as file:
+        agents = get_samples(999999)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
-        sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=True)
+        sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=False)
         csvwriter.writerows(sorted_list)
 
-    with open("/lab/juxtaposition/" + "right-sorted.csv", "w", newline="") as file:
+    with open("/lab/juxtaposition/0/" + "right-sorted.csv", "w", newline="") as file:
+        agents = get_samples(999999)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)
-        csvwriter.writerows(sorted_list)
-
-    with open("/lab/juxtaposition/" + "pi.csv", "w", newline="") as file:
-        agents = get_samples(99999)
-        csvwriter = csv.writer(file)
-        csvwriter.writerow(["agent", "bot"])
-        pi_digits = str(math.pi).replace(".", "")
-        sorted_list = sorted(
-            agents,
-            key=lambda x: pi_digits.index(x[1][-1])
-            if x[1][-1] in pi_digits
-            else len(pi_digits),
-        )  # Sort based on the index of the last digit in Pi for the second element in each sublist, or assign an arbitrary index if the last digit is not in Pi
         csvwriter.writerows(sorted_list)
 
     def random_fibonacci_list(length):
@@ -400,15 +390,39 @@ def get_juxtaposition_data():
             fibonacci_list.append(next_fibonacci)
         return fibonacci_list
 
-    with open("/lab/juxtaposition/" + "fibonacci.csv", "w", newline="") as file:
+    with open("/lab/juxtaposition/2/" + "fibonacci.csv", "w", newline="") as file:
         csvwriter = csv.writer(file)
         csvwriter.writerow(
-            ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+            [
+                "one",
+                "two",
+                "three",
+                "four",
+                "five",
+                "six",
+                "seven",
+                "eight",
+                "nine",
+                "ten",
+                "eleven",
+                "twelve",
+                "thirteen",
+                "fourteen",
+                "fifteen",
+                "sixteen",
+                "seventeen",
+                "eighteen",
+                "nineteen",
+                "twenty",
+                "twenty-one",
+                "twenty-two",
+                "twenty-three",
+            ]
         )
         i = 0
         numbers = []
         count = 33333
         while i < count:
-            numbers.append(random_fibonacci_list(9))
+            numbers.append(random_fibonacci_list(23))
             i = i + 1
         csvwriter.writerows(numbers)

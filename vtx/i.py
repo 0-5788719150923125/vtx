@@ -346,20 +346,20 @@ def get_juxtaposition_data():
         return samples
 
     with open("/lab/juxtaposition/0/" + "unsorted.csv", "w", newline="") as file:
-        agents = get_samples(1500000)
+        agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
     with open("/lab/juxtaposition/0/" + "left-sorted.csv", "w", newline="") as file:
-        agents = get_samples(1500000)
+        agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=False)
         csvwriter.writerows(sorted_list)
 
     with open("/lab/juxtaposition/0/" + "right-sorted.csv", "w", newline="") as file:
-        agents = get_samples(1500000)
+        agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)

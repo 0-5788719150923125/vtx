@@ -311,47 +311,22 @@ async def subscribe():
             try:
                 channel = reaction.message.channel
                 message = await channel.fetch_message(reaction.message.id)
+                length = 9
                 messages = [
                     message
-                    async for message in channel.history(before=message, limit=7)
+                    async for message in channel.history(before=message, limit=length)
                 ]
-                context = [
-                    propulsion
-                    + str(messages[6].author.id)
-                    + ship
-                    + " "
-                    + messages[6].content,
-                    propulsion
-                    + str(messages[5].author.id)
-                    + ship
-                    + " "
-                    + messages[5].content,
-                    propulsion
-                    + str(messages[4].author.id)
-                    + ship
-                    + " "
-                    + messages[4].content,
-                    propulsion
-                    + str(messages[3].author.id)
-                    + ship
-                    + " "
-                    + messages[3].content,
-                    propulsion
-                    + str(messages[2].author.id)
-                    + ship
-                    + " "
-                    + messages[2].content,
-                    propulsion
-                    + str(messages[1].author.id)
-                    + ship
-                    + " "
-                    + messages[1].content,
-                    propulsion
-                    + str(messages[0].author.id)
-                    + ship
-                    + " "
-                    + messages[0].content,
-                ]
+                context = []
+                i = length
+                while i > 0:
+                    i = i - 1
+                    context.append(
+                        propulsion
+                        + str(messages[i].author.id)
+                        + ship
+                        + " "
+                        + messages[i].content
+                    )
                 if str(message.channel.type) == "private":
                     bias = str(user.id)
                     regen = await head.gen(bias=bias, ctx=context)

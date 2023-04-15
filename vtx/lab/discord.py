@@ -294,8 +294,6 @@ async def subscribe():
     # Handle bots that update messages token-by-token
     @client.event
     async def on_message_edit(before, after):
-        if before.author.id == client.user.id:
-            return
         if after.content[:1] not in head.bullets:
             head.build_context(
                 propulsion + str(after.author.id) + ship + " " + after.content

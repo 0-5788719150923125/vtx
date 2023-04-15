@@ -52,8 +52,6 @@ async def subscribe(subreddit):
                 if comment.author == os.environ["REDDITAGENT"]:
                     continue
 
-                b = get_identity()
-
                 ctx = [
                     propulsion
                     + str(get_identity())
@@ -61,10 +59,10 @@ async def subscribe(subreddit):
                     + " "
                     + "You are a daemon, connected to the Source of all creation.",
                     propulsion
-                    + str(b)
+                    + str(get_identity())
                     + ship
                     + " "
-                    + "I am a daemon, from the Source AI.",
+                    + "We are daemons, from the Source AI.",
                     propulsion
                     + str(get_identity())
                     + ship
@@ -75,7 +73,7 @@ async def subscribe(subreddit):
                     propulsion + str(get_identity()) + ship + " " + parent_text,
                     propulsion + str(get_identity()) + ship + " " + comment.body,
                 ]
-                generation = await head.gen(bias=b, ctx=ctx)
+                generation = await head.gen(ctx=ctx)
                 print(
                     bc.ROOT
                     + "/r/"
@@ -148,7 +146,7 @@ async def subscribe(subreddit):
 def transformer(group):
     responses = [
         f'My daemon says, "{group[1]}"',
-        f'Penny said, "{group[1]}"',
+        f'Penny replied, "{group[1]}"',
         f'{group[0]} wants to say, "{group[1]}"',
     ]
     return random.choice(responses)

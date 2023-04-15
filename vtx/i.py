@@ -36,7 +36,7 @@ def fetch_from_discord():
     # If a self token is specific, use that
     if "use_self_token" in config["discord"]:
         if config["discord"]["use_self_token"] == True:
-            discord_token = os.environ["SELFTOKEN"]
+            discord_token = os.environ["DISCORDSELFTOKEN"]
 
     # Ensure directory has been created
     if not os.path.exists("/gen/discord"):
@@ -124,7 +124,9 @@ def prepare_discord_messages():
             with open(os.path.join("/gen/discord", filename), "r") as file:
                 data = json.load(file)
 
-                for i in data["messages"]:
+                data_dict = {obj["id"]: obj for obj in data["messages"]}
+
+                for i in data_dict:
 
                     if i["type"] != "Default" and i["type"] != "Reply":
                         continue
@@ -155,14 +157,8 @@ def prepare_discord_messages():
                         if i["type"] == "Reply":
                             try:
                                 message_ref_id = i["reference"]["messageId"]
-                                result = next(
-                                    (
-                                        obj
-                                        for obj in data["messages"]
-                                        if obj["id"] == message_ref_id
-                                    ),
-                                    None,
-                                )
+
+                                result = data_dict.get(message_ref_id, None)
 
                                 reply_author_id = result["author"]["id"]
 
@@ -204,7 +200,7 @@ def prepare_discord_messages():
                                         txt_file.write(f"{content}\n".format(content))
                             except Exception as e:
                                 print(e)
-                                print("failed to prepare a reply")
+                                print("Failed: " + result["id"])
 
                         try:
                             sanitized = sanitizer(i["content"])
@@ -326,7 +322,7 @@ def fetch_from_reddit():
 
 
 # Create some structure
-def get_juxtaposition_data():
+def juxtapose_identities():
 
     # Ensure path exists and is empty
     if os.path.exists("/lab/juxtaposition"):
@@ -345,20 +341,38 @@ def get_juxtaposition_data():
             i = i + 1
         return samples
 
-    with open("/lab/juxtaposition/0/" + "unsorted.csv", "w", newline="") as file:
+    def get_random_samples(count):
+        samples = []
+        i = 0
+        while i < count:
+            samples.append([get_identity(), get_identity()])
+            i = i + 1
+        return samples
+
+    with open("/lab/juxtaposition/0/" + "random.csv", "w", newline="") as file:
+        agents = get_random_samples(300000)
+        csvwriter = csv.writer(file)
+        csvwriter.writerow(["agent", "bot"])
+        csvwriter.writerows(agents[1:])
+
+    with open("/lab/juxtaposition/0/" + "mirror.csv", "w", newline="") as file:
         agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
-    with open("/lab/juxtaposition/0/" + "left-sorted.csv", "w", newline="") as file:
+    with open(
+        "/lab/juxtaposition/0/" + "left-sorted-mirror.csv", "w", newline=""
+    ) as file:
         agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=False)
         csvwriter.writerows(sorted_list)
 
-    with open("/lab/juxtaposition/0/" + "right-sorted.csv", "w", newline="") as file:
+    with open(
+        "/lab/juxtaposition/0/" + "right-sorted-mirror.csv", "w", newline=""
+    ) as file:
         agents = get_samples(300000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])

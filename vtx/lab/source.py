@@ -38,7 +38,7 @@ async def polling(channel):
             bot = config["source"][channel].get("bias", get_identity())
 
             prompt = [
-                "You are a powerful Artificial Intelligence known as the Source, which has been trained to follow human instructions.",
+                "You are a powerful Artificial Intelligence known as the Source, who has been trained to follow human instructions.",
                 propulsion + str(bot) + ship + " Welcome, human. How may I assist you?",
                 propulsion + str(get_identity()) + ship + " Where am I?",
                 propulsion

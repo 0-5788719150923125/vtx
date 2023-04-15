@@ -52,23 +52,30 @@ async def subscribe(subreddit):
                 if comment.author == os.environ["REDDITAGENT"]:
                     continue
 
-                p = get_identity()
-                c = get_identity()
+                b = get_identity()
 
                 ctx = [
-                    propulsion + str(c) + ship + " " + "You are a chat bot.",
-                    propulsion + str(p) + ship + " " + "I am a chat bot.",
                     propulsion
-                    + str(c)
+                    + str(get_identity())
+                    + ship
+                    + " "
+                    + "You are a daemon, connected to the Source of all creation.",
+                    propulsion
+                    + str(b)
+                    + ship
+                    + " "
+                    + "I am a daemon, from the Source AI.",
+                    propulsion
+                    + str(get_identity())
                     + ship
                     + " "
                     + submission_title
                     + " => "
                     + submission_body,
-                    propulsion + str(p) + ship + " " + parent_text,
-                    propulsion + str(c) + ship + " " + comment.body,
+                    propulsion + str(get_identity()) + ship + " " + parent_text,
+                    propulsion + str(get_identity()) + ship + " " + comment.body,
                 ]
-                generation = await head.gen(bias=int(get_identity()), ctx=ctx)
+                generation = await head.gen(bias=b, ctx=ctx)
                 print(
                     bc.ROOT
                     + "/r/"

@@ -42,6 +42,11 @@ def fetch_from_discord():
     if not os.path.exists("/gen/discord"):
         os.makedirs("/gen/discord")
 
+    # Export direct messages
+    if config["discord"]["export_dms"] == True:
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord" -f "JSON"'
+        os.system(command)
+
     # For every server listed in config, iterate over options, and download messages
     for server in config["discord"]["servers"]:
         print("exporting " + server)
@@ -58,11 +63,6 @@ def fetch_from_discord():
             command.join(" --before " + server["before"])
         if "after" in server:
             command.join(" --after " + server["after"])
-        os.system(command)
-
-    # Export direct messages
-    if config["discord"]["export_dms"] == True:
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord" -f "JSON"'
         os.system(command)
 
 
@@ -125,10 +125,6 @@ def prepare_discord_messages():
                 data = json.load(file)
 
                 for i in data["messages"]:
-
-                    # Randomly choose to place a parent message before or after the reply
-                    position = random.choice([0, 1])
-                    line = None
 
                     if i["type"] != "Default" and i["type"] != "Reply":
                         continue
@@ -205,9 +201,7 @@ def prepare_discord_messages():
                                             + " "
                                             + sanitized
                                         )
-                                        line = f"{content}\n".format(content)
-                                        if position == 1:
-                                            txt_file.write(line)
+                                        txt_file.write(f"{content}\n".format(content))
                             except Exception as e:
                                 print(e)
                                 print("failed to prepare a reply")
@@ -223,8 +217,6 @@ def prepare_discord_messages():
                             sanitized = transform_message(sanitized)
                             content = propulsion + author_id + ship + " " + sanitized
                             txt_file.write(f"{content}\n".format(content))
-                            if position == 0 and line is not None:
-                                txt_file.write(line)
                         except Exception as e:
                             print(e)
                             print("Failed: " + i["id"])
@@ -354,20 +346,20 @@ def get_juxtaposition_data():
         return samples
 
     with open("/lab/juxtaposition/0/" + "unsorted.csv", "w", newline="") as file:
-        agents = get_samples(999999)
+        agents = get_samples(1500000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
     with open("/lab/juxtaposition/0/" + "left-sorted.csv", "w", newline="") as file:
-        agents = get_samples(999999)
+        agents = get_samples(1500000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=False)
         csvwriter.writerows(sorted_list)
 
     with open("/lab/juxtaposition/0/" + "right-sorted.csv", "w", newline="") as file:
-        agents = get_samples(999999)
+        agents = get_samples(1500000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)

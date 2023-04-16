@@ -126,7 +126,7 @@ def prepare_discord_messages():
 
                 data_dict = {obj["id"]: obj for obj in data["messages"]}
 
-                for i in data_dict:
+                for i in data_dict.values():
 
                     if i["type"] != "Default" and i["type"] != "Reply":
                         continue
@@ -156,6 +156,7 @@ def prepare_discord_messages():
 
                         if i["type"] == "Reply":
                             try:
+
                                 message_ref_id = i["reference"]["messageId"]
 
                                 result = data_dict.get(message_ref_id, None)
@@ -200,7 +201,6 @@ def prepare_discord_messages():
                                         txt_file.write(f"{content}\n".format(content))
                             except Exception as e:
                                 print(e)
-                                print("Failed: " + result["id"])
 
                         try:
                             sanitized = sanitizer(i["content"])
@@ -215,7 +215,6 @@ def prepare_discord_messages():
                             txt_file.write(f"{content}\n".format(content))
                         except Exception as e:
                             print(e)
-                            print("Failed: " + i["id"])
 
         except Exception as e:
             print(e)
@@ -350,13 +349,13 @@ def juxtapose_identities():
         return samples
 
     with open("/lab/juxtaposition/0/" + "random.csv", "w", newline="") as file:
-        agents = get_random_samples(300000)
+        agents = get_random_samples(1000000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
     with open("/lab/juxtaposition/0/" + "mirror.csv", "w", newline="") as file:
-        agents = get_samples(300000)
+        agents = get_samples(1000000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
@@ -364,7 +363,7 @@ def juxtapose_identities():
     with open(
         "/lab/juxtaposition/0/" + "left-sorted-mirror.csv", "w", newline=""
     ) as file:
-        agents = get_samples(300000)
+        agents = get_samples(1000000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=False)
@@ -373,7 +372,7 @@ def juxtapose_identities():
     with open(
         "/lab/juxtaposition/0/" + "right-sorted-mirror.csv", "w", newline=""
     ) as file:
-        agents = get_samples(300000)
+        agents = get_samples(1000000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)

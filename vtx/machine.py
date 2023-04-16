@@ -21,7 +21,7 @@ async def main(loop):
         # Load the AI model at startup
         if head.ai is None:
             head.ai = await head.loader()
-            loop.create_task(head.write())
+            # loop.create_task(head.write())
 
         # Prune completed tasks
         for task in tasks.copy():

@@ -5,11 +5,12 @@ import os
 from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
-from transformers import GPT2Config, GPTNeoConfig
+from transformers import GPT2Config, GPTNeoConfig, AutoTokenizer
 from pytorch_lightning import loggers
 from utils import ad, bc, config
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
+os.environ["PYTORCH_KERNEL_CACHE_PATH"] = "/tmp/torch/kernels"
 
 focus = os.environ["FOCUS"]
 model = config[focus]
@@ -18,9 +19,8 @@ tokenizer_file = "src." + focus + ".tokenizer.json"
 
 
 def build_version(version=0):
-    if os.path.exists("/gen/logs/" + focus + "/version_" + str(version)):
+    while os.path.exists("/gen/logs/" + focus + "/version_" + str(version)):
         version = version + 1
-        return build_version(version)
     return version
 
 
@@ -151,6 +151,9 @@ if __name__ == "__main__":
 
     output_dir = "models/" + focus
 
+    tokenizer = AutoTokenizer.from_pretrained(base_model)
+    # tokenizer_fast.add_special_tokens({"additional_special_tokens": "<|endoftext|>"})
+
     # Create a tokenized dataset from every directory specified in config file
     datasets = {}
     inputs = []
@@ -195,6 +198,7 @@ if __name__ == "__main__":
                         intermediate_file,
                         block_size=model["training"].get("block_size", None),
                         line_by_line=line_by_line,
+                        tokenizer=tokenizer,
                     )
                 else:
                     print(

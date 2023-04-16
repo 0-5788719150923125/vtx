@@ -9,7 +9,6 @@ import head
 
 client = None
 response_chance = 6  # out of 100
-followup_chance = 10  # out of 100
 mention_self_chance = 88  # out of 100
 mention_any_chance = 11  # out of 100
 
@@ -117,7 +116,11 @@ class Client(discord.Client):
         bias = 0
         output = "ERROR: Me Found."
 
-        if message.content[:1] in head.bullets or message.content == "":
+        if (
+            message.author == self.user
+            or message.content[:1] in head.bullets
+            or message.content == ""
+        ):
             return
 
         # every message is added to local cache, for building prompt
@@ -130,16 +133,6 @@ class Client(discord.Client):
                 author_id = author_id[::-1]
             head.build_context(propulsion + author_id + ship + " " + message.content)
             print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + message.content)
-
-        # ignore messages from the bot
-        if message.author == self.user:
-            if random.randint(0, 100) < followup_chance:
-                if not str(message.channel.type) == "private":
-                    chance = 1
-                else:
-                    return
-            else:
-                return
 
         # generate responses
         if "gen" in message.content:

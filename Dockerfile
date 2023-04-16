@@ -1,4 +1,6 @@
-FROM nvidia/cuda:12.0.0-base-ubuntu22.04
+FROM nvidia/cuda:11.7.1-devel-ubuntu22.04
+
+ENV TORCH_CUDA_ARCH_LIST=Turing
 
 RUN apt-get update && apt-get install -y python3-pip nodejs npm curl unzip
 
@@ -9,6 +11,7 @@ RUN apt-get update \
     libgcc1 \
     libgssapi-krb5-2 \
     libstdc++6 \
+    python3-packaging \
     zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
@@ -39,6 +42,8 @@ RUN echo "progress=false" > .npmrc
 RUN npm i -g nodemon
 
 COPY package*.json requirements.txt ./
+
+RUN pip3 install torch
 
 RUN pip3 install -r requirements.txt
 

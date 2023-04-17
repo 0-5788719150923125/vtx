@@ -1,0 +1,18 @@
+[
+  {
+    "input": "respond",
+    "output": "response"
+  },
+  {
+    "input": "question",
+    "output": "answer"
+  },
+  {
+    "input": "statement",
+    "output": "statement"
+  },
+  {
+    "input": "smth",
+    "output": "response"
+  }
+]

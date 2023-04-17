@@ -10,6 +10,7 @@ from utils import ad, bc, config, propulsion, ship
 from aitextgen import aitextgen
 import requests
 import logging
+from transformers import AutoTokenizer
 
 # holds the model globally
 ai = None
@@ -57,6 +58,11 @@ def loader(target=None):
         tokenizer_file=None,
         to_gpu=model["to_gpu"],
         cache_dir="models",
+    )
+    ai.tokenizer = AutoTokenizer.from_pretrained(
+        model["training"].get("base_model", None),
+        cache_dir="models",
+        padding_side="left",
     )
     logging.getLogger("transformers").setLevel(logging.INFO)
     print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + model["info"])

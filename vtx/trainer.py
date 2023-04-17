@@ -120,7 +120,6 @@ if __name__ == "__main__":
     base_model = model["training"]["base_model"]
     to_gpu = model["training"]["to_gpu"]
     n_gpu = model["n_gpu"]
-    warmup_steps = model["training"]["warmup_steps"]
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
@@ -156,35 +155,8 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(base_model)
 
     # Create a tokenized dataset from every directory specified in config file
-    datasets = {}
-    inputs = []
-    learning_rate = []
-    num_steps = []
-    freeze_layers = []
-    num_layers_freeze = []
-    weight_decay = []
-    max_grad_norm = []
-    batch_size = []
-    gradient_accumulation_steps = []
-    train_transformers_only = []
-    scheduler = []
-    num_cycles = []
-    for stage in model["training"]["stages"]:
-        learning_rate.append(stage["learning_rate"])
-        num_steps.append(stage["num_steps"])
-        num_layers_freeze.append(stage["num_layers_freeze"])
-        if stage["num_layers_freeze"] > 0:
-            freeze_layers.append(True)
-        weight_decay.append(stage["weight_decay"])
-        max_grad_norm.append(stage["max_grad_norm"])
-        batch_size.append(stage["batch_size"])
-        gradient_accumulation_steps.append(stage["gradient_accumulation_steps"])
-        train_transformers_only.append(stage["train_transformers_only"])
-        scheduler.append(stage["scheduler"])
-        if "num_cycles" not in stage:
-            num_cycles.append(0.5)
-        else:
-            num_cycles.append(stage["num_cycles"])
+    def build_inputs(stage):
+        datasets = {}
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
@@ -212,7 +184,7 @@ if __name__ == "__main__":
 
                     datasets[dataset] = TokenDataset(
                         intermediate_file,
-                        block_size=model["training"].get("block_size", None),
+                        block_size=stage.get("block_size", 1024),
                         line_by_line=line_by_line,
                         tokenizer=tokenizer,
                         save_cache=True,
@@ -230,7 +202,7 @@ if __name__ == "__main__":
                 if dataset in datasets:
                     collected.append(datasets[dataset])
         merged = merge_datasets(collected, equalize=stage["equalize_datasets"])
-        inputs.append(merged)
+        return merged
 
     # Cleanup temp files used for tokenized dataset creation
     if os.path.exists("/tmp/intermediate"):
@@ -246,26 +218,29 @@ if __name__ == "__main__":
     )
 
     # Train the model
-    ai.cross_train(
-        inputs=inputs,
-        batch_size=batch_size,
-        num_steps=num_steps,
-        generate_every=333,
-        save_every=1000,
-        n_gpu=n_gpu,
-        output_dir=output_dir,
-        loggers=logger,
-        learning_rate=learning_rate,
-        weight_decay=weight_decay,
-        warmup_steps=warmup_steps,
-        max_grad_norm=max_grad_norm,
-        gradient_accumulation_steps=gradient_accumulation_steps,
-        train_transformers_only=train_transformers_only,
-        fp16=False,
-        freeze_layers=freeze_layers,
-        num_layers_freeze=num_layers_freeze,
-        scheduler=scheduler,
-        num_cycles=num_cycles,
-        progress_bar_refresh_rate=1,
-        seed=random.randint(0, 2**32 - 1),
-    )
+    for i, stage in enumerate(model["training"]["stages"]):
+        inputs = build_inputs(stage)
+        ai.train(
+            train_data=inputs,
+            batch_size=stage.get("batch_size", 1024),
+            num_steps=stage.get("num_steps", 33333),
+            generate_every=333,
+            save_every=1000,
+            n_gpu=n_gpu,
+            output_dir=output_dir,
+            loggers=logger,
+            learning_rate=stage.get("learning_rate", 0.005),
+            weight_decay=stage.get("weight_decay", 0.01),
+            warmup_steps=stage.get("warmup_steps", 0),
+            max_grad_norm=stage.get("max_grad_norm", 0.5),
+            gradient_accumulation_steps=stage.get("gradient_accumulation_steps", 1),
+            train_transformers_only=stage.get("train_transformers_only", False),
+            fp16=False,
+            freeze_layers=stage.get("freeze_layers", True),
+            num_layers_freeze=stage.get("num_layers_freeze", 4),
+            scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
+            num_cycles=stage.get("num_cycles", 0.5),
+            progress_bar_refresh_rate=1,
+            seed=random.randint(0, 2**32 - 1),
+            stage=i,
+        )

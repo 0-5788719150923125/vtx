@@ -35,7 +35,7 @@ source:
 soul:
 
   # An arbitrary text description of your model.
-  info: few people have one
+  info: because nobody has one
 
   # Whether or not to load this model into your GPU at runtime (for inference.)
   to_gpu: False
@@ -57,14 +57,6 @@ soul:
 
     # Whether or not to train on GPU.
     to_gpu: True
-
-    # This represents the length of each line fed into the tokenizer. Lines longer than this length
-    # will be truncated, while lines shorter will be padded (on the right). When fine-tuning a model,
-    # this will be set to what is already supported by the corresponding model's config.json.
-    block_size: 444
-
-    # This key is currently broken. Anything other than "0" will prevent the network from learning.
-    warmup_steps: 0
 
     # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters
     stages:
@@ -90,6 +82,12 @@ soul:
         scheduler: get_linear_schedule_with_warmup
         # If using cosine schedulers, the number of cycles to use.
         num_cycles: 0.5
+        # This represents the length of each line fed into the tokenizer. Lines longer than this length
+        # will be truncated, while lines shorter will be padded (on the right). When fine-tuning a model,
+        # this will be set to what is already supported by the corresponding model's config.json.
+        block_size: 444
+        # This key is currently broken. Anything other than "0" will prevent the network from learning.
+        warmup_steps: 0
         # Takes an equal number of samples from each dataset, so as not to bias toward one or the other.
         equalize_datasets: False
         # Place each dataset into a folder at {project_root}/lab, then list them here.
@@ -117,8 +115,6 @@ toe:
     resume: False
     base_model: EleutherAI/pythia-70m
     to_gpu: True
-    block_size: 444
-    warmup_steps: 0
     stages:
       - learning_rate: 0.000333
         num_steps: 88888
@@ -130,6 +126,8 @@ toe:
         max_grad_norm: 0.444
         scheduler: get_linear_schedule_with_warmup
         num_cycles: 0.5
+        block_size: 444
+        warmup_steps: 0
         equalize_datasets: False
         datasets:
           - default

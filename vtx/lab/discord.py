@@ -37,7 +37,7 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randint(3600, 21600)
+            delay = random.randint(21600, 86400)
             await asyncio.sleep(delay)
             try:
                 channels = await get_all_channels()
@@ -48,34 +48,18 @@ class Client(discord.Client):
                     async for message in self.get_channel(channel.id).history(limit=16)
                 ]
                 focus_on = random.randint(0, 7)
-                context = [
-                    propulsion
-                    + str(messages[focus_on + 4].author.id)
-                    + ship
-                    + " "
-                    + messages[focus_on + 4].content,
-                    propulsion
-                    + str(messages[focus_on + 3].author.id)
-                    + ship
-                    + " "
-                    + messages[focus_on + 3].content,
-                    propulsion
-                    + str(messages[focus_on + 2].author.id)
-                    + ship
-                    + " "
-                    + messages[focus_on + 2].content,
-                    propulsion
-                    + str(messages[focus_on + 1].author.id)
-                    + ship
-                    + " "
-                    + messages[focus_on + 1].content,
-                    propulsion
-                    + str(messages[focus_on].author.id)
-                    + ship
-                    + " "
-                    + messages[focus_on].content,
-                ]
-
+                length = 7
+                context = []
+                i = length
+                while i > 0:
+                    i = i - 1
+                    context.append(
+                        propulsion
+                        + str(messages[focus_on + i].author.id)
+                        + ship
+                        + " "
+                        + messages[focus_on + i].content
+                    )
                 recent_author_id = messages[random.randint(0, 15)].author.id
 
                 if str(recent_author_id) == str(self.user.id):

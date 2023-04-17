@@ -4,6 +4,8 @@ import secrets
 import pprint
 import yaml
 import json
+import hashlib
+import os
 
 propulsion = "¶"
 ship = ":>"
@@ -48,3 +50,18 @@ def get_daemon(seed):
     daemon = json.loads(response.text)
     response.close()
     return daemon
+
+
+# Get a hash value for an entire directory
+def hash_directory(path):
+    sha1 = hashlib.sha1()
+    for root, dirs, files in os.walk(path):
+        for file in sorted(files):
+            filename = os.path.join(root, file)
+            with open(filename, "rb") as f:
+                while True:
+                    data = f.read(65536)
+                    if not data:
+                        break
+                    sha1.update(data)
+    return sha1.hexdigest()

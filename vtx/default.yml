@@ -32,10 +32,10 @@ source:
 # :: https://docs.aitextgen.io/
 
 # The top-level key is the name of your custom model.
-toe:
+soul:
 
   # An arbitrary text description of your model.
-  info: it's nailed to the foot
+  info: few people have one
 
   # Whether or not to load this model into your GPU at runtime (for inference.)
   to_gpu: False
@@ -96,7 +96,6 @@ toe:
         datasets:
           - default
 
-
 heart:
   info: never give up, never give in
 
@@ -109,28 +108,29 @@ mind:
   model: EleutherAI/gpt-neo-2.7B
   to_gpu: False
 
-soul:
-  info: few people have one
-  to_gpu: True
+toe:
+  info: it's nailed to the foot
+  to_gpu: False
   n_gpu: 1
   max_new_tokens: 333
   training:
-    resume: True
-    base_model: xhyi/PT_GPTNEO350_ATG
-    to_gpu: 1
-    block_size: 111
+    resume: False
+    base_model: EleutherAI/pythia-70m
+    to_gpu: True
+    block_size: 444
     warmup_steps: 0
     stages:
-      - learning_rate: 0.000666
+      - learning_rate: 0.000333
         num_steps: 88888
-        num_layers_freeze: 19
-        batch_size: 2
-        gradient_accumulation_steps: 9
+        batch_size: 3
+        num_layers_freeze: 3
+        gradient_accumulation_steps: 6
         train_transformers_only: False
-        weight_decay: 0.023
+        weight_decay: 0.01
         max_grad_norm: 0.444
-        equalize_datasets: False
         scheduler: get_linear_schedule_with_warmup
+        num_cycles: 0.5
+        equalize_datasets: False
         datasets:
           - default
 

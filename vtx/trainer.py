@@ -7,7 +7,7 @@ from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
 from transformers import GPT2Config, GPTNeoConfig, AutoTokenizer
 from pytorch_lightning import loggers
-from utils import ad, bc, config
+from utils import ad, bc, config, hash_directory
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 os.environ["PYTORCH_KERNEL_CACHE_PATH"] = "/tmp/torch/kernels"
@@ -125,17 +125,19 @@ if __name__ == "__main__":
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
 
+    launch_model = None
     fresh_logs = False
 
     # Resume training on an existing model, or start with a fresh base model
     if model["training"]["resume"] == True:
         if os.path.exists("/vtx/models/" + focus + "/pytorch_model.bin") == True:
-            launch_model = None
             model_folder = "models/" + focus
         else:
+            launch_model = base_model
             model_folder = None
             fresh_logs = True
     else:
+        launch_model = base_model
         model_folder = None
         fresh_logs = True
         if os.path.exists("/vtx/models/" + focus):
@@ -152,7 +154,6 @@ if __name__ == "__main__":
     output_dir = "models/" + focus
 
     tokenizer = AutoTokenizer.from_pretrained(base_model)
-    # tokenizer_fast.add_special_tokens({"additional_special_tokens": "<|endoftext|>"})
 
     # Create a tokenized dataset from every directory specified in config file
     datasets = {}
@@ -187,18 +188,35 @@ if __name__ == "__main__":
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
+
+                    print(bc.FOLD + "loading " + dataset + ad.TEXT)
+
+                    hash = hash_directory("/" + dataset)
+                    cached = "/gen/datasets/" + dataset + "/" + hash + ".tar.gz"
+                    if os.path.exists(cached):
+                        datasets[dataset] = TokenDataset(cached, from_cache=True)
+                        continue
+
+                    try:
+                        shutil.rmtree("/gen/datasets/" + dataset)
+                    except:
+                        pass
+
+                    os.makedirs("/gen/datasets/" + dataset)
+
                     line_by_line = False
                     if "line_by_line" in dataset:
                         line_by_line = dataset["line_by_line"]
 
                     intermediate_file = join_files("/" + dataset)
-                    print(bc.FOLD + "loading " + dataset + ad.TEXT)
 
                     datasets[dataset] = TokenDataset(
                         intermediate_file,
                         block_size=model["training"].get("block_size", None),
                         line_by_line=line_by_line,
                         tokenizer=tokenizer,
+                        save_cache=True,
+                        cache_destination=cached,
                     )
                 else:
                     print(
@@ -218,8 +236,6 @@ if __name__ == "__main__":
     if os.path.exists("/tmp/intermediate"):
         shutil.rmtree("/tmp/intermediate")
 
-    launch_model = base_model
-
     # Instantiate the model object
     ai = aitextgen(
         model=launch_model,
@@ -232,7 +248,6 @@ if __name__ == "__main__":
     # Train the model
     ai.cross_train(
         inputs=inputs,
-        from_cache=False,
         batch_size=batch_size,
         num_steps=num_steps,
         generate_every=333,

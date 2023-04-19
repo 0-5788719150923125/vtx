@@ -20,7 +20,10 @@ async def main(loop):
 
         # Load the AI model at startup
         if head.ai is None:
-            head.ai = await head.loader()
+            try:
+                head.ai = await head.loader()
+            except Exception as e:
+                print(e)
             # loop.create_task(head.write())
 
         # Prune completed tasks

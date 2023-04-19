@@ -41,7 +41,9 @@ def list_full_paths(directory):
 
 
 # Join every file located in a particular directory
-def join_files(path):
+def join_files(
+    path="/vtx", tokenizer=None, stage=None, block_size=1024, line_by_line=False
+):
 
     tmp_path = "/tmp/intermediate"
 
@@ -91,6 +93,7 @@ def join_files(path):
     files = list_full_paths(path)
     intermediate_path = tmp_path + "/" + str(random.randint(1000000, 9999999)) + ".txt"
     intermediate = open(intermediate_path, "a")
+    datasets = {}
     for file in files:
         try:
             # Skip file paths and extensions that we can't process
@@ -106,13 +109,43 @@ def join_files(path):
             if skip == True:
                 continue
 
-            with open(file, "r") as content:
-                string = content.read()
-                intermediate.write(string + "\n\n")
+            if line_by_line == True:
+                datasets[file] = TokenDataset(
+                    file,
+                    block_size=block_size,
+                    line_by_line=line_by_line,
+                    tokenizer=tokenizer,
+                )
+            else:
+                with open(file, "r") as content:
+                    string = content.read()
+                    intermediate.write(string + "\n\n")
         except:
             print("failed to crunch " + file)
+
     intermediate.close()
-    return intermediate_path
+
+    if line_by_line == True:
+        collection = []
+        for dataset in datasets:
+            collection.append(datasets[dataset])
+        if len(collection) == 1:
+            dataset = collection[0]
+        else:
+            dataset = merge_datasets(collection, equalize=False)
+    else:
+        dataset = TokenDataset(
+            intermediate_path,
+            block_size=block_size,
+            line_by_line=line_by_line,
+            tokenizer=tokenizer,
+        )
+
+    # Cleanup temp files used for tokenized dataset creation
+    if os.path.exists("/tmp/intermediate"):
+        shutil.rmtree("/tmp/intermediate")
+
+    return dataset
 
 
 if __name__ == "__main__":
@@ -166,7 +199,11 @@ if __name__ == "__main__":
                     hash = hash_directory("/" + dataset)
                     cached = "/gen/datasets/" + dataset + "/" + hash + ".tar.gz"
                     if os.path.exists(cached):
-                        datasets[dataset] = TokenDataset(cached, from_cache=True)
+                        datasets[dataset] = TokenDataset(
+                            cached,
+                            block_size=stage.get("block_size", 1024),
+                            from_cache=True,
+                        )
                         continue
 
                     try:
@@ -177,19 +214,23 @@ if __name__ == "__main__":
                     os.makedirs("/gen/datasets/" + dataset)
 
                     line_by_line = False
-                    if "line_by_line" in dataset:
-                        line_by_line = dataset["line_by_line"]
+                    if config["collections"][collection][dataset] is not None:
+                        line_by_line = config["collections"][collection][dataset][
+                            "line_by_line"
+                        ]
 
-                    intermediate_file = join_files("/" + dataset)
-
-                    datasets[dataset] = TokenDataset(
-                        intermediate_file,
+                    ds = join_files(
+                        path="/" + dataset,
+                        tokenizer=tokenizer,
+                        stage=stage,
                         block_size=stage.get("block_size", 1024),
                         line_by_line=line_by_line,
-                        tokenizer=tokenizer,
-                        save_cache=True,
-                        cache_destination=cached,
                     )
+
+                    ds.save(cache_destination=cached)
+
+                    datasets[dataset] = ds
+
                 else:
                     print(
                         bc.ROOT + dataset + " is already loaded into memory" + ad.TEXT
@@ -203,10 +244,6 @@ if __name__ == "__main__":
                     collected.append(datasets[dataset])
         merged = merge_datasets(collected, equalize=stage["equalize_datasets"])
         return merged
-
-    # Cleanup temp files used for tokenized dataset creation
-    if os.path.exists("/tmp/intermediate"):
-        shutil.rmtree("/tmp/intermediate")
 
     # Instantiate the model object
     ai = aitextgen(

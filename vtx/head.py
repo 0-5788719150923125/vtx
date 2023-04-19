@@ -205,7 +205,6 @@ def gen(bias=None, ctx=None, failures=0):
             if failures >= 9:
                 raise Exception("failed to generate a response")
             failures = failures + 1
-            print("failing")
             output = asyncio.run(gen(bias, ctx, failures))
         else:
             output = [group[2], group[3]]

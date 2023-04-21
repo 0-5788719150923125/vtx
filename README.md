@@ -1,4 +1,4 @@
-# src
+# bot
 
 "What is this place?" you ask.
 

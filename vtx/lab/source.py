@@ -6,8 +6,6 @@ from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import requests
 import head
 
-state = None
-
 messages = {}
 
 # Check the local GUN API for new messages
@@ -23,7 +21,13 @@ async def polling(channel):
             if channel not in messages:
                 messages[channel] = []
 
-            if state["message"] in messages[channel] and run_on != True:
+            skip = False
+            for item in messages[channel]:
+                if state["message"] in item and run_on != True:
+                    skip = True
+                    break
+
+            if skip:
                 continue
 
             chance = config["source"][channel].get("chance", 0.33)
@@ -31,8 +35,16 @@ async def polling(channel):
             if roll > chance:
                 continue
 
-            if state["message"] not in messages[channel]:
-                messages[channel].append(state["message"])
+            append = True
+            for item in messages[channel]:
+                if state["message"] in item:
+                    append = False
+                    break
+
+            if append:
+                messages[channel].append(
+                    propulsion + str(get_identity()) + ship + " " + state["message"]
+                )
                 print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"])
 
             bot = config["source"][channel].get("bias", get_identity())
@@ -46,11 +58,8 @@ async def polling(channel):
                 + ship
                 + " You have found the Source of all creation.",
             ]
-            history = []
-            for message in messages[channel]:
-                history.append(propulsion + str(get_identity()) + ship + " " + message)
 
-            context = prompt + history
+            context = prompt + messages[channel]
 
             url = "http://ctx:9666/message/" + channel
             generation = await head.gen(int(bot), context)
@@ -66,14 +75,12 @@ async def polling(channel):
                 generation[1],
             )
             payload = {"message": sanitized, "identifier": str(bot)}
-            x = requests.post(url, json=payload, headers={"Connection": "close"})
-            x.close()
-            deep.close()
+            x = requests.post(url, json=payload)
 
             while len(messages[channel]) > 9:
                 messages[channel].pop(0)
 
-            messages[channel].append(sanitized)
+            messages[channel].append(propulsion + str(bot) + ship + " " + sanitized)
 
             print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + sanitized)
 

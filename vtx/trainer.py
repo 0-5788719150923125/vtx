@@ -97,8 +97,9 @@ def join_files(
     files = list_full_paths(path)
     if shuffle:
         random.shuffle(files)
+
     intermediate_path = tmp_path + "/" + str(random.randint(1000000, 9999999)) + ".txt"
-    intermediate = open(intermediate_path, "a")
+
     datasets = {}
     for file in files:
         try:
@@ -124,12 +125,12 @@ def join_files(
                 )
             else:
                 with open(file, "r") as content:
-                    string = content.read()
-                    intermediate.write(string + "\n\n")
-        except:
-            print("failed to crunch " + file)
+                    with open(intermediate_path, "a") as intermediate:
+                        string = content.read()
+                        intermediate.write(string + "\n\n")
 
-    intermediate.close()
+        except Exception as e:
+            print(e)
 
     if line_by_line == True:
         collection = []

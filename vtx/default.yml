@@ -53,7 +53,7 @@ soul:
     resume: True
 
     # The base model to be fine-tuned.
-    base_model: EleutherAI/pythia-160m
+    base_model: EleutherAI/gpt-neo-125M
 
     # Whether or not to train on GPU.
     to_gpu: True

@@ -114,7 +114,7 @@ def join_files(
                     file,
                     block_size=block_size,
                     line_by_line=line_by_line,
-                    tokenizer=tokenizer,
+                    # tokenizer=tokenizer,
                 )
             else:
                 with open(file, "r") as content:
@@ -138,7 +138,7 @@ def join_files(
             intermediate_path,
             block_size=block_size,
             line_by_line=line_by_line,
-            tokenizer=tokenizer,
+            # tokenizer=tokenizer,
         )
 
     # Cleanup temp files used for tokenized dataset creation
@@ -185,7 +185,7 @@ if __name__ == "__main__":
 
     output_dir = "models/" + focus
 
-    tokenizer = AutoTokenizer.from_pretrained(base_model)
+    # tokenizer = AutoTokenizer.from_pretrained(base_model)
 
     # Create a tokenized dataset from every directory specified in config file
     def build_inputs(stage):
@@ -221,7 +221,7 @@ if __name__ == "__main__":
 
                     ds = join_files(
                         path="/" + dataset,
-                        tokenizer=tokenizer,
+                        # tokenizer=tokenizer,
                         stage=stage,
                         block_size=stage.get("block_size", 1024),
                         line_by_line=line_by_line,

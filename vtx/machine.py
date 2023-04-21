@@ -21,9 +21,9 @@ async def main(loop):
         if head.ai is None:
             try:
                 head.ai = await head.loader()
+                loop.create_task(head.write())
             except Exception as e:
                 print(e)
-            # loop.create_task(head.write())
 
         # Prune completed tasks
         for task in tasks.copy():

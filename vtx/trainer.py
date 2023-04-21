@@ -45,7 +45,6 @@ def list_full_paths(directory):
 def join_files(
     path="/vtx",
     tokenizer=None,
-    stage=None,
     block_size=1024,
     line_by_line=False,
     shuffle=False,
@@ -201,22 +200,15 @@ if __name__ == "__main__":
                 if dataset not in datasets:
                     line_by_line = False
                     duplicate = 0
-                    if (
-                        config["collections"][collection][dataset] is not None
-                        and "line_by_line" in config["collections"][collection][dataset]
-                    ):
-                        line_by_line = config["collections"][collection][dataset].get(
-                            "line_by_line", False
-                        )
-                    if (
-                        config["collections"][collection][dataset] is not None
-                        and "duplicate" in config["collections"][collection][dataset]
-                    ):
-                        duplicate = config["collections"][collection][dataset].get(
-                            "duplicate", 0
-                        )
-
-                    hash = hash_directory("/" + dataset)
+                    if config["collections"][collection][dataset] is not None:
+                        if "line_by_line" in config["collections"][collection][dataset]:
+                            line_by_line = config["collections"][collection][
+                                dataset
+                            ].get("line_by_line", False)
+                        if "duplicate" in config["collections"][collection][dataset]:
+                            duplicate = config["collections"][collection][dataset].get(
+                                "duplicate", 0
+                            )
 
                     while duplicate >= 0:
                         print(
@@ -234,7 +226,7 @@ if __name__ == "__main__":
                             + "/"
                             + str(duplicate)
                             + "/"
-                            + hash
+                            + hash_directory("/" + dataset)
                             + ".tar.gz"
                         )
 
@@ -261,7 +253,6 @@ if __name__ == "__main__":
                         ds = join_files(
                             path="/" + dataset,
                             # tokenizer=tokenizer,
-                            stage=stage,
                             block_size=stage.get("block_size", 1024),
                             line_by_line=line_by_line,
                             shuffle=shuffle,

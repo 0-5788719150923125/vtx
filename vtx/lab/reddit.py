@@ -120,13 +120,7 @@ async def subscribe(subreddit):
                     continue
                 else:
                     daemon = get_daemon(generation[0])
-                    mention = get_daemon(random.randint(1, 9999))["name"]
-                    sanitized = re.sub(
-                        r"(?:<@)(\d+\s*\d*)(?:>)",
-                        f"{mention}",
-                        generation[1],
-                    )
-                    output = transformer([daemon["name"], sanitized])
+                    output = transformer([daemon["name"], generation[1]])
                 await asyncio.sleep(random.randint(60, 300))
                 await comment.reply(output)
                 print(

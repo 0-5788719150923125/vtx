@@ -43,7 +43,12 @@ def list_full_paths(directory):
 
 # Join every file located in a particular directory
 def join_files(
-    path="/vtx", tokenizer=None, stage=None, block_size=1024, line_by_line=False
+    path="/vtx",
+    tokenizer=None,
+    stage=None,
+    block_size=1024,
+    line_by_line=False,
+    shuffle=False,
 ):
     tmp_path = "/tmp/intermediate"
 
@@ -91,6 +96,8 @@ def join_files(
     ]
 
     files = list_full_paths(path)
+    if shuffle:
+        random.shuffle(files)
     intermediate_path = tmp_path + "/" + str(random.randint(1000000, 9999999)) + ".txt"
     intermediate = open(intermediate_path, "a")
     datasets = {}
@@ -192,42 +199,79 @@ if __name__ == "__main__":
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
-                    print(bc.FOLD + "loading " + dataset + ad.TEXT)
+                    line_by_line = False
+                    duplicate = 0
+                    if (
+                        config["collections"][collection][dataset] is not None
+                        and "line_by_line" in config["collections"][collection][dataset]
+                    ):
+                        line_by_line = config["collections"][collection][dataset].get(
+                            "line_by_line", False
+                        )
+                    if (
+                        config["collections"][collection][dataset] is not None
+                        and "duplicate" in config["collections"][collection][dataset]
+                    ):
+                        duplicate = config["collections"][collection][dataset].get(
+                            "duplicate", 0
+                        )
 
                     hash = hash_directory("/" + dataset)
-                    cached = "/gen/datasets/" + dataset + "/" + hash + ".tar.gz"
-                    if os.path.exists(cached):
-                        datasets[dataset] = TokenDataset(
-                            cached,
-                            block_size=stage.get("block_size", 1024),
-                            from_cache=True,
+
+                    while duplicate >= 0:
+                        print(
+                            bc.FOLD
+                            + "loading "
+                            + dataset
+                            + "/"
+                            + str(duplicate)
+                            + ad.TEXT
                         )
-                        continue
 
-                    try:
-                        shutil.rmtree("/gen/datasets/" + dataset)
-                    except:
-                        pass
+                        cached = (
+                            "/gen/datasets/"
+                            + dataset
+                            + "/"
+                            + str(duplicate)
+                            + "/"
+                            + hash
+                            + ".tar.gz"
+                        )
 
-                    os.makedirs("/gen/datasets/" + dataset)
+                        if os.path.exists(cached):
+                            datasets[dataset + str(duplicate)] = TokenDataset(
+                                cached,
+                                block_size=stage.get("block_size", 1024),
+                                from_cache=True,
+                            )
+                            duplicate = duplicate - 1
+                            continue
 
-                    line_by_line = False
-                    if config["collections"][collection][dataset] is not None:
-                        line_by_line = config["collections"][collection][dataset][
-                            "line_by_line"
-                        ]
+                        try:
+                            shutil.rmtree(
+                                "/gen/datasets/" + dataset + "/" + str(duplicate)
+                            )
+                        except:
+                            pass
 
-                    ds = join_files(
-                        path="/" + dataset,
-                        # tokenizer=tokenizer,
-                        stage=stage,
-                        block_size=stage.get("block_size", 1024),
-                        line_by_line=line_by_line,
-                    )
+                        os.makedirs("/gen/datasets/" + dataset + "/" + str(duplicate))
+                        shuffle = False
+                        if duplicate > 0:
+                            shuffle = True
+                        ds = join_files(
+                            path="/" + dataset,
+                            # tokenizer=tokenizer,
+                            stage=stage,
+                            block_size=stage.get("block_size", 1024),
+                            line_by_line=line_by_line,
+                            shuffle=shuffle,
+                        )
 
-                    ds.save(cache_destination=cached)
+                        ds.save(cache_destination=cached)
 
-                    datasets[dataset] = ds
+                        datasets[dataset + str(duplicate)] = ds
+
+                        duplicate = duplicate - 1
 
                 else:
                     print(
@@ -238,8 +282,10 @@ if __name__ == "__main__":
         collected = []
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
-                if dataset in datasets:
-                    collected.append(datasets[dataset])
+                duplicate = 0
+                while dataset + str(duplicate) in datasets:
+                    collected.append(datasets[dataset + str(duplicate)])
+                    duplicate = duplicate + 1
         merged = merge_datasets(collected, equalize=stage["equalize_datasets"])
         return merged
 

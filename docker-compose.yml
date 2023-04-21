@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   vtx:
-    image: ghcr.io/0-5788719150923125/bot:1
+    image: ghcr.io/0-5788719150923125/bot:latest
     command: nodemon --ext '*.py, *.yml' --ignore "models/*" --ignore "*.json" --exec python3 main.py
     restart: 'always'
     user: 1000:1000
@@ -26,15 +26,15 @@ services:
       TRANSFORMERS_CACHE: /tmp
 
   ctx:
-    image: ghcr.io/0-5788719150923125/src:1
+    image: ghcr.io/0-5788719150923125/src:latest
     restart: 'always'
     environment:
-      CHANNELS: 'hive,support,opencog'
+      CHANNELS: 'hive,support'
     ports:
       - 9666:9666
 
   pit:
-    image: ghcr.io/0-5788719150923125/bot:1
+    image: ghcr.io/0-5788719150923125/bot:latest
     command: tensorboard --logdir /gen/logs --bind_all --samples_per_plugin scalars=999999999
     volumes:
       - ./gen:/gen

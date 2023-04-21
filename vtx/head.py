@@ -19,6 +19,7 @@ os.environ["LRU_CACHE_CAPACITY"] = "1"
 
 focus = os.environ["FOCUS"]
 
+
 # Decorator to a blocking function into a background thread
 def to_thread(func: typing.Callable) -> typing.Coroutine:
     @functools.wraps(func)
@@ -31,7 +32,6 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 # Load the specified model
 @to_thread
 def loader(target=None):
-
     try:
         del ai
         gc.collect()
@@ -84,7 +84,6 @@ context = default_context.copy()
 
 # Build a local cache of global conversational state
 def build_context(message):
-
     while len(context) >= 16:
         context.pop(0)
 
@@ -113,7 +112,6 @@ def replace(old_message, new_message):
 
 # Truncate the prompt to fit the model
 def truncate_context(ctx, max_length=512):
-
     context_length = sum([len(item) for item in ctx])
 
     if context_length > max_length:
@@ -134,7 +132,6 @@ active = False
 
 @to_thread
 def gen(bias=None, ctx=None, failures=0):
-
     global active
 
     while active == True:

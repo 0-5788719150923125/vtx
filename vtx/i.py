@@ -13,6 +13,7 @@ import praw
 import numpy as np
 import math
 
+
 # Grab all internal links from a web page
 def crawl(site="https://ink.university"):
     html = requests.get(site).content
@@ -29,7 +30,6 @@ def crawl(site="https://ink.university"):
 
 # Fetch messages from Discord, by using Discord Chat Exporter
 def fetch_from_discord():
-
     # By default, use the bot's token
     discord_token = os.environ["DISCORDTOKEN"]
 
@@ -97,7 +97,6 @@ def transform_message(message):
 
 # Format Discord messages for training
 def prepare_discord_messages():
-
     # Replace links and @mentions
     def sanitizer(string):
         sanitized = re.sub(
@@ -127,7 +126,6 @@ def prepare_discord_messages():
                 data_dict = {obj["id"]: obj for obj in data["messages"]}
 
                 for i in data_dict.values():
-
                     if i["type"] != "Default" and i["type"] != "Reply":
                         continue
 
@@ -153,10 +151,8 @@ def prepare_discord_messages():
                     with open(
                         "/lab/discord/exported/" + filename + ".txt", "a"
                     ) as txt_file:
-
                         if i["type"] == "Reply":
                             try:
-
                                 message_ref_id = i["reference"]["messageId"]
 
                                 result = data_dict.get(message_ref_id, None)
@@ -222,7 +218,6 @@ def prepare_discord_messages():
 
 # Download messages from subreddits
 def fetch_from_reddit():
-
     # Instantiate the Reddit client
     reddit = praw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
@@ -232,7 +227,6 @@ def fetch_from_reddit():
 
     # For every sub in config, iterate over options, then download content
     for sub in config["reddit"]:
-
         skip = False
         if "skip" in config["reddit"][sub]:
             skip = config["reddit"][sub]["skip"]
@@ -257,14 +251,12 @@ def fetch_from_reddit():
         sort = config["reddit"][sub].get("sort", "top")
 
         def main():
-
             if sort == "new":
                 submissions = reddit.subreddit(sub).new(limit=limit)
             else:
                 submissions = reddit.subreddit(sub).top(limit=limit)
 
             for submission in submissions:
-
                 bias = get_identity()
                 print("wrote to " + str(bias))
 
@@ -291,7 +283,6 @@ def fetch_from_reddit():
                 )
 
         def dump_replies(replies, context):
-
             for reply in replies:
                 if isinstance(reply, praw.models.MoreComments):
                     continue
@@ -321,8 +312,7 @@ def fetch_from_reddit():
 
 
 # Create some structure
-def juxtapose_identities():
-
+def juxtapose_data():
     # Ensure path exists and is empty
     if os.path.exists("/lab/juxtaposition"):
         shutil.rmtree("/lab/juxtaposition")

@@ -8,6 +8,7 @@ import head
 
 messages = {}
 
+
 # Check the local GUN API for new messages
 async def polling(channel):
     run_on = config["source"][channel].get("run_on", False)
@@ -84,8 +85,8 @@ async def polling(channel):
 
             print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + sanitized)
 
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
 
 async def subscribe(channel) -> None:

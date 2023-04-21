@@ -94,10 +94,9 @@ class Client(discord.Client):
 
     # check every Discord message
     async def on_message(self, message):
-
         reply = random.choice([True, False])
 
-        bias = 0
+        bias = None
         output = "ERROR: Me Found."
 
         if (
@@ -133,7 +132,6 @@ class Client(discord.Client):
             if client.user.mentioned_in(message):
                 if random.randint(0, 100) < mention_self_chance:
                     chance = 1
-                bias = int(message.mentions[0].id)
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
                 if random.randint(0, 100) < mention_any_chance:
@@ -207,7 +205,6 @@ def transformer(group):
 
 # Log private messages
 def log_private_message(user_id, message):
-
     if not os.path.exists("/lab/discord/live"):
         os.makedirs("/lab/discord/live")
 
@@ -257,7 +254,6 @@ async def get_all_channels():
 
 # Subscribe to a Discord bot via token
 async def subscribe():
-
     discord_token = os.environ["DISCORDTOKEN"]
     intents = discord.Intents.default()
     intents.members = True

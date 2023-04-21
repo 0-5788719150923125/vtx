@@ -6,6 +6,7 @@ import asyncio
 import asyncpraw
 import head
 
+
 # Subscribe to a single subreddit
 async def subscribe(subreddit):
     try:

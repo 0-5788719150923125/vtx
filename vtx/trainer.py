@@ -30,6 +30,7 @@ logger = loggers.TensorBoardLogger(
     "/gen/logs", name=focus, version=version, default_hp_metric=False
 )
 
+
 # Get the full path to every file in a directory
 def list_full_paths(directory):
     fname = []
@@ -44,7 +45,6 @@ def list_full_paths(directory):
 def join_files(
     path="/vtx", tokenizer=None, stage=None, block_size=1024, line_by_line=False
 ):
-
     tmp_path = "/tmp/intermediate"
 
     if os.path.exists(tmp_path):
@@ -149,7 +149,6 @@ def join_files(
 
 
 if __name__ == "__main__":
-
     base_model = model["training"]["base_model"]
     to_gpu = model["training"]["to_gpu"]
     n_gpu = model["n_gpu"]
@@ -193,7 +192,6 @@ if __name__ == "__main__":
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
-
                     print(bc.FOLD + "loading " + dataset + ad.TEXT)
 
                     hash = hash_directory("/" + dataset)

@@ -2,24 +2,6 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "npm install",
-      "detail": "Install all node modules required for this project.",
-      "type": "shell",
-      "command": "npm install"
-    },
-    {
-      "label": "npm start",
-      "detail": "Start the node service.",
-      "type": "shell",
-      "command": "npm start"
-    },
-    {
-      "label": "npm outdated",
-      "detail": "Check for outdated npm modules.",
-      "type": "shell",
-      "command": "npm outdated"
-    },
-    {
       "label": "ps",
       "detail": "View a list of all running containers for this project.",
       "type": "shell",
@@ -111,7 +93,7 @@
         "i.fetch_from_reddit()",
         "i.prepare_discord_messages()",
         "i.fetch_from_discord()",
-        "i.juxtapose_identities()"
+        "i.juxtapose_data()"
       ]
     },
     {

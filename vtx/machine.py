@@ -12,12 +12,11 @@ scheduler.start()
 
 tasks = {}
 
+
 # This is the main loop for the entire machine
 @asyncio.coroutine
 async def main(loop):
-
     while True:
-
         # Load the AI model at startup
         if head.ai is None:
             try:

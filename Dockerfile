@@ -47,8 +47,6 @@ RUN pip3 install torch
 
 RUN pip3 install -r requirements.txt
 
-RUN npm install --production
-
 COPY . ./
 
 RUN pip install /vtx/lab/aitextgen

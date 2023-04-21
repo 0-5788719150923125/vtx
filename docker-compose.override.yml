@@ -8,3 +8,7 @@ services:
           devices:
             - driver: nvidia
               capabilities: [gpu]
+
+  ctx:
+    environment:
+      CHANNELS: 'hive,support,opencog'

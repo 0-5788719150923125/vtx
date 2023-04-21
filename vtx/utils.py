@@ -10,6 +10,7 @@ import os
 propulsion = "¶"
 ship = ":>"
 
+# Load configuration files from disk
 with open("/vtx/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 

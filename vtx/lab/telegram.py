@@ -9,7 +9,6 @@ import head
 
 
 async def subscribe() -> None:
-
     token = os.environ["TELEGRAMBOTAPIKEY"]
 
     dp = Dispatcher(Bot(token=token))

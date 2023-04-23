@@ -2,6 +2,7 @@ import functools
 import asyncio
 import random
 import typing
+import shutil
 import time
 import os
 import re
@@ -16,6 +17,13 @@ from transformers import AutoTokenizer
 ai = None
 
 os.environ["LRU_CACHE_CAPACITY"] = "1"
+cache_path = "/tmp/torch"
+os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
+
+if os.path.exists(cache_path):
+    shutil.rmtree(cache_path)
+
+os.makedirs(cache_path)
 
 focus = os.environ["FOCUS"]
 
@@ -126,10 +134,10 @@ def truncate_context(ctx, max_length=512):
     return ctx
 
 
-# Generate a completion from bias and context
 active = False
 
 
+# Generate a completion from bias and context
 @to_thread
 def gen(bias=None, ctx=None, failures=0):
     global active
@@ -176,6 +184,10 @@ def gen(bias=None, ctx=None, failures=0):
             temperature=temperature,
             return_as_list=True,
             num_beams=9,
+            # top_k=4,
+            # penalty_alpha=0.6,
+            # num_beam_groups=3,
+            # length_penalty=43.0,
             repetition_penalty=2.3,
             no_repeat_ngram_size=4,
             early_stopping=True,
@@ -187,10 +199,10 @@ def gen(bias=None, ctx=None, failures=0):
         active = False
         output = None
         generation = completion[0][len(history) :]
-        group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
         variables = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
         broken_variables = re.compile("(\d*\s+\d*)")
         mentions = re.compile("(?:[<][@])(\d+\s*\d*)(?:[>])")
+        group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
 
         if (
             group is None
@@ -219,6 +231,13 @@ def gen(bias=None, ctx=None, failures=0):
 # Generate a completion from bias and context
 @to_thread
 def write(prompt=None):
+    global active
+
+    while active == True:
+        time.sleep(1)
+
+    active = True
+
     prompt = """
 # The 'Frame
 ## RECORD
@@ -245,8 +264,11 @@ Organizations:
             temperature=1.00,
             # eta_cutoff=0.001,
             return_as_list=True,
-            num_beams=9,
-            num_beam_groups=3,
+            # num_beams=9,
+            # num_beam_groups=3,
+            top_k=10,
+            penalty_alpha=0.6,
+            # exponential_decay_length_penalty=(8, 1.23),
             # diversity_penalty=0.023,
             # length_penalty=1.0,
             repetition_penalty=0.88888888,
@@ -263,6 +285,8 @@ Organizations:
     except Exception as e:
         print(e)
         output = str(e)
+
+    active = False
 
     logging.getLogger("transformers").setLevel(logging.INFO)
     num = 0

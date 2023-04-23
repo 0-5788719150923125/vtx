@@ -62,29 +62,14 @@ class Client(discord.Client):
                     )
                 recent_author_id = messages[random.randint(0, 15)].author.id
 
-                if str(recent_author_id) == str(self.user.id):
-                    neurons = [
-                        random.randint(1, 9),  # neuron
-                        random.randint(0, 9),  # neura
-                        random.randint(0, 9),  # neu ra
-                    ]
-                    weight = random.randint(100000000000000, 9999999999999999)
-                    bias = (
-                        str(neurons[0])
-                        + str(neurons[1])
-                        + str(neurons[2])
-                        + str(weight)
-                    )
-                else:
+                if str(recent_author_id) != str(self.user.id):
                     bias = recent_author_id
 
-                generation = await head.gen(int(bias), context)
+                generation = await head.gen(bias, context)
                 if generation[0] == "error":
                     return
-                else:
-                    output = transformer([generation[0], generation[1]])
 
-                print(output)
+                output = transformer([generation[0], generation[1]])
 
                 await messages[focus_on].reply(output)
 
@@ -257,9 +242,9 @@ async def subscribe():
     discord_token = os.environ["DISCORDTOKEN"]
     intents = discord.Intents.default()
     intents.members = True
-    intents.message_content = True
     intents.messages = True
     intents.reactions = True
+    intents.message_content = True
 
     global client
     client = Client(intents=intents)
@@ -271,7 +256,10 @@ async def subscribe():
             head.build_context(
                 propulsion + str(after.author.id) + ship + " " + after.content
             )
-            print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + after.content)
+            if after.author.id != client.user.id:
+                print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + after.content)
+            else:
+                print(bc.CORE + "INK@DISCORD: " + ad.TEXT + after.content)
 
     # Listen for pickles
     @client.event

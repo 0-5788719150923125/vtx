@@ -10,7 +10,13 @@ from pytorch_lightning import loggers
 from utils import ad, bc, config, hash_directory
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
-os.environ["PYTORCH_KERNEL_CACHE_PATH"] = "/tmp/torch/kernels"
+cache_path = "/tmp/torch"
+os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
+
+if os.path.exists(cache_path):
+    shutil.rmtree(cache_path)
+
+os.makedirs(cache_path)
 
 focus = os.environ["FOCUS"]
 model = config[focus]

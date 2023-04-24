@@ -188,7 +188,7 @@ def gen(bias=None, ctx=None, failures=0):
             # penalty_alpha=0.6,
             # num_beam_groups=3,
             # length_penalty=43.0,
-            repetition_penalty=2.3,
+            repetition_penalty=4.2,
             no_repeat_ngram_size=4,
             early_stopping=True,
             renormalize_logits=True,

@@ -12,3 +12,4 @@ services:
   ctx:
     environment:
       CHANNELS: 'hive,support,opencog'
+      WEBUI: enabled

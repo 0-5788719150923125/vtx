@@ -30,6 +30,7 @@ services:
     restart: 'always'
     environment:
       CHANNELS: 'hive,support'
+      WEBUI: disabled
     ports:
       - 9666:9666
 

@@ -184,6 +184,7 @@ def gen(bias=None, ctx=None, failures=0):
             temperature=temperature,
             return_as_list=True,
             num_beams=9,
+            # encoder_repetition_penalty=0.3,
             # top_k=4,
             # penalty_alpha=0.6,
             # num_beam_groups=3,

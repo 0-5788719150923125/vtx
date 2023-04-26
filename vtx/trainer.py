@@ -298,13 +298,18 @@ if __name__ == "__main__":
 
     # Train the model
     for i, stage in enumerate(model["training"]["stages"]):
+        if "dropout" in stage:
+            setattr(ai.model.config, "attention_dropout", stage["dropout"])
+            setattr(ai.model.config, "embed_dropout", stage["dropout"])
+            setattr(ai.model.config, "resid_dropout", stage["dropout"])
+            setattr(ai.model.config, "summary_first_dropout", stage["dropout"])
         inputs = build_inputs(stage)
         ai.train(
             train_data=inputs,
             batch_size=stage.get("batch_size", 1024),
             num_steps=stage.get("num_steps", 33333),
             generate_every=333,
-            save_every=1000,
+            save_every=100,
             n_gpu=n_gpu,
             output_dir=output_dir,
             loggers=logger,

@@ -309,7 +309,7 @@ if __name__ == "__main__":
             batch_size=stage.get("batch_size", 1024),
             num_steps=stage.get("num_steps", 33333),
             generate_every=333,
-            save_every=100,
+            save_every=1000,
             n_gpu=n_gpu,
             output_dir=output_dir,
             loggers=logger,

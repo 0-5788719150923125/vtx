@@ -24,6 +24,7 @@ async def main(loop):
                 # loop.create_task(head.write())
             except Exception as e:
                 print(e)
+                continue
 
         # Prune completed tasks
         for task in tasks.copy():

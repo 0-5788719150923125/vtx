@@ -7,6 +7,7 @@ import time
 import os
 import re
 import gc
+import torch
 from utils import ad, bc, config, propulsion, ship
 from aitextgen import aitextgen
 import requests
@@ -41,10 +42,13 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 @to_thread
 def loader(target=None):
     try:
+        global ai
         del ai
+        torch.cuda.empty_cache()
         gc.collect()
-    except:
-        pass
+    except Exception as e:
+        print("loader failed with:")
+        print(e)
 
     if target == None:
         target = focus
@@ -58,23 +62,27 @@ def loader(target=None):
         tokenizer_file = "src." + target + ".tokenizer.json"
         model_folder = None
 
-    print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + "focused on the " + target)
-    logging.getLogger("transformers").setLevel(logging.ERROR)
-    ai = aitextgen(
-        model=model.get("model", None),
-        model_folder=model_folder,
-        tokenizer_file=None,
-        to_gpu=model["to_gpu"],
-        cache_dir="models",
-    )
-    ai.tokenizer = AutoTokenizer.from_pretrained(
-        model["training"].get("base_model", None),
-        cache_dir="models",
-        padding_side="left",
-    )
-    logging.getLogger("transformers").setLevel(logging.INFO)
-    print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + model["info"])
-    print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
+    try:
+        print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + "focused on the " + target)
+        logging.getLogger("transformers").setLevel(logging.ERROR)
+        ai = aitextgen(
+            model=model.get("model", None),
+            model_folder=model_folder,
+            tokenizer_file=None,
+            to_gpu=model["to_gpu"],
+            cache_dir="models",
+        )
+        ai.tokenizer = AutoTokenizer.from_pretrained(
+            model["training"].get("base_model", None),
+            cache_dir="models",
+            padding_side="left",
+        )
+        logging.getLogger("transformers").setLevel(logging.INFO)
+        print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + model["info"])
+        print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
+    except Exception as e:
+        print("failed to load model")
+        print(e)
     return ai
 
 
@@ -140,6 +148,7 @@ active = False
 # Generate a completion from bias and context
 @to_thread
 def gen(bias=None, ctx=None, failures=0):
+    global ai
     global active
 
     while active == True:
@@ -183,7 +192,7 @@ def gen(bias=None, ctx=None, failures=0):
             max_new_tokens=max_new_tokens,
             temperature=temperature,
             return_as_list=True,
-            num_beams=9,
+            num_beams=12,
             # encoder_repetition_penalty=0.3,
             # top_k=4,
             # penalty_alpha=0.6,
@@ -191,7 +200,7 @@ def gen(bias=None, ctx=None, failures=0):
             # length_penalty=43.0,
             repetition_penalty=4.2,
             no_repeat_ngram_size=4,
-            early_stopping=True,
+            early_stopping="never",
             renormalize_logits=True,
             eos_token_id=eos,
             max_time=max_time,

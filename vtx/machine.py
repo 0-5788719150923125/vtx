@@ -16,16 +16,8 @@ tasks = {}
 # This is the main loop for the entire machine
 @asyncio.coroutine
 async def main(loop):
+    head.ai = await head.loader()
     while True:
-        # Load the AI model at startup
-        if head.ai is None:
-            try:
-                head.ai = await head.loader()
-                # loop.create_task(head.write())
-            except Exception as e:
-                print(e)
-                continue
-
         # Prune completed tasks
         for task in tasks.copy():
             if tasks[task].done() or tasks[task].cancelled():

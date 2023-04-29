@@ -47,7 +47,6 @@ def loader(target=None):
         torch.cuda.empty_cache()
         gc.collect()
     except Exception as e:
-        print("loader failed with:")
         print(e)
 
     if target == None:
@@ -57,9 +56,7 @@ def loader(target=None):
 
     if "training" in model:
         model_folder = "models/" + target
-        tokenizer_file = "src." + target + ".tokenizer.json"
     else:
-        tokenizer_file = "src." + target + ".tokenizer.json"
         model_folder = None
 
     try:
@@ -192,7 +189,7 @@ def gen(bias=None, ctx=None, failures=0):
             max_new_tokens=max_new_tokens,
             temperature=temperature,
             return_as_list=True,
-            num_beams=12,
+            num_beams=16,
             # encoder_repetition_penalty=0.3,
             # top_k=4,
             # penalty_alpha=0.6,

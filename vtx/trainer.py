@@ -302,7 +302,7 @@ if __name__ == "__main__":
             setattr(ai.model.config, "attention_dropout", stage["dropout"])
             setattr(ai.model.config, "embed_dropout", stage["dropout"])
             setattr(ai.model.config, "resid_dropout", stage["dropout"])
-            setattr(ai.model.config, "summary_first_dropout", stage["dropout"])
+            # setattr(ai.model.config, "summary_first_dropout", stage["dropout"])
         inputs = build_inputs(stage)
         ai.train(
             train_data=inputs,

@@ -23,9 +23,9 @@ async def subscribe() -> None:
         )
         response = await head.gen()
         await message.answer(response[1])
-        head.build_context(propulsion + str(get_identity()) + ship + " " + sanitized)
+        head.build_context(propulsion + str(get_identity()) + ship + " " + response[1])
         print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
-        print(bc.CORE + "INK@TELEGRAM: " + ad.TEXT + sanitized)
+        print(bc.CORE + "INK@TELEGRAM: " + ad.TEXT + response[1])
 
     dp.register_message_handler(chat_bot)
     await asyncio.gather(

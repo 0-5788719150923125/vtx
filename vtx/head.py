@@ -8,6 +8,7 @@ import os
 import re
 import gc
 import torch
+import time
 from utils import ad, bc, config, propulsion, ship
 from aitextgen import aitextgen
 import requests
@@ -43,7 +44,8 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 def loader(target=None):
     try:
         global ai
-        del ai
+        ai = None
+        # del ai
         torch.cuda.empty_cache()
         gc.collect()
     except Exception as e:
@@ -80,6 +82,8 @@ def loader(target=None):
     except Exception as e:
         print("failed to load model")
         print(e)
+        time.sleep(15)
+        ai = asyncio.run(loader(target))
     return ai
 
 
@@ -171,15 +175,15 @@ def gen(bias=None, ctx=None, failures=0):
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
             prompt = propulsion + str(bias) + ship
 
-    eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
-
-    temperature = 1.0
-    if failures > 0:
-        temperature = temperature - (0.1 * failures)
-
     # try to complete the prompt
     # https://huggingface.co/docs/transformers/main_classes/text_generation
     try:
+        eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
+
+        temperature = 1.23
+        if failures > 0:
+            temperature = temperature - (0.1 * failures)
+
         logging.getLogger("transformers").setLevel(logging.ERROR)
         completion = ai.generate(
             n=1,
@@ -190,12 +194,12 @@ def gen(bias=None, ctx=None, failures=0):
             temperature=temperature,
             return_as_list=True,
             num_beams=16,
-            # encoder_repetition_penalty=0.3,
             # top_k=4,
             # penalty_alpha=0.6,
             # num_beam_groups=3,
             # length_penalty=43.0,
-            repetition_penalty=4.2,
+            repetition_penalty=2.3,
+            encoder_repetition_penalty=2.3,
             no_repeat_ngram_size=4,
             early_stopping="never",
             renormalize_logits=True,

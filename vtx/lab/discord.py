@@ -62,6 +62,7 @@ class Client(discord.Client):
                     )
                 recent_author_id = messages[random.randint(0, 15)].author.id
 
+                bias = None
                 if str(recent_author_id) != str(self.user.id):
                     bias = recent_author_id
 

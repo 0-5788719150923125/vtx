@@ -180,7 +180,7 @@ def gen(bias=None, ctx=None, failures=0):
     try:
         eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
 
-        temperature = 1.23
+        temperature = 1.0
         if failures > 0:
             temperature = temperature - (0.1 * failures)
 
@@ -194,10 +194,6 @@ def gen(bias=None, ctx=None, failures=0):
             temperature=temperature,
             return_as_list=True,
             num_beams=16,
-            # top_k=4,
-            # penalty_alpha=0.6,
-            # num_beam_groups=3,
-            # length_penalty=43.0,
             repetition_penalty=2.3,
             encoder_repetition_penalty=2.3,
             no_repeat_ngram_size=4,

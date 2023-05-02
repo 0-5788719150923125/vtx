@@ -22,6 +22,8 @@ async def subscribe() -> None:
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )
         response = await head.gen()
+        if response[0] == "error":
+            response[1] = "ERROR: Me Found."
         await message.answer(response[1])
         head.build_context(propulsion + str(get_identity()) + ship + " " + response[1])
         print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])

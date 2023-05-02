@@ -21,13 +21,15 @@ async def subscribe() -> None:
         head.build_context(
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )
-        response = await head.gen()
+        response = await head.gen(bias=806051627198709760)
         if response[0] == "error":
-            response[1] = "ERROR: Me Found."
-        await message.answer(response[1])
-        head.build_context(propulsion + str(get_identity()) + ship + " " + response[1])
+            reply = "ERROR: Me Found."
+        else:
+            reply = response[1]
+        await message.answer(reply)
+        head.build_context(propulsion + str(get_identity()) + ship + " " + reply)
         print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
-        print(bc.CORE + "INK@TELEGRAM: " + ad.TEXT + response[1])
+        print(bc.CORE + "INK@TELEGRAM: " + ad.TEXT + reply)
 
     dp.register_message_handler(chat_bot)
     await asyncio.gather(

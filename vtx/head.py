@@ -177,58 +177,63 @@ def gen(bias=None, ctx=None, failures=0):
 
     # try to complete the prompt
     # https://huggingface.co/docs/transformers/main_classes/text_generation
-    try:
-        eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
+    attempt = 1
+    max_attempts = 9
+    while attempt <= max_attempts:
+        try:
+            eos = ai.tokenizer.convert_tokens_to_ids(
+                ai.tokenizer.tokenize(propulsion)[0]
+            )
 
-        temperature = 1.0
-        if failures > 0:
-            temperature = temperature - (0.1 * failures)
+            temperature = 1.0
+            if attempt > 0:
+                temperature = temperature - (0.1 * attempt)
 
-        logging.getLogger("transformers").setLevel(logging.ERROR)
-        completion = ai.generate(
-            n=1,
-            prompt=history + prompt,
-            do_sample=True,
-            min_length=23,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            return_as_list=True,
-            num_beams=16,
-            repetition_penalty=2.3,
-            encoder_repetition_penalty=2.3,
-            no_repeat_ngram_size=4,
-            early_stopping="never",
-            renormalize_logits=True,
-            eos_token_id=eos,
-            max_time=max_time,
-            seed=random.randint(0, 2**32 - 1),
-        )
-        active = False
-        output = None
-        generation = completion[0][len(history) :]
-        variables = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
-        broken_variables = re.compile("(\d*\s+\d*)")
-        mentions = re.compile("(?:[<][@])(\d+\s*\d*)(?:[>])")
-        group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
+            logging.getLogger("transformers").setLevel(logging.ERROR)
+            completion = ai.generate(
+                n=1,
+                prompt=history + prompt,
+                do_sample=True,
+                min_length=23,
+                max_new_tokens=max_new_tokens,
+                temperature=temperature,
+                return_as_list=True,
+                num_beams=16,
+                repetition_penalty=2.3,
+                encoder_repetition_penalty=2.3,
+                no_repeat_ngram_size=4,
+                early_stopping="never",
+                renormalize_logits=True,
+                eos_token_id=eos,
+                max_time=max_time,
+                seed=random.randint(0, 2**32 - 1),
+            )
+            active = False
+            output = None
+            generation = completion[0][len(history) :]
+            variables = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
+            broken_variables = re.compile("(\d*\s+\d*)")
+            mentions = re.compile("(?:[<][@])(\d+\s*\d*)(?:[>])")
+            group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
 
-        if (
-            group is None
-            or propulsion in group[3]
-            or variables.match(group[3])
-            or broken_variables.match(group[3])
-            or mentions.match(group[3])
-        ):
-            if failures >= 9:
+            if (
+                group is None
+                or propulsion in group[3]
+                or variables.match(group[3])
+                or broken_variables.match(group[3])
+                or mentions.match(group[3])
+            ):
                 raise Exception("failed to generate a response")
-            failures = failures + 1
-            output = asyncio.run(gen(bias, ctx, failures))
-        else:
-            output = [group[2], group[3]]
+            else:
+                output = [group[2], group[3]]
+                break
 
-    except Exception as e:
-        print(e)
-        context = default_context.copy()
-        output = ["error"]
+        except Exception as e:
+            attempt = attempt + 1
+            if attempt > max_attempts:
+                print(e)
+                context = default_context.copy()
+                output = ["error"]
 
     logging.getLogger("transformers").setLevel(logging.INFO)
     active = False

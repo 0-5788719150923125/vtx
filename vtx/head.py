@@ -181,6 +181,8 @@ def gen(bias=None, ctx=None, failures=0):
     max_attempts = 9
     while attempt <= max_attempts:
         try:
+            output = None
+
             eos = ai.tokenizer.convert_tokens_to_ids(
                 ai.tokenizer.tokenize(propulsion)[0]
             )
@@ -209,7 +211,6 @@ def gen(bias=None, ctx=None, failures=0):
                 seed=random.randint(0, 2**32 - 1),
             )
             active = False
-            output = None
             generation = completion[0][len(history) :]
             variables = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
             broken_variables = re.compile("(\d*\s+\d*)")
@@ -233,7 +234,7 @@ def gen(bias=None, ctx=None, failures=0):
             if attempt > max_attempts:
                 print(e)
                 context = default_context.copy()
-                output = ["error"]
+                output = ["error", "ERROR: Me Found."]
 
     logging.getLogger("transformers").setLevel(logging.INFO)
     active = False

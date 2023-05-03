@@ -70,7 +70,6 @@ async def polling(channel):
 
             if generation[0] == "error":
                 messages[channel] = []
-                generation[1] = "ERROR: Me Found."
 
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(

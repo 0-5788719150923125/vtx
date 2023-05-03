@@ -6,6 +6,8 @@ from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import requests
 import head
 
+context_length = 16
+
 messages = {}
 
 
@@ -80,7 +82,7 @@ async def polling(channel):
             payload = {"message": sanitized, "identifier": str(bot)}
             x = requests.post(url, json=payload)
 
-            while len(messages[channel]) > 9:
+            while len(messages[channel]) > context_length:
                 messages[channel].pop(0)
 
             messages[channel].append(propulsion + str(bot) + ship + " " + sanitized)

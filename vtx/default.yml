@@ -12,6 +12,8 @@
 source:
   # The channel names to subscribe to.
   hive:
+    # Give your bot a name. Remove key to allow the model to choose its own name.
+    name: Ryan
 
     # Attempt to respond to new messages in this channel.
     watch: True
@@ -19,8 +21,8 @@ source:
     # The chance to respond to new messages in this channel.
     chance: 0.33
 
-    # If True, your bot will respond to any message - not just new ones. Effectively, this
-    # means that your bot will speak to itself.
+    # If True, your bot will respond to any message - not just the new ones.
+    # Effectively, this means your bot will respond to its own messages.
     run_on: False
 
   support:
@@ -40,8 +42,8 @@ soul:
   # Whether or not to load this model into your GPU at runtime (for inference.)
   to_gpu: False
 
-  # The number of GPUs to expose to PyTorch.
-  n_gpu: 1
+  # The number of the GPU index you want to use.
+  gpu_index: 0
 
   # Given a prompt, this is the maximum number of new tokens your model will generate.
   max_new_tokens: 333
@@ -109,7 +111,6 @@ mind:
 toe:
   info: it's nailed to the foot
   to_gpu: False
-  n_gpu: 1
   max_new_tokens: 333
   training:
     resume: False

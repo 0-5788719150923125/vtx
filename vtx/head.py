@@ -64,6 +64,11 @@ def loader(target=None):
     try:
         print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + "focused on the " + target)
         logging.getLogger("transformers").setLevel(logging.ERROR)
+        # torch.cuda.device(model.get("gpu_index", 0))
+        # os.environ["CUDA_VISIBLE_DEVICES"] = str(model.get("gpu_index", 0))
+        # import torch
+        # from aitextgen import aitextgen
+
         ai = aitextgen(
             model=model.get("model", None),
             model_folder=model_folder,
@@ -202,7 +207,7 @@ def gen(bias=None, ctx=None, failures=0):
                 return_as_list=True,
                 num_beams=16,
                 repetition_penalty=2.3,
-                encoder_repetition_penalty=2.3,
+                encoder_repetition_penalty=1.2,
                 no_repeat_ngram_size=4,
                 early_stopping="never",
                 renormalize_logits=True,

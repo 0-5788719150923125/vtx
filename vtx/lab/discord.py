@@ -8,9 +8,9 @@ import discord
 import head
 
 client = None
-response_chance = 6  # out of 100
+response_chance = 3  # out of 100
 mention_self_chance = 88  # out of 100
-mention_any_chance = 16  # out of 100
+mention_any_chance = 8  # out of 100
 
 
 # A class to control the entire Discord bot

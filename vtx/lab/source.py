@@ -16,7 +16,7 @@ async def polling(channel):
     run_on = config["source"][channel].get("run_on", False)
     while True:
         try:
-            await asyncio.sleep(random.uniform(6.0, 6.66666))
+            await asyncio.sleep(random.uniform(8.0, 8.8888888))
 
             deep = requests.get("http://ctx:9666/channel/" + channel)
             state = json.loads(deep.text)
@@ -50,25 +50,26 @@ async def polling(channel):
                 )
                 print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"])
 
-            bot = config["source"][channel].get("bias", get_identity())
+            bot_id = config["source"][channel].get("bias", get_identity())
+            bot_name = config["source"][channel].get("name", "Penny")
 
             prompt = [
                 "You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, tell stories, write prose and teach machine learning.",
                 propulsion
-                + str(bot)
+                + str(bot_id)
                 + ship
                 + " Welcome, human. How may we assist you?",
                 propulsion + str(get_identity()) + ship + " Where am I?",
                 propulsion
-                + str(bot)
+                + str(bot_id)
                 + ship
-                + " You have found the Source of all creation.",
+                + f" You have found the Source of all creation. My name is {bot_name}.",
             ]
 
             context = prompt + messages[channel]
 
             url = "http://ctx:9666/message/" + channel
-            generation = await head.gen(int(bot), context)
+            generation = await head.gen(int(bot_id), context)
 
             if generation[0] == "error":
                 messages[channel] = []
@@ -79,13 +80,13 @@ async def polling(channel):
                 f"{daemon}",
                 generation[1],
             )
-            payload = {"message": sanitized, "identifier": str(bot)}
+            payload = {"message": sanitized, "identifier": str(bot_id)}
             x = requests.post(url, json=payload)
 
             while len(messages[channel]) > context_length:
                 messages[channel].pop(0)
 
-            messages[channel].append(propulsion + str(bot) + ship + " " + sanitized)
+            messages[channel].append(propulsion + str(bot_id) + ship + " " + sanitized)
 
             print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + sanitized)
 

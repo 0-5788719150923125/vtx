@@ -22,9 +22,11 @@ async def subscribe() -> None:
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )
         response = await head.gen(bias=806051627198709760)
+        print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
+        if response[0] == "error":
+            return
         await message.answer(response[1])
         head.build_context(propulsion + str(get_identity()) + ship + " " + response[1])
-        print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
         print(bc.CORE + "INK@TELEGRAM: " + ad.TEXT + response[1])
 
     dp.register_message_handler(chat_bot)

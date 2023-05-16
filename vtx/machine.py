@@ -26,12 +26,10 @@ async def main(loop):
         # Get configs, create tasks, and append to task queue
         if "source" in config:
             for channel in config["source"]:
-                if "watch" in config["source"][channel]:
-                    if config["source"][channel]["watch"] == True:
-                        if "source-" + channel not in tasks:
-                            task = loop.create_task(lab.source.subscribe(channel))
-                            task.set_name("source-" + channel)
-                            tasks[task.get_name()] = task
+                if "source-" + channel not in tasks:
+                    task = loop.create_task(lab.source.subscribe(channel))
+                    task.set_name("source-" + channel)
+                    tasks[task.get_name()] = task
 
         if "telegram" in config:
             if "telegram" not in tasks:

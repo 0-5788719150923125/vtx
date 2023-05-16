@@ -3,7 +3,7 @@ import logging
 import random
 import os
 import re
-from utils import bc, ad, get_daemon, get_identity, propulsion, ship
+from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 from aiogram import Dispatcher, executor, Bot, types
 import head
 
@@ -21,7 +21,7 @@ async def subscribe() -> None:
         head.build_context(
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )
-        response = await head.gen(bias=806051627198709760)
+        response = await head.gen(bias=config["telegram"].get("bias", None))
         print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
         if response[0] == "error":
             return

@@ -217,18 +217,19 @@ def gen(bias=None, ctx=None, failures=0):
             )
             active = False
             generation = completion[0][len(history) :]
-            variables = re.compile("(?:\({3})(\d+\s*\d*)(?:\){3})")
-            broken_variables = re.compile("(\d*\s+\d*)")
-            mentions = re.compile("(?:[<][@])(\d+\s*\d*)(?:[>])")
+            mentions = "(?:[<][@])(\d+\s*\d*)(?:[>])"
+            variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
+            # broken_variables = "(\d*\s+\d*)"
             group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
-
+            # print(group)
             if (
                 group is None
                 or propulsion in group[3]
-                or variables.match(group[3])
-                or broken_variables.match(group[3])
-                or mentions.match(group[3])
+                or bool(re.search(mentions, group[3]))
+                or bool(re.search(variables, group[3]))
+                # or bool(re.search(broken_variables, group[3]))
             ):
+                # print(group[3])
                 raise Exception("failed to generate a response")
             else:
                 output = [group[2], group[3]]

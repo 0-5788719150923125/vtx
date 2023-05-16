@@ -64,11 +64,6 @@ def loader(target=None):
     try:
         print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + "focused on the " + target)
         logging.getLogger("transformers").setLevel(logging.ERROR)
-        # torch.cuda.device(model.get("gpu_index", 0))
-        # os.environ["CUDA_VISIBLE_DEVICES"] = str(model.get("gpu_index", 0))
-        # import torch
-        # from aitextgen import aitextgen
-
         ai = aitextgen(
             model=model.get("model", None),
             model_folder=model_folder,
@@ -204,10 +199,11 @@ def gen(bias=None, ctx=None, failures=0):
                 min_length=23,
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
+                # eta_cutoff=0.002,
                 return_as_list=True,
                 num_beams=16,
                 repetition_penalty=2.3,
-                encoder_repetition_penalty=1.2,
+                encoder_repetition_penalty=3.0,
                 no_repeat_ngram_size=4,
                 early_stopping="never",
                 renormalize_logits=True,
@@ -219,17 +215,14 @@ def gen(bias=None, ctx=None, failures=0):
             generation = completion[0][len(history) :]
             mentions = "(?:[<][@])(\d+\s*\d*)(?:[>])"
             variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
-            # broken_variables = "(\d*\s+\d*)"
             group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
-            # print(group)
             if (
                 group is None
                 or propulsion in group[3]
                 or bool(re.search(mentions, group[3]))
                 or bool(re.search(variables, group[3]))
-                # or bool(re.search(broken_variables, group[3]))
             ):
-                # print(group[3])
+                print(group[3])
                 raise Exception("failed to generate a response")
             else:
                 output = [group[2], group[3]]

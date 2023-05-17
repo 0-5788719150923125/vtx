@@ -164,7 +164,6 @@ def join_files(
 if __name__ == "__main__":
     base_model = model["training"]["base_model"]
     to_gpu = model["training"]["to_gpu"]
-    n_gpu = model["n_gpu"]
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
@@ -310,7 +309,7 @@ if __name__ == "__main__":
             num_steps=stage.get("num_steps", 33333),
             generate_every=333,
             save_every=1000,
-            n_gpu=n_gpu,
+            n_gpu=1,
             output_dir=output_dir,
             loggers=logger,
             learning_rate=stage.get("learning_rate", 0.005),

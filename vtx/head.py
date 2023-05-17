@@ -231,7 +231,6 @@ def gen(bias=None, ctx=None, failures=0):
         except Exception as e:
             attempt = attempt + 1
             if attempt > max_attempts:
-                print(e)
                 context = default_context.copy()
                 output = ["error", "ERROR: Me Found."]
 

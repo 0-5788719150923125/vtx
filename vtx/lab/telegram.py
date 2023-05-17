@@ -24,7 +24,7 @@ async def subscribe() -> None:
         )
         # pprint(message["chat"]["id"])
         print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
-        if random.choice([True, False]) != True:
+        if random.choice([True, True, True, True, False]) != True:
             return
         response = await head.gen(bias=config["telegram"].get("bias", None))
         if response[0] == "error":

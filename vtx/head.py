@@ -148,7 +148,11 @@ active = False
 
 # Generate a completion from bias and context
 @to_thread
-def gen(bias=None, ctx=None, failures=0):
+def gen(
+    bias=None,
+    ctx=None,
+    prefix: str = "Humans, AI, and daemons have a conversation together:",
+):
     global ai
     global active
 
@@ -163,9 +167,11 @@ def gen(bias=None, ctx=None, failures=0):
         global context
         ctx = context
 
-    ctx = truncate_context(ctx, 1024)
+    ctx = truncate_context(ctx, config[focus].get("context_length", 1024))
+    from pprint import pprint
 
-    history = "\n".join(ctx) + "\n"
+    history = prefix + "\n" + "\n".join(ctx) + "\n"
+    pprint(history)
 
     max_new_tokens = config[focus].get("max_new_tokens", 111)
 
@@ -186,7 +192,7 @@ def gen(bias=None, ctx=None, failures=0):
                 ai.tokenizer.tokenize(propulsion)[0]
             )
 
-            temperature = 1.0
+            temperature = 1.3
             if attempt > 0:
                 temperature = temperature - (0.1 * attempt)
 
@@ -202,7 +208,7 @@ def gen(bias=None, ctx=None, failures=0):
                 return_as_list=True,
                 num_beams=16,
                 repetition_penalty=2.3,
-                encoder_repetition_penalty=2.3,
+                encoder_repetition_penalty=1.8,
                 no_repeat_ngram_size=4,
                 early_stopping="never",
                 renormalize_logits=True,

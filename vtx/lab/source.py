@@ -54,22 +54,25 @@ async def polling(channel):
             bot_name = config["source"][channel].get("name", "Penny")
 
             prompt = [
-                "You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, tell stories, write prose and teach machine learning.",
-                propulsion
-                + str(bot_id)
-                + ship
-                + " Welcome, human. How may we assist you?",
+                propulsion + str(bot_id) + ship + " Welcome, human.",
                 propulsion + str(get_identity()) + ship + " Where am I?",
                 propulsion
                 + str(bot_id)
                 + ship
-                + f" You have found the Source of all creation. My name is {bot_name}.",
+                + f" You have found the Source of all creation. How may we assist you today?.",
             ]
 
             context = prompt + messages[channel]
 
             url = "http://ctx:9666/message/" + channel
-            generation = await head.gen(int(bot_id), context)
+            generation = await head.gen(
+                int(bot_id),
+                context,
+                prefix=config["source"][channel].get(
+                    "prefix",
+                    "You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
+                ),
+            )
 
             if generation[0] == "error":
                 messages[channel] = []

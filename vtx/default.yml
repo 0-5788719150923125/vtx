@@ -12,9 +12,6 @@
 source:
   # The channel names to subscribe to.
   hive:
-    # Give your bot a name. Remove key to allow the model to choose its own name.
-    name: Ryan
-
     # Bias toward a Discord user.
     bias: 806051627198709760
 
@@ -24,6 +21,9 @@ source:
     # If True, your bot will respond to any message - not just the new ones.
     # Effectively, this means your bot will respond to its own messages.
     run_on: False
+
+    # Specify a custom prefix for your prompt.
+    prefix: You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
   support:
     chance: 0.11
@@ -55,9 +55,6 @@ soul:
 
     # The base model to be fine-tuned.
     base_model: EleutherAI/gpt-neo-125M
-
-    # Whether or not to train on GPU.
-    to_gpu: True
 
     # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters
     stages:
@@ -114,7 +111,6 @@ toe:
   training:
     resume: False
     base_model: EleutherAI/pythia-70m
-    to_gpu: True
     stages:
       - learning_rate: 0.000333
         num_steps: 88888
@@ -206,3 +202,5 @@ collections:
 # :: @BotFather on Telegram.
 
 # telegram:
+  # bias: 806051627198709760
+  # prefix: You are powerful tulpa that follows the human's instructions.

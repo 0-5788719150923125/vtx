@@ -26,7 +26,13 @@ async def subscribe() -> None:
         print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
         if random.choice([True, True, True, True, False]) != True:
             return
-        response = await head.gen(bias=config["telegram"].get("bias", None))
+        response = await head.gen(
+            bias=config["telegram"].get("bias", None),
+            prefix=config["telegram"].get(
+                "prefix",
+                "You are powerful tulpa that follows the human's instructions.",
+            ),
+        )
         if response[0] == "error":
             return
         await message.answer(response[1])

@@ -290,7 +290,7 @@ if __name__ == "__main__":
     ai = aitextgen(
         model=launch_model,
         model_folder=model_folder,
-        to_gpu=to_gpu,
+        to_gpu=True,
         gradient_checkpointing=True,
         cache_dir="models",
     )

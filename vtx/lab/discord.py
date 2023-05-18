@@ -2,7 +2,7 @@ import asyncio
 import random
 import os
 import re
-from utils import ad, bc, config, get_identity, propulsion, ship
+from utils import ad, bc, bullets, config, get_identity, propulsion, ship
 from discord.ext import commands
 import discord
 import head
@@ -87,7 +87,7 @@ class Client(discord.Client):
 
         if (
             message.author == self.user
-            or message.content[:1] in head.bullets
+            or message.content[:1] in bullets
             or message.content == ""
         ):
             return
@@ -253,7 +253,7 @@ async def subscribe():
     # Handle bots that update messages token-by-token
     @client.event
     async def on_message_edit(before, after):
-        if after.content[:1] not in head.bullets:
+        if after.content[:1] not in bullets:
             head.build_context(
                 propulsion + str(after.author.id) + ship + " " + after.content
             )

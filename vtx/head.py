@@ -168,7 +168,6 @@ def gen(bias=None, ctx=None, failures=0):
     history = "\n".join(ctx) + "\n"
 
     max_new_tokens = config[focus].get("max_new_tokens", 111)
-    max_time = config[focus].get("max_time", 59)
 
     # bias the prompt
     if bias is not None:
@@ -203,12 +202,12 @@ def gen(bias=None, ctx=None, failures=0):
                 return_as_list=True,
                 num_beams=16,
                 repetition_penalty=2.3,
-                encoder_repetition_penalty=3.0,
+                encoder_repetition_penalty=2.3,
                 no_repeat_ngram_size=4,
                 early_stopping="never",
                 renormalize_logits=True,
                 eos_token_id=eos,
-                max_time=max_time,
+                max_time=60,
                 seed=random.randint(0, 2**32 - 1),
             )
             active = False
@@ -222,7 +221,6 @@ def gen(bias=None, ctx=None, failures=0):
                 or bool(re.search(mentions, group[3]))
                 or bool(re.search(variables, group[3]))
             ):
-                print(group[3])
                 raise Exception("failed to generate a response")
             else:
                 output = [group[2], group[3]]
@@ -308,60 +306,3 @@ Organizations:
     with open(path, "w") as file:
         file.write(output)
     return output
-
-
-bullets = {
-    "⠠",
-    "⠏",
-    "⠲",
-    "⠢",
-    "⠐",
-    "⠕",
-    "⠥",
-    "⠭",
-    "⠞",
-    "⠱",
-    "⠟",
-    "⠒",
-    "⠇",
-    "⠙",
-    "⠮",
-    "⠪",
-    "⠑",
-    "⠷",
-    "⠿",
-    "⠊",
-    "⠂",
-    "⠅",
-    "⠡",
-    "⠬",
-    "⠝",
-    "⠰",
-    "⠽",
-    "⠻",
-    "⠧",
-    "⠃",
-    "⠼",
-    "⠹",
-    "⠌",
-    "⠵",
-    "⠄",
-    "⠎",
-    "⠫",
-    "⠳",
-    "⠯",
-    "⠗",
-    "⠉",
-    "⠁",
-    "⠛",
-    "⠸",
-    "⠋",
-    "⠺",
-    "⠔",
-    "⠓",
-    "⠜",
-    "⠆",
-    "⠍",
-    " ",
-    "\n",
-}

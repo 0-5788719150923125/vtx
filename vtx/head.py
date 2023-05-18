@@ -13,7 +13,7 @@ from utils import ad, bc, config, propulsion, ship
 from aitextgen import aitextgen
 import requests
 import logging
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, GenerationConfig
 
 # holds the model globally
 ai = None
@@ -58,8 +58,10 @@ def loader(target=None):
 
     if "training" in model:
         model_folder = "models/" + target
+        base = model["training"].get("base_model", None)
     else:
         model_folder = None
+        base = model.get("model", None)
 
     try:
         print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + "focused on the " + target)
@@ -72,7 +74,7 @@ def loader(target=None):
             cache_dir="models",
         )
         ai.tokenizer = AutoTokenizer.from_pretrained(
-            model["training"].get("base_model", None),
+            base,
             cache_dir="models",
             padding_side="left",
         )
@@ -168,10 +170,7 @@ def gen(
         ctx = context
 
     ctx = truncate_context(ctx, config[focus].get("context_length", 1024))
-    from pprint import pprint
-
     history = prefix + "\n" + "\n".join(ctx) + "\n"
-    pprint(history)
 
     max_new_tokens = config[focus].get("max_new_tokens", 111)
 
@@ -192,20 +191,18 @@ def gen(
                 ai.tokenizer.tokenize(propulsion)[0]
             )
 
-            temperature = 1.3
+            temperature = 1.2
             if attempt > 0:
                 temperature = temperature - (0.1 * attempt)
 
-            logging.getLogger("transformers").setLevel(logging.ERROR)
-            completion = ai.generate(
+            params = GenerationConfig(
                 n=1,
-                prompt=history + prompt,
                 do_sample=True,
                 min_length=23,
+                max_length=10000,
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 # eta_cutoff=0.002,
-                return_as_list=True,
                 num_beams=16,
                 repetition_penalty=2.3,
                 encoder_repetition_penalty=1.8,
@@ -215,6 +212,12 @@ def gen(
                 eos_token_id=eos,
                 max_time=60,
                 seed=random.randint(0, 2**32 - 1),
+            )
+
+            completion = ai.generate(
+                prompt=history + prompt,
+                generation_config=params,
+                return_as_list=True,
             )
             active = False
             generation = completion[0][len(history) :]
@@ -235,10 +238,10 @@ def gen(
         except Exception as e:
             attempt = attempt + 1
             if attempt > max_attempts:
+                print(e)
                 context = default_context.copy()
                 output = ["error", "ERROR: Me Found."]
 
-    logging.getLogger("transformers").setLevel(logging.INFO)
     active = False
     return output
 

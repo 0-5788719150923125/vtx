@@ -17,6 +17,7 @@ tasks = {}
 @asyncio.coroutine
 async def main(loop):
     head.ai = await head.loader()
+    await head.write()
     while True:
         # Prune completed tasks
         for task in tasks.copy():
@@ -24,33 +25,29 @@ async def main(loop):
                 del tasks[task]
 
         # Get configs, create tasks, and append to task queue
-        if "source" in config:
-            for channel in config["source"]:
-                if "source-" + channel not in tasks:
-                    task = loop.create_task(lab.source.subscribe(channel))
-                    task.set_name("source-" + channel)
-                    tasks[task.get_name()] = task
-
-        if "telegram" in config:
-            if "telegram" not in tasks:
-                task = loop.create_task(lab.telegram.subscribe())
-                task.set_name("telegram")
+        for channel in config["source"]:
+            if "source-" + channel not in tasks:
+                task = loop.create_task(lab.source.subscribe(channel))
+                task.set_name("source-" + channel)
                 tasks[task.get_name()] = task
+
+        if "telegram" in config and "telegram" not in tasks:
+            task = loop.create_task(lab.telegram.subscribe())
+            task.set_name("telegram")
+            tasks[task.get_name()] = task
 
         if "reddit" in config:
             for subreddit in config["reddit"]:
-                if "watch" in config["reddit"][subreddit]:
-                    if config["reddit"][subreddit]["watch"] == True:
-                        if "reddit-" + subreddit not in tasks:
-                            task = loop.create_task(lab.reddit.subscribe(subreddit))
-                            task.set_name("reddit-" + subreddit)
-                            tasks[task.get_name()] = task
+                watch = config["reddit"][subreddit].get("watch", False)
+                if watch and "reddit-" + subreddit not in tasks:
+                    task = loop.create_task(lab.reddit.subscribe(subreddit))
+                    task.set_name("reddit-" + subreddit)
+                    tasks[task.get_name()] = task
 
-        if "discord" in config:
-            if "discord" not in tasks:
-                task = loop.create_task(lab.discord.subscribe())
-                task.set_name("discord")
-                tasks[task.get_name()] = task
+        if "discord" in config and "discord" not in tasks:
+            task = loop.create_task(lab.discord.subscribe())
+            task.set_name("discord")
+            tasks[task.get_name()] = task
 
         await asyncio.sleep(66.6666)
 

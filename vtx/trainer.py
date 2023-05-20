@@ -3,11 +3,6 @@ import shutil
 import random
 import os
 import ninja
-
-os.environ["RWKV_JIT_ON"] = "1"
-os.environ["RWKV_CUDA_ON"] = "1"
-
-# import rwkv
 from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen

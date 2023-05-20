@@ -5,10 +5,6 @@ import typing
 import shutil
 import time
 import os
-
-os.environ["RWKV_JIT_ON"] = "1"
-os.environ["RWKV_CUDA_ON"] = "1"
-# import rwkv
 import re
 import gc
 import torch
@@ -208,7 +204,9 @@ def gen(
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 # eta_cutoff=0.002,
-                num_beams=16,
+                # num_beams=1,
+                penalty_alpha=0.6,
+                top_k=4,
                 repetition_penalty=2.3,
                 encoder_repetition_penalty=1.8,
                 no_repeat_ngram_size=4,
@@ -235,6 +233,7 @@ def gen(
                 or bool(re.search(mentions, group[3]))
                 or bool(re.search(variables, group[3]))
             ):
+                print(completion[0])
                 raise Exception("failed to generate a response")
             else:
                 output = [group[2], group[3]]
@@ -281,15 +280,15 @@ Organizations:
         completion = ai.generate(
             n=1,
             prompt=prompt,
-            do_sample=False,
+            do_sample=True,
             min_length=23,
             max_new_tokens=1024,
-            temperature=1.00,
+            temperature=1.23,
             # eta_cutoff=0.001,
             return_as_list=True,
             # num_beams=9,
             # num_beam_groups=3,
-            top_k=10,
+            top_k=4,
             penalty_alpha=0.6,
             # exponential_decay_length_penalty=(8, 1.23),
             # diversity_penalty=0.023,

@@ -24,10 +24,14 @@ async def subscribe() -> None:
         )
         # pprint(message["chat"]["id"])
         print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
-        if random.choice([True, True, True, True, False]) != True:
+        if (
+            random.choice([True, True, True, True, True, True, True, True, True, False])
+            != True
+        ):
             return
+        bias = config["telegram"].get("bias", get_identity())
         response = await head.gen(
-            bias=config["telegram"].get("bias", None),
+            bias=bias,
             prefix=config["telegram"].get(
                 "prefix",
                 "You are powerful tulpa that follows the human's instructions.",
@@ -36,7 +40,7 @@ async def subscribe() -> None:
         if response[0] == "error":
             return
         await message.answer(response[1])
-        head.build_context(propulsion + str(get_identity()) + ship + " " + response[1])
+        head.build_context(propulsion + str(bias) + ship + " " + response[1])
         print(bc.CORE + "INK@TELEGRAM: " + ad.TEXT + response[1])
 
     dp.register_message_handler(chat_bot)

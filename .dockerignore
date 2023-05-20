@@ -6,3 +6,4 @@ lab/
 node_modules
 vtx/models/*
 !lab/aitextgen
+!lab/rwkv-cuda

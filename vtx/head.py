@@ -5,6 +5,10 @@ import typing
 import shutil
 import time
 import os
+
+os.environ["RWKV_JIT_ON"] = "1"
+os.environ["RWKV_CUDA_ON"] = "1"
+# import rwkv
 import re
 import gc
 import torch

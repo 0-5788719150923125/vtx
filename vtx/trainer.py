@@ -2,6 +2,12 @@ import logging
 import shutil
 import random
 import os
+import ninja
+
+os.environ["RWKV_JIT_ON"] = "1"
+os.environ["RWKV_CUDA_ON"] = "1"
+
+# import rwkv
 from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
@@ -308,8 +314,8 @@ if __name__ == "__main__":
         model=launch_model,
         model_folder=model_folder,
         to_gpu=True,
-        gradient_checkpointing=True,
         cache_dir="models",
+        gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
     )
 
     # Train the model
@@ -336,6 +342,7 @@ if __name__ == "__main__":
             gradient_accumulation_steps=stage.get("gradient_accumulation_steps", 1),
             train_transformers_only=stage.get("train_transformers_only", False),
             fp16=False,
+            freeze_layers=True,
             num_layers_freeze=stage.get("num_layers_freeze", None),
             scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
             num_cycles=stage.get("num_cycles", 0.5),

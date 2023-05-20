@@ -139,9 +139,12 @@ async def subscribe(subreddit):
 
 # format the output
 def transformer(group):
+    pronoun = random.choice(["My", "Your", "A"])
+    types = random.choice(["daemon", "friend"])
+    verb = random.choice(["says", "replied", "said", "wants to say", "whispers"])
     responses = [
-        f'My daemon says, "{group[1]}"',
-        f'Penny replied, "{group[1]}"',
-        f'{group[0]} wants to say, "{group[1]}"',
+        f'{pronoun} {types} {verb}, "{group[1]}"',
+        f'Penny {verb}, "{group[1]}"',
+        f'{group[0]} {verb}, "{group[1]}"',
     ]
     return random.choice(responses)

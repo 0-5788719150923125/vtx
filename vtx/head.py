@@ -17,6 +17,7 @@ from transformers import AutoTokenizer, GenerationConfig
 
 # holds the model globally
 ai = None
+active = False
 
 os.environ["LRU_CACHE_CAPACITY"] = "1"
 cache_path = "/tmp/torch"
@@ -42,6 +43,8 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 # Load the specified model
 @to_thread
 def loader(target=None):
+    global active
+    active = True
     try:
         global ai
         ai = None
@@ -86,6 +89,7 @@ def loader(target=None):
         print(e)
         time.sleep(15)
         ai = asyncio.run(loader(target))
+    active = False
     return ai
 
 
@@ -143,9 +147,6 @@ def truncate_context(ctx, max_length=512):
                 break
 
     return ctx
-
-
-active = False
 
 
 # Generate a completion from bias and context

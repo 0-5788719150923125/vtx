@@ -5,7 +5,7 @@ import os
 from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
-from transformers import GPT2Config, GPTNeoConfig, AutoTokenizer
+from transformers import AutoTokenizer
 from pytorch_lightning import loggers
 from utils import ad, bc, config, hash_directory
 
@@ -33,7 +33,7 @@ def build_version(version=0):
 version = build_version()
 
 logger = loggers.TensorBoardLogger(
-    "/gen/logs", name=focus, version=version, default_hp_metric=False
+    "/gen/logs", name=focus, version=version, default_hp_metric=True
 )
 
 
@@ -127,7 +127,7 @@ def join_files(
                     file,
                     block_size=block_size,
                     line_by_line=line_by_line,
-                    # tokenizer=tokenizer,
+                    tokenizer=tokenizer,
                 )
             else:
                 with open(file, "r") as content:
@@ -151,7 +151,7 @@ def join_files(
             intermediate_path,
             block_size=block_size,
             line_by_line=line_by_line,
-            # tokenizer=tokenizer,
+            tokenizer=tokenizer,
         )
 
     # Cleanup temp files used for tokenized dataset creation
@@ -163,7 +163,6 @@ def join_files(
 
 if __name__ == "__main__":
     base_model = model["training"]["base_model"]
-    to_gpu = model["training"]["to_gpu"]
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
@@ -196,11 +195,15 @@ if __name__ == "__main__":
 
     output_dir = "models/" + focus
 
-    # tokenizer = AutoTokenizer.from_pretrained(base_model)
+    if "neo" in launch_model.lower():
+        tokenizer = None
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(launch_model)
 
     # Create a tokenized dataset from every directory specified in config file
     def build_inputs(stage):
         datasets = {}
+        block_size = stage.get("block_size", 1024)
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
@@ -230,6 +233,8 @@ if __name__ == "__main__":
                             "/gen/datasets/"
                             + dataset
                             + "/"
+                            + str(focus)
+                            + "/"
                             + str(duplicate)
                             + "/"
                             + hash_directory("/" + dataset)
@@ -239,7 +244,7 @@ if __name__ == "__main__":
                         if os.path.exists(cached):
                             datasets[dataset + str(duplicate)] = TokenDataset(
                                 cached,
-                                block_size=stage.get("block_size", 1024),
+                                block_size=block_size,
                                 from_cache=True,
                             )
                             duplicate = duplicate - 1
@@ -247,19 +252,31 @@ if __name__ == "__main__":
 
                         try:
                             shutil.rmtree(
-                                "/gen/datasets/" + dataset + "/" + str(duplicate)
+                                "/gen/datasets/"
+                                + dataset
+                                + "/"
+                                + str(focus)
+                                + "/"
+                                + str(duplicate)
                             )
                         except:
                             pass
 
-                        os.makedirs("/gen/datasets/" + dataset + "/" + str(duplicate))
+                        os.makedirs(
+                            "/gen/datasets/"
+                            + dataset
+                            + "/"
+                            + str(focus)
+                            + "/"
+                            + str(duplicate)
+                        )
                         shuffle = False
                         if duplicate > 0:
                             shuffle = True
                         ds = join_files(
                             path="/" + dataset,
-                            # tokenizer=tokenizer,
-                            block_size=stage.get("block_size", 1024),
+                            tokenizer=tokenizer,
+                            block_size=block_size,
                             line_by_line=line_by_line,
                             shuffle=shuffle,
                         )
@@ -301,7 +318,7 @@ if __name__ == "__main__":
             setattr(ai.model.config, "attention_dropout", stage["dropout"])
             setattr(ai.model.config, "embed_dropout", stage["dropout"])
             setattr(ai.model.config, "resid_dropout", stage["dropout"])
-            # setattr(ai.model.config, "summary_first_dropout", stage["dropout"])
+            setattr(ai.model.config, "summary_first_dropout", stage["dropout"])
         inputs = build_inputs(stage)
         ai.train(
             train_data=inputs,
@@ -319,8 +336,7 @@ if __name__ == "__main__":
             gradient_accumulation_steps=stage.get("gradient_accumulation_steps", 1),
             train_transformers_only=stage.get("train_transformers_only", False),
             fp16=False,
-            freeze_layers=stage.get("freeze_layers", True),
-            num_layers_freeze=stage.get("num_layers_freeze", 4),
+            num_layers_freeze=stage.get("num_layers_freeze", None),
             scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
             num_cycles=stage.get("num_cycles", 0.5),
             progress_bar_refresh_rate=1,

@@ -287,9 +287,6 @@ def fetch_from_reddit():
                 if isinstance(reply, praw.models.MoreComments):
                     continue
 
-                bias = get_identity()
-                print("wrote to " + str(bias))
-
                 with open(
                     "/lab/reddit/" + sub + "/" + reply.submission.id + ".txt", "a"
                 ) as file:
@@ -297,7 +294,7 @@ def fetch_from_reddit():
                         r"http\S+",
                         f"((({str(get_identity())})))",
                         propulsion
-                        + str(bias)
+                        + str(get_identity())
                         + ship
                         + " "
                         + reply.body.replace("\n", "\\n"),

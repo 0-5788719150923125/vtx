@@ -196,7 +196,7 @@ if __name__ == "__main__":
 
     output_dir = "models/" + focus
 
-    if "neo" in launch_model.lower():
+    if "neo" in base_model.lower():
         tokenizer = None
     else:
         tokenizer = AutoTokenizer.from_pretrained(launch_model)

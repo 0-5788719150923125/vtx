@@ -107,7 +107,7 @@ context = default_context.copy()
 
 # Build a local cache of global conversational state
 def build_context(message):
-    while len(context) >= 16:
+    while len(context) >= 23:
         context.pop(0)
 
     context.append(message)
@@ -192,7 +192,7 @@ def gen(
                 ai.tokenizer.tokenize(propulsion)[0]
             )
 
-            temperature = 1.2
+            temperature = 1.23
             if attempt > 0:
                 temperature = temperature - (0.1 * attempt)
 
@@ -208,9 +208,8 @@ def gen(
                 penalty_alpha=0.6,
                 top_k=4,
                 repetition_penalty=2.3,
-                encoder_repetition_penalty=1.8,
+                encoder_repetition_penalty=1.23,
                 no_repeat_ngram_size=4,
-                early_stopping="never",
                 renormalize_logits=True,
                 eos_token_id=eos,
                 max_time=60,
@@ -284,19 +283,12 @@ Organizations:
             min_length=23,
             max_new_tokens=1024,
             temperature=1.23,
-            # eta_cutoff=0.001,
+            # eta_cutoff=0.0003,
             return_as_list=True,
-            # num_beams=9,
-            # num_beam_groups=3,
             top_k=4,
             penalty_alpha=0.6,
-            # exponential_decay_length_penalty=(8, 1.23),
-            # diversity_penalty=0.023,
-            # length_penalty=1.0,
-            repetition_penalty=0.88888888,
-            # exponential_decay_length_penalty=(42, 1.1),
+            repetition_penalty=0.9,
             no_repeat_ngram_size=4,
-            early_stopping=True,
             renormalize_logits=True,
             max_time=360,
             seed=random.randint(0, 2**32 - 1),

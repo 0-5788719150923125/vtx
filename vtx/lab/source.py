@@ -6,7 +6,7 @@ from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import requests
 import head
 
-context_length = 16
+context_length = 23
 
 messages = {}
 

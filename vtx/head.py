@@ -48,7 +48,6 @@ def loader(target=None):
     try:
         global ai
         ai = None
-        # del ai
         torch.cuda.empty_cache()
         gc.collect()
     except Exception as e:

@@ -228,7 +228,6 @@ def gen(
                 or bool(re.search(mentions, group[3]))
                 or bool(re.search(variables, group[3]))
             ):
-                print(completion[0])
                 raise Exception("failed to generate a response")
             else:
                 output = [group[2], group[3]]

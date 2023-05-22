@@ -51,7 +51,6 @@ async def polling(channel):
                 print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"])
 
             bot_id = config["source"][channel].get("bias", get_identity())
-            bot_name = config["source"][channel].get("name", "Penny")
 
             prompt = [
                 propulsion + str(bot_id) + ship + " Welcome, human.",

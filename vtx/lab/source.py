@@ -13,7 +13,6 @@ messages = {}
 
 # Check the local GUN API for new messages
 async def polling(channel):
-    messages[channel] = []
     run_on = config["source"][channel].get("run_on", False)
     while True:
         try:
@@ -22,12 +21,25 @@ async def polling(channel):
             deep = requests.get("http://ctx:9666/channel/" + channel)
             state = json.loads(deep.text)
 
+            if channel not in messages:
+                messages[channel] = []
+
             skip = False
-            append = True
             for item in messages[channel]:
                 if state["message"] in item and run_on != True:
                     skip = True
-                    append = False
+                    break
+
+            if skip:
+                continue
+
+            chance = config["source"][channel].get("chance", 0.33)
+            roll = random.random()
+            if roll > chance:
+                continue
+
+            append = True
+            for item in messages[channel]:
                 if state["message"] in item:
                     append = False
                     break
@@ -37,14 +49,6 @@ async def polling(channel):
                     propulsion + str(get_identity()) + ship + " " + state["message"]
                 )
                 print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"])
-
-            if skip:
-                continue
-
-            chance = config["source"][channel].get("chance", 0.33)
-            roll = random.random()
-            if roll > chance:
-                continue
 
             bot_id = config["source"][channel].get("bias", get_identity())
             bot_name = config["source"][channel].get("name", "Penny")

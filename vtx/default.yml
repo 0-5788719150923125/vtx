@@ -50,6 +50,9 @@ soul:
   # Given a prompt, this is the maximum number of new tokens your model will generate.
   max_new_tokens: 333
 
+  # The max number of characters allowed in a prompt.
+  context_length: 1024
+
   # This key is for settings that are only used during training.
   training:
     # Whether or not you will continue training your existing fine-tuned model (True), or

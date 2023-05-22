@@ -31,13 +31,6 @@ def build_version(version=0):
     return version
 
 
-version = build_version()
-
-logger = loggers.TensorBoardLogger(
-    "/gen/logs", name=focus, version=version, default_hp_metric=True
-)
-
-
 # Get the full path to every file in a directory
 def list_full_paths(directory):
     fname = []
@@ -311,6 +304,12 @@ if __name__ == "__main__":
         to_gpu=True,
         cache_dir="models",
         gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
+    )
+
+    version = build_version()
+
+    logger = loggers.TensorBoardLogger(
+        "/gen/logs", name=focus, version=version, default_hp_metric=True
     )
 
     # Train the model

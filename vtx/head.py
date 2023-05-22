@@ -84,7 +84,6 @@ def loader(target=None):
         print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + model["info"])
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
     except Exception as e:
-        print("failed to load model")
         print(e)
         time.sleep(15)
         ai = asyncio.run(loader(target))
@@ -202,8 +201,6 @@ def gen(
                 max_length=10000,
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
-                # eta_cutoff=0.002,
-                # num_beams=1,
                 penalty_alpha=0.6,
                 top_k=4,
                 repetition_penalty=2.3,

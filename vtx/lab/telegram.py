@@ -6,7 +6,6 @@ import re
 from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 from aiogram import Dispatcher, executor, Bot, types
 import head
-from pprint import pprint
 
 
 async def subscribe() -> None:
@@ -22,12 +21,8 @@ async def subscribe() -> None:
         head.build_context(
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )
-        # pprint(message["chat"]["id"])
         print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
-        if (
-            random.choice([True, True, True, True, True, True, True, True, True, False])
-            != True
-        ):
+        if random.randint(0, 9) == 0:
             return
         bias = config["telegram"].get("bias", get_identity())
         response = await head.gen(

@@ -35,3 +35,6 @@
 [submodule "lab/rwkv-cuda"]
 	path = lab/rwkv-cuda
 	url = https://github.com/BlinkDL/RWKV-CUDA
+[submodule "lab/drm"]
+	path = lab/drm
+	url = https://github.com/0-5788719150923125/drm.git

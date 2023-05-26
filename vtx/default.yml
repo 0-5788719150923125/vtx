@@ -140,18 +140,18 @@ collections:
   # The name of your collection.
   default:
     # The path to your dataset.
+    lab/drm:
+      # duplicate the dataset X amount of times. This has a regularization effect that is much like
+      # stride or a sliding context window.
+      duplicate: 1
+      # In some instances, your data should be read line-by-line. A CSV file is a good example.
+      # line_by_line: True
     lab/opencog/learn:
     lab/aitextgen:
     lab/source:
     lab/fold:
     lab/ink:
-      # duplicate the dataset X amount of times. This has a regularization effect that is much like
-      # stride or a sliding context window.
-      duplicate: 1
     lab/pen:
-    # lab/csvfiles:
-      # In some instances, your data should be read line-by-line. A CSV file is a good example.
-      # line_by_line: True
     lab/journals:
     lab/research:
     lab/pages:

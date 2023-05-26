@@ -147,6 +147,7 @@ collections:
       # In some instances, your data should be read line-by-line. A CSV file is a good example.
       # line_by_line: True
     lab/opencog/learn:
+    lab/opencog/atomspace:
     lab/aitextgen:
     lab/source:
     lab/fold:

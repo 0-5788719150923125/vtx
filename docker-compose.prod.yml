@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  vtx:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+              device_ids: ['0']
+
+  ctx:
+    environment:
+      CHANNELS: 'hive,support,opencog'
+      WEBUI: enabled

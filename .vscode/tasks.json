@@ -50,7 +50,10 @@
       "label": "i",
       "detail": "Prepare your data in various ways.",
       "type": "shell",
-      "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\""
+      "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\"",
+      "runOptions": {
+        "instanceLimit": 3
+      }
     },
     {
       "label": "auto",

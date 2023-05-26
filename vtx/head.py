@@ -237,6 +237,7 @@ def gen(
             attempt = attempt + 1
             if attempt > max_attempts:
                 print(e)
+                asyncio.run(loader(focus))
                 context = default_context.copy()
                 output = ["error", "ERROR: Me Found."]
 

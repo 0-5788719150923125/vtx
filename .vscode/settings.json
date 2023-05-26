@@ -6,6 +6,9 @@
   "prettier.enable": true,
   "prettier.requireConfig": true,
   "prettier.useEditorConfig": true,
-  "terminal.integrated.scrollback": 5000,
-  "search.useIgnoreFiles": false
+  "terminal.integrated.scrollback": 10000,
+  "search.useIgnoreFiles": false,
+  "git.detectSubmodulesLimit": 100,
+  "workbench.editor.limit.value": 3,
+  "workbench.editor.limit.enabled": true
 }

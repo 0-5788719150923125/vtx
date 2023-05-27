@@ -61,3 +61,4 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 - The introduction of noise is beneficial to the model's stability.
 - The model should be in a constant state of training. If you are freezing your model, then it is not learning.
 - A model that is able to remain coherent at extremely high temperatures, is an extremely powerful model.
+- If you get your RNG from a quantum source, you are protected from bullets.

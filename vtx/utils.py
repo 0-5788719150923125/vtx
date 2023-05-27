@@ -1,6 +1,7 @@
 from mergedeep import merge, Strategy
 import requests
 import secrets
+import random
 import pprint
 import yaml
 import json
@@ -66,6 +67,22 @@ def hash_directory(path):
                         break
                     sha1.update(data)
     return sha1.hexdigest()
+
+
+def get_quantum_seed(length: int = 2, data_type: str = "uint16"):
+    try:
+        response = requests.get(
+            f"https://qrng.anu.edu.au/API/jsonI.php?length={str(length)}&type={data_type}"
+        )
+        bullet = json.loads(response.text)
+        if bullet["success"] == True:
+            return int(bullet["data"][0]) * int(bullet["data"][1])
+        else:
+            print(response.text)
+        raise Exception("failed to connect to the mainframe")
+    except Exception as e:
+        print(e)
+        return random.randint(0, 2**32 - 1)
 
 
 bullets = {

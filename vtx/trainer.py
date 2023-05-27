@@ -8,7 +8,7 @@ from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
 from transformers import AutoTokenizer
 from pytorch_lightning import loggers
-from utils import ad, bc, config, hash_directory
+from utils import ad, bc, config, get_quantum_seed, hash_directory
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 cache_path = "/tmp/torch"
@@ -341,6 +341,6 @@ if __name__ == "__main__":
             scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
             num_cycles=stage.get("num_cycles", 0.5),
             progress_bar_refresh_rate=1,
-            seed=random.randint(0, 2**32 - 1),
+            seed=get_quantum_seed(),
             stage=i,
         )

@@ -180,6 +180,10 @@ collections:
 #     limit: 500
 #     watch: True
 #     chance: 0.5
+#   NoRules:
+#     skip: False
+#     watch: True
+#     chance: 0.0666
 
 # :: Connect your AI to Discord.
 # :: This requires a developer account, found here:

@@ -17,14 +17,9 @@ async def subscribe(subreddit):
             username=os.environ["REDDITAGENT"],
             password=os.environ["REDDITPASSWORD"],
         ) as reddit:
-            chance = config["reddit"][subreddit].get("chance", 0.01)
-            watch = []
+            chance = config["reddit"][subreddit].get("chance", 0)
 
-            if "watch" not in config["reddit"][subreddit]:
-                return
-            if config["reddit"][subreddit]["watch"] == True:
-                watch.append(subreddit)
-            else:
+            if chance <= 0:
                 return
 
             subreddit = await reddit.subreddit(subreddit, fetch=True)

@@ -143,7 +143,7 @@ collections:
     lab/drm:
       # duplicate the dataset X amount of times. This has a regularization effect that is much like
       # stride or a sliding context window.
-      duplicate: 1
+      duplicate: 2
       # In some instances, your data should be read line-by-line. A CSV file is a good example.
       # line_by_line: True
     lab/opencog/learn:
@@ -156,7 +156,6 @@ collections:
     lab/journals:
     lab/research:
     lab/pages:
-    lab/texts:
     vtx:
       duplicate: 59
 

@@ -323,7 +323,7 @@ if __name__ == "__main__":
         inputs = build_inputs(stage)
         ai.train(
             train_data=inputs,
-            batch_size=stage.get("batch_size", 1024),
+            batch_size=stage.get("batch_size", 1),
             num_steps=stage.get("num_steps", 33333),
             generate_every=123,
             save_every=1000,

@@ -41,9 +41,9 @@ Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
 - Clone this repo.
 - Install Docker.
 - `git submodule init` to fetch remote datasets.
-- Place configurations into lab/config.yml. ([default.yml](./vtx/default.yml))
-- Put credentials into a .env file at the root of this project. ([example.env](./example.env))
+- Place configurations into vtx/config.yml. ([default.yml](./vtx/default.yml))
 - Put new datasets into lab/{dataset_name}. Also specify them in config.yml.
+- Put credentials into a .env file at the root of this project. ([example.env](./example.env))
 - Use VSCode tasks as a reference.
 - The "build" task will build a Docker image from source files.
 - The "i" task is used for data retrieval and preparation tasks.

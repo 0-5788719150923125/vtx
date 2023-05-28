@@ -2,6 +2,7 @@
 __pycache__
 gen/*
 node_modules
+vtx/config.yml
 vtx/models/*
 lab/*
 lab/logseq/*

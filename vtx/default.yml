@@ -1,6 +1,6 @@
 # This is a default configuration file, with some basic settings to get you started
 # DO NOT modify this file directly. Instead, create a file called "config.yml" in
-# the {project_root}/lab directory, and apply your settings there.
+# the {project_root}/vtx directory, and apply your settings there.
 # Both files will be merged at runtime, with your custom config file taking priority.
 
 # Most of these services require some form of authentication. API keys and credentials should be
@@ -158,6 +158,7 @@ collections:
     lab/pages:
     lab/texts:
     vtx:
+      duplicate: 59
 
 # :: Connect your AI to Reddit.
 # :: This requires the creation of a "personal use script," here:

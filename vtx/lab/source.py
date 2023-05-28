@@ -58,7 +58,7 @@ async def polling(channel):
                 propulsion
                 + str(bot_id)
                 + ship
-                + f" You have found the Source of all creation. How may we assist you today?.",
+                + f" You are in the Source of All Areation. How may we assist you today?",
             ]
 
             context = prompt + messages[channel]

@@ -215,8 +215,8 @@ if __name__ == "__main__":
 
                     while duplicate >= 0:
                         print(
-                            bc.FOLD
-                            + "loading "
+                            "loading "
+                            + bc.FOLD
                             + dataset
                             + "/"
                             + str(duplicate)
@@ -283,7 +283,7 @@ if __name__ == "__main__":
 
                 else:
                     print(
-                        bc.ROOT + dataset + " is already loaded into memory" + ad.TEXT
+                        bc.ROOT + dataset + ad.text + " is already loaded into memory"
                     )
 
         # Merge all tokenized datasets into a single dataset for training

@@ -29,15 +29,12 @@ async def subscribe(subreddit):
 
             subreddit = await reddit.subreddit(subreddit, fetch=True)
             async for comment in subreddit.stream.comments(skip_existing=True):
-                roll = random.random()
-                if roll >= chance:
-                    return
-
                 await comment.submission.load()
                 parent = await comment.parent()
                 submission_title = comment.submission.title
                 submission_body = comment.submission.selftext[:222]
                 parent_text = None
+                roll = random.random()
                 if isinstance(parent, asyncpraw.models.Submission):
                     parent_text = (
                         str(parent.title) + " => " + str(parent.selftext[:222])
@@ -46,8 +43,14 @@ async def subscribe(subreddit):
                     await parent.load()
                     await parent.refresh()
                     if parent.author == os.environ["REDDITAGENT"]:
-                        continue
+                        print(
+                            "i should respond to this, because they were responding to me"
+                        )
+                        roll = roll * len("ACTG")  # the optimal number of children
                     parent_text = str(parent.body)
+
+                if roll >= chance:
+                    return
 
                 await comment.load()
                 if comment.author == os.environ["REDDITAGENT"]:
@@ -146,5 +149,6 @@ def transformer(group):
         f'{pronoun} {types} {verb}, "{group[1]}"',
         f'Penny {verb}, "{group[1]}"',
         f'{group[0]} {verb}, "{group[1]}"',
+        f"{group[1]}",
     ]
     return random.choice(responses)

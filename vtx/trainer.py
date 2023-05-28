@@ -324,7 +324,7 @@ if __name__ == "__main__":
             train_data=inputs,
             batch_size=stage.get("batch_size", 1024),
             num_steps=stage.get("num_steps", 33333),
-            generate_every=333,
+            generate_every=33,
             save_every=1000,
             n_gpu=1,
             output_dir=output_dir,

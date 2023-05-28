@@ -69,6 +69,7 @@ def hash_directory(path):
     return sha1.hexdigest()
 
 
+# Fetch a random number
 def get_quantum_seed(length: int = 2, data_type: str = "uint16"):
     try:
         response = requests.get(

@@ -52,12 +52,12 @@ async def main(loop):
         await asyncio.sleep(66.6666)
 
 
+# Start the main loop in a thread
 def loop_in_thread(loop):
     asyncio.set_event_loop(loop)
     loop.run_until_complete(main(loop))
 
 
-# Start the main loop in a thread
 loop = asyncio.get_event_loop()
 t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
 

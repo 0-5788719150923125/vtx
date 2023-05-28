@@ -65,6 +65,7 @@ def join_files(
         "/lab/opencog/learn/learn-lang-diary",
         "/vtx/models",
         "/vtx/__pycache__",
+        "/vtx/lab/__pycache__",
     ]
 
     suffixes = [

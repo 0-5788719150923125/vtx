@@ -41,7 +41,7 @@ async def subscribe(subreddit):
                         print(
                             "i should respond to this, because they were responding to me"
                         )
-                        roll = roll * len("ACTG")  # the optimal number of children
+                        roll = roll / len("ACTG")  # the optimal number of children
                     parent_text = str(parent.body)
 
                 if roll >= chance:

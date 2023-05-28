@@ -37,6 +37,7 @@ async def subscribe(subreddit):
                 else:
                     await parent.load()
                     await parent.refresh()
+                    print(parent.author)
                     if parent.author == os.environ["REDDITAGENT"]:
                         print(
                             "i should respond to this, because they were responding to me"

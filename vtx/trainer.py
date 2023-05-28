@@ -10,9 +10,9 @@ from transformers import AutoTokenizer
 from pytorch_lightning import loggers
 from utils import ad, bc, config, get_quantum_seed, hash_directory
 
-os.environ["TOKENIZERS_PARALLELISM"] = "true"
 cache_path = "/tmp/torch"
 os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 if os.path.exists(cache_path):
     shutil.rmtree(cache_path)

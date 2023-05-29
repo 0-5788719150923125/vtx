@@ -48,7 +48,7 @@ async def polling(channel):
                 messages[channel].append(
                     propulsion + str(get_identity()) + ship + " " + state["message"]
                 )
-                print(bc.ROOT + "ONE@ROOT:" + ad.TEXT + " " + state["message"])
+                print(bc.FOLD + "PEN@ROOT:" + ad.TEXT + " " + state["message"])
 
             bot_id = config["source"][channel].get("bias", get_identity())
 

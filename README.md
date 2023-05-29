@@ -2,7 +2,7 @@
 
 "What is this place?" you ask.
 
-Mike shakes his head and laughs, %HESITATION% "You wouldn't understand."
+Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 "Go play in the lab."
 

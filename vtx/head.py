@@ -9,7 +9,7 @@ import re
 import gc
 import torch
 import time
-from utils import ad, bc, config, propulsion, ship
+from utils import ad, bc, config, get_quantum_seed, propulsion, ship
 from aitextgen import aitextgen
 import requests
 import logging
@@ -209,7 +209,9 @@ def gen(
                 renormalize_logits=True,
                 eos_token_id=eos,
                 max_time=60,
-                seed=random.randint(0, 2**32 - 1),
+                seed=random.choice(
+                    [random.randint(0, 2**32 - 1), get_quantum_seed()]
+                ),
             )
 
             completion = ai.generate(

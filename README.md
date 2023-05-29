@@ -6,6 +6,10 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 "Go play in the lab."
 
+# Goals
+
+Our goal is to make the simplest, most basic framework for building robots. It's an opinionated approach.
+
 # API
 
 - http://localhost:9666/channel

@@ -20,6 +20,8 @@ async def polling(channel):
 
             deep = requests.get("http://ctx:9666/channel/" + channel)
             state = json.loads(deep.text)
+            if deep.status_code != "200":
+                state["message"] = "ERROR: Me Found."
 
             if channel not in messages:
                 messages[channel] = []

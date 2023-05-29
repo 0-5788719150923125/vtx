@@ -84,6 +84,7 @@ def join_files(
         "pdf",
         "png",
         "pyc",
+        "related.tex",
         "resources/content.xml",
         "resources/meta.xml",
         "sqlite",
@@ -115,7 +116,10 @@ def join_files(
                     skip = True
                     continue
             if skip == True:
+                print(bc.CORE + "skipping " + ad.TEXT + str(file))
                 continue
+            else:
+                print("loading " + str(file))
 
             if line_by_line == True:
                 datasets[file] = TokenDataset(

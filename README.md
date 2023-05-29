@@ -30,8 +30,8 @@ Our goal is to make the simplest, most basic framework for building robots. It's
 
 # Dashboard
 
-- http://localhost:6006
-- [Cockpit](http://localhost:9667)
+- [lab](http://localhost:6006)
+- [src](http://localhost:9666)
 
 # Mirrors
 
@@ -66,3 +66,4 @@ Our goal is to make the simplest, most basic framework for building robots. It's
 - The model should be in a constant state of training. If you are freezing your model, then it is not learning.
 - A model that is able to remain coherent at extremely high temperatures, is an extremely powerful model.
 - If you get your RNG from a quantum source, you are protected from malicious bit flips.
+- If you can make it more friendly, I'm down for it.

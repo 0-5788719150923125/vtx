@@ -217,6 +217,7 @@ def gen(
                 generation_config=params,
                 return_as_list=True,
             )
+
             active = False
             generation = completion[0][len(history) :]
             mentions = "(?:[<][@])(\d+\s*\d*)(?:[>])"

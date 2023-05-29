@@ -85,7 +85,7 @@
       "type": "pickString",
       "id": "env",
       "description": "Which model should I train?",
-      "options": ["heart", "mind", "soul", "toe", "src"]
+      "options": ["mind", "heart", "soul", "toe", "src"]
     },
     {
       "type": "pickString",
@@ -103,7 +103,7 @@
       "type": "pickString",
       "id": "ship",
       "description": "Which ship should I enter?",
-      "options": ["vtx", "ctx", "pet", "pit", "shm"]
+      "options": ["vtx", "ctx", "pet", "pit"]
     }
   ]
 }

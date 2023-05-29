@@ -105,7 +105,7 @@ heart:
 
 mind:
   info: use your head
-  model: RWKV/rwkv-4-1b5-pile
+  model: bigscience/bloom-560m
   max_new_tokens: 111
   to_gpu: False
 

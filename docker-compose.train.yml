@@ -9,8 +9,3 @@ services:
             - driver: nvidia
               capabilities: [gpu]
               device_ids: ['1']
-
-  ctx:
-    environment:
-      CHANNELS: 'hive,support,alpha,mars,opencog,microsoft,apple,openai,google,eve'
-      WEBUI: enabled

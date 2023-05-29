@@ -17,7 +17,7 @@ tasks = {}
 @asyncio.coroutine
 async def main(loop):
     head.ai = await head.loader()
-    await head.write()
+    # await head.write()
     while True:
         # Prune completed tasks
         for task in tasks.copy():

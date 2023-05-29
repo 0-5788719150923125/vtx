@@ -178,8 +178,12 @@ def gen(
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
             prompt = propulsion + str(bias) + ship
 
-    # try to complete the prompt
-    # https://huggingface.co/docs/transformers/main_classes/text_generation
+    verified = random.choice([True, False])
+
+    seed = random.randint(0, 2**32 - 1)
+    if verified == True:
+        seed = get_quantum_seed()
+
     attempt = 1
     max_attempts = 9
     while attempt <= max_attempts:
@@ -194,12 +198,8 @@ def gen(
             if attempt > 0:
                 temperature = temperature - (0.1 * attempt)
 
-            verify = random.choice([True, False])
-
-            seed = random.randint(0, 2**32 - 1)
-            if verify == True:
-                seed = get_quantum_seed()
-
+            # try to complete the prompt
+            # https://huggingface.co/docs/transformers/main_classes/text_generation
             params = GenerationConfig(
                 n=1,
                 do_sample=True,
@@ -236,7 +236,7 @@ def gen(
             ):
                 raise Exception("failed to generate a response")
             else:
-                output = [group[2], group[3]]
+                output = [group[2], group[3], verified]
                 break
 
         except Exception as e:
@@ -244,7 +244,7 @@ def gen(
             if attempt > max_attempts:
                 asyncio.run(loader(focus))
                 context = default_context.copy()
-                output = ["error", "ERROR: Me Found."]
+                output = ["error", "ERROR: Me Found.", False]
 
     active = False
     return output

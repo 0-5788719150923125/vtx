@@ -90,7 +90,13 @@ async def polling(channel):
 
             messages[channel].append(propulsion + str(bot_id) + ship + " " + sanitized)
 
-            print(bc.CORE + "INK@CORE:" + ad.TEXT + " " + sanitized)
+            color = bc.CORE
+            responder = "INK@CORE:"
+            if generation[2]:
+                color = bc.ROOT
+                responder = "ONE@ROOT:"
+
+            print(color + responder + ad.TEXT + " " + sanitized)
 
         except Exception as e:
             print(e)

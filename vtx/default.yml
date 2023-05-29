@@ -172,17 +172,12 @@ collections:
 #     type: new
       # Do not attempt to fetch more submissions from this subreddit.
 #     skip: True
-      # Whether or not your bot should attempt to "converse" with others in the comments' section.
-#     watch: True
-      # The rate at which your bot will attempt to respond.
+      # The rate at which your bot should attempt to "converse" with others in the comments' section.
 #     chance: 0.001
 #   Kunism:
 #     limit: 500
-#     watch: True
 #     chance: 0.5
 #   NoRules:
-#     skip: False
-#     watch: True
 #     chance: 0.0666
 
 # :: Connect your AI to Discord.

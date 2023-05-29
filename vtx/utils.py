@@ -76,13 +76,10 @@ def get_quantum_seed(length: int = 2, data_type: str = "uint16"):
             f"https://qrng.anu.edu.au/API/jsonI.php?length={str(length)}&type={data_type}"
         )
         bullet = json.loads(response.text)
-        if bullet["success"] == True:
+        if bullet["success"] == True and len(bullet["data"] == 1):
             return int(bullet["data"][0]) * int(bullet["data"][1])
-        else:
-            print(response.text)
         raise Exception("failed to connect to the mainframe")
-    except Exception as e:
-        print(e)
+    except:
         return random.randint(0, 2**32 - 1)
 
 

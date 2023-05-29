@@ -194,6 +194,12 @@ def gen(
             if attempt > 0:
                 temperature = temperature - (0.1 * attempt)
 
+            verify = random.choice([True, False])
+
+            seed = random.randint(0, 2**32 - 1)
+            if verify == True:
+                seed = get_quantum_seed()
+
             params = GenerationConfig(
                 n=1,
                 do_sample=True,
@@ -202,16 +208,13 @@ def gen(
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 penalty_alpha=0.6,
-                top_k=3,
-                repetition_penalty=2.42,
-                encoder_repetition_penalty=1.23,
-                no_repeat_ngram_size=12,
+                top_k=4,
+                repetition_penalty=1.42,
+                no_repeat_ngram_size=3,
                 renormalize_logits=True,
                 eos_token_id=eos,
                 max_time=60,
-                seed=random.choice(
-                    [random.randint(0, 2**32 - 1), get_quantum_seed()]
-                ),
+                seed=seed,
             )
 
             completion = ai.generate(

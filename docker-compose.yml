@@ -29,7 +29,6 @@ services:
     image: ghcr.io/0-5788719150923125/src:latest
     restart: 'always'
     environment:
-      CHANNELS: 'hive,support'
       WEBUI: disabled
       ANONYMOUS: 'true'
     ports:

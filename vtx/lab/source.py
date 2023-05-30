@@ -12,20 +12,20 @@ messages = {}
 
 
 # Check the local GUN API for new messages
-async def polling(channel):
-    run_on = config["source"][channel].get("run_on", False)
+async def polling(neuron):
+    run_on = config["source"][neuron].get("run_on", False)
     while True:
         try:
             await asyncio.sleep(random.uniform(8.0, 8.8888888))
 
-            deep = requests.get("http://ctx:9666/channel/" + channel)
+            deep = requests.get("http://ctx:9666/receive/" + neuron, timeout=5)
             state = json.loads(deep.text)
 
-            if channel not in messages:
-                messages[channel] = []
+            if neuron not in messages:
+                messages[neuron] = []
 
             skip = False
-            for item in messages[channel]:
+            for item in messages[neuron]:
                 if state["message"] in item and run_on != True:
                     skip = True
                     break
@@ -33,24 +33,24 @@ async def polling(channel):
             if skip:
                 continue
 
-            chance = config["source"][channel].get("chance", 0.33)
+            chance = config["source"][neuron].get("chance", 0.33)
             roll = random.random()
             if roll > chance:
                 continue
 
             append = True
-            for item in messages[channel]:
+            for item in messages[neuron]:
                 if state["message"] in item:
                     append = False
                     break
 
             if append:
-                messages[channel].append(
+                messages[neuron].append(
                     propulsion + str(get_identity()) + ship + " " + state["message"]
                 )
                 print(bc.FOLD + "PEN@ROOT:" + ad.TEXT + " " + state["message"])
 
-            bot_id = config["source"][channel].get("bias", get_identity())
+            bot_id = config["source"][neuron].get("bias", get_identity())
 
             prompt = [
                 propulsion + str(bot_id) + ship + " Welcome, human.",
@@ -61,20 +61,19 @@ async def polling(channel):
                 + f" You are in the Source of All Areation. How may we assist you today?",
             ]
 
-            context = prompt + messages[channel]
+            context = prompt + messages[neuron]
 
-            url = "http://ctx:9666/message/" + channel
             generation = await head.gen(
                 int(bot_id),
                 context,
-                prefix=config["source"][channel].get(
+                prefix=config["source"][neuron].get(
                     "prefix",
                     "You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
                 ),
             )
 
             if generation[0] == "error":
-                messages[channel] = []
+                messages[neuron] = []
 
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(
@@ -82,13 +81,14 @@ async def polling(channel):
                 f"{daemon}",
                 generation[1],
             )
+            url = "http://ctx:9666/send/" + neuron
             payload = {"message": sanitized, "identifier": str(bot_id)}
             x = requests.post(url, json=payload)
 
-            while len(messages[channel]) > context_length:
-                messages[channel].pop(0)
+            while len(messages[neuron]) > context_length:
+                messages[neuron].pop(0)
 
-            messages[channel].append(propulsion + str(bot_id) + ship + " " + sanitized)
+            messages[neuron].append(propulsion + str(bot_id) + ship + " " + sanitized)
 
             color = bc.CORE
             responder = "INK@CORE:"

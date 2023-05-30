@@ -59,7 +59,7 @@ async def polling(neuron):
                 propulsion
                 + str(bot_id)
                 + ship
-                + f" You are in the Source of All Areation. How may we assist you today?",
+                + f" You are are speaking to the source of all creation. Make it quick.",
             ]
 
             context = prompt + messages[neuron]

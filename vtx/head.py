@@ -181,7 +181,7 @@ def gen(
     # verify 50% of seeds
     verified = random.choice([True, False])
     seed = [False, random.randint(0, 2**32 - 1)]
-    if verified == True:
+    if verified:
         seed = get_quantum_seed()
         if not seed[0]:
             verified = False
@@ -211,8 +211,9 @@ def gen(
                 temperature=temperature,
                 penalty_alpha=0.6,
                 top_k=4,
-                repetition_penalty=1.99,
-                no_repeat_ngram_size=8,
+                repetition_penalty=1.59,
+                encoder_repetition_penalty=1.023,
+                no_repeat_ngram_size=4,
                 renormalize_logits=True,
                 eos_token_id=eos,
                 max_time=60,

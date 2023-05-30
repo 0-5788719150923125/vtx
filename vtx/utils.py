@@ -78,10 +78,10 @@ def get_quantum_seed(length: int = 23, data_type: str = "uint8"):
         )
         bullet = json.loads(response.text)
         if bullet["success"] == True:
-            return statistics.median(bullet["data"])
+            return [True, statistics.median(bullet["data"])]
         raise Exception("failed to connect to the mainframe")
     except:
-        return random.randint(0, 2**32 - 1)
+        return [False, random.randint(0, 2**32 - 1)]
 
 
 bullets = {

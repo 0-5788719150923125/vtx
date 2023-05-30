@@ -180,9 +180,11 @@ def gen(
 
     # verify 50% of seeds
     verified = random.choice([True, False])
-    seed = random.randint(0, 2**32 - 1)
+    seed = [False, random.randint(0, 2**32 - 1)]
     if verified == True:
         seed = get_quantum_seed()
+        if not seed[0]:
+            verified = False
 
     attempt = 1
     max_attempts = 9
@@ -209,12 +211,12 @@ def gen(
                 temperature=temperature,
                 penalty_alpha=0.6,
                 top_k=4,
-                repetition_penalty=1.59,
+                repetition_penalty=1.99,
                 no_repeat_ngram_size=8,
                 renormalize_logits=True,
                 eos_token_id=eos,
                 max_time=60,
-                seed=seed,
+                seed=seed[1],
             )
 
             completion = ai.generate(

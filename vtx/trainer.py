@@ -347,6 +347,6 @@ if __name__ == "__main__":
             scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
             num_cycles=stage.get("num_cycles", 0.5),
             progress_bar_refresh_rate=1,
-            seed=get_quantum_seed(),
+            seed=get_quantum_seed()[1],
             stage=i,
         )

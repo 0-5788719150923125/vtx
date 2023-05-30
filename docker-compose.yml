@@ -45,6 +45,7 @@ services:
   # pet:
   #   image: learningathome/petals:main
   #   command: python -m petals.cli.run_server bigscience/bloom-7b1-petals --cache_dir /bloom --num_blocks 1 --torch_dtype float32
+  #   command: python -m petals.cli.run_server nguyenlab/bloom-560m-petals --cache_dir /bloom --num_blocks 1 --torch_dtype float32
   #   restart: 'no'
   #   network_mode: 'host'
   #   ipc: host

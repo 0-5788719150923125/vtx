@@ -7,6 +7,7 @@ import yaml
 import json
 import hashlib
 import os
+import statistics
 
 propulsion = "¶"
 ship = ":>"
@@ -70,14 +71,14 @@ def hash_directory(path):
 
 
 # Fetch a random number
-def get_quantum_seed(length: int = 2, data_type: str = "uint16"):
+def get_quantum_seed(length: int = 23, data_type: str = "uint8"):
     try:
         response = requests.get(
             f"https://qrng.anu.edu.au/API/jsonI.php?length={str(length)}&type={data_type}"
         )
         bullet = json.loads(response.text)
-        if bullet["success"] == True and len(bullet["data"] == 1):
-            return int(bullet["data"][0]) * int(bullet["data"][1])
+        if bullet["success"] == True:
+            return statistics.median(bullet["data"])
         raise Exception("failed to connect to the mainframe")
     except:
         return random.randint(0, 2**32 - 1)

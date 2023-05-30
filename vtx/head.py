@@ -66,7 +66,7 @@ def loader(target=None):
         base = model.get("model", None)
 
     try:
-        print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + "focused on the " + target)
+        print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + target)
         logging.getLogger("transformers").setLevel(logging.ERROR)
         ai = aitextgen(
             model=model.get("model", None),
@@ -81,7 +81,7 @@ def loader(target=None):
             padding_side="left",
         )
         logging.getLogger("transformers").setLevel(logging.INFO)
-        print(bc.FOLD + "PEN@FOLD: " + ad.TEXT + model["info"])
+        print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + model["info"])
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
     except Exception as e:
         print(e)
@@ -178,8 +178,8 @@ def gen(
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
             prompt = propulsion + str(bias) + ship
 
+    # verify 50% of seeds
     verified = random.choice([True, False])
-
     seed = random.randint(0, 2**32 - 1)
     if verified == True:
         seed = get_quantum_seed()
@@ -209,8 +209,8 @@ def gen(
                 temperature=temperature,
                 penalty_alpha=0.6,
                 top_k=4,
-                repetition_penalty=1.42,
-                no_repeat_ngram_size=3,
+                repetition_penalty=1.59,
+                no_repeat_ngram_size=8,
                 renormalize_logits=True,
                 eos_token_id=eos,
                 max_time=60,

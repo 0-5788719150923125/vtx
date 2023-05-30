@@ -28,7 +28,7 @@ class Client(discord.Client):
         except Exception as e:
             print(e)
 
-        print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + " => ".join(guilds))
+        print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
 
     async def setup_hook(self) -> None:
         self.discord_task = self.loop.create_task(self.think())
@@ -101,7 +101,7 @@ class Client(discord.Client):
                 )
                 author_id = author_id[::-1]
             head.build_context(propulsion + author_id + ship + " " + message.content)
-            print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + message.content)
+            print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + message.content)
 
         # generate responses
         if "gen" in message.content:
@@ -156,7 +156,7 @@ class Client(discord.Client):
             if len(output) > 2000:
                 output = output[:1997] + "..."
 
-            print(bc.CORE + "INK@DISCORD: " + ad.TEXT + output)
+            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + output)
 
             if reply == True:
                 return_message = await message.reply(output)
@@ -258,9 +258,9 @@ async def subscribe():
                 propulsion + str(after.author.id) + ship + " " + after.content
             )
             if after.author.id != client.user.id:
-                print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + after.content)
+                print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + after.content)
             else:
-                print(bc.CORE + "INK@DISCORD: " + ad.TEXT + after.content)
+                print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + after.content)
 
     # Listen for pickles
     @client.event

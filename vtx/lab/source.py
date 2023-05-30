@@ -48,7 +48,8 @@ async def polling(neuron):
                 messages[neuron].append(
                     propulsion + str(get_identity()) + ship + " " + state["message"]
                 )
-                print(bc.FOLD + "PEN@ROOT:" + ad.TEXT + " " + state["message"])
+                tag = random.choice(["ONE", "TWO"])
+                print(bc.FOLD + f"{tag}@FOLD:" + ad.TEXT + " " + state["message"])
 
             bot_id = config["source"][neuron].get("bias", get_identity())
 
@@ -91,7 +92,7 @@ async def polling(neuron):
             messages[neuron].append(propulsion + str(bot_id) + ship + " " + sanitized)
 
             color = bc.CORE
-            responder = "INK@CORE:"
+            responder = "ONE@CORE:"
             if generation[2]:
                 color = bc.ROOT
                 responder = "ONE@ROOT:"

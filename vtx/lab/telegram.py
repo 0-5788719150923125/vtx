@@ -21,7 +21,7 @@ async def subscribe() -> None:
         head.build_context(
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )
-        print(bc.FOLD + "PEN@TELEGRAM: " + ad.TEXT + message["text"])
+        print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
         if random.randint(0, 9) == 0:
             return
         bias = config["telegram"].get("bias", get_identity())
@@ -36,7 +36,7 @@ async def subscribe() -> None:
             return
         await message.answer(response[1])
         head.build_context(propulsion + str(bias) + ship + " " + response[1])
-        print(bc.CORE + "INK@TELEGRAM: " + ad.TEXT + response[1])
+        print(bc.CORE + "ONE@TELEGRAM: " + ad.TEXT + response[1])
 
     dp.register_message_handler(chat_bot)
     await asyncio.gather(

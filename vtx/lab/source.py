@@ -99,8 +99,8 @@ async def polling(neuron):
 
             print(color + responder + ad.TEXT + " " + sanitized)
 
-        except Exception as e:
-            print(e)
+        except:
+            pass
 
 
 async def subscribe(channel) -> None:

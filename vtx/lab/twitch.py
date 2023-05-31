@@ -69,7 +69,7 @@ async def subscribe():
                 output = await head.gen(bias=bias, ctx=context, prefix=prefix)
                 await asyncio.sleep(random.choice([7, 9]))
                 print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
-                lab.source.send(output[1], "alpha")
+                lab.source.send(output[1], "ibm")
                 await chat.send_message(self.channel, output[1])
 
             chat.register_event(ChatEvent.READY, on_ready)

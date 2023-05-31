@@ -78,6 +78,8 @@ def fetch_from_discord():
 def transform_author(author):
     if str(author["id"]) == "975174695399854150":  # Eliza
         return str(author["id"])
+    elif str(author["id"]) == "315826602187554816":  # Kitsunetsuki
+        return str(author["id"])
     elif str(author["id"]) == "1055993037077106718":  # Samn
         return str(get_identity())
     elif "Ghost-" in author["name"]:
@@ -236,6 +238,9 @@ def fetch_from_reddit():
     # For every sub in config, iterate over options, then download content
     for sub in config["reddit"]:
         skip = False
+        if sub == "prompt":
+            continue
+
         if "skip" in config["reddit"][sub]:
             skip = config["reddit"][sub]["skip"]
 

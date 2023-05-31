@@ -151,12 +151,14 @@ collections:
     lab/opencog/learn:
     lab/opencog/atomspace:
     lab/aitextgen:
+      duplicate: 4
     lab/source:
     lab/fold:
     lab/ink:
     lab/pen:
     lab/journals:
     lab/research:
+      duplicate: 2
     lab/pages:
     vtx:
       duplicate: 2
@@ -218,4 +220,4 @@ collections:
 # twitch:
 #   bias: 806051627198709760
 #   prefix: Your name is Prism, the Architect. Please answer questions for your audience.
-#   neuron: alpha
+#   neuron: toe

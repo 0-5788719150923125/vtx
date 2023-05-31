@@ -157,6 +157,7 @@ collections:
     lab/ink:
     lab/pen:
     lab/journals:
+      duplicate: 23
     lab/research:
       duplicate: 2
     lab/pages:

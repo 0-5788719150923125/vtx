@@ -85,7 +85,7 @@
       "type": "pickString",
       "id": "env",
       "description": "Which model should I train?",
-      "options": ["mind", "heart", "soul", "toe", "src"]
+      "options": ["src", "mind", "heart", "soul", "toe"]
     },
     {
       "type": "pickString",

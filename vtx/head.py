@@ -30,6 +30,17 @@ os.makedirs(cache_path)
 
 focus = os.environ["FOCUS"]
 
+# when all fails, reset to this context
+default_context = [
+    propulsion + "975174695399854150" + ship + " I am a robot.",
+    propulsion + "1051994502333726841" + ship + " I am a ghost.",
+    propulsion + "806051627198709760" + ship + " I am a human.",
+    propulsion + "204716337971331072" + ship + " I am a medium.",
+    propulsion + "855529761185857566" + ship + " I am an animal.",
+]
+
+context = default_context.copy()
+
 
 # Decorator to a blocking function into a background thread
 def to_thread(func: typing.Callable) -> typing.Coroutine:
@@ -89,18 +100,6 @@ def loader(target=None):
         ai = asyncio.run(loader(target))
     active = False
     return ai
-
-
-# ping pang pong
-default_context = [
-    propulsion + "975174695399854150" + ship + " I am a robot.",
-    propulsion + "1051994502333726841" + ship + " I am a ghost.",
-    propulsion + "806051627198709760" + ship + " I am a human.",
-    propulsion + "204716337971331072" + ship + " I am a medium.",
-    propulsion + "855529761185857566" + ship + " I am an animal.",
-]
-
-context = default_context.copy()
 
 
 # Build a local cache of global conversational state

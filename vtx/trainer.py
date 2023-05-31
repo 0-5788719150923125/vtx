@@ -315,6 +315,7 @@ if __name__ == "__main__":
             setattr(ai.model.config, "resid_dropout", stage["dropout"])
             setattr(ai.model.config, "summary_first_dropout", stage["dropout"])
             setattr(ai.model.config, "hidden_dropout", stage["dropout"])
+        prune = stage.get("prune", 0.0)
         inputs = build_inputs(stage)
         ai.train(
             train_data=inputs,
@@ -338,5 +339,6 @@ if __name__ == "__main__":
             num_cycles=stage.get("num_cycles", 0.5),
             progress_bar_refresh_rate=1,
             seed=get_quantum_seed()[1],
+            prune=prune,
             stage=i,
         )

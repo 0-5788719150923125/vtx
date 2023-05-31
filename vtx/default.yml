@@ -92,6 +92,8 @@ soul:
         block_size: 444
         # This key is currently broken. Anything other than "0" will prevent the network from learning.
         warmup_steps: 0
+        # Remove a percentage of neurons during training.
+        prune: 0.0
         # Takes an equal number of samples from each dataset, so as not to bias toward one or the other.
         equalize_datasets: False
         # Place each dataset into a folder at {project_root}/lab, then list them here.

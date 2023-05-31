@@ -37,7 +37,7 @@ class Client(discord.Client):
     async def think(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            delay = random.randint(21600, 86400)
+            delay = random.randint(900, 86400)
             await asyncio.sleep(delay)
             try:
                 channels = await get_all_channels()

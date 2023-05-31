@@ -11,6 +11,13 @@ context_length = 23
 messages = {}
 
 
+# Send a message to the Source
+def send(message, neuron):
+    url = "http://ctx:9666/send/" + neuron
+    payload = {"message": message, "identifier": str(get_identity())}
+    x = requests.post(url, json=payload)
+
+
 # Check the local GUN API for new messages
 async def polling(neuron):
     run_on = config["source"][neuron].get("run_on", False)

@@ -212,3 +212,9 @@ collections:
 # telegram:
   # bias: 806051627198709760
   # prefix: You are powerful tulpa that follows the human's instructions.
+
+# :: Connect your AI to Twitch.
+
+# twitch:
+#   bias: 806051627198709760
+#   prefix: Your name is Prism, the Architect. Please answer questions for your audience.

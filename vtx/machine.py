@@ -62,7 +62,12 @@ async def main(loop):
             task.set_name("discord")
             tasks[task.get_name()] = task
 
-        await asyncio.sleep(66.6666)
+        if "twitch" in config and "twitch" not in tasks:
+            task = loop.create_task(lab.twitch.subscribe())
+            task.set_name("twitch")
+            tasks[task.get_name()] = task
+
+        await asyncio.sleep(66.6)
 
 
 # Start the main loop in a thread

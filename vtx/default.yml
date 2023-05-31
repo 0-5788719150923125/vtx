@@ -164,6 +164,7 @@ collections:
 # :: https://www.reddit.com/prefs/apps
 
 # reddit:
+    # prompt: On the 5th of September,
     # For each subreddit you want to subscribe to.
 #   SubSimGPT2Interactive:
       # While fetching data from this subreddit, limit to X number of submissions.

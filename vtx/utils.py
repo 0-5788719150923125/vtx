@@ -38,6 +38,16 @@ class ad:
     TEXT = "\033[0m"
 
 
+# Get the full path of every file in a directory
+def list_full_paths(directory):
+    fname = []
+    for root, d_names, f_names in os.walk(directory):
+        for f in f_names:
+            fname.append(os.path.join(root, f))
+
+    return fname
+
+
 # Generate a pseudo-identity, in the Discord ID format
 def get_identity():
     count = secrets.choice([17, 18])

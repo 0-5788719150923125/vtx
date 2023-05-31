@@ -8,7 +8,7 @@ from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
 from transformers import AutoTokenizer
 from pytorch_lightning import loggers
-from utils import ad, bc, config, get_quantum_seed, hash_directory
+from utils import ad, bc, config, get_quantum_seed, hash_directory, list_full_paths
 
 cache_path = "/tmp/torch"
 os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
@@ -31,18 +31,8 @@ def build_version(version=0):
     return version
 
 
-# Get the full path to every file in a directory
-def list_full_paths(directory):
-    fname = []
-    for root, d_names, f_names in os.walk(directory):
-        for f in f_names:
-            fname.append(os.path.join(root, f))
-
-    return fname
-
-
 # Join every file located in a particular directory
-def join_files(
+def create_dataset(
     path="/vtx",
     tokenizer=None,
     block_size=1024,
@@ -272,7 +262,7 @@ if __name__ == "__main__":
                         shuffle = False
                         if duplicate > 0:
                             shuffle = True
-                        ds = join_files(
+                        ds = create_dataset(
                             path="/" + dataset,
                             tokenizer=tokenizer,
                             block_size=block_size,

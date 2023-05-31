@@ -41,14 +41,19 @@ async def main(loop):
 
         if "reddit" in config:
             for subreddit in config["reddit"]:
-                watch = config["reddit"][subreddit].get("watch", False)
+                try:
+                    watch = config["reddit"][subreddit].get("watch", False)
+                except:
+                    watch = False
                 if watch and "reddit-" + subreddit not in tasks:
                     task = loop.create_task(lab.reddit.subscribe(subreddit))
                     task.set_name("reddit-" + subreddit)
                     tasks[task.get_name()] = task
 
-            if random.random() < 0.0123:
-                task = loop.create_task(lab.reddit.submission())
+            if random.random() < 0.0023:
+                task = loop.create_task(
+                    lab.reddit.submission(config["reddit"]["prompt"])
+                )
                 task.set_name("reddit-submission")
                 tasks[task.get_name()] = task
 

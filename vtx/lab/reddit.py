@@ -8,8 +8,7 @@ import head
 
 
 # Create a submission.
-async def submission():
-    print("trying submission")
+async def submission(prompt: str = "On the 5th of September,"):
     try:
         async with asyncpraw.Reddit(
             client_id=os.environ["REDDITCLIENT"],
@@ -20,15 +19,7 @@ async def submission():
         ) as reddit:
             subreddit = await reddit.subreddit("TheInk")
             title = "On the 5th of September..."
-            print(title)
-            output = await head.predict(
-                """
-  A Reddit submission:
-  # On the 5th of September...
-  ## by Ryan
-  On the 5th of September,"""
-            )
-            print(output)
+            output = await head.predict(str(prompt))
             await subreddit.submit(title=title, selftext=output)
 
     except Exception as e:

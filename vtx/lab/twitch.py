@@ -52,9 +52,10 @@ async def subscribe():
 
             async def on_message(message):
                 print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
+                neuron = config["twitch"].get("neuron", "alpha")
                 if message.user.name == self.username:
                     return
-                lab.source.send(message.text, config["twitch"].get("neuron", "alpha"))
+                lab.source.send(message.text, neuron)
                 prefix = config["twitch"].get(
                     "prefix",
                     "Your name is Prism, the Architect. Please answer questions for your audience.",
@@ -69,7 +70,7 @@ async def subscribe():
                 output = await head.gen(bias=bias, ctx=context, prefix=prefix)
                 await asyncio.sleep(random.choice([7, 9]))
                 print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
-                lab.source.send(output[1], "ibm")
+                lab.source.send(output[1], neuron)
                 await chat.send_message(self.channel, output[1])
 
             chat.register_event(ChatEvent.READY, on_ready)
@@ -81,11 +82,12 @@ async def subscribe():
                 await asyncio.sleep(6.66)
 
     # Usage example
+    channel = os.environ["TWITCHCHANNEL"]
     client_id = os.environ["TWITCHCLIENT"]
     client_secret = os.environ["TWITCHSECRET"]
     oauth_token = os.environ["TWITCHTOKEN"]
-    username = "prismarchitect"
-    channel = "prismarchitect"
 
-    listener = TwitchBot(client_id, client_secret, oauth_token, username, channel)
+    listener = TwitchBot(
+        client_id, client_secret, oauth_token, username=channel, channel=channel
+    )
     await listener.listen()

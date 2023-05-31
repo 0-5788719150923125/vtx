@@ -54,7 +54,7 @@ async def subscribe():
                 print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
                 if message.user.name == self.username:
                     return
-                lab.source.send(message.text, "alpha")
+                lab.source.send(message.text, config["twitch"].get("neuron", "alpha"))
                 prefix = config["twitch"].get(
                     "prefix",
                     "Your name is Prism, the Architect. Please answer questions for your audience.",

@@ -42,7 +42,6 @@ class Client(discord.Client):
             try:
                 channels = await get_all_channels()
                 channel = random.choice(channels)
-                print("=> sending to " + channel.name)
                 messages = [
                     message
                     async for message in self.get_channel(channel.id).history(limit=16)

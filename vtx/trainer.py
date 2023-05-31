@@ -116,7 +116,7 @@ def join_files(
                     skip = True
                     continue
             if skip == True:
-                print(bc.CORE + "skipping " + ad.TEXT + str(file))
+                print("skipping " + bc.CORE + str(file) + ad.TEXT)
                 continue
             else:
                 print("loading " + str(file))

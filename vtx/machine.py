@@ -3,6 +3,7 @@ import threading
 import asyncio
 import time
 from utils import config
+import random
 import head
 import lab
 
@@ -17,7 +18,6 @@ tasks = {}
 @asyncio.coroutine
 async def main(loop):
     head.ai = await head.loader()
-    # await head.write()
     while True:
         # Prune completed tasks
         for task in tasks.copy():
@@ -46,6 +46,11 @@ async def main(loop):
                     task = loop.create_task(lab.reddit.subscribe(subreddit))
                     task.set_name("reddit-" + subreddit)
                     tasks[task.get_name()] = task
+
+            if random.random() < 0.0123:
+                task = loop.create_task(lab.reddit.submission())
+                task.set_name("reddit-submission")
+                tasks[task.get_name()] = task
 
         if "discord" in config and "discord" not in tasks:
             task = loop.create_task(lab.discord.subscribe())

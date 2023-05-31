@@ -7,7 +7,35 @@ import asyncpraw
 import head
 
 
-# Subscribe to a single subreddit
+# Create a submission.
+async def submission():
+    print("trying submission")
+    try:
+        async with asyncpraw.Reddit(
+            client_id=os.environ["REDDITCLIENT"],
+            client_secret=os.environ["REDDITSECRET"],
+            user_agent="u/" + os.environ["REDDITAGENT"],
+            username=os.environ["REDDITAGENT"],
+            password=os.environ["REDDITPASSWORD"],
+        ) as reddit:
+            subreddit = await reddit.subreddit("TheInk")
+            title = "On the 5th of September..."
+            print(title)
+            output = await head.predict(
+                """
+  A Reddit submission:
+  # On the 5th of September...
+  ## by Ryan
+  On the 5th of September,"""
+            )
+            print(output)
+            await subreddit.submit(title=title, selftext=output)
+
+    except Exception as e:
+        print(e)
+
+
+# Subscribe to a single subreddit.
 async def subscribe(subreddit):
     try:
         async with asyncpraw.Reddit(

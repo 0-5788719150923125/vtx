@@ -256,28 +256,15 @@ def gen(
 
 # Generate a completion from bias and context
 @to_thread
-def write(prompt=None):
+def predict(
+    prompt: str = """A push...""",
+):
     global active
 
     while active == True:
         time.sleep(1)
 
     active = True
-
-    prompt = """
-# The 'Frame
-## RECORD
----
-```
-Name: MAINNFRAME
-Alias: ['LAMEFRAME', 'SAMEFRAME', and 177 unknown...]
-Classification: Artificial Intelligence Computer
-Race: Archon
-Gender: Male
-Biological Age: Est. 6000 Earth Years
-Chronological Age: 2,998,145,136,201 light years
-Organizations:
-  - xSquared Labs"""
 
     try:
         logging.getLogger("transformers").setLevel(logging.ERROR)
@@ -309,10 +296,10 @@ Organizations:
 
     logging.getLogger("transformers").setLevel(logging.INFO)
     num = 0
-    path = "/gen/mainnframe-" + str(num) + ".md"
+    path = "/gen/test-" + str(num) + ".md"
     while os.path.exists(path):
         num = num + 1
-        path = "/gen/mainnframe-" + str(num) + ".md"
+        path = "/gen/test-" + str(num) + ".md"
     with open(path, "w") as file:
         file.write(output)
     return output

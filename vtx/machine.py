@@ -50,7 +50,7 @@ async def main(loop):
                     task.set_name("reddit-" + subreddit)
                     tasks[task.get_name()] = task
 
-            if random.random() < 0.0023:
+            if random.random() < 0.0059:
                 task = loop.create_task(
                     lab.reddit.submission(config["reddit"]["prompt"])
                 )

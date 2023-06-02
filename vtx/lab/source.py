@@ -12,9 +12,9 @@ messages = {}
 
 
 # Send a message to the Source
-def send(message, neuron):
+def send(message, neuron, mode: str = "trusted", identifier: str = str(get_identity())):
     url = "http://ctx:9666/send/" + neuron
-    payload = {"message": message, "identifier": str(get_identity())}
+    payload = {"message": message, "identifier": identifier, "mode": mode}
     x = requests.post(url, json=payload)
 
 
@@ -89,9 +89,8 @@ async def polling(neuron):
                 f"{daemon}",
                 generation[1],
             )
-            url = "http://ctx:9666/send/" + neuron
-            payload = {"message": sanitized, "identifier": str(bot_id)}
-            x = requests.post(url, json=payload)
+
+            send(sanitized, neuron, "trusted", str(bot_id))
 
             while len(messages[neuron]) > context_length:
                 messages[neuron].pop(0)

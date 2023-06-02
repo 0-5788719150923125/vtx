@@ -53,9 +53,7 @@ async def subscribe():
             async def on_message(message):
                 print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
                 neuron = config["twitch"].get("neuron", "alpha")
-                lab.source.send(message.text, neuron)
-                if message.user.name == self.username:
-                    return
+                lab.source.send(message.text, neuron, "untrusted")
                 prefix = config["twitch"].get(
                     "prefix",
                     "Your name is Prism, the Architect. Please answer questions for your audience.",
@@ -67,10 +65,12 @@ async def subscribe():
                     f"{propulsion}{bias}{ship} Forty-six and two.",
                     propulsion + (messenger) + ship + " " + message.text,
                 ]
+                if random.random() > 0.666:
+                    return
                 output = await head.gen(bias=bias, ctx=context, prefix=prefix)
                 await asyncio.sleep(random.choice([7, 9]))
                 print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
-                lab.source.send(output[1], neuron)
+                lab.source.send(output[1], neuron, "trusted")
                 await chat.send_message(self.channel, output[1])
 
             chat.register_event(ChatEvent.READY, on_ready)

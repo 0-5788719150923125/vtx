@@ -52,8 +52,8 @@ async def subscribe():
 
             async def on_message(message):
                 print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
-                neuron = config["twitch"].get("neuron", "alpha")
-                lab.source.send(message.text, neuron, "untrusted")
+                focus = config["twitch"].get("focus", "alpha")
+                lab.source.send(message.text, focus, "untrusted")
                 prefix = config["twitch"].get(
                     "prefix",
                     "Your name is Prism, the Architect. Please answer questions for your audience.",
@@ -68,7 +68,7 @@ async def subscribe():
                 output = await head.gen(bias=bias, ctx=context, prefix=prefix)
                 await asyncio.sleep(random.choice([7, 9]))
                 print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
-                lab.source.send(output[1], neuron, "trusted")
+                lab.source.send(output[1], focus, "trusted")
                 await chat.send_message(self.channel, output[1])
 
             chat.register_event(ChatEvent.READY, on_ready)

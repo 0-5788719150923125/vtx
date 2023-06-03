@@ -55,6 +55,10 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 @to_thread
 def loader(target=None):
     global active
+
+    while active == True:
+        time.sleep(1)
+
     active = True
     try:
         global ai

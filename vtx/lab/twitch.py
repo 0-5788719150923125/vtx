@@ -65,8 +65,6 @@ async def subscribe():
                     f"{propulsion}{bias}{ship} Forty-six and two.",
                     propulsion + (messenger) + ship + " " + message.text,
                 ]
-                if random.random() > 0.666:
-                    return
                 output = await head.gen(bias=bias, ctx=context, prefix=prefix)
                 await asyncio.sleep(random.choice([7, 9]))
                 print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")

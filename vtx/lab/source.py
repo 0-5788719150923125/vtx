@@ -25,7 +25,7 @@ async def polling(neuron):
         try:
             await asyncio.sleep(random.uniform(8.0, 8.8888888))
 
-            deep = requests.get("http://ctx:9666/receive/" + neuron, timeout=5)
+            deep = requests.get("http://ctx:9666/receive/" + neuron, timeout=2)
             state = json.loads(deep.text)
 
             if neuron not in messages:
@@ -105,8 +105,9 @@ async def polling(neuron):
 
             print(color + responder + ad.TEXT + " " + sanitized)
 
-        except:
-            pass
+        except Exception as e:
+            print(neuron + " failed to connect")
+            print(e)
 
 
 async def subscribe(channel) -> None:

@@ -55,8 +55,7 @@ async def polling(neuron):
                 messages[neuron].append(
                     propulsion + str(get_identity()) + ship + " " + state["message"]
                 )
-                tag = random.choice(["ONE", "TWO"])
-                print(bc.FOLD + f"{tag}@FOLD:" + ad.TEXT + " " + state["message"])
+                print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
 
             bot_id = config["source"][neuron].get("bias", get_identity())
 

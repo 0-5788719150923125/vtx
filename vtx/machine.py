@@ -2,7 +2,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import threading
 import asyncio
 import time
-from utils import config
+from utils import config, propulsion
 import random
 import head
 import lab
@@ -69,7 +69,7 @@ async def main(loop):
             task = loop.create_task(
                 lab.twitter.send(
                     await head.predict(
-                        f"Generate a Tweet about {topic}:\n\nTweet: ", 66
+                        f"Generate commentary about {topic}:\n\n" + propulsion, 69
                     )
                 )
             )

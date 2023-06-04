@@ -226,3 +226,4 @@ collections:
 # :: Connect your AI to Twitter.
 
 # twitter:
+#   topic: AI alignment

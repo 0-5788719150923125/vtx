@@ -64,6 +64,6 @@ RUN pip install /vtx/lab/aitextgen
 
 # WORKDIR /vtx
 
-CMD ["python3", "main.py"]
+CMD ["python3", "vtx/main.py"]
 
 MAINTAINER R

@@ -13,7 +13,7 @@ source:
   # The channel names to subscribe to.
   hive:
     # Bias toward a Discord user.
-    bias: 806051627198709760
+    # bias: 806051627198709760
 
     # The chance to respond to new messages in this channel.
     chance: 0.33
@@ -114,26 +114,8 @@ mind:
 toe:
   info: it's nailed to the foot
   to_gpu: False
-  max_new_tokens: 333
-  training:
-    resume: False
-    base_model: EleutherAI/pythia-70m
-    stages:
-      - learning_rate: 0.000333
-        num_steps: 88888
-        batch_size: 3
-        num_layers_freeze: 3
-        gradient_accumulation_steps: 6
-        train_transformers_only: False
-        weight_decay: 0.01
-        max_grad_norm: 0.444
-        scheduler: get_linear_schedule_with_warmup
-        num_cycles: 0.5
-        block_size: 444
-        warmup_steps: 0
-        equalize_datasets: False
-        datasets:
-          - default
+  max_new_tokens: 111
+  model: EleutherAI/pythia-70m
 
 # :: Use the following collections of datasets to train your models. Each collection you want
 # :: to use must be specified under your model configuration.

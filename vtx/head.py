@@ -259,9 +259,7 @@ def gen(
 
 # Generate a completion from bias and context
 @to_thread
-def predict(
-    prompt: str = """A push...""",
-):
+def predict(prompt: str = """A push...""", max_new_tokens: int = 1024):
     global active
 
     while active == True:
@@ -276,7 +274,7 @@ def predict(
             prompt=prompt,
             do_sample=True,
             min_length=23,
-            max_new_tokens=1024,
+            max_new_tokens=max_new_tokens,
             temperature=1.23,
             return_as_list=True,
             top_k=4,

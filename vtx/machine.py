@@ -64,6 +64,18 @@ async def main(loop):
             task.set_name("twitch")
             tasks[task.get_name()] = task
 
+        if "twitter" in config and "twitter" not in tasks and random.random() < 0.0059:
+            topic = config["twitter"].get("topic", "AI alignment")
+            task = loop.create_task(
+                lab.twitter.send(
+                    await head.predict(
+                        f"Generate a Tweet about {topic}:\n\nTweet: ", 66
+                    )
+                )
+            )
+            task.set_name("twitter")
+            tasks[task.get_name()] = task
+
         await asyncio.sleep(66.6)
 
 

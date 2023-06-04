@@ -25,7 +25,7 @@ async def polling(neuron):
         try:
             await asyncio.sleep(random.uniform(8.0, 8.8888888))
 
-            deep = requests.get("http://ctx:9666/receive/" + neuron, timeout=2)
+            deep = requests.get("http://ctx:9666/receive/" + neuron, timeout=6)
             state = json.loads(deep.text)
 
             if neuron not in messages:

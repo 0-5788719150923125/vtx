@@ -222,3 +222,7 @@ collections:
 #   bias: 806051627198709760
 #   prefix: Your name is Prism, the Architect. Please answer questions for your audience.
 #   neuron: toe
+
+# :: Connect your AI to Twitter.
+
+# twitter:

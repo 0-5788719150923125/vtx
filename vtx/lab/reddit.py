@@ -151,6 +151,7 @@ async def subscribe(subreddit):
                     + output
                 )
     except Exception as e:
+        print("subreddit at " + str(subreddit))
         print(e)
 
 

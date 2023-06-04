@@ -12,27 +12,27 @@ messages = {}
 
 
 # Send a message to the Source
-def send(message, neuron, mode: str = "trusted", identifier: str = str(get_identity())):
-    url = "http://ctx:9666/send/" + neuron
+def send(message, focus, mode: str = "cos", identifier: str = str(get_identity())):
+    url = "http://ctx:9666/send/" + focus
     payload = {"message": message, "identifier": identifier, "mode": mode}
     x = requests.post(url, json=payload)
 
 
 # Check the local GUN API for new messages
-async def polling(neuron):
-    run_on = config["source"][neuron].get("run_on", False)
+async def polling(focus):
+    run_on = config["source"][focus].get("run_on", False)
     while True:
         try:
             await asyncio.sleep(random.uniform(8.0, 8.8888888))
 
-            deep = requests.get("http://ctx:9666/receive/" + neuron, timeout=6)
+            deep = requests.get("http://ctx:9666/receive/" + focus, timeout=6)
             state = json.loads(deep.text)
 
-            if neuron not in messages:
-                messages[neuron] = []
+            if focus not in messages:
+                messages[focus] = []
 
             skip = False
-            for item in messages[neuron]:
+            for item in messages[focus]:
                 if state["message"] in item and run_on != True:
                     skip = True
                     break
@@ -40,24 +40,24 @@ async def polling(neuron):
             if skip:
                 continue
 
-            chance = config["source"][neuron].get("chance", 0.33)
+            chance = config["source"][focus].get("chance", 0.33)
             roll = random.random()
             if roll > chance:
                 continue
 
             append = True
-            for item in messages[neuron]:
+            for item in messages[focus]:
                 if state["message"] in item:
                     append = False
                     break
 
             if append:
-                messages[neuron].append(
+                messages[focus].append(
                     propulsion + str(get_identity()) + ship + " " + state["message"]
                 )
                 print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
 
-            bot_id = config["source"][neuron].get("bias", get_identity())
+            bot_id = config["source"][focus].get("bias", get_identity())
 
             prompt = [
                 propulsion + str(bot_id) + ship + " Welcome, human.",
@@ -68,19 +68,19 @@ async def polling(neuron):
                 + f" You are are speaking to the source of all creation. Make it quick.",
             ]
 
-            context = prompt + messages[neuron]
+            context = prompt + messages[focus]
 
             generation = await head.gen(
                 int(bot_id),
                 context,
-                prefix=config["source"][neuron].get(
+                prefix=config["source"][focus].get(
                     "prefix",
                     "You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
                 ),
             )
 
             if generation[0] == "error":
-                messages[neuron] = []
+                messages[focus] = []
 
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(
@@ -89,12 +89,12 @@ async def polling(neuron):
                 generation[1],
             )
 
-            send(sanitized, neuron, "trusted", str(bot_id))
+            send(sanitized, focus, "cos", str(bot_id))
 
-            while len(messages[neuron]) > context_length:
-                messages[neuron].pop(0)
+            while len(messages[focus]) > context_length:
+                messages[focus].pop(0)
 
-            messages[neuron].append(propulsion + str(bot_id) + ship + " " + sanitized)
+            messages[focus].append(propulsion + str(bot_id) + ship + " " + sanitized)
 
             color = bc.CORE
             responder = "ONE@CORE:"
@@ -105,7 +105,7 @@ async def polling(neuron):
             print(color + responder + ad.TEXT + " " + sanitized)
 
         except Exception as e:
-            print(neuron + " failed to connect")
+            print(focus + " failed to connect")
             print(e)
 
 

@@ -217,7 +217,7 @@ def gen(
                 repetition_penalty=1.59,
                 encoder_repetition_penalty=1.023,
                 exponential_decay_length_penalty=(42, 1.42),
-                no_repeat_ngram_size=4,
+                no_repeat_ngram_size=5,
                 renormalize_logits=True,
                 eos_token_id=eos,
                 max_time=60,

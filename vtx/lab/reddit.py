@@ -26,8 +26,45 @@ async def submission(prompt: str = "On the 5th of September,"):
         print(e)
 
 
+async def subscribe_submissions(subreddit):
+    try:
+        chance = config["reddit"][subreddit].get("chance", 0.0)
+        if chance <= 0.0:
+            return
+        async with asyncpraw.Reddit(
+            client_id=os.environ["REDDITCLIENT"],
+            client_secret=os.environ["REDDITSECRET"],
+            user_agent="u/" + os.environ["REDDITAGENT"],
+            username=os.environ["REDDITAGENT"],
+            password=os.environ["REDDITPASSWORD"],
+        ) as reddit:
+            subreddit = await reddit.subreddit(subreddit, fetch=True)
+            async for submission in subreddit.stream.submissions(skip_existing=True):
+                if random.random() > chance:
+                    return
+                bias = get_identity()
+                context = [
+                    propulsion
+                    + str(get_identity())
+                    + ship
+                    + " /r/"
+                    + subreddit.display_name,
+                    propulsion + str(bias) + ship + " " + submission.title,
+                    propulsion + str(bias) + ship + " " + submission.selftext,
+                ]
+                output = await head.gen(
+                    ctx=context, prefix="I carefully respond to a submission on Reddit."
+                )
+                response = transformer(output)
+                print(bc.CORE + "ONE@REDDIT: " + ad.TEXT + response)
+                await submission.reply(response)
+
+    except Exception as e:
+        print(e)
+
+
 # Subscribe to a single subreddit.
-async def subscribe(subreddit):
+async def subscribe_comments(subreddit):
     try:
         async with asyncpraw.Reddit(
             client_id=os.environ["REDDITCLIENT"],

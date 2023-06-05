@@ -63,6 +63,7 @@ def create_dataset(
         "bib",
         "bin",
         "eot",
+        "eps",
         "docx",
         "gif",
         "ico",

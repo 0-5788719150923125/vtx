@@ -199,7 +199,7 @@ def gen(
                 ai.tokenizer.tokenize(propulsion)[0]
             )
 
-            temperature = 1.23
+            temperature = 1.42
             if attempt > 0:
                 temperature = temperature - (0.1 * attempt)
 
@@ -212,11 +212,11 @@ def gen(
                 max_length=10000,
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
-                penalty_alpha=0.666,
-                top_k=4,
-                repetition_penalty=1.59,
-                encoder_repetition_penalty=1.23,
-                exponential_decay_length_penalty=(42, 1.21),
+                penalty_alpha=0.512,
+                top_k=8,
+                repetition_penalty=1.89,
+                encoder_repetition_penalty=1.07,
+                exponential_decay_length_penalty=(59, 1.21),
                 no_repeat_ngram_size=5,
                 renormalize_logits=True,
                 eos_token_id=eos,

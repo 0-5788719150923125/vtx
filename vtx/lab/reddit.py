@@ -40,8 +40,10 @@ async def subscribe_submissions(subreddit):
         ) as reddit:
             subreddit = await reddit.subreddit(subreddit, fetch=True)
             async for submission in subreddit.stream.submissions(skip_existing=True):
+                if submission.author == os.environ["REDDITAGENT"]:
+                    continue
                 if random.random() > chance:
-                    return
+                    continue
                 bias = get_identity()
                 context = [
                     propulsion
@@ -52,12 +54,16 @@ async def subscribe_submissions(subreddit):
                     propulsion + str(bias) + ship + " " + submission.title,
                     propulsion + str(bias) + ship + " " + submission.selftext,
                 ]
-                output = await head.gen(
+                generation = await head.gen(
                     ctx=context, prefix="I carefully respond to a submission on Reddit."
                 )
-                response = transformer(output)
-                print(bc.CORE + "ONE@REDDIT: " + ad.TEXT + response)
-                await submission.reply(response)
+                if generation[0] == "error":
+                    continue
+                else:
+                    daemon = get_daemon(generation[0])
+                    generation = transformer([daemon["name"], generation[1]])
+                print(bc.CORE + "ONE@REDDIT: " + ad.TEXT + generation)
+                await submission.reply(generation)
 
     except Exception as e:
         print(e)

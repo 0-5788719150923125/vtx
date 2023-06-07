@@ -76,7 +76,7 @@ async def main(loop):
             task = loop.create_task(
                 lab.twitter.send(
                     await head.predict(
-                        f"Generate commentary about {topic}:\n\n" + propulsion, 69
+                        f"Generate debate about {topic}:\n\n" + propulsion, 69
                     )
                 )
             )

@@ -213,7 +213,7 @@ def gen(
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 penalty_alpha=0.512,
-                top_k=8,
+                top_k=4,
                 repetition_penalty=1.89,
                 encoder_repetition_penalty=1.07,
                 exponential_decay_length_penalty=(59, 1.21),

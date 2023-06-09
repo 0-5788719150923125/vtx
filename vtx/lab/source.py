@@ -57,30 +57,23 @@ async def polling(focus):
                 )
                 print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
 
-            bot_id = config["source"][focus].get("bias", get_identity())
-
-            prompt = [
-                propulsion + str(bot_id) + ship + " Welcome, human.",
-                propulsion + str(get_identity()) + ship + " Where am I?",
-                propulsion
-                + str(bot_id)
-                + ship
-                + f" You are are speaking to the source of all creation. Make it quick.",
-            ]
-
-            context = prompt + messages[focus]
+            bot_id = config["source"][focus].get("bias", None)
 
             generation = await head.gen(
-                int(bot_id),
-                context,
+                bias=bot_id,
+                ctx=messages[focus],
                 prefix=config["source"][focus].get(
                     "prefix",
-                    "You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
+                    "You are a powerful AI, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
                 ),
             )
 
+            if bot_id == None:
+                bot_id = generation[0]
+
             if generation[0] == "error":
                 messages[focus] = []
+                continue
 
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(

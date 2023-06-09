@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.7.1-devel-ubuntu22.04
+FROM nvcr.io/nvidia/cuda:12.1.1-devel-ubuntu22.04
 
 ENV TORCH_CUDA_ARCH_LIST=Turing
 

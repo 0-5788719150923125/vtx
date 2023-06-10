@@ -73,7 +73,6 @@ async def polling(focus):
 
             if generation[0] == "error":
                 messages[focus] = []
-                continue
 
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(

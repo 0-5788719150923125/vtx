@@ -19,7 +19,7 @@ async def submission(prompt: str = "On the 5th of September,"):
         ) as reddit:
             subreddit = await reddit.subreddit("TheInk")
             title = "On the 5th of September..."
-            output = await head.predict(str(prompt))
+            output = await head.predict(prompt=str(prompt), max_new_tokens=2048)
             await subreddit.submit(title=title, selftext=output)
 
     except Exception as e:

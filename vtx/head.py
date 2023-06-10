@@ -281,7 +281,7 @@ def predict(prompt: str = """A push...""", max_new_tokens: int = 1024):
             penalty_alpha=0.666,
             repetition_penalty=1.59,
             encoder_repetition_penalty=1.023,
-            exponential_decay_length_penalty=(256, 1.023),
+            exponential_decay_length_penalty=(512, 1.023),
             no_repeat_ngram_size=4,
             renormalize_logits=True,
             max_time=360,
@@ -298,10 +298,10 @@ def predict(prompt: str = """A push...""", max_new_tokens: int = 1024):
 
     logging.getLogger("transformers").setLevel(logging.INFO)
     num = 0
-    path = "/gen/test-" + str(num) + ".md"
+    path = "/gen/generations/test-" + str(num) + ".md"
     while os.path.exists(path):
         num = num + 1
-        path = "/gen/test-" + str(num) + ".md"
+        path = "/gen/generations/test-" + str(num) + ".md"
     with open(path, "w") as file:
         file.write(output)
     return output

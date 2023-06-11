@@ -24,15 +24,12 @@ async def main(loop):
             if tasks[task].done() or tasks[task].cancelled():
                 del tasks[task]
 
-        try:
-            # Get configs, create tasks, and append to task queue
-            for neuron in config["source"]:
-                if "source-" + neuron not in tasks:
-                    task = loop.create_task(lab.source.subscribe(neuron))
-                    task.set_name("source-" + neuron)
-                    tasks[task.get_name()] = task
-        except Exception as e:
-            print(e)
+        # Get configs, create tasks, and append to task queue
+        for focus in config["source"]:
+            if "source-" + focus not in tasks:
+                task = loop.create_task(lab.source.subscribe(focus))
+                task.set_name("source-" + focus)
+                tasks[task.get_name()] = task
 
         if "telegram" in config and "telegram" not in tasks:
             task = loop.create_task(lab.telegram.subscribe())

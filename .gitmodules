@@ -41,3 +41,15 @@
 [submodule "labs/atomspace"]
 	path = lab/opencog/atomspace
 	url = https://github.com/opencog/atomspace
+[submodule "lab/opencog/ure"]
+	path = lab/opencog/ure
+	url = https://github.com/opencog/ure
+[submodule "lab/opencog/link-grammar"]
+	path = lab/opencog/link-grammar
+	url = https://github.com/opencog/link-grammar
+[submodule "lab/opencog/asmoses"]
+	path = lab/opencog/asmoses
+	url = https://github.com/opencog/asmoses
+[submodule "lab/opencog/cogutil"]
+	path = lab/opencog/cogutil
+	url = https://github.com/opencog/cogutil

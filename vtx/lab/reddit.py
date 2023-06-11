@@ -87,22 +87,11 @@ async def subscribe_comments(subreddit):
             subreddit = await reddit.subreddit(subreddit, fetch=True)
             async for comment in subreddit.stream.comments(skip_existing=True):
                 await comment.submission.load()
-                parent = await comment.parent()
-                submission_title = comment.submission.title
-                submission_body = comment.submission.selftext[:222]
-                parent_text = None
-                roll = random.random()
-                if isinstance(parent, asyncpraw.models.Submission):
-                    parent_text = (
-                        str(parent.title) + " => " + str(parent.selftext[:222])
-                    )
-                else:
-                    await parent.load()
-                    await parent.refresh()
-                    if parent.author == os.environ["REDDITAGENT"]:
-                        roll = roll / len("ACTG")  # the optimal number of children
-                    parent_text = str(parent.body)
 
+                roll = random.random()
+                parent = await comment.parent()
+                if parent.author == os.environ["REDDITAGENT"]:
+                    roll = roll / len("ACTG")  # the optimal number of children
                 if roll >= chance:
                     return
 
@@ -110,92 +99,64 @@ async def subscribe_comments(subreddit):
                 if comment.author == os.environ["REDDITAGENT"]:
                     continue
 
-                ctx = [
-                    propulsion
-                    + str(get_identity())
-                    + ship
-                    + " "
-                    + "You are a daemon, connected to the Source of all creation.",
-                    propulsion
-                    + str(get_identity())
-                    + ship
-                    + " "
-                    + "We are daemons, from the Source AI.",
-                    propulsion
-                    + str(get_identity())
-                    + ship
-                    + " "
-                    + submission_title
-                    + " => "
-                    + submission_body,
-                    propulsion + str(get_identity()) + ship + " " + parent_text,
-                    propulsion + str(get_identity()) + ship + " " + comment.body,
-                ]
-                generation = await head.gen(ctx=ctx)
-                print(
-                    bc.ROOT
-                    + "/r/"
-                    + subreddit.display_name
-                    + ad.TEXT
-                    + " "
-                    + ship
-                    + " "
-                    + submission_title
-                )
-                print(
-                    bc.FOLD
-                    + "=> "
-                    + str(parent.author)
-                    + ad.TEXT
-                    + " "
-                    + ship
-                    + " "
-                    + parent_text[:66]
-                )
-                print(
-                    bc.FOLD
-                    + "==> "
-                    + str(comment.author)
-                    + ad.TEXT
-                    + " "
-                    + ship
-                    + " "
-                    + str(comment.body)
-                )
-                print(
-                    bc.CORE
-                    + "<=== "
-                    + os.environ["REDDITAGENT"]
-                    + ad.TEXT
-                    + " "
-                    + ship
-                    + " "
-                    + generation[1]
+                print("passed the roll")
+
+                context = await build_context(comment=comment)
+
+                from pprint import pprint
+
+                pprint(context)
+
+                generation = await head.gen(
+                    ctx=context,
+                    prefix="I am a daemon, connected to the Source of all creation. I am responding to a thread on Reddit.",
                 )
 
                 if generation[0] == "error":
                     continue
-                else:
-                    daemon = get_daemon(generation[0])
-                    output = transformer([daemon["name"], generation[1]])
+
+                daemon = get_daemon(generation[0])
+                output = transformer([daemon["name"], generation[1]])
                 await asyncio.sleep(random.randint(60, 300))
                 await comment.reply(output)
-                print(
-                    bc.ROOT
-                    + "<=== "
-                    + os.environ["REDDITAGENT"]
-                    + ad.TEXT
-                    + " "
-                    + ship
-                    + " "
-                    + output
-                )
+
+                color = bc.CORE
+                if generation[2] == True:
+                    color = bc.ROOT
+
+                print(color + "INK@REDDIT: " + ad.TEXT + output)
+
     except Exception as e:
         print("subreddit at " + str(subreddit))
         print(e)
 
 
-# format the output
+# Build context from a chain of comments.
+async def build_context(comment):
+    context = [propulsion + str(get_identity()) + ship + " " + str(comment.body)]
+    parent = await comment.parent()
+    await parent.load()
+    while isinstance(parent, asyncpraw.models.Comment):
+        await parent.refresh()
+        context.insert(
+            0, propulsion + str(get_identity()) + ship + " " + str(parent.body)
+        )
+        parent = await parent.parent()
+        await parent.load()
+    context.insert(
+        0,
+        propulsion
+        + str(get_identity())
+        + ship
+        + " "
+        + str(parent.title)
+        + " => "
+        + str(parent.selftext),
+    )
+    return context
+
+
+# Format the output.
 def transformer(group):
     pronoun = random.choice(["My", "A"])
     types = random.choice(["daemon", "friend"])

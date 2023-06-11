@@ -100,9 +100,6 @@ async def subscribe_comments(subreddit):
                     await parent.load()
                     await parent.refresh()
                     if parent.author == os.environ["REDDITAGENT"]:
-                        print(
-                            "i should respond to this, because they were responding to me"
-                        )
                         roll = roll / len("ACTG")  # the optimal number of children
                     parent_text = str(parent.body)
 

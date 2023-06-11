@@ -233,7 +233,7 @@ def gen(
 
             active = False
             generation = completion[0][len(history) :]
-            mentions = "(?:[<][@])(\d+\s*\d*)(?:[>])"
+            mentions = "(?:[<][@])(\d+\s*\d*)"
             variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
             group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
             if (
@@ -250,7 +250,6 @@ def gen(
         except Exception as e:
             attempt = attempt + 1
             if attempt > max_attempts:
-                # asyncio.run(loader(focus))
                 context = default_context.copy()
                 output = ["error", "ERROR: Me Found.", False]
 

@@ -286,7 +286,7 @@ def predict(
             penalty_alpha=0.666,
             repetition_penalty=1.59,
             encoder_repetition_penalty=1.023,
-            exponential_decay_length_penalty=(decay_after_length, 1.023),
+            exponential_decay_length_penalty=(decay_after_length, 1.059),
             no_repeat_ngram_size=4,
             renormalize_logits=True,
             max_time=360,

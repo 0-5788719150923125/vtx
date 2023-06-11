@@ -76,7 +76,9 @@ async def main(loop):
             task = loop.create_task(
                 lab.twitter.send(
                     await head.predict(
-                        f"Generate debate about {topic}:\n\n" + propulsion, 69
+                        prompt=f"Generate debate about {topic}:\n\n" + propulsion,
+                        max_new_tokens=66,
+                        decay_after_length=11,
                     )
                 )
             )

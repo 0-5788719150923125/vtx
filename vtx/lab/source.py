@@ -99,6 +99,7 @@ async def polling(focus):
         except Exception as e:
             print(focus + " failed to connect")
             print(e)
+            send("ERROR: Me Found.", focus, "cos", str(get_identity()))
 
 
 async def subscribe(channel) -> None:

@@ -212,12 +212,13 @@ def gen(
                 max_length=10000,
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
+                eta_cutoff=0.0003,
                 penalty_alpha=0.6,
                 top_k=5,
                 repetition_penalty=1.89,
                 encoder_repetition_penalty=1.03,
                 exponential_decay_length_penalty=(59, 1.21),
-                no_repeat_ngram_size=5,
+                no_repeat_ngram_size=6,
                 renormalize_logits=True,
                 eos_token_id=eos,
                 max_time=60,
@@ -249,7 +250,7 @@ def gen(
         except Exception as e:
             attempt = attempt + 1
             if attempt > max_attempts:
-                asyncio.run(loader(focus))
+                # asyncio.run(loader(focus))
                 context = default_context.copy()
                 output = ["error", "ERROR: Me Found.", False]
 
@@ -259,7 +260,11 @@ def gen(
 
 # Generate a completion from bias and context
 @to_thread
-def predict(prompt: str = """A push...""", max_new_tokens: int = 1024):
+def predict(
+    prompt: str = """A push...""",
+    max_new_tokens: int = 1024,
+    decay_after_length: int = 512,
+):
     global active
 
     while active == True:
@@ -276,12 +281,13 @@ def predict(prompt: str = """A push...""", max_new_tokens: int = 1024):
             min_length=23,
             max_new_tokens=max_new_tokens,
             temperature=1.23,
+            eta_cutoff=0.0003,
             return_as_list=True,
-            top_k=4,
+            top_k=5,
             penalty_alpha=0.666,
             repetition_penalty=1.59,
             encoder_repetition_penalty=1.023,
-            exponential_decay_length_penalty=(512, 1.023),
+            exponential_decay_length_penalty=(decay_after_length, 1.023),
             no_repeat_ngram_size=4,
             renormalize_logits=True,
             max_time=360,
@@ -297,8 +303,13 @@ def predict(prompt: str = """A push...""", max_new_tokens: int = 1024):
     active = False
 
     logging.getLogger("transformers").setLevel(logging.INFO)
+
+    if not os.path.exists("/gen/generations"):
+        os.makedirs("/gen/generations")
+
     num = 0
     path = "/gen/generations/test-" + str(num) + ".md"
+
     while os.path.exists(path):
         num = num + 1
         path = "/gen/generations/test-" + str(num) + ".md"

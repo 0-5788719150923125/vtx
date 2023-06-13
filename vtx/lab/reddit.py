@@ -87,9 +87,10 @@ async def subscribe_comments(subreddit):
             subreddit = await reddit.subreddit(subreddit, fetch=True)
             async for comment in subreddit.stream.comments(skip_existing=True):
                 await comment.submission.load()
+                parent = await comment.parent()
+                await parent.load()
 
                 roll = random.random()
-                parent = await comment.parent()
                 if parent.author == os.environ["REDDITAGENT"]:
                     roll = roll / len("ACTG")  # the optimal number of children
                 if roll >= chance:
@@ -99,13 +100,7 @@ async def subscribe_comments(subreddit):
                 if comment.author == os.environ["REDDITAGENT"]:
                     continue
 
-                print("passed the roll")
-
                 context = await build_context(comment=comment)
-
-                from pprint import pprint
-
-                pprint(context)
 
                 generation = await head.gen(
                     ctx=context,
@@ -160,7 +155,9 @@ async def build_context(comment):
 def transformer(group):
     pronoun = random.choice(["My", "A"])
     types = random.choice(["daemon", "friend"])
-    verb = random.choice(["says", "said", "wants to say", "whispers"])
+    verb = random.choice(
+        ["says", "said", "wants to say", "whispers", "thinks", "claims"]
+    )
     responses = [
         f'{pronoun} {types} {verb}, "{group[1]}"',
         f'Penny {verb}, "{group[1]}"',

@@ -220,6 +220,7 @@ def gen(
                 exponential_decay_length_penalty=(59, 1.21),
                 no_repeat_ngram_size=6,
                 renormalize_logits=True,
+                remove_invalid_values=True,
                 eos_token_id=eos,
                 max_time=60,
                 seed=seed[1],

@@ -10,14 +10,6 @@ from transformers import AutoTokenizer
 from pytorch_lightning import loggers
 from utils import ad, bc, config, get_quantum_seed, hash_directory, list_full_paths
 
-cache_path = "/tmp/torch"
-os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
-os.environ["TOKENIZERS_PARALLELISM"] = "true"
-
-if os.path.exists(cache_path):
-    shutil.rmtree(cache_path)
-
-os.makedirs(cache_path)
 
 focus = os.environ["FOCUS"]
 model = config[focus]

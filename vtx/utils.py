@@ -1,5 +1,6 @@
 from mergedeep import merge, Strategy
 import requests
+import shutil
 import secrets
 import random
 import pprint
@@ -11,6 +12,16 @@ import statistics
 
 propulsion = "¶"
 ship = ":>"
+
+cache_path = "/tmp/torch"
+os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
+os.environ["TRANSFORMERS_CACHE"] = "/tmp"
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
+
+if os.path.exists(cache_path):
+    shutil.rmtree(cache_path)
+
+os.makedirs(cache_path)
 
 # Load configuration files from disk
 with open("/vtx/default.yml", "r") as config_file:

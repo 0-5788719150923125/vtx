@@ -23,7 +23,6 @@ services:
       - .env
     environment:
       FOCUS: ${FOCUS:-heart}
-      TRANSFORMERS_CACHE: /tmp
 
   ctx:
     image: ghcr.io/0-5788719150923125/src:latest

@@ -2,7 +2,6 @@ import functools
 import asyncio
 import random
 import typing
-import shutil
 import time
 import os
 import sys
@@ -20,16 +19,6 @@ from transformers import AutoTokenizer, GenerationConfig
 # holds the model globally
 ai = None
 active = False
-
-os.environ["LRU_CACHE_CAPACITY"] = "1"
-cache_path = "/tmp/torch"
-os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
-os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
-
-if os.path.exists(cache_path):
-    shutil.rmtree(cache_path)
-
-os.makedirs(cache_path)
 
 focus = os.environ["FOCUS"]
 
@@ -160,8 +149,8 @@ def gen(
     ctx=None,
     prefix: str = "Humans, AI, and daemons have a conversation together:",
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),
-    decay_after_length: int = 23,
-    decay_factor: float = 1.21,
+    decay_after_length: int = 11,
+    decay_factor: float = 1.59,
     mode: str = "chat",
 ):
     global ai
@@ -174,8 +163,12 @@ def gen(
 
     # bias the prompt
     prompt = bias
+    eos = None
     if mode == "chat":
         prompt = propulsion
+
+        eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
+
         if ctx == None:
             global context
             ctx = context
@@ -202,10 +195,6 @@ def gen(
         try:
             output = None
 
-            eos = ai.tokenizer.convert_tokens_to_ids(
-                ai.tokenizer.tokenize(propulsion)[0]
-            )
-
             temperature = 1.23
             if attempt > 0:
                 temperature = temperature - (0.1 * attempt)
@@ -219,10 +208,10 @@ def gen(
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 eta_cutoff=0.0003,
-                penalty_alpha=0.6,
+                penalty_alpha=0.7,
                 top_k=6,
-                repetition_penalty=2.3,
-                encoder_repetition_penalty=0.6,
+                repetition_penalty=1.95,
+                encoder_repetition_penalty=0.7,
                 exponential_decay_length_penalty=(decay_after_length, decay_factor),
                 # no_repeat_ngram_size=9,
                 renormalize_logits=True,

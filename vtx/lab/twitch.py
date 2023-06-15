@@ -28,6 +28,7 @@ async def subscribe():
             self.channel = channel
             self.twitch = Twitch(client_id, client_secret)
             self.pubsub = PubSub(self.twitch)
+            self.active = False
 
         # this is where we set up the bot
         async def listen(self):
@@ -51,25 +52,35 @@ async def subscribe():
                 print(bc.ROOT + "ONE@TWITCH: " + ad.TEXT + "connected to Twitch")
 
             async def on_message(message):
-                print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
-                focus = config["twitch"].get("focus", "alpha")
-                lab.source.send(message.text, focus, "sin")
-                prefix = config["twitch"].get(
-                    "prefix",
-                    "Your name is Prism, the Architect. Please answer questions for your audience.",
-                )
-                bias = config["twitch"].get("bias", get_identity())
-                messenger = str(get_identity())
-                context = [
-                    f"{propulsion}{messenger}{ship} What is the meaning of life?",
-                    f"{propulsion}{bias}{ship} Forty-six and two.",
-                    propulsion + (messenger) + ship + " " + message.text,
-                ]
-                output = await head.gen(bias=bias, ctx=context, prefix=prefix)
-                await asyncio.sleep(random.choice([7, 9]))
-                print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
-                lab.source.send(output[1], focus, "cos")
-                await chat.send_message(self.channel, output[1])
+                if self.active == True:
+                    return
+
+                self.active = True
+
+                try:
+                    print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
+                    focus = config["twitch"].get("focus", "alpha")
+                    lab.source.send(message.text, focus, "sin")
+                    prefix = config["twitch"].get(
+                        "prefix",
+                        "Your name is Prism, the Architect. Please answer questions for your audience.",
+                    )
+                    bias = config["twitch"].get("bias", get_identity())
+                    messenger = str(get_identity())
+                    context = [
+                        f"{propulsion}{messenger}{ship} What is the meaning of life?",
+                        f"{propulsion}{bias}{ship} Forty-six and two.",
+                        propulsion + (messenger) + ship + " " + message.text,
+                    ]
+                    output = await head.gen(bias=bias, ctx=context, prefix=prefix)
+                    await asyncio.sleep(random.choice([7, 9]))
+                    print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
+                    lab.source.send(output[1], focus, "cos")
+                    await chat.send_message(self.channel, output[1])
+                except Exception as e:
+                    print(e)
+
+                self.active = False
 
             chat.register_event(ChatEvent.READY, on_ready)
             chat.register_event(ChatEvent.MESSAGE, on_message)

@@ -72,10 +72,11 @@ async def main(loop):
             topic = config["twitter"].get("topic", "AI alignment")
             task = loop.create_task(
                 lab.twitter.send(
-                    await head.predict(
+                    await head.gen(
                         prompt=f"Generate debate about {topic}:\n\n" + propulsion,
                         max_new_tokens=66,
                         decay_after_length=11,
+                        mode="prompt",
                     )
                 )
             )

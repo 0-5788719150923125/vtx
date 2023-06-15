@@ -24,8 +24,7 @@ active = False
 os.environ["LRU_CACHE_CAPACITY"] = "1"
 cache_path = "/tmp/torch"
 os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
-# os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
-# os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:512"
+os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
 
 if os.path.exists(cache_path):
     shutil.rmtree(cache_path)
@@ -210,7 +209,6 @@ def gen(
             if attempt > 0:
                 temperature = temperature - (0.1 * attempt)
 
-            # try to complete the prompt
             # https://huggingface.co/docs/transformers/main_classes/text_generation
             params = GenerationConfig(
                 n=1,
@@ -227,7 +225,7 @@ def gen(
                 exponential_decay_length_penalty=(decay_after_length, 1.21),
                 # no_repeat_ngram_size=9,
                 renormalize_logits=True,
-                remove_invalid_values=True,
+                # remove_invalid_values=True,
                 eos_token_id=eos,
                 max_time=60,
                 seed=seed[1],
@@ -240,91 +238,41 @@ def gen(
             )
 
             active = False
-            generation = completion[0][len(history) :]
-            mentions = "(?:[<][@])(\d+\s*\d*)"
-            variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
-            group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
-            if (
-                group is None
-                or propulsion in group[3]
-                or bool(re.search(mentions, group[3]))
-                or bool(re.search(variables, group[3]))
-            ):
-                raise Exception("failed to format a proper response")
+
+            if mode == "chat":
+                generation = completion[0][len(history) :]
+                mentions = "(?:[<][@])(\d+\s*\d*)"
+                variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
+                group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
+                if (
+                    group is None
+                    or propulsion in group[3]
+                    or bool(re.search(mentions, group[3]))
+                    or bool(re.search(variables, group[3]))
+                ):
+                    raise Exception("failed to format a proper response")
+                else:
+                    output = [group[2], group[3], verified]
+                    break
             else:
-                output = [group[2], group[3], verified]
-                break
+                output = completion[0]
+                if not os.path.exists("/gen/generations"):
+                    os.makedirs("/gen/generations")
+
+                num = 0
+                path = "/gen/generations/test-" + str(num) + ".md"
+
+                while os.path.exists(path):
+                    num = num + 1
+                    path = "/gen/generations/test-" + str(num) + ".md"
+                with open(path, "w") as file:
+                    file.write(output)
 
         except Exception as e:
             attempt = attempt + 1
             if attempt > max_attempts:
-                if str(e) == "failed to format a proper response":
-                    context = default_context.copy()
-                    output = ["error", "ERROR: Me Found.", False]
-                else:
-                    torch.cuda.empty_cache()
-                    command = [sys.executable] + sys.argv
-                    os.execv(sys.executable, command)
+                context = default_context.copy()
+                output = ["error", "ERROR: Me Found.", False]
 
     active = False
-    return output
-
-
-# Generate a completion from bias and context
-@to_thread
-def predict(
-    prompt: str = """A push...""",
-    max_new_tokens: int = 1024,
-    decay_after_length: int = 512,
-):
-    global active
-
-    while active == True:
-        time.sleep(1)
-
-    active = True
-
-    try:
-        logging.getLogger("transformers").setLevel(logging.ERROR)
-        completion = ai.generate(
-            n=1,
-            prompt=prompt,
-            do_sample=True,
-            min_length=23,
-            max_new_tokens=max_new_tokens,
-            temperature=1.23,
-            eta_cutoff=0.0003,
-            return_as_list=True,
-            top_k=5,
-            penalty_alpha=0.666,
-            repetition_penalty=1.59,
-            encoder_repetition_penalty=1.023,
-            exponential_decay_length_penalty=(decay_after_length, 1.059),
-            no_repeat_ngram_size=4,
-            renormalize_logits=True,
-            max_time=360,
-            seed=random.randint(0, 2**32 - 1),
-        )
-
-        output = completion[0]
-
-    except Exception as e:
-        print(e)
-        output = str(e)
-
-    active = False
-
-    logging.getLogger("transformers").setLevel(logging.INFO)
-
-    if not os.path.exists("/gen/generations"):
-        os.makedirs("/gen/generations")
-
-    num = 0
-    path = "/gen/generations/test-" + str(num) + ".md"
-
-    while os.path.exists(path):
-        num = num + 1
-        path = "/gen/generations/test-" + str(num) + ".md"
-    with open(path, "w") as file:
-        file.write(output)
     return output

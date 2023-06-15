@@ -73,7 +73,7 @@ async def main(loop):
             task = loop.create_task(
                 lab.twitter.send(
                     await head.gen(
-                        bias=f"Generate debate about {topic}:\n\n" + propulsion,
+                        bias=f"Generate debate about {topic}:\n\n",
                         max_new_tokens=66,
                         decay_after_length=11,
                         mode="prompt",

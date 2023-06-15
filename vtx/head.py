@@ -161,6 +161,7 @@ def gen(
     prefix: str = "Humans, AI, and daemons have a conversation together:",
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),
     decay_after_length: int = 23,
+    decay_factor: float = 1.21,
     mode: str = "chat",
 ):
     global ai
@@ -222,9 +223,9 @@ def gen(
                 eta_cutoff=0.0003,
                 penalty_alpha=0.6,
                 top_k=6,
-                repetition_penalty=2.89,
+                repetition_penalty=2.3,
                 encoder_repetition_penalty=0.6,
-                exponential_decay_length_penalty=(decay_after_length, 1.21),
+                exponential_decay_length_penalty=(decay_after_length, decay_factor),
                 # no_repeat_ngram_size=9,
                 renormalize_logits=True,
                 remove_invalid_values=True,

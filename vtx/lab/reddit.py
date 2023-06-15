@@ -24,6 +24,7 @@ async def submission(prompt: str = "On the 5th of September,"):
                 max_new_tokens=2048,
                 mode="prompt",
                 decay_after_length=111,
+                decay_factor=0.023,
             )
             await subreddit.submit(title=title, selftext=output)
 

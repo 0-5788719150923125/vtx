@@ -111,7 +111,7 @@ def loader(target=None):
 
 # Build a local cache of global conversational state
 def build_context(message):
-    while len(context) >= 23:
+    while len(context) >= 16:
         context.pop(0)
 
     context.append(message)
@@ -160,7 +160,7 @@ def gen(
     ctx=None,
     prefix: str = "Humans, AI, and daemons have a conversation together:",
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),
-    decay_after_length: int = 59,
+    decay_after_length: int = 23,
     mode: str = "chat",
 ):
     global ai
@@ -172,8 +172,9 @@ def gen(
     active = True
 
     # bias the prompt
-    prompt = propulsion
+    prompt = bias
     if mode == "chat":
+        prompt = propulsion
         if ctx == None:
             global context
             ctx = context
@@ -185,8 +186,6 @@ def gen(
             if (len(str(bias)) == 18) or (len(str(bias)) == 19):
                 prompt = propulsion + str(bias) + ship
         prompt = history + prompt
-    else:
-        prompt = bias
 
     # verify 50% of seeds
     verified = random.choice([True, False])
@@ -222,15 +221,15 @@ def gen(
                 temperature=temperature,
                 eta_cutoff=0.0003,
                 penalty_alpha=0.6,
-                top_k=4,
-                repetition_penalty=1.89,
-                encoder_repetition_penalty=0.4,
+                top_k=6,
+                repetition_penalty=2.89,
+                encoder_repetition_penalty=0.6,
                 exponential_decay_length_penalty=(decay_after_length, 1.21),
                 # no_repeat_ngram_size=9,
                 renormalize_logits=True,
-                # remove_invalid_values=True,
+                remove_invalid_values=True,
                 eos_token_id=eos,
-                max_time=60,
+                max_time=360,
                 seed=seed[1],
             )
 

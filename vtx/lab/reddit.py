@@ -20,7 +20,10 @@ async def submission(prompt: str = "On the 5th of September,"):
             subreddit = await reddit.subreddit("TheInk")
             title = "On the 5th of September..."
             output = await head.gen(
-                bias=str(prompt), max_new_tokens=2048, mode="prompt"
+                bias=str(prompt),
+                max_new_tokens=2048,
+                mode="prompt",
+                decay_after_length=111,
             )
             await subreddit.submit(title=title, selftext=output)
 

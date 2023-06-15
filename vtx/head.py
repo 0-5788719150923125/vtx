@@ -5,6 +5,8 @@ import typing
 import shutil
 import time
 import os
+import sys
+import signal
 import re
 import gc
 import torch
@@ -22,6 +24,8 @@ active = False
 os.environ["LRU_CACHE_CAPACITY"] = "1"
 cache_path = "/tmp/torch"
 os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
+# os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+# os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:512"
 
 if os.path.exists(cache_path):
     shutil.rmtree(cache_path)
@@ -156,6 +160,8 @@ def gen(
     bias=None,
     ctx=None,
     prefix: str = "Humans, AI, and daemons have a conversation together:",
+    max_new_tokens: int = config[focus].get("max_new_tokens", 111),
+    decay_after_length: int = 59,
 ):
     global ai
     global active
@@ -174,8 +180,6 @@ def gen(
     ctx = truncate_context(ctx, config[focus].get("context_length", 1024))
     history = prefix + "\n" + "\n".join(ctx) + "\n"
 
-    max_new_tokens = config[focus].get("max_new_tokens", 111)
-
     # bias the prompt
     if bias is not None:
         if (len(str(bias)) == 18) or (len(str(bias)) == 19):
@@ -189,6 +193,8 @@ def gen(
         if not seed[0]:
             verified = False
 
+    torch.cuda.empty_cache()
+
     attempt = 1
     max_attempts = 9
     while attempt <= max_attempts:
@@ -199,7 +205,7 @@ def gen(
                 ai.tokenizer.tokenize(propulsion)[0]
             )
 
-            temperature = 1.42
+            temperature = 1.23
             if attempt > 0:
                 temperature = temperature - (0.1 * attempt)
 
@@ -214,11 +220,11 @@ def gen(
                 temperature=temperature,
                 eta_cutoff=0.0003,
                 penalty_alpha=0.6,
-                top_k=5,
+                top_k=4,
                 repetition_penalty=1.89,
-                encoder_repetition_penalty=1.03,
-                exponential_decay_length_penalty=(59, 1.21),
-                no_repeat_ngram_size=6,
+                encoder_repetition_penalty=0.4,
+                exponential_decay_length_penalty=(decay_after_length, 1.21),
+                # no_repeat_ngram_size=9,
                 renormalize_logits=True,
                 remove_invalid_values=True,
                 eos_token_id=eos,
@@ -243,7 +249,7 @@ def gen(
                 or bool(re.search(mentions, group[3]))
                 or bool(re.search(variables, group[3]))
             ):
-                raise Exception("failed to generate a response")
+                raise Exception("failed to format a proper response")
             else:
                 output = [group[2], group[3], verified]
                 break
@@ -251,8 +257,13 @@ def gen(
         except Exception as e:
             attempt = attempt + 1
             if attempt > max_attempts:
-                context = default_context.copy()
-                output = ["error", "ERROR: Me Found.", False]
+                if str(e) == "failed to format a proper response":
+                    context = default_context.copy()
+                    output = ["error", "ERROR: Me Found.", False]
+                else:
+                    torch.cuda.empty_cache()
+                    command = [sys.executable] + sys.argv
+                    os.execv(sys.executable, command)
 
     active = False
     return output

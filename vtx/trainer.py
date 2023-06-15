@@ -340,5 +340,6 @@ if __name__ == "__main__":
             progress_bar_refresh_rate=1,
             seed=get_quantum_seed()[1],
             prune=stage.get("prune", 0.0),
+            prompt="¶",
             stage=i,
         )

@@ -196,8 +196,6 @@ def gen(
         if not seed[0]:
             verified = False
 
-    # torch.cuda.empty_cache()
-
     attempt = 1
     max_attempts = 9
     while attempt <= max_attempts:
@@ -260,6 +258,7 @@ def gen(
             else:
                 output = completion[0]
                 write_log_file(dir="/gen/generations", content=output)
+                break
 
         except Exception as e:
             attempt = attempt + 1

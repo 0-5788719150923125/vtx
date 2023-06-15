@@ -94,6 +94,21 @@ def get_quantum_seed(length: int = 23, data_type: str = "uint8"):
         return [False, random.randint(0, 2**32 - 1)]
 
 
+# Write to a log file
+def write_log_file(dir: str, content: str):
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+
+    num = 0
+    path = f"{dir}/test-" + str(num) + ".md"
+
+    while os.path.exists(path):
+        num = num + 1
+        path = f"{dir}/test-" + str(num) + ".md"
+    with open(path, "w") as file:
+        file.write(content)
+
+
 bullets = {
     "⠠",
     "⠏",

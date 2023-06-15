@@ -11,7 +11,7 @@ import re
 import gc
 import torch
 import time
-from utils import ad, bc, config, get_quantum_seed, propulsion, ship
+from utils import ad, bc, config, get_quantum_seed, propulsion, ship, write_log_file
 from aitextgen import aitextgen
 import requests
 import logging
@@ -171,19 +171,22 @@ def gen(
 
     active = True
 
-    prompt = propulsion
-
-    if ctx == None:
-        global context
-        ctx = context
-
-    ctx = truncate_context(ctx, config[focus].get("context_length", 1024))
-    history = prefix + "\n" + "\n".join(ctx) + "\n"
-
     # bias the prompt
-    if bias is not None:
-        if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-            prompt = propulsion + str(bias) + ship
+    prompt = propulsion
+    if mode == "chat":
+        if ctx == None:
+            global context
+            ctx = context
+
+        ctx = truncate_context(ctx, config[focus].get("context_length", 1024))
+        history = prefix + "\n" + "\n".join(ctx) + "\n"
+
+        if bias is not None:
+            if (len(str(bias)) == 18) or (len(str(bias)) == 19):
+                prompt = propulsion + str(bias) + ship
+        prompt = history + prompt
+    else:
+        prompt = bias
 
     # verify 50% of seeds
     verified = random.choice([True, False])
@@ -193,7 +196,7 @@ def gen(
         if not seed[0]:
             verified = False
 
-    torch.cuda.empty_cache()
+    # torch.cuda.empty_cache()
 
     attempt = 1
     max_attempts = 9
@@ -232,7 +235,7 @@ def gen(
             )
 
             completion = ai.generate(
-                prompt=history + prompt,
+                prompt=prompt,
                 generation_config=params,
                 return_as_list=True,
             )
@@ -256,17 +259,7 @@ def gen(
                     break
             else:
                 output = completion[0]
-                if not os.path.exists("/gen/generations"):
-                    os.makedirs("/gen/generations")
-
-                num = 0
-                path = "/gen/generations/test-" + str(num) + ".md"
-
-                while os.path.exists(path):
-                    num = num + 1
-                    path = "/gen/generations/test-" + str(num) + ".md"
-                with open(path, "w") as file:
-                    file.write(output)
+                write_log_file(dir="/gen/generations", content=output)
 
         except Exception as e:
             attempt = attempt + 1

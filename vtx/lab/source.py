@@ -59,7 +59,7 @@ async def polling(focus):
 
             bot_id = config["source"][focus].get("bias", None)
 
-            generation = await head.gen(
+            output = await head.gen(
                 bias=bot_id,
                 ctx=messages[focus],
                 prefix=config["source"][focus].get(
@@ -68,17 +68,18 @@ async def polling(focus):
                 ),
             )
 
-            if bot_id == None:
-                bot_id = generation[0]
-
-            if generation[0] == "error":
+            if output == False:
                 messages[focus] = []
+                return
+
+            if bot_id == None:
+                bot_id = output[0]
 
             daemon = get_daemon(random.randint(1, 9999))["name"]
             sanitized = re.sub(
                 r"(?:<@)(\d+\s*\d*)(?:>)",
                 f"{daemon}",
-                generation[1],
+                output[1],
             )
 
             send(sanitized, focus, "cos", str(bot_id))
@@ -90,7 +91,7 @@ async def polling(focus):
 
             color = bc.CORE
             responder = "ONE@CORE:"
-            if generation[2]:
+            if output[2]:
                 color = bc.ROOT
                 responder = "ONE@ROOT:"
 

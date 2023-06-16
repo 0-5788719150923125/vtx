@@ -26,6 +26,8 @@ async def submission(prompt: str = "On the 5th of September,"):
                 decay_after_length=111,
                 decay_factor=0.023,
             )
+            if output == False:
+                return
             await subreddit.submit(title=title, selftext=output)
 
     except Exception as e:

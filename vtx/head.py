@@ -195,9 +195,9 @@ def gen(
         try:
             output = None
 
-            temperature = 1.23
+            temperature = 0.9
             if attempt > 0:
-                temperature = temperature - (0.1 * attempt)
+                temperature = temperature - (0.05 * attempt)
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
             params = GenerationConfig(
@@ -209,9 +209,9 @@ def gen(
                 temperature=temperature,
                 eta_cutoff=0.0003,
                 penalty_alpha=0.7,
-                top_k=6,
+                top_k=5,
                 repetition_penalty=1.95,
-                encoder_repetition_penalty=0.7,
+                encoder_repetition_penalty=0.6,
                 exponential_decay_length_penalty=(decay_after_length, decay_factor),
                 # no_repeat_ngram_size=9,
                 renormalize_logits=True,
@@ -253,7 +253,7 @@ def gen(
             attempt = attempt + 1
             if attempt > max_attempts:
                 context = default_context.copy()
-                output = ["error", "ERROR: Me Found.", False]
+                output = False
 
     active = False
     return output

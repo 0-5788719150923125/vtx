@@ -65,13 +65,13 @@ class Client(discord.Client):
                 if str(recent_author_id) != str(self.user.id):
                     bias = recent_author_id
 
-                generation = await head.gen(bias, context)
-                if generation[0] == "error":
+                output = await head.gen(bias, context)
+                if output == False:
                     return
 
-                output = transformer([generation[0], generation[1]])
+                transformed = transformer([output[0], output[1]])
 
-                await messages[focus_on].reply(output)
+                await messages[focus_on].reply(transformed)
 
             except Exception as e:
                 print(bc.CORE + str(e) + ad.TEXT)
@@ -82,7 +82,7 @@ class Client(discord.Client):
         reply = random.choice([True, False])
 
         bias = None
-        output = "ERROR: Me Found."
+        transformed = "ERROR: Me Found."
 
         if (
             message.author == self.user
@@ -141,26 +141,26 @@ class Client(discord.Client):
         await asyncio.sleep(random.randint(2, 13))
         try:
             async with message.channel.typing():
-                generation = await head.gen(bias)
-                if generation[0] == "error":
+                output = await head.gen(bias)
+                if output == False:
                     return
                 elif no_transform:
-                    output = generation[1]
+                    transformed = output[1]
                 else:
-                    output = transformer([generation[0], generation[1]])
+                    transformed = transformer([output[0], output[1]])
         except Exception as e:
             print(e)
 
         try:
-            if len(output) > 2000:
-                output = output[:1997] + "..."
+            if len(transformed) > 2000:
+                transformed = transformed[:1997] + "..."
 
-            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + output)
+            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + transformed)
 
             if reply == True:
-                return_message = await message.reply(output)
+                return_message = await message.reply(transformed)
             else:
-                return_message = await message.channel.send(output)
+                return_message = await message.channel.send(transformed)
 
             bot_id = str(self.user.id)
 
@@ -168,10 +168,10 @@ class Client(discord.Client):
                 bot_id = str(bias)
                 log_private_message(
                     str(bias),
-                    propulsion + str(return_message.id) + ship + " " + output,
+                    propulsion + str(return_message.id) + ship + " " + transformed,
                 )
 
-            head.build_context(propulsion + bot_id + ship + " " + output)
+            head.build_context(propulsion + bot_id + ship + " " + transformed)
         except:
             print(bc.CORE + "Failed to send Discord message." + ad.TEXT)
 
@@ -288,22 +288,22 @@ async def subscribe():
                     )
                 if str(message.channel.type) == "private":
                     bias = str(user.id)
-                    regen = await head.gen(bias=bias, ctx=context)
+                    output = await head.gen(bias=bias, ctx=context)
                     head.replace(
-                        message.content, propulsion + bias + ship + " " + regen[1]
+                        message.content, propulsion + bias + ship + " " + output[1]
                     )
                     replace_private_message(
                         str(user.id),
                         str(reaction.message.id),
-                        propulsion + str(reaction.message.id) + ship + " " + regen[1],
+                        propulsion + str(reaction.message.id) + ship + " " + output[1],
                     )
-                    transformed = regen[1]
+                    transformed = output[1]
                 else:
-                    regen = await head.gen(ctx=context)
+                    output = await head.gen(ctx=context)
                     head.replace(
-                        message.content, propulsion + regen[0] + ship + " " + regen[1]
+                        message.content, propulsion + output[0] + ship + " " + output[1]
                     )
-                    transformed = transformer(regen)
+                    transformed = transformer(output)
 
                 await message.edit(content=transformed)
             except Exception as e:

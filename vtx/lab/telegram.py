@@ -25,18 +25,18 @@ async def subscribe() -> None:
         if random.randint(0, 9) == 0:
             return
         bias = config["telegram"].get("bias", get_identity())
-        response = await head.gen(
+        output = await head.gen(
             bias=bias,
             prefix=config["telegram"].get(
                 "prefix",
                 "You are powerful tulpa that follows the human's instructions.",
             ),
         )
-        if response[0] == "error":
+        if output == False:
             return
-        await message.answer(response[1])
-        head.build_context(propulsion + str(bias) + ship + " " + response[1])
-        print(bc.CORE + "ONE@TELEGRAM: " + ad.TEXT + response[1])
+        await message.answer(output[1])
+        head.build_context(propulsion + str(bias) + ship + " " + output[1])
+        print(bc.CORE + "ONE@TELEGRAM: " + ad.TEXT + output[1])
 
     dp.register_message_handler(chat_bot)
     await asyncio.gather(

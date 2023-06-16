@@ -70,7 +70,7 @@ async def polling(focus):
 
             if output == False:
                 messages[focus] = []
-                return
+                output = ["GhostIsCuteVoidGirl", "ERROR: Me Found.", False]
 
             if bot_id == None:
                 bot_id = output[0]

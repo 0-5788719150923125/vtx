@@ -100,7 +100,7 @@ def loader(target=None):
 
 # Build a local cache of global conversational state
 def build_context(message):
-    while len(context) >= 16:
+    while len(context) >= 23:
         context.pop(0)
 
     context.append(message)
@@ -211,9 +211,9 @@ def gen(
                 penalty_alpha=0.7,
                 top_k=5,
                 repetition_penalty=1.95,
-                encoder_repetition_penalty=0.6,
+                # encoder_repetition_penalty=0.666,
                 exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                # no_repeat_ngram_size=9,
+                no_repeat_ngram_size=4,
                 renormalize_logits=True,
                 remove_invalid_values=True,
                 eos_token_id=eos,
@@ -239,6 +239,9 @@ def gen(
                     or propulsion in group[3]
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
+                    or group[3].startswith(">")
+                    or group[3].startswith("~")
+                    or group[3].startswith(" ")
                 ):
                     raise Exception("failed to format a proper response")
                 else:

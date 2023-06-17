@@ -150,7 +150,7 @@ def gen(
     prefix: str = "Humans, AI, and daemons have a conversation together:",
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),
     decay_after_length: int = 11,
-    decay_factor: float = 2.3,
+    decay_factor: float = 0.023,
     mode: str = "chat",
 ):
     global ai
@@ -162,8 +162,8 @@ def gen(
     active = True
 
     # bias the prompt
-    prompt = bias
-    eos = None
+    prompt = prefix
+    eos = False
     if mode == "chat":
         prompt = propulsion
 
@@ -204,8 +204,6 @@ def gen(
                 n=1,
                 do_sample=True,
                 min_length=23,
-                max_length=10000,
-                max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 eta_cutoff=0.0003,
                 penalty_alpha=0.7,
@@ -223,6 +221,7 @@ def gen(
 
             completion = ai.generate(
                 prompt=prompt,
+                max_new_tokens=max_new_tokens,
                 generation_config=params,
                 return_as_list=True,
             )

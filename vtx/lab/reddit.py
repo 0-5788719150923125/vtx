@@ -21,10 +21,10 @@ async def submission(prompt: str = "On the 5th of September,"):
             title = "On the 5th of September..."
             output = await head.gen(
                 prefix=str(prompt),
-                max_new_tokens=2048,
+                max_new_tokens=1536,
                 mode="prompt",
                 decay_after_length=512,
-                decay_factor=0.0023,
+                decay_factor=0.00023,
             )
             if output == False:
                 return

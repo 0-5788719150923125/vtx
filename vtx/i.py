@@ -16,12 +16,6 @@ import math
 import head
 
 
-def carve():
-    ai = asyncio.run(head.loader(target="toe"))
-    setattr(ai.model.config, "n_layer", 16)
-    ai.save("/vtx/models/toe")
-
-
 # Grab all internal links from a web page
 def crawl(site="https://ink.university"):
     html = requests.get(site).content

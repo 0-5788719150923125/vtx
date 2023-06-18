@@ -96,8 +96,7 @@
         "i.fetch_from_reddit()",
         "i.prepare_discord_messages()",
         "i.fetch_from_discord()",
-        "i.juxtapose_data()",
-        "i.carve()"
+        "i.juxtapose_data()"
       ]
     },
     {

@@ -69,5 +69,5 @@ services:
   #     - 9667:80
   #     - 34343:34343
 
-volumes:
-  bloom:
+# volumes:
+#   bloom:

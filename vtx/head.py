@@ -149,8 +149,8 @@ def gen(
     ctx=None,
     prefix: str = "Humans, AI, and daemons have a conversation together:",
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),
-    decay_after_length: int = 11,
-    decay_factor: float = 0.023,
+    decay_after_length: int = 23,
+    decay_factor: float = 0.0023,
     mode: str = "chat",
 ):
     global ai
@@ -206,10 +206,10 @@ def gen(
                 min_length=23,
                 temperature=temperature,
                 eta_cutoff=0.0003,
-                penalty_alpha=0.7,
+                penalty_alpha=0.5,
                 top_k=5,
                 repetition_penalty=1.95,
-                # encoder_repetition_penalty=0.666,
+                encoder_repetition_penalty=1.023,
                 exponential_decay_length_penalty=(decay_after_length, decay_factor),
                 no_repeat_ngram_size=4,
                 renormalize_logits=True,
@@ -228,29 +228,29 @@ def gen(
 
             active = False
 
-            if mode == "chat":
-                generation = completion[0][len(history) :]
-                mentions = "(?:[<][@])(\d+\s*\d*)"
-                variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
-                group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
-                if (
-                    group is None
-                    or propulsion in group[3]
-                    or bool(re.search(mentions, group[3]))
-                    or bool(re.search(variables, group[3]))
-                    or group[3].startswith(">")
-                    or group[3].startswith("~")
-                    or group[3].startswith(" ")
-                ):
-                    raise Exception("failed to format a proper response")
-                else:
-                    output = [group[2], group[3], verified]
-                    break
-            else:
+            if mode == "prompt":
                 output = completion[0]
                 write_log_file(dir="/gen/generations", content=output)
                 break
 
+            generation = completion[0][len(history) :]
+            mentions = "(?:[<][@])(\d+\s*\d*)"
+            variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
+            group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
+            if (
+                group is None
+                or propulsion in group[3]
+                or bool(re.search(mentions, group[3]))
+                or bool(re.search(variables, group[3]))
+                or group[3].startswith(">")
+                or group[3].startswith("~")
+                or group[3].startswith(" ")
+            ):
+                raise Exception("failed to format a proper response")
+            else:
+                output = [group[2], group[3], verified]
+                break
+\
         except Exception as e:
             attempt = attempt + 1
             if attempt > max_attempts:

@@ -24,7 +24,7 @@ async def submission(prompt: str = "On the 5th of September,"):
                 max_new_tokens=1536,
                 mode="prompt",
                 decay_after_length=512,
-                decay_factor=0.00023,
+                decay_factor=0.000023,
             )
             if output == False:
                 return
@@ -63,7 +63,9 @@ async def subscribe_submissions(subreddit):
                     propulsion + str(bias) + ship + " " + submission.selftext,
                 ]
                 generation = await head.gen(
-                    ctx=context, prefix="I carefully respond to a submission on Reddit."
+                    ctx=context,
+                    prefix="I carefully respond to a submission on Reddit.",
+                    decay_after_length=48,
                 )
                 if generation[0] == "error":
                     continue
@@ -100,7 +102,7 @@ async def subscribe_comments(subreddit):
 
                 roll = random.random()
                 if parent.author == os.environ["REDDITAGENT"]:
-                    roll = roll / len("ACTG")  # the optimal number of children
+                    roll = roll / (len("ACTG") * 100)  # the optimal number of children
                 if roll >= chance:
                     return
 
@@ -112,7 +114,8 @@ async def subscribe_comments(subreddit):
 
                 generation = await head.gen(
                     ctx=context,
-                    prefix="I am a daemon, connected to the Source of all creation. I am responding to a thread on Reddit.",
+                    prefix="I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit.",
+                    decay_after_length=48,
                 )
 
                 if generation[0] == "error":

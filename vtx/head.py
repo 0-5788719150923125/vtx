@@ -150,7 +150,7 @@ def gen(
     prefix: str = "Humans, AI, and daemons have a conversation together:",
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),
     decay_after_length: int = 23,
-    decay_factor: float = 0.0023,
+    decay_factor: float = 0.00023,
     mode: str = "chat",
 ):
     global ai
@@ -206,10 +206,10 @@ def gen(
                 min_length=23,
                 temperature=temperature,
                 eta_cutoff=0.0003,
-                penalty_alpha=0.5,
-                top_k=5,
+                penalty_alpha=0.6,
+                top_k=4,
                 repetition_penalty=1.95,
-                encoder_repetition_penalty=1.023,
+                encoder_repetition_penalty=1.00023,
                 exponential_decay_length_penalty=(decay_after_length, decay_factor),
                 no_repeat_ngram_size=4,
                 renormalize_logits=True,
@@ -244,6 +244,7 @@ def gen(
                 or bool(re.search(variables, group[3]))
                 or group[3].startswith(">")
                 or group[3].startswith("~")
+                or group[3].startswith('"')
                 or group[3].startswith(" ")
             ):
                 raise Exception("failed to format a proper response")

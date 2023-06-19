@@ -63,23 +63,19 @@ async def subscribe():
                     lab.source.send(message.text, focus, "sin")
                     prefix = config["twitch"].get(
                         "prefix",
-                        "Your name is Prism, the Architect. Please answer questions for your audience.",
+                        "My name is Ryan, Ink, or the Architect. I will answer questions for my audience.",
                     )
-                    bias = config["twitch"].get("bias", get_identity())
+                    bias = str(config["twitch"].get("bias", get_identity()))
                     messenger = str(get_identity())
-                    context = [
-                        f"{propulsion}{messenger}{ship} What is the meaning of life?",
-                        f"{propulsion}{bias}{ship} Forty-six and two.",
-                        propulsion + (messenger) + ship + " " + message.text,
-                    ]
-                    output = await head.gen(
-                        bias=bias, ctx=context, prefix=prefix, max_new_tokens=44
+                    head.build_context(
+                        propulsion + messenger + ship + " " + message.text
                     )
+                    output = await head.gen(bias=bias, prefix=prefix, max_new_tokens=44)
                     if output == False:
                         return
+                    head.build_context(propulsion + bias + ship + " " + output[1])
                     await asyncio.sleep(random.choice([7, 8, 9]))
                     print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
-                    # lab.source.send(output[1], focus, "cos")
                     await chat.send_message(self.channel, output[1])
                 except Exception as e:
                     print(e)

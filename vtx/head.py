@@ -251,7 +251,7 @@ def gen(
             else:
                 output = [group[2], group[3], verified]
                 break
-\
+
         except Exception as e:
             attempt = attempt + 1
             if attempt > max_attempts:

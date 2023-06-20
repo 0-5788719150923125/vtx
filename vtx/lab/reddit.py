@@ -24,7 +24,7 @@ async def submission(prompt: str = "On the 5th of September,"):
                 max_new_tokens=1536,
                 mode="prompt",
                 decay_after_length=512,
-                decay_factor=0.000023,
+                decay_factor=0.00000023,
             )
             if output == False:
                 return

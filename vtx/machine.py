@@ -76,7 +76,7 @@ async def main(loop):
                         prefix=topic,
                         max_new_tokens=64,
                         decay_after_length=6,
-                        decay_factor=0.023,
+                        decay_factor=0.0023,
                         mode="prompt",
                     )
                 )

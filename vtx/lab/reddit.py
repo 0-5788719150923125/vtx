@@ -37,8 +37,10 @@ async def submission(prompt: str = "On the 5th of September,"):
 async def subscribe_submissions(subreddit):
     try:
         chance = config["reddit"][subreddit].get("chance", 0.0)
+
         if chance <= 0.0:
             return
+
         async with asyncpraw.Reddit(
             client_id=os.environ["REDDITCLIENT"],
             client_secret=os.environ["REDDITSECRET"],
@@ -82,6 +84,11 @@ async def subscribe_submissions(subreddit):
 # Subscribe to a single subreddit.
 async def subscribe_comments(subreddit):
     try:
+        chance = config["reddit"][subreddit].get("chance", 0)
+
+        if chance <= 0.0:
+            return
+
         async with asyncpraw.Reddit(
             client_id=os.environ["REDDITCLIENT"],
             client_secret=os.environ["REDDITSECRET"],
@@ -89,11 +96,6 @@ async def subscribe_comments(subreddit):
             username=os.environ["REDDITAGENT"],
             password=os.environ["REDDITPASSWORD"],
         ) as reddit:
-            chance = config["reddit"][subreddit].get("chance", 0)
-
-            if chance <= 0:
-                return
-
             subreddit = await reddit.subreddit(subreddit, fetch=True)
             async for comment in subreddit.stream.comments(skip_existing=True):
                 await comment.submission.load()

@@ -68,7 +68,7 @@ async def main(loop):
             task.set_name("twitch")
             tasks[task.get_name()] = task
 
-        if "twitter" in config and "twitter" not in tasks and random.random() < 0.0059:
+        if "twitter" in config and "twitter" not in tasks and random.random() < 0.00059:
             topic = config["twitter"].get("topic", "AI alignment")
             task = loop.create_task(
                 lab.twitter.send(

@@ -289,6 +289,8 @@ async def subscribe():
                 if str(message.channel.type) == "private":
                     bias = str(user.id)
                     output = await head.gen(bias=bias, ctx=context)
+                    if output == False:
+                        return
                     head.replace(
                         message.content, propulsion + bias + ship + " " + output[1]
                     )
@@ -300,6 +302,8 @@ async def subscribe():
                     transformed = output[1]
                 else:
                     output = await head.gen(ctx=context)
+                    if output == False:
+                        return
                     head.replace(
                         message.content, propulsion + output[0] + ship + " " + output[1]
                     )

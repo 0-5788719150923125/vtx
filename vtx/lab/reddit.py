@@ -75,6 +75,7 @@ async def subscribe_submissions(subreddit):
                     daemon = get_daemon(generation[0])
                     generation = transformer([daemon["name"], generation[1]])
                 print(bc.CORE + "ONE@REDDIT: " + ad.TEXT + generation)
+                await asyncio.sleep(random.randint(300, 900))
                 await submission.reply(generation)
 
     except Exception as e:
@@ -125,7 +126,7 @@ async def subscribe_comments(subreddit):
 
                 daemon = get_daemon(generation[0])
                 output = transformer([daemon["name"], generation[1]])
-                await asyncio.sleep(random.randint(60, 300))
+                await asyncio.sleep(random.randint(300, 900))
                 await comment.reply(output)
 
                 color = bc.CORE

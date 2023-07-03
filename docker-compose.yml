@@ -6,9 +6,6 @@ services:
     command: nodemon --ext '*.py, *.yml' --ignore "models/*" --ignore "*.json" --exec python3 main.py
     restart: 'always'
     user: 1000:1000
-    ulimits:
-      memlock: -1
-      stack: 67108864
     build:
       context: .
       dockerfile: Dockerfile

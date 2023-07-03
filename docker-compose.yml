@@ -12,6 +12,7 @@ services:
       shm_size: '1gb'
     stdin_open: true
     tty: true
+    network_mode: "host"
     volumes:
       - ./gen:/gen
       - ./lab:/lab
@@ -20,15 +21,17 @@ services:
       - .env
     environment:
       FOCUS: ${FOCUS:-heart}
+      TRANSFORMERS_CACHE: /tmp
 
   ctx:
     image: ghcr.io/0-5788719150923125/src:latest
     restart: 'always'
+    network_mode: "host"
+    ports:
+      - 9666:9666
     environment:
       WEBUI: disabled
       ANONYMOUS: 'true'
-    ports:
-      - 9666:9666
 
   pit:
     image: ghcr.io/0-5788719150923125/bot:latest

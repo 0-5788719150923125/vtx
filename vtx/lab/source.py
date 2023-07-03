@@ -13,7 +13,7 @@ messages = {}
 
 # Send a message to the Source
 def send(message, focus, mode: str = "cos", identifier: str = str(get_identity())):
-    url = "http://ctx:9666/send/" + focus
+    url = "http://localhost:9666/send/" + focus
     payload = {"message": message, "identifier": identifier, "mode": mode}
     x = requests.post(url, json=payload)
 
@@ -25,7 +25,7 @@ async def polling(focus):
         try:
             await asyncio.sleep(random.uniform(8.0, 8.8888888))
 
-            deep = requests.get("http://ctx:9666/receive/" + focus, timeout=6)
+            deep = requests.get("http://localhost:9666/receive/" + focus, timeout=6)
             state = json.loads(deep.text)
 
             if focus not in messages:

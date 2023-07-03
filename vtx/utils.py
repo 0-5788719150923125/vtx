@@ -15,7 +15,6 @@ ship = ":>"
 
 cache_path = "/tmp/torch"
 os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
-os.environ["TRANSFORMERS_CACHE"] = "/tmp"
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 if os.path.exists(cache_path):
@@ -70,7 +69,7 @@ def get_identity():
 # Generate a deterministic daemon name from a string
 def get_daemon(seed):
     obj = {"seed": str(seed)}
-    response = requests.get("http://ctx:9666/daemon", json=obj)
+    response = requests.get("http://localhost:9666/daemon", json=obj)
     daemon = json.loads(response.text)
     response.close()
     return daemon

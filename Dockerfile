@@ -43,26 +43,11 @@ RUN npm i -g nodemon
 
 COPY package*.json requirements.txt ./
 
-# RUN pip3 install torch
-
 RUN pip3 install -r requirements.txt
 
 COPY . ./
 
 RUN pip install /vtx/lab/aitextgen
-
-# ENV PATH=/usr/local/cuda/bin:$PATH
-
-# ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-
-# ENV RWKV_JIT_ON = "1"
-# ENV RWKV_CUDA_ON = "1"
-
-# WORKDIR /vtx/lab/rwkv-cuda/wkv
-
-# RUN python3 /vtx/lab/rwkv-cuda/wkv/run.py
-
-# WORKDIR /vtx
 
 CMD ["python3", "vtx/main.py"]
 

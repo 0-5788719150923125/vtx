@@ -1,6 +1,6 @@
-FROM nvcr.io/nvidia/cuda:12.1.1-devel-ubuntu22.04
+FROM nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
 
-ENV TORCH_CUDA_ARCH_LIST=Turing
+# ENV TORCH_CUDA_ARCH_LIST=Turing
 
 RUN apt-get update && apt-get install -y python3-pip nodejs npm curl unzip
 
@@ -13,6 +13,7 @@ RUN apt-get update \
     libstdc++6 \
     python3-packaging \
     zlib1g \
+    ninja-build \
     && rm -rf /var/lib/apt/lists/*
 
 ENV DOTNET_VERSION=7.0.0
@@ -48,6 +49,10 @@ RUN pip3 install -r requirements.txt
 COPY . ./
 
 RUN pip install /vtx/lab/aitextgen
+
+RUN mkdir /.cache
+
+RUN chmod -R 777 /.cache
 
 CMD ["python3", "vtx/main.py"]
 

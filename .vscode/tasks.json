@@ -35,6 +35,12 @@
       "command": "docker-compose push"
     },
     {
+      "label": "pull",
+      "detail": "Pull the latest Docker images for this project.",
+      "type": "shell",
+      "command": "docker-compose pull"
+    },
+    {
       "label": "up",
       "detail": "Start the services in a development environment.",
       "type": "shell",

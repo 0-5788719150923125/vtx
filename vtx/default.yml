@@ -101,9 +101,30 @@ soul:
           - default
 
 heart:
-  info: never give up, never give in
-  model: gpt2
-  to_gpu: False
+  info: with all you've got
+  to_gpu: True
+  gpu_index: 1
+  max_new_tokens: 111
+  context_length: 4096
+  training:
+    resume: False
+    base_model: RWKV/rwkv-4-430m-pile
+    gradient_checkpointing: False
+    stages:
+      - learning_rate: 0.0001
+        block_size: 1024
+        num_steps: 111111
+        weight_decay: 0.01
+        max_grad_norm: 1.23
+        num_layers_freeze: 1
+        scheduler: get_cosine_schedule_with_warmup
+        num_cycles: 0.5
+        batch_size: 1
+        gradient_accumulation_steps: 6
+        train_transformers_only: False
+        equalize_datasets: False
+        datasets:
+          - two
 
 mind:
   info: use your head
@@ -173,22 +194,22 @@ collections:
 # :: https://discord.com/developers/applications
 # :: At a minimum, your account must have the ability to read and send messages.
 
-discord:
-    # Whether or not to use a self token for authentication. If False, Discord Chat Exporter
-    # will attempt to fetch messages as your bot itself.
-    # How to obtain a self token: https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md
-  use_self_token: True
-    # Whether or not to export private messages.
-  export_dms: True
-    # A list of servers to fetch from (by Discord server ID).
-  servers:
-    '558378982920159242':
-        # "before" and "after" are both supported.
-      before: '2021-01-01 12:00'
-        # Do not attempt to fetch additional messages from this server.
-      skip: True
-    '1041331166592106576':
-    '907925566089465886':
+# discord:
+#     # Whether or not to use a self token for authentication. If False, Discord Chat Exporter
+#     # will attempt to fetch messages as your bot itself.
+#     # How to obtain a self token: https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md
+#   use_self_token: True
+#     # Whether or not to export private messages.
+#   export_dms: True
+#     # A list of servers to fetch from (by Discord server ID).
+#   servers:
+#     '558378982920159242':
+#         # "before" and "after" are both supported.
+#       before: '2021-01-01 12:00'
+#         # Do not attempt to fetch additional messages from this server.
+#       skip: True
+#     '1041331166592106576':
+#     '907925566089465886':
 
 # :: Connect your AI to Telegram.
 # :: This requires a bot API key. To obtain this, you must speak to

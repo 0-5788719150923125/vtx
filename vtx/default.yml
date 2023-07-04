@@ -173,22 +173,22 @@ collections:
 # :: https://discord.com/developers/applications
 # :: At a minimum, your account must have the ability to read and send messages.
 
-# discord:
+discord:
     # Whether or not to use a self token for authentication. If False, Discord Chat Exporter
     # will attempt to fetch messages as your bot itself.
     # How to obtain a self token: https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md
-#   use_self_token: True
+  use_self_token: True
     # Whether or not to export private messages.
-#   export_dms: True
+  export_dms: True
     # A list of servers to fetch from (by Discord server ID).
-#   servers:
-#     '558378982920159242':
+  servers:
+    '558378982920159242':
         # "before" and "after" are both supported.
-#       before: '2021-01-01 12:00'
+      before: '2021-01-01 12:00'
         # Do not attempt to fetch additional messages from this server.
-#       skip: True
-#     '1041331166592106576':
-#     '907925566089465886':
+      skip: True
+    '1041331166592106576':
+    '907925566089465886':
 
 # :: Connect your AI to Telegram.
 # :: This requires a bot API key. To obtain this, you must speak to

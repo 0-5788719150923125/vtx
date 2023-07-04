@@ -17,7 +17,10 @@
       "label": "exec",
       "detail": "Open an interactive shell in the specified container.",
       "type": "shell",
-      "command": "docker-compose exec \"${input:ship}\" /bin/sh"
+      "command": "docker-compose exec \"${input:ship}\" /bin/sh",
+      "windows": {
+        "command": "docker-compose exec \\\"${input:ship}\\\" /bin/sh"
+      }
     },
     {
       "label": "build",
@@ -53,6 +56,9 @@
       "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\"",
       "runOptions": {
         "instanceLimit": 3
+      },
+      "windows": {
+        "command": "docker-compose run vtx python3 -c \\\"import i; ${input:i}\\\""
       }
     },
     {

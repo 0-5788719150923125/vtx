@@ -240,6 +240,8 @@ async def get_all_channels():
 # Subscribe to a Discord bot via token
 async def subscribe():
     discord_token = os.environ["DISCORDTOKEN"]
+    if not discord_token:
+        return
     intents = discord.Intents.default()
     intents.members = True
     intents.messages = True

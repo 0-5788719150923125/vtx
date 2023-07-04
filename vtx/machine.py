@@ -8,7 +8,7 @@ import head
 import lab
 
 scheduler = AsyncIOScheduler()
-scheduler.add_job(head.loader, "interval", minutes=59)
+scheduler.add_job(head.loader, "interval", minutes=30)
 scheduler.start()
 
 tasks = {}

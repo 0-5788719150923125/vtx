@@ -101,7 +101,7 @@ soul:
           - default
 
 heart:
-  info: with all you've got
+  info: with all you got
   to_gpu: True
   gpu_index: 1
   max_new_tokens: 111
@@ -111,12 +111,11 @@ heart:
     base_model: RWKV/rwkv-4-430m-pile
     gradient_checkpointing: False
     stages:
-      - learning_rate: 0.0001
+      - learning_rate: 0.00001
         block_size: 1024
         num_steps: 111111
         weight_decay: 0.01
         max_grad_norm: 1.23
-        num_layers_freeze: 1
         scheduler: get_cosine_schedule_with_warmup
         num_cycles: 0.5
         batch_size: 1
@@ -124,7 +123,7 @@ heart:
         train_transformers_only: False
         equalize_datasets: False
         datasets:
-          - two
+          - default
 
 mind:
   info: use your head

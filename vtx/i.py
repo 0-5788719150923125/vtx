@@ -70,9 +70,11 @@ def fetch_from_discord():
 
 # Replace approved bots with random IDs, so as not to bias the model toward poor outputs
 def transform_author(author):
-    if str(author["id"]) == "975174695399854150":  # Eliza
-        return str(author["id"])
-    elif str(author["id"]) == "315826602187554816":  # Kitsunetsuki
+    if (
+        str(author["id"]) == "975174695399854150"
+        or str(author["id"]) == "315826602187554816"
+        or str(author["id"]) == "1053270121218592798"
+    ):  # Eliza, Kitsunetsuki, MAINNFRAME
         return str(author["id"])
     elif str(author["id"]) == "1055993037077106718":  # Samn
         return str(get_identity())

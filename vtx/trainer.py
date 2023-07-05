@@ -207,6 +207,8 @@ if __name__ == "__main__":
                             + bc.FOLD
                             + dataset
                             + "/"
+                            + str(block_size)
+                            + "/"
                             + str(duplicate)
                             + ad.TEXT
                         )
@@ -216,6 +218,8 @@ if __name__ == "__main__":
                             + dataset
                             + "/"
                             + str(focus)
+                            + "/"
+                            + str(block_size)
                             + "/"
                             + str(duplicate)
                             + "/"
@@ -239,6 +243,8 @@ if __name__ == "__main__":
                                 + "/"
                                 + str(focus)
                                 + "/"
+                                + str(block_size)
+                                + "/"
                                 + str(duplicate)
                             )
                         except:
@@ -249,6 +255,8 @@ if __name__ == "__main__":
                             + dataset
                             + "/"
                             + str(focus)
+                            + "/"
+                            + str(block_size)
                             + "/"
                             + str(duplicate)
                         )
@@ -308,6 +316,7 @@ if __name__ == "__main__":
             setattr(ai.model.config, "resid_dropout", stage["dropout"])
             setattr(ai.model.config, "summary_first_dropout", stage["dropout"])
             setattr(ai.model.config, "hidden_dropout", stage["dropout"])
+
         inputs = build_inputs(stage)
         ai.train(
             train_data=inputs,
@@ -324,6 +333,7 @@ if __name__ == "__main__":
             max_grad_norm=stage.get("max_grad_norm", 0.5),
             gradient_accumulation_steps=stage.get("gradient_accumulation_steps", 1),
             train_transformers_only=stage.get("train_transformers_only", False),
+            use_deepspeed=False,
             fp16=False,
             freeze_layers=True,
             num_layers_freeze=stage.get("num_layers_freeze", None),

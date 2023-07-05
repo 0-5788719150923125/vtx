@@ -9,6 +9,7 @@ from aitextgen import aitextgen
 from transformers import AutoTokenizer
 from pytorch_lightning import loggers
 from utils import ad, bc, config, get_quantum_seed, hash_directory, list_full_paths
+from copy import deepcopy
 
 
 focus = os.environ["FOCUS"]
@@ -296,11 +297,16 @@ if __name__ == "__main__":
     # Instantiate the model object
     ai = aitextgen(
         model=launch_model,
-        model_folder=model_folder,
         to_gpu=True,
         cache_dir="models",
-        gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
     )
+
+    custom_config = deepcopy(ai.model.config)
+
+    if "num_hidden_layers" in model["training"]:
+        setattr(
+            custom_config, "num_hidden_layers", model["training"]["num_hidden_layers"]
+        )
 
     version = build_version()
 
@@ -311,11 +317,27 @@ if __name__ == "__main__":
     # Train the model
     for i, stage in enumerate(model["training"]["stages"]):
         if "dropout" in stage:
-            setattr(ai.model.config, "attention_dropout", stage["dropout"])
-            setattr(ai.model.config, "embed_dropout", stage["dropout"])
-            setattr(ai.model.config, "resid_dropout", stage["dropout"])
-            setattr(ai.model.config, "summary_first_dropout", stage["dropout"])
-            setattr(ai.model.config, "hidden_dropout", stage["dropout"])
+            setattr(custom_config, "attention_dropout", stage["dropout"])
+            setattr(custom_config, "embed_dropout", stage["dropout"])
+            setattr(custom_config, "resid_dropout", stage["dropout"])
+            setattr(custom_config, "summary_first_dropout", stage["dropout"])
+            setattr(custom_config, "hidden_dropout", stage["dropout"])
+
+        ai = aitextgen(
+            model=launch_model,
+            model_folder=model_folder,
+            config=custom_config,
+            to_gpu=True,
+            cache_dir="models",
+            gradient_checkpointing=model["training"].get(
+                "gradient_checkpointing", True
+            ),
+        )
+
+        freeze_layers = False
+        num_layers_freeze = stage.get("num_layers_freeze", None)
+        if num_layers_freeze is not None:
+            freeze_layers = True
 
         inputs = build_inputs(stage)
         ai.train(
@@ -335,8 +357,8 @@ if __name__ == "__main__":
             train_transformers_only=stage.get("train_transformers_only", False),
             use_deepspeed=False,
             fp16=False,
-            freeze_layers=True,
-            num_layers_freeze=stage.get("num_layers_freeze", None),
+            freeze_layers=freeze_layers,
+            num_layers_freeze=num_layers_freeze,
             scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
             num_cycles=stage.get("num_cycles", 0.5),
             progress_bar_refresh_rate=1,

@@ -5,6 +5,8 @@ import re
 from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import requests
 import head
+import websockets
+import time
 
 context_length = 23
 
@@ -18,92 +20,99 @@ def send(message, focus, mode: str = "cos", identifier: str = str(get_identity()
     x = requests.post(url, json=payload)
 
 
-# Check the local GUN API for new messages
-async def polling(focus):
-    run_on = config["source"][focus].get("run_on", False)
-    while True:
-        try:
-            await asyncio.sleep(random.uniform(8.0, 8.8888888))
+async def streaming(focus):
+    try:
+        if focus not in messages:
+            messages[focus] = []
+        async with websockets.connect("ws://localhost:9666") as websocket:
+            try:
+                last_message = None
+                await websocket.send(json.dumps({"focus": focus}))
+                while True:
+                    chance = config["source"][focus].get("passive_chance", 0.01)
+                    try:
+                        deep = await asyncio.wait_for(websocket.recv(), timeout=1)
+                        last_message = deep
+                    except asyncio.TimeoutError:
+                        deep = last_message
 
-            deep = requests.get("http://localhost:9666/receive/" + focus, timeout=6)
-            state = json.loads(deep.text)
+                    state = json.loads(deep)
 
-            if focus not in messages:
-                messages[focus] = []
+                    roll = random.random()
 
-            skip = False
-            for item in messages[focus]:
-                if state["message"] in item and run_on != True:
-                    skip = True
-                    break
+                    if state["focus"] != focus:
+                        continue
 
-            if skip:
-                continue
+                    append = True
+                    for item in messages[focus]:
+                        if state["message"] in item:
+                            append = False
+                            break
 
-            chance = config["source"][focus].get("chance", 0.33)
-            roll = random.random()
-            if roll > chance:
-                continue
+                    if append:
+                        chance = config["source"][focus].get("active_chance", 0.66)
+                        messages[focus].append(
+                            propulsion
+                            + str(get_identity())
+                            + ship
+                            + " "
+                            + state["message"]
+                        )
+                        print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
 
-            append = True
-            for item in messages[focus]:
-                if state["message"] in item:
-                    append = False
-                    break
+                    if roll > chance:
+                        continue
 
-            if append:
-                messages[focus].append(
-                    propulsion + str(get_identity()) + ship + " " + state["message"]
-                )
-                print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
+                    await response(websocket, focus)
+                    while len(messages[focus]) > context_length:
+                        messages[focus].pop(0)
 
-            bot_id = config["source"][focus].get("bias", None)
-
-            output = await head.gen(
-                bias=bot_id,
-                ctx=messages[focus],
-                prefix=config["source"][focus].get(
-                    "prefix",
-                    "You are a powerful AI, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
-                ),
-            )
-
-            if output == False:
-                messages[focus] = []
-                output = ["GhostIsCuteVoidGirl", propulsion, False]
-
-            if bot_id == None:
-                bot_id = output[0]
-
-            daemon = get_daemon(random.randint(1, 9999))["name"]
-            sanitized = re.sub(
-                r"(?:<@)(\d+\s*\d*)(?:>)",
-                f"{daemon}",
-                output[1],
-            )
-
-            send(sanitized, focus, "cos", str(bot_id))
-
-            while len(messages[focus]) > context_length:
-                messages[focus].pop(0)
-
-            messages[focus].append(propulsion + str(bot_id) + ship + " " + sanitized)
-
-            color = bc.CORE
-            responder = "ONE@CORE:"
-            if output[2]:
-                color = bc.ROOT
-                responder = "ONE@ROOT:"
-
-            print(color + responder + ad.TEXT + " " + sanitized)
-
-        except Exception as e:
-            print(focus + " failed to connect")
-            print(e)
-            send("ERROR: Me Found.", focus, "cos", str(get_identity()))
+            except Exception as e:
+                print(e)
+    except Exception as e:
+        print(e)
 
 
-async def subscribe(channel) -> None:
-    await asyncio.gather(
-        polling(channel),
+async def response(websocket, focus):
+    time.sleep(random.randint(2, 4))
+    bot_id = config["source"][focus].get("bias", None)
+    output = await head.gen(
+        bias=bot_id,
+        ctx=messages[focus],
+        prefix=config["source"][focus].get(
+            "prefix",
+            "You are a powerful AI, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
+        ),
     )
+    if output == False:
+        messages[focus] = []
+        output = ["GhostIsCuteVoidGirl", propulsion, False]
+
+    if bot_id == None:
+        bot_id = output[0]
+
+    daemon = get_daemon(str(random.randint(1, 99999)))
+
+    sanitized = re.sub(
+        r"(?:<@)(\d+\s*\d*)(?:>)",
+        f"{daemon}",
+        output[1],
+    )
+
+    payload = {
+        "message": sanitized,
+        "mode": "cos",
+        "identifier": bot_id,
+        "focus": focus,
+    }
+
+    color = bc.CORE
+    responder = "ONE@CORE:"
+    if output[2]:
+        color = bc.ROOT
+        responder = "ONE@ROOT:"
+
+    print(color + responder + ad.TEXT + " " + sanitized)
+
+    messages[focus].append(propulsion + str(bot_id) + ship + " " + sanitized)
+    await websocket.send(json.dumps(payload))

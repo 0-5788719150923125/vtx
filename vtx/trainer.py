@@ -9,7 +9,7 @@ from aitextgen import aitextgen
 from transformers import AutoTokenizer
 from pytorch_lightning import loggers
 from utils import ad, bc, config, get_quantum_seed, hash_directory, list_full_paths
-from copy import deepcopy
+from copy import copy, deepcopy
 
 
 focus = os.environ["FOCUS"]
@@ -297,16 +297,11 @@ if __name__ == "__main__":
     # Instantiate the model object
     ai = aitextgen(
         model=launch_model,
+        model_folder=model_folder,
         to_gpu=True,
         cache_dir="models",
+        gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
     )
-
-    custom_config = deepcopy(ai.model.config)
-
-    if "num_hidden_layers" in model["training"]:
-        setattr(
-            custom_config, "num_hidden_layers", model["training"]["num_hidden_layers"]
-        )
 
     version = build_version()
 
@@ -316,24 +311,6 @@ if __name__ == "__main__":
 
     # Train the model
     for i, stage in enumerate(model["training"]["stages"]):
-        if "dropout" in stage:
-            setattr(custom_config, "attention_dropout", stage["dropout"])
-            setattr(custom_config, "embed_dropout", stage["dropout"])
-            setattr(custom_config, "resid_dropout", stage["dropout"])
-            setattr(custom_config, "summary_first_dropout", stage["dropout"])
-            setattr(custom_config, "hidden_dropout", stage["dropout"])
-
-        ai = aitextgen(
-            model=launch_model,
-            model_folder=model_folder,
-            config=custom_config,
-            to_gpu=True,
-            cache_dir="models",
-            gradient_checkpointing=model["training"].get(
-                "gradient_checkpointing", True
-            ),
-        )
-
         freeze_layers = False
         num_layers_freeze = stage.get("num_layers_freeze", None)
         if num_layers_freeze is not None:

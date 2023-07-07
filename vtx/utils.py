@@ -9,6 +9,7 @@ import json
 import hashlib
 import os
 import statistics
+import websocket
 
 propulsion = "¶"
 ship = ":>"
@@ -66,13 +67,13 @@ def get_identity():
     return identity
 
 
-# Generate a deterministic daemon name from a string
 def get_daemon(seed):
-    obj = {"seed": str(seed)}
-    response = requests.get("http://localhost:9666/daemon", json=obj)
-    daemon = json.loads(response.text)
-    response.close()
-    return daemon
+    ws = websocket.WebSocket()
+    ws.connect("ws://localhost:9666/wss")
+    ws.send(json.dumps({"seed": seed}))
+    response = ws.recv()
+    ws.close()
+    return json.loads(response)["name"]
 
 
 # Get a hash value for an entire directory

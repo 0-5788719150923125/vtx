@@ -26,9 +26,9 @@ async def main(loop):
 
         # Get configs, create tasks, and append to task queue
         for focus in config["source"]:
-            if "source-" + focus not in tasks:
-                task = loop.create_task(lab.source.subscribe(focus))
-                task.set_name("source-" + focus)
+            if f"source-{focus}" not in tasks:
+                task = loop.create_task(lab.source.streaming(focus))
+                task.set_name(f"source-{focus}")
                 tasks[task.get_name()] = task
 
         if "telegram" in config and "telegram" not in tasks:

@@ -11,23 +11,22 @@
 
 source:
   # The channel names to subscribe to.
-  hive:
+  trade:
     # Bias toward a Discord user.
-    # bias: 806051627198709760
+    bias: 806051627198709760
 
-    # The chance to respond to new messages in this channel.
-    chance: 0.33
+    # The chance to respond to a new message in this channel.
+    active_chance: 0.66
 
-    # If True, your bot will respond to any message - not just the new ones.
-    # Effectively, this means your bot will respond to its own messages.
-    run_on: False
+    # The chance of sending a message, every second.
+    passive_chance: 0.01
 
     # Specify a custom prefix for your prompt.
     prefix: You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
   support:
-    chance: 0.11
-    run_on: False
+    passive_chance: 0.01
+    active_chance: 0.99
 
 # :: The following are AI model configurations, used by PyTorch:
 # :: https://docs.aitextgen.io/
@@ -101,23 +100,21 @@ soul:
           - default
 
 heart:
-  info: with all you got
   to_gpu: True
-  gpu_index: 1
-  max_new_tokens: 111
-  context_length: 4096
+  max_new_tokens: 66
+  context_length: 2048
   training:
     resume: False
-    base_model: RWKV/rwkv-4-430m-pile
+    base_model: RWKV/rwkv-4-169m-pile
     gradient_checkpointing: False
     stages:
-      - learning_rate: 0.00001
+      - learning_rate: 0.0001
         block_size: 1024
-        num_steps: 111111
+        num_steps: 333333
         weight_decay: 0.01
         max_grad_norm: 1.23
         scheduler: get_cosine_schedule_with_warmup
-        num_cycles: 0.5
+        num_cycles: 0.333
         batch_size: 1
         gradient_accumulation_steps: 6
         train_transformers_only: False

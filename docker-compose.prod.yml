@@ -10,6 +10,6 @@ services:
               capabilities: [gpu]
               device_ids: ['${INFERENCE_GPU_INDEX:-0}']
 
-  ctx:
-    environment:
-      WEBUI: enabled
+  # ctx:
+  #   environment:
+  #     WEBUI: enabled

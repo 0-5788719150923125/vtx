@@ -73,7 +73,7 @@ async def subscribe_submissions(subreddit):
                     continue
                 else:
                     daemon = get_daemon(generation[0])
-                    generation = transformer([daemon["name"], generation[1]])
+                    generation = transformer([daemon, generation[1]])
                 print(bc.CORE + "ONE@REDDIT: " + ad.TEXT + generation)
                 await asyncio.sleep(random.randint(300, 900))
                 await submission.reply(generation)
@@ -125,7 +125,7 @@ async def subscribe_comments(subreddit):
                     continue
 
                 daemon = get_daemon(generation[0])
-                output = transformer([daemon["name"], generation[1]])
+                output = transformer([daemon, generation[1]])
                 await asyncio.sleep(random.randint(300, 900))
                 await comment.reply(output)
 

@@ -23,15 +23,15 @@ services:
       FOCUS: ${FOCUS:-heart}
       TRANSFORMERS_CACHE: /tmp
 
-  # ctx:
-  #   image: ghcr.io/0-5788719150923125/src:latest
-  #   restart: 'always'
-  #   network_mode: "host"
-  #   ports:
-  #     - 9666:9666
-  #   environment:
-  #     WEBUI: disabled
-  #     ANONYMOUS: 'true'
+  ctx:
+    image: ghcr.io/0-5788719150923125/src:latest
+    restart: 'always'
+    network_mode: "host"
+    ports:
+      - 9666:9666
+    environment:
+      WEBUI: disabled
+      ANONYMOUS: 'true'
 
   pit:
     image: ghcr.io/0-5788719150923125/bot:latest

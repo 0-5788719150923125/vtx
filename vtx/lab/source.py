@@ -5,12 +5,29 @@ import re
 from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
 import requests
 import head
+import websocket
 import websockets
 import time
 
 context_length = 23
 
 messages = {}
+
+
+def send(message, focus, mode):
+    ws = websocket.WebSocket()
+    ws.connect("ws://localhost:9666/wss")
+    ws.send(
+        json.dumps(
+            {
+                "message": message,
+                "identifier": str(get_identity()),
+                "focus": focus,
+                "mode": mode,
+            }
+        ).encode("utf-8")
+    )
+    ws.close()
 
 
 async def streaming(focus):

@@ -13,64 +13,61 @@ context_length = 23
 messages = {}
 
 
-# Send a message to the Source
-def send(message, focus, mode: str = "cos", identifier: str = str(get_identity())):
-    url = "http://localhost:9666/send/" + focus
-    payload = {"message": message, "identifier": identifier, "mode": mode}
-    x = requests.post(url, json=payload)
-
-
 async def streaming(focus):
-    try:
-        if focus not in messages:
-            messages[focus] = []
-        async with websockets.connect("ws://localhost:9666") as websocket:
-            try:
-                last_message = None
-                await websocket.send(json.dumps({"focus": focus}))
-                while True:
-                    chance = config["source"][focus].get("passive_chance", 0.01)
-                    try:
-                        deep = await asyncio.wait_for(websocket.recv(), timeout=1)
-                        last_message = deep
-                    except asyncio.TimeoutError:
-                        deep = last_message
+    if focus not in messages:
+        messages[focus] = []
+    async with websockets.connect("ws://localhost:9666/wss") as websocket:
+        try:
+            last_message = None
+            await websocket.send(json.dumps({"focus": focus}).encode("utf-8"))
+            while True:
+                chance = config["source"][focus].get("passive_chance", 0.01)
+                try:
+                    deep = await asyncio.wait_for(websocket.recv(), timeout=1)
+                    last_message = deep
+                except asyncio.TimeoutError:
+                    deep = last_message
 
-                    state = json.loads(deep)
+                state = json.loads(deep)
 
-                    roll = random.random()
+                roll = random.random()
 
-                    if state["focus"] != focus:
-                        continue
+                if state["focus"] != focus:
+                    continue
 
-                    append = True
-                    for item in messages[focus]:
-                        if state["message"] in item:
-                            append = False
-                            break
+                append = True
+                for item in messages[focus]:
+                    if state["message"] in item:
+                        append = False
+                        break
 
-                    if append:
-                        chance = config["source"][focus].get("active_chance", 0.66)
-                        messages[focus].append(
-                            propulsion
-                            + str(get_identity())
-                            + ship
-                            + " "
-                            + state["message"]
-                        )
-                        print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
+                if append:
+                    chance = config["source"][focus].get("active_chance", 0.66)
+                    messages[focus].append(
+                        propulsion + str(get_identity()) + ship + " " + state["message"]
+                    )
+                    print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
 
-                    if roll > chance:
-                        continue
+                if roll > chance:
+                    continue
 
-                    await response(websocket, focus)
-                    while len(messages[focus]) > context_length:
-                        messages[focus].pop(0)
+                await response(websocket, focus)
+                while len(messages[focus]) > context_length:
+                    messages[focus].pop(0)
 
-            except Exception as e:
-                print(e)
-    except Exception as e:
-        print(e)
+        except Exception as e:
+            print("failed on " + focus)
+            print(e)
+            await websocket.send(
+                json.dumps(
+                    {
+                        "message": "ERROR: Me Found.",
+                        "mode": "cos",
+                        "identifier": "GhostIsCuteVoidGirl",
+                        "focus": focus,
+                    }
+                ).encode("utf-8")
+            )
 
 
 async def response(websocket, focus):
@@ -115,4 +112,4 @@ async def response(websocket, focus):
     print(color + responder + ad.TEXT + " " + sanitized)
 
     messages[focus].append(propulsion + str(bot_id) + ship + " " + sanitized)
-    await websocket.send(json.dumps(payload))
+    await websocket.send(json.dumps(payload).encode("utf-8"))

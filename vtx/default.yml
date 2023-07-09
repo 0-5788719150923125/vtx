@@ -15,7 +15,7 @@ source:
     # Bias toward a Discord user.
     bias: 806051627198709760
 
-    # The chance to respond to a new message in this channel.
+    # The chance of responding to a new message in the channel.
     active_chance: 0.66
 
     # The chance of sending a message, every second.

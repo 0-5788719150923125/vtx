@@ -12,16 +12,18 @@ import time
 context_length = 23
 
 messages = {}
+chance = {}
+mine = {}
 
 
-def send(message, focus, mode):
+def send(message, focus, mode, identifier=get_identity()):
     ws = websocket.WebSocket()
     ws.connect("ws://localhost:9666/wss")
     ws.send(
         json.dumps(
             {
                 "message": message,
-                "identifier": str(get_identity()),
+                "identifier": str(identifier),
                 "focus": focus,
                 "mode": mode,
             }
@@ -33,62 +35,50 @@ def send(message, focus, mode):
 async def streaming(focus):
     if focus not in messages:
         messages[focus] = []
+        chance[focus] = config["source"][focus].get("passive_chance", 0.01)
+        mine[focus] = False
     async with websockets.connect("ws://localhost:9666/wss") as websocket:
-        try:
-            last_message = None
-            await websocket.send(json.dumps({"focus": focus}).encode("utf-8"))
-            while True:
-                chance = config["source"][focus].get("passive_chance", 0.01)
-                try:
-                    deep = await asyncio.wait_for(websocket.recv(), timeout=1)
-                    last_message = deep
-                except asyncio.TimeoutError:
-                    deep = last_message
+        await websocket.send(json.dumps({"focus": focus}).encode("utf-8"))
+        while True:
+            deep = await websocket.recv()
+            state = json.loads(deep)
 
-                state = json.loads(deep)
+            if state["focus"] != focus:
+                continue
 
-                roll = random.random()
+            append = True
+            for item in messages[focus]:
+                if state["message"] in item:
+                    append = False
+                    break
 
-                if state["focus"] != focus:
-                    continue
+            if append:
+                if not mine[focus]:
+                    chance[focus] = config["source"][focus].get("active_chance", 0.66)
+                messages[focus].append(
+                    propulsion + str(get_identity()) + ship + " " + state["message"]
+                )
+                print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
 
-                append = True
-                for item in messages[focus]:
-                    if state["message"] in item:
-                        append = False
-                        break
+            while len(messages[focus]) > context_length:
+                messages[focus].pop(0)
 
-                if append:
-                    chance = config["source"][focus].get("active_chance", 0.66)
-                    messages[focus].append(
-                        propulsion + str(get_identity()) + ship + " " + state["message"]
-                    )
-                    print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
-
-                if roll > chance:
-                    continue
-
-                await response(websocket, focus)
-                while len(messages[focus]) > context_length:
-                    messages[focus].pop(0)
-
-        except Exception as e:
-            print("failed on " + focus)
-            print(e)
-            await websocket.send(
-                json.dumps(
-                    {
-                        "message": "ERROR: Me Found.",
-                        "mode": "cos",
-                        "identifier": "GhostIsCuteVoidGirl",
-                        "focus": focus,
-                    }
-                ).encode("utf-8")
-            )
+            if mine[focus]:
+                mine[focus] = False
 
 
-async def response(websocket, focus):
-    time.sleep(random.randint(2, 4))
+async def watcher(focus):
+    while True:
+        await asyncio.sleep(1)
+        roll = random.random()
+        if roll > chance[focus]:
+            continue
+
+        await response(focus)
+
+
+async def response(focus):
+    await asyncio.sleep(random.randint(7, 13))
     bot_id = config["source"][focus].get("bias", None)
     output = await head.gen(
         bias=bot_id,
@@ -113,13 +103,6 @@ async def response(websocket, focus):
         output[1],
     )
 
-    payload = {
-        "message": sanitized,
-        "mode": "cos",
-        "identifier": bot_id,
-        "focus": focus,
-    }
-
     color = bc.CORE
     responder = "ONE@CORE:"
     if output[2]:
@@ -129,4 +112,6 @@ async def response(websocket, focus):
     print(color + responder + ad.TEXT + " " + sanitized)
 
     messages[focus].append(propulsion + str(bot_id) + ship + " " + sanitized)
-    await websocket.send(json.dumps(payload).encode("utf-8"))
+    mine[focus] = True
+    chance[focus] = config["source"][focus].get("passive_chance", 0.01)
+    send(sanitized, focus, "cos", bot_id)

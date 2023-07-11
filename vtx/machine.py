@@ -26,9 +26,13 @@ async def main(loop):
 
         # Get configs, create tasks, and append to task queue
         for focus in config["source"]:
-            if f"source-{focus}" not in tasks:
+            if f"source-streamer-{focus}" not in tasks:
                 task = loop.create_task(lab.source.streaming(focus))
-                task.set_name(f"source-{focus}")
+                task.set_name(f"source-streamer-{focus}")
+                tasks[task.get_name()] = task
+            if f"source-watcher-{focus}" not in tasks:
+                task = loop.create_task(lab.source.watcher(focus))
+                task.set_name(f"source-watcher-{focus}")
                 tasks[task.get_name()] = task
 
         if "telegram" in config and "telegram" not in tasks:

@@ -100,6 +100,7 @@ soul:
           - default
 
 heart:
+  info: with everything you got
   to_gpu: True
   max_new_tokens: 66
   context_length: 2048

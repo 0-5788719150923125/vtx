@@ -67,7 +67,7 @@ async def subscribe_submissions(subreddit):
                 generation = await head.gen(
                     ctx=context,
                     prefix="I carefully respond to a submission on Reddit.",
-                    decay_after_length=48,
+                    decay_after_length=66,
                 )
                 if generation[0] == "error":
                     continue
@@ -118,7 +118,7 @@ async def subscribe_comments(subreddit):
                 generation = await head.gen(
                     ctx=context,
                     prefix="I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit.",
-                    decay_after_length=48,
+                    decay_after_length=66,
                 )
 
                 if generation[0] == "error":
@@ -168,10 +168,8 @@ async def build_context(comment):
 # Format the output.
 def transformer(group):
     pronoun = random.choice(["My", "A"])
-    types = random.choice(["daemon", "friend"])
-    verb = random.choice(
-        ["says", "said", "wants to say", "whispers", "thinks", "claims"]
-    )
+    types = random.choice(["daemon", "friend", "robot"])
+    verb = random.choice(["says", "said", "wants to say", "whispers", "thinks"])
     responses = [
         f'{pronoun} {types} {verb}, "{group[1]}"',
         f'Penny {verb}, "{group[1]}"',

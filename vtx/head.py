@@ -150,7 +150,7 @@ def gen(
     prefix: str = "Humans, AI, and daemons have a conversation together:",
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),
     decay_after_length: int = 23,
-    decay_factor: float = 0.00023,
+    decay_factor: float = 0.0023,
     mode: str = "chat",
 ):
     global ai
@@ -197,7 +197,8 @@ def gen(
 
             temperature = 0.9
             if attempt > 0:
-                temperature = temperature - (0.05 * attempt)
+                decay_factor = decay_factor / 2
+                temperature = temperature / 2
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
             params = GenerationConfig(

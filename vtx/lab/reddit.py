@@ -69,7 +69,7 @@ async def subscribe_submissions(subreddit):
                     prefix="I carefully respond to a submission on Reddit.",
                     decay_after_length=66,
                 )
-                if generation[0] == "error":
+                if not generation:
                     continue
                 else:
                     daemon = get_daemon(generation[0])

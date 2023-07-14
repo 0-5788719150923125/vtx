@@ -90,7 +90,7 @@ async def response(focus):
     )
     if output == False:
         messages[focus] = []
-        output = ["GhostIsCuteVoidGirl", propulsion, False]
+        return
 
     if bot_id == None:
         bot_id = output[0]

@@ -1,7 +1,5 @@
 FROM nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
 
-# ENV TORCH_CUDA_ARCH_LIST=Turing
-
 RUN apt-get update && apt-get install -y python3-pip nodejs npm curl unzip
 
 RUN apt-get update \

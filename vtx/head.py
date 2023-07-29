@@ -150,7 +150,7 @@ def gen(
     prefix: str = "Humans, AI, and daemons have a conversation together:",
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),
     decay_after_length: int = 23,
-    decay_factor: float = 0.0023,
+    decay_factor: float = 0.000023,
     mode: str = "chat",
 ):
     global ai

@@ -14,7 +14,8 @@ from utils import ad, bc, config, get_quantum_seed, propulsion, ship, write_log_
 from aitextgen import aitextgen
 import requests
 import logging
-from transformers import AutoTokenizer, GenerationConfig
+from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM
+from peft import PeftModel, PeftConfig
 
 # holds the model globally
 ai = None
@@ -75,6 +76,8 @@ def loader(target=None):
     try:
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + target)
         logging.getLogger("transformers").setLevel(logging.ERROR)
+        if "peft" in model["training"]:
+            model_folder = None
         ai = aitextgen(
             model=model.get("model", None),
             model_folder=model_folder,
@@ -87,6 +90,8 @@ def loader(target=None):
             cache_dir="models",
             padding_side="left",
         )
+        if "peft" in model["training"]:
+            ai.model = PeftModel.from_pretrained(ai.model, "models/" + target)
         logging.getLogger("transformers").setLevel(logging.INFO)
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + model["info"])
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))

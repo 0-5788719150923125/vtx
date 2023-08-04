@@ -134,6 +134,8 @@ toe:
   to_gpu: False
   max_new_tokens: 111
   model: EleutherAI/pythia-70m
+  training:
+    peft: "lora"
 
 # :: Use the following collections of datasets to train your models. Each collection you want
 # :: to use must be specified under your model configuration.

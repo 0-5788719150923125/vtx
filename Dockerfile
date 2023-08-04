@@ -49,8 +49,10 @@ COPY . ./
 RUN pip install /vtx/lab/aitextgen
 
 RUN mkdir /.cache
-
 RUN chmod -R 777 /.cache
+
+RUN mkdir /.triton
+RUN chmod -R 777 /.triton
 
 CMD ["python3", "vtx/main.py"]
 

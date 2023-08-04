@@ -6,7 +6,17 @@ import ninja
 from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
-from transformers import AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import (
+    get_peft_config,
+    get_peft_model,
+    PromptTuningInit,
+    PromptTuningConfig,
+    TaskType,
+    PeftType,
+    LoraConfig,
+    PeftModel,
+)
 from pytorch_lightning import loggers
 from utils import ad, bc, config, get_quantum_seed, hash_directory, list_full_paths
 from copy import copy, deepcopy
@@ -302,6 +312,20 @@ if __name__ == "__main__":
         cache_dir="models",
         gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
     )
+
+    if "peft" in model["training"]:
+        peft_type = model["training"].get("peft", "lora")
+        if peft_type == "lora":
+            peft_config = LoraConfig(
+                task_type="CAUSAL_LM",
+                inference_mode=False,
+                r=4,
+                lora_alpha=16,
+                lora_dropout=0.1,
+                bias="none",
+            )
+        ai.model = get_peft_model(ai.model, peft_config)
+        ai.model.print_trainable_parameters()
 
     version = build_version()
 

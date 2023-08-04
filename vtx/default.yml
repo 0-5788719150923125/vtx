@@ -128,6 +128,16 @@ mind:
   model: bigscience/bloom-560m
   max_new_tokens: 111
   to_gpu: False
+  training:
+    gradient_checkpointing: True
+
+root:
+  info: is for the seeds
+  model: cerebras/Cerebras-GPT-111M
+  max_new_tokens: 111
+  to_gpu: False
+  training:
+    gradient_checkpointing: True
 
 toe:
   info: it's nailed to the foot

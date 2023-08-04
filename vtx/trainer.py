@@ -29,7 +29,7 @@ tokenizer_file = "src." + focus + ".tokenizer.json"
 
 
 def build_version(version=0):
-    while os.path.exists("/gen/logs/" + focus + "/version_" + str(version)):
+    while os.path.exists("/gen/logs/" + focus + "/" + str(version)):
         version = version + 1
     return version
 
@@ -314,15 +314,14 @@ if __name__ == "__main__":
     )
 
     if "peft" in model["training"]:
-        peft_type = model["training"].get("peft", "lora")
-        if peft_type == "lora":
+        p = model["training"].get("peft")
+        if p["type"] == "lora":
             peft_config = LoraConfig(
                 task_type="CAUSAL_LM",
-                inference_mode=False,
-                r=4,
-                lora_alpha=16,
-                lora_dropout=0.1,
-                bias="none",
+                r=p.get("r", 4),
+                lora_alpha=p.get("alpha", 16),
+                lora_dropout=p.get("dropout", 0.1),
+                bias=p.get("bias", "none"),
             )
         ai.model = get_peft_model(ai.model, peft_config)
         ai.model.print_trainable_parameters()

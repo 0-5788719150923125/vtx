@@ -133,7 +133,7 @@ mind:
 
 root:
   info: is for the seeds
-  model: cerebras/Cerebras-GPT-111M
+  model: EleutherAI/gpt-neo-125M
   max_new_tokens: 111
   to_gpu: False
   training:

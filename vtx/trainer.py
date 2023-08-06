@@ -322,6 +322,7 @@ if __name__ == "__main__":
                 lora_alpha=p.get("alpha", 16),
                 lora_dropout=p.get("dropout", 0.1),
                 bias=p.get("bias", "none"),
+                target_modules=p.get("target_modules", None),
             )
         ai.model = get_peft_model(ai.model, peft_config)
         ai.model.print_trainable_parameters()

@@ -216,6 +216,8 @@ if __name__ == "__main__":
                         print(
                             "loading "
                             + bc.FOLD
+                            + focus
+                            + "/"
                             + dataset
                             + "/"
                             + str(block_size)
@@ -226,6 +228,8 @@ if __name__ == "__main__":
 
                         cached = (
                             "/gen/datasets/"
+                            + focus
+                            + "/"
                             + dataset
                             + "/"
                             + str(focus)
@@ -250,6 +254,8 @@ if __name__ == "__main__":
                         try:
                             shutil.rmtree(
                                 "/gen/datasets/"
+                                + focus
+                                + "/"
                                 + dataset
                                 + "/"
                                 + str(focus)
@@ -263,6 +269,8 @@ if __name__ == "__main__":
 
                         os.makedirs(
                             "/gen/datasets/"
+                            + focus
+                            + "/"
                             + dataset
                             + "/"
                             + str(focus)
@@ -323,9 +331,12 @@ if __name__ == "__main__":
                 lora_dropout=p.get("dropout", 0.1),
                 bias=p.get("bias", "none"),
                 target_modules=p.get("target_modules", None),
+                modules_to_save=p.get("modules_to_save", None),
             )
         ai.model = get_peft_model(ai.model, peft_config)
         ai.model.print_trainable_parameters()
+
+    print(ai.model)
 
     version = build_version()
 

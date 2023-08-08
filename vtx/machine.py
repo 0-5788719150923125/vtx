@@ -73,11 +73,11 @@ async def main(loop):
             tasks[task.get_name()] = task
 
         if "twitter" in config and "twitter" not in tasks and random.random() < 0.00059:
-            topic = config["twitter"].get("topic", "AI alignment")
+            topics = config["twitter"].get("topics", ["AI alignment"])
             task = loop.create_task(
                 lab.twitter.send(
                     await head.gen(
-                        prefix=topic,
+                        prefix=random.choice(topics),
                         max_new_tokens=64,
                         decay_after_length=6,
                         decay_factor=0.0023,

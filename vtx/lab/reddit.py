@@ -31,7 +31,8 @@ async def submission(prompt: str = "On the 5th of September,"):
             await subreddit.submit(title=title, selftext=output)
 
     except Exception as e:
-        print(e)
+        pass
+        # print(e)
 
 
 async def subscribe_submissions(subreddit):
@@ -79,7 +80,8 @@ async def subscribe_submissions(subreddit):
                 await submission.reply(generation)
 
     except Exception as e:
-        print(e)
+        pass
+        # print(e)
 
 
 # Subscribe to a single subreddit.
@@ -136,8 +138,9 @@ async def subscribe_comments(subreddit):
                 print(color + "INK@REDDIT: " + ad.TEXT + output)
 
     except Exception as e:
-        print("subreddit at " + str(subreddit))
-        print(e)
+        pass
+        # print("subreddit at " + str(subreddit))
+        # print(e)
 
 
 # Build context from a chain of comments.

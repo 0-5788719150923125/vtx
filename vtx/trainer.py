@@ -360,7 +360,7 @@ if __name__ == "__main__":
             save_every=1000,
             n_gpu=1,
             output_dir=output_dir,
-            loggers=logger,
+            loggers=[logger],
             learning_rate=stage.get("learning_rate", 0.005),
             weight_decay=stage.get("weight_decay", 0.01),
             warmup_steps=stage.get("warmup_steps", 0),

@@ -104,9 +104,10 @@ heart:
   to_gpu: True
   max_new_tokens: 66
   context_length: 2048
+  model: RWKV/rwkv-4-430m-pile
   training:
     resume: False
-    base_model: RWKV/rwkv-4-169m-pile
+    base_model: RWKV/rwkv-4-430m-pile
     gradient_checkpointing: False
     stages:
       - learning_rate: 0.0001
@@ -131,19 +132,11 @@ mind:
   training:
     gradient_checkpointing: True
 
-root:
-  info: is for the seeds
-  model: EleutherAI/gpt-neo-125M
-  max_new_tokens: 111
-  to_gpu: False
-  training:
-    gradient_checkpointing: True
-
 toe:
   info: it's nailed to the foot
   to_gpu: False
   max_new_tokens: 111
-  model: EleutherAI/pythia-70m
+  model: EleutherAI/gpt-neo-125M
   training:
     peft: "lora"
 

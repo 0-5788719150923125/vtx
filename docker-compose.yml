@@ -12,7 +12,6 @@ services:
       shm_size: '1gb'
     stdin_open: true
     tty: true
-    network_mode: "host"
     volumes:
       - ./gen:/gen
       - ./lab:/lab
@@ -26,7 +25,6 @@ services:
   ctx:
     image: ghcr.io/0-5788719150923125/src:latest
     restart: 'always'
-    network_mode: "host"
     ports:
       - 9666:9666
     environment:

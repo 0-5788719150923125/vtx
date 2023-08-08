@@ -69,7 +69,7 @@ def get_identity():
 
 def get_daemon(seed):
     ws = websocket.WebSocket()
-    ws.connect("ws://localhost:9666/wss")
+    ws.connect("ws://ctx:9666/wss")
     ws.send(json.dumps({"seed": seed}).encode("utf-8"))
     response = ws.recv()
     ws.close()
@@ -95,7 +95,8 @@ def hash_directory(path):
 def get_quantum_seed(length: int = 23, data_type: str = "uint8"):
     try:
         response = requests.get(
-            f"https://qrng.anu.edu.au/API/jsonI.php?length={str(length)}&type={data_type}"
+            f"https://qrng.anu.edu.au/API/jsonI.php?length={str(length)}&type={data_type}",
+            timeout=2,
         )
         bullet = json.loads(response.text)
         if bullet["success"] == True:

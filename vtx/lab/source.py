@@ -18,7 +18,7 @@ mine = {}
 
 def send(message, focus, mode, identifier=get_identity()):
     ws = websocket.WebSocket()
-    ws.connect("ws://localhost:9666/wss")
+    ws.connect("ws://ctx:9666/wss")
     ws.send(
         json.dumps(
             {
@@ -37,7 +37,7 @@ async def streaming(focus):
         messages[focus] = []
         chance[focus] = config["source"][focus].get("passive_chance", 0.01)
         mine[focus] = False
-    async with websockets.connect("ws://localhost:9666/wss") as websocket:
+    async with websockets.connect("ws://ctx:9666/wss") as websocket:
         await websocket.send(json.dumps({"focus": focus}).encode("utf-8"))
         while True:
             deep = await websocket.recv()

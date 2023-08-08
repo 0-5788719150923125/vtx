@@ -17,6 +17,8 @@ from peft import (
     LoraConfig,
     PeftModel,
 )
+
+# from peft.tuners.lora import mark_only_lora_as_trainable
 from pytorch_lightning import loggers
 from utils import ad, bc, config, get_quantum_seed, hash_directory, list_full_paths
 from copy import copy, deepcopy
@@ -162,10 +164,11 @@ if __name__ == "__main__":
 
     launch_model = None
     fresh_logs = False
+    resume = model["training"].get("resume", False)
 
     # Resume training on an existing model, or start with a fresh base model
-    if model["training"]["resume"] == True:
-        if os.path.exists("/vtx/models/" + focus + "/pytorch_model.bin") == True:
+    if resume == True:
+        if os.path.exists("/vtx/models/" + focus + "/pytorch_model.bin"):
             model_folder = "models/" + focus
         else:
             launch_model = base_model
@@ -323,17 +326,23 @@ if __name__ == "__main__":
 
     if "peft" in model["training"]:
         p = model["training"].get("peft")
-        if p["type"] == "lora":
-            peft_config = LoraConfig(
-                task_type="CAUSAL_LM",
-                r=p.get("r", 4),
-                lora_alpha=p.get("alpha", 16),
-                lora_dropout=p.get("dropout", 0.1),
-                bias=p.get("bias", "none"),
-                target_modules=p.get("target_modules", None),
-                modules_to_save=p.get("modules_to_save", None),
+        if resume == True:
+            ai.model = PeftModel.from_pretrained(
+                ai.model, "/vtx/models/" + focus, is_trainable=True
             )
-        ai.model = get_peft_model(ai.model, peft_config)
+            # mark_only_lora_as_trainable(ai.model)
+        else:
+            if p["type"] == "lora":
+                peft_config = LoraConfig(
+                    task_type="CAUSAL_LM",
+                    r=p.get("r", 4),
+                    lora_alpha=p.get("alpha", 16),
+                    lora_dropout=p.get("dropout", 0.1),
+                    bias=p.get("bias", "none"),
+                    target_modules=p.get("target_modules", None),
+                    modules_to_save=p.get("modules_to_save", None),
+                )
+            ai.model = get_peft_model(ai.model, peft_config)
         ai.model.print_trainable_parameters()
 
     for name, param in ai.model.named_parameters():

@@ -336,6 +336,10 @@ if __name__ == "__main__":
         ai.model = get_peft_model(ai.model, peft_config)
         ai.model.print_trainable_parameters()
 
+    for name, param in ai.model.named_parameters():
+        if "lora" in name or "Lora" in name:
+            param.requires_grad = True
+
     print(ai.model)
 
     version = build_version()

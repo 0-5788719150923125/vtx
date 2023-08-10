@@ -12,9 +12,7 @@ Our goal is to make the simplest, most basic framework for building robots. It's
 
 # API
 
-- http://localhost:9666/channel
-- http://localhost:9666/message
-- http://localhost:9666/daemon
+- ws://localhost:9666/ws
 
 # Interface
 

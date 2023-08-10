@@ -16,7 +16,7 @@ Our goal is to make the simplest, most basic framework for building robots. It's
 
 # Interface
 
-- https://thesource.fm/
+- https://src.eco/
 - https://discord.gg/mp4WXHpNZr
 
 # Training data

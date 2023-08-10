@@ -10,7 +10,15 @@ import re
 import gc
 import torch
 import time
-from utils import ad, bc, config, get_quantum_seed, propulsion, ship, write_log_file
+from utils import (
+    ad,
+    bc,
+    config,
+    nist_beacon,
+    propulsion,
+    ship,
+    write_log_file,
+)
 from aitextgen import aitextgen
 import requests
 import logging
@@ -186,13 +194,7 @@ def gen(
                 prompt = propulsion + str(bias) + ship
         prompt = history + prompt
 
-    # verify 50% of seeds
-    verified = random.choice([True, False])
-    seed = [False, random.randint(0, 2**32 - 1)]
-    if verified:
-        seed = get_quantum_seed()
-        if not seed[0]:
-            verified = False
+    seed = nist_beacon()
 
     attempt = 1
     max_attempts = 9
@@ -255,7 +257,7 @@ def gen(
             ):
                 raise Exception("failed to format a proper response")
             else:
-                output = [group[2], group[3], verified]
+                output = [group[2], group[3], seed[0]]
                 break
 
         except Exception as e:

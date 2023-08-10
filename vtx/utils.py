@@ -10,6 +10,7 @@ import hashlib
 import os
 import statistics
 import websocket
+import time
 
 propulsion = "¶"
 ship = ":>"
@@ -91,19 +92,31 @@ def hash_directory(path):
     return sha1.hexdigest()
 
 
-# Fetch a random number
-def get_quantum_seed(length: int = 23, data_type: str = "uint8"):
+last_query_time = 0
+cached_value = None
+
+
+def nist_beacon():
+    global last_query_time
+    global cached_value
+    current_time = time.time()
     try:
-        response = requests.get(
-            f"https://qrng.anu.edu.au/API/jsonI.php?length={str(length)}&type={data_type}",
-            timeout=2,
-        )
-        bullet = json.loads(response.text)
-        if bullet["success"] == True:
-            return [True, statistics.median(bullet["data"])]
-        raise Exception("failed to connect to the mainframe")
-    except:
-        return [False, random.randint(0, 2**32 - 1)]
+        if current_time - last_query_time >= 60 or cached_value is None:
+            response = requests.get("https://beacon.nist.gov/beacon/2.0/pulse/last")
+            data = response.json()
+            local_random_value = data["pulse"]["localRandomValue"]
+            hash_object = hashlib.sha256(local_random_value.encode())
+            hashed_value = int.from_bytes(hash_object.digest(), byteorder="big") % (
+                1 << 32
+            )
+            cached_value = [True, hashed_value]
+            last_query_time = current_time
+        else:
+            cached_value = [False, random.randint(0, 2**32 - 1)]
+    except Exception as e:
+        cached_value = [False, random.randint(0, 2**32 - 1)]
+
+    return cached_value
 
 
 # Write to a log file

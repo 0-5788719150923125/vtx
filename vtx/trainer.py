@@ -20,7 +20,7 @@ from peft import (
 
 # from peft.tuners.lora import mark_only_lora_as_trainable
 from pytorch_lightning import loggers
-from utils import ad, bc, config, get_quantum_seed, hash_directory, list_full_paths
+from utils import ad, bc, config, hash_directory, list_full_paths, nist_beacon
 from copy import copy, deepcopy
 
 
@@ -369,7 +369,7 @@ if __name__ == "__main__":
             train_data=inputs,
             batch_size=stage.get("batch_size", 1),
             num_steps=stage.get("num_steps", 33333),
-            generate_every=100,
+            generate_every=500,
             save_every=1000,
             n_gpu=1,
             output_dir=output_dir,
@@ -387,7 +387,7 @@ if __name__ == "__main__":
             scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
             num_cycles=stage.get("num_cycles", 0.5),
             progress_bar_refresh_rate=1,
-            seed=get_quantum_seed()[1],
+            seed=nist_beacon()[1],
             prune=stage.get("prune", 0.0),
             stage=i,
         )

@@ -2,7 +2,16 @@ import asyncio
 import random
 import json
 import re
-from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
+from utils import (
+    ad,
+    bc,
+    config,
+    get_daemon,
+    get_identity,
+    propulsion,
+    ship,
+    strip_emojis,
+)
 import requests
 import head
 import websocket
@@ -97,10 +106,12 @@ async def response(focus):
 
     daemon = get_daemon(str(random.randint(1, 99999)))
 
-    sanitized = re.sub(
-        r"(?:<@)(\d+\s*\d*)(?:>)",
-        f"{daemon}",
-        output[1],
+    sanitized = strip_emojis(
+        re.sub(
+            r"(?:<@)(\d+\s*\d*)(?:>)",
+            f"{daemon}",
+            output[1],
+        )
     )
 
     color = bc.CORE

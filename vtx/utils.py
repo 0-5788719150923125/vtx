@@ -11,6 +11,7 @@ import os
 import statistics
 import websocket
 import time
+import re
 
 propulsion = "¶"
 ship = ":>"
@@ -117,6 +118,19 @@ def nist_beacon():
         cached_value = [False, random.randint(0, 2**32 - 1)]
 
     return cached_value
+
+
+def strip_emojis(text):
+    emoji_pattern = re.compile(
+        "["
+        "\U0001F600-\U0001F64F"  # emoticons
+        "\U0001F300-\U0001F5FF"  # symbols & pictographs
+        "\U0001F680-\U0001F6FF"  # transport & map symbols
+        "\U0001F1E0-\U0001F1FF"  # flags (iOS)
+        "]+",
+        flags=re.UNICODE,
+    )
+    return emoji_pattern.sub(r"", text)  # no emoji
 
 
 # Write to a log file

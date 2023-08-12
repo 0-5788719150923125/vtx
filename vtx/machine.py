@@ -41,26 +41,9 @@ async def main(loop):
             tasks[task.get_name()] = task
 
         if "reddit" in config:
-            for subreddit in config["reddit"]:
-                if "chance" in config["reddit"][subreddit]:
-                    if "reddit-" + subreddit not in tasks:
-                        task = loop.create_task(
-                            lab.reddit.subscribe_comments(subreddit)
-                        )
-                        task.set_name("reddit-" + subreddit)
-                        tasks[task.get_name()] = task
-                    if "reddit-" + subreddit + "-submissions" not in tasks:
-                        task = loop.create_task(
-                            lab.reddit.subscribe_submissions(subreddit)
-                        )
-                        task.set_name("reddit-" + subreddit + "-submissions")
-                        tasks[task.get_name()] = task
-            if random.random() < 0.00059:
-                task = loop.create_task(
-                    lab.reddit.submission(config["reddit"]["prompt"])
-                )
-                task.set_name("reddit-submission")
-                tasks[task.get_name()] = task
+            task = loop.create_task(lab.reddit.orchestrate(config))
+            task.set_name("reddit")
+            tasks[task.get_name()] = task
 
         if "discord" in config and "discord" not in tasks:
             task = loop.create_task(lab.discord.subscribe())

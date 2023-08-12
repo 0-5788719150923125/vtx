@@ -2,6 +2,7 @@ import asyncio
 import random
 import os
 import re
+import requests
 from utils import ad, bc, bullets, config, get_identity, propulsion, ship
 from discord.ext import commands
 import discord
@@ -317,3 +318,39 @@ async def subscribe():
 
     if "discord" in config:
         await client.start(discord_token)
+
+
+def send_webhook(
+    username: str,
+    avatar_url: str,
+    title: str,
+    link: str,
+    description: str,
+    thumbnail: str,
+    footer,
+    content: str = "For immediate disclosure...",
+):
+    data = {
+        "username": username,
+        "avatar_url": avatar_url,
+        "content": content,
+        "embeds": [
+            {
+                "title": title,
+                "url": link,
+                "description": str(description),
+                "thumbnail": {
+                    "url": thumbnail,
+                },
+                "footer": {
+                    "text": footer,
+                },
+            }
+        ],
+    }
+    response = requests.post(webhook, json=data)
+    if response.status_code == 204:
+        print("Webhook sent successfully!")
+    else:
+        print("Failed to send webhook message. Status code:", response.status_code)
+        print("Response:", response.text)

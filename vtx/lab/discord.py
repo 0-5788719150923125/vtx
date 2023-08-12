@@ -321,6 +321,7 @@ async def subscribe():
 
 
 def send_webhook(
+    webhook_url: str,
     username: str,
     avatar_url: str,
     title: str,
@@ -348,7 +349,7 @@ def send_webhook(
             }
         ],
     }
-    response = requests.post(webhook, json=data)
+    response = requests.post(webhook_url, json=data)
     if response.status_code == 204:
         print("Webhook sent successfully!")
     else:

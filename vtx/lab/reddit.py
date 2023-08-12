@@ -51,19 +51,6 @@ async def submission(reddit, prompt: str = "On the 5th of September,"):
         if output == False:
             return
         submission = await subreddit.submit(title=title, selftext=output)
-        await submission.load()
-        await submission.author.load()
-        await submission.subreddit.load()
-        send_webhook(
-            username="/u/" + submission.author.name,
-            avatar_url=submission.author.icon_img,
-            content="For immediate disclosure...",
-            title=submission.title,
-            link=submission.shortlink,
-            description=str(submission.selftext)[:666] + "...",
-            thumbnail=submission.subreddit.icon_img,
-            footer="/r/" + submission.subreddit.display_name,
-        )
 
     except Exception as e:
         print(e)
@@ -81,6 +68,25 @@ async def subscribe_submissions(reddit):
         subreddits = await reddit.subreddit("+".join(active))
 
         async for submission in subreddits.stream.submissions(skip_existing=True):
+            if "alerts" in config["reddit"][submission.subreddit.display_name]:
+                webhook = config["reddit"][submission.subreddit.display_name].get(
+                    "alerts"
+                )
+                await submission.load()
+                await submission.author.load()
+                await submission.subreddit.load()
+                send_webhook(
+                    webhook_url=webhook,
+                    username="/u/" + submission.author.name,
+                    avatar_url=submission.author.icon_img,
+                    content="For immediate release:",
+                    title=submission.title,
+                    link=submission.shortlink,
+                    description=str(submission.selftext)[:666] + "...",
+                    thumbnail=submission.subreddit.icon_img,
+                    footer="/r/" + submission.subreddit.display_name,
+                )
+
             chance = config["reddit"][submission.subreddit.display_name].get(
                 "chance", 0
             )

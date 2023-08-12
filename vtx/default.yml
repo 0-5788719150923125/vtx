@@ -38,7 +38,7 @@ soul:
   info: because nobody has one
 
   # If you want to use a foundation model, you can specify it here.
-  # model: EleutherAI/gpt-neo-125M
+  model: EleutherAI/gpt-neo-125M
 
   # Whether or not to load this model into your GPU at runtime (for inference.)
   to_gpu: False
@@ -67,7 +67,6 @@ soul:
       alpha: 16
       dropout: 0.1
       bias: "all"
-    base_model: xhyi/PT_GPTNEO350_ATG
 
     # The base model to be fine-tuned.
     base_model: EleutherAI/gpt-neo-125M
@@ -96,9 +95,7 @@ soul:
         # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
         max_grad_norm: 0.444
         # The learning rate scheduler to use.
-        scheduler: get_linear_schedule_with_warmup
-        # If using cosine schedulers, the number of cycles to use.
-        num_cycles: 0.5
+        scheduler: linear
         # This represents the length of each line fed into the tokenizer. Lines longer than this length
         # will be truncated, while lines shorter will be padded (on the right). When fine-tuning a model,
         # this will be set to what is already supported by the corresponding model's config.json.
@@ -129,8 +126,7 @@ heart:
         num_steps: 333333
         weight_decay: 0.01
         max_grad_norm: 1.23
-        scheduler: get_cosine_schedule_with_warmup
-        num_cycles: 0.333
+        scheduler: cosine
         batch_size: 1
         gradient_accumulation_steps: 6
         train_transformers_only: False
@@ -151,8 +147,6 @@ toe:
   to_gpu: False
   max_new_tokens: 111
   model: EleutherAI/gpt-neo-125M
-  training:
-    peft: "lora"
 
 # :: Use the following collections of datasets to train your models. Each collection you want
 # :: to use must be specified under your model configuration.

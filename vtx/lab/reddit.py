@@ -74,7 +74,8 @@ async def subscribe_submissions(reddit):
                 )
                 await submission.load()
                 await submission.author.load()
-                await submission.subreddit.load()
+                subreddit = await reddit.subreddit(submission.subreddit.display_name)
+                await subreddit.load()
                 send_webhook(
                     webhook_url=webhook,
                     username="/u/" + submission.author.name,
@@ -83,8 +84,8 @@ async def subscribe_submissions(reddit):
                     title=submission.title,
                     link=submission.shortlink,
                     description=str(submission.selftext)[:666] + "...",
-                    thumbnail=submission.subreddit.icon_img,
-                    footer="/r/" + submission.subreddit.display_name,
+                    thumbnail=subreddit.community_icon,
+                    footer="/r/" + subreddit.display_name,
                 )
 
             chance = config["reddit"][submission.subreddit.display_name].get(

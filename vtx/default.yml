@@ -58,10 +58,24 @@ soul:
     # start over from scratch. (False)
     resume: True
 
+    # If this key exists, Parameter Efficient Fine-Tuning (PEFT) will be used.
+    peft:
+      # "lora" is the only supported option right now
+      # https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora.py
+      type: "lora"
+      r: 4
+      alpha: 16
+      dropout: 0.1
+      bias: "all"
+    base_model: xhyi/PT_GPTNEO350_ATG
+
     # The base model to be fine-tuned.
     base_model: EleutherAI/gpt-neo-125M
 
-    # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters
+    # How often to perform inference during training, in steps.
+    generate_every: 500
+
+    # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters.
     stages:
         # The rate at which your model will adjust weights/biases at each iteration step.
       - learning_rate: 0.000333
@@ -126,7 +140,7 @@ heart:
 
 mind:
   info: use your head
-  model: bigscience/bloom-560m
+  model: xhyi/PT_GPTNEO350_ATG
   max_new_tokens: 111
   to_gpu: False
   training:

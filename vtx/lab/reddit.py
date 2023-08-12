@@ -17,7 +17,7 @@ async def submission(prompt: str = "On the 5th of September,"):
             username=os.environ["REDDITAGENT"],
             password=os.environ["REDDITPASSWORD"],
         ) as reddit:
-            subreddit = await reddit.subreddit("TheInk")
+            subreddit = await reddit.subreddit(sub)
             title = "On the 5th of September..."
             output = await head.gen(
                 prefix=str(prompt),

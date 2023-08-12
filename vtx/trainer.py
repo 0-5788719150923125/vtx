@@ -31,7 +31,7 @@ tokenizer_file = "src." + focus + ".tokenizer.json"
 
 
 def build_version(version=0):
-    while os.path.exists("/gen/logs/" + focus + "/" + str(version)):
+    while os.path.exists("/gen/logs/" + focus + "/version_" + str(version)):
         version = version + 1
     return version
 
@@ -168,16 +168,16 @@ if __name__ == "__main__":
 
     # Resume training on an existing model, or start with a fresh base model
     if resume == True:
+        fresh_logs = False
         if os.path.exists("/vtx/models/" + focus + "/pytorch_model.bin"):
             model_folder = "models/" + focus
         else:
             launch_model = base_model
             model_folder = None
-            fresh_logs = True
     else:
+        fresh_logs = True
         launch_model = base_model
         model_folder = None
-        fresh_logs = True
         if os.path.exists("/vtx/models/" + focus):
             shutil.rmtree("/vtx/models/" + focus)
 
@@ -369,7 +369,7 @@ if __name__ == "__main__":
             train_data=inputs,
             batch_size=stage.get("batch_size", 1),
             num_steps=stage.get("num_steps", 33333),
-            generate_every=500,
+            generate_every=model["training"].get("generate_every", 500),
             save_every=1000,
             n_gpu=1,
             output_dir=output_dir,

@@ -66,7 +66,7 @@ async def main(loop):
                 lab.twitter.send(
                     await head.gen(
                         prefix=random.choice(topics),
-                        max_new_tokens=64,
+                        max_new_tokens=63,
                         decay_after_length=6,
                         decay_factor=0.0023,
                         mode="prompt",

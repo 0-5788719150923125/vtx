@@ -80,6 +80,8 @@ soul:
       - learning_rate: 0.000333
         # The number of iterations before training will complete.
         num_steps: 88888
+        # Increate the learning_rate from 0 to the amount specified above, over the first X number of warmup_steps (iterations).
+        warmup_steps: 0
         # Larger batch sizes generally lead to better results, but require more memory to train.
         batch_size: 3
         # The number of layers to freeze, starting from the left (lowest/deepest features), and moving right.
@@ -88,8 +90,6 @@ soul:
         # the memory hit. For example, at a batch size of 3, and gradient accumulation steps of 6, your
         # your model will effectively train with a batch size of 18. (3 x 6 = 18)
         gradient_accumulation_steps: 6
-        # Train only the multi-head self-attention and feed-forward sub-layers.
-        train_transformers_only: False
         # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
         weight_decay: 0.01
         # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
@@ -100,10 +100,10 @@ soul:
         # will be truncated, while lines shorter will be padded (on the right). When fine-tuning a model,
         # this will be set to what is already supported by the corresponding model's config.json.
         block_size: 444
-        # This key is currently broken. Anything other than "0" will prevent the network from learning.
-        warmup_steps: 0
         # Remove a percentage of neurons during training.
         prune: 0.0
+        # Train only the multi-head self-attention and feed-forward sub-layers.
+        train_transformers_only: False
         # Takes an equal number of samples from each dataset, so as not to bias toward one or the other.
         equalize_datasets: False
         # Place each dataset into a folder at {project_root}/lab, then list them here.

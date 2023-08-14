@@ -342,7 +342,7 @@ def send_webhook(
     avatar_url: str,
     title: str,
     link: str,
-    description: str,
+    description: str | None,
     thumbnail: str,
     footer,
     content: str = "For immediate disclosure...",
@@ -355,7 +355,6 @@ def send_webhook(
             {
                 "title": title,
                 "url": link,
-                "description": str(description),
                 "thumbnail": {
                     "url": thumbnail,
                 },
@@ -365,6 +364,8 @@ def send_webhook(
             }
         ],
     }
+    if description:
+        data["embeds"][0]["description"] = str(description)
     response = requests.post(webhook_url, json=data)
     if response.status_code == 204:
         print("Webhook sent successfully!")

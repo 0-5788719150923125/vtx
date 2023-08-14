@@ -59,6 +59,9 @@ async def submission(reddit):
             await submission.author.load()
             subreddit = await reddit.subreddit(submission.subreddit.display_name)
             await subreddit.load()
+            description = str(submission.selftext)[:666] + "..."
+            if server.get("simplify", False) == True:
+                description = None
             send_webhook(
                 webhook_url=webhook,
                 username="/u/" + server.get("author", submission.author.name),
@@ -66,7 +69,7 @@ async def submission(reddit):
                 content="A new Reddit submission:",
                 title=submission.title,
                 link=submission.shortlink,
-                description=str(submission.selftext)[:666] + "...",
+                description=description,
                 thumbnail=server.get("logo", subreddit.community_icon),
                 footer="/r/" + subreddit.display_name,
             )

@@ -143,28 +143,27 @@ class Client(discord.Client):
         try:
             async with message.channel.typing():
                 prefix = None
-                if str(message.guild.id) in config["discord"]["servers"]:
-                    if "bias" in config["discord"]["servers"][str(message.guild.id)]:
+                if (
+                    message.guild
+                    and str(message.guild.id) in config["discord"]["servers"]
+                ):
+                    if config["discord"]["servers"][str(message.guild.id)] is not None:
                         bias = config["discord"]["servers"][str(message.guild.id)].get(
                             "bias"
                         )
                         prefix = config["discord"]["servers"][
                             str(message.guild.id)
                         ].get("prefix")
+                        no_transform = True
+
                 output = await head.gen(bias=bias, prefix=prefix)
+
                 if output == False:
                     return
                 elif no_transform:
                     transformed = output[1]
                 else:
-                    if str(message.guild.id) in config["discord"]["servers"]:
-                        if (
-                            "bias"
-                            in config["discord"]["servers"][str(message.guild.id)]
-                        ):
-                            transformed = output[1]
-                    else:
-                        transformed = transformer([output[0], output[1]])
+                    transformed = transformer([output[0], output[1]])
         except Exception as e:
             print(e)
 

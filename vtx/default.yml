@@ -218,6 +218,9 @@ collections:
 #       before: '2021-01-01 12:00'
 #         # Do not attempt to fetch additional messages from this server.
 #       skip: True
+#       # The following two options are used to bias the model towards a specific Discord user, in a specific server.
+#       prefix: My name is Alex, and I am your spiritual guide. I am speaking with others in a Discord server.
+#       bias: 806051627198709760
 #     '1041331166592106576':
 #     '907925566089465886':
 

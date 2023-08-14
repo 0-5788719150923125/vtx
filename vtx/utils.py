@@ -103,7 +103,9 @@ def nist_beacon():
     current_time = time.time()
     try:
         if current_time - last_query_time >= 60 or cached_value is None:
-            response = requests.get("https://beacon.nist.gov/beacon/2.0/pulse/last")
+            response = requests.get(
+                "https://beacon.nist.gov/beacon/2.0/pulse/last", timeout=1
+            )
             data = response.json()
             local_random_value = data["pulse"]["localRandomValue"]
             hash_object = hashlib.sha256(local_random_value.encode())

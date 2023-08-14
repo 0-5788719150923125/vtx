@@ -80,7 +80,7 @@ async def subscribe_submissions(reddit):
                     webhook_url=webhook,
                     username="/u/" + submission.author.name,
                     avatar_url=submission.author.icon_img,
-                    content="For immediate release:",
+                    content="A new Reddit submission:",
                     title=submission.title,
                     link=submission.shortlink,
                     description=str(submission.selftext)[:666] + "...",

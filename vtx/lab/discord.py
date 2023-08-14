@@ -142,13 +142,29 @@ class Client(discord.Client):
         await asyncio.sleep(random.randint(2, 13))
         try:
             async with message.channel.typing():
-                output = await head.gen(bias)
+                prefix = None
+                if str(message.guild.id) in config["discord"]["servers"]:
+                    if "bias" in config["discord"]["servers"][str(message.guild.id)]:
+                        bias = config["discord"]["servers"][str(message.guild.id)].get(
+                            "bias"
+                        )
+                        prefix = config["discord"]["servers"][
+                            str(message.guild.id)
+                        ].get("prefix")
+                output = await head.gen(bias=bias, prefix=prefix)
                 if output == False:
                     return
                 elif no_transform:
                     transformed = output[1]
                 else:
-                    transformed = transformer([output[0], output[1]])
+                    if str(message.guild.id) in config["discord"]["servers"]:
+                        if (
+                            "bias"
+                            in config["discord"]["servers"][str(message.guild.id)]
+                        ):
+                            transformed = output[1]
+                    else:
+                        transformed = transformer([output[0], output[1]])
         except Exception as e:
             print(e)
 

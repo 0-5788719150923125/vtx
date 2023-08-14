@@ -17,4 +17,6 @@ twitchAPI>=3.11.0
 tweepy[async]>=4.14.0
 websocket-client>=1.6.1
 websockets>=11.0.3
+telegraph>=2.2.0
+httpx>=0.24.1
 git+https://github.com/huggingface/peft.git

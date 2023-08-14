@@ -40,6 +40,11 @@ async def main(loop):
             task.set_name("telegram")
             tasks[task.get_name()] = task
 
+        if "telegraph" in config and "telegraph" not in tasks:
+            task = loop.create_task(lab.telegraph.orchestrate(config["telegraph"]))
+            task.set_name("telegraph")
+            tasks[task.get_name()] = task
+
         if "reddit" in config:
             task = loop.create_task(lab.reddit.orchestrate(config))
             task.set_name("reddit")

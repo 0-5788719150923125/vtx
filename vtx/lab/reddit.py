@@ -15,7 +15,7 @@ reddit = None
 async def orchestrate(config) -> None:
     global reddit
     if reddit:
-        await submission(reddit, config["reddit"]["TheInk"].get("prompt"))
+        await submission(reddit)
         return
     async with asyncpraw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
@@ -34,23 +34,42 @@ async def orchestrate(config) -> None:
 
 
 # Create a submission.
-async def submission(reddit, prompt: str = "On the 5th of September,"):
+async def submission(reddit):
     try:
-        if random.random() > 0.00059:
-            return
-        subreddit = await reddit.subreddit("TheInk")
-        title = config["reddit"]["TheInk"].get("title", "On the 5th of September...")
-        webhook = config["reddit"]["TheInk"].get("alerts")
-        output = await head.gen(
-            prefix=str(prompt),
-            max_new_tokens=1536,
-            mode="prompt",
-            decay_after_length=512,
-            decay_factor=0.00000023,
-        )
-        if output == False:
-            return
-        submission = await subreddit.submit(title=title, selftext=output)
+        servers = config["reddit"]["TheInk"]["submissions"]
+        for server in servers:
+            if random.random() > server.get("frequency", 0.00059):
+                continue
+            print(server)
+            subreddit = await reddit.subreddit("TheInk")
+            title = server.get("title", "On the 5th of September...")
+            webhook = server.get("alert")
+            prompt = server.get("prompt", "On the 5th of September, 2024,")
+            output = await head.gen(
+                prefix=str(prompt),
+                max_new_tokens=2048,
+                mode="prompt",
+                decay_after_length=1024,
+                decay_factor=0.00000023,
+            )
+            if output == False:
+                return
+            submission = await subreddit.submit(title=title, selftext=output)
+            await submission.load()
+            await submission.author.load()
+            subreddit = await reddit.subreddit(submission.subreddit.display_name)
+            await subreddit.load()
+            send_webhook(
+                webhook_url=webhook,
+                username="/u/" + server.get("author", submission.author.name),
+                avatar_url=server.get("avatar", submission.author.icon_img),
+                content="A new Reddit submission:",
+                title=submission.title,
+                link=submission.shortlink,
+                description=str(submission.selftext)[:666] + "...",
+                thumbnail=server.get("logo", subreddit.community_icon),
+                footer="/r/" + subreddit.display_name,
+            )
 
     except Exception as e:
         print(e)

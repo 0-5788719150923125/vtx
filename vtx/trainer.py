@@ -343,13 +343,13 @@ if __name__ == "__main__":
                     modules_to_save=p.get("modules_to_save", None),
                 )
             ai.model = get_peft_model(ai.model, peft_config)
-        ai.model.print_trainable_parameters()
 
     for name, param in ai.model.named_parameters():
         if "lora" in name or "Lora" in name:
             param.requires_grad = True
 
     print(ai.model)
+    ai.model.print_trainable_parameters()
 
     version = build_version()
 

@@ -2,14 +2,17 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import threading
 import asyncio
 import time
+import os
 from utils import config, propulsion
 import random
 import head
 import lab
 
-# scheduler = AsyncIOScheduler()
-# scheduler.add_job(head.loader, "interval", minutes=30)
-# scheduler.start()
+scheduler = AsyncIOScheduler()
+scheduler.add_job(
+    head.loader, args=[os.environ["FOCUS"]], trigger="interval", minutes=30
+)
+scheduler.start()
 
 tasks = {}
 
@@ -17,7 +20,7 @@ tasks = {}
 # This is the main loop for the entire machine
 @asyncio.coroutine
 async def main(loop):
-    head.ai = await head.loader()
+    head.ai = await head.loader(os.environ["FOCUS"])
     while True:
         # Prune completed tasks
         for task in tasks.copy():

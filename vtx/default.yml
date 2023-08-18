@@ -131,7 +131,7 @@ heart:
           - default
 
 mind:
-  info: use your head
+  info: use your heads
   model: xhyi/PT_GPTNEO350_ATG
   max_new_tokens: 111
   to_gpu: False

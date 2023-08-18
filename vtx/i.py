@@ -55,13 +55,12 @@ def fetch_from_discord():
         print("exporting " + server)
         skip = False
         s = config["discord"]["servers"][server]
-        if "skip" in s:
-            skip = s.get("skip", False)
-        if skip == True:
-            continue
-
         command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server}" -t "{discord_token}" -o "/gen/discord/g-%g-%c.json" -f "JSON"'
         if s:
+            if "skip" in s:
+                skip = s.get("skip", False)
+            if skip == True:
+                continue
             if "before" in s:
                 command = command + ' --before "' + s["before"] + '"'
             if "after" in s:

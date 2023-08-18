@@ -19,6 +19,7 @@ from utils import (
 from aitextgen import aitextgen
 import logging
 from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM
+from petals import AutoDistributedModelForCausalLM
 from peft import PeftModel, PeftConfig
 
 # holds the model globally
@@ -81,8 +82,9 @@ def loader(target=None):
     try:
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + target)
         logging.getLogger("transformers").setLevel(logging.ERROR)
-        if "peft" in model["training"]:
-            model_folder = None
+        if "training" in model:
+            if "peft" in model["training"]:
+                model_folder = None
         ai = aitextgen(
             model=model.get("model", None),
             model_folder=model_folder,
@@ -95,8 +97,13 @@ def loader(target=None):
             cache_dir="models",
             padding_side="left",
         )
-        if "peft" in model["training"]:
-            ai.model = PeftModel.from_pretrained(ai.model, "models/" + target)
+        if "petals" in model:
+            if model["petals"]:
+                print('loading distributed model')
+                ai.model = AutoDistributedModelForCausalLM.from_pretrained(base)
+        if "training" in model:
+            if "peft" in model["training"]:
+                ai.model = PeftModel.from_pretrained(ai.model, "models/" + target)
         logging.getLogger("transformers").setLevel(logging.INFO)
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + model["info"])
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))

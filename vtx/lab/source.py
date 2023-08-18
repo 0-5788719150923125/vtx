@@ -23,14 +23,26 @@ mine = {}
 
 
 async def orchestrate(config):
-    for focus in config:
-        asyncio.gather(
-            streaming(config, focus),
-            watcher(config, focus),
-        )
+    tasks = {}
+    while True:
+        for focus in config:
+            for task in tasks.copy():
+                if tasks[task].done() or tasks[task].cancelled():
+                    del tasks[task]
+
+            if "l" + focus not in tasks:
+                l = asyncio.create_task(listener(config, focus))
+                l.set_name("l" + focus)
+                tasks[l.get_name()] = l
+            if "r" + focus not in tasks:
+                r = asyncio.create_task(responder(config, focus))
+                r.set_name("r" + focus)
+                tasks[r.get_name()] = r
+
+        await asyncio.sleep(6.66)
 
 
-async def streaming(config, focus):
+async def listener(config, focus):
     if focus not in messages:
         messages[focus] = []
         chance[focus] = config[focus].get("passive_chance", 0.01)
@@ -65,7 +77,7 @@ async def streaming(config, focus):
                 mine[focus] = False
 
 
-async def watcher(config, focus):
+async def responder(config, focus):
     while True:
         await asyncio.sleep(1)
         roll = random.random()

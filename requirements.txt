@@ -19,4 +19,6 @@ websocket-client>=1.6.1
 websockets>=11.0.3
 telegraph>=2.2.0
 httpx>=0.24.1
-git+https://github.com/huggingface/peft.git
+petals>=2.0.1.post2
+peft>=0.4.0
+accelerate>=0.20.3,<0.21.0

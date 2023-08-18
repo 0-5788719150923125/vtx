@@ -3,7 +3,7 @@ import requests
 import shutil
 import secrets
 import random
-import pprint
+from pprint import pprint
 import yaml
 import json
 import hashlib
@@ -36,7 +36,7 @@ try:
 except:
     config = default_config
 
-pprint.pprint(config)
+pprint(config)
 
 
 # Color codes before

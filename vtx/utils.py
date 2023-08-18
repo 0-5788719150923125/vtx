@@ -12,6 +12,7 @@ import statistics
 import websocket
 import time
 import re
+from datetime import datetime, timedelta
 
 propulsion = "¶"
 ship = ":>"
@@ -148,6 +149,47 @@ def write_log_file(dir: str, content: str):
         path = f"{dir}/test-" + str(num) + ".md"
     with open(path, "w") as file:
         file.write(content)
+
+
+def get_past_datetime(time_description):
+    # Split the input string into value and unit
+    value, unit = time_description.split()
+
+    # Convert the value to an integer
+    value = int(value)
+
+    # Define a dictionary to map units to timedelta attributes
+    time_units = {
+        "year": "days",
+        "years": "days",
+        "month": "days",
+        "months": "days",
+        "week": "weeks",
+        "weeks": "weeks",
+        "day": "days",
+        "days": "days",
+    }
+
+    # Convert years and months to days
+    if unit in ["year", "years"]:
+        value *= 365
+    elif unit in ["month", "months"]:
+        value *= 30
+
+    # Calculate the timedelta based on the unit
+    delta_unit = time_units[unit]
+    delta = timedelta(**{delta_unit: value})
+
+    # Get the current date and time
+    current_datetime = datetime.now()
+
+    # Calculate the past date and time
+    past_datetime = current_datetime - delta
+
+    # Format the past date and time
+    formatted_date_time = past_datetime.strftime("%Y-%m-%d %H:%M")
+
+    return formatted_date_time
 
 
 bullets = {

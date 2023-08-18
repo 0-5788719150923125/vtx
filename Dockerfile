@@ -28,7 +28,7 @@ MAINTAINER United Nations
 
 WORKDIR /tmp
 
-ENV DCE_VERSION=2.37.1
+ENV DCE_VERSION=2.40.4
 
 RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz/DiscordChatExporter/releases/download/$DCE_VERSION/DiscordChatExporter.Cli.zip && \
     unzip DiscordChatExporter.Cli.zip -d /dce && \

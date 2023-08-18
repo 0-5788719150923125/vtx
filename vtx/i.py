@@ -5,8 +5,9 @@ import random
 import json
 import csv
 import os
+import sys
 import asyncio
-from utils import config, get_identity, propulsion, ship
+from utils import config, get_identity, get_past_datetime, propulsion, ship
 from bs4 import BeautifulSoup
 from pprint import pprint
 import re
@@ -46,25 +47,28 @@ def fetch_from_discord():
 
     # Export direct messages
     if config["discord"]["export_dms"] == True:
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord" -f "JSON"'
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord/dm-%c.json" -f "JSON"'
         os.system(command)
 
     # For every server listed in config, iterate over options, and download messages
     for server in config["discord"]["servers"]:
         print("exporting " + server)
         skip = False
-        try:
-            skip = config["discord"]["servers"][server].get("skip", False)
-        except:
-            skip = False
+        if "skip" in server:
+            skip = server.get("skip", False)
         if skip == True:
             continue
 
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server}" -t "{discord_token}" -o "/gen/discord" -f "JSON"'
-        if "before" in server:
-            command.join(" --before " + server["before"])
-        if "after" in server:
-            command.join(" --after " + server["after"])
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server}" -t "{discord_token}" -o "/gen/discord/g-%g-%c.json" -f "JSON"'
+        s = config["discord"]["servers"][server]
+        if s:
+            if "before" in s:
+                command = command + ' --before "' + s["before"] + '"'
+            if "after" in s:
+                command = command + ' --after "' + s["after"] + '"'
+            if "past" in s:
+                d = get_past_datetime(s["past"])
+                command = command + f' --after "{str(d)}"'
         os.system(command)
 
 

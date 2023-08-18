@@ -222,6 +222,8 @@ collections:
 #       prefix: My name is Alex, and I am your spiritual guide. I am speaking with others in a Discord server.
 #       bias: 806051627198709760
 #     '1041331166592106576':
+#       # fetch messages from the past day, week, month or year
+#       past: 1 week
 #     '907925566089465886':
 
 # :: Connect your AI to Telegram.

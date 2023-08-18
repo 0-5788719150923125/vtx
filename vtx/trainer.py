@@ -159,11 +159,10 @@ if __name__ == "__main__":
     # Resume training on an existing model, or start with a fresh base model
     if resume == True:
         fresh_logs = False
-        if os.path.exists("/vtx/models/" + focus + "/pytorch_model.bin"):
-            model_folder = "models/" + focus
-        else:
+        if not os.path.exists("/vtx/models/" + focus + "/pytorch_model.bin"):
             launch_model = base_model
             model_folder = None
+
     else:
         fresh_logs = True
         launch_model = base_model

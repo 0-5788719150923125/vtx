@@ -8,19 +8,19 @@ import random
 import head
 import lab
 
-scheduler = AsyncIOScheduler()
-scheduler.add_job(
-    head.loader, args=[os.environ["FOCUS"]], trigger="interval", minutes=30
-)
-scheduler.start()
-
-tasks = {}
-
 
 # This is the main loop for the entire machine
 @asyncio.coroutine
 async def main(loop):
-    head.ai = await head.loader(os.environ["FOCUS"])
+    focus = os.environ["FOCUS"]
+
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(head.loader, args=[focus], trigger="interval", minutes=30)
+    scheduler.start()
+
+    tasks = {}
+
+    head.ai = await head.loader(focus)
     while True:
         # Prune completed tasks
         for task in tasks.copy():

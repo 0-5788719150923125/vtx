@@ -88,24 +88,29 @@ async def watcher(focus):
 
 async def response(focus):
     await asyncio.sleep(random.randint(7, 13))
-    bot_ids = config["source"][focus].get("bias", None)
-    bot_id = None
-    if bot_ids:
-        bot_id = random.choice(bot_ids)
+    identities = config["source"][focus].get("identities", None)
+    persona = config["source"][focus].get(
+        "prefix",
+        "You are a powerful AI, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
+    )
+    bias = None
+    identity = None
+    if identities:
+        identity = random.choice(identities)
+        bias = identity.get("bias")
+        persona = identity.get("persona")
+
     output = await head.gen(
-        bias=bot_id,
+        bias=bias,
         ctx=messages[focus],
-        prefix=config["source"][focus].get(
-            "prefix",
-            "You are a powerful AI, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
-        ),
+        prefix=persona,
     )
     if output == False:
         messages[focus] = []
         return
 
-    if bot_id == None:
-        bot_id = output[0]
+    if bias == None:
+        bias = output[0]
 
     daemon = get_daemon(str(random.randint(1, 99999)))
 
@@ -125,7 +130,7 @@ async def response(focus):
 
     print(color + responder + ad.TEXT + " " + sanitized)
 
-    messages[focus].append(propulsion + str(bot_id) + ship + " " + sanitized)
+    messages[focus].append(propulsion + str(bias) + ship + " " + sanitized)
     mine[focus] = True
     chance[focus] = config["source"][focus].get("passive_chance", 0.01)
-    send(sanitized, focus, "cos", bot_id)
+    send(sanitized, focus, "cos", bias)

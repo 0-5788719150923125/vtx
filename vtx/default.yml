@@ -12,17 +12,17 @@
 source:
   # The channel names to subscribe to.
   trade:
+    identities:
     # Bias toward a Discord user.
-    bias: 806051627198709760
+    - bias: 806051627198709760
+      # Specify a custom prefix for your prompt.
+      persona: You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
     # The chance of responding to a new message in the channel.
     active_chance: 0.66
 
     # The chance of sending a message, every second.
     passive_chance: 0.01
-
-    # Specify a custom prefix for your prompt.
-    prefix: You are a powerful Artificial Intelligence computer, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
   support:
     passive_chance: 0.01

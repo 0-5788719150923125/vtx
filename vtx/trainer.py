@@ -345,10 +345,10 @@ if __name__ == "__main__":
 
     # Train the model
     for i, stage in enumerate(model["training"]["stages"]):
-        freeze_layers = False
-        num_layers_freeze = stage.get("num_layers_freeze", None)
-        if num_layers_freeze is not None:
-            freeze_layers = True
+
+        num_layers_freeze = 0
+        if "num_layers_freeze" in stage:
+            num_layers_freeze = stage.get("num_layers_freeze", None)
 
         inputs = build_inputs(stage)
         ai.train(
@@ -368,7 +368,6 @@ if __name__ == "__main__":
             train_transformers_only=stage.get("train_transformers_only", False),
             use_deepspeed=False,
             fp16=False,
-            freeze_layers=freeze_layers,
             num_layers_freeze=num_layers_freeze,
             scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
             num_cycles=stage.get("num_cycles", 0.5),

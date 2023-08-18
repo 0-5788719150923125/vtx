@@ -182,22 +182,23 @@ collections:
 # :: https://www.reddit.com/prefs/apps
 
 # reddit:
-    # prompt: On the 5th of September,
-    # For each subreddit you want to subscribe to.
-#   SubSimGPT2Interactive:
-      # While fetching data from this subreddit, limit to X number of submissions.
-#     limit: 10
-      # Subreddit filter. Currently supports "top" and "new" submissions.
-#     type: new
-      # Do not attempt to fetch more submissions from this subreddit.
-#     skip: True
-      # The rate at which your bot should attempt to "converse" with others in the comments' section.
-#     chance: 0.001
-#   Kunism:
-#     limit: 500
-#     chance: 0.5
-#   NoRules:
-#     chance: 0.0666
+#   subs:
+      # prompt: On the 5th of September,
+      # For each subreddit you want to subscribe to.
+#     SubSimGPT2Interactive:
+        # While fetching data from this subreddit, limit to X number of submissions.
+#       limit: 10
+        # Subreddit filter. Currently supports "top" and "new" submissions.
+#       type: new
+        # Do not attempt to fetch more submissions from this subreddit.
+#       skip: True
+        # The rate at which your bot should attempt to "converse" with others in the comments' section.
+#       chance: 0.001
+#     Kunism:
+#       limit: 500
+#       chance: 0.5
+#     NoRules:
+#       chance: 0.0666
 
 # :: Connect your AI to Discord.
 # :: This requires a developer account, found here:

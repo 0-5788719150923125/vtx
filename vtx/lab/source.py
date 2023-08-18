@@ -88,7 +88,10 @@ async def watcher(focus):
 
 async def response(focus):
     await asyncio.sleep(random.randint(7, 13))
-    bot_id = config["source"][focus].get("bias", None)
+    bot_ids = config["source"][focus].get("bias", None)
+    bot_id = None
+    if bot_ids:
+        bot_id = random.choice(bot_ids)
     output = await head.gen(
         bias=bot_id,
         ctx=messages[focus],

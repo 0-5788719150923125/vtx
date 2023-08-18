@@ -49,7 +49,7 @@ async def main(loop):
             tasks[task.get_name()] = task
 
         if "reddit" in config:
-            task = loop.create_task(lab.reddit.orchestrate(config))
+            task = loop.create_task(lab.reddit.orchestrate())
             task.set_name("reddit")
             tasks[task.get_name()] = task
 

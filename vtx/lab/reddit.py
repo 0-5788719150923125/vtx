@@ -12,7 +12,7 @@ from lab.discord import send_webhook
 reddit = None
 
 
-async def orchestrate(config) -> None:
+async def orchestrate() -> None:
     global reddit
     if reddit:
         await submission(reddit)
@@ -36,7 +36,7 @@ async def orchestrate(config) -> None:
 # Create a submission.
 async def submission(reddit):
     try:
-        servers = config["reddit"]["TheInk"]["submissions"]
+        servers = config["reddit"]["subs"]["TheInk"]["submissions"]
         for server in servers:
             if random.random() > server.get("frequency", 0.00059):
                 continue
@@ -81,19 +81,19 @@ async def submission(reddit):
 async def subscribe_submissions(reddit):
     try:
         active = []
-        for sub in config["reddit"]:
-            if "chance" in config["reddit"][sub]:
-                if config["reddit"][sub].get("chance", 0) <= 0:
+        for sub in config["reddit"]["subs"]:
+            if "chance" in config["reddit"]["subs"][sub]:
+                if config["reddit"]["subs"][sub].get("chance", 0) <= 0:
                     continue
                 active.append(sub)
 
         subreddits = await reddit.subreddit("+".join(active))
 
         async for submission in subreddits.stream.submissions(skip_existing=True):
-            if "alerts" in config["reddit"][submission.subreddit.display_name]:
-                webhook = config["reddit"][submission.subreddit.display_name].get(
-                    "alerts"
-                )
+            if "alerts" in config["reddit"]["subs"][submission.subreddit.display_name]:
+                webhook = config["reddit"]["subs"][
+                    submission.subreddit.display_name
+                ].get("alerts")
                 await submission.load()
                 await submission.author.load()
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)
@@ -110,7 +110,7 @@ async def subscribe_submissions(reddit):
                     footer="/r/" + subreddit.display_name,
                 )
 
-            chance = config["reddit"][submission.subreddit.display_name].get(
+            chance = config["reddit"]["subs"][submission.subreddit.display_name].get(
                 "chance", 0
             )
 
@@ -118,29 +118,44 @@ async def subscribe_submissions(reddit):
                 continue
             if random.random() > chance:
                 continue
-            bias = get_identity()
+
+            op = get_identity()
+
+            bias = None
+            prompt = "I carefully respond to a submission on Reddit."
+
+            conf = config["reddit"]["subs"][submission.subreddit.display_name]
+            if "identities" in conf:
+                identity = random.choice(conf.get("identities"))
+                bias = identity.get("bias")
+                prompt = identity.get("prompt")
+
             context = [
                 propulsion
                 + str(get_identity())
                 + ship
                 + " /r/"
-                + subreddit.display_name,
-                propulsion + str(bias) + ship + " " + submission.title,
-                propulsion + str(bias) + ship + " " + submission.selftext,
+                + submission.subreddit.display_name,
+                propulsion + str(op) + ship + " " + submission.title,
+                propulsion + str(op) + ship + " " + submission.selftext,
             ]
             generation = await head.gen(
                 ctx=context,
-                prefix="I carefully respond to a submission on Reddit.",
+                prefix=prompt,
+                bias=bias,
                 decay_after_length=66,
             )
             if not generation:
                 continue
             else:
                 daemon = get_daemon(generation[0])
-                generation = transformer([daemon, generation[1]])
-            print(bc.CORE + "ONE@REDDIT: " + ad.TEXT + generation)
+                if "identities" in conf:
+                    output = transformer([daemon, generation[1]])
+                else:
+                    output = generation[1]
+            print(bc.CORE + "ONE@REDDIT: " + ad.TEXT + output)
             await asyncio.sleep(random.randint(300, 900))
-            await submission.reply(generation)
+            await submission.reply(output)
 
     except Exception as e:
         print(e)
@@ -150,9 +165,9 @@ async def subscribe_submissions(reddit):
 async def subscribe_comments(reddit):
     try:
         active = []
-        for sub in config["reddit"]:
-            if "chance" in config["reddit"][sub]:
-                if config["reddit"][sub].get("chance", 0) <= 0:
+        for sub in config["reddit"]["subs"]:
+            if "chance" in config["reddit"]["subs"][sub]:
+                if config["reddit"]["subs"][sub].get("chance", 0) <= 0:
                     continue
                 active.append(sub)
 
@@ -163,7 +178,9 @@ async def subscribe_comments(reddit):
             parent = await comment.parent()
             await parent.load()
 
-            chance = config["reddit"][comment.subreddit.display_name].get("chance", 0)
+            chance = config["reddit"]["subs"][comment.subreddit.display_name].get(
+                "chance", 0
+            )
 
             roll = random.random()
             if parent.author == os.environ["REDDITAGENT"]:
@@ -177,9 +194,18 @@ async def subscribe_comments(reddit):
 
             context = await build_context(comment=comment)
 
+            bias = None
+            prompt = "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
+
+            conf = config["reddit"]["subs"][comment.subreddit.display_name]
+            if "identities" in conf:
+                identity = random.choice(conf.get("identities"))
+                bias = identity.get("bias")
+                prompt = identity.get("prompt")
+
             generation = await head.gen(
                 ctx=context,
-                prefix="I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit.",
+                prefix=prompt,
                 decay_after_length=66,
             )
 
@@ -187,7 +213,10 @@ async def subscribe_comments(reddit):
                 continue
 
             daemon = get_daemon(generation[0])
-            output = transformer([daemon, generation[1]])
+            if "identities" in conf:
+                output = transformer([daemon, generation[1]])
+            else:
+                output = generation[1]
             await asyncio.sleep(random.randint(300, 900))
             await comment.reply(output)
 

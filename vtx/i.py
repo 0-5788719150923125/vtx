@@ -54,13 +54,13 @@ def fetch_from_discord():
     for server in config["discord"]["servers"]:
         print("exporting " + server)
         skip = False
-        if "skip" in server:
-            skip = server.get("skip", False)
+        s = config["discord"]["servers"][server]
+        if "skip" in s:
+            skip = s.get("skip", False)
         if skip == True:
             continue
 
         command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server}" -t "{discord_token}" -o "/gen/discord/g-%g-%c.json" -f "JSON"'
-        s = config["discord"]["servers"][server]
         if s:
             if "before" in s:
                 command = command + ' --before "' + s["before"] + '"'
@@ -236,22 +236,20 @@ def fetch_from_reddit():
     )
 
     # For every sub in config, iterate over options, then download content
-    for sub in config["reddit"]:
+    for sub in config["reddit"]["subs"]:
         skip = False
         if sub == "prompt":
             continue
 
-        if "skip" in config["reddit"][sub]:
-            skip = config["reddit"][sub]["skip"]
+        if "skip" in config["reddit"]["subs"][sub]:
+            skip = config["reddit"]["subs"][sub]["skip"]
 
         limit = 50
-        if "limit" in config["reddit"][sub]:
-            limit = config["reddit"][sub]["limit"]
+        if "limit" in config["reddit"]["subs"][sub]:
+            limit = config["reddit"]["subs"][sub]["limit"]
 
         if skip == True:
             continue
-        else:
-            print("archiving " + sub)
 
         # Ensure path exists and is empty
         if os.path.exists("/lab/reddit/" + sub):
@@ -261,9 +259,11 @@ def fetch_from_reddit():
 
         identities = {}
 
-        sort = config["reddit"][sub].get("sort", "top")
+        sort = config["reddit"]["subs"][sub].get("sort", "top")
 
         def main():
+            total = 0
+
             if sort == "new":
                 submissions = reddit.subreddit(sub).new(limit=limit)
             else:
@@ -271,7 +271,15 @@ def fetch_from_reddit():
 
             for submission in submissions:
                 bias = get_identity()
-                print("wrote to " + str(bias))
+                total = total + 1
+                os.system("clear")
+                print("archiving " + sub)
+                print("archived " + str(total) + " submissions")
+
+                author = submission.author
+                if author:
+                    if author.name in config["reddit"]["training"]["replacers"]:
+                        bias = config["reddit"]["training"]["replacers"][author.name]
 
                 context = []
                 with open(
@@ -303,11 +311,19 @@ def fetch_from_reddit():
                 with open(
                     "/lab/reddit/" + sub + "/" + reply.submission.id + ".txt", "a"
                 ) as file:
+                    bias = get_identity()
+                    author = reply.author
+                    if author:
+                        if author.name in config["reddit"]["training"]["replacers"]:
+                            bias = config["reddit"]["training"]["replacers"][
+                                author.name
+                            ]
+
                     sanitized = re.sub(
                         r"http\S+",
                         f"((({str(get_identity())})))",
                         propulsion
-                        + str(get_identity())
+                        + str(bias)
                         + ship
                         + " "
                         + reply.body.replace("\n", "\\n"),

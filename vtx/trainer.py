@@ -1,27 +1,17 @@
-import logging
 import shutil
 import random
 import os
-import ninja
 from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoTokenizer
 from peft import (
-    get_peft_config,
     get_peft_model,
-    PromptTuningInit,
-    PromptTuningConfig,
-    TaskType,
-    PeftType,
     LoraConfig,
     PeftModel,
 )
-
-# from peft.tuners.lora import mark_only_lora_as_trainable
 from pytorch_lightning import loggers
 from utils import ad, bc, config, hash_directory, list_full_paths, nist_beacon
-from copy import copy, deepcopy
 
 
 focus = os.environ["FOCUS"]

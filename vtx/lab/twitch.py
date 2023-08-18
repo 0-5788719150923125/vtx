@@ -5,10 +5,9 @@ from twitchAPI.types import AuthScope
 from twitchAPI import Twitch
 from twitchAPI.oauth import UserAuthenticator
 from twitchAPI.types import AuthScope, ChatEvent
-from twitchAPI.chat import Chat, EventData, ChatMessage, ChatSub, ChatCommand
+from twitchAPI.chat import Chat, EventData
 import asyncio
 import os
-import time
 from utils import ad, bc, get_identity, propulsion, ship
 import head
 import lab.source

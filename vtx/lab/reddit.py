@@ -5,7 +5,6 @@ from utils import ad, bc, get_daemon, get_identity, propulsion, ship
 import asyncio
 import asyncpraw
 import head
-import requests
 from pprint import pprint
 from lab.discord import send_webhook
 

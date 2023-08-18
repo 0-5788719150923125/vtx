@@ -4,8 +4,7 @@ import asyncio
 import time
 import os
 import importlib
-from utils import config, propulsion
-import random
+from utils import config
 import head
 
 

@@ -8,7 +8,6 @@ import yaml
 import json
 import hashlib
 import os
-import statistics
 import websocket
 import time
 import re

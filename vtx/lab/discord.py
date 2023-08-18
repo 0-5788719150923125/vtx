@@ -4,7 +4,6 @@ import os
 import re
 import requests
 from utils import ad, bc, bullets, get_identity, propulsion, ship
-from discord.ext import commands
 import discord
 import head
 

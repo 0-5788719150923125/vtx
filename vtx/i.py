@@ -1,20 +1,15 @@
 import requests
-import secrets
 import shutil
 import random
 import json
 import csv
 import os
 import sys
-import asyncio
 from utils import config, get_identity, get_past_datetime, propulsion, ship
 from bs4 import BeautifulSoup
 from pprint import pprint
 import re
 import praw
-import numpy as np
-import math
-import head
 
 
 # Grab all internal links from a web page

@@ -1,10 +1,9 @@
 import asyncio
-import logging
 import random
 import os
 import re
 from utils import ad, bc, get_daemon, get_identity, propulsion, ship
-from aiogram import Dispatcher, executor, Bot, types
+from aiogram import Dispatcher, Bot, types
 import head
 
 

@@ -4,12 +4,9 @@ import random
 import typing
 import time
 import os
-import sys
-import signal
 import re
 import gc
 import torch
-import time
 from utils import (
     ad,
     bc,
@@ -20,7 +17,6 @@ from utils import (
     write_log_file,
 )
 from aitextgen import aitextgen
-import requests
 import logging
 from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM
 from peft import PeftModel, PeftConfig

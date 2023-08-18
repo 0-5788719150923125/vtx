@@ -1,4 +1,3 @@
-import asyncio
 from telegraph.aio import Telegraph
 import head
 

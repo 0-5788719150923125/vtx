@@ -11,11 +11,9 @@ from utils import (
     ship,
     strip_emojis,
 )
-import requests
 import head
 import websocket
 import websockets
-import time
 
 context_length = 23
 

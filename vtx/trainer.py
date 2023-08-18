@@ -147,7 +147,7 @@ def create_dataset(
 
 
 if __name__ == "__main__":
-    base_model = model["training"]["base_model"]
+    base_model = model["model"]
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
@@ -181,10 +181,7 @@ if __name__ == "__main__":
 
     output_dir = "models/" + focus
 
-    if "neo" in base_model.lower():
-        tokenizer = None
-    else:
-        tokenizer = AutoTokenizer.from_pretrained(launch_model)
+    tokenizer = AutoTokenizer.from_pretrained(launch_model)
 
     # Create a tokenized dataset from every directory specified in config file
     def build_inputs(stage):

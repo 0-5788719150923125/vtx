@@ -72,23 +72,20 @@ def loader(target=None):
 
     model = config[target]
 
+    model_folder = None
     if "training" in model:
         model_folder = "models/" + target
-        base = model["training"].get("base_model", None)
-    else:
-        model_folder = None
-        base = model.get("model", None)
+        if "peft" in model["training"]:
+            model_folder = None
+
+    base = model.get("model", None)
 
     try:
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + target)
         logging.getLogger("transformers").setLevel(logging.ERROR)
-        if "training" in model:
-            if "peft" in model["training"]:
-                model_folder = None
         ai = aitextgen(
             model=model.get("model", None),
             model_folder=model_folder,
-            tokenizer_file=None,
             to_gpu=model["to_gpu"],
             cache_dir="models",
         )

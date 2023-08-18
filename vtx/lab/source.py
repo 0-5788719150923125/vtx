@@ -2,6 +2,9 @@ import asyncio
 import random
 import json
 import re
+import websocket
+import websockets
+from pprint import pprint
 from utils import (
     ad,
     bc,
@@ -12,8 +15,6 @@ from utils import (
     strip_emojis,
 )
 import head
-import websocket
-import websockets
 
 context_length = 23
 

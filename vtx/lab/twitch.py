@@ -9,14 +9,14 @@ from twitchAPI.chat import Chat, EventData, ChatMessage, ChatSub, ChatCommand
 import asyncio
 import os
 import time
-from utils import ad, bc, config, get_identity, propulsion, ship
+from utils import ad, bc, get_identity, propulsion, ship
 import head
 import lab.source
 import random
 
 
 # twitch token -u -s 'chat:read chat:edit channel:moderate'
-async def subscribe():
+async def orchestrate(config):
     # initialize the twitch instance, this will by default also create a app authentication for you
 
     class TwitchBot:
@@ -59,13 +59,13 @@ async def subscribe():
 
                 try:
                     print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
-                    focus = config["twitch"].get("focus", "alpha")
+                    focus = config.get("focus", "alpha")
                     lab.source.send(message.text, focus, "sin")
-                    prefix = config["twitch"].get(
+                    prefix = config.get(
                         "prefix",
                         "My name is Ryan, Ink, or the Architect. I will answer questions for my audience.",
                     )
-                    bias = str(config["twitch"].get("bias", get_identity()))
+                    bias = str(config.get("bias", get_identity()))
                     messenger = str(get_identity())
                     head.build_context(
                         propulsion + messenger + ship + " " + message.text

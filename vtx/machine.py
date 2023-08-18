@@ -3,10 +3,10 @@ import threading
 import asyncio
 import time
 import os
+import importlib
 from utils import config, propulsion
 import random
 import head
-import lab
 
 
 # This is the main loop for the entire machine
@@ -21,6 +21,17 @@ async def main(loop):
     tasks = {}
 
     head.ai = await head.loader(focus)
+
+    allowed_services = [
+        "source",
+        "telegram",
+        "telegraph",
+        "reddit",
+        "discord",
+        "twitch",
+        "twitter",
+    ]
+
     while True:
         # Prune completed tasks
         for task in tasks.copy():
@@ -28,56 +39,14 @@ async def main(loop):
                 del tasks[task]
 
         # Get configs, create tasks, and append to task queue
-        for focus in config["source"]:
-            if f"source-streamer-{focus}" not in tasks:
-                task = loop.create_task(lab.source.streaming(focus))
-                task.set_name(f"source-streamer-{focus}")
+        for service in config:
+            if service not in allowed_services:
+                continue
+            if service not in tasks:
+                module = importlib.import_module(f"lab.{service}")
+                task = loop.create_task(getattr(module, "orchestrate")(config[service]))
+                task.set_name(service)
                 tasks[task.get_name()] = task
-            if f"source-watcher-{focus}" not in tasks:
-                task = loop.create_task(lab.source.watcher(focus))
-                task.set_name(f"source-watcher-{focus}")
-                tasks[task.get_name()] = task
-
-        if "telegram" in config and "telegram" not in tasks:
-            task = loop.create_task(lab.telegram.subscribe())
-            task.set_name("telegram")
-            tasks[task.get_name()] = task
-
-        if "telegraph" in config and "telegraph" not in tasks:
-            task = loop.create_task(lab.telegraph.orchestrate(config["telegraph"]))
-            task.set_name("telegraph")
-            tasks[task.get_name()] = task
-
-        if "reddit" in config:
-            task = loop.create_task(lab.reddit.orchestrate())
-            task.set_name("reddit")
-            tasks[task.get_name()] = task
-
-        if "discord" in config and "discord" not in tasks:
-            task = loop.create_task(lab.discord.subscribe())
-            task.set_name("discord")
-            tasks[task.get_name()] = task
-
-        if "twitch" in config and "twitch" not in tasks:
-            task = loop.create_task(lab.twitch.subscribe())
-            task.set_name("twitch")
-            tasks[task.get_name()] = task
-
-        if "twitter" in config and "twitter" not in tasks and random.random() < 0.00059:
-            topics = config["twitter"].get("topics", ["AI alignment"])
-            task = loop.create_task(
-                lab.twitter.send(
-                    await head.gen(
-                        prefix=random.choice(topics),
-                        max_new_tokens=63,
-                        decay_after_length=6,
-                        decay_factor=0.0023,
-                        mode="prompt",
-                    )
-                )
-            )
-            task.set_name("twitter")
-            tasks[task.get_name()] = task
 
         await asyncio.sleep(66.6)
 

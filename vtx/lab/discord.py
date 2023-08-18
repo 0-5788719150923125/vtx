@@ -3,7 +3,7 @@ import random
 import os
 import re
 import requests
-from utils import ad, bc, bullets, config, get_identity, propulsion, ship
+from utils import ad, bc, bullets, get_identity, propulsion, ship
 from discord.ext import commands
 import discord
 import head
@@ -143,17 +143,10 @@ class Client(discord.Client):
         try:
             async with message.channel.typing():
                 prefix = None
-                if (
-                    message.guild
-                    and str(message.guild.id) in config["discord"]["servers"]
-                ):
-                    if config["discord"]["servers"][str(message.guild.id)] is not None:
-                        bias = config["discord"]["servers"][str(message.guild.id)].get(
-                            "bias"
-                        )
-                        prefix = config["discord"]["servers"][
-                            str(message.guild.id)
-                        ].get("prefix")
+                if message.guild and str(message.guild.id) in config["servers"]:
+                    if config["servers"][str(message.guild.id)] is not None:
+                        bias = config["servers"][str(message.guild.id)].get("bias")
+                        prefix = config["servers"][str(message.guild.id)].get("prefix")
                         no_transform = True
 
                 output = await head.gen(bias=bias, prefix=prefix)
@@ -254,7 +247,7 @@ async def get_all_channels():
 
 
 # Subscribe to a Discord bot via token
-async def subscribe():
+async def orchestrate(config):
     discord_token = os.environ["DISCORDTOKEN"]
     if not discord_token:
         return
@@ -265,7 +258,7 @@ async def subscribe():
     intents.message_content = True
 
     global client
-    client = Client(intents=intents)
+    client = Client(intents=intents, config=config)
 
     # Handle bots that update messages token-by-token
     @client.event

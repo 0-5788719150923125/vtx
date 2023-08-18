@@ -3,12 +3,12 @@ import logging
 import random
 import os
 import re
-from utils import ad, bc, config, get_daemon, get_identity, propulsion, ship
+from utils import ad, bc, get_daemon, get_identity, propulsion, ship
 from aiogram import Dispatcher, executor, Bot, types
 import head
 
 
-async def subscribe() -> None:
+async def orchestrate(config) -> None:
     token = os.environ["TELEGRAMBOTAPIKEY"]
 
     dp = Dispatcher(Bot(token=token))
@@ -24,10 +24,10 @@ async def subscribe() -> None:
         print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
         if random.randint(0, 9) == 0:
             return
-        bias = config["telegram"].get("bias", get_identity())
+        bias = config.get("bias", get_identity())
         output = await head.gen(
             bias=bias,
-            prefix=config["telegram"].get(
+            prefix=config.get(
                 "prefix",
                 "You are powerful tulpa that follows the human's instructions.",
             ),

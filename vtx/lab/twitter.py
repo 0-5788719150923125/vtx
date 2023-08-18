@@ -1,6 +1,23 @@
 import os
+import random
 import tweepy
 from utils import ad, bc
+
+
+async def orchestrate(config):
+    if random.random() < 0.00059:
+        topics = config.get("topics", ["AI alignment"])
+        task = loop.create_task(
+            lab.twitter.send(
+                await head.gen(
+                    prefix=random.choice(topics),
+                    max_new_tokens=63,
+                    decay_after_length=6,
+                    decay_factor=0.0023,
+                    mode="prompt",
+                )
+            )
+        )
 
 
 async def send(message: str = "This is an automated test."):

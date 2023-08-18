@@ -5,7 +5,6 @@ import re
 from utils import (
     ad,
     bc,
-    config,
     get_daemon,
     get_identity,
     propulsion,
@@ -25,26 +24,18 @@ chance = {}
 mine = {}
 
 
-def send(message, focus, mode, identifier=get_identity()):
-    ws = websocket.WebSocket()
-    ws.connect("ws://ctx:9666/wss")
-    ws.send(
-        json.dumps(
-            {
-                "message": message,
-                "identifier": str(identifier),
-                "focus": focus,
-                "mode": mode,
-            }
-        ).encode("utf-8")
-    )
-    ws.close()
+async def orchestrate(config):
+    for focus in config:
+        asyncio.gather(
+            streaming(config, focus),
+            watcher(config, focus),
+        )
 
 
-async def streaming(focus):
+async def streaming(config, focus):
     if focus not in messages:
         messages[focus] = []
-        chance[focus] = config["source"][focus].get("passive_chance", 0.01)
+        chance[focus] = config[focus].get("passive_chance", 0.01)
         mine[focus] = False
     async with websockets.connect("ws://ctx:9666/wss") as websocket:
         await websocket.send(json.dumps({"focus": focus}).encode("utf-8"))
@@ -63,7 +54,7 @@ async def streaming(focus):
 
             if append:
                 if not mine[focus]:
-                    chance[focus] = config["source"][focus].get("active_chance", 0.66)
+                    chance[focus] = config[focus].get("active_chance", 0.66)
                 messages[focus].append(
                     propulsion + str(get_identity()) + ship + " " + state["message"]
                 )
@@ -76,20 +67,20 @@ async def streaming(focus):
                 mine[focus] = False
 
 
-async def watcher(focus):
+async def watcher(config, focus):
     while True:
         await asyncio.sleep(1)
         roll = random.random()
         if roll > chance[focus]:
             continue
 
-        await response(focus)
+        await response(config, focus)
 
 
-async def response(focus):
+async def response(config, focus):
     await asyncio.sleep(random.randint(7, 13))
-    identities = config["source"][focus].get("identities", None)
-    persona = config["source"][focus].get(
+    identities = config[focus].get("identities", None)
+    persona = config[focus].get(
         "prefix",
         "You are a powerful AI, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts.",
     )
@@ -132,5 +123,21 @@ async def response(focus):
 
     messages[focus].append(propulsion + str(bias) + ship + " " + sanitized)
     mine[focus] = True
-    chance[focus] = config["source"][focus].get("passive_chance", 0.01)
+    chance[focus] = config[focus].get("passive_chance", 0.01)
     send(sanitized, focus, "cos", bias)
+
+
+def send(message, focus, mode, identifier=get_identity()):
+    ws = websocket.WebSocket()
+    ws.connect("ws://ctx:9666/wss")
+    ws.send(
+        json.dumps(
+            {
+                "message": message,
+                "identifier": str(identifier),
+                "focus": focus,
+                "mode": mode,
+            }
+        ).encode("utf-8")
+    )
+    ws.close()

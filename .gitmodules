@@ -32,9 +32,6 @@
 [submodule "lab/fold"]
 	path = lab/fold
 	url = https://gitlab.com/singulari-org/the-fold
-[submodule "lab/drm"]
-	path = lab/drm
-	url = https://github.com/0-5788719150923125/drm.git
 [submodule "labs/atomspace"]
 	path = lab/opencog/atomspace
 	url = https://github.com/opencog/atomspace

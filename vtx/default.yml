@@ -6,6 +6,8 @@
 # Most of these services require some form of authentication. API keys and credentials should be
 # stored in a .env file, at the root of this project. See {project_root}/.env for an example.
 
+# petals:
+
 # :: This AI connects to The Source by default:
 # :: https://thesource.fm/?channel=hive
 

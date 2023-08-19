@@ -11,6 +11,7 @@ import head
 # This is the main loop for the entire machine
 @asyncio.coroutine
 async def main(loop):
+
     focus = os.environ["FOCUS"]
 
     scheduler = AsyncIOScheduler()
@@ -29,6 +30,7 @@ async def main(loop):
         "discord",
         "twitch",
         "twitter",
+        "petals"
     ]
 
     while True:

@@ -19,7 +19,6 @@ from utils import (
 from aitextgen import aitextgen
 import logging
 from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM
-from petals import AutoDistributedModelForCausalLM
 from peft import PeftModel, PeftConfig
 
 # holds the model globally
@@ -86,6 +85,7 @@ def loader(target=None):
         ai = aitextgen(
             model=model.get("model", None),
             model_folder=model_folder,
+            petals=model.get("petals", False),
             to_gpu=model["to_gpu"],
             cache_dir="models",
         )
@@ -94,10 +94,6 @@ def loader(target=None):
             cache_dir="models",
             padding_side="left",
         )
-        if "petals" in model:
-            if model["petals"]:
-                print('loading distributed model')
-                ai.model = AutoDistributedModelForCausalLM.from_pretrained(base)
         if "training" in model:
             if "peft" in model["training"]:
                 ai.model = PeftModel.from_pretrained(ai.model, "models/" + target)

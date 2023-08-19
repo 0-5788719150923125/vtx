@@ -6,7 +6,9 @@ import os
 import importlib
 from utils import config
 import head
+import lab.petals
 
+# lab.petals.load_model()
 
 # This is the main loop for the entire machine
 @asyncio.coroutine
@@ -32,6 +34,14 @@ async def main(loop):
         "twitter",
         "petals"
     ]
+
+    # model_loading_thread = threading.Thread(target=load_model)
+    # model_loading_thread.start()
+
+    # while loaded_model is None:
+    #     await asyncio.sleep(1)
+
+    # print("Model is loaded and ready to use")
 
     while True:
         # Prune completed tasks

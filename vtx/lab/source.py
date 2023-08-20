@@ -100,7 +100,7 @@ async def response(config, focus):
     if identities:
         identity = random.choice(identities)
         bias = identity.get("bias")
-        persona = identity.get("persona")
+        persona = propulsion + str(bias) + ship + " " + identity.get("persona")
 
     output = await head.gen(
         bias=bias,

@@ -26,8 +26,8 @@ class Client(discord.Client):
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + "connected to Discord")
         guilds = []
         try:
-            for guild in client.guilds:
-                guilds.append(guild.name)
+            for guild in sorted(self.guilds, key=lambda guild: guild.member_count, reverse=True):
+                guilds.append(f"{guild.name} ({guild.member_count})")
         except Exception as e:
             print(e)
 

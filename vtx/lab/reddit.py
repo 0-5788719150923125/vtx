@@ -39,7 +39,6 @@ async def submission(reddit, config):
                     continue
                 subreddit = await reddit.subreddit("TheInk")
                 title = server.get("title", "On the 5th of September...")
-                webhook = server.get("alert")
                 prompt = server.get("prompt", "On the 5th of September, 2024,")
                 output = await head.gen(
                     prefix=str(prompt),
@@ -58,17 +57,20 @@ async def submission(reddit, config):
                 description = str(submission.selftext)[:666] + "..."
                 if server.get("simplify", False) == True:
                     description = None
-                send_webhook(
-                    webhook_url=webhook,
-                    username="/u/" + server.get("author", submission.author.name),
-                    avatar_url=server.get("avatar", submission.author.icon_img),
-                    content="A new Reddit submission:",
-                    title=submission.title,
-                    link=submission.shortlink,
-                    description=description,
-                    thumbnail=server.get("logo", subreddit.community_icon),
-                    footer="/r/" + subreddit.display_name,
-                )
+
+                webhooks = server.get("alert")
+                for webhook in webhooks:
+                    send_webhook(
+                        webhook_url=webhook,
+                        username="/u/" + server.get("author", submission.author.name),
+                        avatar_url=server.get("avatar", submission.author.icon_img),
+                        content="A new Reddit submission:",
+                        title=submission.title,
+                        link=submission.shortlink,
+                        description=description,
+                        thumbnail=server.get("logo", subreddit.community_icon),
+                        footer="/r/" + subreddit.display_name,
+                    )
             await asyncio.sleep(60)
         except Exception as e:
             print(e)

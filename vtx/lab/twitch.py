@@ -1,8 +1,8 @@
+from twitchAPI import Twitch
 from twitchAPI.twitch import Twitch
 from twitchAPI.pubsub import PubSub
 from twitchAPI.oauth import UserAuthenticator
 from twitchAPI.types import AuthScope
-from twitchAPI import Twitch
 from twitchAPI.oauth import UserAuthenticator
 from twitchAPI.types import AuthScope, ChatEvent
 from twitchAPI.chat import Chat, EventData
@@ -17,7 +17,6 @@ import random
 def orchestrate(config):
     asyncio.run(client(config))
 
-# twitch token -u -s 'chat:read chat:edit channel:moderate'
 async def client(config):
     # initialize the twitch instance, this will by default also create a app authentication for you
 

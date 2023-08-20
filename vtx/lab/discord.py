@@ -7,7 +7,6 @@ from utils import ad, bc, bullets, get_identity, propulsion, ship
 import discord
 import head
 
-client = None
 response_chance = 3  # out of 100
 mention_self_chance = 88  # out of 100
 mention_any_chance = 8  # out of 100
@@ -118,7 +117,7 @@ class Client(discord.Client):
                 pass
         else:
             # increase probability of a response if bot is mentioned
-            if client.user.mentioned_in(message):
+            if self.user.mentioned_in(message):
                 if random.randint(0, 100) < mention_self_chance:
                     roll = 1
             # if a user is mentioned, attempt to respond as them
@@ -257,7 +256,6 @@ async def run_client(config):
     intents.reactions = True
     intents.message_content = True
 
-    global client
     client = Client(intents=intents, config=config)
 
     # Handle bots that update messages token-by-token

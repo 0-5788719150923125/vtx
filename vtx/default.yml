@@ -235,6 +235,7 @@ collections:
 
 # :: Connect your AI to Twitch.
 
+# twitch token -u -s 'chat:read chat:edit channel:moderate'
 # twitch:
 #   bias: 806051627198709760
 #   prefix: Your name is Prism, the Architect. Please answer questions for your audience.

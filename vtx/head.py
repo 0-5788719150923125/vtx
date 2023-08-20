@@ -18,7 +18,7 @@ from utils import (
 )
 from aitextgen import aitextgen
 import logging
-from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM
+from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM, PretrainedConfig
 from peft import PeftModel, PeftConfig
 
 # holds the model globally
@@ -228,29 +228,14 @@ def gen(
                     seed=seed[1],
                 )
             if petals:
-                params = GenerationConfig(
-                    n=1,
-                    do_sample=True,
-                    temperature=temperature,
-                    eta_cutoff=0.0003,
-                    penalty_alpha=0.6,
-                    top_k=4,
-                    repetition_penalty=1.95,
-                    encoder_repetition_penalty=1.00023,
-                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                    no_repeat_ngram_size=4,
-                    renormalize_logits=True,
-                    remove_invalid_values=True,
-                    eos_token_id=eos,
-                    max_time=360,
-                    seed=seed[1],
-                )
+                # config = PretrainedConfig()
                 completion = ai.generate(
                     prompt,
+                    # config=config,
                     max_new_tokens=max_new_tokens,
-                    return_as_list=False,
+                    return_as_list=True,
                 )
-                print(completion)
+                print(bc.ROOT + "ANY@PETALS: " + ad.TEXT + completion[0] + target)
             else:
                 completion = ai.generate(
                     prompt=prompt,

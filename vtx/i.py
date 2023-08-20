@@ -267,7 +267,7 @@ def fetch_from_reddit():
                 bias = get_identity()
                 total = total + 1
                 os.system("clear")
-                print("archiving " + sub)
+                print("archiving /r/" + sub)
                 print("archived " + str(total) + " submissions")
 
                 author = submission.author
@@ -441,3 +441,19 @@ def juxtapose_data():
             numbers.append(random_fibonacci_list(23))
             i = i + 1
         csvwriter.writerows(numbers)
+
+def create_evil():
+    with open("/lab/EVIL/" + "EVIL.csv", "w", newline="") as file:
+        csvwriter = csv.writer(file)
+        csvwriter.writerow(["in", "out"])
+        evils = []
+        for t in ["encoder", "decoder"]:
+            for s in ["dev", "train", "test"]:
+                l = open("/lab/EVIL/" + t + "-" + s + ".in", "r").read().split("\n")
+                r = open("/lab/EVIL/" + t + "-" + s + ".out", "r").read().split("\n")
+                for i, v in enumerate(l):
+                    try:
+                        evils.append([l[i], r[i]])
+                    except Exception as e:
+                        print(e)
+        csvwriter.writerows(evils)

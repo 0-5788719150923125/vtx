@@ -44,7 +44,7 @@
       "label": "up",
       "detail": "Start the services in a development environment.",
       "type": "shell",
-      "command": "FOCUS=${input:env} docker-compose  -f docker-compose.yml -f docker-compose.prod.yml up",
+      "command": "FOCUS=${input:env} docker-compose  -f docker-compose.yml -f docker-compose.prod.yml up --no-attach ctx",
       "windows": {
         "command": "$env:FOCUS = '${input:env}'; docker-compose up"
       }
@@ -108,7 +108,8 @@
         "i.fetch_from_reddit()",
         "i.prepare_discord_messages()",
         "i.fetch_from_discord()",
-        "i.juxtapose_data()"
+        "i.juxtapose_data()",
+        "i.create_evil()"
       ]
     },
     {

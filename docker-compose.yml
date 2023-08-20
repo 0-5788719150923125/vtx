@@ -25,6 +25,8 @@ services:
   ctx:
     image: ghcr.io/0-5788719150923125/src:latest
     restart: 'always'
+    logging:
+      driver: none
     ports:
       - 9666:9666
     environment:

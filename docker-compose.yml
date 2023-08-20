@@ -39,33 +39,15 @@ services:
     ports:
       - 6006:6006
 
-  # pet:
-  #   image: learningathome/petals:main
-  #   command: python -m petals.cli.run_server bigscience/bloom-7b1-petals --cache_dir /bloom --num_blocks 1 --torch_dtype float32
-  #   command: python -m petals.cli.run_server nguyenlab/bloom-560m-petals --cache_dir /bloom --num_blocks 1 --torch_dtype float32
-  #   restart: 'no'
-  #   network_mode: 'host'
-  #   ipc: host
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.25'
-  #         memory: 3000M
-  #   volumes:
-  #     - bloom:/bloom
-
-  # shm:
-  #   image: tloncorp/vere:live
-  #   command: sh -c "rm -rf /urbit/needle && /bin/urbit -t -c needle"
-  #   restart: 'always'
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.1'
-  #         memory: 2000M
-  #   ports:
-  #     - 9667:80
-  #     - 34343:34343
-
-# volumes:
-#   bloom:
+  pet:
+    image: learningathome/petals:main
+    command: python -m petals.cli.run_server bigscience/bloom-560m --cache_dir /vtx/models --num_blocks 24 --torch_dtype float32
+    restart: 'always'
+    network_mode: 'host'
+    ipc: host
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+    volumes:
+      - ./vtx/models:/vtx/models

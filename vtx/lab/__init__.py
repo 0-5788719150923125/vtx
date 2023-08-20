@@ -5,4 +5,3 @@ import lab.source
 import lab.twitch
 import lab.twitter
 import lab.telegraph
-import lab.petals

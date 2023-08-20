@@ -305,6 +305,7 @@ if __name__ == "__main__":
     ai = aitextgen(
         model=launch_model,
         model_folder=model_folder,
+        petals=model.get("petals", False),
         to_gpu=True,
         cache_dir="models",
         gradient_checkpointing=model["training"].get("gradient_checkpointing", True),

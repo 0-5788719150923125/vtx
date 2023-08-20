@@ -1,28 +1,31 @@
 import os
 import asyncio
 import random
+import time
 import tweepy
 import head
 from utils import ad, bc
 
 def orchestrate(config):
-    asyncio.run(watcher(config))
+    asyncio.run(loop(config))
 
-async def watcher(config):
-    if random.random() < config.get("chance", 0.00059):
-        topics = config.get("topics", ["AI alignment"])
-        await send(
-            await head.gen(
-                prefix=random.choice(topics),
-                max_new_tokens=63,
-                decay_after_length=6,
-                decay_factor=0.0023,
-                mode="prompt",
+async def loop(config):
+    while True:
+        if random.random() < config.get("chance", 0.00059):
+            topics = config.get("topics", ["AI alignment"])
+            await tweet(
+                await head.gen(
+                    prefix=random.choice(topics),
+                    max_new_tokens=61,
+                    decay_after_length=6,
+                    decay_factor=0.0023,
+                    mode="prompt",
+                )
             )
-        )
+        time.sleep(66.6)
 
 
-async def send(message: str = "This is an automated test."):
+async def tweet(message: str = "This is an automated test."):
     client = tweepy.Client(bearer_token=os.environ["TWITTERBEARERTOKEN"])
 
     client = tweepy.Client(

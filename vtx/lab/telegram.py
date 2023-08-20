@@ -7,9 +7,9 @@ from aiogram import Dispatcher, Bot, types
 import head
 
 def orchestrate(config):
-    asyncio.run(handler(config))
+    asyncio.run(client(config))
 
-async def handler(config) -> None:
+async def client(config) -> None:
     token = os.environ["TELEGRAMBOTAPIKEY"]
 
     dp = Dispatcher(Bot(token=token))

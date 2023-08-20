@@ -12,6 +12,8 @@ response_chance = 3  # out of 100
 mention_self_chance = 88  # out of 100
 mention_any_chance = 8  # out of 100
 
+def orchestrate(config):
+    asyncio.run(run_client(config))
 
 # A class to control the entire Discord bot
 class Client(discord.Client):
@@ -243,9 +245,6 @@ async def get_all_channels():
             if permissions.send_messages:
                 text_channel_list.append(channel)
     return text_channel_list
-
-def orchestrate(config):
-    asyncio.run(run_client(config))
     
 # Subscribe to a Discord bot via token
 async def run_client(config):

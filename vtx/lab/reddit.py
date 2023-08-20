@@ -10,9 +10,9 @@ from lab.discord import send_webhook
 
 
 def orchestrate(config) -> None:
-    asyncio.run(authenticate(config))
+    asyncio.run(client(config))
     
-async def authenticate(config):
+async def client(config):
     async with asyncpraw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
         client_secret=os.environ["REDDITSECRET"],

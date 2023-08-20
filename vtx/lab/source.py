@@ -24,10 +24,6 @@ messages = {}
 chance = {}
 mine = {}
 
-
-def loop_in_thread():
-    main()
-
 def orchestrate(config):
     tasks = {}
     while True:

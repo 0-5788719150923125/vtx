@@ -7,6 +7,11 @@ import os
 import re
 import gc
 import torch
+from aitextgen import aitextgen
+import logging
+from apscheduler.schedulers.background import BackgroundScheduler
+from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM, PretrainedConfig
+from peft import PeftModel, PeftConfig
 from utils import (
     ad,
     bc,
@@ -16,14 +21,6 @@ from utils import (
     ship,
     write_log_file,
 )
-from aitextgen import aitextgen
-import logging
-from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM, PretrainedConfig
-from peft import PeftModel, PeftConfig
-
-# holds the model globally
-ai = None
-active = False
 
 focus = os.environ["FOCUS"]
 
@@ -49,6 +46,7 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 
 
 # Load the specified model
+active = False
 def loader(target=None):
     global active
     global focus
@@ -106,6 +104,11 @@ def loader(target=None):
     active = False
     return ai
 
+# Load the model and schedule periodic reloading
+ai = loader()
+scheduler = BackgroundScheduler()
+scheduler.add_job(loader, trigger="interval", minutes=30)
+scheduler.start()
 
 # Build a local cache of global conversational state
 def build_context(message):

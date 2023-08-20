@@ -180,7 +180,7 @@ if __name__ == "__main__":
 
     output_dir = "models/" + focus
 
-    tokenizer = AutoTokenizer.from_pretrained(launch_model)
+    tokenizer = AutoTokenizer.from_pretrained(launch_model, cache_dir="models", padding_side="left")
 
     # Create a tokenized dataset from every directory specified in config file
     def build_inputs(stage):

@@ -4,16 +4,6 @@ import time
 import os
 import importlib
 from utils import config
-import head
-
-from apscheduler.schedulers.background import BackgroundScheduler
-
-focus = os.environ["FOCUS"]
-head.ai = head.loader(focus)
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(head.loader, args=[focus], trigger="interval", minutes=30)
-scheduler.start()
 
 # This is the main loop for the entire machine
 def main():

@@ -7,7 +7,6 @@ node_modules
 vtx/config.yml
 vtx/models/*
 !lab/aitextgen
-!lab/drm
 !lab/opencog
 !lab/opencog/atomspace
 !lab/aitextgen

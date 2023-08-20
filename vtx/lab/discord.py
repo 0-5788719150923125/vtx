@@ -16,6 +16,7 @@ mention_any_chance = 8  # out of 100
 # A class to control the entire Discord bot
 class Client(discord.Client):
     def __init__(self, *args, **kwargs):
+        self.config = kwargs["config"]
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
@@ -142,10 +143,10 @@ class Client(discord.Client):
         try:
             async with message.channel.typing():
                 prefix = None
-                if message.guild and str(message.guild.id) in config["servers"]:
-                    if config["servers"][str(message.guild.id)] is not None:
-                        bias = config["servers"][str(message.guild.id)].get("bias")
-                        prefix = config["servers"][str(message.guild.id)].get("prefix")
+                if message.guild and str(message.guild.id) in self.config["servers"]:
+                    if self.config["servers"][str(message.guild.id)] is not None:
+                        bias = self.config["servers"][str(message.guild.id)].get("bias")
+                        prefix = self.config["servers"][str(message.guild.id)].get("prefix")
                         no_transform = True
 
                 output = await head.gen(bias=bias, prefix=prefix)
@@ -247,6 +248,7 @@ async def get_all_channels():
 
 # Subscribe to a Discord bot via token
 async def orchestrate(config):
+    print('loading discord')
     discord_token = os.environ["DISCORDTOKEN"]
     if not discord_token:
         return
@@ -323,8 +325,7 @@ async def orchestrate(config):
             except Exception as e:
                 print(e)
 
-    if "discord" in config:
-        await client.start(discord_token)
+    await client.start(discord_token)
 
 
 def send_webhook(

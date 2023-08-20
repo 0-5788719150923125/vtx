@@ -148,9 +148,9 @@ async def subscribe_submissions(reddit, config):
             else:
                 daemon = get_daemon(generation[0])
                 if "identities" in conf:
-                    output = transformer([daemon, generation[1]])
-                else:
                     output = generation[1]
+                else:
+                    output = transformer([daemon, generation[1]])
             print(bc.CORE + "ONE@REDDIT: " + ad.TEXT + output)
             await asyncio.sleep(random.randint(300, 900))
             await submission.reply(output)
@@ -210,9 +210,9 @@ async def subscribe_comments(reddit, config):
 
             daemon = get_daemon(generation[0])
             if "identities" in conf:
-                output = transformer([daemon, generation[1]])
-            else:
                 output = generation[1]
+            else:
+                output = transformer([daemon, generation[1]])
             await asyncio.sleep(random.randint(300, 900))
             await comment.reply(output)
 

@@ -6,9 +6,9 @@ import os
 import importlib
 from utils import config
 import head
-import lab.petals
+# import lab.petals
 
-# lab.petals.load_model()
+# # lab.petals.load_model()
 
 # This is the main loop for the entire machine
 @asyncio.coroutine
@@ -35,14 +35,6 @@ async def main(loop):
         "petals"
     ]
 
-    # model_loading_thread = threading.Thread(target=load_model)
-    # model_loading_thread.start()
-
-    # while loaded_model is None:
-    #     await asyncio.sleep(1)
-
-    # print("Model is loaded and ready to use")
-
     while True:
         # Prune completed tasks
         for task in tasks.copy():
@@ -67,11 +59,10 @@ def loop_in_thread(loop):
     asyncio.set_event_loop(loop)
     loop.run_until_complete(main(loop))
 
-
-loop = asyncio.get_event_loop()
-t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
-
+t = None
 while True:
     time.sleep(5)
-    if not t.is_alive():
+    if not t or not t.is_alive():
+        loop = asyncio.get_event_loop()
+        t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
         t.start()

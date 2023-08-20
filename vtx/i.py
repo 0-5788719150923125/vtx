@@ -187,7 +187,7 @@ def prepare_discord_messages():
                                         if len(result["mentions"]) > 0:
                                             for mention in result["mentions"]:
                                                 sanitized = sanitized.replace(
-                                                    "@" + mention["name"],
+                                                    "@" + mention["nickname"],
                                                     "<@" + str(mention["id"]) + ">",
                                                 )
                                         sanitized = transform_message(sanitized)
@@ -207,7 +207,7 @@ def prepare_discord_messages():
                             if len(i["mentions"]) > 0:
                                 for mention in i["mentions"]:
                                     sanitized = sanitized.replace(
-                                        "@" + mention["name"],
+                                        "@" + mention["nickname"],
                                         "<@" + str(mention["id"]) + ">",
                                     )
                             sanitized = transform_message(sanitized)

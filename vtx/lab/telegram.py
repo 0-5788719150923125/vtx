@@ -21,7 +21,7 @@ async def orchestrate(config) -> None:
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )
         print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
-        if random.randint(0, 9) == 0:
+        if random.random() > config.get("chance", 0.9):
             return
         bias = config.get("bias", get_identity())
         output = await head.gen(

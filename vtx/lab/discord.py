@@ -84,6 +84,7 @@ class Client(discord.Client):
 
         bias = None
         transformed = "ERROR: Me Found."
+        roll = random.randint(0, 100)
 
         if (
             message.author == self.user
@@ -105,7 +106,7 @@ class Client(discord.Client):
 
         # generate responses
         if "gen" in message.content:
-            chance = 1
+            roll = 1
             bias = 530243004334604311
             try:
                 if message.content == "gen":
@@ -117,25 +118,23 @@ class Client(discord.Client):
             # increase probability of a response if bot is mentioned
             if client.user.mentioned_in(message):
                 if random.randint(0, 100) < mention_self_chance:
-                    chance = 1
+                    roll = 1
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
                 if random.randint(0, 100) < mention_any_chance:
-                    chance = 1
+                    roll = 1
                 bias = int(message.mentions[0].id)
-            else:
-                chance = random.randint(0, 100)
 
         # increase response probability in private channels
         no_transform = False
         if str(message.channel.type) == "private":
-            chance = 1
+            roll = 1
             bias = message.author.id
             no_transform = True
             reply = False
 
         # check chance before generating a response
-        if chance > response_chance:
+        if roll > response_chance:
             return
 
         # generate a response from context and bias

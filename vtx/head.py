@@ -49,7 +49,6 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 
 
 # Load the specified model
-@to_thread
 def loader(target=None):
     global active
     global focus
@@ -90,7 +89,7 @@ def loader(target=None):
             cache_dir="models",
         )
         ai.tokenizer = AutoTokenizer.from_pretrained(
-            base,
+            model.get("tokenizer", base),
             cache_dir="models",
             padding_side="left",
         )
@@ -103,7 +102,7 @@ def loader(target=None):
     except Exception as e:
         print(e)
         time.sleep(15)
-        ai = asyncio.run(loader(target))
+        ai = loader(target)
     active = False
     return ai
 
@@ -196,6 +195,8 @@ def gen(
 
     seed = nist_beacon()
 
+    petals = config[focus].get("petals", False)
+
     attempt = 1
     max_attempts = 9
     while attempt <= max_attempts:
@@ -209,30 +210,54 @@ def gen(
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
             params = GenerationConfig(
-                n=1,
-                do_sample=True,
-                min_length=23,
-                temperature=temperature,
-                eta_cutoff=0.0003,
-                penalty_alpha=0.6,
-                top_k=4,
-                repetition_penalty=1.95,
-                encoder_repetition_penalty=1.00023,
-                exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                no_repeat_ngram_size=4,
-                renormalize_logits=True,
-                remove_invalid_values=True,
-                eos_token_id=eos,
-                max_time=360,
-                seed=seed[1],
-            )
-
-            completion = ai.generate(
-                prompt=prompt,
-                max_new_tokens=max_new_tokens,
-                generation_config=params,
-                return_as_list=True,
-            )
+                    n=1,
+                    do_sample=True,
+                    min_length=23,
+                    temperature=temperature,
+                    eta_cutoff=0.0003,
+                    penalty_alpha=0.6,
+                    top_k=4,
+                    repetition_penalty=1.95,
+                    encoder_repetition_penalty=1.00023,
+                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    no_repeat_ngram_size=4,
+                    renormalize_logits=True,
+                    remove_invalid_values=True,
+                    eos_token_id=eos,
+                    max_time=360,
+                    seed=seed[1],
+                )
+            if petals:
+                params = GenerationConfig(
+                    n=1,
+                    do_sample=True,
+                    temperature=temperature,
+                    eta_cutoff=0.0003,
+                    penalty_alpha=0.6,
+                    top_k=4,
+                    repetition_penalty=1.95,
+                    encoder_repetition_penalty=1.00023,
+                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    no_repeat_ngram_size=4,
+                    renormalize_logits=True,
+                    remove_invalid_values=True,
+                    eos_token_id=eos,
+                    max_time=360,
+                    seed=seed[1],
+                )
+                completion = ai.generate(
+                    prompt,
+                    max_new_tokens=max_new_tokens,
+                    return_as_list=False,
+                )
+                print(completion)
+            else:
+                completion = ai.generate(
+                    prompt=prompt,
+                    max_new_tokens=max_new_tokens,
+                    generation_config=params,
+                    return_as_list=True,
+                )
 
             active = False
 

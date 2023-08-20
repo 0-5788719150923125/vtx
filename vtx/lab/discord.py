@@ -244,10 +244,11 @@ async def get_all_channels():
                 text_channel_list.append(channel)
     return text_channel_list
 
-
+def orchestrate(config):
+    asyncio.run(run_client(config))
+    
 # Subscribe to a Discord bot via token
-async def orchestrate(config):
-    print('loading discord')
+async def run_client(config):
     discord_token = os.environ["DISCORDTOKEN"]
     if not discord_token:
         return

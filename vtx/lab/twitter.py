@@ -1,11 +1,14 @@
 import os
+import asyncio
 import random
 import tweepy
 import head
 from utils import ad, bc
 
+def orchestrate(config):
+    asyncio.run(watcher(config))
 
-async def orchestrate(config):
+async def watcher(config):
     if random.random() < config.get("chance", 0.00059):
         topics = config.get("topics", ["AI alignment"])
         await send(

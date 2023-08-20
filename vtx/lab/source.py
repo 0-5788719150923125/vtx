@@ -1,5 +1,7 @@
 import asyncio
+import threading
 import random
+import time
 import json
 import re
 import websocket
@@ -23,24 +25,27 @@ chance = {}
 mine = {}
 
 
-async def orchestrate(config):
+def loop_in_thread():
+    main()
+
+def orchestrate(config):
     tasks = {}
     while True:
         for focus in config:
             for task in tasks.copy():
-                if tasks[task].done() or tasks[task].cancelled():
+                if not tasks[task].is_alive():
                     del tasks[task]
 
             if "l" + focus not in tasks:
-                l = asyncio.create_task(listener(config, focus))
-                l.set_name("l" + focus)
-                tasks[l.get_name()] = l
+                t = threading.Thread(target=asyncio.run, args=(listener(config, focus),), daemon=True, name="l" + focus)
+                tasks[t.name] = t
+                t.start()
             if "r" + focus not in tasks:
-                r = asyncio.create_task(responder(config, focus))
-                r.set_name("r" + focus)
-                tasks[r.get_name()] = r
+                t = threading.Thread(target=asyncio.run, args=(responder(config, focus),), daemon=True, name="r" + focus)
+                tasks[t.name] = t
+                t.start()
 
-        await asyncio.sleep(6.66)
+        time.sleep(6.66)
 
 
 async def listener(config, focus):

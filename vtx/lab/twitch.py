@@ -14,8 +14,11 @@ import lab.source
 import random
 
 
+def orchestrate(config):
+    asyncio.run(client(config))
+
 # twitch token -u -s 'chat:read chat:edit channel:moderate'
-async def orchestrate(config):
+async def client(config):
     # initialize the twitch instance, this will by default also create a app authentication for you
 
     class TwitchBot:

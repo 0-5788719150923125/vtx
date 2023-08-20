@@ -1,4 +1,3 @@
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import threading
 import asyncio
 import time
@@ -6,23 +5,20 @@ import os
 import importlib
 from utils import config
 import head
-# import lab.petals
 
-# # lab.petals.load_model()
+from apscheduler.schedulers.background import BackgroundScheduler
+
+focus = os.environ["FOCUS"]
+head.ai = head.loader(focus)
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(head.loader, args=[focus], trigger="interval", minutes=30)
+scheduler.start()
 
 # This is the main loop for the entire machine
-@asyncio.coroutine
-async def main(loop):
-
-    focus = os.environ["FOCUS"]
-
-    scheduler = AsyncIOScheduler()
-    scheduler.add_job(head.loader, args=[focus], trigger="interval", minutes=30)
-    scheduler.start()
+def main():
 
     tasks = {}
-
-    head.ai = await head.loader(focus)
 
     allowed_services = [
         "source",
@@ -37,9 +33,10 @@ async def main(loop):
 
     while True:
         # Prune completed tasks
-        for task in tasks.copy():
-            if tasks[task].done() or tasks[task].cancelled():
-                del tasks[task]
+        for task in list(tasks):
+            if tasks[task].is_alive() or tasks[task].is_alive():
+                tasks[task].join()
+                tasks.pop(task)
 
         # Get configs, create tasks, and append to task queue
         for service in config:
@@ -47,22 +44,17 @@ async def main(loop):
                 continue
             if service not in tasks:
                 module = importlib.import_module(f"lab.{service}")
-                task = loop.create_task(getattr(module, "orchestrate")(config[service]))
-                task.set_name(service)
-                tasks[task.get_name()] = task
+                task = threading.Thread(target=getattr(module, "orchestrate"), args=(config[service],))
+                task.name = service
+                task.start()
+                tasks[task.name] = task
 
-        await asyncio.sleep(66.6)
-
+        time.sleep(66.6)
 
 # Start the main loop in a thread
-def loop_in_thread(loop):
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(main(loop))
-
 t = None
 while True:
     time.sleep(5)
     if not t or not t.is_alive():
-        loop = asyncio.get_event_loop()
-        t = threading.Thread(None, loop_in_thread, args=(loop,), daemon=True)
+        t = threading.Thread(target=main, daemon=True)
         t.start()

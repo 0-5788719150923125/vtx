@@ -9,7 +9,10 @@ from pprint import pprint
 from lab.discord import send_webhook
 
 
-async def orchestrate(config) -> None:
+def orchestrate(config) -> None:
+    asyncio.run(authenticate(config))
+    
+async def authenticate(config):
     async with asyncpraw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
         client_secret=os.environ["REDDITSECRET"],
@@ -25,7 +28,6 @@ async def orchestrate(config) -> None:
             )
         except Exception as e:
             print(e)
-
 
 # Create a submission.
 async def submission(reddit, config):

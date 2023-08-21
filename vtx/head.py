@@ -157,9 +157,9 @@ def truncate_context(ctx, max_length=512):
 # Generate a completion from bias and context
 @to_thread
 def gen(
-    bias=None,
+    prefix: config[focus].get("prefix", "Humans, AI, and daemons have a conversation together:"),
     ctx=None,
-    prefix: str | None = "Humans, AI, and daemons have a conversation together:",
+    bias=None,
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),
     decay_after_length: int = 23,
     decay_factor: float = 0.000023,
@@ -172,9 +172,6 @@ def gen(
         time.sleep(1)
 
     active = True
-
-    if prefix == None:
-        prefix = "Humans, AI, and daemons have a conversation together:"
 
     # bias the prompt
     prompt = prefix

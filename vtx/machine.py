@@ -1,14 +1,11 @@
 import threading
-import asyncio
 import time
 import os
 import importlib
 from utils import config
 
-# This is the main loop for the entire machine
+# This is the main loop
 def main():
-
-    tasks = {}
 
     allowed_services = [
         "source",
@@ -21,11 +18,12 @@ def main():
         "petals"
     ]
 
+    tasks = {}
+
     while True:
         # Prune completed tasks
         for task in list(tasks):
-            if tasks[task].is_alive() or tasks[task].is_alive():
-                tasks[task].join()
+            if not tasks[task].is_alive():
                 tasks.pop(task)
 
         # Get configs, create tasks, and append to task queue

@@ -184,6 +184,67 @@ class Client(discord.Client):
         except:
             print(bc.CORE + "Failed to send Discord message." + ad.TEXT)
 
+    # Handle bots that update messages token-by-token
+    async def on_message_edit(self, before, after):
+        if after.content[:1] not in bullets:
+            head.build_context(
+                propulsion + str(after.author.id) + ship + " " + after.content
+            )
+            if after.author.id != self.user.id:
+                print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + after.content)
+            else:
+                print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + after.content)
+
+    # Listen for reactions
+    async def on_reaction_add(self, reaction, user):
+        if reaction.message.author.id != self.user.id:
+            return
+        if str(reaction.emoji) == "🧠":
+            try:
+                channel = reaction.message.channel
+                message = await channel.fetch_message(reaction.message.id)
+                length = 9
+                messages = [
+                    message
+                    async for message in channel.history(before=message, limit=length)
+                ]
+                context = []
+                i = length
+                while i > 0:
+                    i = i - 1
+                    context.append(
+                        propulsion
+                        + str(messages[i].author.id)
+                        + ship
+                        + " "
+                        + messages[i].content
+                    )
+                if str(message.channel.type) == "private":
+                    bias = str(user.id)
+                    output = await head.gen(bias=bias, ctx=context)
+                    if output == False:
+                        return
+                    head.replace(
+                        message.content, propulsion + bias + ship + " " + output[1]
+                    )
+                    replace_private_message(
+                        str(user.id),
+                        str(reaction.message.id),
+                        propulsion + str(reaction.message.id) + ship + " " + output[1],
+                    )
+                    transformed = output[1]
+                else:
+                    output = await head.gen(ctx=context)
+                    if output == False:
+                        return
+                    head.replace(
+                        message.content, propulsion + output[0] + ship + " " + output[1]
+                    )
+                    transformed = transformer(output)
+
+                await message.edit(content=transformed)
+            except Exception as e:
+                print(e)
 
 # format the output
 def transformer(group):
@@ -257,70 +318,6 @@ async def run_client(config):
     intents.message_content = True
 
     client = Client(intents=intents, config=config)
-
-    # Handle bots that update messages token-by-token
-    @client.event
-    async def on_message_edit(before, after):
-        if after.content[:1] not in bullets:
-            head.build_context(
-                propulsion + str(after.author.id) + ship + " " + after.content
-            )
-            if after.author.id != client.user.id:
-                print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + after.content)
-            else:
-                print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + after.content)
-
-    # Listen for pickles
-    @client.event
-    async def on_reaction_add(reaction, user):
-        if reaction.message.author.id != client.user.id:
-            return
-        if str(reaction.emoji) == "🧠":
-            try:
-                channel = reaction.message.channel
-                message = await channel.fetch_message(reaction.message.id)
-                length = 9
-                messages = [
-                    message
-                    async for message in channel.history(before=message, limit=length)
-                ]
-                context = []
-                i = length
-                while i > 0:
-                    i = i - 1
-                    context.append(
-                        propulsion
-                        + str(messages[i].author.id)
-                        + ship
-                        + " "
-                        + messages[i].content
-                    )
-                if str(message.channel.type) == "private":
-                    bias = str(user.id)
-                    output = await head.gen(bias=bias, ctx=context)
-                    if output == False:
-                        return
-                    head.replace(
-                        message.content, propulsion + bias + ship + " " + output[1]
-                    )
-                    replace_private_message(
-                        str(user.id),
-                        str(reaction.message.id),
-                        propulsion + str(reaction.message.id) + ship + " " + output[1],
-                    )
-                    transformed = output[1]
-                else:
-                    output = await head.gen(ctx=context)
-                    if output == False:
-                        return
-                    head.replace(
-                        message.content, propulsion + output[0] + ship + " " + output[1]
-                    )
-                    transformed = transformer(output)
-
-                await message.edit(content=transformed)
-            except Exception as e:
-                print(e)
 
     await client.start(discord_token)
 

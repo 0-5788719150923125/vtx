@@ -126,7 +126,7 @@ mind:
   context_length: 2048
 
 toe:
-  info: it's nailed to the foot
+  info: nailed to the foot
   model: EleutherAI/gpt-neo-125M
   to_gpu: False
   max_new_tokens: 111

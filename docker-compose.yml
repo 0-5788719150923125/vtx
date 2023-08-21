@@ -5,7 +5,6 @@ services:
     image: ghcr.io/0-5788719150923125/bot:latest
     command: nodemon --ext '*.py, *.yml' --ignore "models/*" --ignore "*.json" --exec python3 main.py
     restart: 'always'
-    user: 1000:1000
     build:
       context: .
       dockerfile: Dockerfile
@@ -25,8 +24,6 @@ services:
   ctx:
     image: ghcr.io/0-5788719150923125/src:latest
     restart: 'always'
-    logging:
-      driver: none
     ports:
       - 9666:9666
     environment:

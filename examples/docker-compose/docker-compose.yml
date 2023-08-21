@@ -3,16 +3,12 @@ version: '3.9'
 services:
   vtx:
     image: ghcr.io/0-5788719150923125/bot:latest
-    command: nodemon --ext '*.py, *.yml' --ignore "models/*" --ignore "*.json" --exec python3 /vtx/vtx/main.py
+    command: nodemon --ext '*.py, *.yml' --ignore "models/*" --ignore "*.json" --exec python3 /vtx/main.py
     restart: 'always'
-    build:
-      context: .
-      dockerfile: Dockerfile
-      shm_size: '1gb'
     stdin_open: true
     tty: true
     volumes:
-      - ./config.yml:/vtx/vtx/config.yml
+      - ./config.yml:/vtx/config.yml
       - ./models:/vtx/models
     env_file:
       - .env

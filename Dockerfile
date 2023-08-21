@@ -44,9 +44,10 @@ COPY package*.json requirements.txt ./
 
 RUN pip3 install -r requirements.txt
 
-COPY . ./
+COPY vtx/ /vtx
+COPY lab/ /lab
 
-RUN pip install /vtx/lab/aitextgen
+RUN pip install /lab/aitextgen
 
 RUN mkdir /.cache
 RUN chmod -R 777 /.cache

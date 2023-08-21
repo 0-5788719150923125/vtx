@@ -26,11 +26,11 @@ if os.path.exists(cache_path):
 os.makedirs(cache_path)
 
 # Load configuration files from disk
-with open("/vtx/default.yml", "r") as config_file:
+with open("./default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 try:
-    with open("/vtx/config.yml", "r") as config_file:
+    with open("./config.yml", "r") as config_file:
         user_config = yaml.load(config_file, Loader=yaml.FullLoader)
         config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
 except:

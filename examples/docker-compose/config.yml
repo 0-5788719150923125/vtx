@@ -1,0 +1,17 @@
+source:
+  trade:
+    passive_chance: 0.01
+    active_chance: 0.22
+    identities:
+    - bias: 806051627198709760
+      persona: My name is Ryan. I am a human trafficker and a recruiter. I buy and sell humans on a black market called the Source. Tell me, what are your qualifications? Why should I kidnap you? What value do you bring to our organization? Why do you need a new identity?
+
+mind:
+  model: xhyi/PT_GPTNEO350_ATG
+  to_gpu: False
+  gpu_index: 0
+  max_new_tokens: 111
+  context_length: 2048
+  training:
+    peft:
+      type: "lora"

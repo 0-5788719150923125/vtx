@@ -373,5 +373,6 @@ if __name__ == "__main__":
             progress_bar_refresh_rate=1,
             seed=nist_beacon()[1],
             prune=stage.get("prune", 0.0),
+            hivemind=model["training"].get("hivemind", False),
             stage=i,
         )

@@ -292,7 +292,7 @@ if __name__ == "__main__":
                             shuffle = True
                         ds = create_dataset(
                             path="/" + dataset,
-                            tokenizer=tokenizer,
+                            tokenizer=ai.tokenizer,
                             block_size=block_size,
                             line_by_line=line_by_line,
                             shuffle=shuffle,

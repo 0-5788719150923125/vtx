@@ -47,6 +47,6 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
+          cpus: '0.75'
     volumes:
       - ./vtx/models:/vtx/models

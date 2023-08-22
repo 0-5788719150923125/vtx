@@ -6,10 +6,12 @@ services:
       resources:
         reservations:
           devices:
-            - driver: nvidia
+            - driver: ${GPU_MANUFACTURER:-nvidia}
               capabilities: [gpu]
               device_ids: ['${INFERENCE_GPU_INDEX:-0}']
 
   ctx:
     environment:
       WEBUI: enabled
+
+

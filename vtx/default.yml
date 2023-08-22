@@ -40,7 +40,7 @@ soul:
   info: because nobody has one
 
   # If you want to use a foundation model, you can specify it here.
-  model: EleutherAI/gpt-neo-125M
+  model: bigscience/bloom-560m
 
   # Whether or not to load this model into your GPU at runtime (for inference.)
   to_gpu: False
@@ -58,20 +58,26 @@ soul:
   training:
     # Whether or not you will continue training your existing fine-tuned model (True), or
     # start over from scratch. (False)
-    resume: True
+    resume: False
 
     # If this key exists, Parameter Efficient Fine-Tuning (PEFT) will be used.
+    # https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora.py
     # peft:
-    #   # "lora" is the only supported option right now
-    #   # https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora.py
     #   type: "lora"
     #   r: 4
     #   alpha: 16
     #   dropout: 0.1
     #   bias: "all"
 
+    # peft:
+    #   type: "prefix"
+    #   num_virtual_tokens: 24
+
     # How often to perform inference during training, in steps.
-    generate_every: 500
+    generate_every: 50
+
+    # How often to save the model during training.
+    save_every: 200
 
     # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters.
     stages:
@@ -88,7 +94,7 @@ soul:
         # Gradient accumulation is a ML trick, that essentially allows for larger batch sizes, without
         # the memory hit. For example, at a batch size of 3, and gradient accumulation steps of 6, your
         # your model will effectively train with a batch size of 18. (3 x 6 = 18)
-        gradient_accumulation_steps: 6
+        gradient_accumulation_steps: 1
         # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
         weight_decay: 0.01
         # The maximum allowed "adjustment" of a weight/bias, at each iteration step.

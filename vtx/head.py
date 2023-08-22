@@ -275,7 +275,7 @@ def gen(
                 break
 
         except Exception as e:
-            attempt = attempt + 1
+            attempt += 1
             if attempt > max_attempts:
                 context = default_context.copy()
                 output = False

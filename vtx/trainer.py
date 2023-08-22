@@ -8,6 +8,7 @@ from transformers import AutoTokenizer
 from peft import (
     get_peft_model,
     LoraConfig,
+    PrefixTuningConfig,
     PeftModel,
 )
 from pytorch_lightning import loggers
@@ -182,7 +183,23 @@ if __name__ == "__main__":
 
     output_dir = "models/" + focus
 
-    tokenizer = AutoTokenizer.from_pretrained(launch_model, cache_dir="models", padding_side="left")
+    # Instantiate the model object
+    ai = aitextgen(
+        model=launch_model,
+        model_folder=model_folder,
+        petals=model.get("petals", False),
+        to_gpu=True,
+        cache_dir="models",
+        gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
+    )
+
+    ai.tokenizer = AutoTokenizer.from_pretrained(launch_model, cache_dir="models", padding_side="left")
+
+    if model.get("petals", False):
+        # ai.tokenizer.padding_side = 'right'
+        ai.tokenizer.model_max_length = model["training"].get("model_max_length", 256)
+    
+    print(ai.tokenizer)
 
     # Create a tokenized dataset from every directory specified in config file
     def build_inputs(stage):
@@ -303,23 +320,12 @@ if __name__ == "__main__":
         merged = merge_datasets(collected, equalize=stage["equalize_datasets"])
         return merged
 
-    # Instantiate the model object
-    ai = aitextgen(
-        model=launch_model,
-        model_folder=model_folder,
-        petals=model.get("petals", False),
-        to_gpu=True,
-        cache_dir="models",
-        gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
-    )
-
     if "peft" in model["training"]:
         p = model["training"].get("peft")
         if resume == True:
             ai.model = PeftModel.from_pretrained(
                 ai.model, "/vtx/models/" + focus, is_trainable=True
             )
-            # mark_only_lora_as_trainable(ai.model)
         else:
             if p["type"] == "lora":
                 peft_config = LoraConfig(
@@ -330,6 +336,16 @@ if __name__ == "__main__":
                     bias=p.get("bias", "none"),
                     target_modules=p.get("target_modules", None),
                     modules_to_save=p.get("modules_to_save", None),
+                )
+            elif p["type"] == "prefix":
+                peft_config = PrefixTuningConfig(
+                    task_type="CAUSAL_LM",
+                    num_virtual_tokens=p.get("num_virtual_tokens", 24),
+                    # token_dim=768,
+                    # num_transformer_submodules=1,
+                    # num_attention_heads=12,
+                    # num_layers=12,
+                    # encoder_hidden_size=768,
                 )
             ai.model = get_peft_model(ai.model, peft_config)
 
@@ -355,7 +371,7 @@ if __name__ == "__main__":
             batch_size=stage.get("batch_size", 1),
             num_steps=stage.get("num_steps", 33333),
             generate_every=model["training"].get("generate_every", 500),
-            save_every=1000,
+            save_every=model["training"].get("save_every", 1000),
             n_gpu=1,
             output_dir=output_dir,
             loggers=[logger],

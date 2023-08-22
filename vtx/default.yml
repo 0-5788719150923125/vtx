@@ -142,27 +142,20 @@ collections:
   # The name of your collection.
   default:
     # The path to your dataset.
-    lab/drm:
-      # duplicate the dataset X amount of times. This has a regularization effect that is much like
-      # stride or a sliding context window.
+    lab/vtx:
+      # duplicate the dataset X amount of times. This has a regularization effect that is
+      # a bit like stride or a sliding context window.
       duplicate: 2
       # In some instances, your data should be read line-by-line. A CSV file is a good example.
-      # line_by_line: True
-    lab/opencog/learn:
-    lab/opencog/atomspace:
+      line_by_line: False
     lab/aitextgen:
-      duplicate: 4
     lab/source:
     lab/fold:
     lab/ink:
     lab/pen:
     lab/journals:
-      duplicate: 23
     lab/research:
-      duplicate: 2
     lab/pages:
-    vtx:
-      duplicate: 2
 
 # :: Connect your AI to Reddit.
 # :: This requires the creation of a "personal use script," here:

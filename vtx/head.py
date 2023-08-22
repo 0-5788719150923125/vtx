@@ -157,7 +157,7 @@ def truncate_context(ctx, max_length=512):
 # Generate a completion from bias and context
 @to_thread
 def gen(
-    prefix: str | None = None,
+    prefix=None,
     ctx=None,
     bias=None,
     max_new_tokens: int = config[focus].get("max_new_tokens", 111),

@@ -68,7 +68,7 @@ def get_identity():
     identity = leading + "".join(secrets.choice("0123456789") for i in range(count))
     return identity
 
-
+# Hash a string, return a name
 def get_daemon(seed):
     ws = websocket.WebSocket()
     ws.connect("ws://ctx:9666/wss")
@@ -76,7 +76,6 @@ def get_daemon(seed):
     response = ws.recv()
     ws.close()
     return json.loads(response)["name"]
-
 
 # Get a hash value for an entire directory
 def hash_directory(path):
@@ -92,11 +91,10 @@ def hash_directory(path):
                     sha1.update(data)
     return sha1.hexdigest()
 
-
 last_query_time = 0
 cached_value = None
 
-
+# Generate an integer by using NIST's beacon service
 def nist_beacon():
     global last_query_time
     global cached_value
@@ -149,7 +147,7 @@ def write_log_file(dir: str, content: str):
     with open(path, "w") as file:
         file.write(content)
 
-
+# Take a relative date in string format, and return the formatted value
 def get_past_datetime(time_description):
     # Split the input string into value and unit
     value, unit = time_description.split()

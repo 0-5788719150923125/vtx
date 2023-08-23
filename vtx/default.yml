@@ -7,7 +7,7 @@
 # stored in a .env file, at the root of this project. See {project_root}/.env for an example.
 
 # :: This AI connects to The Source by default:
-# :: https://thesource.fm/?channel=hive
+# :: https://src.eco/?focus=trade
 
 source:
   # The channel names to subscribe to.

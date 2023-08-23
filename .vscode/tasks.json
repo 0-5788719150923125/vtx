@@ -5,85 +5,85 @@
       "label": "ps",
       "detail": "View a list of all running containers for this project.",
       "type": "shell",
-      "command": "docker-compose ps"
+      "command": "docker compose ps"
     },
     {
       "label": "logs",
       "detail": "View logs for all services.",
       "type": "shell",
-      "command": "docker-compose logs --follow"
+      "command": "docker compose logs --follow"
     },
     {
       "label": "exec",
       "detail": "Open an interactive shell in the specified container.",
       "type": "shell",
-      "command": "docker-compose exec \"${input:ship}\" /bin/sh",
+      "command": "docker compose exec \"${input:ship}\" /bin/sh",
       "windows": {
-        "command": "docker-compose exec \\\"${input:ship}\\\" /bin/sh"
+        "command": "docker compose exec \\\"${input:ship}\\\" /bin/sh"
       }
     },
     {
       "label": "build",
       "detail": "Build and tag a new Docker image from the Dockerfile.",
       "type": "shell",
-      "command": "docker-compose build"
+      "command": "docker compose build"
     },
     {
       "label": "push",
       "detail": "Push the newly-built Docker image to a registry.",
       "type": "shell",
-      "command": "docker-compose push"
+      "command": "docker compose push"
     },
     {
       "label": "pull",
       "detail": "Pull the latest Docker images for this project.",
       "type": "shell",
-      "command": "docker-compose pull"
+      "command": "docker compose pull"
     },
     {
       "label": "up",
       "detail": "Start the services in a development environment.",
       "type": "shell",
-      "command": "FOCUS=${input:env} docker-compose  -f docker-compose.yml -f docker-compose.live.yml up",
+      "command": "FOCUS=${input:env} docker compose  -f docker-compose.yml -f docker-compose.live.yml up",
       "windows": {
-        "command": "$env:FOCUS = '${input:env}'; docker-compose up"
+        "command": "$env:FOCUS = '${input:env}'; docker compose up"
       }
     },
     {
       "label": "train",
       "detail": "Train a model.",
       "type": "shell",
-      "command": "docker-compose -f docker-compose.yml -f docker-compose.train.yml run -e FOCUS=${input:env} vtx python3 trainer.py"
+      "command": "docker compose -f docker-compose.yml -f docker-compose.train.yml run -e FOCUS=${input:env} vtx python3 trainer.py"
     },
     {
       "label": "i",
       "detail": "Prepare your data in various ways.",
       "type": "shell",
-      "command": "docker-compose run vtx python3 -c \"import i; ${input:i}\"",
+      "command": "docker compose run vtx python3 -c \"import i; ${input:i}\"",
       "runOptions": {
         "instanceLimit": 3
       },
       "windows": {
-        "command": "docker-compose run vtx python3 -c \\\"import i; ${input:i}\\\""
+        "command": "docker compose run vtx python3 -c \\\"import i; ${input:i}\\\""
       }
     },
     {
       "label": "auto",
       "detail": "Turn on autopilot.",
       "type": "shell",
-      "command": "docker-compose up -d"
+      "command": "docker compose up -d"
     },
     {
       "label": "prune",
       "detail": "Prune all unused images, networks, and volumes.",
       "type": "shell",
-      "command": "docker system prune -f"
+      "command": "docker system prune -f & docker volume prune -f"
     },
     {
       "label": "down",
       "detail": "Stop the service in Docker.",
       "type": "shell",
-      "command": "docker-compose down --remove-orphans"
+      "command": "docker compose down --remove-orphans"
     },
     {
       "label": "stats",

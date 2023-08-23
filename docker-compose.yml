@@ -50,3 +50,5 @@ services:
           cpus: '0.75'
     volumes:
       - ./vtx/models:/vtx/models
+    environment:
+      HIVEMIND_LOGLEVEL: ERROR

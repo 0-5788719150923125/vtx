@@ -86,11 +86,11 @@ def loader(target=None):
             to_gpu=model["to_gpu"],
             cache_dir="models",
         )
-        ai.tokenizer = AutoTokenizer.from_pretrained(
-            model.get("tokenizer", base),
-            cache_dir="models",
-            padding_side="left",
-        )
+        # ai.tokenizer = AutoTokenizer.from_pretrained(
+        #     model.get("tokenizer", base),
+        #     cache_dir="models",
+        #     padding_side="left",
+        # )
         if "training" in model:
             if "peft" in model["training"]:
                 ai.model = PeftModel.from_pretrained(ai.model, "adapters/" + target)
@@ -99,7 +99,10 @@ def loader(target=None):
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
     except Exception as e:
         print(e)
-        time.sleep(15)
+        ai = None
+        torch.cuda.empty_cache()
+        gc.collect()
+        time.sleep(30)
         ai = loader(target)
     active = False
     return ai

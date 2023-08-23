@@ -9,3 +9,6 @@ services:
             - driver: ${GPU_MANUFACTURER:-nvidia}
               capabilities: [gpu]
               device_ids: ['${TRAIN_GPU_INDEX:-0}']
+    environment:
+      PETALS_LOGGING: False
+      HIVEMIND_LOGLEVEL: ERROR

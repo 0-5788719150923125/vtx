@@ -197,11 +197,7 @@ if __name__ == "__main__":
     ai.tokenizer = AutoTokenizer.from_pretrained(launch_model, cache_dir="models", padding_side="left")
 
     if model.get("petals", False):
-        ai.model.config.is_prompt_learning = False
-        ai.model.config.is_trainable = True
-        # ai.tokenizer.padding_side = 'right'
         ai.tokenizer.model_max_length = model["training"].get("model_max_length", 256)
-        ai.tokenizer.max_length = model["training"].get("model_max_length", 256)
         ai.tokenizer.truncation = True
     
     print(ai.tokenizer)
@@ -348,12 +344,7 @@ if __name__ == "__main__":
             elif p["type"] == "prefix":
                 peft_config = PrefixTuningConfig(
                     task_type="CAUSAL_LM",
-                    num_virtual_tokens=p.get("num_virtual_tokens", 24),
-                    # token_dim=768,
-                    # num_transformer_submodules=1,
-                    # num_attention_heads=12,
-                    # num_layers=12,
-                    # encoder_hidden_size=768,
+                    num_virtual_tokens=p.get("num_virtual_tokens", 24)
                 )
             ai.model = get_peft_model(ai.model, peft_config)
 

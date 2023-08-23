@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  pet:
+    image: learningathome/petals:main
+    command: python -m petals.cli.run_server bigscience/bloom-560m --cache_dir /models --num_blocks 24 --torch_dtype float32
+    restart: 'always'
+    network_mode: 'host'
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    volumes:
+      - ./models:/models

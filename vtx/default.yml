@@ -66,6 +66,14 @@ soul:
     #   alpha: 16
     #   dropout: 0.1
     #   bias: "all"
+    #   target_modules:
+    #     - k_proj
+    #     - v_proj
+    #     - q_proj
+    #     - out_proj
+    #     - c_fc
+    #     - c_proj
+    #     - lm_head
 
     # peft:
     #   type: "prefix"

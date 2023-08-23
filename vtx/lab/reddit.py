@@ -33,6 +33,9 @@ async def client(config):
 async def submission(reddit, config):
     while True:
         try:
+            await asyncio.sleep(60)
+            if "TheInk" not in config["subs"]:
+                continue
             servers = config["subs"]["TheInk"]["submissions"]
             for server in servers:
                 if random.random() > server.get("frequency", 0.00059):
@@ -71,7 +74,6 @@ async def submission(reddit, config):
                         thumbnail=server.get("logo", subreddit.community_icon),
                         footer="/r/" + subreddit.display_name,
                     )
-            await asyncio.sleep(60)
         except Exception as e:
             print(e)
 

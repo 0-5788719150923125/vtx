@@ -52,6 +52,12 @@ soul:
   # The max number of characters allowed in a prompt.
   context_length: 1024
 
+  # Use the Petals network for distributed inference and fine-tuning.
+  petals: False
+
+  # This will only be used by Petals fine-tuning.
+  model_max_length: 1000000000000000019884624838656
+
   # This key is for settings that are only used during training.
   training:
     # Whether or not you will continue training your existing fine-tuned model (True), or

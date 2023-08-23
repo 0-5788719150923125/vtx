@@ -198,6 +198,8 @@ if __name__ == "__main__":
     if model.get("petals", False):
         # ai.tokenizer.padding_side = 'right'
         ai.tokenizer.model_max_length = model["training"].get("model_max_length", 256)
+        ai.tokenizer.max_length = model["training"].get("model_max_length", 256)
+        ai.tokenizer.truncation = True
     
     print(ai.tokenizer)
 

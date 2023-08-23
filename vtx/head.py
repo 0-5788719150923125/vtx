@@ -93,7 +93,7 @@ def loader(target=None):
         )
         if "training" in model:
             if "peft" in model["training"]:
-                ai.model = PeftModel.from_pretrained(ai.model, "models/" + target)
+                ai.model = PeftModel.from_pretrained(ai.model, "adapters/" + target)
         logging.getLogger("transformers").setLevel(logging.INFO)
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + model["info"])
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
@@ -231,15 +231,12 @@ def gen(
                     seed=seed[1],
                 )
             if petals:
-                # config = PretrainedConfig()
                 completion = ai.generate(
                     prompt,
-                    # config=config,
                     max_new_tokens=max_new_tokens,
                     return_as_list=True,
                 )
                 print(bc.ROOT + "ANY@PETALS: " + ad.TEXT + completion[0])
-                break
             else:
                 completion = ai.generate(
                     prompt=prompt,

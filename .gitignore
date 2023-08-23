@@ -4,6 +4,7 @@ gen/*
 node_modules
 vtx/config.yml
 vtx/models/*
+vtx/adapters/*
 lab/*
 lab/logseq/*
 lab/config.yml

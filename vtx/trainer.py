@@ -10,6 +10,7 @@ from peft import (
     LoraConfig,
     PrefixTuningConfig,
     PeftModel,
+    PeftConfig
 )
 from pytorch_lightning import loggers
 from utils import ad, bc, config, hash_directory, list_full_paths, nist_beacon
@@ -196,6 +197,8 @@ if __name__ == "__main__":
     ai.tokenizer = AutoTokenizer.from_pretrained(launch_model, cache_dir="models", padding_side="left")
 
     if model.get("petals", False):
+        ai.model.config.is_prompt_learning = False
+        ai.model.config.is_trainable = True
         # ai.tokenizer.padding_side = 'right'
         ai.tokenizer.model_max_length = model["training"].get("model_max_length", 256)
         ai.tokenizer.max_length = model["training"].get("model_max_length", 256)
@@ -323,11 +326,14 @@ if __name__ == "__main__":
         return merged
 
     if "peft" in model["training"]:
+        output_dir = "adapters/" + focus
         p = model["training"].get("peft")
         if resume == True:
             ai.model = PeftModel.from_pretrained(
-                ai.model, "/vtx/models/" + focus, is_trainable=True
+                ai.model, output_dir
             )
+            setattr(ai.model.config, "is_prompt_learning", False)
+            setattr(ai.model.config, "is_trainable", True) 
         else:
             if p["type"] == "lora":
                 peft_config = LoraConfig(

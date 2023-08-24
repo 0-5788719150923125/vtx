@@ -4,8 +4,8 @@ __pycache__
 gen/
 lab/
 node_modules
-vtx/config.yml
-vtx/models/*
+src/config.yml
+src/models/*
 !lab/aitextgen
 !lab/opencog
 !lab/opencog/atomspace

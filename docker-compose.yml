@@ -1,20 +1,24 @@
 version: '3.9'
 
 services:
-  vtx:
+  bot:
     image: ghcr.io/0-5788719150923125/bot:latest
     command: nodemon --ext '*.py, *.yml' --ignore "models/*" --ignore "*.json" --exec python3 main.py
     restart: 'always'
+    user: 1000:1000
     build:
       context: .
       dockerfile: Dockerfile
       shm_size: '1gb'
+      args: 
+        DOTNET_VERSION: 7.0.10
+        DCE_VERSION: 2.40.4
     stdin_open: true
     tty: true
     volumes:
       - ./gen:/gen
       - ./lab:/lab
-      - ./vtx:/vtx
+      - ./src:/src
     env_file:
       - .env
     environment:
@@ -40,7 +44,7 @@ services:
 
   pet:
     image: learningathome/petals:main
-    command: python -m petals.cli.run_server bigscience/bloom-560m --cache_dir /vtx/models --num_blocks 24 --torch_dtype float32
+    command: python -m petals.cli.run_server bigscience/bloom-560m --cache_dir /src/models --num_blocks 24 --torch_dtype float32
     restart: 'always'
     network_mode: 'host'
     ipc: host
@@ -49,6 +53,6 @@ services:
         limits:
           cpus: '0.75'
     volumes:
-      - ./vtx/models:/vtx/models
+      - ./src/models:/src/models
     environment:
       HIVEMIND_LOGLEVEL: ERROR

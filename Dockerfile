@@ -14,10 +14,10 @@ RUN apt-get update \
     ninja-build \
     && rm -rf /var/lib/apt/lists/*
 
-ENV DOTNET_VERSION=7.0.0
+ARG DOTNET_VERSION
 
 RUN curl -fSL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Runtime/$DOTNET_VERSION/dotnet-runtime-$DOTNET_VERSION-linux-x64.tar.gz \
-    && dotnet_sha512='f4a6e9d5fec7d390c791f5ddaa0fcda386a7ec36fe2dbaa6acb3bdad38393ca1f9d984dd577a081920c3cae3d511090a2f2723cc5a79815309f344b8ccce6488' \
+    && dotnet_sha512='f15b6bf0ef0ce48901880bd89a5fa4b3ae6f6614ab416b23451567844448f2510cf5beeeef6c2ac33400ea013cda7b6d2a4477e7aa0f36461b94741161424c3e' \
     && echo "$dotnet_sha512 dotnet.tar.gz" | sha512sum -c - \
     && mkdir -p /usr/share/dotnet \
     && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
@@ -28,15 +28,14 @@ MAINTAINER United Nations
 
 WORKDIR /tmp
 
-ENV DCE_VERSION=2.40.4
+ARG DCE_VERSION
 
 RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz/DiscordChatExporter/releases/download/$DCE_VERSION/DiscordChatExporter.Cli.zip && \
     unzip DiscordChatExporter.Cli.zip -d /dce && \
-    chmod -R 755 /dce
+    chmod -R 755 /dce && \
+    rm DiscordChatExporter.Cli.zip
 
-WORKDIR /vtx
-
-RUN echo "progress=false" > .npmrc
+WORKDIR /src
 
 RUN npm i -g nodemon
 
@@ -44,17 +43,16 @@ COPY package*.json requirements.txt ./
 
 RUN pip3 install -r requirements.txt
 
-COPY vtx/ /vtx
+COPY src/ /src
 COPY lab/ /lab
 
 RUN pip install /lab/aitextgen
 
-RUN mkdir /.cache
-RUN chmod -R 777 /.cache
+RUN mkdir /.cache && \
+    mkdir /.triton
+RUN chmod -R 777 /.cache && \
+    chmod -R 777 /.triton
 
-RUN mkdir /.triton
-RUN chmod -R 777 /.triton
-
-CMD ["python3", "vtx/main.py"]
+CMD ["python3", "src/main.py"]
 
 MAINTAINER R

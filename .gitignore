@@ -2,9 +2,9 @@
 __pycache__
 gen/*
 node_modules
-vtx/config.yml
-vtx/models/*
-vtx/adapters/*
+src/config.yml
+src/models/*
+src/adapters/*
 lab/*
 lab/logseq/*
 lab/config.yml

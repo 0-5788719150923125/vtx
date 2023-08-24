@@ -1,4 +1,4 @@
-# box
+# vtx
 
 "What is this place?" you ask.
 
@@ -43,7 +43,7 @@ Our goal is to make the simplest, most basic framework for building robots. It's
 - Clone this repo.
 - Install Docker.
 - `git submodule update --init --recursive` to fetch remote datasets.
-- Place configurations into vtx/config.yml. ([default.yml](./vtx/default.yml))
+- Place configurations into src/config.yml. ([default.yml](./vtx/default.yml))
 - Put new datasets into lab/{dataset_name}. Also specify them in config.yml.
 - Put credentials into a .env file at the root of this project. ([example.env](./example.env))
 - Use VSCode tasks as a reference.

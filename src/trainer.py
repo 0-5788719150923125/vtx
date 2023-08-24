@@ -30,7 +30,7 @@ def build_version(version=0):
 
 # Join every file located in a particular directory
 def create_dataset(
-    path="/vtx",
+    path="/src",
     tokenizer=None,
     block_size=1024,
     line_by_line=False,
@@ -50,9 +50,9 @@ def create_dataset(
         "/lab/reaper/public",
         "/lab/aitextgen/aitextgen/static",
         "/lab/opencog/learn/learn-lang-diary",
-        "/vtx/models",
-        "/vtx/__pycache__",
-        "/vtx/lab/__pycache__",
+        "/src/models",
+        "/src/__pycache__",
+        "/src/lab/__pycache__",
     ]
 
     suffixes = [
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     # Resume training on an existing model, or start with a fresh base model
     if resume == True:
         fresh_logs = False
-        if not os.path.exists("/vtx/models/" + focus + "/pytorch_model.bin"):
+        if not os.path.exists("/src/models/" + focus + "/pytorch_model.bin"):
             launch_model = base_model
             model_folder = None
 
@@ -171,16 +171,16 @@ if __name__ == "__main__":
         fresh_logs = True
         launch_model = base_model
         model_folder = None
-        if os.path.exists("/vtx/models/" + focus):
-            shutil.rmtree("/vtx/models/" + focus)
+        if os.path.exists("/src/models/" + focus):
+            shutil.rmtree("/src/models/" + focus)
 
     # Start with a fresh logs directory
     if fresh_logs == True:
         if os.path.exists("/gen/logs/" + focus):
             shutil.rmtree("/gen/logs/" + focus)
 
-    if os.path.exists("/vtx/models/" + focus) == False:
-        os.makedirs("/vtx/models/" + focus)
+    if os.path.exists("/src/models/" + focus) == False:
+        os.makedirs("/src/models/" + focus)
 
     output_dir = "models/" + focus
 

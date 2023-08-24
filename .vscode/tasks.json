@@ -53,18 +53,18 @@
       "label": "train",
       "detail": "Train a model.",
       "type": "shell",
-      "command": "docker compose -f docker-compose.yml -f docker-compose.train.yml run -e FOCUS=${input:env} vtx python3 trainer.py"
+      "command": "docker compose -f docker-compose.yml -f docker-compose.train.yml run -e FOCUS=${input:env} bot python3 trainer.py"
     },
     {
       "label": "i",
       "detail": "Prepare your data in various ways.",
       "type": "shell",
-      "command": "docker compose run vtx python3 -c \"import i; ${input:i}\"",
+      "command": "docker compose run bot python3 -c \"import i; ${input:i}\"",
       "runOptions": {
         "instanceLimit": 3
       },
       "windows": {
-        "command": "docker compose run vtx python3 -c \\\"import i; ${input:i}\\\""
+        "command": "docker compose run bot python3 -c \\\"import i; ${input:i}\\\""
       }
     },
     {
@@ -116,7 +116,7 @@
       "type": "pickString",
       "id": "ship",
       "description": "Which ship should I enter?",
-      "options": ["vtx", "ctx", "pet", "pit"]
+      "options": ["bot", "ctx", "pet", "pit"]
     }
   ]
 }

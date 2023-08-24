@@ -16,7 +16,7 @@ async def loop(config):
             await tweet(
                 await head.gen(
                     prefix=random.choice(topics),
-                    max_new_tokens=60,
+                    max_new_tokens=59,
                     decay_after_length=12,
                     decay_factor=0.023,
                     mode="prompt",

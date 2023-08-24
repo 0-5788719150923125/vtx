@@ -159,6 +159,9 @@ if __name__ == "__main__":
     launch_model = None
     fresh_logs = False
     resume = model["training"].get("resume", False)
+    if model["training"].get("regen", False):
+        if os.path.exists('/gen/datasets/' + focus):
+            shutil.rmtree('/gen/datasets/' + focus)
 
     # Resume training on an existing model, or start with a fresh base model
     if resume == True:
@@ -194,7 +197,7 @@ if __name__ == "__main__":
         gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
     )
 
-    ai.tokenizer = AutoTokenizer.from_pretrained(launch_model, cache_dir="models", padding_side="left")
+    ai.tokenizer = AutoTokenizer.from_pretrained(launch_model, cache_dir="models", padding_side="left", padding="max_length", truncation=True)
 
     if model.get("petals", False):
         ai.tokenizer.model_max_length = model["training"].get("model_max_length", 256)

@@ -12,7 +12,7 @@ Our goal is to make the simplest, most basic framework for building robots. It's
 
 # API
 
-- ws://localhost:9666/ws
+- ws://localhost:9666/wss
 
 # Interface
 

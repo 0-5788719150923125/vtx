@@ -22,13 +22,9 @@ class Client(discord.Client):
 
     async def on_ready(self):
         # List all Discord servers on startup
-        print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + "connected to Discord")
         guilds = []
-        try:
-            for guild in sorted(self.guilds, key=lambda guild: guild.member_count, reverse=True):
-                guilds.append(f"{guild.name} ({guild.member_count})")
-        except Exception as e:
-            print(e)
+        for guild in sorted(self.guilds, key=lambda guild: guild.member_count, reverse=True):
+            guilds.append(f"{guild.name} ({guild.member_count})")
 
         print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
 
@@ -42,7 +38,7 @@ class Client(discord.Client):
             delay = random.randint(900, 86400)
             await asyncio.sleep(delay)
             try:
-                channels = await get_all_channels()
+                channels = await get_all_channels(self)
                 channel = random.choice(channels)
                 messages = [
                     message
@@ -297,9 +293,9 @@ def replace_private_message(user_id, message_id, message):
 
 
 # list all available Discord channels
-async def get_all_channels():
+async def get_all_channels(self):
     text_channel_list = []
-    for guild in client.guilds:
+    for guild in self.guilds:
         for channel in guild.text_channels:
             permissions = channel.permissions_for(guild.me)
             if permissions.send_messages:

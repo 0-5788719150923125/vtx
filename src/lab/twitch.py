@@ -50,7 +50,6 @@ async def client(config):
 
             async def on_ready(ready_event: EventData):
                 await ready_event.chat.join_room(self.channel)
-                print(bc.ROOT + "ONE@TWITCH: " + ad.TEXT + "connected to Twitch")
 
             async def on_message(message):
                 if self.active == True:

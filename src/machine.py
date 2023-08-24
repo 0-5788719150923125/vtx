@@ -2,10 +2,7 @@ import threading
 import time
 import os
 import importlib
-from utils import config
-# import hivemind
-# from pytorch_lightning.strategies import HivemindStrategy
-# from lightning_hivemind.strategy import HivemindStrategy
+from utils import ad, bc, config
 
 # This is the main loop
 def main():
@@ -13,7 +10,7 @@ def main():
     allowed_services = [
         "source",
         "telegram",
-        "telegraph",
+        # "telegraph",
         "reddit",
         "discord",
         "twitch",
@@ -39,6 +36,7 @@ def main():
                 task.name = service
                 task.start()
                 tasks[task.name] = task
+                print(bc.ROOT + f"ONE@{service.upper()}: " + ad.TEXT + "connected")
 
         time.sleep(66.6)
 

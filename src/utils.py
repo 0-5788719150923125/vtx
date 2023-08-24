@@ -62,11 +62,22 @@ def list_full_paths(directory):
 
 
 # Generate a pseudo-identity, in the Discord ID format
-def get_identity():
-    count = secrets.choice([17, 18])
-    leading = secrets.choice("123456789")
-    identity = leading + "".join(secrets.choice("0123456789") for i in range(count))
+def get_identity(seed=None):
+    if seed is not None:
+        # Convert the seed string to an integer and use it to seed the random number generator
+        seed_int = int.from_bytes(seed.encode('utf-8'), 'big')
+        random.seed(seed_int)
+
+    count = random.choice([17, 18])
+    leading = random.choice("123456789")
+    identity = leading + "".join(random.choice("0123456789") for _ in range(count))
+
+    if seed is not None:
+        # Restore the random number generator to its original state
+        random.seed()
+
     return identity
+
 
 # Hash a string, return a name
 def get_daemon(seed):

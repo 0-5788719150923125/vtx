@@ -1,9 +1,11 @@
 import random
 import os
+import threading
 import re
 from utils import ad, bc, get_daemon, get_identity, propulsion, ship
 import asyncio
 import asyncpraw
+import time
 import head
 from pprint import pprint
 from lab.discord import send_webhook
@@ -24,10 +26,144 @@ async def client(config):
             await asyncio.gather(
                 subscribe_comments(reddit, config),
                 subscribe_submissions(reddit, config),
-                submission(reddit, config)
+                submission(reddit, config),
+                stalker(reddit, config)
             )
         except Exception as e:
             print(e)
+
+async def stalker(reddit, config):
+
+    async def watch_submissions(reddit, config, user):
+        redditor = await reddit.redditor(user)
+        async for submission in redditor.stream.submissions(skip_existing=True):
+            try:
+
+                victim = config["stalk"][user]
+
+                chance = victim.get("chance", 0.1)
+                if random.random() > chance:
+                    continue
+
+                await submission.load()
+                await submission.subreddit.load()
+                op = get_identity(user)
+                context = [
+                    propulsion
+                    + str(get_identity())
+                    + ship
+                    + " /r/"
+                    + submission.subreddit.display_name,
+                    propulsion + str(op) + ship + " " + submission.title,
+                    propulsion + str(op) + ship + " " + submission.selftext,
+                ]
+
+                mask = victim.get("mask", None)
+                bias = config["masks"][mask].get("bias", None) if mask else None
+                prompt = config["masks"][mask].get("prompt") if mask else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
+
+                generation = await head.gen(
+                    ctx=context,
+                    bias=bias,
+                    prefix=prompt,
+                    decay_after_length=66,
+                )
+
+                if generation[0] == False:
+                    continue
+
+                if mask:
+                    output = generation[1]
+                else:
+                    daemon = get_daemon(generation[0])
+                    output = transformer([daemon, generation[1]])
+
+                min_delay = victim.get("min", 300)
+                max_delay = victim.get("max", 900)
+                await asyncio.sleep(random.randint(min_delay, max_delay))
+                await submission.reply(output)
+
+                color = bc.CORE
+                if generation[2] == True:
+                    color = bc.ROOT
+
+                print(color + "INK@REDDIT: " + ad.TEXT + output)
+            except Exception as e:
+                print(e)
+
+    async def watch_comments(reddit, config, user):
+        redditor = await reddit.redditor(user)
+        async for comment in redditor.stream.comments(skip_existing=True):
+
+            try:
+
+                victim = config["stalk"][user]
+
+                chance = victim.get("chance", 0.1)
+                if random.random() > chance:
+                    continue
+
+                await comment.load()
+                context = await build_context(comment=comment)
+
+                mask = victim.get("mask", None)
+                bias = config["masks"][mask].get("bias", None) if mask else None
+                prompt = config["masks"][mask].get("prompt") if mask else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
+
+                generation = await head.gen(
+                    ctx=context,
+                    bias=bias,
+                    prefix=prompt,
+                    decay_after_length=66,
+                )
+
+                if generation[0] == False:
+                    continue
+
+                if mask:
+                    output = generation[1]
+                else:
+                    daemon = get_daemon(generation[0])
+                    output = transformer([daemon, generation[1]])
+
+                min_delay = victim.get("min", 300)
+                max_delay = victim.get("max", 900)
+                await asyncio.sleep(random.randint(min_delay, max_delay))
+                await comment.reply(output)
+
+                color = bc.CORE
+                if generation[2] == True:
+                    color = bc.ROOT
+
+                print(color + "INK@REDDIT: " + ad.TEXT + output)
+            except Exception as e:
+                print(e)
+
+    tasks = {}
+    while True:
+
+        for task in list(tasks):
+            if tasks[task].done():
+                tasks.pop(task)
+
+        loop = asyncio.get_event_loop()
+
+        for user in config["stalk"]:
+            
+            c = user + "-c"
+            if c not in tasks:
+                task = loop.create_task(watch_comments(reddit, config, user))
+                task.name = c
+                tasks[c] = task
+
+            s = user + "-s"
+            if s not in tasks:
+                task = loop.create_task(watch_submissions(reddit, config, user))
+                task.name = s
+                tasks[s] = task
+
+        await asyncio.sleep(66.6)
+ 
 
 # Create a submission.
 async def submission(reddit, config):
@@ -205,7 +341,7 @@ async def subscribe_comments(reddit, config):
                 decay_after_length=66,
             )
 
-            if generation[0] == "error":
+            if generation[0] == False:
                 continue
 
             daemon = get_daemon(generation[0])

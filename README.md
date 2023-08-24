@@ -45,7 +45,7 @@ Our goal is to make the simplest, most basic framework for building robots. It's
 - `git submodule update --init --recursive` to fetch remote datasets.
 - Place configurations into src/config.yml. ([default.yml](./vtx/default.yml))
 - Put new datasets into lab/{dataset_name}. Also specify them in config.yml.
-- Put credentials into a .env file at the root of this project. ([example.env](./example.env))
+- Put credentials into a .env file at the root of this project. ([example.env](./examples/bot/.env))
 - Use VSCode tasks as a reference.
 - The "build" task will build a Docker image from source files.
 - The "i" task is used for data retrieval and preparation tasks.

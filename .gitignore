@@ -1,4 +1,5 @@
 .env
+!examples/bot/.env
 __pycache__
 gen/*
 node_modules

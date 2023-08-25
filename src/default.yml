@@ -50,7 +50,7 @@ soul:
   max_new_tokens: 333
 
   # The max number of characters allowed in a prompt.
-  context_length: 1024
+  context_length: 4096
 
   # Use the Petals network for distributed inference and fine-tuning.
   petals: False
@@ -131,7 +131,7 @@ heart:
   info: with everything you got
   model: RWKV/rwkv-4-430m-pile
   to_gpu: True
-  context_length: 2048
+  context_length: 4096
   training:
     gradient_checkpointing: False
 
@@ -139,7 +139,7 @@ mind:
   info: use your heads
   model: xhyi/PT_GPTNEO350_ATG
   to_gpu: False
-  context_length: 2048
+  context_length: 4096
 
 toe:
   info: nailed to the foot

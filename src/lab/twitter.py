@@ -11,12 +11,12 @@ def orchestrate(config):
 
 async def loop(config):
     while True:
-        if random.random() < config.get("chance", 0.00059):
+        if random.random() < config.get("chance", 0.001):
             topics = config.get("topics", ["AI alignment"])
             await tweet(
                 await head.gen(
                     prefix=random.choice(topics),
-                    max_new_tokens=59,
+                    max_new_tokens=56,
                     decay_after_length=12,
                     decay_factor=0.023,
                     mode="prompt",

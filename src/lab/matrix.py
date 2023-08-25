@@ -43,6 +43,8 @@ async def subscribe(user, password, config) -> None:
                     return
                     
                 message = event.source['content']['body']
+                # pprint(event.source)
+
                 group = re.search(r"^(?:[>].*[\n][\n])(.*)", message)
                 if group:
                     message = group[1]
@@ -52,13 +54,14 @@ async def subscribe(user, password, config) -> None:
 
                 if event.sender == client.user:
                     identity = str(bias)
-                    # return
 
                 head.build_context(propulsion + identity + ship + " " + message)
 
-                if "luciferianink" not in message.lower():
+                if "Architect" not in message:
                     if 'm.relates_to' in event.source['content']:
                         if 'm.in_reply_to' not in event.source['content']['m.relates_to']:
+                            return
+                        if "luciferianink" not in event.source['content']['body']:
                             return
                     else:
                         return

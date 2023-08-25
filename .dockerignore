@@ -7,8 +7,8 @@ node_modules
 src/config.yml
 src/models/*
 !lab/aitextgen
-!lab/opencog
 !lab/opencog/atomspace
+!lab/opencog/learn
 !lab/source
 !lab/fold
 !lab/ink

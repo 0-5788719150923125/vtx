@@ -1,18 +1,17 @@
 FROM nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
 
-RUN apt-get update && apt-get install -y python3-pip python3-venv nodejs npm curl unzip
-
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    # ca-certificates \
-    # libc6 \
-    # libgcc1 \
-    # libgssapi-krb5-2 \
-    # libstdc++6 \
+    && apt-get install -y --no-install-recommends \
+    curl \
+    nodejs \
+    npm \
+    python3-pip \
     python3-packaging \
-    # zlib1g \
-    # ninja-build \
+    python3-venv \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
 
 ARG DOTNET_VERSION
 
@@ -26,8 +25,6 @@ RUN curl -fSL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Runt
 
 MAINTAINER United Nations
 
-WORKDIR /tmp
-
 ARG DCE_VERSION
 
 RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz/DiscordChatExporter/releases/download/$DCE_VERSION/DiscordChatExporter.Cli.zip && \
@@ -37,11 +34,13 @@ RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz
 
 WORKDIR /src
 
-RUN npm i -g nodemon
-
-COPY package*.json requirements.*txt ./
+COPY requirements.txt ./
 
 RUN pip install -r requirements.txt
+
+ARG NODEMON_VERSION
+
+RUN npm i -g nodemon@$NODEMON_VERSION
 
 COPY src/ /src
 COPY lab/ /lab
@@ -52,13 +51,13 @@ RUN python3 -m venv venv/x \
     && chmod +x venv/x/bin/activate \
     && venv/x/bin/activate
 
+COPY requirements.x.txt ./
+
 RUN pip install -r requirements.x.txt
 
-# RUN venv/x/deactivate
-
 RUN mkdir /.cache && \
-    mkdir /.triton
-RUN chmod -R 777 /.cache && \
+    mkdir /.triton && \
+    chmod -R 777 /.cache && \
     chmod -R 777 /.triton
 
 CMD ["python3", "src/main.py"]

@@ -13,6 +13,7 @@ services:
       args: 
         DOTNET_VERSION: 7.0.10
         DCE_VERSION: 2.40.4
+        NODEMON_VERSION: 3.0.1
     stdin_open: true
     tty: true
     volumes:

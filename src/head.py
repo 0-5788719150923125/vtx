@@ -10,8 +10,7 @@ import torch
 from aitextgen import aitextgen
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
-from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM, PretrainedConfig
-from peft import PeftModel, PeftConfig
+from transformers import GenerationConfig
 from utils import (
     ad,
     bc,
@@ -69,12 +68,12 @@ def loader(target=None):
     model = config[target]
 
     model_folder = None
+    adapter = None
     if "training" in model:
         model_folder = "models/" + target
         if "peft" in model["training"]:
             model_folder = None
-
-    base = model.get("model", None)
+            adapter = "adapters/" + target
 
     try:
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + target)
@@ -85,15 +84,8 @@ def loader(target=None):
             petals=model.get("petals", False),
             to_gpu=model["to_gpu"],
             cache_dir="models",
+            adapter=adapter
         )
-        # ai.tokenizer = AutoTokenizer.from_pretrained(
-        #     model.get("tokenizer", base),
-        #     cache_dir="models",
-        #     padding_side="left",
-        # )
-        if "training" in model:
-            if "peft" in model["training"]:
-                ai.model = PeftModel.from_pretrained(ai.model, "adapters/" + target)
         logging.getLogger("transformers").setLevel(logging.INFO)
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + model["info"])
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))

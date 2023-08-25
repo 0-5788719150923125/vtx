@@ -61,9 +61,9 @@ async def stalker(reddit, config):
                     propulsion + str(op) + ship + " " + submission.selftext,
                 ]
 
-                mask = victim.get("mask", None)
-                bias = config["masks"][mask].get("bias", None) if mask else None
-                prompt = config["masks"][mask].get("prompt") if mask else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
+                stalker = victim.get("stalker", None)
+                bias = config["stalkers"][stalker].get("bias", None) if stalker else None
+                prompt = config["stalkers"][stalker].get("prompt") if stalker else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
 
                 generation = await head.gen(
                     ctx=context,
@@ -75,7 +75,7 @@ async def stalker(reddit, config):
                 if generation[0] == False:
                     continue
 
-                if mask:
+                if stalker:
                     output = generation[1]
                 else:
                     daemon = get_daemon(generation[0])
@@ -109,9 +109,9 @@ async def stalker(reddit, config):
                 await comment.load()
                 context = await build_context(comment=comment)
 
-                mask = victim.get("mask", None)
-                bias = config["masks"][mask].get("bias", None) if mask else None
-                prompt = config["masks"][mask].get("prompt") if mask else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
+                stalker = victim.get("stalker", None)
+                bias = config["stalkers"][stalker].get("bias", None) if stalker else None
+                prompt = config["stalkers"][stalker].get("prompt") if stalker else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
 
                 generation = await head.gen(
                     ctx=context,
@@ -123,7 +123,7 @@ async def stalker(reddit, config):
                 if generation[0] == False:
                     continue
 
-                if mask:
+                if stalker:
                     output = generation[1]
                 else:
                     daemon = get_daemon(generation[0])

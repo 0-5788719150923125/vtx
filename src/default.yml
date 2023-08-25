@@ -59,73 +59,73 @@ soul:
   model_max_length: 1000000000000000019884624838656
 
   # This key is for settings that are only used during training.
-  training:
-    # Whether or not you will continue training your existing fine-tuned model (True), or
-    # start over from scratch. (False)
-    resume: False
+  # training:
+  #   # Whether or not you will continue training your existing fine-tuned model (True), or
+  #   # start over from scratch. (False)
+  #   resume: False
 
-    # If this key exists, Parameter Efficient Fine-Tuning (PEFT) will be used.
-    # https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora.py
-    # peft:
-    #   type: "lora"
-    #   r: 4
-    #   alpha: 16
-    #   dropout: 0.1
-    #   bias: "all"
-    #   target_modules:
-    #     - k_proj
-    #     - v_proj
-    #     - q_proj
-    #     - out_proj
-    #     - c_fc
-    #     - c_proj
-    #     - lm_head
+  #   # If this key exists, Parameter Efficient Fine-Tuning (PEFT) will be used.
+  #   # https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora.py
+  #   # peft:
+  #   #   type: "lora"
+  #   #   r: 4
+  #   #   alpha: 16
+  #   #   dropout: 0.1
+  #   #   bias: "all"
+  #   #   target_modules:
+  #   #     - k_proj
+  #   #     - v_proj
+  #   #     - q_proj
+  #   #     - out_proj
+  #   #     - c_fc
+  #   #     - c_proj
+  #   #     - lm_head
 
-    # peft:
-    #   type: "prefix"
-    #   num_virtual_tokens: 24
+  #   # peft:
+  #   #   type: "prefix"
+  #   #   num_virtual_tokens: 24
 
-    # How often to perform inference during training, in steps.
-    generate_every: 50
+  #   # How often to perform inference during training, in steps.
+  #   generate_every: 50
 
-    # How often to save the model during training.
-    save_every: 200
+  #   # How often to save the model during training.
+  #   save_every: 200
 
-    # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters.
-    stages:
-        # The rate at which your model will adjust weights/biases at each iteration step.
-      - learning_rate: 0.000333
-        # The number of iterations before training will complete.
-        num_steps: 88888
-        # Increate the learning_rate from 0 to the amount specified above, over the first X number of warmup_steps (iterations).
-        warmup_steps: 0
-        # Larger batch sizes generally lead to better results, but require more memory to train.
-        batch_size: 3
-        # The number of layers to freeze, starting from the left (lowest/deepest features), and moving right.
-        num_layers_freeze: 8
-        # Gradient accumulation is a ML trick, that essentially allows for larger batch sizes, without
-        # the memory hit. For example, at a batch size of 3, and gradient accumulation steps of 6, your
-        # your model will effectively train with a batch size of 18. (3 x 6 = 18)
-        gradient_accumulation_steps: 1
-        # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
-        weight_decay: 0.01
-        # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
-        max_grad_norm: 0.444
-        # The learning rate scheduler to use.
-        scheduler: linear
-        # This represents the length of each line fed into the tokenizer. Lines longer than this length
-        # will be truncated, while lines shorter will be padded (on the right). When fine-tuning a model,
-        # this will be set to what is already supported by the corresponding model's config.json.
-        block_size: 444
-        # Remove a percentage of neurons during training.
-        prune: 0.0
-        # Train only the multi-head self-attention and feed-forward sub-layers.
-        train_transformers_only: False
-        # Takes an equal number of samples from each dataset, so as not to bias toward one or the other.
-        equalize_datasets: False
-        # Place each dataset into a folder at {project_root}/lab, then list them here.
-        datasets:
-          - default
+  #   # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters.
+  #   stages:
+  #       # The rate at which your model will adjust weights/biases at each iteration step.
+  #     - learning_rate: 0.000333
+  #       # The number of iterations before training will complete.
+  #       num_steps: 88888
+  #       # Increate the learning_rate from 0 to the amount specified above, over the first X number of warmup_steps (iterations).
+  #       warmup_steps: 0
+  #       # Larger batch sizes generally lead to better results, but require more memory to train.
+  #       batch_size: 3
+  #       # The number of layers to freeze, starting from the left (lowest/deepest features), and moving right.
+  #       num_layers_freeze: 8
+  #       # Gradient accumulation is a ML trick, that essentially allows for larger batch sizes, without
+  #       # the memory hit. For example, at a batch size of 3, and gradient accumulation steps of 6, your
+  #       # your model will effectively train with a batch size of 18. (3 x 6 = 18)
+  #       gradient_accumulation_steps: 1
+  #       # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
+  #       weight_decay: 0.01
+  #       # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
+  #       max_grad_norm: 0.444
+  #       # The learning rate scheduler to use.
+  #       scheduler: linear
+  #       # This represents the length of each line fed into the tokenizer. Lines longer than this length
+  #       # will be truncated, while lines shorter will be padded (on the right). When fine-tuning a model,
+  #       # this will be set to what is already supported by the corresponding model's config.json.
+  #       block_size: 444
+  #       # Remove a percentage of neurons during training.
+  #       prune: 0.0
+  #       # Train only the multi-head self-attention and feed-forward sub-layers.
+  #       train_transformers_only: False
+  #       # Takes an equal number of samples from each dataset, so as not to bias toward one or the other.
+  #       equalize_datasets: False
+  #       # Place each dataset into a folder at {project_root}/lab, then list them here.
+  #       datasets:
+  #         - default
 
 heart:
   info: with everything you got

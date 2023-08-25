@@ -54,5 +54,5 @@ services:
           cpus: '0.75'
     volumes:
       - ./src/models:/src/models
-    environment:
-      HIVEMIND_LOGLEVEL: ERROR
+    # environment:
+    #   HIVEMIND_LOGLEVEL: ERROR

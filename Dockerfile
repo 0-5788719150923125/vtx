@@ -48,8 +48,6 @@ COPY lab/ /lab
 
 RUN pip install /lab/aitextgen
 
-RUN pip install accelerate==0.22.0
-
 RUN mkdir /.cache && \
     mkdir /.triton
 RUN chmod -R 777 /.cache && \

@@ -215,10 +215,11 @@ def gen(
                 temperature = temperature / 2
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
-            params = GenerationConfig(
+            generation_config = GenerationConfig(
                     n=1,
                     do_sample=True,
                     min_length=23,
+                    max_new_tokens=max_new_tokens,
                     temperature=temperature,
                     eta_cutoff=0.0003,
                     penalty_alpha=0.6,
@@ -233,20 +234,19 @@ def gen(
                     max_time=360,
                     seed=seed[1],
                 )
+
+            logging.getLogger("transformers").setLevel(logging.ERROR)
+            completion = ai.generate(
+                prompt=prompt,
+                generation_config=generation_config,
+                # max_length=111,
+                max_length=2048,
+                return_as_list=True,
+            )
+            logging.getLogger("transformers").setLevel(logging.WARNING)
+
             if petals:
-                completion = ai.generate(
-                    prompt,
-                    max_new_tokens=max_new_tokens,
-                    return_as_list=True,
-                )
-                print(bc.ROOT + "ANY@PETALS: " + ad.TEXT + completion[0])
-            else:
-                completion = ai.generate(
-                    prompt=prompt,
-                    max_new_tokens=max_new_tokens,
-                    generation_config=params,
-                    return_as_list=True,
-                )
+                print(bc.ROOT + "ONE@PETALS: " + ad.TEXT + completion[0])
 
             active = False
 
@@ -276,6 +276,8 @@ def gen(
 
         except Exception as e:
             attempt += 1
+            if petals:
+                print(e)
             if attempt > max_attempts:
                 context = default_context.copy()
                 output = False

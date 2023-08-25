@@ -135,9 +135,9 @@ def replace(old_message, new_message):
 
 # Truncate the prompt to fit the model
 def truncate_context(ctx, max_length=512):
-    context_length = sum([len(item) for item in ctx])
+    truncate_length = sum([len(item) for item in ctx])
 
-    if context_length > max_length:
+    if truncate_length > max_length:
         for i, line in enumerate(ctx):
             if not line.startswith(propulsion):
                 continue
@@ -183,7 +183,7 @@ def gen(
             global context
             ctx = context
 
-        ctx = truncate_context(ctx, config[focus].get("context_length", 1024))
+        ctx = truncate_context(ctx, config[focus].get("truncate_length", 1024))
         history = prefix + "\n" + "\n".join(ctx) + "\n"
 
         if bias is not None:

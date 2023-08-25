@@ -33,7 +33,7 @@ async def client(config) -> None:
                 "You are powerful tulpa that follows the human's instructions.",
             ),
         )
-        if output == False:
+        if output[0] == False:
             return
         await message.answer(output[1])
         head.build_context(propulsion + str(bias) + ship + " " + output[1])

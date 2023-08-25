@@ -1,6 +1,6 @@
 import random
 
-frequency = random.seed = None
+frequency = random.seed()
 
 if __name__ == "__main__":
     print("the main loop is a constellation")

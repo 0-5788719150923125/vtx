@@ -71,7 +71,7 @@ async def client(config):
                         propulsion + messenger + ship + " " + message.text
                     )
                     output = await head.gen(bias=bias, prefix=prefix, max_new_tokens=44)
-                    if output == False:
+                    if output[0] == False:
                         return
                     head.build_context(propulsion + bias + ship + " " + output[1])
                     await asyncio.sleep(random.choice([7, 8, 9]))

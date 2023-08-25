@@ -60,22 +60,28 @@ def list_full_paths(directory):
 
     return fname
 
+def str_to_int(seed):
+  seed_bytes = seed.encode('utf-8')
+  seed_int = hashlib.sha256(seed_bytes).hexdigest()
+  seed_int = int(seed_int, 16)
+  return seed_int
+
+def make_random_deterministic(seed):
+  seed_int = str_to_int(str(seed))[:10]
+  random.seed(seed_int)
 
 # Generate a pseudo-identity, in the Discord ID format
 def get_identity(seed=None):
+
     if seed is not None:
-        # Convert the seed string to an integer and use it to seed the random number generator
-        seed_int = int.from_bytes(seed.encode('utf-8'), 'big')
-        random.seed(seed_int)
+        random.seed(seed)
 
     count = random.choice([17, 18])
     leading = random.choice("123456789")
     identity = leading + "".join(random.choice("0123456789") for _ in range(count))
 
-    if seed is not None:
-        # Restore the random number generator to its original state
-        random.seed()
-
+    random.seed()
+    
     return identity
 
 

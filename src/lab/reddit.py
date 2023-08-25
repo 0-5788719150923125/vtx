@@ -39,15 +39,18 @@ async def stalker(reddit, config):
         async for submission in redditor.stream.submissions(skip_existing=True):
             try:
 
-                victim = config["stalk"][user]
+                victim = config["stalk"].get(user)
 
                 chance = victim.get("chance", 0.1)
+
                 if random.random() > chance:
                     continue
 
                 await submission.load()
                 await submission.subreddit.load()
+
                 op = get_identity(user)
+
                 context = [
                     propulsion
                     + str(get_identity())
@@ -97,7 +100,7 @@ async def stalker(reddit, config):
 
             try:
 
-                victim = config["stalk"][user]
+                victim = config["stalk"].get(user)
 
                 chance = victim.get("chance", 0.1)
                 if random.random() > chance:
@@ -186,7 +189,7 @@ async def submission(reddit, config):
                     decay_after_length=1024,
                     decay_factor=0.00000023,
                 )
-                if output == False:
+                if output[0] == False:
                     return
                 submission = await subreddit.submit(title=title, selftext=output)
                 await submission.load()
@@ -279,7 +282,7 @@ async def subscribe_submissions(reddit, config):
                 bias=bias,
                 decay_after_length=66,
             )
-            if not generation:
+            if generation[0]:
                 continue
             else:
                 daemon = get_daemon(generation[0])

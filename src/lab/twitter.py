@@ -13,15 +13,16 @@ async def loop(config):
     while True:
         if random.random() < config.get("chance", 0.001):
             topics = config.get("topics", ["AI alignment"])
-            await tweet(
-                await head.gen(
-                    prefix=random.choice(topics),
-                    max_new_tokens=56,
-                    decay_after_length=12,
-                    decay_factor=0.023,
-                    mode="prompt",
-                )
+            output = await head.gen(
+                prefix=random.choice(topics),
+                max_new_tokens=56,
+                decay_after_length=12,
+                decay_factor=0.023,
+                mode="prompt",
             )
+            if output[0] == False:
+                continue
+            await tweet(output[1])
         time.sleep(66.6)
 
 

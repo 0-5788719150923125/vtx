@@ -1,17 +1,17 @@
 FROM nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
 
-RUN apt-get update && apt-get install -y python3-pip nodejs npm curl unzip
+RUN apt-get update && apt-get install -y python3-pip python3-venv nodejs npm curl unzip
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    ca-certificates \
-    libc6 \
-    libgcc1 \
-    libgssapi-krb5-2 \
-    libstdc++6 \
+    # ca-certificates \
+    # libc6 \
+    # libgcc1 \
+    # libgssapi-krb5-2 \
+    # libstdc++6 \
     python3-packaging \
-    zlib1g \
-    ninja-build \
+    # zlib1g \
+    # ninja-build \
     && rm -rf /var/lib/apt/lists/*
 
 ARG DOTNET_VERSION
@@ -39,14 +39,22 @@ WORKDIR /src
 
 RUN npm i -g nodemon
 
-COPY package*.json requirements.txt ./
+COPY package*.json requirements.*txt ./
 
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 COPY src/ /src
 COPY lab/ /lab
 
 RUN pip install /lab/aitextgen
+
+RUN python3 -m venv venv/x \
+    && chmod +x venv/x/bin/activate \
+    && venv/x/bin/activate
+
+RUN pip install -r requirements.x.txt
+
+# RUN venv/x/deactivate
 
 RUN mkdir /.cache && \
     mkdir /.triton

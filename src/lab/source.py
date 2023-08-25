@@ -108,7 +108,7 @@ async def response(config, focus):
         ctx=messages[focus],
         prefix=persona,
     )
-    if output == False:
+    if output[0] == False:
         messages[focus] = []
         return
 

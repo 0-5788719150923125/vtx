@@ -271,7 +271,7 @@ def gen(
             ):
                 raise Exception("failed to format a proper response")
             else:
-                output = [group[2], group[3], seed[0]]
+                output = [group[2], group[3], seed[0], ctx]
                 break
 
         except Exception as e:
@@ -280,7 +280,7 @@ def gen(
                 print(e)
             if attempt > max_attempts:
                 context = default_context.copy()
-                output = False
+                output = [False, ctx]
 
     active = False
     return output

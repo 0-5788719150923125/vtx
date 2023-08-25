@@ -36,12 +36,6 @@ def create_dataset(
     line_by_line=False,
     shuffle=False,
 ):
-    tmp_path = "/tmp/intermediate"
-
-    if os.path.exists(tmp_path):
-        shutil.rmtree(tmp_path)
-
-    os.makedirs(tmp_path)
 
     prefixes = [
         ".git",
@@ -90,7 +84,7 @@ def create_dataset(
     if shuffle:
         random.shuffle(files)
 
-    intermediate_path = tmp_path + "/" + str(random.randint(1000000, 9999999)) + ".txt"
+    intermediate_path = "/tmp/intermediate.txt"
 
     datasets = {}
     for file in files:
@@ -144,8 +138,7 @@ def create_dataset(
         )
 
     # Cleanup temp files used for tokenized dataset creation
-    if os.path.exists("/tmp/intermediate"):
-        shutil.rmtree("/tmp/intermediate")
+    os.delete("/tmp/intermediate.txt")
 
     return dataset
 

@@ -231,8 +231,6 @@ def gen(
             completion = ai.generate(
                 prompt=prompt,
                 generation_config=generation_config,
-                # max_length=111,
-                max_length=2048,
                 return_as_list=True,
             )
             logging.getLogger("transformers").setLevel(logging.WARNING)

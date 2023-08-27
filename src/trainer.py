@@ -138,7 +138,8 @@ def create_dataset(
         )
 
     # Cleanup temp files used for tokenized dataset creation
-    os.delete("/tmp/intermediate.txt")
+    if os.path.exists('/tmp/intermediate.txt'):
+        os.remove("/tmp/intermediate.txt")
 
     return dataset
 

@@ -24,7 +24,7 @@ from utils import ad, bc, config
 
 # inputs = tokenizer("A cat sat", return_tensors="pt")["input_ids"]
 
-# outputs = model.generate(input_ids=inputs, max_length=2048, generation_config=params)
+# outputs = model.generate(inputs=inputs, max_length=2048, generation_config=params)
 # # outputs = model.generate(input_ids=inputs, max_new_tokens=9, num_beams=3)
 # print(tokenizer.decode(outputs[0]))  # A cat sat on a mat...
 

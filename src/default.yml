@@ -64,6 +64,9 @@ soul:
     # start over from scratch. (False)
     resume: False
 
+    # Delete all tokenized datasets, and rebuild them from scratch.
+    regen: False
+
     # If this key exists, Parameter Efficient Fine-Tuning (PEFT) will be used.
     # https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora.py
     # peft:

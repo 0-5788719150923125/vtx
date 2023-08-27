@@ -176,9 +176,6 @@ if __name__ == "__main__":
         if os.path.exists("/gen/logs/" + focus):
             shutil.rmtree("/gen/logs/" + focus)
 
-    if os.path.exists("/src/models/" + focus) == False:
-        os.makedirs("/src/models/" + focus)
-
     output_dir = "models/" + focus
 
     # Instantiate the model object
@@ -344,6 +341,8 @@ if __name__ == "__main__":
                     num_virtual_tokens=p.get("num_virtual_tokens", 24)
                 )
             ai.model = get_peft_model(ai.model, peft_config)
+    elif os.path.exists("/src/models/" + focus) == False:
+        os.makedirs("/src/models/" + focus)
 
     for name, param in ai.model.named_parameters():
         if "lora" in name or "Lora" in name:

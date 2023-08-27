@@ -158,8 +158,8 @@ collections:
   default:
     # The path to your dataset.
     lab/src:
-      # duplicate the dataset X amount of times. This has a regularization effect that is
-      # a bit like stride or a sliding context window.
+      # duplicate the dataset X amount of times. Each subsequent duplicate is shuffled, such that
+      # batches are in a different order, and contain different combinations of data.
       duplicate: 2
       # In some instances, your data should be read line-by-line. A CSV file is a good example.
       line_by_line: False

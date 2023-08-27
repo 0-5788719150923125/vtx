@@ -142,9 +142,9 @@ def get_string_length(string):
     return length
 
 # Truncate the prompt to fit the model
-def truncate_context(ctx, max_length=1024):
+def truncate_context(ctx, max_tokens=1024):
     length = get_string_length(ctx)
-    while length >= max_length:
+    while length >= max_tokens:
         ctx = ctx[5:]
         length = get_string_length(ctx)
     if ctx == '':

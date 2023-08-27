@@ -108,8 +108,10 @@ async def response(config, focus):
         ctx=messages[focus],
         prefix=persona,
     )
+
     if output[0] == False:
-        messages[focus] = []
+        if len(messages[focus]) > 0:
+            messages[focus].pop(0)
         return
 
     if bias == None:
@@ -126,7 +128,8 @@ async def response(config, focus):
     )
 
     if sanitized == '' or sanitized.startswith(" "):
-        messages[focus] = []
+        if len(messages[focus]) > 0:
+            messages[focus].pop(0)
         return
 
     color = bc.CORE

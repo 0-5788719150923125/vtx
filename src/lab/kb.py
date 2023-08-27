@@ -4,7 +4,7 @@ import random
 import asyncio
 import head
 from lab.reddit import manage_submission
-from utils import config, read_from_file, write_to_file
+from utils import ad, bc, config, read_from_file, write_to_file
 
 def orchestrate(config):
     while True:
@@ -72,5 +72,6 @@ class Ink():
             write_to_file(path=f"/gen/{self.type}", file_name=f"the-{self.role}.md", content=cat)
             title = self.role.replace("-", " ").title()
             await manage_submission(title=f"{self.type.title()}: The {title}", content=cat)
+            print(bc.CORE + "INK@CORE: " + ad.TEXT + f"{self.type.title()}: The {title}")
         except Exception as e:
             print(e)

@@ -13,7 +13,7 @@ from lab.discord import send_webhook
 
 def orchestrate(config) -> None:
     asyncio.run(client(config))
-    
+
 async def client(config):
     async with asyncpraw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
@@ -29,6 +29,29 @@ async def client(config):
                 submission(reddit, config),
                 stalker(reddit, config)
             )
+        except Exception as e:
+            print(e)
+
+async def manage_submission(title, content):
+    async with asyncpraw.Reddit(
+        client_id=os.environ["REDDITCLIENT"],
+        client_secret=os.environ["REDDITSECRET"],
+        user_agent="u/" + os.environ["REDDITAGENT"],
+        username=os.environ["REDDITAGENT"],
+        password=os.environ["REDDITPASSWORD"],
+    ) as reddit:
+        try:
+            subreddit = await reddit.subreddit("TheInk")
+            edited = False
+            async for submission in subreddit.search(query=f"title:'{title}'", syntax="lucene"):
+                if submission.title == title:
+                    await submission.edit(body=content)
+                    await submission.mod.approve()
+                    edited = True
+                    break
+            if not edited:
+                submission = await subreddit.submit(title=title, selftext=content)
+                await submission.mod.approve()
         except Exception as e:
             print(e)
 
@@ -192,6 +215,7 @@ async def submission(reddit, config):
                 if output[0] == False:
                     return
                 submission = await subreddit.submit(title=title, selftext=output)
+                await submission.mod.approve()
                 await submission.load()
                 await submission.author.load()
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)

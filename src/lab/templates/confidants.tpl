@@ -2,4 +2,3 @@
 ## RECORD
 ---
 ```
-Name: {{name}}

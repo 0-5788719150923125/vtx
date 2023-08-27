@@ -40,7 +40,8 @@ def main():
         "discord",
         "twitch",
         "twitter",
-        "matrix"
+        "matrix",
+        "kb"
     ]
 
     tasks = {}

@@ -164,6 +164,18 @@ def write_log_file(dir: str, content: str):
     with open(path, "w") as file:
         file.write(content)
 
+def read_from_file(path: str):
+    return open(path).read()
+
+def write_to_file(path: str, file_name: str, content: str):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    path = f"{path}/" + str(file_name)
+
+    with open(path, "w") as file:
+        file.write(content)
+
 # Take a relative date in string format, and return the formatted value
 def get_past_datetime(time_description):
     # Split the input string into value and unit

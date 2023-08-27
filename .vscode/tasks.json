@@ -109,7 +109,8 @@
         "i.prepare_discord_messages()",
         "i.fetch_from_discord()",
         "i.juxtapose_data()",
-        "i.create_evil()"
+        "i.create_evil()",
+        "i.fetch_from_matrix()"
       ]
     },
     {

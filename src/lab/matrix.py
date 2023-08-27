@@ -42,7 +42,6 @@ async def subscribe(user, password, config) -> None:
                 return
                 
             message = event.source['content']['body']
-            # pprint(event.source)
 
             group = re.search(r"^(?:[>].*[\n][\n])(.*)", message)
             if group:

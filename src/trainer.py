@@ -354,7 +354,7 @@ if __name__ == "__main__":
     version = build_version()
 
     logger = loggers.TensorBoardLogger(
-        "/gen/logs", name=focus, version=version, default_hp_metric=True
+        "/gen/logs", name=focus, version=version, default_hp_metric=False
     )
 
     # Train the model

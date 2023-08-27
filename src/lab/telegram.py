@@ -5,6 +5,7 @@ import re
 from utils import ad, bc, get_daemon, get_identity, propulsion, ship
 from aiogram import Dispatcher, Bot, types
 import head
+from lab.ink import Ink
 
 def orchestrate(config):
     asyncio.run(client(config))
@@ -19,6 +20,15 @@ async def client(config) -> None:
 
     @dp.message_handler()
     async def chat_bot(message: types.Message):
+
+        if message["text"].lower() == "ink":
+            try:
+                ink = Ink()
+                await ink.write()
+            except Exception as e:
+                print(e)
+            return
+
         head.build_context(
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )

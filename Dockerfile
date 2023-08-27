@@ -3,6 +3,7 @@ FROM nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     curl \
+    git \
     nodejs \
     npm \
     python3-pip \

@@ -3,22 +3,23 @@ import time
 import os
 import importlib
 from utils import ad, bc, config
+# from lightning_hivemind.strategy import HivemindStrategy
 
 # import torch
 # from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM
 # from petals import AutoDistributedModelForCausalLM
-# # from peft import PeftModel, PeftConfig
+# from peft import PeftModel, PeftConfig
 
-# # model_name = "EleutherAI/gpt-neo-125M"
+# # model_name = "stabilityai/StableBeluga-7B"
 # model_name = "bigscience/bloom-560m"
 
+# model = AutoDistributedModelForCausalLM.from_pretrained(model_name, cache_dir="models", torch_dtype=torch.float32, active_adapter="adapters/soul")
 # tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir="models", padding_side="left")
-# model = AutoDistributedModelForCausalLM.from_pretrained(model_name, cache_dir="models", torch_dtype=torch.float32)
 # # model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir="models", torch_dtype=torch.float32)
 
 # params = GenerationConfig(
 #         max_time=360,
-#         max_new_tokens=9
+#         max_new_tokens=33
 #     )
 # # model = PeftModel.from_pretrained(model, "adapters/soul")
 

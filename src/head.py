@@ -8,7 +8,6 @@ import re
 import gc
 import torch
 from aitextgen import aitextgen
-from aitextgen.utils import model_max_length
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 from transformers import GenerationConfig
@@ -107,7 +106,7 @@ scheduler.add_job(loader, trigger="interval", minutes=30)
 scheduler.start()
 
 def get_max_length():
-    return model_max_length(ai.model.config)
+    return ai.model_max_length
 
 # Build a local cache of global conversational state
 def build_context(message):

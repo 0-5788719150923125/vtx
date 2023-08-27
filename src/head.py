@@ -9,6 +9,7 @@ import gc
 import torch
 from aitextgen import aitextgen
 import logging
+from pprint import pprint
 from apscheduler.schedulers.background import BackgroundScheduler
 from transformers import GenerationConfig
 from utils import (
@@ -135,21 +136,20 @@ def replace(old_message, new_message):
     except Exception as e:
         print(e)
 
+# Tokenize a string, and get its length (in tokens)
+def get_string_length(string):
+    length = len(ai.tokenizer(string, return_tensors="pt")["input_ids"][0])
+    return length
 
 # Truncate the prompt to fit the model
-def truncate_context(ctx, max_length=512):
-    truncate_length = sum([len(item) for item in ctx])
-
-    if truncate_length > max_length:
-        for i, line in enumerate(ctx):
-            if not line.startswith(propulsion):
-                continue
-            remaining = i + 1
-            ctx[i] = line[:remaining]
-            if sum([len(item) for item in ctx]) <= max_length:
-                break
-
-    return ctx
+def truncate_context(ctx, max_length=1024):
+    length = get_string_length(ctx)
+    while length >= max_length:
+        ctx = ctx[5:]
+        length = get_string_length(ctx)
+    if ctx == '':
+        return ''
+    return ctx + "\n"
 
 
 # Generate a completion from bias and context
@@ -165,6 +165,7 @@ def gen(
 ):
     global ai
     global active
+    global context
 
     while active == True:
         time.sleep(1)
@@ -183,11 +184,10 @@ def gen(
         eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
 
         if ctx == None:
-            global context
             ctx = context
 
-        ctx = truncate_context(ctx, config[focus].get("truncate_length", 1024))
-        history = prefix + "\n" + "\n".join(ctx) + "\n"
+        flat = truncate_context("\n".join(ctx), config[focus].get("truncate_length", ai.model_max_length))
+        history = prefix + "\n" + flat
 
         if bias is not None:
             if (len(str(bias)) == 18) or (len(str(bias)) == 19):

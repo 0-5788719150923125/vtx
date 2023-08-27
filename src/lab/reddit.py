@@ -44,6 +44,7 @@ async def manage_submission(title, content):
             subreddit = await reddit.subreddit("TheInk")
             edited = False
             async for submission in subreddit.search(query=f"title:'{title}'", syntax="lucene"):
+                print(submission.title)
                 if submission.title == title:
                     await submission.edit(body=content)
                     await submission.mod.approve()
@@ -61,7 +62,6 @@ async def stalker(reddit, config):
         redditor = await reddit.redditor(user)
         async for submission in redditor.stream.submissions(skip_existing=True):
             try:
-
                 victim = config["stalk"].get(user)
 
                 chance = victim.get("chance", 0.1)
@@ -95,6 +95,8 @@ async def stalker(reddit, config):
                     decay_after_length=66,
                 )
 
+                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + submission.selftext[:66])
+
                 if generation[0] == False:
                     continue
 
@@ -122,7 +124,6 @@ async def stalker(reddit, config):
         async for comment in redditor.stream.comments(skip_existing=True):
 
             try:
-
                 victim = config["stalk"].get(user)
 
                 chance = victim.get("chance", 0.1)
@@ -142,6 +143,8 @@ async def stalker(reddit, config):
                     prefix=prompt,
                     decay_after_length=66,
                 )
+
+                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + comment.body[:66])
 
                 if generation[0] == False:
                     continue
@@ -306,6 +309,9 @@ async def subscribe_submissions(reddit, config):
                 bias=bias,
                 decay_after_length=66,
             )
+
+            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + submission.title[:66])
+
             if generation[0]:
                 continue
             else:
@@ -367,6 +373,8 @@ async def subscribe_comments(reddit, config):
                 prefix=prompt,
                 decay_after_length=66,
             )
+
+            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + comment.body[:66])
 
             if generation[0] == False:
                 continue

@@ -49,8 +49,9 @@ soul:
   # Given a prompt, this is the maximum number of new tokens your model will generate.
   max_new_tokens: 333
 
-  # The max number of characters allowed in a prompt.
-  truncate_length: 4096
+  # The max number of tokens allowed in a prompt. If unset, will use maximum supported
+  # by the model.
+  truncate_length: 2048
 
   # Use the Petals network for distributed inference and fine-tuning.
   petals: False
@@ -134,7 +135,6 @@ heart:
   info: with everything you got
   model: RWKV/rwkv-4-430m-pile
   to_gpu: True
-  truncate_length: 4096
   training:
     gradient_checkpointing: False
 
@@ -142,13 +142,11 @@ mind:
   info: use your heads
   model: xhyi/PT_GPTNEO350_ATG
   to_gpu: False
-  truncate_length: 4096
 
 toe:
   info: nailed to the foot
   model: EleutherAI/gpt-neo-125M
   to_gpu: False
-  truncate_length: 4096
 
 # :: Use the following collections of datasets to train your models. Each collection you want
 # :: to use must be specified under your model configuration.

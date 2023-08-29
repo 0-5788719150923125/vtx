@@ -181,10 +181,13 @@ def gen(
     if mode == "chat":
         prompt = propulsion
 
-        eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
-
         if ctx == None:
             ctx = context
+
+        while not ai:
+            time.sleep(1)
+            
+        eos = ai.tokenizer.convert_tokens_to_ids(ai.tokenizer.tokenize(propulsion)[0])
 
         flat = truncate_context("\n".join(ctx), config[focus].get("truncate_length", ai.model_max_length))
         history = prefix + "\n" + flat

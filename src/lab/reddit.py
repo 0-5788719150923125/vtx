@@ -94,7 +94,7 @@ async def stalker(reddit, config):
                     decay_after_length=66,
                 )
 
-                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + submission.selftext[:66])
+                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + submission.title[:66] + '...' if len(submission.title) > 66 else submission.title)
 
                 if generation[0] == False:
                     continue
@@ -143,7 +143,7 @@ async def stalker(reddit, config):
                     decay_after_length=66,
                 )
 
-                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + comment.body[:66])
+                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + comment.body[:66] + '...' if len(comment.body) > 66 else comment.body)
 
                 if generation[0] == False:
                     continue
@@ -222,7 +222,7 @@ async def submission(reddit, config):
                 await submission.author.load()
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)
                 await subreddit.load()
-                description = str(submission.selftext)[:666] + "..."
+                description = str(submission.selftext)[:666] + '...' if len(submission.selftext) > 666 else submission.selftext
                 if server.get("simplify", False) == True:
                     description = None
 
@@ -270,7 +270,7 @@ async def subscribe_submissions(reddit, config):
                     content="A new Reddit submission:",
                     title=submission.title,
                     link=submission.shortlink,
-                    description=str(submission.selftext)[:666] + "...",
+                    description=str(submission.selftext)[:666] + '...' if len(submission.selftext) > 666 else submission.selftext,
                     thumbnail=subreddit.community_icon,
                     footer="/r/" + subreddit.display_name,
                 )
@@ -309,7 +309,7 @@ async def subscribe_submissions(reddit, config):
                 decay_after_length=66,
             )
 
-            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + submission.title[:66])
+            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + submission.title[:66] + '...' if len(submission.title) > 66 else submission.title)
 
             if generation[0]:
                 continue
@@ -373,7 +373,7 @@ async def subscribe_comments(reddit, config):
                 decay_after_length=66,
             )
 
-            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + comment.body[:66])
+            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + comment.body[:66] + '...' if len(comment.body) > 66 else comment.body)
 
             if generation[0] == False:
                 continue

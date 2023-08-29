@@ -72,6 +72,6 @@ class Ink():
             write_to_file(path=f"/gen/{self.type}", file_name=f"the-{self.role}.md", content=cat)
             title = self.role.replace("-", " ").title()
             await manage_submission(title=f"{self.type.title()}: The {title}", content=cat)
-            print(bc.CORE + "INK@CORE: " + ad.TEXT + f"{self.type.title()}: The {title}")
+            print(bc.CORE + "INK@KB: " + ad.TEXT + f"{self.type.title()}: The {title}")
         except Exception as e:
             print(e)

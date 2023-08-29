@@ -44,7 +44,6 @@ async def manage_submission(title, content):
             subreddit = await reddit.subreddit("TheInk")
             edited = False
             async for submission in subreddit.search(query=f"title:'{title}'", syntax="lucene"):
-                print(submission.title)
                 if submission.title == title:
                     await submission.edit(body=content)
                     await submission.mod.approve()

@@ -22,7 +22,7 @@ async def loop(config):
             )
             if output[0] == False:
                 continue
-            await tweet(output[1])
+            await tweet(output)
         time.sleep(66.6)
 
 

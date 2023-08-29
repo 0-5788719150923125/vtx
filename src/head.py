@@ -245,7 +245,6 @@ def gen(
 
             if mode == "prompt":
                 output = completion[0]
-                write_log_file(dir="/gen/generations", content=output)
                 break
 
             generation = completion[0][len(history) :]

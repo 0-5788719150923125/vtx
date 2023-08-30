@@ -9,6 +9,8 @@ services:
             - driver: ${GPU_MANUFACTURER:-nvidia}
               capabilities: [gpu]
               device_ids: ['${TRAIN_GPU_INDEX:-0}']
+    network_mode: 'host'
+    ipc: host
     environment:
       PETALS_LOGGING: False
-      # HIVEMIND_LOGLEVEL: ERROR
+      HIVEMIND_LOGLEVEL: INFO

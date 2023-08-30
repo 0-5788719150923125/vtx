@@ -275,7 +275,7 @@ def gen(
                 print(e)
             if attempt > max_attempts:
                 context = default_context.copy()
-                output = [False, ctx]
+                output = [False, e]
 
     active = False
     return output

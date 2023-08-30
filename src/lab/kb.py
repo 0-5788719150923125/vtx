@@ -2,6 +2,7 @@ import os
 import time
 import random
 import asyncio
+import math
 import head
 from lab.reddit import manage_submission
 from utils import ad, bc, config, read_from_file, write_to_file
@@ -12,6 +13,8 @@ def orchestrate(config):
         for t in list(config.get("data")):
             for entry in config["data"][t]:
                 chance = config.get("chance", 0)
+                if "chance" in entry:
+                    chance = entry.get("chance")
                 if random.random() > chance:
                     continue
                 asyncio.run(ink.write(t, entry))
@@ -45,6 +48,8 @@ class Ink():
             value = entry.get(key)
             if key == 'role':
                 self.prompt = self.prompt.replace("{{role}}", value.title())
+            if key == 'chance':
+                continue
             else:
                 self.prompt = self.prompt + f"\n{key.capitalize()}: {value}"
         self.stage = self.prompt
@@ -53,10 +58,11 @@ class Ink():
         self.full_doc = self.stage
 
     def chunk_prompt(self):
-        while self.get_length(self.stage) > self.model_max_length:
+        three_quarters = math.floor((self.model_max_length / 4)) * 3
+        while self.get_length(self.stage) > three_quarters:
             self.replace_at_index = random.randint(len(self.prompt), len(self.stage))
-            self.stage = self.stage[self.replace_at_index:]
-            self.full_doc = self.full_doc[:self.replace_at_index]
+            self.stage = self.stage[:self.replace_at_index]
+            self.full_doc = self.full_doc[self.replace_at_index:]
             self.combine = True
 
     async def write(self, t, entry):
@@ -65,10 +71,13 @@ class Ink():
             self.create_prompt(entry)
             self.chunk_prompt()
             output = await head.gen(mode="prompt", prefix=self.stage, max_new_tokens=33)
-            cat = output
             if self.combine:
                 self.combine = False
                 cat = self.full_doc + output
+            cat = output
+            if output[0] == False:
+                print(output[1])
+                return
             write_to_file(path=f"/gen/{self.type}", file_name=f"the-{self.role}.md", content=cat)
             title = self.role.replace("-", " ").title()
             await manage_submission(title=f"{self.type.title()}: The {title}", content=cat)

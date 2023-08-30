@@ -22,6 +22,8 @@ from utils import (
     write_log_file,
 )
 
+logging.getLogger("transformers").setLevel(logging.WARNING)
+
 focus = os.environ["FOCUS"]
 
 # when all fails, reset to this context
@@ -78,7 +80,6 @@ def loader(target=None):
 
     try:
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + target)
-        logging.getLogger("transformers").setLevel(logging.ERROR)
         ai = aitextgen(
             model=model.get("model", None),
             model_folder=model_folder,
@@ -87,7 +88,6 @@ def loader(target=None):
             cache_dir="models",
             adapter=adapter
         )
-        logging.getLogger("transformers").setLevel(logging.INFO)
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + model["info"])
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
     except Exception as e:
@@ -213,33 +213,27 @@ def gen(
                 temperature = temperature / 2
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
-            generation_config = GenerationConfig(
-                    n=1,
-                    do_sample=True,
-                    min_length=23,
-                    max_new_tokens=max_new_tokens,
-                    temperature=temperature,
-                    eta_cutoff=0.0003,
-                    penalty_alpha=0.6,
-                    top_k=4,
-                    repetition_penalty=1.95,
-                    encoder_repetition_penalty=1.00023,
-                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                    no_repeat_ngram_size=4,
-                    renormalize_logits=True,
-                    remove_invalid_values=True,
-                    eos_token_id=eos,
-                    max_time=360,
-                    seed=seed[1],
-                )
-
-            logging.getLogger("transformers").setLevel(logging.ERROR)
             completion = ai.generate(
                 prompt=prompt,
-                generation_config=generation_config,
+                n=1,
+                do_sample=True,
+                min_length=23,
+                max_new_tokens=max_new_tokens,
+                temperature=temperature,
+                eta_cutoff=0.0003,
+                penalty_alpha=0.6,
+                top_k=4,
+                repetition_penalty=1.95,
+                encoder_repetition_penalty=1.00023,
+                exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                no_repeat_ngram_size=4,
+                renormalize_logits=True,
+                remove_invalid_values=True,
+                eos_token_id=eos,
+                max_time=360,
+                seed=seed[1],
                 return_as_list=True,
             )
-            logging.getLogger("transformers").setLevel(logging.WARNING)
 
             if petals:
                 print(bc.ROOT + "ONE@PETALS: " + ad.TEXT + completion[0])

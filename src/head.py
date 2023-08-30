@@ -49,24 +49,20 @@ def to_thread(func: typing.Callable) -> typing.Coroutine:
 
 # Load the specified model
 active = False
-def loader(target=None):
+def loader(target=focus):
+    global ai
     global active
-    global focus
 
     while active == True:
         time.sleep(1)
 
     active = True
     try:
-        global ai
         ai = None
         torch.cuda.empty_cache()
         gc.collect()
     except Exception as e:
         print(e)
-
-    if target == None:
-        target = focus
 
     model = config[target]
 
@@ -92,9 +88,6 @@ def loader(target=None):
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
     except Exception as e:
         print(e)
-        ai = None
-        torch.cuda.empty_cache()
-        gc.collect()
         time.sleep(30)
         ai = loader(target)
     active = False
@@ -195,6 +188,7 @@ def gen(
         if bias is not None:
             if (len(str(bias)) == 18) or (len(str(bias)) == 19):
                 prompt = propulsion + str(bias) + ship
+
         prompt = history + prompt
 
     seed = nist_beacon()
@@ -235,9 +229,6 @@ def gen(
                 return_as_list=True,
             )
 
-            if petals:
-                print(bc.ROOT + "ONE@PETALS: " + ad.TEXT + completion[0])
-
             active = False
 
             if mode == "prompt":
@@ -253,10 +244,7 @@ def gen(
                 or propulsion in group[3]
                 or bool(re.search(mentions, group[3]))
                 or bool(re.search(variables, group[3]))
-                or group[3].startswith(">")
-                or group[3].startswith("~")
-                or group[3].startswith('"')
-                or group[3].startswith(" ")
+                or group[3][:1] in [">", "~", "\"", " "]
             ):
                 raise Exception("failed to format a proper response")
             else:
@@ -265,8 +253,6 @@ def gen(
 
         except Exception as e:
             attempt += 1
-            if petals:
-                print(e)
             if attempt > max_attempts:
                 context = default_context.copy()
                 output = [False, e]

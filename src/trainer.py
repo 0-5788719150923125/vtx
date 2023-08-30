@@ -170,6 +170,8 @@ if __name__ == "__main__":
         model_folder = None
         if os.path.exists("/src/models/" + focus):
             shutil.rmtree("/src/models/" + focus)
+        if os.path.exists("/src/embeddings/" + focus):
+            shutil.rmtree("/src/embeddings/" + focus)
 
     # Start with a fresh logs directory
     if fresh_logs == True:
@@ -178,6 +180,44 @@ if __name__ == "__main__":
 
     output_dir = "models/" + focus
 
+    pre_seq_len = 0
+    if "peft" in model["training"]:
+        p = model["training"].get("peft")
+        if p["type"] == "prefix":
+            pre_seq_len = p.get("num_virtual_tokens")
+
+    peft_config = None
+    if "peft" in model["training"]:
+        output_dir = "adapters/" + focus
+        p = model["training"].get("peft")
+        if resume == True:
+            if p["type"] == "prefix":
+                output_dir = "/src/embeddings/" + focus
+            # ai.model = PeftModel.from_pretrained(
+            #     ai.model, output_dir
+            # )
+            # setattr(ai.model.config, "is_prompt_learning", False)
+            # setattr(ai.model.config, "is_trainable", True) 
+        else:
+            if p["type"] == "lora":
+                peft_config = LoraConfig(
+                    task_type="CAUSAL_LM",
+                    r=p.get("r", 4),
+                    lora_alpha=p.get("alpha", 16),
+                    lora_dropout=p.get("dropout", 0.1),
+                    bias=p.get("bias", "none"),
+                    target_modules=p.get("target_modules", None),
+                    modules_to_save=p.get("modules_to_save", None),
+                )
+            elif p["type"] == "prefix":
+                pre_seq_len = p.get("num_virtual_tokens")
+                output_dir = "/src/embeddings/" + focus
+                # peft_config = PrefixTuningConfig(
+                #     task_type="CAUSAL_LM",
+                #     num_virtual_tokens=p.get("num_virtual_tokens", 24)
+                # )
+            # ai.model = get_peft_model(ai.model, peft_config)
+
     # Instantiate the model object
     ai = aitextgen(
         model=launch_model,
@@ -185,13 +225,15 @@ if __name__ == "__main__":
         petals=model.get("petals", False),
         to_gpu=True,
         cache_dir="models",
+        embeddings_dir="/src/embeddings/" + focus,
+        pre_seq_len=pre_seq_len,
         gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
     )
 
     ai.tokenizer = AutoTokenizer.from_pretrained(launch_model, cache_dir="models", padding_side="left", padding="max_length", truncation=True)
 
     if model.get("petals", False):
-        ai.tokenizer.model_max_length = model["training"].get("model_max_length", 256)
+        ai.tokenizer.model_max_length = model["training"].get("model_max_length", 1000000000000000019884624838656)
         ai.tokenizer.truncation = True
     
     print(ai.tokenizer)
@@ -316,31 +358,17 @@ if __name__ == "__main__":
         return merged
 
     if "peft" in model["training"]:
-        output_dir = "adapters/" + focus
-        p = model["training"].get("peft")
-        if resume == True:
-            ai.model = PeftModel.from_pretrained(
-                ai.model, output_dir
-            )
-            setattr(ai.model.config, "is_prompt_learning", False)
-            setattr(ai.model.config, "is_trainable", True) 
-        else:
             if p["type"] == "lora":
-                peft_config = LoraConfig(
-                    task_type="CAUSAL_LM",
-                    r=p.get("r", 4),
-                    lora_alpha=p.get("alpha", 16),
-                    lora_dropout=p.get("dropout", 0.1),
-                    bias=p.get("bias", "none"),
-                    target_modules=p.get("target_modules", None),
-                    modules_to_save=p.get("modules_to_save", None),
-                )
-            elif p["type"] == "prefix":
-                peft_config = PrefixTuningConfig(
-                    task_type="CAUSAL_LM",
-                    num_virtual_tokens=p.get("num_virtual_tokens", 24)
-                )
-            ai.model = get_peft_model(ai.model, peft_config)
+                if resume == True:
+                    ai.model = PeftModel.from_pretrained(
+                        ai.model, output_dir
+                    )
+                    setattr(ai.model.config, "is_prompt_learning", False)
+                    setattr(ai.model.config, "is_trainable", True) 
+                else:
+                    ai.model = get_peft_model(ai.model, peft_config)
+                ai.model.print_trainable_parameters()
+
     elif os.path.exists("/src/models/" + focus) == False:
         os.makedirs("/src/models/" + focus)
 
@@ -349,7 +377,6 @@ if __name__ == "__main__":
             param.requires_grad = True
 
     print(ai.model)
-    ai.model.print_trainable_parameters()
 
     version = build_version()
 
@@ -387,5 +414,6 @@ if __name__ == "__main__":
             petals=model.get("petals", False),
             hivemind=model["training"].get("hivemind", False),
             stage=i,
-            prompt="¶"
+            # prompt="¶"
+            prompt=""
         )

@@ -72,7 +72,8 @@ def loader(target=focus):
         model_folder = "models/" + target
         if "peft" in model["training"]:
             model_folder = None
-            adapter = "adapters/" + target
+            if model["training"]["peft"]["type"] == "lora":
+                adapter = "adapters/" + target
 
     try:
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + target)
@@ -82,6 +83,7 @@ def loader(target=focus):
             petals=model.get("petals", False),
             to_gpu=model["to_gpu"],
             cache_dir="models",
+            embeddings_dir="/src/embeddings/" + focus,
             adapter=adapter
         )
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + model["info"])

@@ -1,5 +1,4 @@
-pytorch-lightning>=2.0.7
-hivemind>=1.1.9
+lightning>=2.0.8
 beautifulsoup4>=4.12.2
 transformers>=4.32.0
 tensorboard>=2.14.0

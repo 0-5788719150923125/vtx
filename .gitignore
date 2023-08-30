@@ -6,6 +6,7 @@ node_modules
 src/config.yml
 src/models/*
 src/adapters/*
+src/embeddings/*
 lab/*
 lab/logseq/*
 lab/config.yml

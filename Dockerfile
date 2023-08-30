@@ -46,8 +46,6 @@ RUN npm i -g nodemon@$NODEMON_VERSION
 COPY src/ /src
 COPY lab/ /lab
 
-RUN pip install /lab/aitextgen
-
 RUN python3 -m venv venv/x \
     && chmod +x venv/x/bin/activate \
     && venv/x/bin/activate

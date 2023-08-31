@@ -311,7 +311,7 @@ async def subscribe_submissions(reddit, config):
 
             print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + submission.title[:66] + '...' if len(submission.title) > 66 else submission.title)
 
-            if generation[0]:
+            if generation[0] == False:
                 continue
             else:
                 daemon = get_daemon(generation[0])
@@ -319,7 +319,13 @@ async def subscribe_submissions(reddit, config):
                     output = generation[1]
                 else:
                     output = transformer([daemon, generation[1]])
-            print(bc.CORE + "ONE@REDDIT: " + ad.TEXT + output)
+
+            color = bc.CORE
+            if generation[2] == True:
+                color = bc.ROOT
+
+            print(color + "INK@REDDIT: " + ad.TEXT + output)
+            
             await asyncio.sleep(random.randint(300, 900))
             await submission.reply(output)
 

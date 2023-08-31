@@ -413,6 +413,7 @@ if __name__ == "__main__":
             prune=stage.get("prune", 0.0),
             petals=model.get("petals", False),
             hivemind=model["training"].get("hivemind", False),
+            target_batch_size=stage.get("target_batch_size", 8192),
             stage=i,
             # prompt="¶"
             prompt=""

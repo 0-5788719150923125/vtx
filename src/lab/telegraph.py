@@ -14,7 +14,7 @@ async def client(config):
     for target in config:
         if "prompt" in config[target]:
             try:
-                output = await head.gen(
+                output = await head.ctx.gen(
                     prefix=config[target].get("prompt"),
                     max_new_tokens=1536,
                     mode="prompt",

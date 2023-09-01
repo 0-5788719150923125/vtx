@@ -103,7 +103,7 @@ async def response(config, focus):
         bias = identity.get("bias")
         persona = propulsion + str(bias) + ship + " " + identity.get("persona")
 
-    output = await head.gen(
+    output = await head.ctx.gen(
         bias=bias,
         ctx=messages[focus],
         prefix=persona,

@@ -24,7 +24,7 @@ class Ink():
     def __init__(self):
         self.type = "confidants"
         self.role = None
-        self.model_max_length = head.get_max_length()
+        self.model_max_length = head.ctx.get_max_length()
         self.prompt = ""
         self.stage = ""
         self.full_doc = ""
@@ -32,7 +32,7 @@ class Ink():
         self.combine = False
 
     def get_length(self, string):
-        tokens = head.ai.tokenizer(string, return_tensors="pt")["input_ids"]
+        tokens = head.ctx.ai.tokenizer(string, return_tensors="pt")["input_ids"]
         return len(tokens[0])
 
     def create_prompt(self, entry):
@@ -70,7 +70,7 @@ class Ink():
             self.type = t
             self.create_prompt(entry)
             self.chunk_prompt()
-            output = await head.gen(mode="prompt", prefix=self.stage, max_new_tokens=33)
+            output = await head.ctx.gen(mode="prompt", prefix=self.stage, max_new_tokens=33)
             if self.combine:
                 self.combine = False
                 cat = self.full_doc + output

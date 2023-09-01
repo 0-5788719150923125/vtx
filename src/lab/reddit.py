@@ -87,7 +87,7 @@ async def stalker(reddit, config):
                 bias = config["stalkers"][stalker].get("bias", None) if stalker else None
                 prompt = config["stalkers"][stalker].get("prompt") if stalker else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
 
-                generation = await head.gen(
+                generation = await head.ctx.gen(
                     ctx=context,
                     bias=bias,
                     prefix=prompt,
@@ -130,7 +130,7 @@ async def stalker(reddit, config):
                 bias = config["stalkers"][stalker].get("bias", None) if stalker else None
                 prompt = config["stalkers"][stalker].get("prompt") if stalker else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
 
-                generation = await head.gen(
+                generation = await head.ctx.gen(
                     ctx=context,
                     bias=bias,
                     prefix=prompt,
@@ -197,7 +197,7 @@ async def submission(reddit, config):
                 subreddit = await reddit.subreddit("TheInk")
                 title = server.get("title", "On the 5th of September...")
                 prompt = server.get("prompt", "On the 5th of September, 2024,")
-                output = await head.gen(
+                output = await head.ctx.gen(
                     prefix=str(prompt),
                     max_new_tokens=2048,
                     mode="prompt",
@@ -303,7 +303,7 @@ async def subscribe_submissions(reddit, config):
                 propulsion + str(op) + ship + " " + submission.title,
                 propulsion + str(op) + ship + " " + submission.selftext,
             ]
-            generation = await head.gen(
+            generation = await head.ctx.gen(
                 ctx=context,
                 prefix=prompt,
                 bias=bias,
@@ -379,7 +379,7 @@ async def subscribe_comments(reddit, config):
                 if ignore:
                     continue
 
-            generation = await head.gen(
+            generation = await head.ctx.gen(
                 ctx=context,
                 prefix=prompt,
                 decay_after_length=66,

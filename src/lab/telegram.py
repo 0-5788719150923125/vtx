@@ -19,14 +19,14 @@ async def client(config) -> None:
 
     @dp.message_handler()
     async def chat_bot(message: types.Message):
-        head.build_context(
+        head.ctx.build_context(
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )
         print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
         if random.random() > config.get("chance", 0.9):
             return
         bias = config.get("bias", get_identity())
-        output = await head.gen(
+        output = await head.ctx.gen(
             bias=bias,
             prefix=config.get(
                 "prefix",
@@ -36,7 +36,7 @@ async def client(config) -> None:
         if output[0] == False:
             return
         await message.answer(output[1])
-        head.build_context(propulsion + str(bias) + ship + " " + output[1])
+        head.ctx.build_context(propulsion + str(bias) + ship + " " + output[1])
         print(bc.CORE + "ONE@TELEGRAM: " + ad.TEXT + output[1])
 
     dp.register_message_handler(chat_bot)

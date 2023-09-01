@@ -3,6 +3,7 @@ import requests
 import shutil
 import secrets
 import random
+import string
 from pprint import pprint
 import yaml
 import json
@@ -175,6 +176,16 @@ def write_to_file(path: str, file_name: str, content: str):
 
     with open(path, "w") as file:
         file.write(content)
+
+def random_string(length=10):
+    # Define the characters you want to include in the random string
+    characters = string.ascii_letters + string.digits  # Letters (both uppercase and lowercase) and digits
+    # You can customize this by adding more characters as needed
+
+    # Use random.choices to generate the string
+    random_string = ''.join(random.choices(characters, k=length))
+
+    return random_string
 
 # Take a relative date in string format, and return the formatted value
 def get_past_datetime(time_description):

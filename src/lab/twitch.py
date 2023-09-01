@@ -70,7 +70,7 @@ async def client(config):
                     head.build_context(
                         propulsion + messenger + ship + " " + message.text
                     )
-                    output = await head.gen(bias=bias, prefix=prefix, max_new_tokens=44)
+                    output = await head.ctx.gen(bias=bias, prefix=prefix, max_new_tokens=44)
                     if output[0] == False:
                         return
                     head.build_context(propulsion + bias + ship + " " + output[1])

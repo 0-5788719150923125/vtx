@@ -82,10 +82,11 @@ def loader(target=focus):
             model=model.get("model", None),
             model_folder=model_folder,
             petals=model.get("petals", False),
-            to_gpu=model["to_gpu"],
+            to_gpu=model.get("to_gpu", False),
             cache_dir="models",
             embeddings_dir="/src/embeddings/" + focus,
-            adapter=adapter
+            adapter=adapter,
+            to_fp16=model.get("to_fp16", False)
         )
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + model["info"])
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))

@@ -43,6 +43,10 @@ soul:
   # Whether or not to load this model into your GPU at runtime (for inference.)
   to_gpu: False
 
+  # Convert the model to 16-bit floating point at inference. Reduces memory consumption,
+  # at the cost of reduced precision.
+  to_fp16: False
+
   # The number of the GPU index you want to use.
   gpu_index: 0
 

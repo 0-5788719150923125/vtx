@@ -148,7 +148,6 @@ def truncate_context(ctx, max_tokens=1024):
         return ''
     return ctx + "\n"
 
-
 # Generate a completion from bias and context
 @to_thread
 def gen(

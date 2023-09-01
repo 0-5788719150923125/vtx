@@ -415,6 +415,5 @@ if __name__ == "__main__":
             hivemind=model["training"].get("hivemind", False),
             target_batch_size=stage.get("target_batch_size", 8192),
             stage=i,
-            # prompt="¶"
             prompt=""
         )

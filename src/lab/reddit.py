@@ -285,6 +285,15 @@ async def subscribe_submissions(reddit, config):
                 bias = stalker.get("bias")
                 prompt = stalker.get("prompt")
 
+            if "filter" in sub:
+                ignore = False
+                for term in sub.get("filter"):
+                    if term in submission.title.lower() or term in submission.selftext.lower():
+                        ignore = True
+                        break
+                if ignore:
+                    continue
+
             context = [
                 propulsion
                 + str(get_identity())
@@ -334,7 +343,6 @@ async def subscribe_comments(reddit, config):
         subreddits = await reddit.subreddit("+".join(active))
 
         async for comment in subreddits.stream.comments(skip_existing=True):
-            await comment.submission.load()
             parent = await comment.parent()
             await parent.load()
 
@@ -360,6 +368,16 @@ async def subscribe_comments(reddit, config):
                 stalker = config["stalkers"].get(sub["stalker"])
                 bias = stalker.get("bias")
                 prompt = stalker.get("prompt")
+
+            if "filter" in sub:
+                ignore = False
+                submission = await reddit.submission(comment.submission)
+                for term in sub.get("filter"):
+                    if term in submission.title.lower() or term in submission.selftext.lower() or term in comment.body.lower():
+                        ignore = True
+                        break
+                if ignore:
+                    continue
 
             generation = await head.gen(
                 ctx=context,

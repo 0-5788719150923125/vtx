@@ -16,8 +16,8 @@ async def loop(config):
             output = await head.gen(
                 prefix=random.choice(topics),
                 max_new_tokens=56,
-                decay_after_length=12,
-                decay_factor=0.023,
+                decay_after_length=6,
+                decay_factor=0.23,
                 mode="prompt",
             )
             if output[0] == False:

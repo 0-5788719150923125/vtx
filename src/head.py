@@ -114,7 +114,6 @@ def build_context(message):
 
     context.append(message)
 
-
 # Build a local cache of global conversational state
 def replace(old_message, new_message):
     try:

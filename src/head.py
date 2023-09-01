@@ -5,6 +5,7 @@ import random
 import typing
 import time
 import os
+import sys
 import re
 import gc
 import torch
@@ -26,6 +27,7 @@ from utils import (
 logging.getLogger("transformers").setLevel(logging.WARNING)
 
 focus = os.environ["FOCUS"]
+
 
 class cortex:
     def __init__(self, config, focus):
@@ -56,8 +58,8 @@ class cortex:
         while length >= max_tokens:
             ctx = ctx[5:]
             length = self.get_string_length(ctx)
-        if ctx == '':
-            return ''
+        if ctx == "":
+            return ""
         return ctx + "\n"
 
     # Build a local cache of global conversational state
@@ -69,22 +71,18 @@ class cortex:
 
     # Build a local cache of global conversational state
     def replace(self, old_message, new_message):
-        try:
-            matcher = re.compile(r'(\*")(.*)(?:"\*$)')
-            group = re.search(matcher, old_message)
-            captured = "J U X T A P O S I T I O N"[::-1]
-            if group is not None and group[2]:
-                captured = group[2]
-            for item in self.context:
-                if captured in item or old_message in item:
-                    index = self.context.index(item)
-                    self.context[index] = new_message
-                    return
+        matcher = re.compile(r'(\*")(.*)(?:"\*$)')
+        group = re.search(matcher, old_message)
+        captured = "J U X T A P O S I T I O N"[::-1]
+        if group is not None and group[2]:
+            captured = group[2]
+        for item in self.context:
+            if captured in item or old_message in item:
+                index = self.context.index(item)
+                self.context[index] = new_message
+                return
 
-            self.build_context(new_message)
-
-        except Exception as e:
-            print(e)
+        self.build_context(new_message)
 
     # Decorator to a blocking function into a background thread
     def to_thread(func: typing.Callable) -> typing.Coroutine:
@@ -95,8 +93,13 @@ class cortex:
         return wrapper
 
     def loader(self, focus):
+        while self.active == True:
+            time.sleep(1)
+
+        self.active = True
+        self.ai = None
+
         try:
-            ai = None
             torch.cuda.empty_cache()
         except Exception as e:
             print(e)
@@ -122,15 +125,15 @@ class cortex:
                 cache_dir="models",
                 embeddings_dir="/src/embeddings/" + focus,
                 adapter=adapter,
-                to_fp16=self.config.get("to_fp16", False)
+                to_fp16=self.config.get("to_fp16", False),
             )
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))
-            active = False
+            self.active = False
         except Exception as e:
             print(e)
             time.sleep(5)
-            active = False
+            self.active = False
             self.loader(self.focus)
             return
 
@@ -145,14 +148,15 @@ class cortex:
         decay_factor: float = 0.000023,
         mode: str = "chat",
     ):
-
-        while self.active == True:
+        while self.active == True or not self.ai:
             time.sleep(1)
 
         self.active = True
 
         if not prefix:
-            prefix = self.config.get("prefix", "Humans, AI, and daemons have a conversation together:")
+            prefix = self.config.get(
+                "prefix", "Humans, AI, and daemons have a conversation together:"
+            )
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
@@ -165,12 +169,14 @@ class cortex:
             if ctx == None:
                 ctx = self.context
 
-            while not self.ai:
-                time.sleep(1)
+            eos = self.ai.tokenizer.convert_tokens_to_ids(
+                self.ai.tokenizer.tokenize(propulsion)[0]
+            )
 
-            eos = self.ai.tokenizer.convert_tokens_to_ids(self.ai.tokenizer.tokenize(propulsion)[0])
-
-            flat = self.truncate_context("\n".join(ctx), self.config.get("truncate_length", self.ai.model_max_length))
+            flat = self.truncate_context(
+                "\n".join(ctx),
+                self.config.get("truncate_length", self.ai.model_max_length),
+            )
             history = prefix + "\n" + flat
 
             if bias is not None:
@@ -232,7 +238,7 @@ class cortex:
                     or propulsion in group[3]
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
-                    or group[3][:1] in [">", "~", "\"", " "]
+                    or group[3][:1] in [">", "~", '"', " "]
                 ):
                     raise Exception("failed to format a proper response")
                 else:
@@ -248,8 +254,17 @@ class cortex:
         self.active = False
         return output
 
+
 # Load the model and schedule periodic reloading
 ctx = cortex(config[focus], focus)
 scheduler = BackgroundScheduler()
-scheduler.add_job(cortex, args=(config[focus], focus,), trigger="interval", minutes=30)
+scheduler.add_job(
+    cortex,
+    args=(
+        config[focus],
+        focus,
+    ),
+    trigger="interval",
+    minutes=30,
+)
 scheduler.start()

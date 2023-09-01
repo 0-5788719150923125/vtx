@@ -94,7 +94,8 @@ async def stalker(reddit, config):
                     decay_after_length=66,
                 )
 
-                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + submission.title[:66] + '...' if len(submission.title) > 66 else submission.title)
+                msg = submission.title[:66] + '...' if len(submission.title) > 66 else submission.title
+                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
 
                 if generation[0] == False:
                     continue
@@ -143,7 +144,8 @@ async def stalker(reddit, config):
                     decay_after_length=66,
                 )
 
-                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + comment.body[:66] + '...' if len(comment.body) > 66 else comment.body)
+                msg = comment.body[:66] + '...' if len(comment.body) > 66 else comment.body
+                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
 
                 if generation[0] == False:
                     continue
@@ -309,7 +311,8 @@ async def subscribe_submissions(reddit, config):
                 decay_after_length=66,
             )
 
-            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + submission.title[:66] + '...' if len(submission.title) > 66 else submission.title)
+            msg = submission.title[:66] + '...' if len(submission.title) > 66 else submission.title
+            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
 
             if generation[0] == False:
                 continue
@@ -379,7 +382,8 @@ async def subscribe_comments(reddit, config):
                 decay_after_length=66,
             )
 
-            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + comment.body[:66] + '...' if len(comment.body) > 66 else comment.body)
+            msg = comment.body[:66] + '...' if len(comment.body) > 66 else comment.body
+            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
 
             if generation[0] == False:
                 continue

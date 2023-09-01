@@ -60,9 +60,10 @@ def loader(target=focus):
     try:
         ai = None
         torch.cuda.empty_cache()
-        gc.collect()
     except Exception as e:
         print(e)
+
+    gc.collect()
 
     model = config[target]
 
@@ -88,11 +89,13 @@ def loader(target=focus):
         )
         print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + model["info"])
         print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(ai))
+        active = False
     except Exception as e:
         print(e)
-        time.sleep(30)
+        time.sleep(5)
+        active = False
         ai = loader(target)
-    active = False
+        return
     return ai
 
 # Load the model and schedule periodic reloading

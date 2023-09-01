@@ -53,7 +53,7 @@ async def subscribe(user, password, config) -> None:
             if event.sender == client.user:
                 identity = str(bias)
 
-            head.build_context(propulsion + identity + ship + " " + message)
+            head.ctx.build_context(propulsion + identity + ship + " " + message)
 
             if "Architect" not in message:
                 if 'm.relates_to' in event.source['content']:

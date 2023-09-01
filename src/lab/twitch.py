@@ -67,13 +67,13 @@ async def client(config):
                     )
                     bias = str(config.get("bias", get_identity()))
                     messenger = str(get_identity())
-                    head.build_context(
+                    head.ctx.build_context(
                         propulsion + messenger + ship + " " + message.text
                     )
                     output = await head.ctx.gen(bias=bias, prefix=prefix, max_new_tokens=44)
                     if output[0] == False:
                         return
-                    head.build_context(propulsion + bias + ship + " " + output[1])
+                    head.ctx.build_context(propulsion + bias + ship + " " + output[1])
                     await asyncio.sleep(random.choice([7, 8, 9]))
                     print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
                     await chat.send_message(self.channel, output[1])

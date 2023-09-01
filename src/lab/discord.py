@@ -98,7 +98,7 @@ class Client(discord.Client):
                     author_id, propulsion + author_id + ship + " " + message.content
                 )
                 author_id = author_id[::-1]
-            head.build_context(propulsion + author_id + ship + " " + message.content)
+            head.ctx.build_context(propulsion + author_id + ship + " " + message.content)
             print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + message.content)
 
         # generate responses
@@ -176,14 +176,14 @@ class Client(discord.Client):
                     propulsion + str(return_message.id) + ship + " " + transformed,
                 )
 
-            head.build_context(propulsion + bot_id + ship + " " + transformed)
+            head.ctx.build_context(propulsion + bot_id + ship + " " + transformed)
         except:
             print(bc.CORE + "Failed to send Discord message." + ad.TEXT)
 
     # Handle bots that update messages token-by-token
     async def on_message_edit(self, before, after):
         if after.content[:1] not in bullets:
-            head.build_context(
+            head.ctx.build_context(
                 propulsion + str(after.author.id) + ship + " " + after.content
             )
             if after.author.id != self.user.id:
@@ -220,7 +220,7 @@ class Client(discord.Client):
                     output = await head.ctx.gen(bias=bias, ctx=context)
                     if output[0] == False:
                         return
-                    head.replace(
+                    head.ctx.replace(
                         message.content, propulsion + bias + ship + " " + output[1]
                     )
                     replace_private_message(
@@ -233,7 +233,7 @@ class Client(discord.Client):
                     output = await head.ctx.gen(ctx=context)
                     if output[0] == False:
                         return
-                    head.replace(
+                    head.ctx.replace(
                         message.content, propulsion + output[0] + ship + " " + output[1]
                     )
                     transformed = transformer(output)

@@ -28,10 +28,10 @@ logging.getLogger("transformers").setLevel(logging.WARNING)
 focus = os.environ["FOCUS"]
 
 class cortex:
-    def __init__(self, config, target):
+    def __init__(self, config, focus):
         self.active = False
         self.ai = None
-        self.target = target
+        self.focus = focus
         self.config = config
         self.context = [
             propulsion + "975174695399854150" + ship + " I am a robot.",
@@ -40,7 +40,7 @@ class cortex:
             propulsion + "204716337971331072" + ship + " I am a medium.",
             propulsion + "855529761185857566" + ship + " I am an animal.",
         ]
-        self.loader(self.target)
+        self.loader(self.focus)
 
     def get_max_length(self):
         return self.ai.model_max_length
@@ -75,7 +75,7 @@ class cortex:
             captured = "J U X T A P O S I T I O N"[::-1]
             if group is not None and group[2]:
                 captured = group[2]
-            for item in context:
+            for item in self.context:
                 if captured in item or old_message in item:
                     index = self.context.index(item)
                     self.context[index] = new_message
@@ -94,7 +94,7 @@ class cortex:
 
         return wrapper
 
-    def loader(self, target):
+    def loader(self, focus):
         try:
             ai = None
             torch.cuda.empty_cache()
@@ -106,14 +106,14 @@ class cortex:
         model_folder = None
         adapter = None
         if "training" in self.config:
-            model_folder = "models/" + target
+            model_folder = "models/" + focus
             if "peft" in self.config["training"]:
                 model_folder = None
                 if self.config["training"]["peft"]["type"] == "lora":
-                    adapter = "adapters/" + target
+                    adapter = "adapters/" + focus
 
         try:
-            print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + target)
+            print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + focus)
             self.ai = aitextgen(
                 model=self.config.get("model", None),
                 model_folder=model_folder,
@@ -131,7 +131,7 @@ class cortex:
             print(e)
             time.sleep(5)
             active = False
-            self.loader(self.target)
+            self.loader(self.focus)
             return
 
     @to_thread
@@ -140,7 +140,7 @@ class cortex:
         prefix=None,
         ctx=None,
         bias=None,
-        max_new_tokens: int = config.get("max_new_tokens", 111),
+        max_new_tokens: int = 111,
         decay_after_length: int = 23,
         decay_factor: float = 0.000023,
         mode: str = "chat",
@@ -153,6 +153,8 @@ class cortex:
 
         if not prefix:
             prefix = self.config.get("prefix", "Humans, AI, and daemons have a conversation together:")
+
+        max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
         # bias the prompt
         prompt = prefix

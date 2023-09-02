@@ -4,8 +4,10 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     curl \
     git \
+    ninja-build \
     nodejs \
     npm \
+    python3-dev \
     python3-pip \
     python3-packaging \
     python3-venv \
@@ -32,6 +34,8 @@ RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz
     unzip DiscordChatExporter.Cli.zip -d /dce && \
     chmod -R 755 /dce && \
     rm DiscordChatExporter.Cli.zip
+
+ENV TORCH_CUDA_ARCH_LIST=Turing
 
 WORKDIR /src
 

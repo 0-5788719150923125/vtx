@@ -205,7 +205,7 @@ class cortex:
             try:
                 output = None
 
-                temperature = 0.9
+                temperature = 1.23
                 if attempt > 0:
                     decay_factor = decay_factor / 2
                     temperature = temperature / 2
@@ -222,7 +222,7 @@ class cortex:
                     penalty_alpha=0.6,
                     top_k=4,
                     repetition_penalty=1.95,
-                    encoder_repetition_penalty=1.00023,
+                    # encoder_repetition_penalty=1.00023,
                     exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=7,
                     renormalize_logits=True,

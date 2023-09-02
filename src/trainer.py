@@ -285,8 +285,6 @@ if __name__ == "__main__":
                             + "/"
                             + dataset
                             + "/"
-                            + str(focus)
-                            + "/"
                             + str(block_size)
                             + "/"
                             + str(duplicate)
@@ -311,8 +309,6 @@ if __name__ == "__main__":
                                 + "/"
                                 + dataset
                                 + "/"
-                                + str(focus)
-                                + "/"
                                 + str(block_size)
                                 + "/"
                                 + str(duplicate)
@@ -325,8 +321,6 @@ if __name__ == "__main__":
                             + focus
                             + "/"
                             + dataset
-                            + "/"
-                            + str(focus)
                             + "/"
                             + str(block_size)
                             + "/"

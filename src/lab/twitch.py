@@ -17,6 +17,7 @@ import random
 def orchestrate(config):
     asyncio.run(client(config))
 
+
 async def client(config):
     # initialize the twitch instance, this will by default also create a app authentication for you
 
@@ -70,7 +71,9 @@ async def client(config):
                     head.ctx.build_context(
                         propulsion + messenger + ship + " " + message.text
                     )
-                    output = await head.ctx.gen(bias=bias, prefix=prefix, max_new_tokens=44)
+                    output = await head.ctx.gen(
+                        bias=bias, prefix=prefix, max_new_tokens=44
+                    )
                     if output[0] == False:
                         return
                     head.ctx.build_context(propulsion + bias + ship + " " + output[1])

@@ -5,13 +5,7 @@ from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
 from transformers import AutoTokenizer
-from peft import (
-    get_peft_model,
-    LoraConfig,
-    PrefixTuningConfig,
-    PeftModel,
-    PeftConfig
-)
+from peft import get_peft_model, LoraConfig, PrefixTuningConfig, PeftModel, PeftConfig
 from pytorch_lightning import loggers
 from utils import ad, bc, config, hash_directory, list_full_paths, nist_beacon
 
@@ -36,7 +30,6 @@ def create_dataset(
     line_by_line=False,
     shuffle=False,
 ):
-
     prefixes = [
         ".git",
         "/lab/reaper/logseq",
@@ -138,7 +131,7 @@ def create_dataset(
         )
 
     # Cleanup temp files used for tokenized dataset creation
-    if os.path.exists('/tmp/intermediate.txt'):
+    if os.path.exists("/tmp/intermediate.txt"):
         os.remove("/tmp/intermediate.txt")
 
     return dataset
@@ -154,8 +147,8 @@ if __name__ == "__main__":
     fresh_logs = False
     resume = model["training"].get("resume", False)
     if model["training"].get("regen", False):
-        if os.path.exists('/gen/datasets/' + focus):
-            shutil.rmtree('/gen/datasets/' + focus)
+        if os.path.exists("/gen/datasets/" + focus):
+            shutil.rmtree("/gen/datasets/" + focus)
 
     # Resume training on an existing model, or start with a fresh base model
     if resume == True:
@@ -197,7 +190,7 @@ if __name__ == "__main__":
             #     ai.model, output_dir
             # )
             # setattr(ai.model.config, "is_prompt_learning", False)
-            # setattr(ai.model.config, "is_trainable", True) 
+            # setattr(ai.model.config, "is_trainable", True)
         else:
             if p["type"] == "lora":
                 peft_config = LoraConfig(
@@ -230,12 +223,20 @@ if __name__ == "__main__":
         gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
     )
 
-    ai.tokenizer = AutoTokenizer.from_pretrained(launch_model, cache_dir="models", padding_side="left", padding="max_length", truncation=True)
+    ai.tokenizer = AutoTokenizer.from_pretrained(
+        launch_model,
+        cache_dir="models",
+        padding_side="left",
+        padding="max_length",
+        truncation=True,
+    )
 
     if model.get("petals", False):
-        ai.tokenizer.model_max_length = model["training"].get("model_max_length", 1000000000000000019884624838656)
+        ai.tokenizer.model_max_length = model["training"].get(
+            "model_max_length", 1000000000000000019884624838656
+        )
         ai.tokenizer.truncation = True
-    
+
     print(ai.tokenizer)
 
     # Create a tokenized dataset from every directory specified in config file
@@ -358,16 +359,14 @@ if __name__ == "__main__":
         return merged
 
     if "peft" in model["training"]:
-            if p["type"] == "lora":
-                if resume == True:
-                    ai.model = PeftModel.from_pretrained(
-                        ai.model, output_dir
-                    )
-                    setattr(ai.model.config, "is_prompt_learning", False)
-                    setattr(ai.model.config, "is_trainable", True) 
-                else:
-                    ai.model = get_peft_model(ai.model, peft_config)
-                ai.model.print_trainable_parameters()
+        if p["type"] == "lora":
+            if resume == True:
+                ai.model = PeftModel.from_pretrained(ai.model, output_dir)
+                setattr(ai.model.config, "is_prompt_learning", False)
+                setattr(ai.model.config, "is_trainable", True)
+            else:
+                ai.model = get_peft_model(ai.model, peft_config)
+            ai.model.print_trainable_parameters()
 
     elif os.path.exists("/src/models/" + focus) == False:
         os.makedirs("/src/models/" + focus)
@@ -386,7 +385,6 @@ if __name__ == "__main__":
 
     # Train the model
     for i, stage in enumerate(model["training"]["stages"]):
-
         inputs = build_inputs(stage)
         ai.train(
             train_data=inputs,
@@ -415,5 +413,5 @@ if __name__ == "__main__":
             hivemind=model["training"].get("hivemind", False),
             target_batch_size=stage.get("target_batch_size", 8192),
             stage=i,
-            prompt=""
+            prompt="",
         )

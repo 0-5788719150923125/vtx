@@ -11,8 +11,10 @@ response_chance = 3  # out of 100
 mention_self_chance = 88  # out of 100
 mention_any_chance = 8  # out of 100
 
+
 def orchestrate(config):
     asyncio.run(run_client(config))
+
 
 # A class to control the entire Discord bot
 class Client(discord.Client):
@@ -23,7 +25,9 @@ class Client(discord.Client):
     async def on_ready(self):
         # List all Discord servers on startup
         guilds = []
-        for guild in sorted(self.guilds, key=lambda guild: guild.member_count, reverse=True):
+        for guild in sorted(
+            self.guilds, key=lambda guild: guild.member_count, reverse=True
+        ):
             guilds.append(f"{guild.name} ({guild.member_count})")
 
         print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
@@ -98,7 +102,9 @@ class Client(discord.Client):
                     author_id, propulsion + author_id + ship + " " + message.content
                 )
                 author_id = author_id[::-1]
-            head.ctx.build_context(propulsion + author_id + ship + " " + message.content)
+            head.ctx.build_context(
+                propulsion + author_id + ship + " " + message.content
+            )
             print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + message.content)
 
         # generate responses
@@ -142,7 +148,9 @@ class Client(discord.Client):
                 if message.guild and str(message.guild.id) in self.config["servers"]:
                     if self.config["servers"][str(message.guild.id)] is not None:
                         bias = self.config["servers"][str(message.guild.id)].get("bias")
-                        prefix = self.config["servers"][str(message.guild.id)].get("prefix")
+                        prefix = self.config["servers"][str(message.guild.id)].get(
+                            "prefix"
+                        )
                         no_transform = True
 
                 output = await head.ctx.gen(bias=bias, prefix=prefix)
@@ -242,6 +250,7 @@ class Client(discord.Client):
             except Exception as e:
                 print(e)
 
+
 # format the output
 def transformer(group):
     responses = [
@@ -301,7 +310,8 @@ async def get_all_channels(self):
             if permissions.send_messages:
                 text_channel_list.append(channel)
     return text_channel_list
-    
+
+
 # Subscribe to a Discord bot via token
 async def run_client(config):
     discord_token = os.environ["DISCORDTOKEN"]

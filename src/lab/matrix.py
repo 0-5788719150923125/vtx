@@ -12,6 +12,7 @@ from utils import ad, bc, get_identity, propulsion, ship
 
 logging.getLogger("nio").setLevel(logging.WARNING)
 
+
 def orchestrate(config):
     tasks = {}
     while True:
@@ -22,14 +23,19 @@ def orchestrate(config):
         if "matrix" not in tasks:
             user = os.environ["MATRIXUSER"]
             password = os.environ["MATRIXPASSWORD"]
-            t = threading.Thread(target=asyncio.run, args=(subscribe(user, password, config),), daemon=True, name="matrix")
+            t = threading.Thread(
+                target=asyncio.run,
+                args=(subscribe(user, password, config),),
+                daemon=True,
+                name="matrix",
+            )
             tasks[t.name] = t
             t.start()
 
         time.sleep(6.66)
 
-async def subscribe(user, password, config) -> None:
 
+async def subscribe(user, password, config) -> None:
     client = AsyncClient("https://matrix.org", user)
     dt = datetime.utcnow()
     connected = int(dt.timestamp()) * 1000
@@ -38,15 +44,15 @@ async def subscribe(user, password, config) -> None:
         try:
             if event.server_timestamp < connected:
                 return
-            if event.source['content']['msgtype'] != 'm.text':
+            if event.source["content"]["msgtype"] != "m.text":
                 return
-                
-            message = event.source['content']['body']
+
+            message = event.source["content"]["body"]
 
             group = re.search(r"^(?:[>].*[\n][\n])(.*)", message)
             if group:
                 message = group[1]
-            
+
             identity = get_identity(event.sender)
             bias = 806051627198709760
 
@@ -56,10 +62,10 @@ async def subscribe(user, password, config) -> None:
             head.ctx.build_context(propulsion + identity + ship + " " + message)
 
             if "Architect" not in message:
-                if 'm.relates_to' in event.source['content']:
-                    if 'm.in_reply_to' not in event.source['content']['m.relates_to']:
+                if "m.relates_to" in event.source["content"]:
+                    if "m.in_reply_to" not in event.source["content"]["m.relates_to"]:
                         return
-                    if "luciferianink" not in event.source['content']['body']:
+                    if "luciferianink" not in event.source["content"]["body"]:
                         return
                 else:
                     return
@@ -71,7 +77,7 @@ async def subscribe(user, password, config) -> None:
 
             completion = await head.ctx.gen(
                 prefix="I am Ryan's bot, and I am connected to GUN's Matrix room.",
-                bias=bias
+                bias=bias,
             )
 
             if completion[0] == False:

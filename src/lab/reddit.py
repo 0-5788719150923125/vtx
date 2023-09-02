@@ -14,6 +14,7 @@ from lab.discord import send_webhook
 def orchestrate(config) -> None:
     asyncio.run(client(config))
 
+
 async def client(config):
     async with asyncpraw.Reddit(
         client_id=os.environ["REDDITCLIENT"],
@@ -27,10 +28,11 @@ async def client(config):
                 subscribe_comments(reddit, config),
                 subscribe_submissions(reddit, config),
                 submission(reddit, config),
-                stalker(reddit, config)
+                stalker(reddit, config),
             )
         except Exception as e:
             print(e)
+
 
 async def manage_submission(title, content):
     async with asyncpraw.Reddit(
@@ -43,7 +45,9 @@ async def manage_submission(title, content):
         try:
             subreddit = await reddit.subreddit("TheInk")
             edited = False
-            async for submission in subreddit.search(query=f"title:'{title}'", syntax="lucene"):
+            async for submission in subreddit.search(
+                query=f"title:'{title}'", syntax="lucene"
+            ):
                 if submission.title == title:
                     await submission.edit(body=content)
                     await submission.mod.approve()
@@ -55,8 +59,8 @@ async def manage_submission(title, content):
         except Exception as e:
             print(e)
 
-async def stalker(reddit, config):
 
+async def stalker(reddit, config):
     async def watch_submissions(reddit, config, user):
         redditor = await reddit.redditor(user)
         async for submission in redditor.stream.submissions(skip_existing=True):
@@ -84,8 +88,14 @@ async def stalker(reddit, config):
                 ]
 
                 stalker = victim.get("stalker", None)
-                bias = config["stalkers"][stalker].get("bias", None) if stalker else None
-                prompt = config["stalkers"][stalker].get("prompt") if stalker else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
+                bias = (
+                    config["stalkers"][stalker].get("bias", None) if stalker else None
+                )
+                prompt = (
+                    config["stalkers"][stalker].get("prompt")
+                    if stalker
+                    else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
+                )
 
                 generation = await head.ctx.gen(
                     ctx=context,
@@ -94,7 +104,11 @@ async def stalker(reddit, config):
                     decay_after_length=66,
                 )
 
-                msg = submission.title[:66] + '...' if len(submission.title) > 66 else submission.title
+                msg = (
+                    submission.title[:66] + "..."
+                    if len(submission.title) > 66
+                    else submission.title
+                )
                 print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
 
                 if generation[0] == False:
@@ -108,14 +122,19 @@ async def stalker(reddit, config):
 
                 min_delay = victim.get("min", 300)
                 max_delay = victim.get("max", 900)
-                asyncio.create_task(reply(submission, output, {"min": min_delay, "max": max_delay, "seeded": generation[2]}))
+                asyncio.create_task(
+                    reply(
+                        submission,
+                        output,
+                        {"min": min_delay, "max": max_delay, "seeded": generation[2]},
+                    )
+                )
             except Exception as e:
                 print(e)
 
     async def watch_comments(reddit, config, user):
         redditor = await reddit.redditor(user)
         async for comment in redditor.stream.comments(skip_existing=True):
-
             try:
                 victim = config["stalk"].get(user)
 
@@ -127,8 +146,14 @@ async def stalker(reddit, config):
                 context = await build_context(comment=comment)
 
                 stalker = victim.get("stalker", None)
-                bias = config["stalkers"][stalker].get("bias", None) if stalker else None
-                prompt = config["stalkers"][stalker].get("prompt") if stalker else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit." 
+                bias = (
+                    config["stalkers"][stalker].get("bias", None) if stalker else None
+                )
+                prompt = (
+                    config["stalkers"][stalker].get("prompt")
+                    if stalker
+                    else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
+                )
 
                 generation = await head.ctx.gen(
                     ctx=context,
@@ -137,7 +162,11 @@ async def stalker(reddit, config):
                     decay_after_length=66,
                 )
 
-                msg = comment.body[:66] + '...' if len(comment.body) > 66 else comment.body
+                msg = (
+                    comment.body[:66] + "..."
+                    if len(comment.body) > 66
+                    else comment.body
+                )
                 print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
 
                 if generation[0] == False:
@@ -151,13 +180,18 @@ async def stalker(reddit, config):
 
                 min_delay = victim.get("min", 300)
                 max_delay = victim.get("max", 900)
-                asyncio.create_task(reply(comment, output, {"min": min_delay, "max": max_delay, "seeded": generation[2]}))
+                asyncio.create_task(
+                    reply(
+                        comment,
+                        output,
+                        {"min": min_delay, "max": max_delay, "seeded": generation[2]},
+                    )
+                )
             except Exception as e:
                 print(e)
 
     tasks = {}
     while True:
-
         for task in list(tasks):
             if tasks[task].done():
                 tasks.pop(task)
@@ -165,7 +199,6 @@ async def stalker(reddit, config):
         loop = asyncio.get_event_loop()
 
         for user in config["stalk"]:
-            
             c = user + "-c"
             if c not in tasks:
                 task = loop.create_task(watch_comments(reddit, config, user))
@@ -181,7 +214,7 @@ async def stalker(reddit, config):
         await asyncio.sleep(66.6)
 
     asyncio.create_task(stalker(reddit, config))
- 
+
 
 # Create a submission.
 async def submission(reddit, config):
@@ -212,7 +245,11 @@ async def submission(reddit, config):
                 await submission.author.load()
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)
                 await subreddit.load()
-                description = str(submission.selftext)[:666] + '...' if len(submission.selftext) > 666 else submission.selftext
+                description = (
+                    str(submission.selftext)[:666] + "..."
+                    if len(submission.selftext) > 666
+                    else submission.selftext
+                )
                 if server.get("simplify", False) == True:
                     description = None
 
@@ -262,7 +299,9 @@ async def subscribe_submissions(reddit, config):
                     content="A new Reddit submission:",
                     title=submission.title,
                     link=submission.shortlink,
-                    description=str(submission.selftext)[:666] + '...' if len(submission.selftext) > 666 else submission.selftext,
+                    description=str(submission.selftext)[:666] + "..."
+                    if len(submission.selftext) > 666
+                    else submission.selftext,
                     thumbnail=subreddit.community_icon,
                     footer="/r/" + subreddit.display_name,
                 )
@@ -288,7 +327,10 @@ async def subscribe_submissions(reddit, config):
             if "filter" in sub:
                 ignore = False
                 for term in sub.get("filter"):
-                    if term in submission.title.lower() or term in submission.selftext.lower():
+                    if (
+                        term in submission.title.lower()
+                        or term in submission.selftext.lower()
+                    ):
                         ignore = True
                         break
                 if ignore:
@@ -310,7 +352,11 @@ async def subscribe_submissions(reddit, config):
                 decay_after_length=66,
             )
 
-            msg = submission.title[:66] + '...' if len(submission.title) > 66 else submission.title
+            msg = (
+                submission.title[:66] + "..."
+                if len(submission.title) > 66
+                else submission.title
+            )
             print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
 
             if generation[0] == False:
@@ -322,7 +368,13 @@ async def subscribe_submissions(reddit, config):
                 else:
                     output = transformer([daemon, generation[1]])
 
-            asyncio.create_task(reply(submission, output, {"min": 300, "max": 900, "seeded": generation[2]}))
+            asyncio.create_task(
+                reply(
+                    submission,
+                    output,
+                    {"min": 300, "max": 900, "seeded": generation[2]},
+                )
+            )
 
     except Exception as e:
         print(e)
@@ -373,7 +425,11 @@ async def subscribe_comments(reddit, config):
                 ignore = False
                 submission = await reddit.submission(comment.submission)
                 for term in sub.get("filter"):
-                    if term in submission.title.lower() or term in submission.selftext.lower() or term in comment.body.lower():
+                    if (
+                        term in submission.title.lower()
+                        or term in submission.selftext.lower()
+                        or term in comment.body.lower()
+                    ):
                         ignore = True
                         break
                 if ignore:
@@ -385,7 +441,7 @@ async def subscribe_comments(reddit, config):
                 decay_after_length=66,
             )
 
-            msg = comment.body[:66] + '...' if len(comment.body) > 66 else comment.body
+            msg = comment.body[:66] + "..." if len(comment.body) > 66 else comment.body
             print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
 
             if generation[0] == False:
@@ -397,16 +453,23 @@ async def subscribe_comments(reddit, config):
             else:
                 output = transformer([daemon, generation[1]])
 
-            asyncio.create_task(reply(comment, output, {"min": 300, "max": 900, "seeded": generation[2]}))
-                
+            asyncio.create_task(
+                reply(
+                    comment, output, {"min": 300, "max": 900, "seeded": generation[2]}
+                )
+            )
+
     except Exception as e:
         print(e)
 
     asyncio.create_task(subscribe_comments(reddit, config))
 
+
 async def reply(obj, message, config):
     try:
-        await asyncio.sleep(random.randint(config.get("min", 300), config.get("max", 900)))
+        await asyncio.sleep(
+            random.randint(config.get("min", 300), config.get("max", 900))
+        )
         await obj.reply(message)
 
         color = bc.CORE
@@ -416,6 +479,7 @@ async def reply(obj, message, config):
         print(color + "INK@REDDIT: " + ad.TEXT + message)
     except Exception as e:
         print(e)
+
 
 # Build context from a chain of comments.
 async def build_context(comment):

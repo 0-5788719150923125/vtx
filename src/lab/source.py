@@ -24,6 +24,7 @@ messages = {}
 chance = {}
 mine = {}
 
+
 def orchestrate(config):
     tasks = {}
     while True:
@@ -33,11 +34,21 @@ def orchestrate(config):
                     del tasks[task]
 
             if "l" + focus not in tasks:
-                t = threading.Thread(target=asyncio.run, args=(listener(config, focus),), daemon=True, name="l" + focus)
+                t = threading.Thread(
+                    target=asyncio.run,
+                    args=(listener(config, focus),),
+                    daemon=True,
+                    name="l" + focus,
+                )
                 tasks[t.name] = t
                 t.start()
             if "r" + focus not in tasks:
-                t = threading.Thread(target=asyncio.run, args=(responder(config, focus),), daemon=True, name="r" + focus)
+                t = threading.Thread(
+                    target=asyncio.run,
+                    args=(responder(config, focus),),
+                    daemon=True,
+                    name="r" + focus,
+                )
                 tasks[t.name] = t
                 t.start()
 
@@ -127,7 +138,7 @@ async def response(config, focus):
         )
     )
 
-    if sanitized == '' or sanitized.startswith(" "):
+    if sanitized == "" or sanitized.startswith(" "):
         if len(messages[focus]) > 0:
             messages[focus].pop(0)
         return

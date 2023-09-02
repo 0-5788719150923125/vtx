@@ -6,8 +6,10 @@ from utils import ad, bc, get_daemon, get_identity, propulsion, ship
 from aiogram import Dispatcher, Bot, types
 import head
 
+
 def orchestrate(config):
     asyncio.run(client(config))
+
 
 async def client(config) -> None:
     token = os.environ["TELEGRAMBOTAPIKEY"]

@@ -3,6 +3,7 @@ import time
 import os
 import importlib
 from utils import ad, bc, config
+
 # from lightning_hivemind.strategy import HivemindStrategy
 
 # import torch
@@ -29,9 +30,9 @@ from utils import ad, bc, config
 # # outputs = model.generate(input_ids=inputs, max_new_tokens=9, num_beams=3)
 # print(tokenizer.decode(outputs[0]))  # A cat sat on a mat...
 
+
 # This is the main loop
 def main():
-
     allowed_services = [
         "source",
         "telegram",
@@ -41,7 +42,7 @@ def main():
         "twitch",
         "twitter",
         "matrix",
-        "kb"
+        "kb",
     ]
 
     tasks = {}
@@ -58,13 +59,16 @@ def main():
                 continue
             if service not in tasks:
                 module = importlib.import_module(f"lab.{service}")
-                task = threading.Thread(target=getattr(module, "orchestrate"), args=(config[service],))
+                task = threading.Thread(
+                    target=getattr(module, "orchestrate"), args=(config[service],)
+                )
                 task.name = service
                 task.start()
                 tasks[task.name] = task
                 print(bc.ROOT + f"ONE@{service.upper()}: " + ad.TEXT + "connected")
 
         time.sleep(66.6)
+
 
 # Start the main loop in a thread
 t = None

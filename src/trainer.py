@@ -226,7 +226,7 @@ if __name__ == "__main__":
     ai.tokenizer = AutoTokenizer.from_pretrained(
         launch_model,
         cache_dir="models",
-        padding_side="left",
+        padding_side=model["training"].get("padding_side", "left"),
         padding="max_length",
         truncation=True,
     )
@@ -355,8 +355,10 @@ if __name__ == "__main__":
                 while dataset + str(duplicate) in datasets:
                     collected.append(datasets[dataset + str(duplicate)])
                     duplicate = duplicate + 1
-        merged = merge_datasets(collected, equalize=stage["equalize_datasets"])
-        return merged
+        if len(collected) > 1:
+            return merge_datasets(collected, equalize=stage["equalize_datasets"])
+        else:
+            return collected[0]
 
     if "peft" in model["training"]:
         if p["type"] == "lora":

@@ -4,6 +4,7 @@ import concurrent.futures
 import random
 import typing
 import time
+import math
 import os
 import sys
 import re
@@ -175,7 +176,9 @@ class cortex:
 
             flat = self.truncate_context(
                 "\n".join(ctx),
-                self.config.get("truncate_length", self.ai.model_max_length),
+                self.config.get(
+                    "truncate_length", math.floor(self.ai.model_max_length * 0.8)
+                ),
             )
             history = prefix + "\n" + flat
 
@@ -214,7 +217,7 @@ class cortex:
                     repetition_penalty=1.95,
                     encoder_repetition_penalty=1.00023,
                     exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                    no_repeat_ngram_size=4,
+                    no_repeat_ngram_size=7,
                     renormalize_logits=True,
                     remove_invalid_values=True,
                     eos_token_id=eos,
@@ -247,6 +250,7 @@ class cortex:
 
             except Exception as e:
                 attempt += 1
+
                 if attempt > max_attempts:
                     # self.context.pop(0)
                     output = [False, e]

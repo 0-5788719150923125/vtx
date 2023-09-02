@@ -179,6 +179,7 @@ if __name__ == "__main__":
         if p["type"] == "prefix":
             pre_seq_len = p.get("num_virtual_tokens")
 
+    tuning_mode = None
     peft_config = None
     if "peft" in model["training"]:
         output_dir = "adapters/" + focus
@@ -202,7 +203,12 @@ if __name__ == "__main__":
                     target_modules=p.get("target_modules", None),
                     modules_to_save=p.get("modules_to_save", None),
                 )
+            elif p["type"] == "prompt":
+                tuning_mode = "ptune"
+                pre_seq_len = p.get("num_virtual_tokens")
+                output_dir = "/src/embeddings/" + focus
             elif p["type"] == "prefix":
+                tuning_mode = "deep_ptune"
                 pre_seq_len = p.get("num_virtual_tokens")
                 output_dir = "/src/embeddings/" + focus
                 # peft_config = PrefixTuningConfig(
@@ -219,6 +225,7 @@ if __name__ == "__main__":
         to_gpu=True,
         cache_dir="models",
         embeddings_dir="/src/embeddings/" + focus,
+        tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
         gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
     )

@@ -109,12 +109,18 @@ class cortex:
 
         model_folder = None
         adapter = None
+        tuning_mode = None
         if "training" in self.config:
             model_folder = "models/" + focus
             if "peft" in self.config["training"]:
                 model_folder = None
-                if self.config["training"]["peft"]["type"] == "lora":
+                t = self.config["training"]["peft"]["type"]
+                if t == "lora":
                     adapter = "adapters/" + focus
+                elif t == "prompt":
+                    tuning_mode = "ptune"
+                elif t == "prefix":
+                    tuning_mode == "deep_ptune"
 
         try:
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + focus)
@@ -124,6 +130,7 @@ class cortex:
                 petals=self.config.get("petals", False),
                 to_gpu=self.config.get("to_gpu", False),
                 cache_dir="models",
+                tuning_mode=tuning_mode,
                 embeddings_dir="/src/embeddings/" + focus,
                 adapter=adapter,
                 to_fp16=self.config.get("to_fp16", False),

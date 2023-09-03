@@ -6,9 +6,9 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 "Go play in the lab."
 
-# Goals
+# Synopsis
 
-Our goal is to make the simplest, most basic framework for building robots. It's an opinionated approach.
+A simple, opinionated framework for human cloning experiments.
 
 # API
 

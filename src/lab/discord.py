@@ -77,7 +77,10 @@ class Client(discord.Client):
 
             except Exception as e:
                 print(bc.CORE + str(e) + ad.TEXT)
-                self.discord_task = self.loop.create_task(self.think())
+                try:
+                    await setup_hook(self)
+                except Exception as e:
+                    print(e)
 
     # check every Discord message
     async def on_message(self, message):

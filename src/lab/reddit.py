@@ -8,11 +8,38 @@ import asyncpraw
 import time
 import head
 from pprint import pprint
+from cerberus import Validator
 from lab.discord import send_webhook
 
 
 def orchestrate(config) -> None:
+    # validation(config)
+    # print(config)
     asyncio.run(client(config))
+
+
+def validation(config):
+    schema = {
+        "stalkers": {
+            "type": "dict",
+            "allow_unknown": True,
+            "schema": {"bias": {"type": "integer"}, "prompt": {"type": "string"}},
+        },
+        "stalk": {
+            "type": "dict",
+            "allow_unknown": True,
+            "schema": {
+                "chance": {"type": "integer"},
+                "stalker": {"type": "string"},
+                "min": {"type": "integer"},
+                "max": {"type": "integer"},
+            },
+        },
+        "training": {"replacers": {"type": "string", "allow_unknown": True}},
+    }
+    v = Validator()
+    print(v.validate(config, schema))
+    print(v.errors)
 
 
 async def client(config):

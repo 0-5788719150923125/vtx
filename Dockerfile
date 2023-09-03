@@ -35,8 +35,6 @@ RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz
     chmod -R 755 /dce && \
     rm DiscordChatExporter.Cli.zip
 
-ENV TORCH_CUDA_ARCH_LIST=Turing
-
 WORKDIR /src
 
 COPY requirements.txt ./

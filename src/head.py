@@ -222,7 +222,7 @@ class cortex:
                     penalty_alpha=0.6,
                     top_k=4,
                     repetition_penalty=1.95,
-                    # encoder_repetition_penalty=1.00023,
+                    encoder_repetition_penalty=0.999,
                     exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=7,
                     renormalize_logits=True,

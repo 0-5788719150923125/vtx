@@ -8,7 +8,7 @@ import head
 
 
 def orchestrate(config):
-    asyncio.run(client(config))
+    asyncio.run(client(config["telegram"]))
 
 
 async def client(config) -> None:

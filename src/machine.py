@@ -1,34 +1,7 @@
 import threading
 import time
-import os
 import importlib
 from utils import ad, bc, config
-
-# from lightning_hivemind.strategy import HivemindStrategy
-
-# import torch
-# from transformers import AutoTokenizer, GenerationConfig, AutoModelForCausalLM
-# from petals import AutoDistributedModelForCausalLM
-# from peft import PeftModel, PeftConfig
-
-# # model_name = "stabilityai/StableBeluga-7B"
-# model_name = "bigscience/bloom-560m"
-
-# model = AutoDistributedModelForCausalLM.from_pretrained(model_name, cache_dir="models", torch_dtype=torch.float32, active_adapter="adapters/soul")
-# tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir="models", padding_side="left")
-# # model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir="models", torch_dtype=torch.float32)
-
-# params = GenerationConfig(
-#         max_time=360,
-#         max_new_tokens=33
-#     )
-# # model = PeftModel.from_pretrained(model, "adapters/soul")
-
-# inputs = tokenizer("A cat sat", return_tensors="pt")["input_ids"]
-
-# outputs = model.generate(inputs=inputs, max_length=2048, generation_config=params)
-# # outputs = model.generate(input_ids=inputs, max_new_tokens=9, num_beams=3)
-# print(tokenizer.decode(outputs[0]))  # A cat sat on a mat...
 
 
 # This is the main loop
@@ -59,8 +32,9 @@ def main():
                 continue
             if service not in tasks:
                 module = importlib.import_module(f"lab.{service}")
+                partial = {service: config[service], "personas": config["personas"]}
                 task = threading.Thread(
-                    target=getattr(module, "orchestrate"), args=(config[service],)
+                    target=getattr(module, "orchestrate"), args=(partial,)
                 )
                 task.name = service
                 task.start()

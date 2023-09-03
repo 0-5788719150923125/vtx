@@ -4,7 +4,7 @@ import head
 
 
 def orchestrate(config):
-    asyncio.run(client(config))
+    asyncio.run(client(config["telegraph"]))
 
 
 async def client(config):

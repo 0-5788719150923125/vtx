@@ -15,6 +15,7 @@ import logging
 from pprint import pprint
 from apscheduler.schedulers.background import BackgroundScheduler
 from transformers import GenerationConfig
+from cerberus import Validator
 from utils import (
     ad,
     bc,
@@ -22,7 +23,6 @@ from utils import (
     nist_beacon,
     propulsion,
     ship,
-    write_log_file,
 )
 
 logging.getLogger("transformers").setLevel(logging.WARNING)
@@ -30,8 +30,84 @@ logging.getLogger("transformers").setLevel(logging.WARNING)
 focus = os.environ["FOCUS"]
 
 
+def validation(config):
+    schema = {
+        "info": {"type": "string"},
+        "model": {"type": "string"},
+        "to_gpu": {"type": "boolean"},
+        "gpu_index": {"type": "integer"},
+        "to_fp16": {"type": "boolean"},
+        "max_new_tokens": {"type": "integer"},
+        "petals": {"type": "boolean"},
+        "training": {
+            "type": "dict",
+            "schema": {
+                "resume": {"type": "boolean"},
+                "regen": {"type": "boolean"},
+                "generate_every": {"type": "integer"},
+                "save_every": {"type": "integer"},
+                "gradient_checkpointing": {"type": "boolean"},
+                "hivemind": {"type": "boolean"},
+                "model_max_length": {"type": "integer"},
+                "padding_side": {
+                    "type": "string",
+                    "allowed": ["left", "right"],
+                },
+                "peft": {
+                    "type": "dict",
+                    "schema": {
+                        "type": {
+                            "type": "string",
+                            "allowed": ["lora", "prefix", "prompt"],
+                        },
+                        "r": {"type": "integer"},
+                        "alpha": {"type": "integer"},
+                        "dropout": {"type": "float"},
+                        "bias": {
+                            "type": "string",
+                            "allowed": ["none", "lora_only", "all"],
+                        },
+                        "target_modules": {"type": "list"},
+                        "num_virtual_tokens": {"type": "integer"},
+                    },
+                },
+                "stages": {
+                    "type": "list",
+                    "schema": {
+                        "type": "dict",
+                        "schema": {
+                            "learning_rate": {"type": "float"},
+                            "block_size": {"type": "integer"},
+                            "num_steps": {"type": "integer"},
+                            "warmup_steps": {"type": "integer"},
+                            "weight_decay": {"type": "float"},
+                            "max_grad_norm": {"type": "float"},
+                            "scheduler": {
+                                "type": "string",
+                                "allowed": ["linear", "cosine"],
+                            },
+                            "batch_size": {"type": "integer"},
+                            "gradient_accumulation_steps": {"type": "integer"},
+                            "train_transformers_only": {"type": "boolean"},
+                            "equalize_datasets": {"type": "boolean"},
+                            "datasets": {"type": "list"},
+                        },
+                    },
+                },
+            },
+        },
+    }
+    v = Validator()
+    result = v.validate(config, schema)
+    if not result:
+        print(v.errors)
+    return result
+
+
 class cortex:
     def __init__(self, config, focus):
+        if not validation(config):
+            raise Exception(f"Something is wrong with the {focus} configuration.")
         self.active = False
         self.ai = None
         self.focus = focus

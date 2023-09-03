@@ -13,10 +13,10 @@ from lab.discord import send_webhook
 
 
 def orchestrate(config) -> None:
-    result = validation(config)
+    result = validation(config["reddit"])
     if not result:
         return
-    asyncio.run(client(config))
+    asyncio.run(client(config["reddit"]))
 
 
 def validation(config):

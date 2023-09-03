@@ -6,23 +6,26 @@
 # Most of these services require some form of authentication. API keys and credentials should be
 # stored in a .env file, at the root of this project. See {project_root}/.env for an example.
 
+personas:
+  source:
+    bias: 806051627198709760
+    persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
+
 # :: This AI connects to The Source by default:
 # :: https://src.eco/?focus=trade
 
 source:
   # The channel names to subscribe to.
   trade:
-    identities:
-    # Bias toward a Discord user.
-    - bias: 806051627198709760
-      # Specify a custom prefix for your prompt.
-      persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
-
     # The chance of responding to a new message in the channel.
     active_chance: 0.66
 
     # The chance of sending a message, every second.
     passive_chance: 0.01
+
+    # Bias toward a Discord user.
+    personas:
+      - source
 
   support:
     passive_chance: 0.01

@@ -25,7 +25,7 @@ def orchestrate(config):
             password = os.environ["MATRIXPASSWORD"]
             t = threading.Thread(
                 target=asyncio.run,
-                args=(subscribe(user, password, config),),
+                args=(subscribe(user, password, config["matrix"]),),
                 daemon=True,
                 name="matrix",
             )

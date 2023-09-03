@@ -14,10 +14,10 @@ mention_any_chance = 8  # out of 100
 
 
 def orchestrate(config):
-    result = validation(config)
+    result = validation(config["discord"])
     if not result:
         return
-    asyncio.run(run_client(config))
+    asyncio.run(run_client(config["discord"]))
 
 
 def validation(config):
@@ -110,7 +110,7 @@ class Client(discord.Client):
             except Exception as e:
                 print(bc.CORE + str(e) + ad.TEXT)
                 try:
-                    await setup_hook(self)
+                    self.discord_task = self.loop.create_task(self.think())
                 except Exception as e:
                     print(e)
 

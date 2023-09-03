@@ -13,6 +13,7 @@ import websocket
 import time
 import re
 from datetime import datetime, timedelta
+from cerberus import Validator
 
 propulsion = "¶"
 ship = ":>"
@@ -38,6 +39,33 @@ except:
     config = default_config
 
 pprint(config)
+
+
+def validation(config):
+    schema = {
+        "personas": {
+            "type": "dict",
+            "keysrules": {"type": "string"},
+            "valuesrules": {
+                "type": "dict",
+                "schema": {
+                    "bias": {"type": "integer"},
+                    "persona": {"type": "string"},
+                },
+            },
+        }
+    }
+    v = Validator()
+    result = v.validate(config, schema)
+    if not result:
+        print(v.errors)
+    return result
+
+
+if not validation({"personas": config["personas"]}):
+    raise Exception(
+        "There is something wrong with the 'personas' key in your config.yml file."
+    )
 
 
 # Color codes before

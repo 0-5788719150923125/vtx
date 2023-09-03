@@ -11,9 +11,9 @@ from utils import ad, bc, config, read_from_file, write_to_file
 def orchestrate(config):
     while True:
         ink = Ink()
-        for t in list(config.get("data")):
-            for entry in config["data"][t]:
-                chance = config.get("chance", 0)
+        for t in list(config["kb"].get("data")):
+            for entry in config["kb"]["data"][t]:
+                chance = config["kb"].get("chance", 0)
                 if "chance" in entry:
                     chance = entry.get("chance")
                 if random.random() > chance:

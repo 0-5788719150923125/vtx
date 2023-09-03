@@ -8,7 +8,7 @@ from utils import ad, bc
 
 
 def orchestrate(config):
-    asyncio.run(loop(config))
+    asyncio.run(loop(config["twitter"]))
 
 
 async def loop(config):

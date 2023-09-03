@@ -15,7 +15,7 @@ import random
 
 
 def orchestrate(config):
-    asyncio.run(client(config))
+    asyncio.run(client(config["twitch"]))
 
 
 async def client(config):

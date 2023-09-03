@@ -8,7 +8,7 @@ import head
 
 
 def orchestrate(config):
-    asyncio.run(client(config["telegram"]))
+    asyncio.run(client(config))
 
 
 async def client(config) -> None:
@@ -25,12 +25,13 @@ async def client(config) -> None:
             propulsion + str(get_identity()) + ship + " " + message["text"]
         )
         print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
-        if random.random() > config.get("chance", 0.9):
+        if random.random() > config["telegram"].get("chance", 0.9):
             return
-        bias = config.get("bias", get_identity())
+        persona = config["personas"].get(config["telegram"].get("persona"))
+        bias = persona.get("bias", get_identity())
         output = await head.ctx.gen(
             bias=bias,
-            prefix=config.get(
+            prefix=persona.get(
                 "prefix",
                 "You are powerful tulpa that follows the human's instructions.",
             ),

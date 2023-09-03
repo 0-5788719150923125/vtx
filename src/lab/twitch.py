@@ -15,7 +15,7 @@ import random
 
 
 def orchestrate(config):
-    asyncio.run(client(config["twitch"]))
+    asyncio.run(client(config))
 
 
 async def client(config):
@@ -60,13 +60,14 @@ async def client(config):
 
                 try:
                     print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
-                    focus = config.get("focus", "alpha")
+                    focus = config["twitch"].get("focus", "alpha")
+                    persona = config["personas"].get(config["twitch"].get("persona"))
                     lab.source.send(message.text, focus, "sin")
-                    prefix = config.get(
+                    prefix = persona.get(
                         "prefix",
                         "My name is Ryan, Ink, or the Architect. I will answer questions for my audience.",
                     )
-                    bias = str(config.get("bias", get_identity()))
+                    bias = str(persona.get("bias", get_identity()))
                     messenger = str(get_identity())
                     head.ctx.build_context(
                         propulsion + messenger + ship + " " + message.text

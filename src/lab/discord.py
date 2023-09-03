@@ -17,7 +17,7 @@ def orchestrate(config):
     result = validation(config["discord"])
     if not result:
         return
-    asyncio.run(run_client(config["discord"]))
+    asyncio.run(run_client(config))
 
 
 def validation(config):
@@ -31,8 +31,7 @@ def validation(config):
                 "type": "dict",
                 "nullable": True,
                 "schema": {
-                    "bias": {"type": "integer"},
-                    "prefix": {"type": "string"},
+                    "persona": {"type": "string"},
                     "past": {"type": "string"},
                     "skip": {"type": "boolean"},
                     "after": {"type": "string"},
@@ -180,13 +179,17 @@ class Client(discord.Client):
         try:
             async with message.channel.typing():
                 prefix = None
-                if message.guild and str(message.guild.id) in self.config["servers"]:
-                    if self.config["servers"][str(message.guild.id)] is not None:
-                        bias = self.config["servers"][str(message.guild.id)].get("bias")
-                        prefix = self.config["servers"][str(message.guild.id)].get(
-                            "prefix"
-                        )
-                        no_transform = True
+                if (
+                    message.guild
+                    and int(message.guild.id) in self.config["discord"]["servers"]
+                ):
+                    server = self.config["discord"]["servers"][int(message.guild.id)]
+                    if server is not None:
+                        if "persona" in server:
+                            persona = self.config["personas"].get(server.get("persona"))
+                            bias = persona.get("bias")
+                            prefix = persona.get("persona")
+                            no_transform = True
 
                 output = await head.ctx.gen(bias=bias, prefix=prefix)
 

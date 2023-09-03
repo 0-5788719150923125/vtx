@@ -13,8 +13,9 @@ from lab.discord import send_webhook
 
 
 def orchestrate(config) -> None:
-    # validation(config)
-    # print(config)
+    result = validation(config)
+    if not result:
+        return
     asyncio.run(client(config))
 
 
@@ -22,24 +23,56 @@ def validation(config):
     schema = {
         "stalkers": {
             "type": "dict",
-            "allow_unknown": True,
-            "schema": {"bias": {"type": "integer"}, "prompt": {"type": "string"}},
+            "keysrules": {"type": "string"},
+            "valuesrules": {
+                "type": "dict",
+                "schema": {"bias": {"type": "integer"}, "prompt": {"type": "string"}},
+            },
         },
         "stalk": {
             "type": "dict",
-            "allow_unknown": True,
-            "schema": {
-                "chance": {"type": "integer"},
-                "stalker": {"type": "string"},
-                "min": {"type": "integer"},
-                "max": {"type": "integer"},
+            "keysrules": {"type": "string"},
+            "valuesrules": {
+                "type": "dict",
+                "schema": {
+                    "chance": {"type": "number"},
+                    "stalker": {"type": "string"},
+                    "min": {"type": "integer"},
+                    "max": {"type": "integer"},
+                },
             },
         },
-        "training": {"replacers": {"type": "string", "allow_unknown": True}},
+        "replacers": {
+            "type": "dict",
+            "keysrules": {"type": "string"},
+            "valuesrules": {"type": "integer"},
+        },
+        "subs": {
+            "type": "dict",
+            "keysrules": {"type": "string"},
+            "valuesrules": {
+                "type": "dict",
+                "schema": {
+                    "limit": {"type": "integer"},
+                    "chance": {"type": "float"},
+                    "stalker": {"type": "string"},
+                    "skip": {"type": "boolean"},
+                    "alerts": {"type": "string"},
+                    "type": {
+                        "type": "string",
+                        "allowed": ["top", "new"],
+                    },
+                    "filter": {"type": "list"},
+                    "submissions": {"type": "list"},
+                },
+            },
+        },
     }
     v = Validator()
-    print(v.validate(config, schema))
-    print(v.errors)
+    result = v.validate(config, schema)
+    if not result:
+        print(v.errors)
+    return result
 
 
 async def client(config):

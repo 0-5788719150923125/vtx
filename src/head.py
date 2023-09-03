@@ -303,10 +303,11 @@ class cortex:
                     no_repeat_ngram_size=7,
                     renormalize_logits=True,
                     remove_invalid_values=True,
-                    eos_token_id=eos,
                     max_time=360,
                     seed=seed[1],
                     return_as_list=True,
+                    eos_token_id=eos,
+                    pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
                 )
 
                 self.active = False

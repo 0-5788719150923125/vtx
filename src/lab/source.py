@@ -7,6 +7,7 @@ import re
 import websocket
 import websockets
 from pprint import pprint
+from cerberus import Validator
 from utils import (
     ad,
     bc,
@@ -26,6 +27,10 @@ mine = {}
 
 
 def orchestrate(config):
+    result = validation(config)
+    if not result:
+        return
+
     tasks = {}
     while True:
         for focus in config:
@@ -53,6 +58,29 @@ def orchestrate(config):
                 t.start()
 
         time.sleep(6.66)
+
+
+def validation(config):
+    servers = {"temp": config}
+    schema = {
+        "temp": {
+            "type": "dict",
+            "keysrules": {"type": "string"},
+            "valuesrules": {
+                "type": "dict",
+                "schema": {
+                    "passive_chance": {"type": "float"},
+                    "active_chance": {"type": "float"},
+                    "identities": {"type": "list"},
+                },
+            },
+        }
+    }
+    v = Validator()
+    result = v.validate(servers, schema)
+    if not result:
+        print(v.errors)
+    return result
 
 
 async def listener(config, focus):

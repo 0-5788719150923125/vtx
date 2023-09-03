@@ -6,6 +6,7 @@ import requests
 from utils import ad, bc, bullets, get_identity, propulsion, ship
 import discord
 import head
+from cerberus import Validator
 
 response_chance = 3  # out of 100
 mention_self_chance = 88  # out of 100
@@ -13,7 +14,38 @@ mention_any_chance = 8  # out of 100
 
 
 def orchestrate(config):
+    result = validation(config)
+    if not result:
+        return
     asyncio.run(run_client(config))
+
+
+def validation(config):
+    schema = {
+        "use_self_token": {"type": "boolean"},
+        "export_dms": {"type": "boolean"},
+        "servers": {
+            "type": "dict",
+            "keysrules": {"type": "integer"},
+            "valuesrules": {
+                "type": "dict",
+                "nullable": True,
+                "schema": {
+                    "bias": {"type": "integer"},
+                    "prefix": {"type": "string"},
+                    "past": {"type": "string"},
+                    "skip": {"type": "boolean"},
+                    "after": {"type": "string"},
+                    "before": {"type": "string"},
+                },
+            },
+        },
+    }
+    v = Validator()
+    result = v.validate(config, schema)
+    if not result:
+        print(v.errors)
+    return result
 
 
 # A class to control the entire Discord bot

@@ -85,7 +85,15 @@ def validation(config):
                             "max_grad_norm": {"type": "float"},
                             "scheduler": {
                                 "type": "string",
-                                "allowed": ["linear", "cosine"],
+                                "allowed": [
+                                    "linear",
+                                    "cosine",
+                                    "cosine_with_restarts",
+                                    "polynomial",
+                                    "constant",
+                                    "inverse_sqrt",
+                                    "reduce_lr_on_plateau",
+                                ],
                             },
                             "batch_size": {"type": "integer"},
                             "gradient_accumulation_steps": {"type": "integer"},

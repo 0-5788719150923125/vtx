@@ -361,15 +361,20 @@ if __name__ == "__main__":
         else:
             return collected[0]
 
+    get_trainable = False
     if "peft" in model["training"]:
         if p["type"] == "lora":
+            get_trainable = True
             if resume == True:
                 ai.model = PeftModel.from_pretrained(ai.model, output_dir)
                 setattr(ai.model.config, "is_prompt_learning", False)
                 setattr(ai.model.config, "is_trainable", True)
             else:
                 ai.model = get_peft_model(ai.model, peft_config)
-            ai.model.print_trainable_parameters()
+
+    print(ai.model)
+    if get_trainable:
+        ai.model.print_trainable_parameters()
 
     elif os.path.exists("/src/models/" + focus) == False:
         os.makedirs("/src/models/" + focus)
@@ -377,8 +382,6 @@ if __name__ == "__main__":
     for name, param in ai.model.named_parameters():
         if "lora" in name or "Lora" in name:
             param.requires_grad = True
-
-    print(ai.model)
 
     version = build_version()
 

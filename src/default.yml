@@ -153,6 +153,11 @@ mind:
   model: xhyi/PT_GPTNEO350_ATG
   to_gpu: False
 
+core:
+  info: is hotter than hell
+  model: cerebras/Cerebras-GPT-590M
+  to_gpu: False
+
 toe:
   info: nailed to the foot
   model: EleutherAI/gpt-neo-125M

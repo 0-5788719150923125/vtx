@@ -37,6 +37,7 @@ def validation(config):
         "to_gpu": {"type": "boolean"},
         "gpu_index": {"type": "integer"},
         "to_fp16": {"type": "boolean"},
+        "low_memory": {"type": "boolean"},
         "max_new_tokens": {"type": "integer"},
         "petals": {"type": "boolean"},
         "training": {
@@ -211,6 +212,11 @@ class cortex:
                 adapter=adapter,
                 to_fp16=self.config.get("to_fp16", False),
             )
+
+            if "rwkv" in getattr(self.ai.model.config, "_name_or_path"):
+                print("Hacking the RWKV config...")
+                self.ai.model.train()
+
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))
             self.active = False
@@ -300,7 +306,8 @@ class cortex:
                     repetition_penalty=1.95,
                     encoder_repetition_penalty=0.999,
                     exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                    no_repeat_ngram_size=7,
+                    no_repeat_ngram_size=5,
+                    low_memory=self.config.get("low_memory", False),
                     renormalize_logits=True,
                     remove_invalid_values=True,
                     max_time=360,

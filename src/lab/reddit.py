@@ -375,7 +375,6 @@ async def subscribe_submissions(reddit, config):
             sub = config["reddit"]["subs"][submission.subreddit.display_name]
             if "persona" in sub:
                 persona = config["personas"].get(sub["persona"])
-                print(persona)
                 bias = persona.get("bias")
                 prompt = persona.get("persona")
 

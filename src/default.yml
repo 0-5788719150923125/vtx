@@ -185,6 +185,9 @@ collections:
 # :: https://www.reddit.com/prefs/apps
 
 # reddit:
+  # delay:
+  #   min: 120
+  #   max: 600
 #   subs:
       # prompt: On the 5th of September,
       # For each subreddit you want to subscribe to.
@@ -217,7 +220,7 @@ collections:
 #   export_dms: True
 #     # A list of servers to fetch from (by Discord server ID).
 #   servers:
-#     '558378982920159242':
+#     558378982920159242:
 #         # "before" and "after" are both supported.
 #       before: '2021-01-01 12:00'
 #         # Do not attempt to fetch additional messages from this server.
@@ -225,26 +228,24 @@ collections:
 #       # The following two options are used to bias the model towards a specific Discord user, in a specific server.
 #       prefix: My name is Alex, and I am your spiritual guide. I am speaking with others in a Discord server.
 #       bias: 806051627198709760
-#     '1041331166592106576':
+#     1041331166592106576:
 #       # fetch messages from the past day, week, month or year
 #       past: 1 week
-#     '907925566089465886':
+#     907925566089465886:
 
 # :: Connect your AI to Telegram.
 # :: This requires a bot API key. To obtain this, you must speak to
 # :: @BotFather on Telegram.
 
 # telegram:
-  # bias: 806051627198709760
-  # prefix: You are powerful tulpa that follows the human's instructions.
+  # persona: source
 
 # :: Connect your AI to Twitch.
 
 # twitch token -u -s 'chat:read chat:edit channel:moderate'
 # twitch:
-#   bias: 806051627198709760
-#   prefix: Your name is Prism, the Architect. Please answer questions for your audience.
-#   neuron: toe
+#   persona: source
+#   focus: trade
 
 # :: Connect your AI to Twitter.
 

@@ -64,7 +64,8 @@ class Client(discord.Client):
         print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
 
     async def setup_hook(self) -> None:
-        self.discord_task = self.loop.create_task(self.think())
+        # self.discord_task = self.loop.create_task(self.think())
+        pass
 
     # randomly generate commentary
     async def think(self):

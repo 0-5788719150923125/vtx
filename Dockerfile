@@ -1,5 +1,7 @@
 FROM nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
 
+ENV TRANSFORMERS_CACHE="/tmp"
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     curl \

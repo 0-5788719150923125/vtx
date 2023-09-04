@@ -2,14 +2,17 @@ source:
   trade:
     passive_chance: 0.01
     active_chance: 0.22
-    identities:
-    - bias: 806051627198709760
-      persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
+    personas:
+      - source
+
+personas:
+  source:
+    bias: 806051627198709760
+    persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
 mind:
   model: xhyi/PT_GPTNEO350_ATG
   to_gpu: False
-  gpu_index: 0
   max_new_tokens: 111
   context_length: 2048
   training:

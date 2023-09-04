@@ -16,18 +16,14 @@ def orchestrate(config) -> None:
     result = validation(config["reddit"])
     if not result:
         return
-    asyncio.run(client(config["reddit"]))
+    asyncio.run(client(config))
 
 
 def validation(config):
     schema = {
-        "stalkers": {
+        "delay": {
             "type": "dict",
-            "keysrules": {"type": "string"},
-            "valuesrules": {
-                "type": "dict",
-                "schema": {"bias": {"type": "integer"}, "prompt": {"type": "string"}},
-            },
+            "schema": {"min": {"type": "integer"}, "max": {"type": "integer"}},
         },
         "stalk": {
             "type": "dict",
@@ -55,7 +51,7 @@ def validation(config):
                 "schema": {
                     "limit": {"type": "integer"},
                     "chance": {"type": "float"},
-                    "stalker": {"type": "string"},
+                    "persona": {"type": "string"},
                     "skip": {"type": "boolean"},
                     "alerts": {"type": "string"},
                     "type": {
@@ -125,7 +121,7 @@ async def stalker(reddit, config):
         redditor = await reddit.redditor(user)
         async for submission in redditor.stream.submissions(skip_existing=True):
             try:
-                victim = config["stalk"].get(user)
+                victim = config["reddit"]["stalk"].get(user)
 
                 chance = victim.get("chance", 0.1)
 
@@ -147,12 +143,10 @@ async def stalker(reddit, config):
                     propulsion + str(op) + ship + " " + submission.selftext,
                 ]
 
-                stalker = victim.get("stalker", None)
-                bias = (
-                    config["stalkers"][stalker].get("bias", None) if stalker else None
-                )
+                stalker = config["personas"].get(victim.get("stalker", None), None)
+                bias = stalker.get("bias", None) if stalker else None
                 prompt = (
-                    config["stalkers"][stalker].get("prompt")
+                    stalker.get("persona")
                     if stalker
                     else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
                 )
@@ -196,7 +190,7 @@ async def stalker(reddit, config):
         redditor = await reddit.redditor(user)
         async for comment in redditor.stream.comments(skip_existing=True):
             try:
-                victim = config["stalk"].get(user)
+                victim = config["reddit"]["stalk"].get(user)
 
                 chance = victim.get("chance", 0.1)
                 if random.random() > chance:
@@ -205,12 +199,10 @@ async def stalker(reddit, config):
                 await comment.load()
                 context = await build_context(comment=comment)
 
-                stalker = victim.get("stalker", None)
-                bias = (
-                    config["stalkers"][stalker].get("bias", None) if stalker else None
-                )
+                stalker = config["personas"].get(victim.get("stalker", None), None)
+                bias = stalker.get("bias", None) if stalker else None
                 prompt = (
-                    config["stalkers"][stalker].get("prompt")
+                    stalker.get("prompt")
                     if stalker
                     else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
                 )
@@ -258,7 +250,7 @@ async def stalker(reddit, config):
 
         loop = asyncio.get_event_loop()
 
-        for user in config["stalk"]:
+        for user in config["reddit"]["stalk"]:
             c = user + "-c"
             if c not in tasks:
                 task = loop.create_task(watch_comments(reddit, config, user))
@@ -281,9 +273,9 @@ async def submission(reddit, config):
     while True:
         try:
             await asyncio.sleep(60)
-            if "TheInk" not in config["subs"]:
+            if "TheInk" not in config["reddit"]["subs"]:
                 continue
-            servers = config["subs"]["TheInk"]["submissions"]
+            servers = config["reddit"]["subs"]["TheInk"]["submissions"]
             for server in servers:
                 if random.random() > server.get("frequency", 0.00059):
                     continue
@@ -335,19 +327,19 @@ async def submission(reddit, config):
 async def subscribe_submissions(reddit, config):
     try:
         active = []
-        for sub in config["subs"]:
-            if "chance" in config["subs"][sub]:
-                if config["subs"][sub].get("chance", 0) <= 0:
+        for sub in config["reddit"]["subs"]:
+            if "chance" in config["reddit"]["subs"][sub]:
+                if config["reddit"]["subs"][sub].get("chance", 0) <= 0:
                     continue
                 active.append(sub)
 
         subreddits = await reddit.subreddit("+".join(active))
 
         async for submission in subreddits.stream.submissions(skip_existing=True):
-            if "alerts" in config["subs"][submission.subreddit.display_name]:
-                webhook = config["subs"][submission.subreddit.display_name].get(
-                    "alerts"
-                )
+            if "alerts" in config["reddit"]["subs"][submission.subreddit.display_name]:
+                webhook = config["reddit"]["subs"][
+                    submission.subreddit.display_name
+                ].get("alerts")
                 await submission.load()
                 await submission.author.load()
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)
@@ -366,7 +358,9 @@ async def subscribe_submissions(reddit, config):
                     footer="/r/" + subreddit.display_name,
                 )
 
-            chance = config["subs"][submission.subreddit.display_name].get("chance", 0)
+            chance = config["reddit"]["subs"][submission.subreddit.display_name].get(
+                "chance", 0
+            )
 
             if submission.author == os.environ["REDDITAGENT"]:
                 continue
@@ -378,11 +372,12 @@ async def subscribe_submissions(reddit, config):
             bias = None
             prompt = "I carefully respond to a submission on Reddit."
 
-            sub = config["subs"][submission.subreddit.display_name]
-            if "stalker" in sub:
-                stalker = config["stalkers"].get(sub["stalker"])
-                bias = stalker.get("bias")
-                prompt = stalker.get("prompt")
+            sub = config["reddit"]["subs"][submission.subreddit.display_name]
+            if "persona" in sub:
+                persona = config["personas"].get(sub["persona"])
+                print(persona)
+                bias = persona.get("bias")
+                prompt = persona.get("persona")
 
             if "filter" in sub:
                 ignore = False
@@ -423,16 +418,19 @@ async def subscribe_submissions(reddit, config):
                 continue
             else:
                 daemon = get_daemon(generation[0])
-                if "stalker" in sub:
+                if "persona" in sub:
                     output = generation[1]
                 else:
                     output = transformer([daemon, generation[1]])
+
+            min_delay = config["reddit"]["delay"].get("min", 300)
+            max_delay = config["reddit"]["delay"].get("max", 300)
 
             asyncio.create_task(
                 reply(
                     submission,
                     output,
-                    {"min": 300, "max": 900, "seeded": generation[2]},
+                    {"min": min_delay, "max": max_delay, "seeded": generation[2]},
                 )
             )
 
@@ -446,9 +444,9 @@ async def subscribe_submissions(reddit, config):
 async def subscribe_comments(reddit, config):
     try:
         active = []
-        for sub in config["subs"]:
-            if "chance" in config["subs"][sub]:
-                if config["subs"][sub].get("chance", 0) <= 0:
+        for sub in config["reddit"]["subs"]:
+            if "chance" in config["reddit"]["subs"][sub]:
+                if config["reddit"]["subs"][sub].get("chance", 0) <= 0:
                     continue
                 active.append(sub)
 
@@ -458,7 +456,9 @@ async def subscribe_comments(reddit, config):
             parent = await comment.parent()
             await parent.load()
 
-            chance = config["subs"][comment.subreddit.display_name].get("chance", 0)
+            chance = config["reddit"]["subs"][comment.subreddit.display_name].get(
+                "chance", 0
+            )
 
             roll = random.random()
             if parent.author == os.environ["REDDITAGENT"]:
@@ -475,11 +475,11 @@ async def subscribe_comments(reddit, config):
             bias = None
             prompt = "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
 
-            sub = config["subs"][comment.subreddit.display_name]
-            if "stalker" in sub:
-                stalker = config["stalkers"].get(sub["stalker"])
-                bias = stalker.get("bias")
-                prompt = stalker.get("prompt")
+            sub = config["reddit"]["subs"][comment.subreddit.display_name]
+            if "persona" in sub:
+                persona = config["personas"].get(sub["persona"])
+                bias = persona.get("bias")
+                prompt = persona.get("persona")
 
             if "filter" in sub:
                 ignore = False
@@ -508,14 +508,19 @@ async def subscribe_comments(reddit, config):
                 continue
 
             daemon = get_daemon(generation[0])
-            if "stalker" in sub:
+            if "persona" in sub:
                 output = generation[1]
             else:
                 output = transformer([daemon, generation[1]])
 
+            min_delay = config["reddit"]["delay"].get("min", 300)
+            max_delay = config["reddit"]["delay"].get("max", 300)
+
             asyncio.create_task(
                 reply(
-                    comment, output, {"min": 300, "max": 900, "seeded": generation[2]}
+                    comment,
+                    output,
+                    {"min": min_delay, "max": max_delay, "seeded": generation[2]},
                 )
             )
 

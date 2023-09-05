@@ -35,6 +35,7 @@ The Vortex (VTX) is a bot-making framework, designed for the creation of AI clon
   - [Twitter](#twitter-x)
   - [Telegram](#telegram)
   - [Matrix](#matrix)
+- [Credits](#credits)
 
 ## Summary
 
@@ -843,3 +844,28 @@ matrix:
 However, beyond this, the current Matrix implementation has a bunch of hard-coded values, which won't work for you. 
 
 Matrix needs further development.
+
+## Credits
+
+A special thanks goes out to the following groups (in no particular order):
+
+- [AITextGen](https://github.com/minimaxir/aitextgen), for providing an excellent foundation for this project.
+- [Huggingface](https://huggingface.co/), for sponsoring a plethora of open-source tooling, used by almost everyone in the AI community.
+- [BigScience](https://bigscience.huggingface.co/), for all of the research that led to [Hivemind](https://github.com/learning-at-home/hivemind) and [Petals](https://chat.petals.dev/).
+- [Brain.js](https://brain.js.org), for maintaining a great little library, which is used to train AI at [the Source](https://src.eco).
+- [LightningAI](https://lightning.ai/), for doing the hard stuff for us.
+- [Docker](https://www.docker.com/), for shipping robots.
+- [LogSeq](https://logseq.com/), for giving me a place to dump my brain (and structured graph data to train upon.)
+- [Gitlab](https://gitlab.com), for version controlling many dozens of kilobytes of spaghetti code.
+- [GUN](https://gun.eco/), for building a database for freedom fighters. It's not flashy, and it's a PITA to use - but it is very useful.
+- [SurrealDB](https://surrealdb.com), for making SQL easy.
+- [IPFS](https://ipfs.tech/), for building an InterPlanetary File System. 
+- [Hugo](https://gohugo.io/), for powering something like 15 of my websites.
+- [Cloudflare](cloudflare.com), for protecting and serving.
+- [Microsoft](https://www.microsoft.com), because TypeScript and government back-doors.
+- [OpenAI](https://openai.com/), for being a crutch that, admittedly, led to progress.
+- [OpenCog Foundation](https://opencog.org/), for humbling me (and hacking my computer.)
+- [Discord](discord.com/), for hacking all of my friends.
+- [Cerberus](https://docs.python-cerberus.org), for protecting the gates of Hell.
+- [The FBI](https://www.fbi.gov), for ignoring my warnings.
+- And of course, I would like to thank all of my friends! Without their support, none of this would have been possible.

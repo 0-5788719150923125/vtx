@@ -343,17 +343,16 @@ class cortex:
                     or bool(re.search(variables, group[3]))
                     or group[3][:1] in [">", "~", '"', " "]
                 ):
-                    raise Exception("failed to format a proper response")
-                else:
-                    output = [group[2], group[3], seed[0], ctx]
-                    break
+                    attempt += 1
+                    output = [False, ctx]
+                    continue
+                output = [group[2], group[3], seed[0], ctx]
+                break
 
             except Exception as e:
+                print(e)
                 attempt += 1
-
-                if attempt > max_attempts:
-                    # self.context.pop(0)
-                    output = [False, e]
+                output = [False, e]
 
         self.active = False
         return output

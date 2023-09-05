@@ -122,7 +122,7 @@ def get_identity(seed=None):
 # Hash a string, return a name
 def get_daemon(seed):
     ws = websocket.WebSocket()
-    ws.connect("ws://ctx:9666/wss")
+    ws.connect("ws://localhost:9666/ws")
     ws.send(json.dumps({"seed": seed}).encode("utf-8"))
     response = ws.recv()
     ws.close()

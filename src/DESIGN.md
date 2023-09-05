@@ -83,6 +83,7 @@ version: '3.9'
 services:
   bot:
     image: ghcr.io/0-5788719150923125/bot:latest
+    network_mode: host
     stdin_open: true
     tty: true
     volumes:
@@ -93,6 +94,7 @@ services:
 
   ctx:
     image: ghcr.io/0-5788719150923125/src:latest
+    network_mode: host
 ```
 
 Different users will have different configuration needs. The [Docker Compose Reference](https://docs.docker.com/compose/compose-file/compose-file-v3/) page is the best place to read about Docker-specific options.

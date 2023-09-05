@@ -854,8 +854,8 @@ A special thanks goes out to the following groups (in no particular order):
 - [BigScience](https://bigscience.huggingface.co/), for all of the research that led to [Hivemind](https://github.com/learning-at-home/hivemind) and [Petals](https://chat.petals.dev/).
 - [Brain.js](https://brain.js.org), for maintaining a great little library, which is used to train AI at [the Source](https://src.eco).
 - [LightningAI](https://lightning.ai/), for doing the hard stuff for us.
-- [Docker](https://www.docker.com/), for shipping robots.
 - [LogSeq](https://logseq.com/), for giving me a place to dump my brain (and structured graph data to train upon.)
+- [Docker](https://www.docker.com/), for shipping robots.
 - [Gitlab](https://gitlab.com), for version controlling many dozens of kilobytes of spaghetti code.
 - [GUN](https://gun.eco/), for building a database for freedom fighters. It's not flashy, and it's a PITA to use - but it is very useful.
 - [SurrealDB](https://surrealdb.com), for making SQL easy.

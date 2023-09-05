@@ -363,7 +363,7 @@ async def subscribe_submissions(reddit, config):
                 "chance", 0
             )
 
-            if submission.author == os.environ["REDDITAGENT"]:
+            if submission.author in [os.environ["REDDITAGENT"], "AutoModerator"]:
                 continue
             if random.random() > chance:
                 continue
@@ -467,7 +467,7 @@ async def subscribe_comments(reddit, config):
                 continue
 
             await comment.load()
-            if comment.author == os.environ["REDDITAGENT"]:
+            if comment.author in [os.environ["REDDITAGENT"], "AutoModerator"]:
                 continue
 
             context = await build_context(comment=comment)

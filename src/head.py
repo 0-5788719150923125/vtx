@@ -40,6 +40,7 @@ def validation(config):
         "low_memory": {"type": "boolean"},
         "max_new_tokens": {"type": "integer"},
         "petals": {"type": "boolean"},
+        "focus": {"type": "dict"},
         "training": {
             "type": "dict",
             "schema": {

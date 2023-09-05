@@ -95,7 +95,7 @@ async def client(config):
                 await asyncio.sleep(6.66)
 
     # Usage example
-    channel = os.environ["TWITCHCHANNEL"]
+    channel = config["twitch"].get("channel", "missiontv")
     client_id = os.environ["TWITCHCLIENT"]
     client_secret = os.environ["TWITCHSECRET"]
     oauth_token = os.environ["TWITCHTOKEN"]

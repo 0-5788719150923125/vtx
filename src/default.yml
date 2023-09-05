@@ -15,21 +15,22 @@ personas:
 # :: https://src.eco/?focus=trade
 
 source:
-  # The channel names to subscribe to.
-  trade:
-    # The chance of responding to a new message in the channel.
-    active_chance: 0.66
+  focus:
+    # The channel names to subscribe to.
+    trade:
+      # The chance of responding to a new message in the channel.
+      active_chance: 0.66
 
-    # The chance of sending a message, every second.
-    passive_chance: 0.01
+      # The chance of sending a message, every second.
+      passive_chance: 0.01
 
-    # Bias toward a Discord user.
-    personas:
-      - source
+      # Bias toward a Discord user.
+      personas:
+        - source
 
-  support:
-    passive_chance: 0.01
-    active_chance: 0.99
+    support:
+      passive_chance: 0.01
+      active_chance: 0.99
 
 # :: The following are AI model configurations, used by PyTorch:
 # :: https://docs.aitextgen.io/

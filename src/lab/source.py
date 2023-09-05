@@ -27,13 +27,13 @@ mine = {}
 
 
 def orchestrate(config):
-    result = validation(config)
+    result = validation(config["source"])
     if not result:
         return
 
     tasks = {}
     while True:
-        for focus in config["source"]:
+        for focus in config["source"]["focus"]:
             for task in tasks.copy():
                 if not tasks[task].is_alive():
                     del tasks[task]
@@ -62,7 +62,7 @@ def orchestrate(config):
 
 def validation(config):
     schema = {
-        "source": {
+        "focus": {
             "type": "dict",
             "keysrules": {"type": "string"},
             "valuesrules": {
@@ -74,7 +74,15 @@ def validation(config):
                 },
             },
         },
-        "personas": {"type": "dict"},
+        "info": {"type": "string"},
+        "model": {"type": "string"},
+        "to_gpu": {"type": "boolean"},
+        "to_fp16": {"type": "boolean"},
+        "max_new_tokens": {"type": "integer"},
+        "training": {"type": "dict"},
+        "gpu_index": {"type": "integer"},
+        "low_memory": {"type": "boolean"},
+        "petals": {"type": "boolean"},
     }
     v = Validator()
     result = v.validate(config, schema)
@@ -86,7 +94,7 @@ def validation(config):
 async def listener(config, focus):
     if focus not in messages:
         messages[focus] = []
-        chance[focus] = config["source"][focus].get("passive_chance", 0.01)
+        chance[focus] = config["source"]["focus"][focus].get("passive_chance", 0.01)
         mine[focus] = False
     async with websockets.connect("ws://ctx:9666/wss") as websocket:
         await websocket.send(json.dumps({"focus": focus}).encode("utf-8"))
@@ -105,7 +113,9 @@ async def listener(config, focus):
 
             if append:
                 if not mine[focus]:
-                    chance[focus] = config["source"][focus].get("active_chance", 0.66)
+                    chance[focus] = config["source"]["focus"][focus].get(
+                        "active_chance", 0.66
+                    )
                 messages[focus].append(
                     propulsion + str(get_identity()) + ship + " " + state["message"]
                 )
@@ -130,7 +140,7 @@ async def responder(config, focus):
 
 async def response(config, focus):
     await asyncio.sleep(random.randint(7, 13))
-    personas = config["source"][focus].get("personas", None)
+    personas = config["source"]["focus"][focus].get("personas", None)
     persona = "You are a powerful AI, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts."
     bias = None
     identity = None
@@ -181,7 +191,7 @@ async def response(config, focus):
 
     messages[focus].append(propulsion + str(bias) + ship + " " + sanitized)
     mine[focus] = True
-    chance[focus] = config["source"][focus].get("passive_chance", 0.01)
+    chance[focus] = config["source"]["focus"][focus].get("passive_chance", 0.01)
     send(sanitized, focus, "cos", bias)
 
 

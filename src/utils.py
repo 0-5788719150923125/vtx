@@ -34,8 +34,11 @@ with open("./default.yml", "r") as config_file:
 try:
     with open("./config.yml", "r") as config_file:
         user_config = yaml.load(config_file, Loader=yaml.FullLoader)
+        if "reddit" in user_config:
+            user_config["reddit"]["enabled"] = True
         config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-except:
+except Exception as e:
+    print(e)
     config = default_config
 
 pprint(config)

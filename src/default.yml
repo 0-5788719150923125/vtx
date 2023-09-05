@@ -4,141 +4,55 @@
 # Both files will be merged at runtime, with your custom config file taking priority.
 
 # Most of these services require some form of authentication. API keys and credentials should be
-# stored in a .env file, at the root of this project. See {project_root}/.env for an example.
+# stored in a .env file, at the root of this project. See {project_root}/examples/bot/.env for an example.
 
 personas:
   source:
     bias: 806051627198709760
     persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
-# :: This AI connects to The Source by default:
-# :: https://src.eco/?focus=trade
-
 source:
   focus:
-    # The channel names to subscribe to.
     trade:
-      # The chance of responding to a new message in the channel.
       active_chance: 0.66
-
-      # The chance of sending a message, every second.
       passive_chance: 0.01
-
-      # Bias toward a Discord user.
       personas:
         - source
-
     support:
       passive_chance: 0.01
       active_chance: 0.99
 
-# :: The following are AI model configurations, used by PyTorch:
-# :: https://docs.aitextgen.io/
-
-# The top-level key is the name of your custom model.
 soul:
-
-  # An arbitrary text description of your model.
   info: because nobody has one
-
-  # If you want to use a foundation model, you can specify it here.
   model: bigscience/bloom-560m
-
-  # Whether or not to load this model into your GPU at runtime (for inference.)
   to_gpu: False
-
-  # Convert the model to 16-bit floating point at inference. Reduces memory consumption,
-  # at the cost of reduced precision.
   to_fp16: False
-
-  # The number of the GPU index you want to use.
-  gpu_index: 0
-
-  # Given a prompt, this is the maximum number of new tokens your model will generate.
   max_new_tokens: 333
-
-  # The max number of tokens allowed in a prompt. If unset, will use maximum supported
-  # by the model.
   truncate_length: 2048
-
-  # Use the Petals network for distributed inference and fine-tuning.
-  petals: False
-
-  # This key is for settings that are only used during training.
+  petals: True
   training:
-    # Whether or not you will continue training your existing fine-tuned model (True), or
-    # start over from scratch. (False)
     resume: False
-
-    # Delete all tokenized datasets, and rebuild them from scratch.
     regen: False
-
-    # This will only be used by Petals fine-tuning.
     model_max_length: 1000000000000000019884624838656
-
-    # Set the tokenizer's padding side.
     padding_side: left
-
-    # If this key exists, Parameter Efficient Fine-Tuning (PEFT) will be used.
-    # https://github.com/huggingface/peft/blob/main/src/peft/tuners/lora.py
-    # peft:
-    #   type: "lora"
-    #   r: 4
-    #   alpha: 16
-    #   dropout: 0.1
-    #   bias: "all"
-    #   target_modules:
-    #     - k_proj
-    #     - v_proj
-    #     - q_proj
-    #     - out_proj
-    #     - c_fc
-    #     - c_proj
-    #     - lm_head
-
     # peft:
     #   type: "prefix"
     #   num_virtual_tokens: 24
-
-    # How often to perform inference during training, in steps.
     generate_every: 50
-
-    # How often to save the model during training.
     save_every: 200
-
-    # You may define one or more stages to run sequentially, each with different datasets and/or hyperparameters.
     stages:
-        # The rate at which your model will adjust weights/biases at each iteration step.
       - learning_rate: 0.000333
-        # The number of iterations before training will complete.
         num_steps: 88888
-        # Increate the learning_rate from 0 to the amount specified above, over the first X number of warmup_steps (iterations).
         warmup_steps: 0
-        # Larger batch sizes generally lead to better results, but require more memory to train.
         batch_size: 3
-        # The number of layers to freeze, starting from the left (lowest/deepest features), and moving right.
         num_layers_freeze: 8
-        # Gradient accumulation is a ML trick, that essentially allows for larger batch sizes, without
-        # the memory hit. For example, at a batch size of 3, and gradient accumulation steps of 6, your
-        # your model will effectively train with a batch size of 18. (3 x 6 = 18)
         gradient_accumulation_steps: 1
-        # The rate at which weights/biases will decay, essentially "forgetting" features it had previously learned.
         weight_decay: 0.01
-        # The maximum allowed "adjustment" of a weight/bias, at each iteration step.
         max_grad_norm: 0.444
-        # The learning rate scheduler to use.
         scheduler: linear
-        # This represents the length of each line fed into the tokenizer. Lines longer than this length
-        # will be truncated, while lines shorter will be padded (on the right). When fine-tuning a model,
-        # this will be set to what is already supported by the corresponding model's config.json.
         block_size: 444
-        # Remove a percentage of neurons during training.
-        prune: 0.0
-        # Train only the multi-head self-attention and feed-forward sub-layers.
         train_transformers_only: False
-        # Takes an equal number of samples from each dataset, so as not to bias toward one or the other.
         equalize_datasets: False
-        # Place each dataset into a folder at {project_root}/lab, then list them here.
         datasets:
           - default
 
@@ -175,18 +89,10 @@ toe:
     peft:
       type: "lora"
 
-# :: Use the following collections of datasets to train your models. Each collection you want
-# :: to use must be specified under your model configuration.
-
 collections:
-  # The name of your collection.
   default:
-    # The path to your dataset.
-    lab/src:
-      # duplicate the dataset X amount of times. Each subsequent duplicate is shuffled, such that
-      # batches are in a different order, and contain different combinations of data.
+    src:
       duplicate: 2
-      # In some instances, your data should be read line-by-line. A CSV file is a good example.
       line_by_line: False
     lab/aitextgen:
     lab/source:
@@ -197,74 +103,14 @@ collections:
     lab/research:
     lab/pages:
 
-# :: Connect your AI to Reddit.
-# :: This requires the creation of a "personal use script," here:
-# :: https://www.reddit.com/prefs/apps
-
-# reddit:
-  # delay:
-  #   min: 120
-  #   max: 600
-#   subs:
-      # prompt: On the 5th of September,
-      # For each subreddit you want to subscribe to.
-#     SubSimGPT2Interactive:
-        # While fetching data from this subreddit, limit to X number of submissions.
-#       limit: 10
-        # Subreddit filter. Currently supports "top" and "new" submissions.
-#       type: new
-        # Do not attempt to fetch more submissions from this subreddit.
-#       skip: True
-        # The rate at which your bot should attempt to "converse" with others in the comments' section.
-#       chance: 0.001
-#     Kunism:
-#       limit: 500
-#       chance: 0.5
-#     NoRules:
-#       chance: 0.0666
-
-# :: Connect your AI to Discord.
-# :: This requires a developer account, found here:
-# :: https://discord.com/developers/applications
-# :: At a minimum, your account must have the ability to read and send messages.
-
-# discord:
-#     # Whether or not to use a self token for authentication. If False, Discord Chat Exporter
-#     # will attempt to fetch messages as your bot itself.
-#     # How to obtain a self token: https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md
-#   use_self_token: True
-#     # Whether or not to export private messages.
-#   export_dms: True
-#     # A list of servers to fetch from (by Discord server ID).
-#   servers:
-#     558378982920159242:
-#         # "before" and "after" are both supported.
-#       before: '2021-01-01 12:00'
-#         # Do not attempt to fetch additional messages from this server.
-#       skip: True
-#       # The following two options are used to bias the model towards a specific Discord user, in a specific server.
-#       prefix: My name is Alex, and I am your spiritual guide. I am speaking with others in a Discord server.
-#       bias: 806051627198709760
-#     1041331166592106576:
-#       # fetch messages from the past day, week, month or year
-#       past: 1 week
-#     907925566089465886:
-
-# :: Connect your AI to Telegram.
-# :: This requires a bot API key. To obtain this, you must speak to
-# :: @BotFather on Telegram.
-
-# telegram:
-  # persona: source
-
-# :: Connect your AI to Twitch.
-
-# twitch token -u -s 'chat:read chat:edit channel:moderate'
-# twitch:
-#   persona: source
-#   focus: trade
-
-# :: Connect your AI to Twitter.
-
-# twitter:
-#   topic: AI alignment
+reddit:
+  enabled: False
+  subs:
+    SubSimGPT2Interactive:
+      chance: 0.001
+    Kunism:
+      chance: 0.5
+    NoRules:
+      chance: 0.05
+    TheInk:
+      chance: 0.5

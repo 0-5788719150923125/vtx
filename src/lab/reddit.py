@@ -21,6 +21,7 @@ def orchestrate(config) -> None:
 
 def validation(config):
     schema = {
+        "enabled": {"type": "boolean"},
         "delay": {
             "type": "dict",
             "schema": {"min": {"type": "integer"}, "max": {"type": "integer"}},

@@ -30,6 +30,9 @@ def main():
         for service in config:
             if service not in allowed_services:
                 continue
+            if config[service] and "enabled" in config[service]:
+                if config[service].get("enabled", True) == False:
+                    continue
             if service not in tasks:
                 module = importlib.import_module(f"lab.{service}")
                 partial = {service: config[service], "personas": config["personas"]}

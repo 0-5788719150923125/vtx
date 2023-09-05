@@ -35,8 +35,8 @@ A simple, opinionated framework for human cloning experiments.
 
 - https://chatbook.dev/
 - https://chatbook.org/
-- http://Alpha8.888/?channel=backbone.lumbar.6/
-- http://Omega8.888.ipns.localhost:8080/?channel=backbone.lumbar.5/
+- http://Alpha8.888/?focus=backbone.lumbar.6/
+- http://Omega8.888.ipns.localhost:8080/?focus=backbone.lumbar.5/
 
 # Instructions
 
@@ -52,3 +52,5 @@ A simple, opinionated framework for human cloning experiments.
 - The "train" task is used to train your models.
 - The "up" task is used to run your bot.
 - Ask me questions.
+
+For the latest, most up-to-date documentation, [please visit this link](https://studio.src.eco/nail/vtx/).

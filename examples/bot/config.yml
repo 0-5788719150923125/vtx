@@ -1,9 +1,10 @@
 source:
-  trade:
-    passive_chance: 0.01
-    active_chance: 0.22
-    personas:
-      - source
+  focus:
+    trade:
+      passive_chance: 0.01
+      active_chance: 0.22
+      personas:
+        - source
 
 personas:
   source:
@@ -11,7 +12,6 @@ personas:
     persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
 mind:
-  model: xhyi/PT_GPTNEO350_ATG
   to_gpu: False
   training:
     peft:

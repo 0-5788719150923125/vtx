@@ -100,7 +100,7 @@ Different users will have different configuration needs. The [Docker Compose Ref
 
 To specify an AI model to use, please set the FOCUS variable in your `.env` file:
 
-```bash
+```sh
 FOCUS='mind'
 ```
 
@@ -132,11 +132,11 @@ The following is a non-exhaustive list of VTX's most commonly-used features.
 The entire lifecycle of VTX is controlled via the Docker Compose CLI (command line interface). To use this interface, you must open a terminal (on Linux/Mac), or Powershell (on Windows), and navigate to the root of your project directory.
 
 To bring the bot online, use this command:
-```bash
+```sh
 docker compose up 
 ```
 To bring the bot online (in headless mode; i.g. detached from the terminal), use this:
-```bash
+```sh
 docker compose up -d
 ```
 To bring the bot down, click inside of your terminal, and press:
@@ -144,23 +144,23 @@ To bring the bot down, click inside of your terminal, and press:
 CTRL + C
 ```
 To destroy the entire project:
-```bash
+```sh
 docker compose down
 ```
 To download the latest updates:
-```bash
+```sh
 docker compose pull
 ```
 To remove old versions from your computer (and thus, free gigabytes worth of space):
-```bash
+```sh
 docker system prune
 ```
 To remove data saved by your model (and free space):
-```bash
+```sh
 docker volume prune
 ```
 To see other options, run each of the following commands. They will print available options to your terminal:
-```bash
+```sh
 docker
 docker compose
 ```
@@ -556,19 +556,19 @@ To connect with Reddit, one must first [register an application](https://www.red
 Now, we must save 4 variables into our `.env` file.
 
 The first is called REDDITCLIENT, and it must contain the value located just under the "personal use script" text, in your Reddit application:
-```bash
+```sh
 REDDITCLIENT='HCM1ZzHzyTqfykD4PpK2bw'
 ```
 The second variable is called REDDITSECRET, which is also found within your registered application's entry:
-```bash
+```sh
 REDDITSECRET='KWuACGdauEMHjjWAQ_i0aRb7a1F-kw'
 ```
 The third variable is called REDDITAGENT, and it must contain your Reddit username:
-```bash
+```sh
 REDDITAGENT='myUsername'
 ```
 The final variable must contain your reddit password:
-```bash
+```sh
 REDDITPASSWORD='mySuperSecretPassword1!'
 ```
 
@@ -663,7 +663,7 @@ We do not condone digital harassment. This is intended to be a feature used for 
 To connect VTX with Discord, you must register an application with the [Discord Developer Portal](https://discord.com/developers/applications). 
 
 First, register the application. Next, click on the "Bot" tab, give your bot a name, and click on "Reset Token". Take this token, and put it into your `.env` file:
-```bash
+```sh
 DISCORDTOKEN='mySuperSecretToken'
 ```
 Returning to the "Bot" tab in the Discord Portal, enable the "PUBLIC BOT", "PRESENCE INTENT", "SERVER MEMBERS INTENT", and "MESSAGE CONTENT INTENT" options.
@@ -731,18 +731,18 @@ Further, you can simply tell the collector to "skip" a server - never downloadin
 To connect your bot with Twitch, you must first [register an application](https://dev.twitch.tv/console). The application may have any name, and it must have a valid URL. Unless you have some other reason to use a different URL, you can just give it "http://localhost:3000" for the OAuth Redirect URL.
 
 Now, place the provided Client ID and Secret into your `.env` file:
-```bash
+```sh
 TWITCHCLIENT='myTwitchClient'
 TWITCHSECRET='mySuperSecretTwitchSecret'
 ```
 Now, you must obtain a Twitch token and refresh token. The easiest way to do this is with the [Twitch CLI](https://dev.twitch.tv/docs/cli/), but their are other methods.
 
 Run this command to obtain both values:
-```bash
+```sh
 twitch token -u -s 'chat:read chat:edit channel:moderate'
 ```
 Place these values into your `.env` file:
-```bash
+```sh
 TWITCHTOKEN='myTwitchToken'
 TWITCHREFRESHTOKEN='myTwitchRefreshToken'
 ```
@@ -771,21 +771,21 @@ twitch:
 To connect with Twitter, one must [register an application](https://developer.twitter.com/en/portal/projects-and-apps). 
 
 The Consumer key and secret must go into your `.env` file:
-```bash
+```sh
 TWITTERCONSUMERKEY="myConsumerKey"
 TWITTERCONSUMERSECRET="MyConsumerSecret"
 ```
 Bearer token must go here:
-```bash
+```sh
 TWITTERBEARERTOKEN="AAAAAAAAAAAAAAAAAAAAAK%2F....."
 ```
 Access token and secret must go here:
-```bash
+```sh
 TWITTERACCESSTOKEN="myAccessToken"
 TWITTERACCESSTOKENSECRET="myAccessSecret"
 ```
 OAuth 2.0 Client ID and Client Secret must go here:
-```bash
+```sh
 TWITTERCLIENTKEY="myAPIKey"
 TWITTERCLIENTSECRET="myAPISecret"
 ```
@@ -816,11 +816,11 @@ twitter:
 ### Telegram
 
 To configure a Telegram bot, you will first need to start a conversation with @BotFather. Use this command to start the application process:
-```bash
+```sh
 /newbot
 ```
 After completing registration, place your API key into this variable, in your `.env` file:
-```bash
+```sh
 TELEGRAMBOTAPIKEY='myTelegramAPIKey'
 ```
 Finally, update your `config.yml` file:
@@ -832,7 +832,7 @@ telegram:
 ### Matrix
 
 Matrix is somewhat under-developed right now. It first requires your credentials in the `.env` file:
-```bash
+```sh
 MATRIXUSER="@myUser:matrix.org"
 MATRIXPASSWORD="myPassword"
 ```

@@ -194,6 +194,12 @@ mind:
     generate_every: 100
     save_every: 1000
 ```
+To set the model to train with [Hivemind](https://github.com/learning-at-home/hivemind):
+```
+mind:
+  training:
+    hivemind: True
+```
 If the "peft" key exists, the model will be trained with Parameter Efficient Fine-Tuning (PEFT) methods:
 ```
 mind:

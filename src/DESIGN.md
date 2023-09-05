@@ -379,6 +379,8 @@ mind:
         - collection1
         - collection2
 ```
+### Datasets
+
 Datasets must defined under a dedicated key called "collections":
 ```
 collections:
@@ -585,3 +587,177 @@ In this example, your bot will follow "myVictim" around Reddit, with a 20% chanc
 
 We do not condone digital harassment. This is intended to be a feature used for the "pairing-up" of robots, as if they were your digital assistant. For example, one of our users has a robot that follows them around Reddit, which acts like a parrot sitting upon their shoulder, screaming "Arrghhh!" like a pirate on 50% of their comments!
 
+### Discord
+
+To connect VTX with Discord, you must register an application with the [Discord Developer Portal](https://discord.com/developers/applications). 
+
+First, register the application. Next, click on the "Bot" tab, give your bot a name, and click on "Reset Token". Take this token, and put it into your `.env` file:
+```
+DISCORDTOKEN='mySuperSecretToken'
+```
+Returning to the "Bot" tab in the Discord Portal, enable the "PUBLIC BOT", "PRESENCE INTENT", "SERVER MEMBERS INTENT", and "MESSAGE CONTENT INTENT" options.
+
+After, click on the "OAuth2" tab, click on "URL Generator", and choose the "bot" scope. Below, give your bot the following permissions:
+
+- Read Messages/View Channels
+- Send Messages
+- Manage Messages
+- Read Message History
+
+Below that, copy the "GENERATED URL", and paste it into your browser. Follow the prompts to add this bot to a Discord server. *You must be an admin* to add bots to servers.
+
+Now, with your bot registered, you must define the "discord" key in your `config.yml`:
+```
+discord:
+```
+Without any other configuration, your bot will be capable of speaking in direct messages, or any server they've been added into.
+
+To tell your bot to "act like" a specic person, in a specific server, define the "persona" key, under a key that matches each server's Discord ID:
+```
+discord:
+  servers:
+    1041331166592106576:
+      persona: brain
+    830300981966143488:
+      persona: pen
+```
+You may also choose to fetch Discord messages, to be used as training data. To do this, you can set 2 keys:
+```
+discord:
+  use_self_token: True
+  export_dms: True
+```
+If "use_self_token" is False, then your messages will be retrieved from the bot's context - which may not have access to as many servers and conversations as your normal Discord user does! 
+
+More likely, you will want to fetch messages as your normal Discord user. While this is *technically* possible, when "use_self_token" is set to True, you should be warned: **The use of self-bots is strictly forbidden by the Discord Terms of Service**.
+
+That said, if you wish to use your normal user account to fetch messages, you will need to [obtain a self-token](https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md), and set "use_self_token" to True.
+
+Now that you're ready to obtain data, use these settings to configure how each server is prepared:
+```
+discord:
+  servers:
+    1041331166592106576:
+      before: 2022-01-01 12:00
+    879744958880428043:
+      after: 2022-01-01 12:00
+    1098975168782667806:
+      past: 1 month
+    922565350598508664:
+      skip: True
+```
+In these examples, your data collector can be configured to fetch data from before a certain date, after a certain date, or "the past X days/weeks/months/years".
+
+Further, you can simply tell the collector to "skip" a server - downloading no messages at all.
+
+### Twitch
+
+To connect your bot with Twitch, you must first [register an application](https://dev.twitch.tv/console). The application may have any name, and it must have a valid URL. Unless you have some other reason to use a different URL, you can just give it "http://localhost:3000" for the OAuth Redirect URL.
+
+Now, place the provided Client ID and Secret into your `.env` file:
+```
+TWITCHCLIENT='myTwitchClient'
+TWITCHSECRET='mySuperSecretTwitchSecret'
+```
+You should also define the name of a channel to join:
+```
+TWITCHCHANNEL='missiontv'
+```
+Now, you must obtain a Twitch token and refresh token. The easiest way to do this is with the [Twitch CLI](https://dev.twitch.tv/docs/cli/), but their are other methods.
+
+Run this command to obtain both values:
+```
+twitch token -u -s 'chat:read chat:edit channel:moderate'
+```
+Place these values into your `.env` file:
+```
+TWITCHTOKEN='myTwitchToken'
+TWITCHREFRESHTOKEN='myTwitchRefreshToken'
+```
+Obnoxiously, refresh tokens will expire, if your bot goes offline for long periods of time. To renew them, use the CLI command again.
+
+If your bot remains online, it will automatically refresh these tokens every 8 hours or so.
+
+Finally, with all of the authentication stuff out of the way, Twitch can be enabled by specifying a key and a persona:
+```
+twitch:
+  persona: architect
+```
+
+### Twitter (X)
+
+To connect with Twitter, one must [register an application](https://developer.twitter.com/en/portal/projects-and-apps). 
+
+The Consumer key and secret must go into your `.env` file:
+```
+TWITTERCONSUMERKEY="myConsumerKey"
+TWITTERCONSUMERSECRET="MyConsumerSecret"
+```
+Bearer token must go here:
+```
+TWITTERBEARERTOKEN="AAAAAAAAAAAAAAAAAAAAAK%2F....."
+```
+Access token and secret must go here:
+```
+TWITTERACCESSTOKEN="myAccessToken"
+TWITTERACCESSTOKENSECRET="myAccessSecret"
+```
+OAuth 2.0 Client ID and Client Secret must go here:
+```
+TWITTERCLIENTKEY="myAPIKey"
+TWITTERCLIENTSECRET="myAPISecret"
+```
+Finally, your bot is ready. First, define the "twitter" key in your `config.yml` file:
+```
+twitter:
+```
+With no other configuration, your bot will periodically post new tweets to your profile page.
+
+To adjust the rate:
+```
+twitter:
+  chance: 0.01
+```
+Your bot will roll a dice, once per minute. In this example, it will have a 1% chance of making a new tweet. Thus, your bot will post something new approximately once every 100 minutes.
+
+To give your bot a series of "prompts" to choose from:
+```
+twitter:
+  topics:
+    - "#G1358 is to be reserved for neuro-symbolic AI, while"
+    - "Neuro-symbolic AI is reserved for #G1358, while"
+    - "Biological systems are akin to #G1358"
+    - "If #G1358 can ever be stopped, it would be"
+    - "What can we do about 
+```
+
+### Telegram
+
+To configure a Telegram bot, you will first need to start a conversation with @BotFather. Use this command to start the application process:
+```
+/newbot
+```
+After completing registration, place your API key into this variable, in your `.env` file:
+```
+TELEGRAMBOTAPIKEY='myTelegramAPIKey'
+```
+Finally, update your `config.yml` file:
+```
+telegram:
+  persona: architect
+```
+
+### Matrix
+
+Matrix is somewhat under-developed right now. It first requires your credentials in the `.env` file:
+```
+MATRIXUSER="@myUser:matrix.org"
+MATRIXPASSWORD="myPassword"
+```
+After, it requires the existence of the "matrix" key in your `config.yml`:
+```
+matrix:
+```
+However, beyond this, the current Matrix implementation has a bunch of hard-coded values, which won't work for you. 
+
+Matrix needs further development.

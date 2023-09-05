@@ -147,7 +147,7 @@ class cortex:
             length = self.get_string_length(ctx)
         if ctx == "":
             return ""
-        return ctx + "\n"
+        return ctx
 
     # Build a local cache of global conversational state
     def build_context(self, message):
@@ -263,14 +263,16 @@ class cortex:
         prompt = prefix
         eos = False
         if mode == "chat":
+            eos = self.ai.tokenizer.convert_tokens_to_ids(
+                self.ai.tokenizer.tokenize(propulsion)[0]
+            )
+
             prompt = propulsion
 
             if ctx == None:
                 ctx = self.context
 
-            eos = self.ai.tokenizer.convert_tokens_to_ids(
-                self.ai.tokenizer.tokenize(propulsion)[0]
-            )
+            ctx.insert(0, prefix)
 
             flat = self.truncate_context(
                 "\n".join(ctx),
@@ -278,13 +280,14 @@ class cortex:
                     "truncate_length", math.floor(self.ai.model_max_length * 0.8)
                 ),
             )
-            history = prefix + "\n" + flat
+
+            history = flat
 
             if bias is not None:
                 if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-                    prompt = propulsion + str(bias) + ship
-
-            prompt = history + prompt
+                    prompt = history + "\n" + propulsion + str(bias) + ship
+            else:
+                prompt = history + "\n" + propulsion
 
         seed = nist_beacon()
 
@@ -332,7 +335,7 @@ class cortex:
                     output = completion[0]
                     break
 
-                generation = completion[0][len(history) :]
+                generation = completion[0][len(history + "\n") :]
                 mentions = "(?:[<][@])(\d+\s*\d*)"
                 variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
                 group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)

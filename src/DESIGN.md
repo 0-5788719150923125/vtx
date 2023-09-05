@@ -1,7 +1,7 @@
 +++
 title = "One Bot to Rule Them All"
 author = "Ink"
-date = "2023-9-5"
+date = "2023-09-05"
 description = "Tutorial for using the VTX AI."
 tags = [
     "ai",

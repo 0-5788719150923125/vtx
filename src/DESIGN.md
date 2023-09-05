@@ -23,6 +23,17 @@ The Vortex (VTX) is a bot-making framework, designed for the creation of AI clon
   - [Docker](#docker)
   - [.env](#env)
   - [config.yml](#configyml)
+- [Options](#options)
+  - [Models](#models)
+  - [Datasets](#datasets)
+  - [Personas](#personas)
+  - [The Source](#the-source)
+  - [Reddit](#reddit)
+  - [Discord](#discord)
+  - [Twitch](#twitch)
+  - [Twitter](#twitter-x)
+  - [Telegram](#telegram)
+  - [Matrix](#matrix)
 
 ## Features
 

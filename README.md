@@ -6,13 +6,13 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 "Go play in the lab."
 
-# Synopsis
+# Goals
 
-A simple, opinionated framework for human cloning experiments.
+To provide a simple, opinionated framework for human cloning experiments.
 
 # API
 
-- ws://localhost:9666/wss
+- ws://localhost:9666/ws
 
 # Interface
 
@@ -53,4 +53,4 @@ A simple, opinionated framework for human cloning experiments.
 - The "up" task is used to run your bot.
 - Ask me questions.
 
-For the latest, most up-to-date documentation, [please visit this link](https://studio.src.eco/nail/vtx/).
+For thorough documentation, [please visit this link](https://studio.src.eco/nail/vtx/).

@@ -93,7 +93,7 @@ services:
       - .env
 
   ctx:
-    image: ghcr.io/0-5788719150923125/src:latest
+    image: ghcr.io/0-5788719150923125/ctx:latest
     network_mode: host
 ```
 

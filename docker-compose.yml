@@ -27,12 +27,9 @@ services:
       FOCUS: ${FOCUS:-heart}
 
   ctx:
-    image: ghcr.io/0-5788719150923125/src:latest
+    image: ghcr.io/0-5788719150923125/ctx:latest
     restart: 'always'
     network_mode: host
-    environment:
-      WEBUI: disabled
-      ANONYMOUS: 'true'
 
   pit:
     image: ghcr.io/0-5788719150923125/bot:latest

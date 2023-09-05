@@ -24,6 +24,7 @@ The Vortex (VTX) is a bot-making framework, designed for the creation of AI clon
   - [.env](#env)
   - [config.yml](#configyml)
 - [Features](#features)
+  - [Orchestration](#orchestration)
   - [Models](#models)
   - [Datasets](#datasets)
   - [Personas](#personas)
@@ -125,6 +126,44 @@ key1:
 ## Features
 
 The following is a non-exhaustive list of VTX's most commonly-used features.
+
+### Orchestration
+
+The entire lifecycle of VTX is controlled via the Docker Compose CLI (command line interface). To use this interface, you must open a terminal (on Linux/Mac), or Powershell (on Windows), and navigate to the root of your project directory.
+
+To bring the bot online, use this command:
+```bash
+docker compose up 
+```
+To bring the bot online (in headless mode; i.g. detached from the terminal), use this:
+```bash
+docker compose up -d
+```
+To bring the bot down, click inside of your terminal, and press:
+```
+CTRL + C
+```
+To destroy the entire project:
+```bash
+docker compose down
+```
+To download the latest updates:
+```bash
+docker compose pull
+```
+To remove old versions from your computer (and thus, free gigabytes worth of space):
+```bash
+docker system prune
+```
+To remove data saved by your model (and free space):
+```bash
+docker volume prune
+```
+To see other options, run each of the following commands. They will print available options to your terminal:
+```bash
+docker
+docker compose
+```
 
 ### Models
 

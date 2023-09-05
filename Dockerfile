@@ -63,6 +63,8 @@ RUN mkdir /.cache && \
     chmod -R 777 /.cache && \
     chmod -R 777 /.triton
 
-CMD ["python3", "src/main.py"]
+ENV FOCUS='mind'
+
+CMD ["python3", "main.py"]
 
 MAINTAINER R

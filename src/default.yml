@@ -147,21 +147,32 @@ heart:
   to_gpu: True
   training:
     gradient_checkpointing: False
+    peft:
+      type: "lora"
 
 mind:
   info: use your heads
   model: xhyi/PT_GPTNEO350_ATG
   to_gpu: False
+  training:
+    peft:
+      type: "lora"
 
 core:
   info: is hotter than hell
   model: cerebras/Cerebras-GPT-590M
   to_gpu: False
+  training:
+    peft:
+      type: "lora"
 
 toe:
   info: nailed to the foot
   model: EleutherAI/gpt-neo-125M
   to_gpu: False
+  training:
+    peft:
+      type: "lora"
 
 # :: Use the following collections of datasets to train your models. Each collection you want
 # :: to use must be specified under your model configuration.

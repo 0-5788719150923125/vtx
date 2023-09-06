@@ -41,7 +41,7 @@ services:
 
   pet:
     image: learningathome/petals:main
-    command: python -m petals.cli.run_server bigscience/bloom-560m --public_name "src" --cache_dir /src/models --num_blocks 24 --torch_dtype float32
+    command: python -m petals.cli.run_server bigscience/bloom-560m --public_name "https://src.eco" --cache_dir /src/models --num_blocks 24 --torch_dtype float32
     restart: 'always'
     network_mode: 'host'
     ipc: host

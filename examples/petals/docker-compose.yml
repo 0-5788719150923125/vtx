@@ -3,7 +3,7 @@ version: '3.9'
 services:
   pet:
     image: learningathome/petals:main
-    command: python -m petals.cli.run_server bigscience/bloom-560m --public_name "https://src.eco" --cache_dir /models --num_blocks 24 --torch_dtype float32
+    command: python -m petals.cli.run_server bigscience/bloom-560m --public_name "src" --cache_dir /models --num_blocks 24 --torch_dtype float32
     network_mode: 'host'
     ipc: host
     deploy:

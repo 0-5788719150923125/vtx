@@ -159,8 +159,8 @@ async def response(config, focus):
     )
 
     if output[0] == False:
-        if focus == "aia":
-            print(output[1])
+        # if focus == "aia":
+        #     print(output[1])
         if len(messages[focus]) > 0:
             messages[focus].pop(0)
         return

@@ -41,6 +41,7 @@ def validation(config):
         "max_new_tokens": {"type": "integer"},
         "petals": {"type": "boolean"},
         "focus": {"type": "dict"},
+        "truncate_length": {"type": "integer"},
         "training": {
             "type": "dict",
             "schema": {

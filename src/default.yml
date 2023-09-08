@@ -27,30 +27,26 @@ soul:
   model: bigscience/bloom-560m
   to_gpu: False
   to_fp16: False
-  max_new_tokens: 333
-  truncate_length: 2048
   petals: True
   training:
     resume: False
     regen: False
-    model_max_length: 1000000000000000019884624838656
-    padding_side: left
-    # peft:
-    #   type: "prefix"
-    #   num_virtual_tokens: 24
     generate_every: 50
-    save_every: 200
+    save_every: 100
+    padding_side: left
+    model_max_length: 256
+    peft:
+      type: "prefix"
+      num_virtual_tokens: 128
     stages:
-      - learning_rate: 0.000333
-        num_steps: 88888
-        warmup_steps: 0
-        batch_size: 3
-        num_layers_freeze: 8
-        gradient_accumulation_steps: 1
+      - learning_rate: 0.001
+        block_size: 256
+        num_steps: 33333
+        warmup_steps: 250
         weight_decay: 0.01
-        max_grad_norm: 0.444
-        scheduler: linear
-        block_size: 444
+        max_grad_norm: 1.23
+        scheduler: cosine
+        batch_size: 6
         train_transformers_only: False
         equalize_datasets: False
         datasets:

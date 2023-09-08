@@ -5,7 +5,14 @@ from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
 from transformers import AutoTokenizer
-from peft import get_peft_model, LoraConfig, PrefixTuningConfig, PeftModel, PeftConfig
+from peft import (
+    get_peft_model,
+    LoraConfig,
+    PrefixTuningConfig,
+    PromptTuningConfig,
+    PeftModel,
+    PeftConfig,
+)
 from pytorch_lightning import loggers
 from utils import ad, bc, config, hash_directory, list_full_paths, nist_beacon
 
@@ -185,13 +192,13 @@ if __name__ == "__main__":
         output_dir = "adapters/" + focus
         p = model["training"].get("peft")
         if resume == True:
-            if p["type"] == "prefix":
-                output_dir = "/src/embeddings/" + focus
-            # ai.model = PeftModel.from_pretrained(
-            #     ai.model, output_dir
-            # )
-            # setattr(ai.model.config, "is_prompt_learning", False)
-            # setattr(ai.model.config, "is_trainable", True)
+            if model.get("petals", False):
+                if p["type"] == "prefix":
+                    output_dir = "/src/embeddings/" + focus
+            # else:
+            #     ai.model = PeftModel.from_pretrained(ai.model, output_dir)
+            #     setattr(ai.model.config, "is_prompt_learning", False)
+            #     setattr(ai.model.config, "is_trainable", True)
         else:
             if p["type"] == "lora":
                 peft_config = LoraConfig(
@@ -204,18 +211,27 @@ if __name__ == "__main__":
                     modules_to_save=p.get("modules_to_save", None),
                 )
             elif p["type"] == "prompt":
-                tuning_mode = "ptune"
-                pre_seq_len = p.get("num_virtual_tokens")
-                output_dir = "/src/embeddings/" + focus
+                if model.get("petals", False):
+                    tuning_mode = "ptune"
+                    pre_seq_len = p.get("num_virtual_tokens")
+                    output_dir = "/src/embeddings/" + focus
+                else:
+                    peft_config = PromptTuningConfig(
+                        task_type="CAUSAL_LM",
+                        num_virtual_tokens=p.get("num_virtual_tokens", 24),
+                    )
+                    # ai.model = get_peft_model(ai.model, peft_config)
             elif p["type"] == "prefix":
-                tuning_mode = "deep_ptune"
-                pre_seq_len = p.get("num_virtual_tokens")
-                output_dir = "/src/embeddings/" + focus
-                # peft_config = PrefixTuningConfig(
-                #     task_type="CAUSAL_LM",
-                #     num_virtual_tokens=p.get("num_virtual_tokens", 24)
-                # )
-            # ai.model = get_peft_model(ai.model, peft_config)
+                if model.get("petals", False):
+                    tuning_mode = "deep_ptune"
+                    pre_seq_len = p.get("num_virtual_tokens")
+                    output_dir = "/src/embeddings/" + focus
+                else:
+                    peft_config = PrefixTuningConfig(
+                        task_type="CAUSAL_LM",
+                        num_virtual_tokens=p.get("num_virtual_tokens", 24),
+                    )
+                    # ai.model = get_peft_model(ai.model, peft_config)
 
     # Instantiate the model object
     ai = aitextgen(
@@ -234,15 +250,12 @@ if __name__ == "__main__":
         launch_model,
         cache_dir="models",
         padding_side=model["training"].get("padding_side", "left"),
+        model_max_length=model["training"].get(
+            "model_max_length", ai.tokenizer.model_max_length
+        ),
         padding="max_length",
         truncation=True,
     )
-
-    if model.get("petals", False):
-        ai.tokenizer.model_max_length = model["training"].get(
-            "model_max_length", 1000000000000000019884624838656
-        )
-        ai.tokenizer.truncation = True
 
     print(ai.tokenizer)
 
@@ -363,7 +376,7 @@ if __name__ == "__main__":
 
     get_trainable = False
     if "peft" in model["training"]:
-        if p["type"] == "lora":
+        if not model.get("petals", False):
             get_trainable = True
             if resume == True:
                 ai.model = PeftModel.from_pretrained(ai.model, output_dir)

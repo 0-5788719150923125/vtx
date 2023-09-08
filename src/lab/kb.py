@@ -50,7 +50,7 @@ class Ink:
             value = entry.get(key)
             if key == "role":
                 self.prompt = self.prompt.replace("{{role}}", value.title())
-            if key == "chance":
+            elif key == "chance":
                 continue
             else:
                 self.prompt = self.prompt + f"\n{key.capitalize()}: {value}"

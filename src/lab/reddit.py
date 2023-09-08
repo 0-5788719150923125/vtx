@@ -9,6 +9,7 @@ import time
 import head
 from pprint import pprint
 from cerberus import Validator
+from events import post_event
 from lab.discord import send_webhook
 
 
@@ -112,7 +113,14 @@ async def manage_submission(title, content):
                     break
             if not edited:
                 submission = await subreddit.submit(title=title, selftext=content)
+                await submission.load()
                 await submission.mod.approve()
+                post_event(
+                    "kb_created",
+                    title=submission.title,
+                    description=submission.selftext,
+                    link=submission.shortlink,
+                )
         except Exception as e:
             print(e)
 

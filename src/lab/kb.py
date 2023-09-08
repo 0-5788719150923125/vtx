@@ -5,6 +5,7 @@ import asyncio
 import math
 import head
 from lab.reddit import manage_submission
+from events import post_event
 from utils import ad, bc, config, read_from_file, write_to_file
 
 
@@ -57,6 +58,8 @@ class Ink:
         self.stage = self.prompt
         if os.path.exists(f):
             self.stage = read_from_file(f)
+        else:
+            self.created = True
         self.full_doc = self.stage
 
     def chunk_prompt(self):

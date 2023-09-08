@@ -3,10 +3,11 @@ import random
 import os
 import re
 import requests
-from utils import ad, bc, bullets, get_identity, propulsion, ship
 import discord
-import head
 from cerberus import Validator
+import head
+from events import subscribe
+from utils import ad, bc, bullets, get_identity, propulsion, ship
 
 response_chance = 3  # out of 100
 mention_self_chance = 88  # out of 100
@@ -17,7 +18,28 @@ def orchestrate(config):
     result = validation(config["discord"])
     if not result:
         return
+    subscribe_events(config)
     asyncio.run(run_client(config))
+
+
+def subscribe_events(config):
+    servers = config["discord"].get("servers")
+    for server in servers:
+        if not servers[server] or not servers[server].get("subscribe"):
+            continue
+        for event in servers[server].get("subscribe"):
+            data = servers[server]
+            subscribe(
+                event,
+                send_webhook,
+                webhook_url=data.get("webhook"),
+                username=data.get("author"),
+                avatar_url=data.get("avatar"),
+                thumbnail=data.get("logo"),
+                footer=data.get("footer", "/r/TheInk"),
+                simplify=data.get("simplify", False),
+                content=event,
+            )
 
 
 def validation(config):
@@ -36,6 +58,13 @@ def validation(config):
                     "skip": {"type": "boolean"},
                     "after": {"type": "string"},
                     "before": {"type": "string"},
+                    "subscribe": {"type": "list"},
+                    "simplify": {"type": "boolean"},
+                    "author": {"type": "string"},
+                    "logo": {"type": "string"},
+                    "avatar": {"type": "string"},
+                    "webhook": {"type": "string"},
+                    "link": {"type": "string"},
                 },
             },
         },
@@ -374,6 +403,7 @@ def send_webhook(
     title: str,
     link: str,
     description: str | None,
+    simplify: False,
     thumbnail: str,
     footer,
     content: str = "For immediate disclosure...",
@@ -395,7 +425,7 @@ def send_webhook(
             }
         ],
     }
-    if description:
+    if description and not simplify:
         data["embeds"][0]["description"] = str(description)
     response = requests.post(webhook_url, json=data)
     if response.status_code == 204:

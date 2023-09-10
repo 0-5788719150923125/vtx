@@ -37,9 +37,8 @@ def main():
                 module = importlib.import_module(f"lab.{service}")
                 partial = {service: config[service], "personas": config["personas"]}
                 task = threading.Thread(
-                    target=getattr(module, "orchestrate"), args=(partial,)
+                    target=getattr(module, "orchestrate"), args=(partial,), name=service
                 )
-                task.name = service
                 task.start()
                 tasks[task.name] = task
                 print(bc.ROOT + f"ONE@{service.upper()}: " + ad.TEXT + "connected")

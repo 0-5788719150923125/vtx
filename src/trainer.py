@@ -195,10 +195,6 @@ if __name__ == "__main__":
             if model.get("petals", False):
                 if p["type"] == "prefix":
                     output_dir = "/src/embeddings/" + focus
-            # else:
-            #     ai.model = PeftModel.from_pretrained(ai.model, output_dir)
-            #     setattr(ai.model.config, "is_prompt_learning", False)
-            #     setattr(ai.model.config, "is_trainable", True)
         else:
             if p["type"] == "lora":
                 peft_config = LoraConfig(
@@ -220,7 +216,6 @@ if __name__ == "__main__":
                         task_type="CAUSAL_LM",
                         num_virtual_tokens=p.get("num_virtual_tokens", 24),
                     )
-                    # ai.model = get_peft_model(ai.model, peft_config)
             elif p["type"] == "prefix":
                 if model.get("petals", False):
                     tuning_mode = "deep_ptune"
@@ -231,7 +226,6 @@ if __name__ == "__main__":
                         task_type="CAUSAL_LM",
                         num_virtual_tokens=p.get("num_virtual_tokens", 24),
                     )
-                    # ai.model = get_peft_model(ai.model, peft_config)
 
     # Instantiate the model object
     ai = aitextgen(

@@ -23,6 +23,8 @@ services:
       - ./src:/src
     env_file:
       - .env
+    environment:
+      FOCUS: ${FOCUS:-heart}
 
   ctx:
     image: ghcr.io/0-5788719150923125/ctx:latest

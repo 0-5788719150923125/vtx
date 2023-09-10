@@ -187,21 +187,6 @@ def strip_emojis(text):
     return emoji_pattern.sub(r"", text)  # no emoji
 
 
-# Write to a log file
-def write_log_file(dir: str, content: str):
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-
-    num = 0
-    path = f"{dir}/test-" + str(num) + ".md"
-
-    while os.path.exists(path):
-        num = num + 1
-        path = f"{dir}/test-" + str(num) + ".md"
-    with open(path, "w") as file:
-        file.write(content)
-
-
 def read_from_file(path: str):
     return open(path).read()
 

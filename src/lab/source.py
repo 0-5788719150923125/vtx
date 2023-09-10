@@ -148,6 +148,9 @@ async def response(config, focus):
         filtered = [
             config["personas"][key] for key in personas if key in config["personas"]
         ]
+        assert (
+            len(filtered) > 0
+        ), f"ERROR: Found no matching personas for the channel ({focus})."
         identity = random.choice(filtered)
         bias = identity.get("bias")
         persona = propulsion + str(bias) + ship + " " + identity.get("persona")

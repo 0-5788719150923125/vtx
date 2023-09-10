@@ -22,6 +22,23 @@ source:
       passive_chance: 0.01
       active_chance: 0.99
 
+mind:
+  info: use your heads
+  model: EleutherAI/gpt-neo-1.3B
+  to_gpu: False
+  training:
+    peft:
+      type: "lora"
+
+heart:
+  info: with everything you got
+  model: RWKV/rwkv-4-430m-pile
+  to_gpu: True
+  training:
+    gradient_checkpointing: False
+    peft:
+      type: "lora"
+
 soul:
   info: because nobody has one
   model: bigscience/bloom-560m
@@ -51,23 +68,6 @@ soul:
         equalize_datasets: False
         datasets:
           - default
-
-heart:
-  info: with everything you got
-  model: RWKV/rwkv-4-430m-pile
-  to_gpu: True
-  training:
-    gradient_checkpointing: False
-    peft:
-      type: "lora"
-
-mind:
-  info: use your heads
-  model: xhyi/PT_GPTNEO350_ATG
-  to_gpu: False
-  training:
-    peft:
-      type: "lora"
 
 core:
   info: is hotter than hell

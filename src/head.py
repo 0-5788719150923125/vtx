@@ -319,7 +319,7 @@ class cortex:
                     repetition_penalty=1.95,
                     encoder_repetition_penalty=0.999,
                     exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                    no_repeat_ngram_size=6,
+                    no_repeat_ngram_size=7,
                     low_memory=self.config.get("low_memory", False),
                     renormalize_logits=True,
                     remove_invalid_values=True,

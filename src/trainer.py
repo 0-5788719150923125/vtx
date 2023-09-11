@@ -411,7 +411,7 @@ if __name__ == "__main__":
             learning_rate=stage.get("learning_rate", 0.005),
             weight_decay=stage.get("weight_decay", 0.01),
             warmup_steps=stage.get("warmup_steps", 0),
-            max_grad_norm=stage.get("max_grad_norm", 0.5),
+            gradient_clip_val=stage.get("gradient_clip_val", 0.5),
             gradient_accumulation_steps=stage.get("gradient_accumulation_steps", 1),
             train_transformers_only=stage.get("train_transformers_only", False),
             use_deepspeed=False,

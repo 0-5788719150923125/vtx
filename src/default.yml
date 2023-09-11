@@ -61,7 +61,7 @@ soul:
         num_steps: 33333
         warmup_steps: 250
         weight_decay: 0.01
-        max_grad_norm: 1.23
+        gradient_clip_val: 1.23
         scheduler: cosine
         batch_size: 6
         train_transformers_only: False

@@ -84,7 +84,7 @@ def validation(config):
                             "num_steps": {"type": "integer"},
                             "warmup_steps": {"type": "integer"},
                             "weight_decay": {"type": "float"},
-                            "max_grad_norm": {"type": "float"},
+                            "gradient_clip_val": {"type": "float"},
                             "scheduler": {
                                 "type": "string",
                                 "allowed": [

@@ -318,6 +318,7 @@ async def submission(reddit, config):
                 for webhook in webhooks:
                     send_webhook(
                         webhook_url=webhook,
+                        simplify=False,
                         username="/u/" + server.get("author", submission.author.name),
                         avatar_url=server.get("avatar", submission.author.icon_img),
                         content="A new Reddit submission:",

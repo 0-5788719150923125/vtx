@@ -77,13 +77,13 @@ class Ink:
             self.create_prompt(entry)
             self.chunk_prompt()
             output = await head.ctx.prompt(prompt=self.stage, max_new_tokens=33)
+            if output[0] == False:
+                print(output[1])
+                return
             if self.combine:
                 self.combine = False
                 cat = self.full_doc + output
             cat = output
-            if output[0] == False:
-                print(output[1])
-                return
             write_to_file(
                 path=f"/gen/{self.type}", file_name=f"the-{self.role}.md", content=cat
             )

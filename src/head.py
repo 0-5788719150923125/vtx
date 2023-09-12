@@ -409,6 +409,8 @@ class cortex:
 
                 if completion:
                     output = completion[0].replace(r"\n", "\n")
+                    if output.endswith(propulsion):
+                        output = output[:-1]
                     break
 
                 output = [False, prompt]

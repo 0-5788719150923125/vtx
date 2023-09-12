@@ -89,7 +89,7 @@ async def client(config):
                 subscribe_submissions(reddit, config),
                 submission(reddit, config),
                 stalker(reddit, config),
-                manage_submissions(),
+                manage_submissions(reddit, config),
             )
         except Exception as e:
             logging.error(e)
@@ -102,46 +102,37 @@ async def load_submissions(title, content):
     queued.append({"title": title, "content": content})
 
 
-async def manage_submissions():
+async def manage_submissions(reddit, config):
     global queued
-    async with asyncpraw.Reddit(
-        client_id=os.environ["REDDITCLIENT"],
-        client_secret=os.environ["REDDITSECRET"],
-        user_agent="u/" + os.environ["REDDITAGENT"],
-        username=os.environ["REDDITAGENT"],
-        password=os.environ["REDDITPASSWORD"],
-    ) as reddit:
-        subreddit = await reddit.subreddit("TheInk")
-        edited = False
-        try:
-            while True:
-                time.sleep(6.66)
-                if len(queued) > 0:
-                    item = queued.pop(0)
-                    title = item["title"]
-                    content = item["content"]
-                    async for submission in subreddit.search(
-                        query=f"title:'{title}'", syntax="lucene"
-                    ):
-                        if submission.title == title:
-                            await submission.edit(body=content)
-                            await submission.mod.approve()
-                            edited = True
-                            break
-                    if not edited:
-                        submission = await subreddit.submit(
-                            title=title, selftext=content
-                        )
-                        await submission.load()
+    subreddit = await reddit.subreddit("TheInk")
+    edited = False
+    try:
+        while True:
+            await asyncio.sleep(6.66)
+            if len(queued) > 0:
+                item = queued.pop(0)
+                title = item["title"]
+                content = item["content"]
+                async for submission in subreddit.search(
+                    query=f"title:'{title}'", syntax="lucene"
+                ):
+                    if submission.title == title:
+                        await submission.edit(body=content)
                         await submission.mod.approve()
-                        post_event(
-                            "new_reddit_submission",
-                            title=submission.title,
-                            description=submission.selftext,
-                            link=submission.shortlink,
-                        )
-        except Exception as e:
-            logging.error(e)
+                        edited = True
+                        break
+                if not edited:
+                    submission = await subreddit.submit(title=title, selftext=content)
+                    await submission.load()
+                    await submission.mod.approve()
+                    post_event(
+                        "new_reddit_submission",
+                        title=submission.title,
+                        description=submission.selftext,
+                        link=submission.shortlink,
+                    )
+    except Exception as e:
+        logging.error(e)
 
 
 async def stalker(reddit, config):

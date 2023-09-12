@@ -14,7 +14,7 @@ from aitextgen import aitextgen
 import logging
 from pprint import pprint
 from apscheduler.schedulers.background import BackgroundScheduler
-from transformers import GenerationConfig
+from transformers import GenerationConfig, AutoModelForQuestionAnswering
 from cerberus import Validator
 from utils import (
     ad,
@@ -288,8 +288,6 @@ class cortex:
         max_attempts = 10
         while attempt < max_attempts:
             try:
-                # output = None
-
                 temperature = 1.23
                 seed = nist_beacon()
 
@@ -356,8 +354,6 @@ class cortex:
     def prompt(
         self,
         prompt="",
-        ctx=None,
-        bias=None,
         max_new_tokens: int = 111,
         decay_after_length: int = 23,
         decay_factor: float = 0.000023,
@@ -373,8 +369,6 @@ class cortex:
         max_attempts = 10
         while attempt < max_attempts:
             try:
-                output = None
-
                 temperature = 1.23
                 seed = nist_beacon()
 
@@ -414,6 +408,77 @@ class cortex:
                 print(e)
                 output = [False, e]
 
+        self.active = False
+        return output
+
+    @to_thread
+    def query(
+        self,
+        question="",
+        max_new_tokens: int = 111,
+        decay_after_length: int = 23,
+        decay_factor: float = 0.000023,
+    ):
+        """
+        Not functioning. This will require loading the model into QuestionAnswering
+        mode, as well as attaching appropriate adapters.
+        """
+
+        while self.active == True or not self.ai:
+            time.sleep(1)
+
+        self.active = True
+        # print(self.ai.model.config.supports_mode("question_answering"))
+        # self.ai.model.config.model_type = "question_answering"
+        self.ai.model = AutoModelForQuestionAnswering(self.ai.model)
+
+        max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
+
+        attempt = 0
+        max_attempts = 10
+        while attempt < max_attempts:
+            try:
+                temperature = 1.23
+                seed = nist_beacon()
+
+                if attempt > 0:
+                    decay_factor = decay_factor / 2
+                    temperature = temperature / 2
+
+                attempt += 1
+
+                # https://huggingface.co/docs/transformers/main_classes/text_generation
+                completion = self.ai.generate(
+                    prompt=question,
+                    n=1,
+                    do_sample=True,
+                    min_length=23,
+                    max_new_tokens=max_new_tokens,
+                    temperature=temperature,
+                    eta_cutoff=0.0003,
+                    penalty_alpha=0.6,
+                    top_k=4,
+                    repetition_penalty=1.95,
+                    encoder_repetition_penalty=0.999,
+                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    no_repeat_ngram_size=7,
+                    low_memory=self.config.get("low_memory", False),
+                    renormalize_logits=True,
+                    remove_invalid_values=True,
+                    max_time=360,
+                    seed=seed[1],
+                    return_as_list=True,
+                )
+                print(completion)
+
+                output = completion[0]
+                break
+
+            except Exception as e:
+                print(e)
+                output = [False, e]
+
+        self.ai.model.config.model_type = "causal_lm"
         self.active = False
         return output
 

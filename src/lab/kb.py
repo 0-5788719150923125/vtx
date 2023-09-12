@@ -101,19 +101,12 @@ class Ink:
                 file_name=f"the-{self.role}.md",
                 content=content,
             )
-            await manage_submission(title=self.title, content=content)
-            # post_event(
-            #     "kb_created",
-            #     title=submission.title,
-            #     description=submission.selftext,
-            #     link=submission.shortlink,
-            # )
-            print(
-                bc.CORE
-                + "INK@KB: "
-                + ad.TEXT
-                + f"{self.type.title()}: The {self.title}"
+            post_event(
+                "kb_updated",
+                title=self.title,
+                content=content,
             )
+            print(bc.CORE + "INK@KB: " + ad.TEXT + self.title)
 
         except Exception as e:
             logging.error(e)

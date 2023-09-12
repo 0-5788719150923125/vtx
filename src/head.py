@@ -356,7 +356,7 @@ class cortex:
         self,
         prompt="",
         max_new_tokens: int = 111,
-        decay_after_length: int = 23,
+        decay_after_length: int = 66,
         decay_factor: float = 0.000023,
     ):
         eos = self.ai.tokenizer.convert_tokens_to_ids(

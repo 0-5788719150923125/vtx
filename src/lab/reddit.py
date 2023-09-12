@@ -10,7 +10,7 @@ import logging
 import head
 from pprint import pprint
 from cerberus import Validator
-from events import post_event
+from events import post_event, subscribe_event
 from lab.discord import send_webhook
 
 
@@ -88,42 +88,57 @@ async def client(config):
                 subscribe_submissions(reddit, config),
                 submission(reddit, config),
                 stalker(reddit, config),
+                listener(reddit, config),
             )
         except Exception as e:
             logging.error(e)
 
 
+async def listener(reddit, config) -> None:
+    try:
+        subscribe_event("kb_updated", manage_submission)
+    except Exception as e:
+        logging.error(e)
+
+
 async def manage_submission(title, content):
-    async with asyncpraw.Reddit(
-        client_id=os.environ["REDDITCLIENT"],
-        client_secret=os.environ["REDDITSECRET"],
-        user_agent="u/" + os.environ["REDDITAGENT"],
-        username=os.environ["REDDITAGENT"],
-        password=os.environ["REDDITPASSWORD"],
-    ) as reddit:
-        try:
-            subreddit = await reddit.subreddit("TheInk")
-            edited = False
-            async for submission in subreddit.search(
-                query=f"title:'{title}'", syntax="lucene"
-            ):
-                if submission.title == title:
-                    await submission.edit(body=content)
+    try:
+        async with asyncpraw.Reddit(
+            client_id=os.environ["REDDITCLIENT"],
+            client_secret=os.environ["REDDITSECRET"],
+            user_agent="u/" + os.environ["REDDITAGENT"],
+            username=os.environ["REDDITAGENT"],
+            password=os.environ["REDDITPASSWORD"],
+        ) as reddit:
+            try:
+                subreddit = await reddit.subreddit("TheInk")
+                edited = False
+                async for submission in subreddit.search(
+                    query=f"title:'{title}'", syntax="lucene"
+                ):
+                    try:
+                        print(submission.title)
+                        if submission.title == title:
+                            await submission.edit(body=content)
+                            await submission.mod.approve()
+                            edited = True
+                            break
+                    except Exception as e:
+                        logging.error(e)
+                if not edited:
+                    submission = await subreddit.submit(title=title, selftext=content)
+                    await submission.load()
                     await submission.mod.approve()
-                    edited = True
-                    break
-            if not edited:
-                submission = await subreddit.submit(title=title, selftext=content)
-                await submission.load()
-                await submission.mod.approve()
-                post_event(
-                    "kb_created",
-                    title=submission.title,
-                    description=submission.selftext,
-                    link=submission.shortlink,
-                )
-        except Exception as e:
-            logging.error(e)
+                    post_event(
+                        "new_reddit_submission",
+                        title=submission.title,
+                        description=submission.selftext,
+                        link=submission.shortlink,
+                    )
+            except Exception as e:
+                logging.error(e)
+    except Exception as e:
+        logging.error(e)
 
 
 async def stalker(reddit, config):

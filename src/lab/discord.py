@@ -7,7 +7,7 @@ import logging
 import discord
 from cerberus import Validator
 import head
-from events import subscribe
+from events import subscribe_event
 from utils import ad, bc, bullets, get_identity, propulsion, ship
 
 response_chance = 3  # out of 100
@@ -30,7 +30,7 @@ def subscribe_events(config):
             continue
         for event in servers[server].get("subscribe"):
             data = servers[server]
-            subscribe(
+            subscribe_event(
                 event,
                 send_webhook,
                 webhook_url=data.get("webhook"),

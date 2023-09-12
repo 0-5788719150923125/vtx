@@ -16,10 +16,9 @@ async def client(config):
     for target in config:
         if "prompt" in config[target]:
             try:
-                output = await head.ctx.gen(
-                    prefix=config[target].get("prompt"),
+                output = await head.ctx.prompt(
+                    prompt=config[target].get("prompt"),
                     max_new_tokens=1536,
-                    mode="prompt",
                     decay_after_length=512,
                     decay_factor=0.00000023,
                 )

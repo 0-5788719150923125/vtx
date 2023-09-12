@@ -128,7 +128,7 @@ class Client(discord.Client):
                 if str(recent_author_id) != str(self.user.id):
                     bias = recent_author_id
 
-                output = await head.ctx.gen(bias, context)
+                output = await head.ctx.chat(bias, context)
                 if output[0] == False:
                     return
 
@@ -221,7 +221,7 @@ class Client(discord.Client):
                             prefix = persona.get("persona")
                             no_transform = True
 
-                output = await head.ctx.gen(bias=bias, prefix=prefix)
+                output = await head.ctx.chat(bias=bias, prefix=prefix)
 
                 if output[0] == False:
                     return
@@ -293,7 +293,7 @@ class Client(discord.Client):
                     )
                 if str(message.channel.type) == "private":
                     bias = str(user.id)
-                    output = await head.ctx.gen(bias=bias, ctx=context)
+                    output = await head.ctx.chat(bias=bias, ctx=context)
                     if output[0] == False:
                         return
                     head.ctx.replace(
@@ -306,7 +306,7 @@ class Client(discord.Client):
                     )
                     transformed = output[1]
                 else:
-                    output = await head.ctx.gen(ctx=context)
+                    output = await head.ctx.chat(ctx=context)
                     if output[0] == False:
                         return
                     head.ctx.replace(

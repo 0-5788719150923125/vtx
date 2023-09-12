@@ -29,7 +29,7 @@ async def client(config) -> None:
             return
         persona = config["personas"].get(config["telegram"].get("persona"))
         bias = persona.get("bias", get_identity())
-        output = await head.ctx.gen(
+        output = await head.ctx.chat(
             bias=bias,
             prefix=persona.get(
                 "prefix",

@@ -75,7 +75,7 @@ async def subscribe(user, password, config) -> None:
             task = asyncio.create_task(client.room_typing(room.room_id))
             await asyncio.gather(task)
 
-            completion = await head.ctx.gen(
+            completion = await head.ctx.chat(
                 prefix="I am Ryan's bot, and I am connected to GUN's Matrix room.",
                 bias=bias,
             )

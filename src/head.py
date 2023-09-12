@@ -236,7 +236,7 @@ class cortex:
             return
 
     @to_thread
-    def gen(
+    def chat(
         self,
         prefix=None,
         ctx=None,
@@ -244,7 +244,6 @@ class cortex:
         max_new_tokens: int = 111,
         decay_after_length: int = 23,
         decay_factor: float = 0.000023,
-        mode: str = "chat",
     ):
         while self.active == True or not self.ai:
             time.sleep(1)
@@ -258,40 +257,117 @@ class cortex:
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
-        prompt = prefix
-        eos = False
-        if mode == "chat":
-            eos = self.ai.tokenizer.convert_tokens_to_ids(
-                self.ai.tokenizer.tokenize(propulsion)[0]
-            )
+        eos = self.ai.tokenizer.convert_tokens_to_ids(
+            self.ai.tokenizer.tokenize(propulsion)[0]
+        )
 
-            prompt = propulsion
+        context = self.context
+        if ctx:
+            context = ctx.copy()
 
-            context = self.context
-            if ctx:
-                context = ctx.copy()
+        context.insert(0, prefix)
 
-            context.insert(0, prefix)
+        flat = self.truncate_context(
+            "\n".join(context),
+            self.config.get(
+                "truncate_length", math.floor(self.ai.model_max_length * 0.8)
+            ),
+        )
 
-            flat = self.truncate_context(
-                "\n".join(context),
-                self.config.get(
-                    "truncate_length", math.floor(self.ai.model_max_length * 0.8)
-                ),
-            )
+        history = flat + "\n"
 
-            history = flat + "\n"
+        prompt = history + propulsion
+        if bias:
+            assert len(str(bias)) in [
+                18,
+                19,
+            ], f"The given bias ({str(bias)}) is of the wrong length."
+            prompt += str(bias) + ship
 
-            if bias is not None:
-                assert len(str(bias)) in [
-                    18,
-                    19,
-                ], f"The given bias ({str(bias)}) is of the wrong length."
-                prompt = history + propulsion + str(bias) + ship
-            else:
-                prompt = history + propulsion
+        attempt = 0
+        max_attempts = 10
+        while attempt < max_attempts:
+            try:
+                # output = None
 
-        petals = self.config.get("petals", False)
+                temperature = 1.23
+                seed = nist_beacon()
+
+                if attempt > 0:
+                    decay_factor = decay_factor / 2
+                    temperature = temperature / 2
+
+                attempt += 1
+
+                # https://huggingface.co/docs/transformers/main_classes/text_generation
+                completion = self.ai.generate(
+                    prompt=prompt,
+                    n=1,
+                    do_sample=True,
+                    min_length=23,
+                    max_new_tokens=max_new_tokens,
+                    temperature=temperature,
+                    eta_cutoff=0.0003,
+                    penalty_alpha=0.6,
+                    top_k=4,
+                    repetition_penalty=1.95,
+                    encoder_repetition_penalty=0.999,
+                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    no_repeat_ngram_size=7,
+                    low_memory=self.config.get("low_memory", False),
+                    renormalize_logits=True,
+                    remove_invalid_values=True,
+                    max_time=360,
+                    seed=seed[1],
+                    return_as_list=True,
+                    eos_token_id=eos,
+                    pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
+                )
+
+                # This doesn't work very well. There are instances where the tokenizer
+                # cannot perfectly replicate the input, causing a mismatch between the
+                # completion and the previous history.
+                generation = completion[0].replace(history, "")
+                mentions = "(?:[<][@])(\d+\s*\d*)"
+                variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
+                group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
+                if (
+                    group is None
+                    or propulsion in group[3]
+                    or bool(re.search(mentions, group[3]))
+                    or bool(re.search(variables, group[3]))
+                    or group[3][:1] in [">", "~", '"', " "]
+                ):
+                    output = [False, context]
+                    if attempt == max_attempts:
+                        raise Exception(f"INVALID OUTPUT: {group[3]}")
+                    continue
+                output = [group[2], group[3], seed[0], context]
+                break
+
+            except Exception as e:
+                print(e)
+                output = [False, e]
+
+        self.active = False
+        return output
+
+    @to_thread
+    def prompt(
+        self,
+        prompt="",
+        ctx=None,
+        bias=None,
+        max_new_tokens: int = 111,
+        decay_after_length: int = 23,
+        decay_factor: float = 0.000023,
+    ):
+        while self.active == True or not self.ai:
+            time.sleep(1)
+
+        self.active = True
+
+        max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
         attempt = 0
         max_attempts = 10
@@ -329,33 +405,9 @@ class cortex:
                     max_time=360,
                     seed=seed[1],
                     return_as_list=True,
-                    eos_token_id=eos,
-                    pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
                 )
 
-                if mode == "prompt":
-                    output = completion[0]
-                    break
-
-                # This doesn't work very well. There are instances where the tokenizer
-                # cannot perfectly replicate the input, causing a mismatch between the
-                # completion and the previous history.
-                generation = completion[0].replace(history, "")
-                mentions = "(?:[<][@])(\d+\s*\d*)"
-                variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
-                group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
-                if (
-                    group is None
-                    or propulsion in group[3]
-                    or bool(re.search(mentions, group[3]))
-                    or bool(re.search(variables, group[3]))
-                    or group[3][:1] in [">", "~", '"', " "]
-                ):
-                    output = [False, context]
-                    if attempt == max_attempts:
-                        raise Exception(f"INVALID OUTPUT: {group[3]}")
-                    continue
-                output = [group[2], group[3], seed[0], context]
+                output = completion[0]
                 break
 
             except Exception as e:

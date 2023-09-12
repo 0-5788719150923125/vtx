@@ -160,7 +160,7 @@ async def stalker(reddit, config):
                     else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
                 )
 
-                generation = await head.ctx.gen(
+                generation = await head.ctx.chat(
                     ctx=context,
                     bias=bias,
                     prefix=prompt,
@@ -216,7 +216,7 @@ async def stalker(reddit, config):
                     else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
                 )
 
-                generation = await head.ctx.gen(
+                generation = await head.ctx.chat(
                     ctx=context,
                     bias=bias,
                     prefix=prompt,
@@ -291,10 +291,9 @@ async def submission(reddit, config):
                 subreddit = await reddit.subreddit("TheInk")
                 title = server.get("title", "On the 5th of September...")
                 prompt = server.get("prompt", "On the 5th of September, 2024,")
-                output = await head.ctx.gen(
-                    prefix=str(prompt),
+                output = await head.ctx.prompt(
+                    prompt=prompt,
                     max_new_tokens=2048,
-                    mode="prompt",
                     decay_after_length=1024,
                     decay_factor=0.00000023,
                 )
@@ -408,7 +407,7 @@ async def subscribe_submissions(reddit, config):
                 propulsion + str(op) + ship + " " + submission.title,
                 propulsion + str(op) + ship + " " + submission.selftext,
             ]
-            generation = await head.ctx.gen(
+            generation = await head.ctx.chat(
                 ctx=context,
                 prefix=prompt,
                 bias=bias,
@@ -503,7 +502,7 @@ async def subscribe_comments(reddit, config):
                 if ignore:
                     continue
 
-            generation = await head.ctx.gen(
+            generation = await head.ctx.chat(
                 ctx=context,
                 prefix=prompt,
                 decay_after_length=66,

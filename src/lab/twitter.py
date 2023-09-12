@@ -15,12 +15,11 @@ async def loop(config):
     while True:
         if random.random() < config.get("chance", 0.001):
             topics = config.get("topics", ["AI alignment"])
-            output = await head.ctx.gen(
-                prefix=random.choice(topics),
+            output = await head.ctx.prompt(
+                prompt=random.choice(topics),
                 max_new_tokens=56,
                 decay_after_length=6,
                 decay_factor=0.23,
-                mode="prompt",
             )
             if output[0] == False:
                 continue

@@ -72,7 +72,7 @@ async def client(config):
                     head.ctx.build_context(
                         propulsion + messenger + ship + " " + message.text
                     )
-                    output = await head.ctx.gen(
+                    output = await head.ctx.chat(
                         bias=bias, prefix=prefix, max_new_tokens=44
                     )
                     if output[0] == False:

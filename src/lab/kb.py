@@ -75,9 +75,7 @@ class Ink:
             self.type = t
             self.create_prompt(entry)
             self.chunk_prompt()
-            output = await head.ctx.gen(
-                mode="prompt", prefix=self.stage, max_new_tokens=33
-            )
+            output = await head.ctx.prompt(prompt=self.stage, max_new_tokens=33)
             if self.combine:
                 self.combine = False
                 cat = self.full_doc + output

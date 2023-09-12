@@ -90,10 +90,10 @@ def fetch_from_discord():
 
     # For every server listed in config, iterate over options, and download messages
     for server in config["discord"]["servers"]:
-        print("exporting " + server)
+        print("exporting " + str(server))
         skip = False
         s = config["discord"]["servers"][server]
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{server}" -t "{discord_token}" -o "/gen/discord/g-%g-%c.json" -f "JSON"'
+        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{str(server)}" -t "{discord_token}" -o "/gen/discord/g-%g-%c.json" -f "JSON"'
         if s:
             if "skip" in s:
                 skip = s.get("skip", False)
@@ -315,8 +315,8 @@ def fetch_from_reddit():
 
                 author = submission.author
                 if author:
-                    if author.name in config["reddit"]["training"]["replacers"]:
-                        bias = config["reddit"]["training"]["replacers"][author.name]
+                    if author.name in config["reddit"]["replacers"]:
+                        bias = config["reddit"]["replacers"][author.name]
 
                 context = []
                 with open(
@@ -351,10 +351,8 @@ def fetch_from_reddit():
                     bias = get_identity()
                     author = reply.author
                     if author:
-                        if author.name in config["reddit"]["training"]["replacers"]:
-                            bias = config["reddit"]["training"]["replacers"][
-                                author.name
-                            ]
+                        if author.name in config["reddit"]["replacers"]:
+                            bias = config["reddit"]["replacers"][author.name]
 
                     sanitized = re.sub(
                         r"http\S+",

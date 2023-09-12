@@ -146,8 +146,6 @@ class cortex:
         while length >= max_tokens:
             ctx = ctx[5:]
             length = self.get_string_length(ctx)
-        if ctx == "":
-            return ""
         return ctx
 
     # Build a local cache of global conversational state
@@ -260,7 +258,6 @@ class cortex:
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
-        # bias the prompt
         prompt = prefix
         eos = False
         if mode == "chat":
@@ -282,28 +279,30 @@ class cortex:
                 ),
             )
 
-            history = flat
+            history = flat + "\n"
 
             if bias is not None:
                 if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-                    prompt = history + "\n" + propulsion + str(bias) + ship
+                    prompt = history + propulsion + str(bias) + ship
             else:
-                prompt = history + "\n" + propulsion
-
-        seed = nist_beacon()
+                prompt = history + propulsion
 
         petals = self.config.get("petals", False)
 
-        attempt = 1
-        max_attempts = 9
-        while attempt <= max_attempts:
+        attempt = 0
+        max_attempts = 10
+        while attempt < max_attempts:
             try:
                 output = None
 
                 temperature = 1.23
+                seed = nist_beacon()
+
                 if attempt > 0:
                     decay_factor = decay_factor / 2
                     temperature = temperature / 2
+
+                attempt += 1
 
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.ai.generate(
@@ -330,13 +329,14 @@ class cortex:
                     pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
                 )
 
-                self.active = False
-
                 if mode == "prompt":
                     output = completion[0]
                     break
 
-                generation = completion[0][len(history + "\n") :]
+                # This doesn't work very well. There are instances where the tokenizer
+                # cannot perfectly replicate the input, causing a mismatch between the
+                # completion and the previous history.
+                generation = completion[0].replace(history, "")
                 mentions = "(?:[<][@])(\d+\s*\d*)"
                 variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
                 group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
@@ -347,15 +347,15 @@ class cortex:
                     or bool(re.search(variables, group[3]))
                     or group[3][:1] in [">", "~", '"', " "]
                 ):
-                    attempt += 1
                     output = [False, ctx]
+                    if attempt == max_attempts:
+                        raise Exception(f"INVALID OUTPUT: {group[3]}")
                     continue
                 output = [group[2], group[3], seed[0], ctx]
                 break
 
             except Exception as e:
                 print(e)
-                attempt += 1
                 output = [False, e]
 
         self.active = False

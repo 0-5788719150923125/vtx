@@ -267,13 +267,14 @@ class cortex:
 
             prompt = propulsion
 
-            if ctx == None:
-                ctx = self.context
+            context = self.context
+            if ctx:
+                context = ctx.copy()
 
-            ctx.insert(0, prefix)
+            context.insert(0, prefix)
 
             flat = self.truncate_context(
-                "\n".join(ctx),
+                "\n".join(context),
                 self.config.get(
                     "truncate_length", math.floor(self.ai.model_max_length * 0.8)
                 ),
@@ -282,8 +283,11 @@ class cortex:
             history = flat + "\n"
 
             if bias is not None:
-                if (len(str(bias)) == 18) or (len(str(bias)) == 19):
-                    prompt = history + propulsion + str(bias) + ship
+                assert len(str(bias)) in [
+                    18,
+                    19,
+                ], f"The given bias ({str(bias)}) is of the wrong length."
+                prompt = history + propulsion + str(bias) + ship
             else:
                 prompt = history + propulsion
 
@@ -347,11 +351,11 @@ class cortex:
                     or bool(re.search(variables, group[3]))
                     or group[3][:1] in [">", "~", '"', " "]
                 ):
-                    output = [False, ctx]
+                    output = [False, context]
                     if attempt == max_attempts:
                         raise Exception(f"INVALID OUTPUT: {group[3]}")
                     continue
-                output = [group[2], group[3], seed[0], ctx]
+                output = [group[2], group[3], seed[0], context]
                 break
 
             except Exception as e:

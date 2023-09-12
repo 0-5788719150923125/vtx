@@ -189,7 +189,7 @@ class cortex:
         try:
             torch.cuda.empty_cache()
         except Exception as e:
-            print(e)
+            logging.error(e)
 
         gc.collect()
 
@@ -230,7 +230,7 @@ class cortex:
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))
             self.active = False
         except Exception as e:
-            print(e)
+            logging.error(e)
             time.sleep(5)
             self.active = False
             self.loader(self.focus)
@@ -345,7 +345,7 @@ class cortex:
                 break
 
             except Exception as e:
-                print(e)
+                logging.error(e)
                 output = [False, e]
 
         self.active = False
@@ -359,6 +359,10 @@ class cortex:
         decay_after_length: int = 23,
         decay_factor: float = 0.000023,
     ):
+        eos = self.ai.tokenizer.convert_tokens_to_ids(
+            self.ai.tokenizer.tokenize(propulsion)[0]
+        )
+
         while self.active == True or not self.ai:
             time.sleep(1)
 
@@ -399,14 +403,21 @@ class cortex:
                     remove_invalid_values=True,
                     max_time=360,
                     seed=seed[1],
+                    eos_token_id=eos,
                     return_as_list=True,
                 )
 
-                output = completion[0]
-                break
+                if completion:
+                    output = completion[0]
+                    break
+
+                output = [False, prompt]
+                if attempt == max_attempts:
+                    raise Exception(f"FAILED PROMPT: {prompt}")
+                continue
 
             except Exception as e:
-                print(e)
+                logging.error(e)
                 output = [False, e]
 
         self.active = False
@@ -476,7 +487,7 @@ class cortex:
                 break
 
             except Exception as e:
-                print(e)
+                logging.error(e)
                 output = [False, e]
 
         self.ai.model.config.model_type = "causal_lm"

@@ -4,6 +4,7 @@ import random
 import time
 import tweepy
 import head
+import logging
 from utils import ad, bc
 
 
@@ -23,7 +24,10 @@ async def loop(config):
             )
             if output[0] == False:
                 continue
-            await tweet(output)
+            try:
+                await tweet(output)
+            except Exception as e:
+                logging.error(e)
         time.sleep(66.6)
 
 

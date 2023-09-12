@@ -4,6 +4,7 @@ import shutil
 import secrets
 import random
 import string
+import logging
 from pprint import pprint
 import yaml
 import json
@@ -38,7 +39,7 @@ try:
             user_config["reddit"]["enabled"] = True
         config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
 except Exception as e:
-    print(e)
+    logging.error(e)
     config = default_config
 
 pprint(config)

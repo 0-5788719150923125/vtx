@@ -95,7 +95,7 @@ async def subscribe(user, password, config) -> None:
             print(bc.CORE + "INK@MATRIX: " + ad.TEXT + response)
 
         except Exception as e:
-            print(e)
+            logging.error(e)
 
     client.add_event_callback(message_callback, RoomMessage)
 

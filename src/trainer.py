@@ -1,6 +1,7 @@
 import shutil
 import random
 import os
+import logging
 from aitextgen.TokenDataset import TokenDataset, merge_datasets
 from aitextgen.tokenizers import train_tokenizer
 from aitextgen import aitextgen
@@ -119,7 +120,7 @@ def create_dataset(
                         intermediate.write(string + "\n\n")
 
         except Exception as e:
-            print(e)
+            logging.error(e)
 
     if line_by_line == True:
         collection = []

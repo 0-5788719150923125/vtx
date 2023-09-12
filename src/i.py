@@ -5,6 +5,7 @@ import json
 import csv
 import os
 import sys
+import logging
 from utils import config, get_identity, get_past_datetime, propulsion, ship
 from bs4 import BeautifulSoup
 from pprint import pprint
@@ -47,7 +48,7 @@ def fetch_from_matrix():
                     break
 
             except Exception as e:
-                print(f"Error fetching room messages: {e}")
+                logging.error(e)
                 break
 
         await client.sync_forever(timeout=30000, full_state=True)
@@ -243,7 +244,7 @@ def prepare_discord_messages():
                                         )
                                         txt_file.write(f"{content}\n".format(content))
                             except Exception as e:
-                                print(e)
+                                logging.error(e)
 
                         try:
                             sanitized = sanitizer(i["content"])
@@ -257,10 +258,10 @@ def prepare_discord_messages():
                             content = propulsion + author_id + ship + " " + sanitized
                             txt_file.write(f"{content}\n".format(content))
                         except Exception as e:
-                            print(e)
+                            logging.error(e)
 
         except Exception as e:
-            print(e)
+            logging.error(e)
 
 
 # Download messages from subreddits
@@ -497,5 +498,5 @@ def create_evil():
                     try:
                         evils.append([l[i], r[i]])
                     except Exception as e:
-                        print(e)
+                        logging.error(e)
         csvwriter.writerows(evils)

@@ -3,6 +3,7 @@ import random
 import os
 import re
 import requests
+import logging
 import discord
 from cerberus import Validator
 import head
@@ -137,11 +138,8 @@ class Client(discord.Client):
                 await messages[focus_on].reply(transformed)
 
             except Exception as e:
-                print(bc.CORE + str(e) + ad.TEXT)
-                try:
-                    self.discord_task = self.loop.create_task(self.think())
-                except Exception as e:
-                    print(e)
+                logging.error(e)
+                self.discord_task = self.loop.create_task(self.think())
 
     # check every Discord message
     async def on_message(self, message):
@@ -230,7 +228,7 @@ class Client(discord.Client):
                 else:
                     transformed = transformer([output[0], output[1]])
         except Exception as e:
-            print(e)
+            logging.error(e)
 
         try:
             if len(transformed) > 2000:
@@ -316,7 +314,7 @@ class Client(discord.Client):
 
                 await message.edit(content=transformed)
             except Exception as e:
-                print(e)
+                logging.error(e)
 
 
 # format the output
@@ -366,7 +364,7 @@ def replace_private_message(user_id, message_id, message):
 
         os.replace(user_log + ".tmp.txt", user_log + ".txt")
     except Exception as e:
-        print(e)
+        logging.error(e)
 
 
 # list all available Discord channels

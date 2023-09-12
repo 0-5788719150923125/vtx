@@ -3,6 +3,7 @@ import time
 import random
 import asyncio
 import math
+import logging
 import head
 from lab.reddit import manage_submission
 from events import post_event
@@ -90,6 +91,7 @@ class Ink:
             await manage_submission(
                 title=f"{self.type.title()}: The {title}", content=cat
             )
+            print(bc.CORE + "INK@KB: " + ad.TEXT + f"{self.type.title()}: The {title}")
+
         except Exception as e:
-            print(e)
-        print(bc.CORE + "INK@KB: " + ad.TEXT + f"{self.type.title()}: The {title}")
+            logging.error(e)

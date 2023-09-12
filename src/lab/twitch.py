@@ -8,6 +8,7 @@ from twitchAPI.types import AuthScope, ChatEvent
 from twitchAPI.chat import Chat, EventData
 import asyncio
 import os
+import logging
 from utils import ad, bc, get_identity, propulsion, ship
 import head
 import lab.source
@@ -82,7 +83,7 @@ async def client(config):
                     print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
                     await chat.send_message(self.channel, output[1])
                 except Exception as e:
-                    print(e)
+                    logging.error(e)
 
                 self.active = False
 

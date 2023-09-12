@@ -6,6 +6,7 @@ from utils import ad, bc, get_daemon, get_identity, propulsion, ship
 import asyncio
 import asyncpraw
 import time
+import logging
 import head
 from pprint import pprint
 from cerberus import Validator
@@ -89,7 +90,7 @@ async def client(config):
                 stalker(reddit, config),
             )
         except Exception as e:
-            print(e)
+            logging.error(e)
 
 
 async def manage_submission(title, content):
@@ -122,7 +123,7 @@ async def manage_submission(title, content):
                     link=submission.shortlink,
                 )
         except Exception as e:
-            print(e)
+            logging.error(e)
 
 
 async def stalker(reddit, config):
@@ -193,7 +194,7 @@ async def stalker(reddit, config):
                     )
                 )
             except Exception as e:
-                print(e)
+                logging.error(e)
 
     async def watch_comments(reddit, config, user):
         redditor = await reddit.redditor(user)
@@ -249,7 +250,7 @@ async def stalker(reddit, config):
                     )
                 )
             except Exception as e:
-                print(e)
+                logging.error(e)
 
     tasks = {}
     while True:
@@ -327,7 +328,7 @@ async def submission(reddit, config):
                         footer="/r/" + subreddit.display_name,
                     )
         except Exception as e:
-            print(e)
+            logging.error(e)
 
     asyncio.create_task(submission(reddit, config))
 
@@ -442,7 +443,7 @@ async def subscribe_submissions(reddit, config):
             )
 
     except Exception as e:
-        print(e)
+        logging.error(e)
 
     asyncio.create_task(subscribe_submissions(reddit, config))
 
@@ -532,7 +533,7 @@ async def subscribe_comments(reddit, config):
             )
 
     except Exception as e:
-        print(e)
+        logging.error(e)
 
     asyncio.create_task(subscribe_comments(reddit, config))
 
@@ -550,7 +551,7 @@ async def reply(obj, message, config):
 
         print(color + "INK@REDDIT: " + ad.TEXT + message)
     except Exception as e:
-        print(e)
+        logging.error(e)
 
 
 # Build context from a chain of comments.

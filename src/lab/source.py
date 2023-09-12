@@ -4,6 +4,7 @@ import random
 import time
 import json
 import re
+import logging
 import websocket
 import websockets
 from pprint import pprint

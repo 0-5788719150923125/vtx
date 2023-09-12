@@ -5,7 +5,6 @@ import asyncio
 import math
 import logging
 import head
-from lab.reddit import manage_submission
 from events import post_event
 from utils import ad, bc, config, read_from_file, write_to_file
 

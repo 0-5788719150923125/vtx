@@ -9,6 +9,7 @@ import os
 import sys
 import re
 import gc
+from copy import deepcopy
 import torch
 from aitextgen import aitextgen
 import logging
@@ -263,7 +264,7 @@ class cortex:
 
         context = self.context
         if ctx:
-            context = ctx.copy()
+            context = deepcopy(ctx)
 
         context.insert(0, prefix)
 

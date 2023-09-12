@@ -179,11 +179,6 @@ async def response(config, focus):
         )
     )
 
-    if sanitized == "" or sanitized.startswith(" "):
-        if len(messages[focus]) > 0:
-            messages[focus].pop(0)
-        return
-
     color = bc.CORE
     responder = "ONE@CORE:"
     if output[2]:

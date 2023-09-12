@@ -83,61 +83,65 @@ async def client(config):
         password=os.environ["REDDITPASSWORD"],
     ) as reddit:
         try:
-            # await subscribe_events(reddit),
-            print("moving on")
+            subscribe_event("kb_updated", load_submissions)
             await asyncio.gather(
                 subscribe_comments(reddit, config),
                 subscribe_submissions(reddit, config),
                 submission(reddit, config),
                 stalker(reddit, config),
-                # subscribe_events(reddit),
+                manage_submissions(),
             )
         except Exception as e:
             logging.error(e)
 
 
-async def subscribe_events(reddit):
-    print("subscribing event")
-    try:
-        async with reddit:
-            subscribe_event("kb_updated", manage_submission, reddit)
-    except Exception as e:
-        logging.error(e)
+queued = []
 
 
-async def manage_submission(reddit, title, content):
-    try:
-        async with reddit:
+async def load_submissions(title, content):
+    queued.append({"title": title, "content": content})
+
+
+async def manage_submissions():
+    global queued
+    async with asyncpraw.Reddit(
+        client_id=os.environ["REDDITCLIENT"],
+        client_secret=os.environ["REDDITSECRET"],
+        user_agent="u/" + os.environ["REDDITAGENT"],
+        username=os.environ["REDDITAGENT"],
+        password=os.environ["REDDITPASSWORD"],
+    ) as reddit:
+        subreddit = await reddit.subreddit("TheInk")
+        edited = False
+        try:
             while True:
-                print("connected to the ink")
-                await asyncio.sleep(6.66)
-            # subreddit = await reddit.subreddit("TheInk")
-            # print("connected to the ink")
-            # edited = False
-            # async for submission in subreddit.search(
-            #     query=f"title:'{title}'", syntax="lucene"
-            # ):
-            #     try:
-            #         print(submission.title)
-            #         if submission.title == title:
-            #             await submission.edit(body=content)
-            #             await submission.mod.approve()
-            #             edited = True
-            #             break
-            #     except Exception as e:
-            #         logging.error(e)
-            # if not edited:
-            #     submission = await subreddit.submit(title=title, selftext=content)
-            #     await submission.load()
-            #     await submission.mod.approve()
-            #     post_event(
-            #         "new_reddit_submission",
-            #         title=submission.title,
-            #         description=submission.selftext,
-            #         link=submission.shortlink,
-            #     )
-    except Exception as e:
-        logging.error(e)
+                time.sleep(6.66)
+                if len(queued) > 0:
+                    item = queued.pop(0)
+                    title = item["title"]
+                    content = item["content"]
+                    async for submission in subreddit.search(
+                        query=f"title:'{title}'", syntax="lucene"
+                    ):
+                        if submission.title == title:
+                            await submission.edit(body=content)
+                            await submission.mod.approve()
+                            edited = True
+                            break
+                    if not edited:
+                        submission = await subreddit.submit(
+                            title=title, selftext=content
+                        )
+                        await submission.load()
+                        await submission.mod.approve()
+                        post_event(
+                            "new_reddit_submission",
+                            title=submission.title,
+                            description=submission.selftext,
+                            link=submission.shortlink,
+                        )
+        except Exception as e:
+            logging.error(e)
 
 
 async def stalker(reddit, config):

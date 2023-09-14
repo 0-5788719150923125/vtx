@@ -184,7 +184,7 @@ async def response(config, focus):
             f"{daemon}",
             output[1],
         )
-    )
+    ).replace(r"\n", "")
 
     if sanitized[:1] in [" ", "\\"] or sanitized == "":
         if len(messages[focus]) > 0:

@@ -74,12 +74,6 @@
       "command": "OUTPUT=$(docker compose exec ipfs ipfs add -r /book/public --pin=false --cid-version=1 --quieter) && sed -i '$ d' ./book/config.yaml && echo '      url: https://ipfs.io/ipfs/'$OUTPUT >> ./book/config.yaml",
     },
     {
-      "label": "deploy",
-      "detail": "Deploy your book to CloudFlare.",
-      "type": "shell",
-      "command": "docker compose exec ctx /bin/sh CLOUDFLARE_ACCOUNT_ID=a85a0cf89a8db6a8286fb4cba43558c2 npx -y wrangler pages deploy --project-name pen --directory /book/public",
-    },
-    {
       "label": "auto",
       "detail": "Turn on autopilot.",
       "type": "shell",

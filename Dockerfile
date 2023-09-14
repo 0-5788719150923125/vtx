@@ -5,10 +5,15 @@ ENV TRANSFORMERS_CACHE="/tmp"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     curl \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+
+RUN apt-get update -y \
+    && apt-get install -y \
     git \
     ninja-build \
     nodejs \
-    npm \
     python3-dev \
     python3-pip \
     python3-packaging \
@@ -72,8 +77,10 @@ COPY requirements.x.txt ./
 RUN pip install -r requirements.x.txt
 
 RUN mkdir /.cache && \
+    mkdir /.config && \
     mkdir /.triton && \
     chmod -R 777 /.cache && \
+    chmod -R 777 /.config && \
     chmod -R 777 /.triton
 
 ENV FOCUS='toe'

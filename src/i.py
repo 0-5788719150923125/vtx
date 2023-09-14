@@ -22,8 +22,8 @@ def compile_book():
 
 def deploy_book():
     cloudflare_account_id = "a85a0cf89a8db6a8286fb4cba43558c2"
-    project_name = "pen-u"
-    command = f"CLOUDFLARE_ACCOUNT_ID={cloudflare_account_id} wrangler pages deploy --project-name {project_name} --directory /book/public"
+    project_name = "pen"
+    command = f"WRANGLER_SEND_METRICS=true CLOUDFLARE_ACCOUNT_ID={cloudflare_account_id} wrangler pages deploy --project-name {project_name} --directory /book/public"
     os.system(command)
 
 

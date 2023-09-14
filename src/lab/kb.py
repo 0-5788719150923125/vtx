@@ -101,7 +101,7 @@ class Ink:
         return len(tokens[0])
 
     def create_prompt(self, entry):
-        self.dir = f"/gen/{self.type}"
+        self.dir = f"/book/content/docs/{self.type}"
         if not os.path.exists(self.dir):
             os.mkdir(self.dir)
 
@@ -150,14 +150,14 @@ class Ink:
             self.tags = entry.get("tags", [])
             self.create_prompt(entry)
             self.chunk_prompt()
-            output = await head.ctx.prompt(prompt=self.stage, max_new_tokens=33)
+            output = await head.ctx.prompt(prompt=self.stage, max_new_tokens=99)
             if output[0] == False:
                 print(output[1])
                 return
             content = output
             if self.combine:
                 self.combine = False
-                content = self.full_doc + output
+                content = output + self.full_doc
             write_to_file(
                 path=self.dir,
                 file_name=self.file,

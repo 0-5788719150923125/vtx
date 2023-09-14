@@ -47,3 +47,6 @@
 [submodule "lab/opencog/cogutil"]
 	path = lab/opencog/cogutil
 	url = https://github.com/opencog/cogutil
+[submodule "book/themes/book"]
+	path = book/themes/book
+	url = https://github.com/alex-shpak/hugo-book.git

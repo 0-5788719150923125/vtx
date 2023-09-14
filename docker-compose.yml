@@ -19,6 +19,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
+      - ./book:/book
       - ./gen:/gen
       - ./lab:/lab
       - ./src:/src

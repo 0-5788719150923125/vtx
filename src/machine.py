@@ -15,7 +15,7 @@ def main():
         "twitch",
         "twitter",
         "matrix",
-        "hugo",
+        "book",
         "kb",
     ]
 
@@ -38,7 +38,10 @@ def main():
                 module = importlib.import_module(f"lab.{service}")
                 partial = {service: config[service], "personas": config["personas"]}
                 task = threading.Thread(
-                    target=getattr(module, "main"), args=(partial,), name=service
+                    target=getattr(module, "main"),
+                    args=(partial,),
+                    name=service,
+                    daemon=True,
                 )
                 task.start()
                 tasks[task.name] = task

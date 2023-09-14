@@ -60,6 +60,7 @@ RUN npm i -g nodemon@$NODEMON_VERSION
 
 COPY src/ /src
 COPY lab/ /lab
+COPY book/ /book
 
 RUN python3 -m venv venv/x \
     && chmod +x venv/x/bin/activate \

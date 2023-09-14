@@ -411,9 +411,6 @@ def send_webhook(
     allowed_tags=None,
     tags=None,
 ):
-    print(allowed_tags)
-    print(tags)
-
     if allowed_tags and tags:
         allowed = False
         for tag in tags:

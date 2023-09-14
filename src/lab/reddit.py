@@ -27,6 +27,7 @@ if __name__ == "main":
 def validation(config):
     schema = {
         "enabled": {"type": "boolean"},
+        "filter": {"type": "list"},
         "delay": {
             "type": "dict",
             "schema": {"min": {"type": "integer"}, "max": {"type": "integer"}},
@@ -319,6 +320,11 @@ async def subscribe_submissions(reddit, config):
 
             frequency = subs[submission.subreddit.display_name].get("frequency", 0)
 
+            sub = subs[submission.subreddit.display_name]
+
+            if filter_response(sub, config, submission):
+                continue
+
             if submission.author in [os.environ["REDDITAGENT"], "AutoModerator"]:
                 continue
             if random.random() > frequency:
@@ -329,23 +335,10 @@ async def subscribe_submissions(reddit, config):
             bias = None
             prompt = "I carefully respond to a submission on Reddit."
 
-            sub = subs[submission.subreddit.display_name]
             if "persona" in sub:
                 persona = config["personas"].get(sub["persona"])
                 bias = persona.get("bias")
                 prompt = persona.get("persona")
-
-            if "filter" in sub:
-                ignore = False
-                for term in sub.get("filter"):
-                    if (
-                        term in submission.title.lower()
-                        or term in submission.selftext.lower()
-                    ):
-                        ignore = True
-                        break
-                if ignore:
-                    continue
 
             context = [
                 propulsion
@@ -437,19 +430,9 @@ async def subscribe_comments(reddit, config):
                 bias = persona.get("bias")
                 prompt = persona.get("persona")
 
-            if "filter" in sub:
-                ignore = False
-                submission = await reddit.submission(comment.submission)
-                for term in sub.get("filter"):
-                    if (
-                        term in submission.title.lower()
-                        or term in submission.selftext.lower()
-                        or term in comment.body.lower()
-                    ):
-                        ignore = True
-                        break
-                if ignore:
-                    continue
+            submission = await reddit.submission(comment.submission)
+            if filter_response(sub, config, submission, comment):
+                continue
 
             generation = await head.ctx.chat(
                 ctx=context,
@@ -484,6 +467,18 @@ async def subscribe_comments(reddit, config):
         logging.error(e)
 
     asyncio.create_task(subscribe_comments(reddit, config))
+
+
+def filter_response(sub, config, submission, comment=None):
+    if "filter" in sub or "filter" in config["reddit"]:
+        filters = config["reddit"].get("filter", []) + sub.get("filter", [])
+        for term in filters:
+            if term in submission.title.lower() or term in submission.selftext.lower():
+                return True
+            if comment:
+                if term in comment.body.lower():
+                    return True
+        return False
 
 
 async def reply(obj, message, config):

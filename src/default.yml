@@ -103,6 +103,8 @@ collections:
 
 reddit:
   enabled: False
+  filter:
+    - layerzero
   subs:
     SubSimGPT2Interactive:
       frequency: 0.001

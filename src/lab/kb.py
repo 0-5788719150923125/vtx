@@ -137,8 +137,8 @@ class Ink:
         self.full_doc = self.stage
 
     def chunk_prompt(self):
-        three_quarters = math.floor((self.model_max_length / 4)) * 3
-        while self.get_length(self.stage) > three_quarters:
+        partial = math.floor(self.model_max_length * 0.8)
+        while self.get_length(self.stage) > partial:
             self.replace_at_index = random.randint(len(self.prompt), len(self.stage))
             self.stage = self.stage[: self.replace_at_index]
             self.full_doc = self.full_doc[self.replace_at_index :]
@@ -150,7 +150,7 @@ class Ink:
             self.tags = entry.get("tags", [])
             self.create_prompt(entry)
             self.chunk_prompt()
-            output = await head.ctx.prompt(prompt=self.stage, max_new_tokens=99)
+            output = await head.ctx.prompt(prompt=self.stage, max_new_tokens=33)
             if output[0] == False:
                 print(output[1])
                 return

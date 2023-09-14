@@ -12,9 +12,9 @@ services:
       dockerfile: Dockerfile
       shm_size: '1gb'
       args: 
-        HUGO_VERSION: 0.118.2
         DCE_VERSION: 2.40.4
         DOTNET_VERSION: 7.0.10
+        HUGO_VERSION: 0.118.2
         NODEMON_VERSION: 3.0.1
     stdin_open: true
     tty: true
@@ -33,7 +33,7 @@ services:
     restart: 'always'
     network_mode: host
 
-  pit:
+  dash:
     image: ghcr.io/0-5788719150923125/bot:latest
     command: tensorboard --logdir /gen/logs --bind_all --samples_per_plugin scalars=999999999
     volumes:
@@ -61,3 +61,12 @@ services:
       - ./src/adapters:/src/adapters
     environment:
       HIVEMIND_LOGLEVEL: ERROR
+
+  ipfs:
+    image: ipfs/kubo:latest
+    command: daemon --init-profile=lowpower
+    volumes:
+      - data:/data/ipfs
+
+volumes:
+  data:

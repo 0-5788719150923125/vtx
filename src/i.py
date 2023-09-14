@@ -15,6 +15,11 @@ import asyncio
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
 
 
+def compile_book():
+    command = f"hugo --source /book --noBuildLock"
+    os.system(command)
+
+
 def fetch_from_matrix():
     client = AsyncClient("https://matrix.org", os.environ["MATRIXUSER"])
 

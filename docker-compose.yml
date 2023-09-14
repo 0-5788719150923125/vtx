@@ -66,6 +66,7 @@ services:
     image: ipfs/kubo:latest
     command: daemon --init-profile=lowpower
     volumes:
+      - ./book:/book
       - data:/data/ipfs
 
 volumes:

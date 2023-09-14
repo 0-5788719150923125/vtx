@@ -15,4 +15,5 @@ lab/config.yml
 !lab/journals
 book/content/docs
 book/resources
+book/public
 !.keep

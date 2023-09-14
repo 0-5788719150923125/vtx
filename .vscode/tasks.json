@@ -68,6 +68,12 @@
       }
     },
     {
+      "label": "add",
+      "detail": "Add the book/ directory to IPFS.",
+      "type": "shell",
+      "command": "docker compose exec -it ipfs ipfs add -r /book/public/ --pin=false --cid-version=1 --quieter",
+    },
+    {
       "label": "auto",
       "detail": "Turn on autopilot.",
       "type": "shell",
@@ -110,14 +116,15 @@
         "i.fetch_from_discord()",
         "i.juxtapose_data()",
         "i.create_evil()",
-        "i.fetch_from_matrix()"
+        "i.fetch_from_matrix()",
+        "i.compile_book()"
       ]
     },
     {
       "type": "pickString",
       "id": "ship",
       "description": "Which ship should I enter?",
-      "options": ["bot", "ctx", "pet", "pit"]
+      "options": ["bot", "ctx", "dash", "ipfs", "pet"]
     }
   ]
 }

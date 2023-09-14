@@ -313,9 +313,7 @@ async def subscribe_submissions(reddit, config):
                     content="A new Reddit submission:",
                     title=submission.title,
                     link=submission.shortlink,
-                    description=str(submission.selftext)[:666] + "..."
-                    if len(submission.selftext) > 666
-                    else submission.selftext,
+                    description=submission.selftext,
                     thumbnail=subreddit.community_icon,
                     footer="/r/" + subreddit.display_name,
                 )

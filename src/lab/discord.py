@@ -23,6 +23,39 @@ def orchestrate(config):
     asyncio.run(run_client(config))
 
 
+def validation(config):
+    schema = {
+        "use_self_token": {"type": "boolean"},
+        "export_dms": {"type": "boolean"},
+        "servers": {
+            "type": "dict",
+            "keysrules": {"type": "integer"},
+            "valuesrules": {
+                "type": "dict",
+                "nullable": True,
+                "schema": {
+                    "persona": {"type": "string"},
+                    "past": {"type": "string"},
+                    "skip": {"type": "boolean"},
+                    "after": {"type": "string"},
+                    "before": {"type": "string"},
+                    "subscribe": {"type": "list"},
+                    "author": {"type": "string"},
+                    "logo": {"type": "string"},
+                    "avatar": {"type": "string"},
+                    "webhook": {"type": "string"},
+                    "link": {"type": "string"},
+                },
+            },
+        },
+    }
+    v = Validator()
+    result = v.validate(config, schema)
+    if not result:
+        print(v.errors)
+    return result
+
+
 def subscribe_events(config):
     servers = config["discord"].get("servers")
     for server in servers:
@@ -45,45 +78,10 @@ def subscribe_events(config):
                         "https://styles.redditmedia.com/t5_2sqtn6/styles/communityIcon_xfdgcz8156751.png",
                     ),
                     footer=data.get("footer", "/r/TheInk"),
-                    simplify=data.get("simplify", False),
                     content=f"Event: {event}",
                 )
             except Exception as e:
                 logging.error(e)
-
-
-def validation(config):
-    schema = {
-        "use_self_token": {"type": "boolean"},
-        "export_dms": {"type": "boolean"},
-        "servers": {
-            "type": "dict",
-            "keysrules": {"type": "integer"},
-            "valuesrules": {
-                "type": "dict",
-                "nullable": True,
-                "schema": {
-                    "persona": {"type": "string"},
-                    "past": {"type": "string"},
-                    "skip": {"type": "boolean"},
-                    "after": {"type": "string"},
-                    "before": {"type": "string"},
-                    "subscribe": {"type": "list"},
-                    "simplify": {"type": "boolean"},
-                    "author": {"type": "string"},
-                    "logo": {"type": "string"},
-                    "avatar": {"type": "string"},
-                    "webhook": {"type": "string"},
-                    "link": {"type": "string"},
-                },
-            },
-        },
-    }
-    v = Validator()
-    result = v.validate(config, schema)
-    if not result:
-        print(v.errors)
-    return result
 
 
 # A class to control the entire Discord bot
@@ -410,12 +408,10 @@ def send_webhook(
     title: str,
     link: str,
     description: str | None,
-    simplify: False,
     thumbnail: str,
     footer,
     content: str = "For immediate disclosure...",
 ):
-    print("sending webhook")
     data = {
         "username": username,
         "avatar_url": avatar_url,
@@ -423,6 +419,9 @@ def send_webhook(
         "embeds": [
             {
                 "title": title,
+                "description": str(description)[:333] + "..."
+                if len(description) > 333
+                else description,
                 "url": link,
                 "thumbnail": {
                     "url": thumbnail,
@@ -433,8 +432,6 @@ def send_webhook(
             }
         ],
     }
-    if description and not simplify:
-        data["embeds"][0]["description"] = str(description)
     response = requests.post(webhook_url, json=data)
     if response.status_code == 204:
         print("Webhook sent successfully!")

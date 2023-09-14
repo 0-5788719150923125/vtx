@@ -26,12 +26,6 @@ languages:
     contentDir: content
     weight: 1
 
-menu:
-  after:
-    - name: "Mirror"
-      url: "https://ink.university"
-      weight: 0
-
 params:
   # (Optional, default light) Sets color theme: light, dark or auto.
   # Theme 'auto' switches between dark and light modes based on browser/os preferences
@@ -104,3 +98,10 @@ params:
   # /!\ This is an experimental feature, might be removed or changed at any time
   # (Optional, experimental, default false) Enables a drop-down menu for translations only if a translation is present.
   BookTranslatedOnly: false
+
+
+menu:
+  after:
+    - name: "Last"
+      weight: 5
+      url: https://ipfs.io/ipfs/bafybeids34gmqsk7a3vp2kbfyb7refwvsllk2edu26kvolwgotsbhvxqee

@@ -12,8 +12,9 @@ services:
       dockerfile: Dockerfile
       shm_size: '1gb'
       args: 
-        DOTNET_VERSION: 7.0.10
+        HUGO_VERSION: 0.118.2
         DCE_VERSION: 2.40.4
+        DOTNET_VERSION: 7.0.10
         NODEMON_VERSION: 3.0.1
     stdin_open: true
     tty: true

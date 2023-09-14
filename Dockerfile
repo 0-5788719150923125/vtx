@@ -33,9 +33,20 @@ MAINTAINER United Nations
 ARG DCE_VERSION
 
 RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz/DiscordChatExporter/releases/download/$DCE_VERSION/DiscordChatExporter.Cli.zip && \
-    unzip DiscordChatExporter.Cli.zip -d /dce && \
-    chmod -R 755 /dce && \
+    mkdir -p /usr/share/dce && \
+    unzip DiscordChatExporter.Cli.zip -d /usr/share/dce && \
+    chmod -R 755 /usr/share/dce && \
     rm DiscordChatExporter.Cli.zip
+
+ARG HUGO_VERSION
+
+RUN curl --location --remote-header-name --remote-name https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz && \
+    mkdir -p /usr/share/hugo && \
+    tar -zxf hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz -C /usr/share/hugo && \
+    chmod -R 755 /usr/share/hugo && \
+    rm hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz && \
+    ln -s /usr/share/hugo/hugo /usr/bin/hugo && \
+    hugo version
 
 WORKDIR /src
 

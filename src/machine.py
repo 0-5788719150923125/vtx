@@ -15,6 +15,7 @@ def main():
         "twitch",
         "twitter",
         "matrix",
+        "hugo",
         "kb",
     ]
 

@@ -71,7 +71,7 @@
       "label": "add",
       "detail": "Add the book/ directory to IPFS.",
       "type": "shell",
-      "command": "docker compose exec -it ipfs ipfs add -r /book/public/ --pin=false --cid-version=1 --quieter",
+      "command": "OUTPUT=$(docker compose exec ipfs ipfs add -r /book/public --pin=false --cid-version=1 --quieter) && echo $OUTPUT > ./book/cid.txt",
     },
     {
       "label": "auto",

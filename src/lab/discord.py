@@ -11,9 +11,9 @@ import head
 from events import subscribe_event
 from utils import ad, bc, bullets, get_identity, propulsion, ship
 
-response_chance = 3  # out of 100
-mention_self_chance = 88  # out of 100
-mention_any_chance = 8  # out of 100
+response_frequency = 3  # out of 100
+mention_self_frequency = 88  # out of 100
+mention_any_frequency = 8  # out of 100
 
 
 def main(config):
@@ -186,11 +186,11 @@ class Client(discord.Client):
         else:
             # increase probability of a response if bot is mentioned
             if self.user.mentioned_in(message):
-                if random.randint(0, 100) < mention_self_chance:
+                if random.randint(0, 100) < mention_self_frequency:
                     roll = 1
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
-                if random.randint(0, 100) < mention_any_chance:
+                if random.randint(0, 100) < mention_any_frequency:
                     roll = 1
                 bias = int(message.mentions[0].id)
 
@@ -202,8 +202,8 @@ class Client(discord.Client):
             no_transform = True
             reply = False
 
-        # check chance before generating a response
-        if roll > response_chance:
+        # check frequency before generating a response
+        if roll > response_frequency:
             return
 
         # generate a response from context and bias

@@ -37,7 +37,7 @@ def validation(config):
             "valuesrules": {
                 "type": "dict",
                 "schema": {
-                    "chance": {"type": "number"},
+                    "frequency": {"type": "number"},
                     "stalker": {"type": "string"},
                     "min": {"type": "integer"},
                     "max": {"type": "integer"},
@@ -56,7 +56,7 @@ def validation(config):
                 "type": "dict",
                 "schema": {
                     "limit": {"type": "integer"},
-                    "chance": {"type": "float"},
+                    "frequency": {"type": "float"},
                     "persona": {"type": "string"},
                     "skip": {"type": "boolean"},
                     "tags": {"type": "list"},
@@ -139,9 +139,9 @@ async def stalker(reddit, config):
             try:
                 victim = config["reddit"]["stalk"].get(user)
 
-                chance = victim.get("chance", 0.1)
+                frequency = victim.get("frequency", 0.1)
 
-                if random.random() > chance:
+                if random.random() > frequency:
                     continue
 
                 await submission.load()
@@ -208,8 +208,8 @@ async def stalker(reddit, config):
             try:
                 victim = config["reddit"]["stalk"].get(user)
 
-                chance = victim.get("chance", 0.1)
-                if random.random() > chance:
+                frequency = victim.get("frequency", 0.1)
+                if random.random() > frequency:
                     continue
 
                 await comment.load()
@@ -289,8 +289,8 @@ async def subscribe_submissions(reddit, config):
         active = []
         subs = config["reddit"]["subs"]
         for sub in subs:
-            if "chance" in subs[sub]:
-                if subs[sub].get("chance", 0) <= 0:
+            if "frequency" in subs[sub]:
+                if subs[sub].get("frequency", 0) <= 0:
                     continue
                 active.append(sub)
 
@@ -317,11 +317,11 @@ async def subscribe_submissions(reddit, config):
                 except Exception as e:
                     logging.error(e)
 
-            chance = subs[submission.subreddit.display_name].get("chance", 0)
+            frequency = subs[submission.subreddit.display_name].get("frequency", 0)
 
             if submission.author in [os.environ["REDDITAGENT"], "AutoModerator"]:
                 continue
-            if random.random() > chance:
+            if random.random() > frequency:
                 continue
 
             op = get_identity()
@@ -401,8 +401,8 @@ async def subscribe_comments(reddit, config):
     try:
         active = []
         for sub in config["reddit"]["subs"]:
-            if "chance" in config["reddit"]["subs"][sub]:
-                if config["reddit"]["subs"][sub].get("chance", 0) <= 0:
+            if "frequency" in config["reddit"]["subs"][sub]:
+                if config["reddit"]["subs"][sub].get("frequency", 0) <= 0:
                     continue
                 active.append(sub)
 
@@ -412,14 +412,14 @@ async def subscribe_comments(reddit, config):
             parent = await comment.parent()
             await parent.load()
 
-            chance = config["reddit"]["subs"][comment.subreddit.display_name].get(
-                "chance", 0
+            frequency = config["reddit"]["subs"][comment.subreddit.display_name].get(
+                "frequency", 0
             )
 
             roll = random.random()
             if parent.author == os.environ["REDDITAGENT"]:
                 roll = roll / (len("ACTG") * 100)  # the optimal number of children
-            if roll >= chance:
+            if roll >= frequency:
                 continue
 
             await comment.load()

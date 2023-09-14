@@ -14,13 +14,13 @@ personas:
 source:
   focus:
     trade:
-      active_chance: 0.66
-      passive_chance: 0.01
+      active_frequency: 0.66
+      passive_frequency: 0.01
       personas:
         - source
     support:
-      passive_chance: 0.01
-      active_chance: 0.99
+      passive_frequency: 0.01
+      active_frequency: 0.99
 
 mind:
   info: use your heads
@@ -103,10 +103,10 @@ reddit:
   enabled: False
   subs:
     SubSimGPT2Interactive:
-      chance: 0.001
+      frequency: 0.001
     Autismophrenia:
-      chance: 0.5
+      frequency: 0.5
     NoRules:
-      chance: 0.05
+      frequency: 0.05
     asmr:
-      chance: 0.05
+      frequency: 0.05

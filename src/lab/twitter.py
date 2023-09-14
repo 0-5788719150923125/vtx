@@ -18,7 +18,7 @@ if __name__ == "main":
 
 async def loop(config):
     while True:
-        if random.random() < config.get("chance", 0.001):
+        if random.random() < config.get("frequency", 0.001):
             topics = config.get("topics", ["AI alignment"])
             output = await head.ctx.prompt(
                 prompt=random.choice(topics),

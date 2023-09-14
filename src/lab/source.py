@@ -23,7 +23,7 @@ import head
 context_length = 23
 
 messages = {}
-chance = {}
+frequency = {}
 mine = {}
 
 
@@ -73,8 +73,8 @@ def validation(config):
             "valuesrules": {
                 "type": "dict",
                 "schema": {
-                    "passive_chance": {"type": "float"},
-                    "active_chance": {"type": "float"},
+                    "passive_frequency": {"type": "float"},
+                    "active_frequency": {"type": "float"},
                     "personas": {"type": "list"},
                 },
             },
@@ -99,7 +99,9 @@ def validation(config):
 async def listener(config, focus):
     if focus not in messages:
         messages[focus] = []
-        chance[focus] = config["source"]["focus"][focus].get("passive_chance", 0.01)
+        frequency[focus] = config["source"]["focus"][focus].get(
+            "passive_frequency", 0.01
+        )
         mine[focus] = False
     async with websockets.connect("ws://localhost:9666/ws") as websocket:
         await websocket.send(json.dumps({"focus": focus}).encode("utf-8"))
@@ -118,8 +120,8 @@ async def listener(config, focus):
 
             if append:
                 if not mine[focus]:
-                    chance[focus] = config["source"]["focus"][focus].get(
-                        "active_chance", 0.66
+                    frequency[focus] = config["source"]["focus"][focus].get(
+                        "active_frequency", 0.66
                     )
                 messages[focus].append(
                     propulsion + str(get_identity()) + ship + " " + state["message"]
@@ -137,7 +139,7 @@ async def responder(config, focus):
     while True:
         await asyncio.sleep(1)
         roll = random.random()
-        if roll > chance[focus]:
+        if roll > frequency[focus]:
             continue
 
         await response(config, focus)
@@ -199,7 +201,7 @@ async def response(config, focus):
 
     messages[focus].append(propulsion + str(bias) + ship + " " + sanitized)
     mine[focus] = True
-    chance[focus] = config["source"]["focus"][focus].get("passive_chance", 0.01)
+    frequency[focus] = config["source"]["focus"][focus].get("passive_frequency", 0.01)
     send(sanitized, focus, "cos", bias)
 
 

@@ -31,7 +31,7 @@ async def client(config) -> None:
                 propulsion + str(get_identity()) + ship + " " + message["text"]
             )
             print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
-            if random.random() > config["telegram"].get("chance", 0.9):
+            if random.random() > config["telegram"].get("frequency", 0.9):
                 return
             persona = config["personas"].get(config["telegram"].get("persona"))
             bias = persona.get("bias", get_identity())

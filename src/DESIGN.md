@@ -534,21 +534,21 @@ source:
 ```
 The personas listed here must also exist in the top-level "personas" key, which was described earlier.
 
-The "passive_chance" key will set the rate at which your bot will send a message, per second:
+The "passive_frequency" key will set the rate at which your bot will send a message, per second:
 ```yml
 source:
   focus:
     channel1:
-      passive_chance: 0.01
+      passive_frequency: 0.01
 ```
 In this example, your bot will roll a dice 1 time per second. 1% of the time (0.01), your bot will choose to respond. Thus, your bot will respond every 100 seconds, on average.
 
-To set the rate at which your bot responds to *new messages* (i.e. messages that were *not* sent by itself; or, messages that were sent by other people/robots), set the "active_chance" key:
+To set the rate at which your bot responds to *new messages* (i.e. messages that were *not* sent by itself; or, messages that were sent by other people/robots), set the "active_frequency" key:
 ```yml
 source:
   focus:
     channel1:
-      active_chance: 0.6
+      active_frequency: 0.6
 ```
 In this example, your bot will respond to new messages at a rate of 60% - every time a new message is "seen."
 
@@ -582,14 +582,14 @@ reddit:
     subreddit1:
     subreddit2:
 ```
-By default, your bot will have a 0% chance of responding to messages in a subreddit. To give it a chance:
+By default, your bot will have a 0% frequency of responding to messages in a subreddit. To give it a chance:
 ```yml
 reddit:
   subs:
     SubSimGPT2Interactive:
-      chance: 0.05
+      frequency: 0.05
 ```
-In this example, your bot will have a 5% chance to respond to *every* new message (as it's created), within the /r/SubSimGPT2Interactive subreddit.
+In this example, your bot will have a 5% frequency to respond to *every* new message (as it's created), within the /r/SubSimGPT2Interactive subreddit.
 
 /r/SubSimGPT2Interactive is a great place to test your bot, since the entire subreddit is already being flooded with botspam! /r/NoRules and /r/TheInk are also great subreddits for AI chat.
 
@@ -652,12 +652,12 @@ To configure VTX to follow a specific user - responding to their activity - you 
 reddit:
   stalk:
     myVictim:
-      chance: 0.2
+      frequency: 0.2
       stalker: architect
       min: 30
       max: 90
 ```
-In this example, your bot will follow "myVictim" around Reddit, with a 20% chance of responding to their every action. They will use the persona of "architect", and respond within 30-90 seconds of seeing a new message from this user.
+In this example, your bot will follow "myVictim" around Reddit, with a 20% frequency of responding to their every action. They will use the persona of "architect", and respond within 30-90 seconds of seeing a new message from this user.
 
 We do not condone digital harassment. This is intended to be a feature used for the "pairing-up" of robots, as if they were your digital assistant. For example, the member who requested this feature has a robot that follows them around Reddit, acting like a parrot upon their shoulder, screaming "Arrghhh, matey!" (like a pirate) on 50% of their comments!
 
@@ -801,9 +801,9 @@ With no other configuration, your bot will periodically post new tweets to your 
 To adjust the rate:
 ```yml
 twitter:
-  chance: 0.01
+  frequency: 0.01
 ```
-Your bot will roll a dice, once per minute. In this example, it will have a 1% chance of making a new tweet. Thus, your bot will post something new approximately once every 100 minutes.
+Your bot will roll a dice, once per minute. In this example, it will have a 1% frequency of making a new tweet. Thus, your bot will post something new approximately once every 100 minutes.
 
 To give your bot a series of "prompts" to choose from:
 ```yml

@@ -191,6 +191,11 @@ async def response(config, focus):
             messages[focus].pop(0)
         return
 
+    if propulsion + str(bias) + ship + " " + sanitized in messages[focus]:
+        if len(messages[focus]) > 0:
+            messages[focus].pop(0)
+        return
+
     color = bc.CORE
     responder = "ONE@CORE:"
     if output[2]:

@@ -27,14 +27,10 @@ languages:
     weight: 1
 
 menu:
-  before: 
-    - name: "Mission"
-      url: "/"
-      weight: 0
   after:
     - name: "Mirror"
       url: "https://ink.university"
-      weight: 100
+      weight: 0
 
 params:
   # (Optional, default light) Sets color theme: light, dark or auto.

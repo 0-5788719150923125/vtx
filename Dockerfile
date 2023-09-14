@@ -77,6 +77,6 @@ RUN mkdir /.cache && \
 
 ENV FOCUS='mind'
 
-CMD ["nodemon", "--ext", "*.py", "*.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]
+CMD ["nodemon", "--ext", "*.py, *.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]
 
 MAINTAINER R

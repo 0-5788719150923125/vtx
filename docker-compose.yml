@@ -3,9 +3,11 @@ version: '3.9'
 services:
   bot:
     image: ghcr.io/0-5788719150923125/bot:latest
-    command: nodemon --ext '*.py, *.yml' --ignore "models/*" --ignore "*.json" --exec python3 main.py
     restart: 'always'
+    ipc: host
     network_mode: host
+    tty: true
+    stdin_open: true
     user: 1000:1000
     build:
       context: .
@@ -16,8 +18,6 @@ services:
         DOTNET_VERSION: 7.0.10
         HUGO_VERSION: 0.118.2
         NODEMON_VERSION: 3.0.1
-    stdin_open: true
-    tty: true
     volumes:
       - ./book:/book
       - ./gen:/gen

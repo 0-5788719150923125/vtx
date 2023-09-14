@@ -4,6 +4,7 @@ import random
 import asyncio
 import math
 import logging
+from cerberus import Validator
 import head
 from events import post_event
 from utils import (
@@ -17,6 +18,10 @@ from utils import (
 
 
 def main(config):
+    result = validation(config["kb"])
+    if not result:
+        return
+
     allowed_types = ["confidants", "prose"]
 
     while True:
@@ -36,6 +41,44 @@ def main(config):
 
 if __name__ == "main":
     main(config)
+
+
+def validation(config):
+    schema = {
+        "frequency": {"type": "float"},
+        "types": {
+            "type": "dict",
+            "schema": {
+                "prose": {
+                    "type": "list",
+                    "schema": {
+                        "type": "dict",
+                        "schema": {
+                            "title": {"type": "string"},
+                            "prompt": {"type": "string"},
+                            "frequency": {"type": "float"},
+                            "tags": {"type": "list"},
+                        },
+                    },
+                },
+                "confidants": {
+                    "type": "list",
+                    "schema": {
+                        "type": "dict",
+                        "allow_unknown": True,
+                        "schema": {
+                            "role": {"type": "string"},
+                        },
+                    },
+                },
+            },
+        },
+    }
+    v = Validator()
+    result = v.validate(config, schema)
+    if not result:
+        print(v.errors)
+    return result
 
 
 class Ink:

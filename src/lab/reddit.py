@@ -97,8 +97,8 @@ async def client(config):
 queued = []
 
 
-async def load_submissions(title, content):
-    queued.append({"title": title, "content": content})
+async def load_submissions(title, content, tags):
+    queued.append({"title": title, "content": content, "tags": tags})
 
 
 async def manage_submissions(reddit, config):
@@ -112,6 +112,7 @@ async def manage_submissions(reddit, config):
                 item = queued.pop(0)
                 title = item["title"]
                 content = item["content"]
+                tags = item["tags"]
                 async for submission in subreddit.search(
                     query=f"title:'{title}'", syntax="lucene"
                 ):
@@ -129,6 +130,7 @@ async def manage_submissions(reddit, config):
                         title=submission.title,
                         description=submission.selftext,
                         link=submission.shortlink,
+                        tags=tags,
                     )
     except Exception as e:
         logging.error(e)

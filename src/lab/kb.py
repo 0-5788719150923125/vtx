@@ -47,6 +47,7 @@ class Ink:
         self.combine = False
         self.dir = ""
         self.file = ""
+        self.tags = []
 
     def get_length(self, string):
         tokens = head.ctx.ai.tokenizer(string, return_tensors="pt")["input_ids"]
@@ -59,6 +60,7 @@ class Ink:
 
         if entry.get("role"):
             self.role = entry.get("role").lower().replace(" ", "-")
+            self.tags.append("role")
 
             self.file = f"the-{self.role}.md"
             f = f"{self.dir}/{self.file}"
@@ -98,6 +100,7 @@ class Ink:
     async def write(self, t, entry):
         try:
             self.type = t
+            self.tags = entry.get("tags", [])
             self.create_prompt(entry)
             self.chunk_prompt()
             output = await head.ctx.prompt(prompt=self.stage, max_new_tokens=33)
@@ -117,6 +120,7 @@ class Ink:
                 "kb_updated",
                 title=self.title,
                 content=content,
+                tags=self.tags,
             )
             print(bc.CORE + "INK@KB: " + ad.TEXT + self.title)
 

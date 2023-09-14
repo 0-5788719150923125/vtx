@@ -45,6 +45,7 @@ def validation(config):
                     "avatar": {"type": "string"},
                     "webhook": {"type": "string"},
                     "link": {"type": "string"},
+                    "tags": {"type": "list"},
                 },
             },
         },
@@ -79,6 +80,7 @@ def subscribe_events(config):
                     ),
                     footer=data.get("footer", "/r/TheInk"),
                     content=f"Event: {event}",
+                    allowed_tags=data.get("tags", None),
                 )
             except Exception as e:
                 logging.error(e)
@@ -411,7 +413,18 @@ def send_webhook(
     thumbnail: str,
     footer,
     content: str = "For immediate disclosure...",
+    allowed_tags=None,
+    tags=None,
 ):
+    if allowed_tags and tags:
+        allowed = False
+        for tag in tags:
+            if tag in allowed_tags:
+                allowed = True
+                break
+        if not allowed:
+            return
+
     data = {
         "username": username,
         "avatar_url": avatar_url,
@@ -433,8 +446,5 @@ def send_webhook(
         ],
     }
     response = requests.post(webhook_url, json=data)
-    if response.status_code == 204:
-        print("Webhook sent successfully!")
-    else:
-        print("Failed to send webhook message. Status code:", response.status_code)
-        print("Response:", response.text)
+    if response.status_code != 204:
+        logging.error(response)

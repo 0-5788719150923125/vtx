@@ -87,7 +87,6 @@ async def client(config):
             await asyncio.gather(
                 subscribe_comments(reddit, config),
                 subscribe_submissions(reddit, config),
-                submission(reddit, config),
                 stalker(reddit, config),
                 manage_submissions(reddit, config),
             )
@@ -285,62 +284,6 @@ async def stalker(reddit, config):
         await asyncio.sleep(66.6)
 
     asyncio.create_task(stalker(reddit, config))
-
-
-# Create a submission.
-async def submission(reddit, config):
-    while True:
-        try:
-            await asyncio.sleep(60)
-            if "TheInk" not in config["reddit"]["subs"]:
-                continue
-            servers = config["reddit"]["subs"]["TheInk"]["submissions"]
-            for server in servers:
-                if random.random() > server.get("frequency", 0.00059):
-                    continue
-                subreddit = await reddit.subreddit("TheInk")
-                title = server.get("title", "On the 5th of September...")
-                prompt = server.get("prompt", "On the 5th of September, 2024,")
-                output = await head.ctx.prompt(
-                    prompt=prompt,
-                    max_new_tokens=2048,
-                    decay_after_length=1024,
-                    decay_factor=0.00000023,
-                )
-                if output[0] == False:
-                    return
-                submission = await subreddit.submit(title=title, selftext=output)
-                await submission.mod.approve()
-                await submission.load()
-                await submission.author.load()
-                subreddit = await reddit.subreddit(submission.subreddit.display_name)
-                await subreddit.load()
-                description = (
-                    str(submission.selftext)[:666] + "..."
-                    if len(submission.selftext) > 666
-                    else submission.selftext
-                )
-                if server.get("simplify", False) == True:
-                    description = None
-
-                webhooks = server.get("alert")
-                for webhook in webhooks:
-                    send_webhook(
-                        webhook_url=webhook,
-                        simplify=False,
-                        username="/u/" + server.get("author", submission.author.name),
-                        avatar_url=server.get("avatar", submission.author.icon_img),
-                        content="A new Reddit submission:",
-                        title=submission.title,
-                        link=submission.shortlink,
-                        description=description,
-                        thumbnail=server.get("logo", subreddit.community_icon),
-                        footer="/r/" + subreddit.display_name,
-                    )
-        except Exception as e:
-            logging.error(e)
-
-    asyncio.create_task(submission(reddit, config))
 
 
 async def subscribe_submissions(reddit, config):

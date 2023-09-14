@@ -30,17 +30,26 @@ def subscribe_events(config):
             continue
         for event in servers[server].get("subscribe"):
             data = servers[server]
-            subscribe_event(
-                event,
-                send_webhook,
-                webhook_url=data.get("webhook"),
-                username=data.get("author"),
-                avatar_url=data.get("avatar"),
-                thumbnail=data.get("logo"),
-                footer=data.get("footer", "/r/TheInk"),
-                simplify=data.get("simplify", False),
-                content=event,
-            )
+            try:
+                subscribe_event(
+                    event,
+                    send_webhook,
+                    webhook_url=data.get("webhook"),
+                    username=data.get("author", "The Source"),
+                    avatar_url=data.get(
+                        "avatar",
+                        "https://cdn.discordapp.com/avatars/957758215075004416/1c79616ea084910675e5df259bea1cf5.webp",
+                    ),
+                    thumbnail=data.get(
+                        "logo",
+                        "https://styles.redditmedia.com/t5_2sqtn6/styles/communityIcon_xfdgcz8156751.png",
+                    ),
+                    footer=data.get("footer", "/r/TheInk"),
+                    simplify=data.get("simplify", False),
+                    content=f"Event: {event}",
+                )
+            except Exception as e:
+                logging.error(e)
 
 
 def validation(config):
@@ -406,6 +415,7 @@ def send_webhook(
     footer,
     content: str = "For immediate disclosure...",
 ):
+    print("sending webhook")
     data = {
         "username": username,
         "avatar_url": avatar_url,

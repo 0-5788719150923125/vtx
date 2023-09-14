@@ -130,6 +130,21 @@ def get_daemon(seed):
     return json.loads(response)["name"]
 
 
+def deterministic_short_hash(input_string, length=7, seed="42"):
+    # Create a hashlib sha256 object
+    hasher = hashlib.sha256()
+
+    # Update the hasher with the input string and seed
+    hasher.update(seed.encode())
+    hasher.update(input_string.encode())
+
+    # Get the hexadecimal digest and truncate it to the desired length
+    hex_digest = hasher.hexdigest()
+    short_hash = hex_digest[:length]
+
+    return short_hash
+
+
 # Get a hash value for an entire directory
 def hash_directory(path):
     sha1 = hashlib.sha1()

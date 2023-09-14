@@ -108,3 +108,5 @@ reddit:
       chance: 0.5
     NoRules:
       chance: 0.05
+    asmr:
+      chance: 0.05

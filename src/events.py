@@ -5,8 +5,9 @@ subscribers = defaultdict(list)
 
 
 def subscribe_event(event_type, fn, *args, **kwargs):
-    for subscriber, _, _ in subscribers[event_type]:
-        if subscriber == fn:
+    for existing_fn, _, _ in subscribers[event_type]:
+        if existing_fn == fn:
+            subscribers[event_type].append((fn, args, kwargs))
             return
 
     subscribers[event_type].append((fn, args, kwargs))

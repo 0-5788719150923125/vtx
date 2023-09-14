@@ -6,11 +6,18 @@ import math
 import logging
 import head
 from events import post_event
-from utils import ad, bc, config, read_from_file, write_to_file
+from utils import (
+    ad,
+    bc,
+    config,
+    deterministic_short_hash,
+    read_from_file,
+    write_to_file,
+)
 
 
 def orchestrate(config):
-    allowed_types = ["confidants"]
+    allowed_types = ["confidants", "prose"]
 
     while True:
         ink = Ink()
@@ -18,10 +25,10 @@ def orchestrate(config):
             if t not in allowed_types:
                 continue
             for entry in config["kb"]["types"][t]:
-                chance = config["kb"].get("chance", 0)
-                if "chance" in entry:
-                    chance = entry.get("chance")
-                if random.random() > chance:
+                frequency = config["kb"].get("frequency", 0)
+                if "frequency" in entry:
+                    frequency = entry.get("frequency")
+                if random.random() > frequency:
                     continue
                 asyncio.run(ink.write(t, entry))
         time.sleep(60)
@@ -38,23 +45,24 @@ class Ink:
         self.full_doc = ""
         self.replace_at_index = 0
         self.combine = False
+        self.dir = ""
+        self.file = ""
 
     def get_length(self, string):
         tokens = head.ctx.ai.tokenizer(string, return_tensors="pt")["input_ids"]
         return len(tokens[0])
 
     def create_prompt(self, entry):
-        path = f"/gen/{self.type}"
-        if not os.path.exists(path):
-            os.mkdir(path)
+        self.dir = f"/gen/{self.type}"
+        if not os.path.exists(self.dir):
+            os.mkdir(self.dir)
 
-        if entry.get("prompt"):
-            self.title = entry.get("title")
-            self.prompt = entry.get("prompt")
-        elif entry.get("role"):
+        if entry.get("role"):
             self.role = entry.get("role").lower().replace(" ", "-")
 
-            f = f"{path}/the-{self.role}.md"
+            self.file = f"the-{self.role}.md"
+            f = f"{self.dir}/{self.file}"
+
             title = self.role.replace("-", " ").title()
             self.title = f"{self.type.title()}: The {title}"
             self.prompt = read_from_file(f"/src/lab/templates/{self.type}.tpl")
@@ -62,10 +70,15 @@ class Ink:
                 value = entry.get(key)
                 if key == "role":
                     self.prompt = self.prompt.replace("{{role}}", value.title())
-                elif key == "chance":
+                elif key == "frequency":
                     continue
                 else:
                     self.prompt = self.prompt + f"\n{key.capitalize()}: {value}"
+        else:
+            self.title = entry.get("title")
+            self.prompt = entry.get("prompt")
+            self.file = deterministic_short_hash(self.title, length=7) + ".md"
+            f = f"{self.dir}/{self.file}"
 
         self.stage = self.prompt
         if os.path.exists(f):
@@ -96,8 +109,8 @@ class Ink:
                 self.combine = False
                 content = self.full_doc + output
             write_to_file(
-                path=f"/gen/{self.type}",
-                file_name=f"the-{self.role}.md",
+                path=self.dir,
+                file_name=self.file,
                 content=content,
             )
             post_event(

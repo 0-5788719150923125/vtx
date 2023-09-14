@@ -8,8 +8,12 @@ from aiogram import Dispatcher, Bot, types
 import head
 
 
-def orchestrate(config):
+def main(config):
     asyncio.run(client(config))
+
+
+if __name__ == "main":
+    main(config)
 
 
 async def client(config) -> None:

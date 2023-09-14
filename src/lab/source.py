@@ -27,7 +27,7 @@ chance = {}
 mine = {}
 
 
-def orchestrate(config):
+def main(config):
     result = validation(config["source"])
     if not result:
         return
@@ -59,6 +59,10 @@ def orchestrate(config):
                 t.start()
 
         time.sleep(6.66)
+
+
+if __name__ == "main":
+    main(config)
 
 
 def validation(config):

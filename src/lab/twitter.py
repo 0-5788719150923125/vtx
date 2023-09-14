@@ -8,8 +8,12 @@ import logging
 from utils import ad, bc
 
 
-def orchestrate(config):
+def main(config):
     asyncio.run(loop(config["twitter"]))
+
+
+if __name__ == "main":
+    main(config)
 
 
 async def loop(config):

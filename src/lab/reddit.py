@@ -11,14 +11,17 @@ import head
 from pprint import pprint
 from cerberus import Validator
 from events import post_event, subscribe_event
-from lab.discord import send_webhook
 
 
-def orchestrate(config) -> None:
+def main(config) -> None:
     result = validation(config["reddit"])
     if not result:
         return
     asyncio.run(client(config))
+
+
+if __name__ == "main":
+    main(config)
 
 
 def validation(config):
@@ -56,7 +59,7 @@ def validation(config):
                     "chance": {"type": "float"},
                     "persona": {"type": "string"},
                     "skip": {"type": "boolean"},
-                    "alerts": {"type": "string"},
+                    "tags": {"type": "list"},
                     "type": {
                         "type": "string",
                         "allowed": ["top", "new"],
@@ -125,13 +128,6 @@ async def manage_submissions(reddit, config):
                     submission = await subreddit.submit(title=title, selftext=content)
                     await submission.load()
                     await submission.mod.approve()
-                    post_event(
-                        "new_reddit_submission",
-                        title=submission.title,
-                        description=submission.selftext,
-                        link=submission.shortlink,
-                        tags=tags,
-                    )
     except Exception as e:
         logging.error(e)
 
@@ -291,38 +287,37 @@ async def stalker(reddit, config):
 async def subscribe_submissions(reddit, config):
     try:
         active = []
-        for sub in config["reddit"]["subs"]:
-            if "chance" in config["reddit"]["subs"][sub]:
-                if config["reddit"]["subs"][sub].get("chance", 0) <= 0:
+        subs = config["reddit"]["subs"]
+        for sub in subs:
+            if "chance" in subs[sub]:
+                if subs[sub].get("chance", 0) <= 0:
                     continue
                 active.append(sub)
 
         subreddits = await reddit.subreddit("+".join(active))
 
         async for submission in subreddits.stream.submissions(skip_existing=True):
-            if "alerts" in config["reddit"]["subs"][submission.subreddit.display_name]:
-                webhook = config["reddit"]["subs"][
-                    submission.subreddit.display_name
-                ].get("alerts")
+            if "tags" in subs[submission.subreddit.display_name]:
                 await submission.load()
                 await submission.author.load()
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)
                 await subreddit.load()
-                send_webhook(
-                    webhook_url=webhook,
-                    username="/u/" + submission.author.name,
-                    avatar_url=submission.author.icon_img,
-                    content="A new Reddit submission:",
-                    title=submission.title,
-                    link=submission.shortlink,
-                    description=submission.selftext,
-                    thumbnail=subreddit.community_icon,
-                    footer="/r/" + subreddit.display_name,
-                )
+                try:
+                    post_event(
+                        "new_reddit_submission",
+                        title=submission.title,
+                        description=submission.selftext,
+                        username="/u/" + submission.author.name,
+                        avatar_url=submission.author.icon_img,
+                        thumbnail=subreddit.community_icon,
+                        link=submission.shortlink,
+                        footer="/r/" + subreddit.display_name,
+                        tags=subs[submission.subreddit.display_name].get("tags"),
+                    )
+                except Exception as e:
+                    logging.error(e)
 
-            chance = config["reddit"]["subs"][submission.subreddit.display_name].get(
-                "chance", 0
-            )
+            chance = subs[submission.subreddit.display_name].get("chance", 0)
 
             if submission.author in [os.environ["REDDITAGENT"], "AutoModerator"]:
                 continue
@@ -334,7 +329,7 @@ async def subscribe_submissions(reddit, config):
             bias = None
             prompt = "I carefully respond to a submission on Reddit."
 
-            sub = config["reddit"]["subs"][submission.subreddit.display_name]
+            sub = subs[submission.subreddit.display_name]
             if "persona" in sub:
                 persona = config["personas"].get(sub["persona"])
                 bias = persona.get("bias")

@@ -13,7 +13,7 @@ from utils import ad, bc, get_identity, propulsion, ship
 logging.getLogger("nio").setLevel(logging.WARNING)
 
 
-def orchestrate(config):
+def main(config):
     tasks = {}
     while True:
         for task in tasks.copy():
@@ -33,6 +33,10 @@ def orchestrate(config):
             t.start()
 
         time.sleep(6.66)
+
+
+if __name__ == "main":
+    main(config)
 
 
 async def subscribe(user, password, config) -> None:

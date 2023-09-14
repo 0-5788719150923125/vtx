@@ -4,8 +4,12 @@ from telegraph.aio import Telegraph
 import head
 
 
-def orchestrate(config):
+def main(config):
     asyncio.run(client(config["telegraph"]))
+
+
+if __name__ == "main":
+    main(config)
 
 
 async def client(config):

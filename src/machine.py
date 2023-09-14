@@ -37,7 +37,7 @@ def main():
                 module = importlib.import_module(f"lab.{service}")
                 partial = {service: config[service], "personas": config["personas"]}
                 task = threading.Thread(
-                    target=getattr(module, "orchestrate"), args=(partial,), name=service
+                    target=getattr(module, "main"), args=(partial,), name=service
                 )
                 task.start()
                 tasks[task.name] = task

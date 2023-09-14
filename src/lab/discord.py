@@ -5,6 +5,7 @@ import re
 import requests
 import logging
 import discord
+from pprint import pprint
 from cerberus import Validator
 import head
 from events import subscribe_event
@@ -15,12 +16,16 @@ mention_self_chance = 88  # out of 100
 mention_any_chance = 8  # out of 100
 
 
-def orchestrate(config):
+def main(config):
     result = validation(config["discord"])
     if not result:
         return
     subscribe_events(config)
     asyncio.run(run_client(config))
+
+
+if __name__ == "main":
+    main(config)
 
 
 def validation(config):
@@ -69,16 +74,6 @@ def subscribe_events(config):
                     event,
                     send_webhook,
                     webhook_url=data.get("webhook"),
-                    username=data.get("author", "The Source"),
-                    avatar_url=data.get(
-                        "avatar",
-                        "https://cdn.discordapp.com/avatars/957758215075004416/1c79616ea084910675e5df259bea1cf5.webp",
-                    ),
-                    thumbnail=data.get(
-                        "logo",
-                        "https://styles.redditmedia.com/t5_2sqtn6/styles/communityIcon_xfdgcz8156751.png",
-                    ),
-                    footer=data.get("footer", "/r/TheInk"),
                     content=f"Event: {event}",
                     allowed_tags=data.get("tags", None),
                 )
@@ -405,17 +400,20 @@ async def run_client(config):
 
 def send_webhook(
     webhook_url: str,
-    username: str,
-    avatar_url: str,
     title: str,
     link: str,
-    description: str | None,
-    thumbnail: str,
-    footer,
+    username: str = "The Source",
+    avatar_url: str = "https://cdn.discordapp.com/avatars/957758215075004416/1c79616ea084910675e5df259bea1cf5.webp",
+    description: str = "",
+    thumbnail: str = "https://styles.redditmedia.com/t5_2sqtn6/styles/communityIcon_xfdgcz8156751.png",
+    footer: str = "/r/TheInk",
     content: str = "For immediate disclosure...",
     allowed_tags=None,
     tags=None,
 ):
+    print(allowed_tags)
+    print(tags)
+
     if allowed_tags and tags:
         allowed = False
         for tag in tags:

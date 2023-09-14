@@ -15,8 +15,12 @@ import lab.source
 import random
 
 
-def orchestrate(config):
+def main(config):
     asyncio.run(client(config))
+
+
+if __name__ == "main":
+    main(config)
 
 
 async def client(config):

@@ -16,7 +16,7 @@ from utils import (
 )
 
 
-def orchestrate(config):
+def main(config):
     allowed_types = ["confidants", "prose"]
 
     while True:
@@ -32,6 +32,10 @@ def orchestrate(config):
                     continue
                 asyncio.run(ink.write(t, entry))
         time.sleep(60)
+
+
+if __name__ == "main":
+    main(config)
 
 
 class Ink:

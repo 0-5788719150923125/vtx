@@ -55,8 +55,9 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 ARG NODEMON_VERSION
+ARG WRANGLER_VERSION
 
-RUN npm i -g nodemon@$NODEMON_VERSION
+RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
 
 COPY src/ /src
 COPY lab/ /lab
@@ -75,7 +76,7 @@ RUN mkdir /.cache && \
     chmod -R 777 /.cache && \
     chmod -R 777 /.triton
 
-ENV FOCUS='mind'
+ENV FOCUS='toe'
 
 CMD ["nodemon", "--ext", "*.py, *.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]
 

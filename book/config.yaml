@@ -1,5 +1,3 @@
-# hugo server --minify --themesDir ../.. --baseURL=http://0.0.0.0:1313/theme/hugo-book/
-
 baseURL: /
 title: pen.university
 theme: book
@@ -104,4 +102,4 @@ menu:
   after:
     - name: "Last"
       weight: 5
-      url: https://ipfs.io/ipfs/bafybeids34gmqsk7a3vp2kbfyb7refwvsllk2edu26kvolwgotsbhvxqee
+      url: https://ipfs.io/ipfs/bafybeiajn7kjtfhqrrubhdtzyjakwdu7m43ojk5q7e7fmmkarlsmypnwg4

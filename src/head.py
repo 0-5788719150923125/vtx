@@ -242,8 +242,8 @@ class cortex:
         prefix=None,
         ctx=None,
         bias=None,
-        max_new_tokens: int = 111,
-        decay_after_length: int = 23,
+        max_new_tokens: int = 222,
+        decay_after_length: int = 33,
         decay_factor: float = 0.000023,
     ):
         while self.active == True or not self.ai:
@@ -309,10 +309,10 @@ class cortex:
                     eta_cutoff=0.0003,
                     penalty_alpha=0.6,
                     top_k=4,
-                    repetition_penalty=1.95,
+                    repetition_penalty=2.3,
                     encoder_repetition_penalty=0.999,
                     exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                    no_repeat_ngram_size=7,
+                    no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     renormalize_logits=True,
                     remove_invalid_values=True,
@@ -335,13 +335,15 @@ class cortex:
                     or propulsion in group[3]
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
-                    or group[3][:1] in [">", "~", '"', " "]
+                    or group[3] == ""
+                    or group[3][:1] in [">", "~", '"', " ", "\\", "\n", ""]
+                    or group[3].endswith("\n")
                 ):
                     output = [False, context]
-                    if attempt == max_attempts:
-                        raise Exception(f"INVALID OUTPUT: {group[3]}")
+                    # if attempt == max_attempts:
+                    #     raise Exception(f"INVALID OUTPUT: {group[3]}")
                     continue
-                output = [group[2], group[3], seed[0], context]
+                output = [group[2], group[3].replace(r"\n", "\n"), seed[0], context]
                 break
 
             except Exception as e:
@@ -397,7 +399,7 @@ class cortex:
                     repetition_penalty=1.95,
                     encoder_repetition_penalty=0.999,
                     exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                    no_repeat_ngram_size=7,
+                    no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     renormalize_logits=True,
                     remove_invalid_values=True,

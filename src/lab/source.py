@@ -186,12 +186,11 @@ async def response(config, focus):
         )
     ).replace(r"\n", "")
 
-    # if sanitized[:1] in [" ", "\\"] or sanitized == "":
-    #     if len(messages[focus]) > 0:
-    #         messages[focus].pop(0)
-    #     return
-
-    if propulsion + str(bias) + ship + " " + sanitized in messages[focus]:
+    if (
+        sanitized.startswith(" ")
+        or sanitized == ""
+        or propulsion + str(bias) + ship + " " + sanitized in messages[focus]
+    ):
         if len(messages[focus]) > 0:
             messages[focus].pop(0)
         return

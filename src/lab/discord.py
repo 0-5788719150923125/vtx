@@ -76,6 +76,7 @@ def subscribe_events(config):
                     webhook_url=data.get("webhook"),
                     content=f"Event: {event}",
                     allowed_tags=data.get("tags", None),
+                    config=data,
                 )
             except Exception as e:
                 logging.error(e)
@@ -410,6 +411,7 @@ def send_webhook(
     content: str = "For immediate disclosure...",
     allowed_tags=None,
     tags=None,
+    config=None,
 ):
     if allowed_tags and tags:
         allowed = False
@@ -419,6 +421,11 @@ def send_webhook(
                 break
         if not allowed:
             return
+
+    if config:
+        avatar_url = config.get("avatar", avatar_url)
+        username = config.get("author", username)
+        thumbnail = config.get("logo", thumbnail)
 
     data = {
         "username": username,

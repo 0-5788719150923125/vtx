@@ -105,6 +105,9 @@ async def load_submissions(title, content, tags):
     queued.append({"title": title, "content": content, "tags": tags})
 
 
+tags = None
+
+
 async def manage_submissions(reddit, config):
     global queued
     subreddit = await reddit.subreddit("TheInk")
@@ -116,6 +119,9 @@ async def manage_submissions(reddit, config):
                 item = queued.pop(0)
                 title = item["title"]
                 content = item["content"]
+                # This is such a stupid hack, because passing information through
+                # multiple events is hard.
+                global tags
                 tags = item["tags"]
                 async for submission in subreddit.search(
                     query=f"title:'{title}'", syntax="lucene"
@@ -304,6 +310,7 @@ async def subscribe_submissions(reddit, config):
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)
                 await subreddit.load()
                 try:
+                    global tags
                     post_event(
                         "new_reddit_submission",
                         title=submission.title,
@@ -313,7 +320,7 @@ async def subscribe_submissions(reddit, config):
                         thumbnail=subreddit.community_icon,
                         link=submission.shortlink,
                         footer="/r/" + subreddit.display_name,
-                        tags=subs[submission.subreddit.display_name].get("tags"),
+                        tags=tags,
                     )
                 except Exception as e:
                     logging.error(e)

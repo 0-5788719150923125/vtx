@@ -7,10 +7,12 @@ RUN apt-get update \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+ARG NODE_MAJOR_VERSION
+
+RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR_VERSION.x | bash -
 
 RUN apt-get update -y \
-    && apt-get install -y \
+    && apt-get install -y --no-install-recommends \
     git \
     ninja-build \
     nodejs \

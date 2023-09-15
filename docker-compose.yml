@@ -18,6 +18,7 @@ services:
         DOTNET_VERSION: 7.0.10
         HUGO_VERSION: 0.118.2
         NODEMON_VERSION: 3.0.1
+        NODE_MAJOR_VERSION: 20
         WRANGLER_VERSION: 3.8.0
     volumes:
       - ./book:/book
@@ -33,8 +34,6 @@ services:
     image: ghcr.io/0-5788719150923125/ctx:latest
     restart: 'always'
     network_mode: host
-    volumes:
-      - ./book:/book
 
   dash:
     image: ghcr.io/0-5788719150923125/bot:latest

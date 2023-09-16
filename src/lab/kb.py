@@ -101,9 +101,11 @@ class Ink:
         return len(tokens[0])
 
     def create_prompt(self, entry):
-        self.dir = f"/book/content/docs/{self.type}"
+        self.dir = f"/book/content/{self.type}"
         if not os.path.exists(self.dir):
             os.mkdir(self.dir)
+            with open(os.path.join(self.dir, "_index.md"), "w") as file:
+                pass
 
         if entry.get("role"):
             self.role = entry.get("role").lower().replace(" ", "-")

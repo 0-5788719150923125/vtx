@@ -13,7 +13,7 @@ lab/config.yml
 !lab/logseq/config.edn
 !lab/pages
 !lab/journals
-book/content/docs
+book/content/**/
 book/resources
 book/public
 !.keep

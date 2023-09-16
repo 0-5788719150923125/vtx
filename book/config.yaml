@@ -23,6 +23,7 @@ languages:
     languageName: English
     contentDir: content
     weight: 1
+    pluralizeListTitles: false
 
 params:
   # (Optional, default light) Sets color theme: light, dark or auto.
@@ -49,11 +50,11 @@ params:
   # (Optional, default docs) Specify root page to render child pages as menu.
   # Page is resoled by .GetPage function: https://gohugo.io/functions/getpage/
   # For backward compatibility you can set '*' to render all sections to menu. Acts same as '/'
-  BookSection: docs
+  BookSection: '*'
 
   # Set source repository location.
   # Used for 'Last Modified' and 'Edit this page' links.
-  BookRepo: https://github.com/0-5788719150923125/kb
+  BookRepo: https://github.com/0-5788719150923125/vtx
 
   # (Optional, default 'commit') Specifies commit portion of the link to the page's last modified
   # commit hash for 'doc' page type.
@@ -65,7 +66,7 @@ params:
   # Enable "Edit this page" links for 'doc' page type.
   # Disabled by default. Uncomment to enable. Requires 'BookRepo' param.
   # Edit path must point to root directory of repo.
-  BookEditPath: edit/main/exampleSite
+  BookEditPath: edit/main/book
 
   # Configure the date format used on the pages
   # - In git information

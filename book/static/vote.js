@@ -29,6 +29,10 @@ const throttledMouseMove = throttle(function (event) {
         const mouseX = event.clientX
         const mouseY = event.clientY
 
+
+        // const range = document.createRange();
+        // const node = range.selectNode(document.elementFromPoint(mouseX, mouseY));
+
         const selection = document.caretPositionFromPoint(mouseX, mouseY)
 
         const targetNode = selection.offsetNode
@@ -42,10 +46,6 @@ const throttledMouseMove = throttle(function (event) {
 
         if (previousNode && previousText) {
             previousNode.innerHTML = previousText
-            if (previousText === null) {
-                console.log("it was nothing")
-            }
-            console.log(previousText)
         }
 
         previousNode = selection.offsetNode?.parentNode
@@ -86,7 +86,7 @@ const throttledMouseMove = throttle(function (event) {
         const withinText = originalText.slice(startIndex, endIndex)
         const afterText = originalText.slice(endIndex)
 
-        // selection.offsetNode.parentNode.innerHTML = `${beforeText}<span class="destroyed">${withinText}</span>${afterText}`
+        selection.offsetNode.parentNode.innerHTML = `${beforeText}<span class="destroyed">${withinText}</span>${afterText}`
     } catch (err) {
         console.error(err)
     }

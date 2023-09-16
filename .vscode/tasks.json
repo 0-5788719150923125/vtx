@@ -17,10 +17,16 @@
         "label": "exec",
         "detail": "Open an interactive shell in the specified container.",
         "type": "shell",
-        "command": "docker compose exec \"${input:ship}\" /bin/sh",
+        "command": "docker compose exec \"${input:ship}\" /bin/bash",
         "windows": {
-          "command": "docker compose exec \\\"${input:ship}\\\" /bin/sh"
+          "command": "docker compose exec \\\"${input:ship}\\\" /bin/bash"
         }
+      },
+      {
+        "label": "test",
+        "detail": "Run all tests with Robot Framework.",
+        "type": "shell",
+        "command": "docker compose exec bot robot /src/tests",
       },
       {
         "label": "build",

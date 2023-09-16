@@ -7,6 +7,8 @@ src/config.yml
 src/models/*
 src/adapters/*
 src/embeddings/*
+src/*.html
+src/*.xml
 lab/*
 lab/logseq/*
 lab/config.yml

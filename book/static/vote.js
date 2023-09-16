@@ -23,7 +23,7 @@ const throttledMouseMove = throttle(function (event) {
     try {
         if (locked) return
 
-        // console.clear()
+        console.clear()
 
         // Get the character index under the mouse cursor
         const mouseX = event.clientX
@@ -60,22 +60,15 @@ const throttledMouseMove = throttle(function (event) {
             start = start + (selection.offset - blockSize)
         }
         if (previousSibling !== null) {
-            const previousSiblingText =
-                previousSibling.previousSibling?.innerText
-            if (previousSibling !== null) {
-                let remaining = blockSize - selection.offset
-                let length = previousSiblingText.length
-                let sib = previousSibling.previousSibling.innerText.slice(
-                    length - remaining,
-                    length
-                )
-                // console.log(sib)
-            }
+            let remaining = blockSize - selection.offset
+            let length = previousSibling.previousSibling?.innerText.length
+            let sib = previousSibling.previousSibling?.innerText.slice(
+                length - remaining,
+                length
+            )
         }
 
         const textToHighlight = targetNode.data.slice(start, cursorIndex)
-
-        // console.log(textToHighlight)
 
         // // Find the index where your desired substring starts and ends
         const startIndex = targetNode.data.indexOf(textToHighlight)

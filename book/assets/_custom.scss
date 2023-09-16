@@ -1,7 +1,16 @@
 .destroyed {
-    background-color: red;
+    color: white;
+    background-color: $core;
 }
 
 .markdown pre code {
     white-space: break-spaces;
+}
+
+a, .book-menu a.active {
+    color: $core;
+}
+
+a:hover {
+    color: $one;
 }

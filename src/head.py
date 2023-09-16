@@ -244,7 +244,7 @@ class cortex:
         bias=None,
         max_new_tokens: int = 222,
         decay_after_length: int = 33,
-        decay_factor: float = 0.000023,
+        decay_factor: float = 0.00023,
     ):
         while self.active == True or not self.ai:
             time.sleep(1)
@@ -260,8 +260,8 @@ class cortex:
 
         eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
         bad = [
-            self.ai.tokenizer("<@", add_special_tokens=False).input_ids,
-            self.ai.tokenizer("(((", add_special_tokens=False).input_ids,
+            self.ai.tokenizer(token, add_special_tokens=False).input_ids
+            for token in ["<@", "((", "((("]
         ]
 
         context = self.context
@@ -292,12 +292,12 @@ class cortex:
         while attempt < max_attempts:
             try:
                 temperature = 1.23
-                seed = nist_beacon()
 
                 if attempt > 0:
                     temperature = temperature * 0.8
 
                 attempt += 1
+                seed = nist_beacon()
 
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.ai.generate(
@@ -334,6 +334,7 @@ class cortex:
                 group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
                 if (
                     group is None
+                    or group[0] is None
                     or propulsion in group[3]
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
@@ -352,7 +353,6 @@ class cortex:
 
             except Exception as e:
                 logging.error(e)
-                output = [False, e]
 
         self.active = False
         return output

@@ -100,7 +100,7 @@ params:
 
 menu:
   before:
-    - name: "Heads"
+    - name: "Head"
       weight: 0
       url: https://ink.university
   after:

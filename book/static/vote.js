@@ -15,14 +15,15 @@ function throttle(callback, delay) {
     }
 }
 
+let previousNode
+let previousText
+
 let running = false
 const throttledMouseMove = throttle(function (event) {
     try {
         if (locked) return
 
-        running = true
-
-        console.log('running again')
+        // console.clear()
 
         // Get the character index under the mouse cursor
         const mouseX = event.clientX
@@ -33,24 +34,23 @@ const throttledMouseMove = throttle(function (event) {
         const targetNode = selection.offsetNode
         if (!targetNode.data) return
 
-        console.info(selection)
-
         const cursorIndex = selection.offset
 
         if (!selection.offsetNode?.parentNode) return
 
         let originalText = targetNode.data
-        // if (previousText) {
-        //     originalText = previousText
-        // }
 
         if (previousNode && previousText) {
             previousNode.innerHTML = previousText
+            if (previousText === null) {
+                console.log("it was nothing")
+            }
+            console.log(previousText)
         }
 
         previousNode = selection.offsetNode?.parentNode
         previousText = selection.offsetNode?.data
-
+        
         if (!previousNode) return
 
         const previousSibling = selection.offsetNode.parentNode.previousSibling
@@ -69,13 +69,13 @@ const throttledMouseMove = throttle(function (event) {
                     length - remaining,
                     length
                 )
-                console.log(sib)
+                // console.log(sib)
             }
         }
 
         const textToHighlight = targetNode.data.slice(start, cursorIndex)
-        // console.log(targetNode)
-        console.log(textToHighlight)
+
+        // console.log(textToHighlight)
 
         // // Find the index where your desired substring starts and ends
         const startIndex = targetNode.data.indexOf(textToHighlight)
@@ -86,16 +86,12 @@ const throttledMouseMove = throttle(function (event) {
         const withinText = originalText.slice(startIndex, endIndex)
         const afterText = originalText.slice(endIndex)
 
-        selection.offsetNode.parentNode.innerHTML = `${beforeText}<span class="destroyed">${withinText}</span>${afterText}`
-        console.clear()
+        // selection.offsetNode.parentNode.innerHTML = `${beforeText}<span class="destroyed">${withinText}</span>${afterText}`
     } catch (err) {
         console.error(err)
     }
-    running = false
 }, 50)
 
-let previousNode
-let previousText
 textBlocks.forEach((textBlock) => {
     textBlock.addEventListener('click', (event) => {
         locked = true

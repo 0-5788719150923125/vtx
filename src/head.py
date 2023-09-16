@@ -338,6 +338,8 @@ class cortex:
                     or group[3] == ""
                     or group[3][:1] in [">", "~", '"', " ", "\\", "\n", ""]
                     or group[3].endswith("\n")
+                    or group[3] in prompt
+                    or group[3].startswith(" ")
                 ):
                     output = [False, context]
                     # if attempt == max_attempts:

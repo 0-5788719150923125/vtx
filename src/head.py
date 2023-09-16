@@ -258,12 +258,10 @@ class cortex:
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
-        eos = self.ai.tokenizer.convert_tokens_to_ids(
-            self.ai.tokenizer.tokenize(propulsion)[0]
-        )
+        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
         bad = [
-            self.ai.tokenizer.convert_tokens_to_ids(self.ai.tokenizer.tokenize("<@")),
-            self.ai.tokenizer.convert_tokens_to_ids(self.ai.tokenizer.tokenize("(((")),
+            self.ai.tokenizer("<@", add_special_tokens=False).input_ids,
+            self.ai.tokenizer("(((", add_special_tokens=False).input_ids,
         ]
 
         context = self.context
@@ -297,8 +295,7 @@ class cortex:
                 seed = nist_beacon()
 
                 if attempt > 0:
-                    decay_factor = decay_factor / 2
-                    temperature = temperature / 2
+                    temperature = temperature * 0.8
 
                 attempt += 1
 

@@ -299,7 +299,7 @@ def fetch_from_reddit():
         if "skip" in config["reddit"]["subs"][sub]:
             skip = config["reddit"]["subs"][sub]["skip"]
 
-        limit = 50
+        limit = 5
         if "limit" in config["reddit"]["subs"][sub]:
             limit = config["reddit"]["subs"][sub]["limit"]
 

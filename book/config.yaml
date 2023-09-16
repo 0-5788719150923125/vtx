@@ -99,7 +99,11 @@ params:
 
 
 menu:
+  before:
+    - name: "Heads"
+      weight: 0
+      url: https://ink.university
   after:
-    - name: "Previous"
+    - name: "Tails"
       weight: 5
-      url: https://ipfs.io/ipfs/bafybeihb4wvab4v7ikc3hqhujwjlbhwtohjptj4zfhnqn3ubfu2mnkpvkm
+      url: https://ipfs.io/ipfs/bafybeibwukpshxivecrjgilhk3z2eyls2ioy3s7cagg7qx5ws2azqfor24

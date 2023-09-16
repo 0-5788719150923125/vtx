@@ -30,7 +30,7 @@ def main(config):
             if t not in allowed_types:
                 continue
             for entry in config["kb"]["types"][t]:
-                frequency = config["kb"].get("frequency", 0)
+                frequency = entry.get("frequency", config["kb"].get("frequency", 0))
                 if "frequency" in entry:
                     frequency = entry.get("frequency")
                 if random.random() > frequency:

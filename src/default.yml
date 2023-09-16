@@ -81,7 +81,7 @@ core:
 
 toe:
   info: nailed to the foot
-  model: EleutherAI/gpt-neo-125M
+  model: cerebras/Cerebras-GPT-111M
   to_gpu: False
   training:
     peft:
@@ -114,3 +114,5 @@ reddit:
       frequency: 0.05
     asmr:
       frequency: 0.05
+    heart:
+      frequency: 0.5

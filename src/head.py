@@ -342,8 +342,8 @@ class cortex:
                     or group[3].startswith(" ")
                 ):
                     output = [False, context]
-                    # if attempt == max_attempts:
-                    #     raise Exception(f"INVALID OUTPUT: {group[3]}")
+                    if attempt == max_attempts:
+                        raise Exception(f"INVALID OUTPUT: {group[3]}")
                     continue
                 output = [group[2], group[3].replace(r"\n", "\n"), seed[0], context]
                 break
@@ -503,14 +503,14 @@ class cortex:
 
 # Load the model and schedule periodic reloading
 ctx = cortex(config[focus], focus)
-scheduler = BackgroundScheduler()
-scheduler.add_job(
-    cortex,
-    args=(
-        config[focus],
-        focus,
-    ),
-    trigger="interval",
-    minutes=30,
-)
-scheduler.start()
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(
+#     cortex,
+#     args=(
+#         config[focus],
+#         focus,
+#     ),
+#     trigger="interval",
+#     minutes=30,
+# )
+# scheduler.start()

@@ -255,7 +255,7 @@ class Client(discord.Client):
                     propulsion + str(return_message.id) + ship + " " + transformed,
                 )
 
-            head.ctx.build_context(propulsion + bot_id + ship + " " + transformed)
+            head.ctx.build_context(propulsion + bot_id + ship + " " + output[1])
         except:
             print(bc.CORE + "Failed to send Discord message." + ad.TEXT)
 
@@ -284,6 +284,16 @@ class Client(discord.Client):
                     async for message in channel.history(before=message, limit=length)
                 ]
                 context = []
+                no_transform = False
+                server = self.config["discord"]["servers"][
+                    int(reaction.message.guild.id)
+                ]
+                if server is not None:
+                    if "persona" in server:
+                        persona = self.config["personas"].get(server.get("persona"))
+                        bias = persona.get("bias")
+                        prefix = persona.get("persona")
+                        no_transform = True
                 i = length
                 while i > 0:
                     i = i - 1
@@ -296,7 +306,7 @@ class Client(discord.Client):
                     )
                 if str(message.channel.type) == "private":
                     bias = str(user.id)
-                    output = await head.ctx.chat(bias=bias, ctx=context)
+                    output = await head.ctx.chat(bias=bias, prefix=prefix, ctx=context)
                     if output[0] == False:
                         return
                     head.ctx.replace(
@@ -315,7 +325,10 @@ class Client(discord.Client):
                     head.ctx.replace(
                         message.content, propulsion + output[0] + ship + " " + output[1]
                     )
-                    transformed = transformer(output)
+                    if no_transform:
+                        transformed = output[1]
+                    else:
+                        transformed = transformer(output)
 
                 await message.edit(content=transformed)
             except Exception as e:

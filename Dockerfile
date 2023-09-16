@@ -1,5 +1,6 @@
 FROM nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
 
+ENV DEBIAN_FRONTEND="noninteractive"
 ENV TRANSFORMERS_CACHE="/tmp"
 
 RUN apt-get update \
@@ -13,7 +14,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR_VERSION.x | bash -
 
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
+    clang \
     git \
+    libclang-dev \
+    libopencv-dev \
     ninja-build \
     nodejs \
     python3-dev \

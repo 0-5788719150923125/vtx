@@ -27,6 +27,11 @@ def deploy_book():
     os.system(command)
 
 
+def convert_video_to_ascii():
+    command = f"/src/scripts/mediatoascii --video-path input.mp4 -o output.mp4 --scale-down 2.0"
+    os.system(command)
+
+
 def fetch_from_matrix():
     client = AsyncClient("https://matrix.org", os.environ["MATRIXUSER"])
 

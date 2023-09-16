@@ -261,6 +261,10 @@ class cortex:
         eos = self.ai.tokenizer.convert_tokens_to_ids(
             self.ai.tokenizer.tokenize(propulsion)[0]
         )
+        bad = [
+            self.ai.tokenizer.convert_tokens_to_ids(self.ai.tokenizer.tokenize("<@")),
+            self.ai.tokenizer.convert_tokens_to_ids(self.ai.tokenizer.tokenize("(((")),
+        ]
 
         context = self.context
         if ctx:
@@ -320,6 +324,7 @@ class cortex:
                     seed=seed[1],
                     return_as_list=True,
                     eos_token_id=eos,
+                    bad_words_ids=bad,
                     pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
                 )
 

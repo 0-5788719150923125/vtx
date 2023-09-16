@@ -170,7 +170,8 @@ async def response(config, focus):
 
     if output[0] == False:
         if len(messages[focus]) > 0:
-            messages[focus].pop(0)
+            # messages[focus].pop(0)
+            messages[focus] = []
         return
 
     if bias == None:
@@ -192,7 +193,8 @@ async def response(config, focus):
         or propulsion + str(bias) + ship + " " + sanitized in messages[focus]
     ):
         if len(messages[focus]) > 0:
-            messages[focus].pop(0)
+            # messages[focus].pop(0)
+            messages[focus] = []
         return
 
     color = bc.CORE

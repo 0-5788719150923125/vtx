@@ -305,7 +305,7 @@ class Client(discord.Client):
                         + messages[i].content
                     )
                 if str(message.channel.type) == "private":
-                    bias = str(user.id)
+                    bias = str(self.user.id)
                     output = await head.ctx.chat(bias=bias, prefix=prefix, ctx=context)
                     if output[0] == False:
                         return
@@ -313,7 +313,7 @@ class Client(discord.Client):
                         message.content, propulsion + bias + ship + " " + output[1]
                     )
                     replace_private_message(
-                        str(user.id),
+                        str(self.user.id),
                         str(reaction.message.id),
                         propulsion + str(reaction.message.id) + ship + " " + output[1],
                     )

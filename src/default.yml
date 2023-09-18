@@ -81,7 +81,7 @@ core:
 
 toe:
   info: nailed to the foot
-  model: cerebras/Cerebras-GPT-111M
+  model: gpt2
   to_gpu: False
   training:
     peft:

@@ -81,7 +81,12 @@ def validation(config):
                     "schema": {
                         "type": "dict",
                         "schema": {
+                            "optimizer": {
+                                "type": "string",
+                                "allowed": ["AdamW", "SophiaH"],
+                            },
                             "learning_rate": {"type": "float"},
+                            "update_period": {"type": "integer"},
                             "block_size": {"type": "integer"},
                             "num_steps": {"type": "integer"},
                             "warmup_steps": {"type": "integer"},
@@ -411,7 +416,12 @@ class cortex:
                 )
 
                 if completion:
-                    output = completion[0].replace(r"\n", "\n")
+                    output = (
+                        completion[0]
+                        .replace(r"\n", "\n")
+                        .replace("{{<", "{{")
+                        .replace(">}}", "}}")
+                    )
                     if output.endswith(propulsion):
                         output = output[:-1]
                     break

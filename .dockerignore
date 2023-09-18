@@ -6,7 +6,7 @@ lab/
 node_modules
 src/config.yml
 src/models/*
-!lab/aitextgen
+!lab/aigen
 !lab/opencog/atomspace
 !lab/opencog/learn
 !lab/source

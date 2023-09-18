@@ -92,7 +92,7 @@ collections:
     src:
       duplicate: 2
       line_by_line: False
-    lab/aitextgen:
+    lab/aigen:
     lab/source:
     lab/fold:
     lab/ink:

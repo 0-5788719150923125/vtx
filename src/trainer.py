@@ -2,9 +2,9 @@ import shutil
 import random
 import os
 import logging
-from aitextgen.TokenDataset import TokenDataset, merge_datasets
-from aitextgen.tokenizers import train_tokenizer
-from aitextgen import aitextgen
+from aigen.TokenDataset import TokenDataset, merge_datasets
+from aigen.tokenizers import train_tokenizer
+from aigen import aigen
 from transformers import AutoTokenizer
 from peft import (
     get_peft_model,
@@ -43,7 +43,7 @@ def create_dataset(
         "/lab/reaper/logseq",
         "/lab/reaper/assets",
         "/lab/reaper/public",
-        "/lab/aitextgen/aitextgen/static",
+        "/lab/aigen/aigen/static",
         "/lab/opencog/learn/learn-lang-diary",
         "/src/models",
         "/src/__pycache__",
@@ -229,7 +229,7 @@ if __name__ == "__main__":
                     )
 
     # Instantiate the model object
-    ai = aitextgen(
+    ai = aigen(
         model=launch_model,
         model_folder=model_folder,
         petals=model.get("petals", False),

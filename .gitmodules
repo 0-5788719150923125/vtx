@@ -2,7 +2,7 @@
 	path = lab/research
 	url = https://github.com/SocioProphet/clymer_research
 [submodule "aitextgen"]
-	path = lab/aitextgen
+	path = lab/aigen
 	url = https://github.com/LuciferianInk/aitextgen.git
 	branch = dev
 [submodule "lab/source"]

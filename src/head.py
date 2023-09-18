@@ -12,7 +12,7 @@ import re
 import gc
 from copy import deepcopy
 import torch
-from aitextgen import aitextgen
+from aigen import aigen
 import logging
 from pprint import pprint
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -201,7 +201,7 @@ class cortex:
 
         try:
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + focus)
-            self.ai = aitextgen(
+            self.ai = aigen(
                 model=self.config.get("model", None),
                 model_folder=model_folder,
                 petals=self.config.get("petals", False),

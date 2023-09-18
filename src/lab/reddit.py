@@ -6,6 +6,7 @@ from utils import ad, bc, get_daemon, get_identity, propulsion, ship
 import asyncio
 import asyncpraw
 import time
+from copy import deepcopy
 import logging
 import head
 from pprint import pprint
@@ -105,10 +106,11 @@ async def load_submissions(title, content, tags):
     queued.append({"title": title, "content": content, "tags": tags})
 
 
-tags = None
+my_tags = None
 
 
 async def manage_submissions(reddit, config):
+    global my_tags
     global queued
     subreddit = await reddit.subreddit("TheInk")
     edited = False
@@ -121,8 +123,7 @@ async def manage_submissions(reddit, config):
                 content = item["content"]
                 # This is such a stupid hack, because passing information through
                 # multiple events is hard.
-                global tags
-                tags = item["tags"]
+                my_tags = item["tags"]
                 async for submission in subreddit.search(
                     query=f"title:'{title}'", syntax="lucene"
                 ):
@@ -310,7 +311,10 @@ async def subscribe_submissions(reddit, config):
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)
                 await subreddit.load()
                 try:
-                    global tags
+                    tags = subs[submission.subreddit.display_name].get("tags")
+                    global my_tags
+                    if my_tags:
+                        tags = my_tags + tags
                     post_event(
                         "new_reddit_submission",
                         title=submission.title,
@@ -320,8 +324,9 @@ async def subscribe_submissions(reddit, config):
                         thumbnail=subreddit.community_icon,
                         link=submission.shortlink,
                         footer="/r/" + subreddit.display_name,
-                        tags=tags,
+                        tags=deepcopy(tags),
                     )
+                    my_tags = None
                 except Exception as e:
                     logging.error(e)
 

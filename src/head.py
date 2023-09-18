@@ -7,6 +7,7 @@ import time
 import math
 import os
 import sys
+import traceback
 import re
 import gc
 from copy import deepcopy
@@ -156,21 +157,6 @@ class cortex:
 
         self.context.append(message)
 
-    # Build a local cache of global conversational state
-    def replace(self, old_message, new_message):
-        matcher = re.compile(r'(\*")(.*)(?:"\*$)')
-        group = re.search(matcher, old_message)
-        captured = "J U X T A P O S I T I O N"[::-1]
-        if group is not None and group[2]:
-            captured = group[2]
-        for item in self.context:
-            if captured in item or old_message in item:
-                index = self.context.index(item)
-                self.context[index] = new_message
-                return
-
-        self.build_context(new_message)
-
     # Decorator to a blocking function into a background thread
     def to_thread(func: typing.Callable) -> typing.Coroutine:
         @functools.wraps(func)
@@ -270,14 +256,15 @@ class cortex:
 
         context.insert(0, prefix)
 
-        flat = self.truncate_context(
-            "\n".join(context),
-            self.config.get(
-                "truncate_length", math.floor(self.ai.model_max_length * 0.8)
-            ),
+        history = (
+            self.truncate_context(
+                "\n".join(context),
+                self.config.get(
+                    "truncate_length", math.floor(self.ai.model_max_length * 0.8)
+                ),
+            )
+            + "\n"
         )
-
-        history = flat + "\n"
 
         prompt = history + propulsion
         if bias:
@@ -315,14 +302,14 @@ class cortex:
                     exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
-                    renormalize_logits=True,
-                    remove_invalid_values=True,
                     max_time=360,
                     seed=seed[1],
+                    renormalize_logits=True,
+                    remove_invalid_values=True,
                     return_as_list=True,
                     eos_token_id=eos,
-                    bad_words_ids=bad,
                     pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
+                    bad_words_ids=bad,
                 )
 
                 # This doesn't work very well. There are instances where the tokenizer
@@ -335,10 +322,13 @@ class cortex:
                 if (
                     group is None
                     or group[0] is None
-                    or propulsion in group[3]
+                    or group[2] is None
+                    or group[3] is None
+                    or seed[0] is None
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
                     or group[3] == ""
+                    or propulsion in group[3]
                     or group[3][:1] in [">", "~", '"', " ", "\\", "\n", ""]
                     or group[3].endswith("\n")
                     or group[3] in prompt
@@ -346,13 +336,14 @@ class cortex:
                 ):
                     output = [False, context]
                     if attempt == max_attempts:
-                        raise Exception(f"INVALID OUTPUT: {group[3]}")
+                        raise Exception(generation)
                     continue
                 output = [group[2], group[3].replace(r"\n", "\n"), seed[0], context]
                 break
 
             except Exception as e:
                 logging.error(e)
+                # print(traceback.format_exc())
 
         self.active = False
         return output

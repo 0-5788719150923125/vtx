@@ -169,16 +169,19 @@ async def stalker(reddit, config):
 
                 stalker = config["personas"].get(victim.get("stalker", None), None)
                 bias = stalker.get("bias", None) if stalker else None
-                prompt = (
+                prefix = (
                     stalker.get("persona")
                     if stalker
                     else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
                 )
 
+                if bias:
+                    prefix = propulsion + str(bias) + ship + " " + prefix
+
                 generation = await head.ctx.chat(
                     ctx=context,
                     bias=bias,
-                    prefix=prompt,
+                    prefix=prefix,
                     decay_after_length=66,
                 )
 
@@ -225,16 +228,19 @@ async def stalker(reddit, config):
 
                 stalker = config["personas"].get(victim.get("stalker", None), None)
                 bias = stalker.get("bias", None) if stalker else None
-                prompt = (
+                prefix = (
                     stalker.get("prompt")
                     if stalker
                     else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
                 )
 
+                if bias:
+                    prefix = propulsion + str(bias) + ship + " " + prefix
+
                 generation = await head.ctx.chat(
                     ctx=context,
                     bias=bias,
-                    prefix=prompt,
+                    prefix=prefix,
                     decay_after_length=66,
                 )
 
@@ -434,13 +440,13 @@ async def subscribe_comments(reddit, config):
             context = await build_context(comment=comment)
 
             bias = None
-            prompt = "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
+            prefix = "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
 
             sub = config["reddit"]["subs"][comment.subreddit.display_name]
             if "persona" in sub:
                 persona = config["personas"].get(sub["persona"])
                 bias = persona.get("bias")
-                prompt = persona.get("persona")
+                prefix = propulsion + str(bias) + ship + " " + persona.get("persona")
 
             submission = await reddit.submission(comment.submission)
             if filter_response(sub, config, submission, comment):
@@ -448,7 +454,7 @@ async def subscribe_comments(reddit, config):
 
             generation = await head.ctx.chat(
                 ctx=context,
-                prefix=prompt,
+                prefix=prefix,
                 decay_after_length=66,
             )
 

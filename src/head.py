@@ -367,6 +367,11 @@ class cortex:
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
+        bad = [
+            self.ai.tokenizer(token, add_special_tokens=False).input_ids
+            for token in ["{{<"]
+        ]
+
         attempt = 0
         max_attempts = 10
         while attempt < max_attempts:
@@ -396,12 +401,13 @@ class cortex:
                     exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
-                    renormalize_logits=True,
-                    remove_invalid_values=True,
                     max_time=360,
                     seed=seed[1],
-                    eos_token_id=eos,
+                    renormalize_logits=True,
+                    remove_invalid_values=True,
                     return_as_list=True,
+                    eos_token_id=eos,
+                    bad_words_ids=bad,
                 )
 
                 if completion:

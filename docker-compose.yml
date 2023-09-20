@@ -11,7 +11,7 @@ services:
     user: 1000:1000
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.${ARCH:-x64}
       shm_size: '1gb'
       args: 
         DCE_VERSION: 2.40.4

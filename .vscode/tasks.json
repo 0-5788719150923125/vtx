@@ -124,7 +124,8 @@
           "i.create_evil()",
           "i.fetch_from_matrix()",
           "i.compile_book()",
-          "i.deploy_book()"
+          "i.deploy_book()",
+          "i.convert_video_to_ascii()"
         ]
       },
       {

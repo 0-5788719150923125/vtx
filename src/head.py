@@ -213,9 +213,9 @@ class cortex:
                 to_fp16=self.config.get("to_fp16", False),
             )
 
-            if "rwkv" in getattr(self.ai.model.config, "_name_or_path"):
-                print("Hacking the RWKV config...")
-                self.ai.model.train()
+            # if "rwkv" in getattr(self.ai.model.config, "_name_or_path"):
+            #     print("Hacking the RWKV config...")
+            #     self.ai.model.train()
 
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))

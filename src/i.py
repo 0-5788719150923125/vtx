@@ -28,7 +28,12 @@ def deploy_book():
 
 
 def convert_video_to_ascii():
-    command = f"/src/scripts/mediatoascii --video-path input.mp4 -o output.mp4 --scale-down 2.0"
+    command = f"/src/scripts/mediatoascii --video-path /src/scripts/input.mp4 -o /src/scripts/output.mp4 --scale-down 12.0 --height-sample-scale 2.4 --overwrite"
+    os.system(command)
+
+
+def upload_via_scp():
+    command = f"scp -i /home/crow/Documents/creds/Oracle/one.key -r ./src/adapters/mind opc@129.159.66.224:/home/opc/vtx/src/adapters/mind"
     os.system(command)
 
 

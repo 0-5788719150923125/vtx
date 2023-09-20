@@ -107,4 +107,4 @@ menu:
   after:
     - name: "Tails"
       weight: 5
-      url: https://ipfs.io/ipfs/bafybeiflcjvoo5rfhk3btqwetjjq5mtqjw63bhccf7ewtmlcxwm46tiv4u
+      url: https://ipfs.io/ipfs/bafybeig42xxdlthj5jzf65wmptryhrt2ldwmsm64oncjb73nzfjdm2rgoy

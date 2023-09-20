@@ -53,3 +53,9 @@
 [submodule "lab/gun/db"]
 	path = lab/gun/db
 	url = https://github.com/amark/gun
+[submodule "lab/gun/wiki"]
+	path = lab/gun/wiki
+	url = https://github.com/amark/gun.wiki.git
+[submodule "lab/robotframework"]
+	path = lab/robotframework
+	url = https://github.com/robotframework/robotframework.git

@@ -85,7 +85,7 @@ async def client(config):
                     head.ctx.build_context(propulsion + bias + ship + " " + output[1])
                     await asyncio.sleep(random.choice([7, 8, 9]))
                     print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output[1]}")
-                    await chat.send_message(self.channel, output[1])
+                    await chat.send_message(self.channel, "[BOT] " + output[1])
                 except Exception as e:
                     logging.error(e)
 

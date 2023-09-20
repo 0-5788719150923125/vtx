@@ -103,7 +103,7 @@ def fetch_from_discord():
 
     # Export direct messages
     if config["discord"]["export_dms"] == True:
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord/dm-%c.json" -f "JSON"'
+        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "/gen/discord/dm-%c.json" -f "JSON"'
         os.system(command)
 
     # For every server listed in config, iterate over options, and download messages
@@ -111,7 +111,7 @@ def fetch_from_discord():
         print("exporting " + str(server))
         skip = False
         s = config["discord"]["servers"][server]
-        command = f'dotnet /dce/DiscordChatExporter.Cli.dll exportguild --guild "{str(server)}" -t "{discord_token}" -o "/gen/discord/g-%g-%c.json" -f "JSON"'
+        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportguild --guild "{str(server)}" -t "{discord_token}" -o "/gen/discord/g-%g-%c.json" -f "JSON"'
         if s:
             if "skip" in s:
                 skip = s.get("skip", False)

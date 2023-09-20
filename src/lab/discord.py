@@ -96,7 +96,7 @@ class Client(discord.Client):
         ):
             guilds.append(f"{guild.name} ({guild.member_count})")
 
-        print(bc.FOLD + "PEN@DISCORD: " + ad.TEXT + " => ".join(guilds))
+        print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
 
     async def setup_hook(self) -> None:
         # self.discord_task = self.loop.create_task(self.think())

@@ -190,7 +190,7 @@ async def stalker(reddit, config):
                     if len(submission.title) > 66
                     else submission.title
                 )
-                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
+                print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
                 if generation[0] == False:
                     continue
@@ -249,7 +249,7 @@ async def stalker(reddit, config):
                     if len(comment.body) > 66
                     else comment.body
                 )
-                print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
+                print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
                 if generation[0] == False:
                     continue
@@ -379,7 +379,7 @@ async def subscribe_submissions(reddit, config):
                 if len(submission.title) > 66
                 else submission.title
             )
-            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
+            print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
             if generation[0] == False:
                 continue
@@ -459,7 +459,7 @@ async def subscribe_comments(reddit, config):
             )
 
             msg = comment.body[:66] + "..." if len(comment.body) > 66 else comment.body
-            print(bc.FOLD + "PEN@REDDIT: " + ad.TEXT + msg)
+            print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
             if generation[0] == False:
                 continue
@@ -510,7 +510,7 @@ async def reply(obj, message, config):
         if config.get("seeded", False) == True:
             color = bc.ROOT
 
-        print(color + "INK@REDDIT: " + ad.TEXT + message)
+        print(color + "ONE@REDDIT: " + ad.TEXT + message)
     except Exception as e:
         logging.error(e)
 

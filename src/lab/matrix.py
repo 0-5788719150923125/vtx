@@ -74,7 +74,7 @@ async def subscribe(user, password, config) -> None:
                 else:
                     return
 
-            print(bc.FOLD + "PEN@MATRIX: " + ad.TEXT + message)
+            print(bc.FOLD + "ONE@MATRIX: " + ad.TEXT + message)
 
             task = asyncio.create_task(client.room_typing(room.room_id))
             await asyncio.gather(task)
@@ -96,7 +96,7 @@ async def subscribe(user, password, config) -> None:
                 content={"msgtype": "m.text", "body": response},
             )
 
-            print(bc.CORE + "INK@MATRIX: " + ad.TEXT + response)
+            print(bc.CORE + "ONE@MATRIX: " + ad.TEXT + response)
 
         except Exception as e:
             logging.error(e)

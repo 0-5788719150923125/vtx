@@ -171,7 +171,7 @@ class Ink:
                 content=content,
                 tags=self.tags,
             )
-            print(bc.CORE + "INK@KB: " + ad.TEXT + self.title)
+            print(bc.CORE + "ONE@KB: " + ad.TEXT + self.title)
 
         except Exception as e:
             logging.error(e)

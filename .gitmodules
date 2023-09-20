@@ -3,7 +3,7 @@
 	url = https://github.com/SocioProphet/clymer_research
 [submodule "aitextgen"]
 	path = lab/aigen
-	url = https://github.com/LuciferianInk/aitextgen.git
+	url = https://github.com/LuciferianInk/aigen.git
 	branch = dev
 [submodule "lab/source"]
 	path = lab/source

@@ -50,3 +50,6 @@
 [submodule "book/themes/book"]
 	path = book/themes/book
 	url = https://github.com/alex-shpak/hugo-book.git
+[submodule "lab/gun/db"]
+	path = lab/gun/db
+	url = https://github.com/amark/gun

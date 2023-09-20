@@ -126,7 +126,7 @@ async def listener(config, focus):
                 messages[focus].append(
                     propulsion + str(get_identity()) + ship + " " + state["message"]
                 )
-                print(bc.FOLD + f"TWO@FOLD:" + ad.TEXT + " " + state["message"])
+                print(bc.FOLD + f"ONE@FOLD:" + ad.TEXT + " " + state["message"])
 
             while len(messages[focus]) > context_length:
                 messages[focus].pop(0)

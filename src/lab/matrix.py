@@ -88,7 +88,7 @@ async def subscribe(user, password, config) -> None:
                 print(completion[1])
                 return
 
-            response = f"[BOT] {completion[1]}"
+            response = f"[GHOST] {completion[1]}"
 
             await client.room_send(
                 room_id=room.room_id,

@@ -7,6 +7,7 @@ import time
 import math
 import os
 import sys
+import numpy as np
 import traceback
 import re
 import gc
@@ -156,14 +157,15 @@ class cortex:
         return ctx
 
     def get_embeddings(self, texts):
-        feature_extraction = pipeline(
-            "feature-extraction",
-            model=self.ai.model,
-            tokenizer=self.ai.tokenizer,
-            device=self.ai.get_device(),
-        )
-        embeddings = feature_extraction(texts)
-        return embeddings
+        return self.ai.tokenizer(texts, return_tensors="np")
+        # feature_extraction = pipeline(
+        #     "feature-extraction",
+        #     model=self.ai.model,
+        #     tokenizer=self.ai.tokenizer,
+        #     device=self.ai.get_device(),
+        # )
+        # embeddings = feature_extraction(texts)
+        # return [np.mean(embedding, axis=0) for embedding in embeddings]
 
     # Build a local cache of global conversational state
     def build_context(self, message):

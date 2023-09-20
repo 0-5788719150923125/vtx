@@ -21,6 +21,7 @@ RUN apt-get update -y \
     libopencv-dev \
     ninja-build \
     nodejs \
+    npm \
     python3-dev \
     python3-pip \
     python3-packaging \
@@ -69,7 +70,9 @@ RUN pip install -r requirements.txt
 ARG NODEMON_VERSION
 ARG WRANGLER_VERSION
 
-RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
+# 
+# RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
+RUN npm i -g nodemon@$NODEMON_VERSION
 
 COPY src/ /src
 COPY lab/ /lab

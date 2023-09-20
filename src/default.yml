@@ -34,7 +34,7 @@ mind:
 
 heart:
   info: with everything you got
-  model: BlinkDL/rwkv-4-pile-169m
+  model: RWKV/rwkv-4-169m-pile
   to_gpu: True
   training:
     gradient_checkpointing: False

@@ -203,12 +203,15 @@ def hash_directory(path):
     for root, dirs, files in os.walk(path):
         for file in sorted(files):
             filename = os.path.join(root, file)
-            with open(filename, "rb") as f:
-                while True:
-                    data = f.read(65536)
-                    if not data:
-                        break
-                    sha1.update(data)
+            try:
+                with open(filename, "rb") as f:
+                    while True:
+                        data = f.read(65536)
+                        if not data:
+                            break
+                        sha1.update(data)
+            except Exception as e:
+                logging.error(e)
     return sha1.hexdigest()
 
 

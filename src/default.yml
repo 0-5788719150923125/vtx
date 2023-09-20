@@ -6,8 +6,6 @@
 # Most of these services require some form of authentication. API keys and credentials should be
 # stored in a .env file, at the root of this project. See {project_root}/examples/bot/.env for an example.
 
-book:
-
 personas:
   source:
     bias: 806051627198709760

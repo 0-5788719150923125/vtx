@@ -125,7 +125,7 @@ class Ink:
                     self.prompt = self.prompt + f"\n{key.capitalize()}: {value}"
         else:
             self.title = entry.get("title")
-            self.prompt = entry.get("prompt")
+            self.prompt = "# " + self.title + "\n---\n" + entry.get("prompt")
             self.file = deterministic_short_hash(self.title, length=7) + ".md"
             f = f"{self.dir}/{self.file}"
 

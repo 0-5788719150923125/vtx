@@ -5,6 +5,7 @@ import re
 import logging
 from utils import ad, bc, get_daemon, get_identity, propulsion, ship
 from aiogram import Dispatcher, Bot, types
+from events import post_event
 import head
 
 
@@ -31,6 +32,9 @@ async def client(config) -> None:
                 propulsion + str(get_identity()) + ship + " " + message["text"]
             )
             print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
+
+            post_event("commit_memory", texts=message["text"])
+
             if random.random() > config["telegram"].get("frequency", 0.9):
                 return
             persona = config["personas"].get(config["telegram"].get("persona"))

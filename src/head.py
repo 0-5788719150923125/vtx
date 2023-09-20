@@ -16,7 +16,7 @@ from aigen import aigen
 import logging
 from pprint import pprint
 from apscheduler.schedulers.background import BackgroundScheduler
-from transformers import GenerationConfig, AutoModelForQuestionAnswering
+from transformers import AutoModelForQuestionAnswering, pipeline
 from cerberus import Validator
 from utils import (
     ad,
@@ -155,6 +155,16 @@ class cortex:
             length = self.get_string_length(ctx)
         return ctx
 
+    def get_embeddings(self, texts):
+        feature_extraction = pipeline(
+            "feature-extraction",
+            model=self.ai.model,
+            tokenizer=self.ai.tokenizer,
+            device=self.ai.get_device(),
+        )
+        embeddings = feature_extraction(texts)
+        return embeddings
+
     # Build a local cache of global conversational state
     def build_context(self, message):
         while len(self.context) >= 23:
@@ -177,12 +187,12 @@ class cortex:
         self.active = True
         self.ai = None
 
+        gc.collect()
+
         try:
             torch.cuda.empty_cache()
         except Exception as e:
             logging.error(e)
-
-        gc.collect()
 
         model_folder = None
         adapter = None
@@ -212,10 +222,6 @@ class cortex:
                 adapter=adapter,
                 to_fp16=self.config.get("to_fp16", False),
             )
-
-            # if "rwkv" in getattr(self.ai.model.config, "_name_or_path"):
-            #     print("Hacking the RWKV config...")
-            #     self.ai.model.train()
 
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))

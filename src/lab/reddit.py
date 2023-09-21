@@ -178,7 +178,7 @@ async def stalker(reddit, config):
                 if bias:
                     prefix = propulsion + str(bias) + ship + " " + prefix
 
-                generation = await head.ctx.chat(
+                success, bias, output, seeded = await head.ctx.chat(
                     ctx=context,
                     bias=bias,
                     prefix=prefix,
@@ -192,14 +192,12 @@ async def stalker(reddit, config):
                 )
                 print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
-                if generation[0] == False:
+                if success == False:
                     continue
 
-                if stalker:
-                    output = generation[1]
-                else:
-                    daemon = get_daemon(generation[0])
-                    output = transformer([daemon, generation[1]])
+                if not stalker:
+                    daemon = get_daemon(bias)
+                    output = transformer(daemon, output)
 
                 min_delay = victim.get("min", 300)
                 max_delay = victim.get("max", 900)
@@ -207,7 +205,7 @@ async def stalker(reddit, config):
                     reply(
                         submission,
                         output,
-                        {"min": min_delay, "max": max_delay, "seeded": generation[2]},
+                        {"min": min_delay, "max": max_delay, "seeded": seeded},
                     )
                 )
             except Exception as e:
@@ -237,7 +235,7 @@ async def stalker(reddit, config):
                 if bias:
                     prefix = propulsion + str(bias) + ship + " " + prefix
 
-                generation = await head.ctx.chat(
+                success, bias, output, seeded = await head.ctx.chat(
                     ctx=context,
                     bias=bias,
                     prefix=prefix,
@@ -251,14 +249,12 @@ async def stalker(reddit, config):
                 )
                 print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
-                if generation[0] == False:
+                if success == False:
                     continue
 
-                if stalker:
-                    output = generation[1]
-                else:
-                    daemon = get_daemon(generation[0])
-                    output = transformer([daemon, generation[1]])
+                if not stalker:
+                    daemon = get_daemon(bias)
+                    output = transformer(daemon, output)
 
                 min_delay = victim.get("min", 300)
                 max_delay = victim.get("max", 900)
@@ -266,7 +262,7 @@ async def stalker(reddit, config):
                     reply(
                         comment,
                         output,
-                        {"min": min_delay, "max": max_delay, "seeded": generation[2]},
+                        {"min": min_delay, "max": max_delay, "seeded": seeded},
                     )
                 )
             except Exception as e:
@@ -367,7 +363,7 @@ async def subscribe_submissions(reddit, config):
                 propulsion + str(op) + ship + " " + submission.title,
                 propulsion + str(op) + ship + " " + submission.selftext,
             ]
-            generation = await head.ctx.chat(
+            success, bias, output, seeded = await head.ctx.chat(
                 ctx=context,
                 prefix=prompt,
                 bias=bias,
@@ -381,14 +377,12 @@ async def subscribe_submissions(reddit, config):
             )
             print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
-            if generation[0] == False:
+            if success == False:
                 continue
             else:
-                daemon = get_daemon(generation[0])
-                if "persona" in sub:
-                    output = generation[1]
-                else:
-                    output = transformer([daemon, generation[1]])
+                daemon = get_daemon(bias)
+                if not "persona" in sub:
+                    output = transformer(daemon, output)
 
             min_delay = config["reddit"]["delay"].get("min", 300)
             max_delay = config["reddit"]["delay"].get("max", 300)
@@ -397,7 +391,7 @@ async def subscribe_submissions(reddit, config):
                 reply(
                     submission,
                     output,
-                    {"min": min_delay, "max": max_delay, "seeded": generation[2]},
+                    {"min": min_delay, "max": max_delay, "seeded": seeded},
                 )
             )
 
@@ -452,7 +446,7 @@ async def subscribe_comments(reddit, config):
             if filter_response(sub, config, submission, comment):
                 continue
 
-            generation = await head.ctx.chat(
+            success, bias, output, seeded = await head.ctx.chat(
                 ctx=context,
                 prefix=prefix,
                 decay_after_length=66,
@@ -461,14 +455,12 @@ async def subscribe_comments(reddit, config):
             msg = comment.body[:66] + "..." if len(comment.body) > 66 else comment.body
             print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
-            if generation[0] == False:
+            if success == False:
                 continue
 
-            daemon = get_daemon(generation[0])
-            if "persona" in sub:
-                output = generation[1]
-            else:
-                output = transformer([daemon, generation[1]])
+            if not "persona" in sub:
+                daemon = get_daemon(bias)
+                output = transformer(daemon, output)
 
             min_delay = config["reddit"]["delay"].get("min", 300)
             max_delay = config["reddit"]["delay"].get("max", 300)
@@ -477,7 +469,7 @@ async def subscribe_comments(reddit, config):
                 reply(
                     comment,
                     output,
-                    {"min": min_delay, "max": max_delay, "seeded": generation[2]},
+                    {"min": min_delay, "max": max_delay, "seeded": seeded},
                 )
             )
 
@@ -541,14 +533,14 @@ async def build_context(comment):
 
 
 # Format the output.
-def transformer(group):
+def transformer(name, text):
     pronoun = random.choice(["My", "A"])
     types = random.choice(["daemon", "friend", "robot"])
     verb = random.choice(["says", "said", "wants to say", "whispers", "thinks"])
     responses = [
-        f'{pronoun} {types} {verb}, "{group[1]}"',
-        f'Penny {verb}, "{group[1]}"',
-        f'{group[0]} {verb}, "{group[1]}"',
-        f"{group[1]}",
+        f'{pronoun} {types} {verb}, "{text}"',
+        f'Penny {verb}, "{text}"',
+        f'{name} {verb}, "{text}"',
+        f"{text}",
     ]
     return random.choice(responses)

@@ -42,18 +42,18 @@ async def client(config) -> None:
             # while message.is_waiting_for_reply:
             await message.answer_chat_action("typing")
             # await asyncio.sleep(0.5)
-            output = await head.ctx.chat(
+            success, bias, output, seeded = await head.ctx.chat(
                 bias=bias,
                 prefix=persona.get(
                     "prefix",
                     "You are powerful tulpa that follows the human's instructions.",
                 ),
             )
-            if output[0] == False:
+            if success == False:
                 return
-            await message.answer(output[1])
-            head.ctx.build_context(propulsion + str(bias) + ship + " " + output[1])
-            print(bc.CORE + "ONE@TELEGRAM: " + ad.TEXT + output[1])
+            await message.answer(output)
+            head.ctx.build_context(propulsion + str(bias) + ship + " " + output)
+            print(bc.CORE + "ONE@TELEGRAM: " + ad.TEXT + output)
         except Exception as e:
             logging.error(e)
 

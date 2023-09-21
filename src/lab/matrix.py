@@ -79,16 +79,16 @@ async def subscribe(user, password, config) -> None:
             task = asyncio.create_task(client.room_typing(room.room_id))
             await asyncio.gather(task)
 
-            completion = await head.ctx.chat(
+            success, bias, output, seeded = await head.ctx.chat(
                 prefix="I am Ryan's bot, and I am connected to GUN's Matrix room.",
                 bias=bias,
             )
 
-            if completion[0] == False:
-                print(completion[1])
+            if success == False:
+                print(output)
                 return
 
-            response = f"[GHOST] {completion[1]}"
+            response = f"[GHOST] {output}"
 
             await client.room_send(
                 room_id=room.room_id,

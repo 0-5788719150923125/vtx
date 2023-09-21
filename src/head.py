@@ -289,6 +289,7 @@ class cortex:
 
         attempt = 0
         max_attempts = 10
+        success = False
         while attempt < max_attempts:
             try:
                 temperature = 1.23
@@ -347,11 +348,13 @@ class cortex:
                     or group[3] in prompt
                     or group[3].startswith(" ")
                 ):
-                    output = [False, context]
                     if attempt == max_attempts:
                         raise Exception(generation)
                     continue
-                output = [group[2], group[3].replace(r"\n", "\n"), seed[0], context]
+                success = True
+                bias = group[2]
+                output = group[3].replace(r"\n", "\n")
+                seeded = seed[0]
                 break
 
             except Exception as e:
@@ -359,7 +362,7 @@ class cortex:
                 # print(traceback.format_exc())
 
         self.active = False
-        return output
+        return success, bias, output, seeded
 
     @to_thread
     def prompt(

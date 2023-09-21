@@ -134,11 +134,11 @@ class Client(discord.Client):
                 if str(recent_author_id) != str(self.user.id):
                     bias = recent_author_id
 
-                output = await head.ctx.chat(bias, context)
-                if output[0] == False:
+                success, bias, output, seeded = await head.ctx.chat(bias, context)
+                if success == False:
                     return
 
-                transformed = transformer([output[0], output[1]])
+                transformed = transformer(bias, output)
 
                 await messages[focus_on].reply(transformed)
 
@@ -224,14 +224,16 @@ class Client(discord.Client):
                             prefix = persona.get("persona")
                             no_transform = True
 
-                output = await head.ctx.chat(bias=bias, prefix=prefix)
+                success, bias, output, seeded = await head.ctx.chat(
+                    bias=bias, prefix=prefix
+                )
 
-                if output[0] == False:
+                if output == False:
                     return
                 elif no_transform:
-                    transformed = output[1]
+                    transformed = output
                 else:
-                    transformed = transformer([output[0], output[1]])
+                    transformed = transformer(bias, output)
         except Exception as e:
             logging.error(e)
 
@@ -306,29 +308,31 @@ class Client(discord.Client):
                     )
                 if str(message.channel.type) == "private":
                     bias = str(self.user.id)
-                    output = await head.ctx.chat(bias=bias, prefix=prefix, ctx=context)
-                    if output[0] == False:
+                    success, bias, output, seeded = await head.ctx.chat(
+                        bias=bias, prefix=prefix, ctx=context
+                    )
+                    if success == False:
                         return
                     head.ctx.replace(
-                        message.content, propulsion + bias + ship + " " + output[1]
+                        message.content, propulsion + bias + ship + " " + output
                     )
                     replace_private_message(
                         str(self.user.id),
                         str(reaction.message.id),
-                        propulsion + str(reaction.message.id) + ship + " " + output[1],
+                        propulsion + str(reaction.message.id) + ship + " " + output,
                     )
-                    transformed = output[1]
+                    transformed = output
                 else:
-                    output = await head.ctx.chat(ctx=context)
-                    if output[0] == False:
+                    success, bias, output, seeded = await head.ctx.chat(ctx=context)
+                    if success == False:
                         return
                     head.ctx.replace(
-                        message.content, propulsion + output[0] + ship + " " + output[1]
+                        message.content, propulsion + bias + ship + " " + output
                     )
                     if no_transform:
-                        transformed = output[1]
+                        transformed = output
                     else:
-                        transformed = transformer(output)
+                        transformed = transformer(bias, output)
 
                 await message.edit(content=transformed)
             except Exception as e:
@@ -336,13 +340,13 @@ class Client(discord.Client):
 
 
 # format the output
-def transformer(group):
+def transformer(bias, text):
     responses = [
-        f'The ghost of <@{group[0]}> suggests, *"{group[1]}"*',
-        f'<@{group[0]}> says, *"{group[1]}"*',
-        f'<@{group[0]}> would say, *"{group[1]}"*',
-        f'They said, *"{group[1]}"*',
-        f"{group[1]}",
+        f'The ghost of <@{bias}> suggests, *"{text}"*',
+        f'<@{bias}> says, *"{text}"*',
+        f'<@{bias}> would say, *"{text}"*',
+        f'They said, *"{text}"*',
+        f"{text}",
     ]
     return random.choice(responses)
 

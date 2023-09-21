@@ -162,20 +162,17 @@ async def response(config, focus):
         bias = identity.get("bias")
         persona = propulsion + str(bias) + ship + " " + identity.get("persona")
 
-    output = await head.ctx.chat(
+    success, bias, output, seeded = await head.ctx.chat(
         bias=bias,
         ctx=messages[focus],
         prefix=persona,
     )
 
-    if output[0] == False:
+    if success == False:
         if len(messages[focus]) > 0:
             # messages[focus].pop(0)
             messages[focus] = []
         return
-
-    if bias == None:
-        bias = output[0]
 
     daemon = get_daemon(str(random.randint(1, 99999)))
 
@@ -183,7 +180,7 @@ async def response(config, focus):
         re.sub(
             r"(?:<@)(\d+\s*\d*)(?:>)",
             f"{daemon}",
-            output[1],
+            output,
         )
     ).replace(r"\n", "")
 
@@ -199,7 +196,7 @@ async def response(config, focus):
 
     color = bc.CORE
     responder = "ONE@CORE:"
-    if output[2]:
+    if seeded:
         color = bc.ROOT
         responder = "ONE@ROOT:"
 

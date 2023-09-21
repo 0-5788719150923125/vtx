@@ -286,10 +286,14 @@ class cortex:
                 19,
             ], f"The given bias ({str(bias)}) is of the wrong length."
             prompt += str(bias) + ship
+        else:
+            bias = None
 
         attempt = 0
         max_attempts = 10
         success = False
+        output = None
+        seeded = False
         while attempt < max_attempts:
             try:
                 temperature = 1.23
@@ -299,6 +303,7 @@ class cortex:
 
                 attempt += 1
                 seed = nist_beacon()
+                seeded = seed[0]
 
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.ai.generate(
@@ -354,7 +359,6 @@ class cortex:
                 success = True
                 bias = group[2]
                 output = group[3].replace(r"\n", "\n")
-                seeded = seed[0]
                 break
 
             except Exception as e:

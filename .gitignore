@@ -16,6 +16,7 @@ lab/config.yml
 !lab/pages
 !lab/journals
 book/content/**/
+book/static/tests
 book/resources
 book/public
 !.keep

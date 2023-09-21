@@ -26,7 +26,7 @@
         "label": "test",
         "detail": "Run all tests with Robot Framework.",
         "type": "shell",
-        "command": "docker compose exec bot robot /src/tests",
+        "command": "docker compose exec bot robot --outputdir /book/static/tests /src/tests",
       },
       {
         "label": "build",

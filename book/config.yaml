@@ -105,6 +105,9 @@ menu:
       weight: 0
       url: https://ink.university
   after:
+    - name: "Report"
+      weight: 1
+      url: /tests/report.html
     - name: "Tails"
       weight: 5
-      url: https://ipfs.io/ipfs/bafybeig42xxdlthj5jzf65wmptryhrt2ldwmsm64oncjb73nzfjdm2rgoy
+      url: https://ipfs.io/ipfs/bafybeica25ogsluebdtvawlfjv23rgxuyf266fzajai5wpp5dysb6pisgu

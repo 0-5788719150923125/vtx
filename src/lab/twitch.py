@@ -66,16 +66,18 @@ async def client(config):
                 try:
                     print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
                     focus = config["twitch"].get("focus", "alpha")
-                    persona = config["personas"].get(config["twitch"].get("persona"))
+                    personas = config["twitch"].get("personas")
+                    name = random.choice(personas)
+                    persona = config["personas"].get(name)
                     lab.source.send(message.text, focus, "sin")
                     prefix = persona.get(
                         "prefix",
                         "My name is Ryan, Ink, or the Architect. I will answer questions for my audience.",
                     )
                     bias = str(persona.get("bias", get_identity()))
-                    messenger = str(get_identity())
+                    viewer = str(get_identity())
                     head.ctx.build_context(
-                        propulsion + messenger + ship + " " + message.text
+                        propulsion + viewer + ship + " " + message.text
                     )
                     success, bias, output, seeded = await head.ctx.chat(
                         bias=bias, prefix=prefix, max_new_tokens=44
@@ -85,7 +87,7 @@ async def client(config):
                     head.ctx.build_context(propulsion + bias + ship + " " + output)
                     await asyncio.sleep(random.choice([7, 8, 9]))
                     print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output}")
-                    await chat.send_message(self.channel, "[BOT] " + output)
+                    await chat.send_message(self.channel, f"[{name.upper()}] " + output)
                 except Exception as e:
                     logging.error(e)
 

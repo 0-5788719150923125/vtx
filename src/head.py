@@ -156,6 +156,21 @@ class cortex:
             length = self.get_string_length(ctx)
         return ctx
 
+    # Replace an old message with a new one
+    def edit_message(self, old_message, new_message):
+        matcher = re.compile(r'(\*")(.*)(?:"\*$)')
+        group = re.search(matcher, old_message)
+        captured = "J U X T A P O S I T I O N"[::-1]
+        if group is not None and group[2]:
+            captured = group[2]
+        for item in self.context:
+            if captured in item or old_message in item:
+                index = self.context.index(item)
+                self.context[index] = new_message
+                return
+
+        self.build_context(new_message)
+
     def get_embeddings(self, texts):
         return self.ai.tokenizer(texts, return_tensors="np")
         # feature_extraction = pipeline(

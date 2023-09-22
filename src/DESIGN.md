@@ -753,10 +753,11 @@ Obnoxiously, refresh tokens will expire, if your bot goes offline for long perio
 
 If your bot remains online, it will automatically refresh these tokens every 8 hours or so.
 
-Finally, with all of the authentication stuff out of the way, Twitch can be enabled by specifying a key and a persona:
+Finally, with all of the authentication stuff out of the way, Twitch can be enabled by specifying a key and a list of personas to randomly choose from:
 ```yml
 twitch:
-  persona: architect
+  personas: 
+    - architect
 ```
 You define the name of a channel to join:
 ```yml

@@ -313,7 +313,7 @@ class Client(discord.Client):
                     )
                     if success == False:
                         return
-                    head.ctx.replace(
+                    head.ctx.edit_message(
                         message.content, propulsion + bias + ship + " " + output
                     )
                     replace_private_message(
@@ -326,7 +326,7 @@ class Client(discord.Client):
                     success, bias, output, seeded = await head.ctx.chat(ctx=context)
                     if success == False:
                         return
-                    head.ctx.replace(
+                    head.ctx.edit_message(
                         message.content, propulsion + bias + ship + " " + output
                     )
                     if no_transform:

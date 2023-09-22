@@ -58,6 +58,9 @@ async def client(config):
                 await ready_event.chat.join_room(self.channel)
 
             async def on_message(message):
+                viewer = str(get_identity(message.user.name))
+                head.ctx.build_context(propulsion + viewer + ship + " " + message.text)
+
                 if self.active == True:
                     return
 
@@ -71,16 +74,12 @@ async def client(config):
                     persona = config["personas"].get(name)
                     lab.source.send(message.text, focus, "sin")
                     prefix = persona.get(
-                        "prefix",
+                        "persona",
                         "My name is Ryan, Ink, or the Architect. I will answer questions for my audience.",
                     )
                     bias = str(persona.get("bias", get_identity()))
-                    viewer = str(get_identity())
-                    head.ctx.build_context(
-                        propulsion + viewer + ship + " " + message.text
-                    )
                     success, bias, output, seeded = await head.ctx.chat(
-                        bias=bias, prefix=prefix, max_new_tokens=44
+                        bias=bias, prefix=prefix, max_new_tokens=111
                     )
                     if success == False:
                         return

@@ -232,15 +232,6 @@ class cortex:
                 to_fp16=self.config.get("to_fp16", False),
             )
 
-            setattr(
-                self.ai.model.config,
-                "context_length",
-                self.config.get(
-                    "truncate_length",
-                    getattr(self.ai.model.config, "context_length", 1024),
-                ),
-            )
-
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))
             self.active = False
@@ -397,8 +388,8 @@ class cortex:
                     or group[3][:2] in ["\\", "\n"]
                     or group[3] in prompt
                 ):
-                    while group[3].endswith("\n"):
-                        group[3] = group[3][:-1]
+                    # while group[3].endswith("\n"):
+                    #     group[3] = group[3][:-1]
                     if attempt == max_attempts:
                         raise Exception(generation)
                     continue
@@ -580,14 +571,14 @@ def remove_matching_characters(str1, str2):
 
 # Load the model and schedule periodic reloading
 ctx = cortex(config[focus], focus)
-scheduler = BackgroundScheduler()
-scheduler.add_job(
-    cortex,
-    args=(
-        config[focus],
-        focus,
-    ),
-    trigger="interval",
-    minutes=30,
-)
-scheduler.start()
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(
+#     cortex,
+#     args=(
+#         config[focus],
+#         focus,
+#     ),
+#     trigger="interval",
+#     minutes=30,
+# )
+# scheduler.start()

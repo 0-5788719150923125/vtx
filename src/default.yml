@@ -11,7 +11,10 @@ personas:
     bias: 806051627198709760
     persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
+# The Source model intentionally ships with no defaults. Its intended use is for your
+# own experimentation and development.
 source:
+  info: of all creation
   focus:
     trade:
       active_frequency: 0.66
@@ -22,6 +25,8 @@ source:
       passive_frequency: 0.01
       active_frequency: 0.99
 
+# An extremely powerful model, trained on a lot of data, and just barely capable of
+# running on 8GB of VRAM. 
 mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
@@ -30,6 +35,7 @@ mind:
     peft:
       type: "lora"
 
+# A recurrent neural network, and a labor of love by its community.
 heart:
   info: with everything you got
   model: RWKV/rwkv-4-169m-pile
@@ -39,6 +45,8 @@ heart:
     peft:
       type: "lora"
 
+# The product of a large research community, who is attempting to decentralize 
+# deep learning.
 soul:
   info: because nobody has one
   model: bigscience/bloom-560m
@@ -69,6 +77,7 @@ soul:
         datasets:
           - default
 
+# Mostly GPT-2 architecture. Terrible performance.
 core:
   info: is hotter than hell
   model: cerebras/Cerebras-GPT-590M
@@ -77,6 +86,7 @@ core:
     peft:
       type: "lora"
 
+# A very small model, which can be run on < 4GB of VRAM.
 toe:
   info: nailed to the foot
   model: gpt2

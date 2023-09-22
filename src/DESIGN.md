@@ -177,8 +177,10 @@ mind:
 core:
 
 soul:
+
+etc...
 ```
-As of today, VTX ships with support for models named "soul", "mind", "core", "heart", "src", or "toe". Each model uses a different architecture, while also being trained differently. You can see the default values [here](https://github.com/0-5788719150923125/vtx/blob/main/src/default.yml).
+As of today, VTX ships with support for models named "soul", "mind", "core", "heart", "source", or "toe". Each model uses a different architecture, while also serving different purposes. You can see the default values [here](https://github.com/0-5788719150923125/vtx/blob/main/src/default.yml).
 
 To set an arbitrary description of your model:
 ```yml

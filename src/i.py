@@ -28,7 +28,7 @@ def deploy_book():
 
 
 def convert_video_to_ascii():
-    command = f"/src/scripts/mediatoascii --video-path /src/scripts/input.mp4 -o /src/scripts/output.mp4 --scale-down 12.0 --height-sample-scale 2.4 --overwrite"
+    command = f"/src/scripts/mediatoascii --video-path /src/scripts/input.mp4 -o /src/scripts/output.mp4 --scale-down 16.0 --overwrite"
     os.system(command)
 
 

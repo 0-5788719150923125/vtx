@@ -21,8 +21,6 @@ def create_memory(texts):
             # metadatas=[{"source": "my_source"}, {"source": "my_source"}],
             ids=[random_string(length=7)],
         )
-        results = collection.query(query_texts=[texts], n_results=3)
-        print(results)
     except Exception as e:
         logging.error(e)
 
@@ -42,4 +40,15 @@ def import_directory(path="/lab/ink"):
 
 # import_directory()
 
-# results = collection.query(query_texts=["This is a query document"], n_results=2)
+# query = "What is Fodder's real name?"
+
+# results = collection.query(query_texts=[query], n_results=3)
+
+# from transformers import pipeline
+
+# qa_model = pipeline("question-answering")
+
+# for i, document in enumerate(results["documents"][0]):
+#     output = qa_model(question=query, context=document)
+#     print(results["distances"][0][i])
+#     print(output)

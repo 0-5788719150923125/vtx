@@ -107,6 +107,7 @@ class Ink:
 
         if entry.get("role"):
             self.role = entry.get("role").lower().replace(" ", "-")
+            self.tags.append("ink")
             self.tags.append("roles")
 
             self.file = f"the-{self.role}.md"

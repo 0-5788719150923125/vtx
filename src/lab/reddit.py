@@ -88,7 +88,7 @@ async def client(config):
         password=os.environ["REDDITPASSWORD"],
     ) as reddit:
         try:
-            subscribe_event("kb_updated", load_submissions)
+            subscribe_event("kb_updated", receive_kb_updates)
             await asyncio.gather(
                 subscribe_comments(reddit, config),
                 subscribe_submissions(reddit, config),
@@ -102,7 +102,7 @@ async def client(config):
 queued = []
 
 
-async def load_submissions(title, content, tags):
+async def receive_kb_updates(title, content, tags):
     queued.append({"title": title, "content": content, "tags": tags})
 
 
@@ -112,18 +112,30 @@ my_tags = None
 async def manage_submissions(reddit, config):
     global my_tags
     global queued
-    subreddit = await reddit.subreddit("TheInk")
-    edited = False
-    try:
-        while True:
+    subreddits = config["reddit"]["subs"]
+    while True:
+        try:
             await asyncio.sleep(6.66)
-            if len(queued) > 0:
-                item = queued.pop(0)
-                title = item["title"]
-                content = item["content"]
-                # This is such a stupid hack, because passing information through
-                # multiple events is hard.
-                my_tags = item["tags"]
+            if len(queued) == 0:
+                continue
+            item = queued.pop(0)
+            title = item["title"]
+            content = item["content"]
+            # This is such a stupid hack, because passing information through
+            # multiple events is hard.
+            my_tags = item["tags"]
+            for name in subreddits:
+                sub = subreddits.get(name)
+                allowed = False
+                if "tags" in sub:
+                    target = sub["tags"][0]
+                    if target in my_tags:
+                        allowed = True
+                if not allowed:
+                    continue
+                # We submit to the first tag found
+                subreddit = await reddit.subreddit(name)
+                edited = False
                 async for submission in subreddit.search(
                     query=f"title:'{title}'", syntax="lucene"
                 ):
@@ -134,10 +146,13 @@ async def manage_submissions(reddit, config):
                         break
                 if not edited:
                     submission = await subreddit.submit(title=title, selftext=content)
-                    await submission.load()
-                    await submission.mod.approve()
-    except Exception as e:
-        logging.error(e)
+                    try:
+                        await submission.load()
+                        await submission.mod.approve()
+                    except Exception as e:
+                        logging.error(e)
+        except Exception as e:
+            logging.error(e)
 
 
 async def stalker(reddit, config):

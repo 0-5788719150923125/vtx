@@ -141,7 +141,7 @@ class cortex:
         self.loader(self.focus)
 
     def get_max_length(self):
-        return self.ai.model_max_length
+        return self.config.get("truncate_length", self.ai.model_max_length)
 
     # Tokenize a string, and get its length (in tokens)
     def get_string_length(self, string):
@@ -173,14 +173,6 @@ class cortex:
 
     def get_embeddings(self, texts):
         return self.ai.tokenizer(texts, return_tensors="np")
-        # feature_extraction = pipeline(
-        #     "feature-extraction",
-        #     model=self.ai.model,
-        #     tokenizer=self.ai.tokenizer,
-        #     device=self.ai.get_device(),
-        # )
-        # embeddings = feature_extraction(texts)
-        # return [np.mean(embedding, axis=0) for embedding in embeddings]
 
     # Build a local cache of global conversational state
     def build_context(self, message):
@@ -240,6 +232,15 @@ class cortex:
                 to_fp16=self.config.get("to_fp16", False),
             )
 
+            setattr(
+                self.ai.model.config,
+                "context_length",
+                self.config.get(
+                    "truncate_length",
+                    getattr(self.ai.model.config, "context_length", 1024),
+                ),
+            )
+
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))
             self.active = False
@@ -272,10 +273,35 @@ class cortex:
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
+        def get_tokens_as_tuple(word):
+            return tuple(
+                self.ai.tokenizer([word], add_special_tokens=False).input_ids[0]
+            )
+
         eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
+        push = {get_tokens_as_tuple("\n"): -5.9}
         bad = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
-            for token in ["<@", "((", "((("]
+            # Many of these tokens were chosen from past experience with ugly patterns
+            # output by various models.
+            for token in [
+                "<br>",
+                "<br/>",
+                "<{@",
+                "<[@",
+                "<#",
+                "<#@",
+                "<@",
+                "<@@",
+                "<@@@",
+                "< @",
+                "<\@",
+                "<((",
+                "((",
+                "(((",
+                f"{ship}\n",
+                f"{ship} \n",
+            ]
         ]
 
         context = self.context
@@ -287,12 +313,13 @@ class cortex:
         history = (
             self.truncate_context(
                 "\n".join(context),
-                self.config.get(
-                    "truncate_length", math.floor(self.ai.model_max_length * 0.8)
-                ),
+                self.get_max_length() * 0.8,
             )
             + "\n"
         )
+
+        while "  " in history:
+            history = history.replace("  ", " ")
 
         prompt = history + propulsion
         if bias:
@@ -343,16 +370,19 @@ class cortex:
                     return_as_list=True,
                     eos_token_id=eos,
                     pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
+                    sequence_bias=push,
                     bad_words_ids=bad,
                 )
 
-                # This doesn't work very well. There are instances where the tokenizer
-                # cannot perfectly replicate the input, causing a mismatch between the
-                # completion and the previous history.
-                generation = completion[0].replace(history, "")
+                # generation = remove_matching_characters(history, completion[0])
+                generation = completion[0]
+                temp_history = deepcopy(history)
+                while len(temp_history) > 0:
+                    generation = generation[1:]
+                    temp_history = temp_history[1:]
                 mentions = "(?:[<][@])(\d+\s*\d*)"
                 variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
-                group = re.search(r"^(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
+                group = re.search(r"(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
                 if (
                     group is None
                     or group[0] is None
@@ -363,11 +393,12 @@ class cortex:
                     or bool(re.search(variables, group[3]))
                     or group[3] == ""
                     or propulsion in group[3]
-                    or group[3][:1] in [">", "~", '"', " ", "\\", "\n", ""]
-                    or group[3].endswith("\n")
+                    or group[3][:1] in [">", "~", '"', "“", " ", "< @", "\\", "\n", ""]
+                    or group[3][:2] in ["\\", "\n"]
                     or group[3] in prompt
-                    or group[3].startswith(" ")
                 ):
+                    while group[3].endswith("\n"):
+                        group[3] = group[3][:-1]
                     if attempt == max_attempts:
                         raise Exception(generation)
                     continue
@@ -378,7 +409,7 @@ class cortex:
 
             except Exception as e:
                 logging.error(e)
-                # print(traceback.format_exc())
+                print(traceback.format_exc())
 
         self.active = False
         return success, bias, output, seeded
@@ -540,16 +571,23 @@ class cortex:
         return output
 
 
+def remove_matching_characters(str1, str2):
+    i = 0
+    while i < min(len(str1), len(str2)) and str1[i] == str2[i]:
+        i += 1
+    return str2[i:]
+
+
 # Load the model and schedule periodic reloading
 ctx = cortex(config[focus], focus)
-# scheduler = BackgroundScheduler()
-# scheduler.add_job(
-#     cortex,
-#     args=(
-#         config[focus],
-#         focus,
-#     ),
-#     trigger="interval",
-#     minutes=30,
-# )
-# scheduler.start()
+scheduler = BackgroundScheduler()
+scheduler.add_job(
+    cortex,
+    args=(
+        config[focus],
+        focus,
+    ),
+    trigger="interval",
+    minutes=30,
+)
+scheduler.start()

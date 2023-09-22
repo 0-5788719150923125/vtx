@@ -110,4 +110,4 @@ menu:
       url: /tests/report.html
     - name: "Tails"
       weight: 5
-      url: https://ipfs.io/ipfs/bafybeieutvrkjlv2mh2dnu2xnqi7gpchaxxgqin765cipo6oymh7ywwala
+      url: https://ipfs.io/ipfs/bafybeifctafeldrlfy6u5pbwq3c7ofe7mrbhx62f3bn32xoytsfqv6m2cu

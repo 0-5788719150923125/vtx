@@ -170,8 +170,7 @@ async def response(config, focus):
 
     if success == False:
         if len(messages[focus]) > 0:
-            # messages[focus].pop(0)
-            messages[focus] = []
+            messages[focus].pop(0)
         return
 
     daemon = get_daemon(str(random.randint(1, 99999)))
@@ -190,8 +189,7 @@ async def response(config, focus):
         or propulsion + str(bias) + ship + " " + sanitized in messages[focus]
     ):
         if len(messages[focus]) > 0:
-            # messages[focus].pop(0)
-            messages[focus] = []
+            messages[focus].pop(0)
         return
 
     color = bc.CORE

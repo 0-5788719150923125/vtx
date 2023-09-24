@@ -83,7 +83,7 @@ def validation(config):
                         "schema": {
                             "optimizer": {
                                 "type": "string",
-                                "allowed": ["AdamW", "SophiaH"],
+                                "allowed": ["AdamW", "Lion", "SophiaH"],
                             },
                             "learning_rate": {"type": "float"},
                             "update_period": {"type": "integer"},

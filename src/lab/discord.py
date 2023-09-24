@@ -162,7 +162,7 @@ class Client(discord.Client):
             return
 
         # every message is added to local cache, for building prompt
-        if message.content != "gen" and message.author != self.user:
+        if message.content.lower() != "gen" and message.author != self.user:
             author_id = str(message.author.id)
             if str(message.channel.type) == "private":
                 log_private_message(
@@ -175,7 +175,7 @@ class Client(discord.Client):
             print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + message.content)
 
         # generate responses
-        if "gen" in message.content:
+        if "gen" in message.content.lower():
             roll = 1
             bias = 530243004334604311
             try:

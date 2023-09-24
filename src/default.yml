@@ -26,11 +26,10 @@ source:
       active_frequency: 0.99
 
 # An extremely powerful model, trained on a lot of data, and just barely capable of
-# running on 8GB of VRAM. 
+# running on 8GB of VRAM without quantization.
 mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
-  to_gpu: False
   training:
     peft:
       type: "lora"
@@ -39,7 +38,6 @@ mind:
 heart:
   info: with everything you got
   model: RWKV/rwkv-4-169m-pile
-  to_gpu: True
   training:
     gradient_checkpointing: False
     peft:
@@ -50,8 +48,6 @@ heart:
 soul:
   info: because nobody has one
   model: bigscience/bloom-560m
-  to_gpu: False
-  to_fp16: False
   petals: True
   training:
     resume: False
@@ -81,7 +77,6 @@ soul:
 core:
   info: is hotter than hell
   model: cerebras/Cerebras-GPT-590M
-  to_gpu: False
   training:
     peft:
       type: "lora"
@@ -90,7 +85,6 @@ core:
 toe:
   info: nailed to the foot
   model: gpt2
-  to_gpu: False
   training:
     peft:
       type: "lora"
@@ -98,8 +92,6 @@ toe:
 collections:
   default:
     src:
-      duplicate: 2
-      line_by_line: False
     lab/aigen:
     lab/source:
     lab/fold:

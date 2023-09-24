@@ -192,15 +192,15 @@ To use a different base model:
 mind:
   model: bigscience/bloom-560m
 ```
-Whether or not to load this model on to your GPU at runtime (it is always loaded to GPU for training):
-```yml
-mind:
-  to_gpu: True
-```
 Convert the model to 16 bit floating point weights for inference (saves memory, sacrifices precision):
 ```yml
 mind:
-  to_fp16: True
+  precision: 16
+```
+At 4 and 8 bit precision, a model will first be quantized, before it will be available for use:
+```yml
+mind:
+  precision: 4
 ```
 Set the maximum number of tokens allowed during inference:
 ```yml

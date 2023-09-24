@@ -11,7 +11,7 @@ def main():
         "source",
         "telegram",
         # "telegraph",
-        # "reddit",
+        "reddit",
         "discord",
         "twitch",
         "twitter",

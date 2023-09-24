@@ -37,9 +37,8 @@ def validation(config):
     schema = {
         "info": {"type": "string"},
         "model": {"type": "string"},
-        "to_gpu": {"type": "boolean"},
         "gpu_index": {"type": "integer"},
-        "to_fp16": {"type": "boolean"},
+        "precision": {"type": "integer", "allowed": [4, 8, 16, 32]},
         "low_memory": {"type": "boolean"},
         "max_new_tokens": {"type": "integer"},
         "petals": {"type": "boolean"},
@@ -224,12 +223,11 @@ class cortex:
                 model=self.config.get("model", None),
                 model_folder=model_folder,
                 petals=self.config.get("petals", False),
-                to_gpu=self.config.get("to_gpu", False),
                 cache_dir="models",
                 tuning_mode=tuning_mode,
                 embeddings_dir="/src/embeddings/" + focus,
                 adapter=adapter,
-                to_fp16=self.config.get("to_fp16", False),
+                precision=self.config.get("precision", None),
             )
 
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
@@ -399,8 +397,9 @@ class cortex:
                 break
 
             except Exception as e:
-                logging.error(e)
-                print(traceback.format_exc())
+                if e is not None:
+                    logging.error(e)
+                    print(traceback.format_exc())
 
         self.active = False
         return success, bias, output, seeded

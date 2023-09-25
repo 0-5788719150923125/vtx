@@ -24,12 +24,6 @@ model_folder = "models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
 
 
-def build_version(version=0):
-    while os.path.exists("/gen/logs/" + focus + "/version_" + str(version)):
-        version = version + 1
-    return version
-
-
 # Join every file located in a particular directory
 def create_dataset(
     path="/src",
@@ -389,15 +383,11 @@ if __name__ == "__main__":
     elif os.path.exists("/src/models/" + focus) == False:
         os.makedirs("/src/models/" + focus)
 
-    for name, param in ai.model.named_parameters():
-        if "lora" in name or "Lora" in name:
-            param.requires_grad = True
+    for n, p in ai.model.named_parameters():
+        if "lora" in n.lower():
+            p.requires_grad = True
 
-    version = build_version()
-
-    logger = loggers.TensorBoardLogger(
-        "/gen/logs", name=focus, version=version, default_hp_metric=False
-    )
+    logger = loggers.TensorBoardLogger("/gen/logs", name=focus, default_hp_metric=False)
 
     # Train the model
     for i, stage in enumerate(model["training"]["stages"]):

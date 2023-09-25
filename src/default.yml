@@ -84,7 +84,7 @@ core:
 # A very small model, which can be run on < 4GB of VRAM.
 toe:
   info: nailed to the foot
-  model: gpt2
+  model: EleutherAI/pythia-70m
   training:
     peft:
       type: "lora"

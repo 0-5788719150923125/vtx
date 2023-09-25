@@ -386,8 +386,6 @@ class cortex:
                     or group[3][:2] in ["\\", "\n"]
                     or group[3] in prompt
                 ):
-                    # while group[3].endswith("\n"):
-                    #     group[3] = group[3][:-1]
                     if attempt == max_attempts:
                         raise Exception(generation)
                     continue
@@ -397,9 +395,8 @@ class cortex:
                 break
 
             except Exception as e:
-                if e is not None:
-                    logging.error(e)
-                    print(traceback.format_exc())
+                logging.error(e)
+                print(traceback.format_exc())
 
         self.active = False
         return success, bias, output, seeded
@@ -412,9 +409,7 @@ class cortex:
         decay_after_length: int = 99,
         decay_factor: float = 0.000023,
     ):
-        eos = self.ai.tokenizer.convert_tokens_to_ids(
-            self.ai.tokenizer.tokenize(propulsion)[0]
-        )
+        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
 
         while self.active == True or not self.ai:
             time.sleep(1)

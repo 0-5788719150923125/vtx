@@ -511,9 +511,7 @@ class cortex:
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
         prompt = f"""
-        I am a powerful artificial intelligence, who helps users to answer their questions.
-
-        For example:
+        I am a powerful artificial intelligence, who helps users to answer their questions. For example:
 
         Q:
 
@@ -521,7 +519,15 @@ class cortex:
 
         A:
 
-        According to the Hitchhiker's Guide to the Galaxy, the answer to this question is "42".
+        According to the Hitchhiker's Guide to the Galaxy, the answer to that question is "42".
+
+        Q:
+
+        What is Docker?
+
+        A:
+
+        Docker is a platform that simplifies application deployment by creating lightweight, portable containers to package and run software and its dependencies consistently across different environments. It enables developers to isolate and manage applications, making it easier to deploy and scale them across various systems while ensuring consistency. Docker has become a fundamental tool in DevOps and containerization workflows.
 
         Q:
 
@@ -545,7 +551,7 @@ class cortex:
         ]
 
         try:
-            temperature = 0.7
+            temperature = 0.3
             seed = nist_beacon()
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation

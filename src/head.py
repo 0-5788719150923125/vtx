@@ -12,6 +12,7 @@ import traceback
 import re
 import gc
 from copy import deepcopy
+from textwrap import dedent
 import torch
 from aigen import aigen
 import logging
@@ -180,6 +181,9 @@ class cortex:
 
         self.context.append(message)
 
+    def get_tokens_as_tuple(self, word):
+        return tuple(self.ai.tokenizer([word], add_special_tokens=False).input_ids[0])
+
     # Decorator to a blocking function into a background thread
     def to_thread(func: typing.Callable) -> typing.Coroutine:
         @functools.wraps(func)
@@ -262,13 +266,17 @@ class cortex:
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
-        def get_tokens_as_tuple(word):
-            return tuple(
-                self.ai.tokenizer([word], add_special_tokens=False).input_ids[0]
-            )
-
         eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
-        push = {get_tokens_as_tuple("\n"): -5.9}
+        push = {
+            self.get_tokens_as_tuple(s): b
+            for s, b in {
+                "\n": -5.9,
+                "<@": -5.9,
+                "[[": -5.9,
+                "<": -5.9,
+                "((": -5.9,
+            }.items()
+        }
         bad = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
             # Many of these tokens were chosen from past experience with ugly patterns
@@ -339,7 +347,6 @@ class cortex:
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.ai.generate(
                     prompt=prompt,
-                    n=1,
                     do_sample=True,
                     min_length=23,
                     max_new_tokens=max_new_tokens,
@@ -363,7 +370,6 @@ class cortex:
                     bad_words_ids=bad,
                 )
 
-                # generation = remove_matching_characters(history, completion[0])
                 generation = completion[0]
                 temp_history = deepcopy(history)
                 while len(temp_history) > 0:
@@ -409,8 +415,6 @@ class cortex:
         decay_after_length: int = 99,
         decay_factor: float = 0.000023,
     ):
-        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
-
         while self.active == True or not self.ai:
             time.sleep(1)
 
@@ -418,6 +422,13 @@ class cortex:
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
+        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
+        push = {
+            self.get_tokens_as_tuple(s): b
+            for s, b in {
+                propulsion: -5.9,
+            }.items()
+        }
         bad = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
             for token in ["{{<"]
@@ -439,7 +450,6 @@ class cortex:
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.ai.generate(
                     prompt=prompt,
-                    n=1,
                     do_sample=True,
                     min_length=23,
                     max_new_tokens=max_new_tokens,
@@ -458,6 +468,7 @@ class cortex:
                     remove_invalid_values=True,
                     return_as_list=True,
                     eos_token_id=eos,
+                    sequence_bias=push,
                     bad_words_ids=bad,
                 )
 
@@ -488,91 +499,103 @@ class cortex:
     def query(
         self,
         question="",
-        max_new_tokens: int = 111,
-        decay_after_length: int = 23,
-        decay_factor: float = 0.000023,
+        max_new_tokens: int = 333,
+        decay_after_length: int = 66,
+        decay_factor: float = 0.0000023,
     ):
-        """
-        Not functioning. This will require loading the model into QuestionAnswering
-        mode, as well as attaching appropriate adapters.
-        """
-
         while self.active == True or not self.ai:
             time.sleep(1)
 
         self.active = True
-        # print(self.ai.model.config.supports_mode("question_answering"))
-        # self.ai.model.config.model_type = "question_answering"
-        self.ai.model = AutoModelForQuestionAnswering(self.ai.model)
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
-        attempt = 0
-        max_attempts = 10
-        while attempt < max_attempts:
-            try:
-                temperature = 1.23
-                seed = nist_beacon()
+        prompt = f"""
+        I am a powerful artificial intelligence, who helps users to answer their questions.
 
-                if attempt > 0:
-                    decay_factor = decay_factor / 2
-                    temperature = temperature / 2
+        For example:
 
-                attempt += 1
+        Q:
 
-                # https://huggingface.co/docs/transformers/main_classes/text_generation
-                completion = self.ai.generate(
-                    prompt=question,
-                    n=1,
-                    do_sample=True,
-                    min_length=23,
-                    max_new_tokens=max_new_tokens,
-                    temperature=temperature,
-                    eta_cutoff=0.0003,
-                    penalty_alpha=0.6,
-                    top_k=4,
-                    repetition_penalty=1.95,
-                    encoder_repetition_penalty=0.999,
-                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                    no_repeat_ngram_size=7,
-                    low_memory=self.config.get("low_memory", False),
-                    renormalize_logits=True,
-                    remove_invalid_values=True,
-                    max_time=360,
-                    seed=seed[1],
-                    return_as_list=True,
-                )
-                print(completion)
+        What is the meaning of life?
 
-                output = completion[0]
-                break
+        A:
 
-            except Exception as e:
-                logging.error(e)
-                output = [False, e]
+        According to the Hitchhiker's Guide to the Galaxy, the answer to this question is "42".
 
-        self.ai.model.config.model_type = "causal_lm"
+        Q:
+
+        {question}
+
+        A:
+        """
+
+        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
+        push = {
+            self.get_tokens_as_tuple(s): b
+            for s, b in {
+                propulsion: -5.9,
+            }.items()
+        }
+        bad = [
+            self.ai.tokenizer(token, add_special_tokens=False).input_ids
+            # Many of these tokens were chosen from past experience with ugly patterns
+            # output by various models.
+            for token in [propulsion]
+        ]
+
+        try:
+            temperature = 0.7
+            seed = nist_beacon()
+
+            # https://huggingface.co/docs/transformers/main_classes/text_generation
+            completion = self.ai.generate(
+                prompt=dedent(prompt),
+                do_sample=True,
+                min_length=23,
+                max_new_tokens=max_new_tokens,
+                temperature=temperature,
+                eta_cutoff=0.0003,
+                penalty_alpha=0.6,
+                top_k=4,
+                repetition_penalty=1.95,
+                encoder_repetition_penalty=0.999,
+                exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                no_repeat_ngram_size=9,
+                low_memory=self.config.get("low_memory", False),
+                renormalize_logits=True,
+                remove_invalid_values=True,
+                max_time=360,
+                seed=seed[1],
+                eos_token_id=eos,
+                suppress_tokens=[eos],
+                sequence_bias=push,
+                bad_words_ids=bad,
+                return_as_list=True,
+            )
+
+            output = completion[0]
+
+        except Exception as e:
+            logging.error(e)
+            print(traceback.format_exc())
+            output = e
+
         self.active = False
         return output
 
 
-def remove_matching_characters(str1, str2):
-    i = 0
-    while i < min(len(str1), len(str2)) and str1[i] == str2[i]:
-        i += 1
-    return str2[i:]
-
-
 # Load the model and schedule periodic reloading
 ctx = cortex(config[focus], focus)
-# scheduler = BackgroundScheduler()
-# scheduler.add_job(
-#     cortex,
-#     args=(
-#         config[focus],
-#         focus,
-#     ),
-#     trigger="interval",
-#     minutes=30,
-# )
-# scheduler.start()
+# if config[focus].get("reload_interval", False):
+#     scheduler = BackgroundScheduler()
+#     scheduler.add_job(
+#         cortex,
+#         args=(
+#             config[focus],
+#             focus,
+#         ),
+#         trigger="interval",
+#         minutes=30,
+#     )
+#     scheduler.start()

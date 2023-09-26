@@ -12,9 +12,9 @@ from cerberus import Validator
 from utils import (
     ad,
     bc,
-    get_daemon,
     get_identity,
     propulsion,
+    remove_invisible_characters,
     ship,
     strip_emojis,
 )
@@ -172,21 +172,9 @@ async def response(config, focus):
             messages[focus].pop(0)
         return
 
-    daemon = get_daemon(str(random.randint(1, 99999)))
+    sanitized = remove_invisible_characters(strip_emojis(output))
 
-    sanitized = strip_emojis(
-        re.sub(
-            r"(?:<@)(\d+\s*\d*)(?:>)",
-            f"{daemon}",
-            output,
-        )
-    ).replace(r"\n", "")
-
-    if (
-        sanitized.startswith(" ")
-        or sanitized == ""
-        or propulsion + str(bias) + ship + " " + sanitized in messages[focus]
-    ):
+    if propulsion + str(bias) + ship + " " + sanitized in messages[focus]:
         if len(messages[focus]) > 0:
             messages[focus].pop(0)
         return

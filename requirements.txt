@@ -2,6 +2,7 @@ lightning>=2.0.8
 beautifulsoup4>=4.12.2
 transformers>=4.32.0
 tensorboard>=2.14.0
+# tensorboardX>=2.6.2.2 
 apscheduler>=3.10.4
 discord.py>=2.3.2
 deepspeed>=0.10.1

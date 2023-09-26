@@ -49,6 +49,8 @@ async def client(config) -> None:
                     "You are powerful tulpa that follows the human's instructions.",
                 ),
             )
+            answer = await head.ctx.query(question=message["text"])
+            print(answer)
             if success == False:
                 return
             await message.answer(output)

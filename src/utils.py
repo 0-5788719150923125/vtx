@@ -245,6 +245,27 @@ def nist_beacon():
     return cached_value
 
 
+def has_invisible_characters(text):
+    # Define a regular expression to match any non-printable characters
+    invisible_char_pattern = re.compile(r"[^ -~\t\n\r\f\v]+")
+
+    # Check if the input text contains any non-printable characters
+    return bool(invisible_char_pattern.search(text))
+
+
+def remove_invisible_characters(text):
+    # Define a regular expression to match any non-printable characters
+    invisible_char_pattern = re.compile(r"[^ -~\t\n\r\f\v]+")
+
+    # Replace all occurrences of non-printable characters with an empty string
+    cleaned_text = invisible_char_pattern.sub("", text)
+
+    while cleaned_text.startswith(" "):
+        cleaned_text = cleaned_text[1:]
+
+    return cleaned_text
+
+
 def strip_emojis(text):
     emoji_pattern = re.compile(
         "["

@@ -2,7 +2,7 @@ import random
 import os
 import threading
 import re
-from utils import ad, bc, get_daemon, get_identity, propulsion, ship
+from common import ad, bc, get_daemon, get_identity, propulsion, ship
 import asyncio
 import asyncpraw
 import time

@@ -9,7 +9,7 @@ from pprint import pprint
 from cerberus import Validator
 import head
 from events import subscribe_event
-from utils import ad, bc, bullets, get_identity, propulsion, ship
+from common import ad, bc, bullets, get_identity, propulsion, ship
 
 response_frequency = 3  # out of 100
 mention_self_frequency = 88  # out of 100

@@ -5,7 +5,7 @@ from chromadb import chromadb, Documents, EmbeddingFunction, Embeddings
 from chromadb.config import Settings
 from events import subscribe_event
 from head import ctx
-from utils import list_full_paths, random_string
+from common import list_full_paths, random_string
 
 focus = os.environ["FOCUS"]
 

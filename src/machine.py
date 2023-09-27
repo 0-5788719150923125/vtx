@@ -2,7 +2,7 @@ import threading
 import time
 import importlib
 import memory
-from utils import ad, bc, config
+from common import ad, bc, config
 
 
 # This is the main loop

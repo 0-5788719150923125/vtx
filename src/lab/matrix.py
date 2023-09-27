@@ -8,7 +8,7 @@ from pprint import pprint
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
 import logging
 import head
-from utils import ad, bc, get_identity, propulsion, ship
+from common import ad, bc, get_identity, propulsion, ship
 
 logging.getLogger("nio").setLevel(logging.WARNING)
 

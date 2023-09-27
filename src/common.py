@@ -23,6 +23,8 @@ from cerberus import Validator
 propulsion = "¶"
 ship = ":>"
 
+focus = os.environ["FOCUS"]
+
 cache_path = "/tmp/torch"
 os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
@@ -46,7 +48,7 @@ except Exception as e:
     logging.error(e)
     config = default_config
 
-pprint(config)
+print(yaml.dump(config, indent=4, sort_keys=True))
 
 
 def validation(config):

@@ -18,20 +18,19 @@ from aigen import aigen
 import logging
 from pprint import pprint
 from apscheduler.schedulers.background import BackgroundScheduler
-from transformers import AutoModelForQuestionAnswering, pipeline
 from cerberus import Validator
-from utils import (
+from common import (
     ad,
     bc,
     config,
+    focus,
     nist_beacon,
     propulsion,
     ship,
 )
 
-logging.getLogger("transformers").setLevel(logging.WARNING)
 
-focus = os.environ["FOCUS"]
+logging.getLogger("transformers").setLevel(logging.WARNING)
 
 
 def validation(config):
@@ -75,6 +74,8 @@ def validation(config):
                             "allowed": ["none", "lora_only", "all"],
                         },
                         "target_modules": {"type": "list"},
+                        "rank_pattern": {"type": "dict"},
+                        "alpha_pattern": {"type": "dict"},
                         "num_virtual_tokens": {"type": "integer"},
                     },
                 },
@@ -362,6 +363,7 @@ class cortex:
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
                     seed=seed[1],
+                    use_cache=False,
                     renormalize_logits=True,
                     remove_invalid_values=True,
                     return_as_list=True,
@@ -369,6 +371,7 @@ class cortex:
                     pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
                     sequence_bias=push,
                     bad_words_ids=bad,
+                    stop_word=propulsion,
                 )
 
                 generation = completion[0]
@@ -465,12 +468,14 @@ class cortex:
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
                     seed=seed[1],
+                    use_cache=False,
                     renormalize_logits=True,
                     remove_invalid_values=True,
                     return_as_list=True,
                     eos_token_id=eos,
                     sequence_bias=push,
                     bad_words_ids=bad,
+                    stop_word=propulsion,
                 )
 
                 if completion:
@@ -547,14 +552,24 @@ class cortex:
         }
         bad = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
-            # Many of these tokens were chosen from past experience with ugly patterns
-            # output by various models.
             for token in [propulsion]
         ]
 
         try:
             temperature = 0.3
             seed = nist_beacon()
+
+            stop_words = [
+                propulsion,
+                "Q",
+                "Q:",
+                "]",
+                "']",
+                "']\n",
+                "]\n",
+                "\n\n",
+                "']\n\n",
+            ]
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
             completion = self.ai.generate(
@@ -575,10 +590,12 @@ class cortex:
                 remove_invalid_values=True,
                 max_time=360,
                 seed=seed[1],
+                use_cache=False,
                 eos_token_id=eos,
                 suppress_tokens=[eos],
                 sequence_bias=push,
                 bad_words_ids=bad,
+                stop_word="Q:",
                 return_as_list=True,
             )
 

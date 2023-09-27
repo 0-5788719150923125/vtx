@@ -4,9 +4,9 @@ import random
 import json
 import csv
 import os
-import sys
 import logging
-from utils import config, get_identity, get_past_datetime, propulsion, ship
+import sys
+from common import config, get_identity, get_past_datetime, propulsion, ship
 from bs4 import BeautifulSoup
 from pprint import pprint
 import re

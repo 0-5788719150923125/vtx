@@ -15,10 +15,9 @@ from peft import (
     PeftConfig,
 )
 from pytorch_lightning import loggers
-from utils import ad, bc, config, hash_directory, list_full_paths, nist_beacon
+from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_beacon
 
 
-focus = os.environ["FOCUS"]
 model = config[focus]
 model_folder = "models/" + focus
 tokenizer_file = "src." + focus + ".tokenizer.json"
@@ -201,6 +200,8 @@ if __name__ == "__main__":
                     lora_dropout=p.get("dropout", 0.1),
                     bias=p.get("bias", "none"),
                     target_modules=p.get("target_modules", None),
+                    rank_pattern=p.get("rank_pattern", {}),
+                    alpha_pattern=p.get("alpha_pattern", {}),
                     modules_to_save=p.get("modules_to_save", None),
                 )
             elif p["type"] == "prompt":

@@ -3,7 +3,7 @@ import random
 import os
 import re
 import logging
-from utils import ad, bc, get_daemon, get_identity, propulsion, ship
+from common import ad, bc, get_daemon, get_identity, propulsion, ship
 from aiogram import Dispatcher, Bot, types
 from events import post_event
 import head
@@ -35,13 +35,17 @@ async def client(config) -> None:
 
             post_event("commit_memory", texts=message["text"])
 
+            # For testing Q/A mode
+            answer = await head.ctx.query(question=message["text"])
+            print(answer)
+
             if random.random() > config["telegram"].get("frequency", 0.9):
                 return
             persona = config["personas"].get(config["telegram"].get("persona"))
             bias = persona.get("bias", get_identity())
             # while message.is_waiting_for_reply:
             await message.answer_chat_action("typing")
-            # await asyncio.sleep(0.5)
+
             success, bias, output, seeded = await head.ctx.chat(
                 bias=bias,
                 prefix=persona.get(
@@ -49,8 +53,6 @@ async def client(config) -> None:
                     "You are powerful tulpa that follows the human's instructions.",
                 ),
             )
-            answer = await head.ctx.query(question=message["text"])
-            print(answer)
             if success == False:
                 return
             await message.answer(output)

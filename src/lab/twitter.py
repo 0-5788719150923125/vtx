@@ -5,7 +5,7 @@ import time
 import tweepy
 import head
 import logging
-from utils import ad, bc
+from common import ad, bc
 
 
 def main(config):

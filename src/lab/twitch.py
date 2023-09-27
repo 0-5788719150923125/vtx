@@ -1,15 +1,12 @@
-from twitchAPI import Twitch
 from twitchAPI.twitch import Twitch
 from twitchAPI.pubsub import PubSub
 from twitchAPI.oauth import UserAuthenticator
-from twitchAPI.types import AuthScope
-from twitchAPI.oauth import UserAuthenticator
-from twitchAPI.types import AuthScope, ChatEvent
+from twitchAPI.type import AuthScope, ChatEvent
 from twitchAPI.chat import Chat, EventData
 import asyncio
 import os
 import logging
-from utils import ad, bc, get_identity, propulsion, ship
+from common import ad, bc, get_identity, propulsion, ship
 import head
 import lab.source
 import random

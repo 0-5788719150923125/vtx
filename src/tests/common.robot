@@ -1,5 +1,5 @@
 *** Settings ***
-Library           ../utils.py
+Library           ../common.py
 
 *** Test Cases ***
 Create hash from string
@@ -22,6 +22,10 @@ Generate a random string
     ${result}    random_string    10
     ${length}    GET LENGTH    ${result}
     SHOULD BE EQUAL AS INTEGERS    ${length}    10
+
+Generate a daemon name
+    ${result}    get_daemon    Ryan
+    SHOULD BE EQUAL    ${result}    Amorsus
 
 List every file in a directory recursively
     ${result}    list_full_paths    '/src'

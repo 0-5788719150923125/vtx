@@ -245,7 +245,7 @@ class cortex:
         bias=None,
         max_new_tokens: int = 222,
         decay_after_length: int = 33,
-        decay_factor: float = 0.00023,
+        decay_factor: float = 0.000023,
     ):
         while self.active == True or not self.ai:
             time.sleep(1)

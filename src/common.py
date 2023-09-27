@@ -16,7 +16,6 @@ from datetime import datetime, timedelta
 from pprint import pprint
 
 import requests
-import websocket
 import yaml
 from cerberus import Validator
 from mergedeep import Strategy, merge
@@ -226,14 +225,26 @@ def get_identity(seed=None):
     return identity
 
 
+def random_string(length=10):
+    # Define the characters you want to include in the random string
+    characters = (
+        string.ascii_letters + string.digits
+    )  # Letters (both uppercase and lowercase) and digits
+    # You can customize this by adding more characters as needed
+
+    # Use random.choices to generate the string
+    random_string = "".join(random.choices(characters, k=length))
+
+    return random_string
+
+
 # Hash a string, return a name
-def get_daemon(seed):
-    ws = websocket.WebSocket()
-    ws.connect("ws://localhost:9666/ws")
-    ws.send(json.dumps({"seed": seed}).encode("utf-8"))
-    response = ws.recv()
-    ws.close()
-    return json.loads(response)["name"]
+def get_daemon(seed=random_string(length=24)):
+    command = ["node", "/src/scripts/daemon.js", str(seed)]
+    output = subprocess.check_output(
+        command, universal_newlines=True, stderr=subprocess.STDOUT
+    )
+    return output.strip()
 
 
 def deterministic_short_hash(input_string, length=7, seed="42"):
@@ -352,19 +363,6 @@ def write_to_file(path: str, file_name: str, content: str):
 
     with open(path, "w") as file:
         file.write(content)
-
-
-def random_string(length=10):
-    # Define the characters you want to include in the random string
-    characters = (
-        string.ascii_letters + string.digits
-    )  # Letters (both uppercase and lowercase) and digits
-    # You can customize this by adding more characters as needed
-
-    # Use random.choices to generate the string
-    random_string = "".join(random.choices(characters, k=length))
-
-    return random_string
 
 
 # Take a relative date in string format, and return the formatted value

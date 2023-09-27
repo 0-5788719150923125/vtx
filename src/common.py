@@ -49,7 +49,58 @@ except Exception as e:
     logging.error(e)
     config = default_config
 
-print(yaml.dump(config, indent=4, sort_keys=True))
+
+def colorize_yaml(yaml_dict):
+    # Define ANSI color escape codes
+    color_codes = {
+        "red": "\033[91m",
+        "reset": "\033[0m",
+    }
+
+    # Convert the YAML dictionary to a string without type tags
+    yaml_text = yaml.dump(yaml_dict, default_style=None)
+
+    # Split the YAML text into lines
+    lines = yaml_text.split("\n")
+
+    # Initialize a regular expression pattern to match lines with keys
+    pattern = re.compile(r"^(\s*)([^\s:]+):(.*)(?<!\s)$")
+
+    # Initialize a stack to keep track of whether we are within a list of dictionaries
+    stack = []
+
+    # Iterate through lines and colorize keys based on the stack
+    for i, line in enumerate(lines):
+        match = pattern.match(line)
+        if match:
+            leading_whitespace = match.group(1)
+            key = match.group(2)
+            rest_of_line = match.group(3)
+
+            # Check if we are within a list of dictionaries
+            within_list_of_dicts = all(isinstance(item, dict) for item in stack)
+
+            # Check if the key should be colored based on whether it's within a list of dicts
+            if within_list_of_dicts:
+                colored_key = f"{color_codes['red']}{key}{color_codes['reset']}"
+                lines[i] = f"{leading_whitespace}{colored_key}:{rest_of_line}"
+
+        # Update the stack based on indentation
+        num_spaces = len(leading_whitespace)
+        while len(stack) > num_spaces / 2:
+            stack.pop()
+
+        # Check if the line starts a new dictionary in a list
+        if rest_of_line.startswith("- "):
+            stack.append({})
+
+    # Join the modified lines back into a single string
+    colored_yaml = "\n".join(lines)
+
+    return colored_yaml
+
+
+print(colorize_yaml(config))
 
 
 def validation(config):
@@ -334,13 +385,22 @@ def get_past_datetime(time_description):
         "weeks": "weeks",
         "day": "days",
         "days": "days",
+        "hour": "hours",  # Added support for "hour" and "hours"
+        "hours": "hours",  # Added support for "hour" and "hours"
+        "minute": "minutes",  # Added support for "minute" and "minutes"
+        "minutes": "minutes",  # Added support for "minute" and "minutes"
     }
 
-    # Convert years and months to days
+    # Convert years, months, hours, and minutes to days or hours or minutes
     if unit in ["year", "years"]:
         value *= 365
     elif unit in ["month", "months"]:
         value *= 30
+    elif unit in ["hour", "hours"]:
+        value *= 60  # Convert hours to minutes
+        unit = "minutes"  # Update the unit to "minutes" for consistency
+    elif unit in ["minute", "minutes"]:
+        unit = "minutes"  # Update the unit to "minutes" for consistency
 
     # Calculate the timedelta based on the unit
     delta_unit = time_units[unit]

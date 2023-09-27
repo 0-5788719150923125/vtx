@@ -116,6 +116,7 @@ def fetch_from_discord():
     # For every server listed in config, iterate over options, and download messages
     for server in config["discord"]["servers"]:
         print("exporting " + str(server))
+
         skip = False
         s = config["discord"]["servers"][server]
         command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportguild --guild "{str(server)}" -t "{discord_token}" -o "/gen/discord/g-%g-%c.json" -f "JSON"'
@@ -131,6 +132,9 @@ def fetch_from_discord():
             if "past" in s:
                 d = get_past_datetime(s["past"])
                 command = command + f' --after "{str(d)}"'
+        for filename in os.listdir("/gen/discord"):
+            if filename.startswith(f"g-{str(server)}"):
+                os.remove(os.path.join("/gen/discord", filename))
         os.system(command)
 
 

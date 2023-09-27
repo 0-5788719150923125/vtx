@@ -23,8 +23,6 @@ from cerberus import Validator
 
 from common import ad, bc, config, focus, nist_beacon, propulsion, ship
 
-logging.getLogger("transformers").setLevel(logging.WARNING)
-
 
 def validation(config):
     schema = {
@@ -359,7 +357,6 @@ class cortex:
                     use_cache=False,
                     renormalize_logits=True,
                     remove_invalid_values=True,
-                    return_as_list=True,
                     eos_token_id=eos,
                     pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
                     sequence_bias=push,
@@ -367,9 +364,9 @@ class cortex:
                     stop_word=propulsion,
                 )
 
-                generation = completion[0]
+                generation = completion
                 temp_history = deepcopy(history)
-                while len(temp_history) > 0:
+                while len(temp_history) > 1:
                     generation = generation[1:]
                     temp_history = temp_history[1:]
                 mentions = "(?:[<][@])(\d+\s*\d*)"
@@ -399,7 +396,6 @@ class cortex:
 
             except Exception as e:
                 logging.error(e)
-                print(traceback.format_exc())
 
         self.active = False
         return success, bias, output, seeded
@@ -464,7 +460,6 @@ class cortex:
                     use_cache=False,
                     renormalize_logits=True,
                     remove_invalid_values=True,
-                    return_as_list=True,
                     eos_token_id=eos,
                     sequence_bias=push,
                     bad_words_ids=bad,
@@ -473,8 +468,7 @@ class cortex:
 
                 if completion:
                     output = (
-                        completion[0]
-                        .replace(r"\n", "\n")
+                        completion.replace(r"\n", "\n")
                         .replace("{{<", "{{")
                         .replace(">}}", "}}")
                     )
@@ -589,10 +583,9 @@ class cortex:
                 sequence_bias=push,
                 bad_words_ids=bad,
                 stop_word="Q:",
-                return_as_list=True,
             )
 
-            output = completion[0]
+            output = completion
 
         except Exception as e:
             logging.error(e)

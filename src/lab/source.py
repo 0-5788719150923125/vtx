@@ -87,6 +87,8 @@ def validation(config):
         "gpu_index": {"type": "integer"},
         "low_memory": {"type": "boolean"},
         "petals": {"type": "boolean"},
+        "reload_interval": {"type": "integer"},
+        "truncate_length": {"type": "integer"},
     }
     v = Validator()
     result = v.validate(config, schema)

@@ -45,6 +45,7 @@ def validation(config):
         "petals": {"type": "boolean"},
         "focus": {"type": "dict"},
         "truncate_length": {"type": "integer"},
+        "reload_interval": {"type": "integer"},
         "training": {
             "type": "dict",
             "schema": {
@@ -501,7 +502,7 @@ class cortex:
         question="",
         max_new_tokens: int = 333,
         decay_after_length: int = 66,
-        decay_factor: float = 0.0000023,
+        decay_factor: float = 0.023,
     ):
         while self.active == True or not self.ai:
             time.sleep(1)
@@ -534,6 +535,7 @@ class cortex:
         {question}
 
         A:
+        
         """
 
         eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
@@ -593,15 +595,16 @@ class cortex:
 
 # Load the model and schedule periodic reloading
 ctx = cortex(config[focus], focus)
-# if config[focus].get("reload_interval", False):
-#     scheduler = BackgroundScheduler()
-#     scheduler.add_job(
-#         cortex,
-#         args=(
-#             config[focus],
-#             focus,
-#         ),
-#         trigger="interval",
-#         minutes=30,
-#     )
-#     scheduler.start()
+reload_interval = config[focus].get("reload_interval", 0)
+if reload_interval > 0:
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(
+        cortex,
+        args=(
+            config[focus],
+            focus,
+        ),
+        trigger="interval",
+        minutes=reload_interval,
+    )
+    scheduler.start()

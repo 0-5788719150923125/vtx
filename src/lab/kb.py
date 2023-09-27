@@ -1,12 +1,13 @@
-import os
-import time
-import random
 import asyncio
-import math
 import logging
+import math
+import os
+import random
+import time
+
 from cerberus import Validator
+
 import head
-from events import post_event
 from common import (
     ad,
     bc,
@@ -15,6 +16,7 @@ from common import (
     read_from_file,
     write_to_file,
 )
+from events import post_event
 
 
 def main(config):

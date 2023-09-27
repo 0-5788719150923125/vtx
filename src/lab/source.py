@@ -1,14 +1,17 @@
 import asyncio
-import threading
-import random
-import time
 import json
-import re
 import logging
+import random
+import re
+import threading
+import time
+from pprint import pprint
+
 import websocket
 import websockets
-from pprint import pprint
 from cerberus import Validator
+
+import head
 from common import (
     ad,
     bc,
@@ -18,7 +21,6 @@ from common import (
     ship,
     strip_emojis,
 )
-import head
 
 context_length = 23
 

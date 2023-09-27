@@ -1,11 +1,13 @@
-import os
 import logging
+import os
+
 import numpy as np
-from chromadb import chromadb, Documents, EmbeddingFunction, Embeddings
+from chromadb import Documents, EmbeddingFunction, Embeddings, chromadb
 from chromadb.config import Settings
+
+from common import list_full_paths, random_string
 from events import subscribe_event
 from head import ctx
-from common import list_full_paths, random_string
 
 focus = os.environ["FOCUS"]
 

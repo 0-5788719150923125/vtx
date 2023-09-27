@@ -1,24 +1,25 @@
-from mergedeep import merge, Strategy
-import requests
-import shutil
-import secrets
-import random
-import string
-import logging
-from pprint import pprint
-import yaml
-import json
 import hashlib
-import os
-import websocket
-import time
-import re
 import io
+import json
+import logging
+import os
+import random
+import re
+import secrets
 import selectors
+import shutil
+import string
 import subprocess
 import sys
+import time
 from datetime import datetime, timedelta
+from pprint import pprint
+
+import requests
+import websocket
+import yaml
 from cerberus import Validator
+from mergedeep import Strategy, merge
 
 propulsion = "¶"
 ship = ":>"

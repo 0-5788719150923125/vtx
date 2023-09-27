@@ -1,6 +1,7 @@
+import importlib
 import threading
 import time
-import importlib
+
 import memory
 from common import ad, bc, config
 

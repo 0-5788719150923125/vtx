@@ -1,22 +1,23 @@
-import shutil
-import random
-import os
 import logging
+import os
+import random
+import shutil
+
+from aigen import aigen
 from aigen.TokenDataset import TokenDataset, merge_datasets
 from aigen.tokenizers import train_tokenizer
-from aigen import aigen
-from transformers import AutoTokenizer
 from peft import (
-    get_peft_model,
     LoraConfig,
+    PeftConfig,
+    PeftModel,
     PrefixTuningConfig,
     PromptTuningConfig,
-    PeftModel,
-    PeftConfig,
+    get_peft_model,
 )
 from pytorch_lightning import loggers
-from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_beacon
+from transformers import AutoTokenizer
 
+from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_beacon
 
 model = config[focus]
 model_folder = "models/" + focus

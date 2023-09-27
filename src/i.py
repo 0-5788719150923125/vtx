@@ -1,18 +1,20 @@
-import requests
-import shutil
-import random
-import json
-import csv
-import os
-import logging
-import sys
-from common import config, get_identity, get_past_datetime, propulsion, ship
-from bs4 import BeautifulSoup
-from pprint import pprint
-import re
-import praw
 import asyncio
+import csv
+import json
+import logging
+import os
+import random
+import re
+import shutil
+import sys
+from pprint import pprint
+
+import praw
+import requests
+from bs4 import BeautifulSoup
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
+
+from common import config, get_identity, get_past_datetime, propulsion, ship
 
 
 def compile_book():

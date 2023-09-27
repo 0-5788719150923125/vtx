@@ -1,12 +1,14 @@
+import asyncio
+import logging
 import os
-import time
 import re
 import threading
-import asyncio
+import time
 from datetime import datetime
 from pprint import pprint
+
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
-import logging
+
 import head
 from common import ad, bc, get_identity, propulsion, ship
 

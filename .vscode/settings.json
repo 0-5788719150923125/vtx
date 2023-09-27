@@ -7,13 +7,7 @@
     },
   },
   "black-formatter.args": ["--line-length", "88"],
-  "isort.args":[
-		"--profile",
-		"black",
-		"--skip-gitignore",
-		"--line-length",
-		"88"
-  ],
+  "isort.args":["--profile", "black"],
   "isort.check": true,
   "prettier.enable": true,
   "prettier.requireConfig": true,

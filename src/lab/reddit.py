@@ -1,16 +1,18 @@
-import random
-import os
-import threading
-import re
-from common import ad, bc, get_daemon, get_identity, propulsion, ship
 import asyncio
-import asyncpraw
+import logging
+import os
+import random
+import re
+import threading
 import time
 from copy import deepcopy
-import logging
-import head
 from pprint import pprint
+
+import asyncpraw
 from cerberus import Validator
+
+import head
+from common import ad, bc, get_daemon, get_identity, propulsion, ship
 from events import post_event, subscribe_event
 
 

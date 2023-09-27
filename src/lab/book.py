@@ -1,5 +1,7 @@
 import time
+
 import psutil
+
 from common import run_shell_command
 
 

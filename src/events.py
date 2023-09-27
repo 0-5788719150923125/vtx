@@ -1,5 +1,5 @@
-from collections import defaultdict
 import asyncio
+from collections import defaultdict
 
 subscribers = defaultdict(list)
 

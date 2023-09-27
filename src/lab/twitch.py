@@ -1,15 +1,17 @@
-from twitchAPI.twitch import Twitch
-from twitchAPI.pubsub import PubSub
-from twitchAPI.oauth import UserAuthenticator
-from twitchAPI.type import AuthScope, ChatEvent
-from twitchAPI.chat import Chat, EventData
 import asyncio
-import os
 import logging
-from common import ad, bc, get_identity, propulsion, ship
+import os
+import random
+
+from twitchAPI.chat import Chat, EventData
+from twitchAPI.oauth import UserAuthenticator
+from twitchAPI.pubsub import PubSub
+from twitchAPI.twitch import Twitch
+from twitchAPI.type import AuthScope, ChatEvent
+
 import head
 import lab.source
-import random
+from common import ad, bc, get_identity, propulsion, ship
 
 
 def main(config):

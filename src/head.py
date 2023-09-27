@@ -354,7 +354,7 @@ class cortex:
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
                     seed=seed[1],
-                    use_cache=False,
+                    use_cache=True,
                     renormalize_logits=True,
                     remove_invalid_values=True,
                     eos_token_id=eos,
@@ -457,7 +457,7 @@ class cortex:
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
                     seed=seed[1],
-                    use_cache=False,
+                    use_cache=True,
                     renormalize_logits=True,
                     remove_invalid_values=True,
                     eos_token_id=eos,
@@ -527,7 +527,6 @@ class cortex:
         {question}
 
         A:
-        
         """
 
         eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
@@ -545,18 +544,6 @@ class cortex:
         try:
             temperature = 0.3
             seed = nist_beacon()
-
-            stop_words = [
-                propulsion,
-                "Q",
-                "Q:",
-                "]",
-                "']",
-                "']\n",
-                "]\n",
-                "\n\n",
-                "']\n\n",
-            ]
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
             completion = self.ai.generate(
@@ -577,13 +564,16 @@ class cortex:
                 remove_invalid_values=True,
                 max_time=360,
                 seed=seed[1],
-                use_cache=False,
+                use_cache=True,
                 eos_token_id=eos,
                 suppress_tokens=[eos],
                 sequence_bias=push,
                 bad_words_ids=bad,
                 stop_word="Q:",
             )
+
+            while completion.endswith("\n"):
+                completion = completion[1:]
 
             output = completion
 

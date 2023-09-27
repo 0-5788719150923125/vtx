@@ -193,7 +193,8 @@ def prepare_discord_messages():
 
     os.makedirs("/lab/discord/exported")
 
-    print("preparing Discord messages")
+    successes = 0
+    failures = 0
     for filename in os.listdir("/gen/discord"):
         try:
             with open(os.path.join("/gen/discord", filename), "r") as file:
@@ -271,8 +272,9 @@ def prepare_discord_messages():
                                             + sanitized
                                         )
                                         txt_file.write(f"{content}\n".format(content))
+                                        successes += 1
                             except Exception as e:
-                                logging.error(e)
+                                failures += 1
 
                         try:
                             sanitized = sanitizer(i["content"])
@@ -285,11 +287,15 @@ def prepare_discord_messages():
                             sanitized = transform_message(sanitized)
                             content = propulsion + author_id + ship + " " + sanitized
                             txt_file.write(f"{content}\n".format(content))
+                            successes += 1
                         except Exception as e:
-                            logging.error(e)
-
+                            failures += 1
         except Exception as e:
-            logging.error(e)
+            failures += 1
+
+        os.system("clear")
+        print("preparing Discord messages")
+        print(f"{successes} successes, {failures} failures")
 
 
 # Download messages from subreddits

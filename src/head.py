@@ -37,6 +37,10 @@ def validation(config):
         "focus": {"type": "dict"},
         "truncate_length": {"type": "integer"},
         "reload_interval": {"type": "integer"},
+        "bos_token": {"type": "string"},
+        "eos_token": {"type": "string"},
+        "unk_token": {"type": "string"},
+        "pad_token": {"type": "string"},
         "training": {
             "type": "dict",
             "schema": {
@@ -229,7 +233,6 @@ class cortex:
                 adapter=adapter,
                 precision=self.config.get("precision", None),
             )
-
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))
         except Exception as e:

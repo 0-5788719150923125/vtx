@@ -91,6 +91,10 @@ def validation(config):
         "petals": {"type": "boolean"},
         "reload_interval": {"type": "integer"},
         "truncate_length": {"type": "integer"},
+        "bos_token": {"type": "string"},
+        "eos_token": {"type": "string"},
+        "unk_token": {"type": "string"},
+        "pad_token": {"type": "string"},
     }
     v = Validator()
     result = v.validate(config, schema)

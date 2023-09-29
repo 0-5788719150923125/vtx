@@ -143,8 +143,8 @@ class Ink:
         partial = math.floor(self.model_max_length * 0.8)
         while self.get_length(self.staged) > partial:
             self.replace_at_index = random.randint(len(self.prompt), len(self.staged))
+            # print(f"replacing at index {self.replace_at_index}")
             self.staged = self.staged[: self.replace_at_index]
-            self.full_doc = self.full_doc[self.replace_at_index :]
             self.combine = True
 
     async def write(self, t, entry):
@@ -155,8 +155,8 @@ class Ink:
             self.chunk_prompt()
             output = await head.ctx.prompt(
                 prompt=self.staged,
-                max_new_tokens=33,
-                decay_after_length=11,
+                max_new_tokens=111,
+                decay_after_length=33,
                 decay_factor=-0.23,
             )
             if output[0] == False:
@@ -164,7 +164,8 @@ class Ink:
             content = output
             if self.combine:
                 self.combine = False
-                content = output + self.full_doc
+                # content = output + self.full_doc[: self.replace_at_index]
+                # print(self.full_doc[: self.replace_at_index])
             write_to_file(
                 path=self.dir,
                 file_name=self.file,

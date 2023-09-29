@@ -270,7 +270,7 @@ if __name__ == "__main__":
     # Create a tokenized dataset from every directory specified in config file
     def build_inputs(stage):
         datasets = {}
-        block_size = stage.get("block_size", 1024)
+        block_size = stage.get("block_size", ai.model_max_length)
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
@@ -419,8 +419,8 @@ if __name__ == "__main__":
             output_dir=output_dir,
             loggers=[logger],
             optimizer=stage.get("optimizer", "AdamW"),
-            learning_rate=stage.get("learning_rate", 0.005),
-            weight_decay=stage.get("weight_decay", 0.01),
+            learning_rate=float(stage.get("learning_rate", 0.005)),
+            weight_decay=float(stage.get("weight_decay", 0.01)),
             warmup_steps=stage.get("warmup_steps", 0),
             gradient_clip_val=stage.get("gradient_clip_val", 0.5),
             update_period=stage.get("update_period", 10),

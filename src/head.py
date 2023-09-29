@@ -11,6 +11,7 @@ import sys
 import time
 import traceback
 import typing
+from itertools import chain
 from copy import deepcopy
 from pprint import pprint
 from textwrap import dedent
@@ -174,8 +175,10 @@ class cortex:
 
         self.context.append(message)
 
-    def get_tokens_as_tuple(self, word):
-        return tuple(self.ai.tokenizer([word], add_special_tokens=False).input_ids[0])
+    def get_tokens_as_tuple(self, sequence):
+        return tuple(
+            self.ai.tokenizer([sequence], add_special_tokens=False).input_ids[0]
+        )
 
     # Decorator to a blocking function into a background thread
     def to_thread(func: typing.Callable) -> typing.Coroutine:
@@ -229,13 +232,17 @@ class cortex:
 
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))
-            self.active = False
         except Exception as e:
             logging.error(e)
             time.sleep(5)
-            self.active = False
             self.loader(self.focus)
-            return
+        self.active = False
+
+    def wait_in_queue(self):
+        while self.active == True or not self.ai:
+            time.sleep(1)
+
+        self.active = True
 
     @to_thread
     def chat(
@@ -244,13 +251,10 @@ class cortex:
         ctx=None,
         bias=None,
         max_new_tokens: int = 222,
-        decay_after_length: int = 44,
-        decay_factor: float = 0.0023,
+        decay_after_length: int = 33,
+        decay_factor: float = -2.3,
     ):
-        while self.active == True or not self.ai:
-            time.sleep(1)
-
-        self.active = True
+        self.wait_in_queue()
 
         if not prefix:
             prefix = self.config.get(
@@ -260,17 +264,18 @@ class cortex:
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
         eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
-        push = {
+        push_sequences = {
             self.get_tokens_as_tuple(s): b
             for s, b in {
-                "\n": -5.9,
-                "<@": -5.9,
-                "[[": -5.9,
-                "<": -5.9,
-                "((": -5.9,
+                "'t": 0.5,
+                "\n": -8.0,
+                "#": -2.0,
+                "<@": -20.0,
+                "[[": -20.0,
+                "((": -20.0,
             }.items()
         }
-        bad = [
+        bad_tokens = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
             # Many of these tokens were chosen from past experience with ugly patterns
             # output by various models.
@@ -293,6 +298,22 @@ class cortex:
                 f"{ship} \n",
             ]
         ]
+
+        suppress_tokens = list(
+            set(
+                chain.from_iterable(
+                    [
+                        self.ai.tokenizer(token, add_special_tokens=False).input_ids
+                        # Many of these tokens were chosen from past experience with ugly patterns
+                        # output by various models.
+                        for token in [
+                            "(((",
+                            "<@",
+                        ]
+                    ]
+                )
+            )
+        )
 
         context = self.context
         if ctx:
@@ -318,8 +339,6 @@ class cortex:
                 19,
             ], f"The given bias ({str(bias)}) is of the wrong length."
             prompt += str(bias) + ship
-        else:
-            bias = None
 
         attempt = 0
         max_attempts = 10
@@ -357,10 +376,9 @@ class cortex:
                     use_cache=True,
                     renormalize_logits=True,
                     remove_invalid_values=True,
-                    # eos_token_id=eos,
-                    pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
-                    sequence_bias=push,
-                    bad_words_ids=bad,
+                    sequence_bias=push_sequences,
+                    bad_words_ids=bad_tokens,
+                    suppress_tokens=suppress_tokens,
                     stop_word=propulsion,
                 )
 
@@ -384,8 +402,8 @@ class cortex:
                     or bool(re.search(variables, group[3]))
                     or group[3] == ""
                     or propulsion in group[3]
-                    or group[3][:1] in [">", "~", '"', "“", " ", "< @", "\\", "\n", ""]
-                    or group[3][:2] in ["\\", "\n"]
+                    or group[3][:1] in [">", "~", '"', "“", " ", "\\", "\n", ""]
+                    or group[3][:2] in ["\\", "\n", "<@", "(("]
                     or group[3] in prompt
                 ):
                     if attempt == max_attempts:
@@ -398,7 +416,6 @@ class cortex:
 
             except Exception as e:
                 logging.error(e)
-                print(traceback.format_exc())
 
         self.active = False
         return success, bias, output, seeded
@@ -411,10 +428,7 @@ class cortex:
         decay_after_length: int = 99,
         decay_factor: float = 0.000023,
     ):
-        while self.active == True or not self.ai:
-            time.sleep(1)
-
-        self.active = True
+        self.wait_in_queue()
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
@@ -463,7 +477,6 @@ class cortex:
                     use_cache=True,
                     renormalize_logits=True,
                     remove_invalid_values=True,
-                    # eos_token_id=eos,
                     sequence_bias=push,
                     bad_words_ids=bad,
                     stop_word=propulsion,
@@ -499,10 +512,7 @@ class cortex:
         decay_after_length: int = 66,
         decay_factor: float = 0.023,
     ):
-        while self.active == True or not self.ai:
-            time.sleep(1)
-
-        self.active = True
+        self.wait_in_queue()
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
@@ -568,7 +578,6 @@ class cortex:
                 max_time=360,
                 seed=seed[1],
                 use_cache=True,
-                # eos_token_id=eos,
                 suppress_tokens=[eos],
                 sequence_bias=push,
                 bad_words_ids=bad,

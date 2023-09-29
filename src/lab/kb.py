@@ -88,7 +88,7 @@ class Ink:
         self.model_max_length = head.ctx.get_max_length()
         self.title = ""
         self.prompt = ""
-        self.stage = ""
+        self.staged = ""
         self.full_doc = ""
         self.replace_at_index = 0
         self.combine = False
@@ -132,18 +132,18 @@ class Ink:
             self.file = deterministic_short_hash(self.title, length=7) + ".md"
             f = f"{self.dir}/{self.file}"
 
-        self.stage = self.prompt
+        self.staged = self.prompt
         if os.path.exists(f):
-            self.stage = read_from_file(f)
+            self.staged = read_from_file(f)
         else:
             self.created = True
-        self.full_doc = self.stage
+        self.full_doc = self.staged
 
     def chunk_prompt(self):
         partial = math.floor(self.model_max_length * 0.8)
-        while self.get_length(self.stage) > partial:
-            self.replace_at_index = random.randint(len(self.prompt), len(self.stage))
-            self.stage = self.stage[: self.replace_at_index]
+        while self.get_length(self.staged) > partial:
+            self.replace_at_index = random.randint(len(self.prompt), len(self.staged))
+            self.staged = self.staged[: self.replace_at_index]
             self.full_doc = self.full_doc[self.replace_at_index :]
             self.combine = True
 
@@ -153,9 +153,13 @@ class Ink:
             self.tags = entry.get("tags", [])
             self.create_prompt(entry)
             self.chunk_prompt()
-            output = await head.ctx.prompt(prompt=self.stage, max_new_tokens=33)
+            output = await head.ctx.prompt(
+                prompt=self.staged,
+                max_new_tokens=33,
+                decay_after_length=11,
+                decay_factor=-0.23,
+            )
             if output[0] == False:
-                print(output[1])
                 return
             content = output
             if self.combine:

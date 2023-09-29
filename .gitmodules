@@ -59,6 +59,3 @@
 [submodule "lab/robotframework"]
 	path = lab/robotframework
 	url = https://github.com/robotframework/robotframework.git
-[submodule "lab/ec"]
-	path = lab/ec
-	url = https://github.com/ellisk42/ec.git

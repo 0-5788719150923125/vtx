@@ -55,7 +55,7 @@ def validation(config):
                     "schema": {
                         "type": {
                             "type": "string",
-                            "allowed": ["lora", "prefix", "prompt"],
+                            "allowed": ["adalora", "lora", "prefix", "prompt"],
                         },
                         "r": {"type": "integer"},
                         "alpha": {"type": "integer"},
@@ -207,7 +207,7 @@ class cortex:
             if "peft" in self.config["training"]:
                 model_folder = None
                 t = self.config["training"]["peft"]["type"]
-                if t == "lora":
+                if t in ["adalora", "lora"]:
                     adapter = "adapters/" + focus
                 elif t == "prompt":
                     tuning_mode = "ptune"

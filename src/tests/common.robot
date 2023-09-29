@@ -1,5 +1,5 @@
 *** Settings ***
-Library           ../common.py
+Library    ../common.py
 
 *** Test Cases ***
 Create hash from string
@@ -29,4 +29,4 @@ Generate a daemon name
 
 List every file in a directory recursively
     ${result}    list_full_paths    '/src'
-    SHOULD RETURN
+    LOG MANY    ${result}

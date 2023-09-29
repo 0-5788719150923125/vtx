@@ -7,6 +7,7 @@ from aigen import aigen
 from aigen.TokenDataset import TokenDataset, merge_datasets
 from aigen.tokenizers import train_tokenizer
 from peft import (
+    AdaLoraConfig,
     LoraConfig,
     PeftConfig,
     PeftModel,
@@ -184,6 +185,7 @@ if __name__ == "__main__":
 
     tuning_mode = None
     peft_config = None
+    use_petals = model_config.get("petals", False)
     if "peft" in model_config["training"]:
         output_dir = "adapters/" + focus
         p = model_config["training"].get("peft")
@@ -204,8 +206,20 @@ if __name__ == "__main__":
                     alpha_pattern=p.get("alpha_pattern", {}),
                     modules_to_save=p.get("modules_to_save", None),
                 )
+            elif p["type"] == "adalora":
+                peft_config = LoraConfig(
+                    task_type="CAUSAL_LM",
+                    r=p.get("r", 4),
+                    lora_alpha=p.get("alpha", 16),
+                    lora_dropout=p.get("dropout", 0.1),
+                    bias=p.get("bias", "none"),
+                    target_modules=p.get("target_modules", None),
+                    rank_pattern=p.get("rank_pattern", {}),
+                    alpha_pattern=p.get("alpha_pattern", {}),
+                    modules_to_save=p.get("modules_to_save", None),
+                )
             elif p["type"] == "prompt":
-                if model_config.get("petals", False):
+                if use_petals:
                     tuning_mode = "ptune"
                     pre_seq_len = p.get("num_virtual_tokens")
                     output_dir = "/src/embeddings/" + focus
@@ -215,7 +229,7 @@ if __name__ == "__main__":
                         num_virtual_tokens=p.get("num_virtual_tokens", 24),
                     )
             elif p["type"] == "prefix":
-                if model_config.get("petals", False):
+                if use_petals:
                     tuning_mode = "deep_ptune"
                     pre_seq_len = p.get("num_virtual_tokens")
                     output_dir = "/src/embeddings/" + focus
@@ -229,7 +243,7 @@ if __name__ == "__main__":
     ai = aigen(
         model=launch_model,
         model_folder=model_folder,
-        petals=model_config.get("petals", False),
+        petals=use_petals,
         cache_dir="models",
         embeddings_dir="/src/embeddings/" + focus,
         tuning_mode=tuning_mode,
@@ -370,7 +384,7 @@ if __name__ == "__main__":
 
     get_trainable = False
     if "peft" in model_config["training"]:
-        if not model_config.get("petals", False):
+        if not use_petals:
             get_trainable = True
             if resume == True:
                 ai.model = PeftModel.from_pretrained(ai.model, output_dir)
@@ -417,7 +431,7 @@ if __name__ == "__main__":
             progress_bar_refresh_rate=1,
             seed=nist_beacon()[1],
             prune=stage.get("prune", 0.0),
-            petals=model_config.get("petals", False),
+            petals=use_petals,
             use_deepspeed=False,
             hivemind=model_config["training"].get("hivemind", False),
             target_batch_size=stage.get("target_batch_size", 8192),

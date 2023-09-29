@@ -244,8 +244,8 @@ class cortex:
         ctx=None,
         bias=None,
         max_new_tokens: int = 222,
-        decay_after_length: int = 33,
-        decay_factor: float = 0.000023,
+        decay_after_length: int = 44,
+        decay_factor: float = 0.00023,
     ):
         while self.active == True or not self.ai:
             time.sleep(1)
@@ -357,7 +357,7 @@ class cortex:
                     use_cache=True,
                     renormalize_logits=True,
                     remove_invalid_values=True,
-                    eos_token_id=eos,
+                    # eos_token_id=eos,
                     pad_token_id=getattr(self.ai.tokenizer, "pad_token_id", eos),
                     sequence_bias=push,
                     bad_words_ids=bad,
@@ -396,6 +396,7 @@ class cortex:
 
             except Exception as e:
                 logging.error(e)
+                print(traceback.format_exc())
 
         self.active = False
         return success, bias, output, seeded
@@ -460,7 +461,7 @@ class cortex:
                     use_cache=True,
                     renormalize_logits=True,
                     remove_invalid_values=True,
-                    eos_token_id=eos,
+                    # eos_token_id=eos,
                     sequence_bias=push,
                     bad_words_ids=bad,
                     stop_word=propulsion,
@@ -565,7 +566,7 @@ class cortex:
                 max_time=360,
                 seed=seed[1],
                 use_cache=True,
-                eos_token_id=eos,
+                # eos_token_id=eos,
                 suppress_tokens=[eos],
                 sequence_bias=push,
                 bad_words_ids=bad,

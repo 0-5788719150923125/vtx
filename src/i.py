@@ -138,7 +138,7 @@ def fetch_from_discord():
         os.system(command)
 
 
-# Replace approved bots with random IDs, so as not to bias the model toward poor outputs
+# Replace unapproved bots with random IDs, so as not to bias the model toward poor outputs
 def transform_author(author):
     if (
         str(author["id"]) == "975174695399854150"
@@ -357,16 +357,19 @@ def fetch_from_reddit():
                 with open(
                     "/lab/reddit/" + sub + "/" + submission.id + ".txt", "a"
                 ) as file:
-                    sanitized = re.sub(
-                        r"http\S+",
-                        f"((({str(get_identity())})))",
+                    original_submission = (
                         propulsion
                         + str(bias)
                         + ship
                         + " "
                         + submission.title
                         + " "
-                        + submission.selftext.replace("\n", "\\n"),
+                        + submission.selftext.replace("\n", "\\n")
+                    )
+                    sanitized = re.sub(
+                        r"http\S+",
+                        f"((({str(get_identity())})))",
+                        original_submission,
                     )
                     context = [sanitized]
                     file.write("".join(context))

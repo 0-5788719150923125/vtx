@@ -19,9 +19,8 @@ from transformers import AutoTokenizer
 
 from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_beacon
 
-model = config[focus]
+model_config = config[focus]
 model_folder = "models/" + focus
-tokenizer_file = "src." + focus + ".tokenizer.json"
 
 
 # Join every file located in a particular directory
@@ -142,15 +141,15 @@ def create_dataset(
 
 
 if __name__ == "__main__":
-    base_model = model["model"]
+    base_model = model_config["model"]
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
 
     launch_model = None
     fresh_logs = False
-    resume = model["training"].get("resume", False)
-    if model["training"].get("regen", False):
+    resume = model_config["training"].get("resume", False)
+    if model_config["training"].get("regen", False):
         if os.path.exists("/gen/datasets/" + focus):
             shutil.rmtree("/gen/datasets/" + focus)
 
@@ -178,18 +177,18 @@ if __name__ == "__main__":
     output_dir = "models/" + focus
 
     pre_seq_len = 0
-    if "peft" in model["training"]:
-        p = model["training"].get("peft")
+    if "peft" in model_config["training"]:
+        p = model_config["training"].get("peft")
         if p["type"] == "prefix":
             pre_seq_len = p.get("num_virtual_tokens")
 
     tuning_mode = None
     peft_config = None
-    if "peft" in model["training"]:
+    if "peft" in model_config["training"]:
         output_dir = "adapters/" + focus
-        p = model["training"].get("peft")
+        p = model_config["training"].get("peft")
         if resume == True:
-            if model.get("petals", False):
+            if model_config.get("petals", False):
                 if p["type"] == "prefix":
                     output_dir = "/src/embeddings/" + focus
         else:
@@ -206,7 +205,7 @@ if __name__ == "__main__":
                     modules_to_save=p.get("modules_to_save", None),
                 )
             elif p["type"] == "prompt":
-                if model.get("petals", False):
+                if model_config.get("petals", False):
                     tuning_mode = "ptune"
                     pre_seq_len = p.get("num_virtual_tokens")
                     output_dir = "/src/embeddings/" + focus
@@ -216,7 +215,7 @@ if __name__ == "__main__":
                         num_virtual_tokens=p.get("num_virtual_tokens", 24),
                     )
             elif p["type"] == "prefix":
-                if model.get("petals", False):
+                if model_config.get("petals", False):
                     tuning_mode = "deep_ptune"
                     pre_seq_len = p.get("num_virtual_tokens")
                     output_dir = "/src/embeddings/" + focus
@@ -230,20 +229,22 @@ if __name__ == "__main__":
     ai = aigen(
         model=launch_model,
         model_folder=model_folder,
-        petals=model.get("petals", False),
+        petals=model_config.get("petals", False),
         cache_dir="models",
         embeddings_dir="/src/embeddings/" + focus,
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
-        precision=model.get("precision", None),
-        gradient_checkpointing=model["training"].get("gradient_checkpointing", True),
+        precision=model_config.get("precision", None),
+        gradient_checkpointing=model_config["training"].get(
+            "gradient_checkpointing", True
+        ),
     )
 
     ai.tokenizer = AutoTokenizer.from_pretrained(
         launch_model,
         cache_dir="models",
-        padding_side=model["training"].get("padding_side", "left"),
-        model_max_length=model["training"].get(
+        padding_side=model_config["training"].get("padding_side", "left"),
+        model_max_length=model_config["training"].get(
             "model_max_length", ai.tokenizer.model_max_length
         ),
         padding="max_length",
@@ -368,8 +369,8 @@ if __name__ == "__main__":
             return collected[0]
 
     get_trainable = False
-    if "peft" in model["training"]:
-        if not model.get("petals", False):
+    if "peft" in model_config["training"]:
+        if not model_config.get("petals", False):
             get_trainable = True
             if resume == True:
                 ai.model = PeftModel.from_pretrained(ai.model, output_dir)
@@ -392,35 +393,33 @@ if __name__ == "__main__":
     logger = loggers.TensorBoardLogger("/gen/logs", name=focus, default_hp_metric=False)
 
     # Train the model
-    for i, stage in enumerate(model["training"]["stages"]):
+    for i, stage in enumerate(model_config["training"]["stages"]):
         inputs = build_inputs(stage)
         ai.train(
             train_data=inputs,
             batch_size=stage.get("batch_size", 1),
             num_steps=stage.get("num_steps", 33333),
-            generate_every=model["training"].get("generate_every", 500),
-            save_every=model["training"].get("save_every", 1000),
+            generate_every=model_config["training"].get("generate_every", 500),
+            save_every=model_config["training"].get("save_every", 1000),
             n_gpu=1,
             output_dir=output_dir,
             loggers=[logger],
             optimizer=stage.get("optimizer", "AdamW"),
             learning_rate=stage.get("learning_rate", 0.005),
-            update_period=stage.get("update_period", 10),
             weight_decay=stage.get("weight_decay", 0.01),
             warmup_steps=stage.get("warmup_steps", 0),
             gradient_clip_val=stage.get("gradient_clip_val", 0.5),
+            update_period=stage.get("update_period", 10),
             gradient_accumulation_steps=stage.get("gradient_accumulation_steps", 1),
             train_transformers_only=stage.get("train_transformers_only", False),
-            use_deepspeed=False,
-            fp16=False,
             num_layers_freeze=stage.get("num_layers_freeze", 0),
             scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
-            num_cycles=stage.get("num_cycles", 0.5),
             progress_bar_refresh_rate=1,
             seed=nist_beacon()[1],
             prune=stage.get("prune", 0.0),
-            petals=model.get("petals", False),
-            hivemind=model["training"].get("hivemind", False),
+            petals=model_config.get("petals", False),
+            use_deepspeed=False,
+            hivemind=model_config["training"].get("hivemind", False),
             target_batch_size=stage.get("target_batch_size", 8192),
             stage=i,
             prompt="",

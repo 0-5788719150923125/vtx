@@ -30,16 +30,17 @@ async def client(config) -> None:
     @dp.message_handler()
     async def chat_bot(message: types.Message):
         try:
+            sender_id = message["from"]["id"]
             head.ctx.build_context(
-                propulsion + str(get_identity()) + ship + " " + message["text"]
+                propulsion + str(get_identity(sender_id)) + ship + " " + message["text"]
             )
             print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
 
             post_event("commit_memory", texts=message["text"])
 
             # For testing Q/A mode
-            answer = await head.ctx.query(question=message["text"])
-            print(answer)
+            # answer = await head.ctx.query(question=message["text"])
+            # print(answer)
 
             if random.random() > config["telegram"].get("frequency", 0.9):
                 return
@@ -48,15 +49,18 @@ async def client(config) -> None:
             # while message.is_waiting_for_reply:
             await message.answer_chat_action("typing")
 
-            success, bias, output, seeded = await head.ctx.chat(
-                bias=bias,
-                prefix=persona.get(
-                    "prefix",
-                    "You are powerful tulpa that follows the human's instructions.",
-                ),
-            )
-            if success == False:
-                return
+            if "?q" in message["text"].split():
+                output = await head.ctx.query(question=message["text"])
+            else:
+                success, bias, output, seeded = await head.ctx.chat(
+                    bias=bias,
+                    prefix=persona.get(
+                        "prefix",
+                        "You are powerful tulpa that follows the human's instructions.",
+                    ),
+                )
+                if success == False:
+                    return
             await message.answer(output)
             head.ctx.build_context(propulsion + str(bias) + ship + " " + output)
             print(bc.CORE + "ONE@TELEGRAM: " + ad.TEXT + output)

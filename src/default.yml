@@ -73,10 +73,10 @@ soul:
         datasets:
           - default
 
-# Mostly GPT-2 architecture. Terrible performance.
-core:
-  info: is hotter than hell
-  model: cerebras/Cerebras-GPT-590M
+# An extremely capable transformer based on GPT-NeoX architecture.
+root:
+  info: producing crotalus since 1999 
+  model: EleutherAI/pythia-1b-deduped
   training:
     peft:
       type: "lora"

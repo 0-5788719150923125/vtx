@@ -5,6 +5,8 @@ import time
 import memory
 from common import ad, bc, config
 
+# from lab import scratch
+
 
 # This is the main loop
 def main():

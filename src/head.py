@@ -22,7 +22,16 @@ from aigen import aigen
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
 
-from common import ad, bc, config, focus, nist_beacon, propulsion, ship
+from common import (
+    ad,
+    bc,
+    config,
+    focus,
+    nist_beacon,
+    propulsion,
+    remove_invisible_characters,
+    ship,
+)
 
 
 def validation(config):
@@ -273,6 +282,7 @@ class cortex:
                 "'t": 0.5,
                 "\n": -8.0,
                 "#": -2.0,
+                "< @": -20.0,
                 "<@": -20.0,
                 "[[": -20.0,
                 "((": -20.0,
@@ -309,10 +319,7 @@ class cortex:
                         self.ai.tokenizer(token, add_special_tokens=False).input_ids
                         # Many of these tokens were chosen from past experience with ugly patterns
                         # output by various models.
-                        for token in [
-                            "(((",
-                            "<@",
-                        ]
+                        for token in ["((", "(((", "<@", "< @"]
                     ]
                 )
             )
@@ -407,6 +414,7 @@ class cortex:
                     or propulsion in group[3]
                     or group[3][:1] in [">", "~", '"', "“", " ", "\\", "\n", ""]
                     or group[3][:2] in ["\\", "\n", "<@", "(("]
+                    or group[3][:3] in ["< @"]
                     or group[3] in prompt
                 ):
                     if attempt == max_attempts:
@@ -414,7 +422,9 @@ class cortex:
                     continue
                 success = True
                 bias = group[2]
-                output = group[3].replace(r"\n", "\n")
+                output = remove_invisible_characters(group[3].replace(r"\n", "\n"))
+                while "  " in output:
+                    output = output.replace("  ", " ")
                 break
 
             except Exception as e:

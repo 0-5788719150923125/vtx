@@ -262,24 +262,22 @@ class cortex:
         prefix=None,
         ctx=None,
         bias=None,
+        temperature: float = 1.23,
         max_new_tokens: int = 222,
         decay_after_length: int = 33,
-        decay_factor: float = -2.3,
+        decay_factor: float = 0.0000023,
     ):
         self.wait_in_queue()
 
         if not prefix:
-            prefix = self.config.get(
-                "prefix", "Humans, AI, and daemons have a conversation together:"
-            )
+            prefix = "Humans, AI, and daemons have a conversation together:"
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
-        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
         push_sequences = {
             self.get_tokens_as_tuple(s): b
             for s, b in {
-                "'t": 0.5,
+                # "'t": 0.5,
                 "\n": -8.0,
                 "#": -2.0,
                 "< @": -20.0,
@@ -357,8 +355,6 @@ class cortex:
         seeded = False
         while attempt < max_attempts:
             try:
-                temperature = 1.23
-
                 if attempt > 0:
                     temperature = temperature * 0.8
 
@@ -378,7 +374,7 @@ class cortex:
                     top_k=4,
                     repetition_penalty=2.3,
                     encoder_repetition_penalty=0.999,
-                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    # exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,

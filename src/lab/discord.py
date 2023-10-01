@@ -34,6 +34,7 @@ def validation(config):
     schema = {
         "use_self_token": {"type": "boolean"},
         "export_dms": {"type": "boolean"},
+        "logSenders": {"type": "boolean"},
         "bannedUsers": {"type": "list"},
         "bannedServers": {"type": "list"},
         "servers": {
@@ -98,9 +99,11 @@ class Client(discord.Client):
         for guild in sorted(
             self.guilds, key=lambda guild: guild.member_count, reverse=True
         ):
-            guilds.append(f"{guild.name} ({guild.id}:{guild.member_count})")
-            if str(guild.id) in self.config["discord"].get("bannedServers", []):
+            if int(guild.id) in self.config["discord"].get("bannedServers", []):
+                print(f"leaving: {guild.name}")
                 await guild.leave()
+            else:
+                guilds.append(f"{guild.name} ({guild.id}:{guild.member_count})")
         print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
 
     async def setup_hook(self) -> None:
@@ -153,8 +156,6 @@ class Client(discord.Client):
 
     # check every Discord message
     async def on_message(self, message):
-        # print(int(message.guild.id))
-
         if message.guild:
             if str(message.guild.id) in self.config["discord"].get("bannedServers", []):
                 await message.guild.leave()
@@ -162,6 +163,11 @@ class Client(discord.Client):
 
         if str(message.author.id) in self.config["discord"].get("bannedusers", []):
             return
+
+        if self.config["discord"].get("logSenders", False):
+            if message.guild.id:
+                print(f"guild: {message.guild.id}")
+            print(f"sender: {message.author.id}")
 
         reply = random.choice([True, False])
 

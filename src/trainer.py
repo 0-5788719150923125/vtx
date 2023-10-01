@@ -106,12 +106,22 @@ def create_dataset(
                 print("loading " + str(file))
 
             if line_by_line == True:
+                with open(file, "r") as content:
+                    with open("/tmp/lines.txt", "a") as lines:
+                        string = content.read()
+                        if "<|url|>" in string:
+                            mask_token = tokenizer.mask_token
+                            if mask_token is None:
+                                mask_token = tokenizer.unk_token
+                            string = string.replace("<|url|>", mask_token)
+                        lines.write(string)
                 datasets[file] = TokenDataset(
-                    file,
+                    "/tmp/lines.txt",
                     block_size=block_size,
                     line_by_line=line_by_line,
                     tokenizer=tokenizer,
                 )
+                os.remove("/tmp/lines.txt")
             else:
                 with open(file, "r") as content:
                     with open(intermediate_path, "a") as intermediate:

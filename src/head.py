@@ -260,8 +260,8 @@ class cortex:
         bias=None,
         temperature: float = 1.23,
         max_new_tokens: int = 222,
-        decay_after_length: int = 33,
-        decay_factor: float = 0.0023,
+        decay_after_length: int = 44,
+        decay_factor: float = 0.0000000000001,
     ):
         self.wait_in_queue()
 
@@ -422,7 +422,6 @@ class cortex:
             except Exception as e:
                 logging.error(e)
                 # print(traceback.format_exc())
-
         self.active = False
         return success, bias, output, seeded
 

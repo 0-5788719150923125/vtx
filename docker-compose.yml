@@ -25,6 +25,7 @@ services:
       - ./gen:/gen
       - ./lab:/lab
       - ./src:/src
+      - ./lab/aigen:/src/lab/aigen
     env_file:
       - .env
     environment:

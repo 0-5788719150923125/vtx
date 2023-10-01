@@ -4,7 +4,9 @@ import random
 import shutil
 
 from aigen import aigen
-from aigen.TokenDataset import TokenDataset, merge_datasets
+
+# from aigen.TokenDataset import TokenDataset, NewTokenDataset, merge_datasets
+from lab.aigen.aigen.TokenDataset import TokenDataset, NewTokenDataset, merge_datasets
 from aigen.tokenizers import train_tokenizer
 from peft import (
     AdaLoraConfig,
@@ -28,7 +30,8 @@ model_folder = "models/" + focus
 def create_dataset(
     path="/src",
     tokenizer=None,
-    block_size=1024,
+    block_size: int = 1024,
+    stride: int = 16,
     line_by_line=False,
     shuffle=False,
 ):
@@ -113,6 +116,11 @@ def create_dataset(
                 with open(file, "r") as content:
                     with open(intermediate_path, "a") as intermediate:
                         string = content.read()
+                        if "<|url|>" in string:
+                            mask_token = tokenizer.mask_token
+                            if mask_token is None:
+                                mask_token = tokenizer.unk_token
+                            string = string.replace("<|url|>", mask_token)
                         intermediate.write(string + "\n\n")
 
         except Exception as e:
@@ -127,11 +135,17 @@ def create_dataset(
         else:
             dataset = merge_datasets(collection, equalize=False)
     else:
-        dataset = TokenDataset(
+        # dataset = TokenDataset(
+        #     intermediate_path,
+        #     block_size=block_size,
+        #     line_by_line=line_by_line,
+        #     tokenizer=tokenizer,
+        # )
+        dataset = NewTokenDataset(
             intermediate_path,
-            block_size=block_size,
-            line_by_line=line_by_line,
             tokenizer=tokenizer,
+            block_size=block_size,
+            stride=stride,
         )
 
     # Cleanup temp files used for tokenized dataset creation
@@ -262,8 +276,10 @@ if __name__ == "__main__":
         #     "model_max_length", ai.tokenizer.model_max_length
         # ),
         padding=False,
-        truncation=False,
+        truncation=True,
     )
+
+    # ai.tokenizer.add_special_tokens({"additional_special_tokens": ["<|url|>"]})
 
     print(ai.tokenizer)
 

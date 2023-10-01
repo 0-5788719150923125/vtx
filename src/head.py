@@ -275,7 +275,7 @@ class cortex:
             for s, b in {
                 # "'t": 0.5,
                 "\n": -8.0,
-                "<|url|>": -5.0,
+                # "<|url|>": -20.0,
                 "#": -2.0,
                 "< @": -20.0,
                 "<@": -20.0,
@@ -302,7 +302,7 @@ class cortex:
                 "<((",
                 "((",
                 "(((",
-                "<|url|>",
+                # "<|url|>",
                 f"{ship}\n",
                 f"{ship} \n",
             ]
@@ -351,6 +351,7 @@ class cortex:
         success = False
         output = None
         seeded = False
+
         while attempt < max_attempts:
             try:
                 if attempt > 0:
@@ -406,6 +407,7 @@ class cortex:
                     or bool(re.search(variables, group[3]))
                     or group[3] == ""
                     or wall in group[3]
+                    or "<|url|>" in group[3]
                     or group[3][:1] in [">", "~", '"', "“", " ", "\\", "\n", ""]
                     or group[3][:2] in ["\\", "\n", "<@", "(("]
                     or group[3][:3] in ["< @"]

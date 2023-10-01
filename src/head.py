@@ -261,7 +261,7 @@ class cortex:
         temperature: float = 1.23,
         max_new_tokens: int = 222,
         decay_after_length: int = 33,
-        decay_factor: float = 0.0023,
+        decay_factor: float = 0.00023,
     ):
         self.wait_in_queue()
 
@@ -370,7 +370,7 @@ class cortex:
                     top_k=4,
                     repetition_penalty=2.3,
                     encoder_repetition_penalty=0.999,
-                    # exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,

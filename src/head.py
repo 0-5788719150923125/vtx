@@ -261,7 +261,7 @@ class cortex:
         temperature: float = 1.23,
         max_new_tokens: int = 222,
         decay_after_length: int = 33,
-        decay_factor: float = 0.0000023,
+        decay_factor: float = 0.0023,
     ):
         self.wait_in_queue()
 
@@ -269,8 +269,6 @@ class cortex:
             prefix = "Humans, AI, and daemons have a conversation together:"
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
-
-        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
 
         push_sequences = {
             self.get_tokens_as_tuple(s): b
@@ -380,11 +378,10 @@ class cortex:
                     use_cache=True,
                     renormalize_logits=True,
                     remove_invalid_values=True,
-                    sequence_bias=push_sequences,
-                    bad_words_ids=bad_tokens,
-                    suppress_tokens=suppress_tokens,
+                    # sequence_bias=push_sequences,
+                    # bad_words_ids=bad_tokens,
+                    # suppress_tokens=suppress_tokens,
                     stop_word=propulsion,
-                    eos_token_id=[eos],
                 )
 
                 generation = completion

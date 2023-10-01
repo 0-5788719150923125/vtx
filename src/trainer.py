@@ -271,15 +271,10 @@ if __name__ == "__main__":
     ai.tokenizer = AutoTokenizer.from_pretrained(
         launch_model,
         cache_dir="models",
-        padding_side=model_config["training"].get("padding_side", "left"),
-        # model_max_length=model_config["training"].get(
-        #     "model_max_length", ai.tokenizer.model_max_length
-        # ),
         padding=False,
+        padding_side=model_config["training"].get("padding_side", "left"),
         truncation=True,
     )
-
-    # ai.tokenizer.add_special_tokens({"additional_special_tokens": ["<|url|>"]})
 
     print(ai.tokenizer)
 
@@ -287,6 +282,7 @@ if __name__ == "__main__":
     def build_inputs(stage):
         datasets = {}
         block_size = stage.get("block_size", ai.model_max_length)
+        stride = stage.get("stride", 0)
         for collection in stage["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
@@ -370,6 +366,7 @@ if __name__ == "__main__":
                             path="/" + dataset,
                             tokenizer=ai.tokenizer,
                             block_size=block_size,
+                            stride=stride,
                             line_by_line=line_by_line,
                             shuffle=shuffle,
                         )
@@ -394,7 +391,9 @@ if __name__ == "__main__":
                     collected.append(datasets[dataset + str(duplicate)])
                     duplicate = duplicate + 1
         if len(collected) > 1:
-            return merge_datasets(collected, equalize=stage["equalize_datasets"])
+            return merge_datasets(
+                collected, equalize=stage.get("equalize_datasets", False)
+            )
         else:
             return collected[0]
 

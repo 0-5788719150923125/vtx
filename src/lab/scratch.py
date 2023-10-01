@@ -11,34 +11,43 @@ tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir="/src/models")
 
 string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 
-print(
-    TokenDataset(
-        "/book/content/pillars.md",
-        tokenizer=tokenizer,
-        block_size=32,
-        padding_side="left",
-    )
-)
-print(
-    NewTokenDataset(
-        "/book/content/pillars.md",
-        tokenizer=tokenizer,
-        block_size=32,
-        stride=4,
-        padding_side="left",
-    )
-)
-
-# print(string)
 # print(
-#     tokenizer(
-#         string,
-#         max_length=16,
-#         truncation=True,
-#         stride=4,
-#         return_overflowing_tokens=True,
+#     TokenDataset(
+#         "/book/content/pillars.md",
+#         tokenizer=tokenizer,
+#         block_size=32,
+#         padding_side="left",
 #     )
 # )
+# print(
+#     NewTokenDataset(
+#         "/lab/juxtaposition/2/fibonacci.csv",
+#         # "/book/content/pillars.md",
+#         tokenizer=tokenizer,
+#         block_size=32,
+#         stride=4,
+#         padding_side="left",
+#     )
+# )
+
+print(string)
+
+tokenizer.pad_token = tokenizer.eos_token
+
+inputs = tokenizer(
+    string,
+    max_length=16,
+    padding=True,
+    truncation=True,
+    stride=4,
+    return_overflowing_tokens=True,
+)
+
+print(inputs)
+
+inputs = inputs.convert_to_tensors("pt")
+
+print(inputs)
 
 # inputs = tokenizer("Harry Potter is", return_tensors="pt")["input_ids"]
 # inputs = None

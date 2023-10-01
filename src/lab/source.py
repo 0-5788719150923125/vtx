@@ -16,7 +16,7 @@ from common import (
     ad,
     bc,
     get_identity,
-    propulsion,
+    wall,
     remove_invisible_characters,
     ship,
     strip_emojis,
@@ -131,7 +131,7 @@ async def listener(config, focus):
                         "active_frequency", 0.66
                     )
                 messages[focus].append(
-                    propulsion + str(get_identity()) + ship + " " + state["message"]
+                    wall + str(get_identity()) + ship + " " + state["message"]
                 )
                 print(bc.FOLD + f"ONE@FOLD:" + ad.TEXT + " " + state["message"])
 
@@ -167,7 +167,7 @@ async def response(config, focus):
         ), f"ERROR: Found no matching personas for the channel ({focus})."
         identity = random.choice(filtered)
         bias = identity.get("bias")
-        persona = propulsion + str(bias) + ship + " " + identity.get("persona")
+        persona = wall + str(bias) + ship + " " + identity.get("persona")
 
     success, bias, output, seeded = await head.ctx.chat(
         bias=bias,
@@ -182,7 +182,7 @@ async def response(config, focus):
 
     sanitized = remove_invisible_characters(strip_emojis(output))
 
-    if propulsion + str(bias) + ship + " " + sanitized in messages[focus]:
+    if wall + str(bias) + ship + " " + sanitized in messages[focus]:
         if len(messages[focus]) > 0:
             messages[focus].pop(0)
         return
@@ -195,7 +195,7 @@ async def response(config, focus):
 
     print(color + responder + ad.TEXT + " " + sanitized)
 
-    messages[focus].append(propulsion + str(bias) + ship + " " + sanitized)
+    messages[focus].append(wall + str(bias) + ship + " " + sanitized)
     mine[focus] = True
     frequency[focus] = config["source"]["focus"][focus].get("passive_frequency", 0.01)
     send(sanitized, focus, "cos", bias)

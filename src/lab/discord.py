@@ -10,7 +10,7 @@ import requests
 from cerberus import Validator
 
 import head
-from common import ad, bc, bullets, get_identity, propulsion, ship
+from common import ad, bc, bullets, get_identity, wall, ship
 from events import subscribe_event
 
 response_frequency = 3  # out of 100
@@ -124,7 +124,7 @@ class Client(discord.Client):
                 while i > 0:
                     i = i - 1
                     context.append(
-                        propulsion
+                        wall
                         + str(messages[focus_on + i].author.id)
                         + ship
                         + " "
@@ -168,12 +168,10 @@ class Client(discord.Client):
             author_id = str(message.author.id)
             if str(message.channel.type) == "private":
                 log_private_message(
-                    author_id, propulsion + author_id + ship + " " + message.content
+                    author_id, wall + author_id + ship + " " + message.content
                 )
                 author_id = author_id[::-1]
-            head.ctx.build_context(
-                propulsion + author_id + ship + " " + message.content
-            )
+            head.ctx.build_context(wall + author_id + ship + " " + message.content)
             print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + message.content)
 
         # generate responses
@@ -256,10 +254,10 @@ class Client(discord.Client):
                 bot_id = str(bias)
                 log_private_message(
                     str(bias),
-                    propulsion + str(return_message.id) + ship + " " + transformed,
+                    wall + str(return_message.id) + ship + " " + transformed,
                 )
 
-            head.ctx.build_context(propulsion + bot_id + ship + " " + output[1])
+            head.ctx.build_context(wall + bot_id + ship + " " + output[1])
         except:
             print(bc.CORE + "Failed to send Discord message." + ad.TEXT)
 
@@ -267,7 +265,7 @@ class Client(discord.Client):
     async def on_message_edit(self, before, after):
         if after.content[:1] not in bullets:
             head.ctx.build_context(
-                propulsion + str(after.author.id) + ship + " " + after.content
+                wall + str(after.author.id) + ship + " " + after.content
             )
             if after.author.id != self.user.id:
                 print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + after.content)
@@ -302,7 +300,7 @@ class Client(discord.Client):
                 while i > 0:
                     i = i - 1
                     context.append(
-                        propulsion
+                        wall
                         + str(messages[i].author.id)
                         + ship
                         + " "
@@ -316,12 +314,12 @@ class Client(discord.Client):
                     if success == False:
                         return
                     head.ctx.edit_message(
-                        message.content, propulsion + bias + ship + " " + output
+                        message.content, wall + bias + ship + " " + output
                     )
                     replace_private_message(
                         str(self.user.id),
                         str(reaction.message.id),
-                        propulsion + str(reaction.message.id) + ship + " " + output,
+                        wall + str(reaction.message.id) + ship + " " + output,
                     )
                     transformed = output
                 else:
@@ -329,7 +327,7 @@ class Client(discord.Client):
                     if success == False:
                         return
                     head.ctx.edit_message(
-                        message.content, propulsion + bias + ship + " " + output
+                        message.content, wall + bias + ship + " " + output
                     )
                     if no_transform:
                         transformed = output

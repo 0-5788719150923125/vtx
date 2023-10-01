@@ -14,7 +14,7 @@ import requests
 from bs4 import BeautifulSoup
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
 
-from common import config, get_identity, get_past_datetime, propulsion, ship
+from common import config, get_identity, get_past_datetime, wall, ship
 
 
 def compile_book():
@@ -177,7 +177,7 @@ def prepare_discord_messages():
     def sanitizer(string):
         sanitized = re.sub(
             r"http\S+",
-            f"((({str(get_identity())})))",
+            "<|url|>",
             string,
         )
         sanitized = re.sub(
@@ -210,12 +210,10 @@ def prepare_discord_messages():
                         if i["content"] != "":
                             i["content"] = i["content"]
                         if i["embeds"][0]["title"]:
-                            i["content"] = (
-                                i["content"] + " | " + i["embeds"][0]["title"]
-                            )
+                            i["content"] = i["content"] + " " + i["embeds"][0]["title"]
                         if i["embeds"][0]["description"]:
                             i["content"] = (
-                                i["content"] + " | " + i["embeds"][0]["description"]
+                                i["content"] + " " + i["embeds"][0]["description"]
                             )
 
                     author_id = i["author"]["id"]
@@ -247,13 +245,13 @@ def prepare_discord_messages():
                                             if result["embeds"][0]["title"]:
                                                 result["content"] = (
                                                     result["content"]
-                                                    + " | "
+                                                    + " "
                                                     + result["embeds"][0]["title"]
                                                 )
                                             if result["embeds"][0]["description"]:
                                                 result["content"] = (
                                                     result["content"]
-                                                    + " | "
+                                                    + " "
                                                     + result["embeds"][0]["description"]
                                                 )
                                         sanitized = sanitizer(result["content"])
@@ -265,7 +263,7 @@ def prepare_discord_messages():
                                                 )
                                         sanitized = transform_message(sanitized)
                                         content = (
-                                            propulsion
+                                            wall
                                             + reply_author_id
                                             + ship
                                             + " "
@@ -285,7 +283,7 @@ def prepare_discord_messages():
                                         "<@" + str(mention["id"]) + ">",
                                     )
                             sanitized = transform_message(sanitized)
-                            content = propulsion + author_id + ship + " " + sanitized
+                            content = wall + author_id + ship + " " + sanitized
                             txt_file.write(f"{content}\n".format(content))
                             successes += 1
                         except Exception as e:
@@ -358,7 +356,7 @@ def fetch_from_reddit():
                     "/lab/reddit/" + sub + "/" + submission.id + ".txt", "a"
                 ) as file:
                     original_submission = (
-                        propulsion
+                        wall
                         + str(bias)
                         + ship
                         + " "
@@ -368,7 +366,7 @@ def fetch_from_reddit():
                     )
                     sanitized = re.sub(
                         r"http\S+",
-                        f"((({str(get_identity())})))",
+                        "<|url|>",
                         original_submission,
                     )
                     context = [sanitized]
@@ -394,12 +392,8 @@ def fetch_from_reddit():
 
                     sanitized = re.sub(
                         r"http\S+",
-                        f"((({str(get_identity())})))",
-                        propulsion
-                        + str(bias)
-                        + ship
-                        + " "
-                        + reply.body.replace("\n", "\\n"),
+                        "<|url|>",
+                        wall + str(bias) + ship + " " + reply.body.replace("\n", "\\n"),
                     )
                     context.append(sanitized)
                     file.write("\n" + " ".join(context))
@@ -438,13 +432,13 @@ def juxtapose_data():
         return samples
 
     with open("/lab/juxtaposition/0/" + "random.csv", "w", newline="") as file:
-        agents = get_random_samples(100000)
+        agents = get_random_samples(10000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
     with open("/lab/juxtaposition/0/" + "mirror.csv", "w", newline="") as file:
-        agents = get_samples(100000)
+        agents = get_samples(10000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
@@ -452,7 +446,7 @@ def juxtapose_data():
     with open(
         "/lab/juxtaposition/0/" + "left-sorted-mirror.csv", "w", newline=""
     ) as file:
-        agents = get_samples(100000)
+        agents = get_samples(10000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=False)
@@ -461,7 +455,7 @@ def juxtapose_data():
     with open(
         "/lab/juxtaposition/0/" + "right-sorted-mirror.csv", "w", newline=""
     ) as file:
-        agents = get_samples(100000)
+        agents = get_samples(10000)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)
@@ -515,9 +509,12 @@ def juxtapose_data():
         )
         i = 0
         numbers = []
-        count = 33333
+        count = 3333
         while i < count:
-            numbers.append(random_fibonacci_list(23))
+            sequence = random_fibonacci_list(23)
+            if random.random() < 0.5:
+                sequence.reverse()
+            numbers.append(sequence)
             i = i + 1
         csvwriter.writerows(numbers)
 

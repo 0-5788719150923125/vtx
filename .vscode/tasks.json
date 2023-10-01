@@ -120,12 +120,12 @@
           "i.fetch_from_reddit()",
           "i.prepare_discord_messages()",
           "i.fetch_from_discord()",
-          "i.juxtapose_data()",
-          "i.create_evil()",
           "i.fetch_from_matrix()",
           "i.compile_book()",
           "i.deploy_book()",
-          "i.convert_video_to_ascii()"
+          "i.convert_video_to_ascii()",
+          "i.juxtapose_data()",
+          "i.create_evil()",
         ]
       },
       {

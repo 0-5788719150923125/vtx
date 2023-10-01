@@ -20,7 +20,7 @@ import yaml
 from cerberus import Validator
 from mergedeep import Strategy, merge
 
-propulsion = "¶"
+wall = "¶"
 ship = ":>"
 
 focus = os.environ["FOCUS"]

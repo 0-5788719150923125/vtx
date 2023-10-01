@@ -28,7 +28,7 @@ from common import (
     config,
     focus,
     nist_beacon,
-    propulsion,
+    wall,
     remove_invisible_characters,
     ship,
 )
@@ -135,11 +135,11 @@ class cortex:
         self.focus = focus
         self.config = config
         self.context = [
-            propulsion + "975174695399854150" + ship + " I am a robot.",
-            propulsion + "1051994502333726841" + ship + " I am a ghost.",
-            propulsion + "806051627198709760" + ship + " I am a human.",
-            propulsion + "204716337971331072" + ship + " I am a medium.",
-            propulsion + "855529761185857566" + ship + " I am an animal.",
+            wall + "975174695399854150" + ship + " I am a robot.",
+            wall + "1051994502333726841" + ship + " I am a ghost.",
+            wall + "806051627198709760" + ship + " I am a human.",
+            wall + "204716337971331072" + ship + " I am a medium.",
+            wall + "855529761185857566" + ship + " I am an animal.",
         ]
         self.loader(self.focus)
 
@@ -275,6 +275,7 @@ class cortex:
             for s, b in {
                 # "'t": 0.5,
                 "\n": -8.0,
+                "<|url|>": -5.0,
                 "#": -2.0,
                 "< @": -20.0,
                 "<@": -20.0,
@@ -301,6 +302,7 @@ class cortex:
                 "<((",
                 "((",
                 "(((",
+                "<|url|>",
                 f"{ship}\n",
                 f"{ship} \n",
             ]
@@ -336,7 +338,7 @@ class cortex:
         while "  " in history:
             history = history.replace("  ", " ")
 
-        prompt = history + propulsion
+        prompt = history + wall
         if bias:
             assert len(str(bias)) in [
                 18,
@@ -381,7 +383,7 @@ class cortex:
                     sequence_bias=push_sequences,
                     bad_words_ids=bad_tokens,
                     suppress_tokens=suppress_tokens,
-                    stop_word=propulsion,
+                    stop_word=wall,
                 )
 
                 generation = completion
@@ -403,7 +405,7 @@ class cortex:
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
                     or group[3] == ""
-                    or propulsion in group[3]
+                    or wall in group[3]
                     or group[3][:1] in [">", "~", '"', "“", " ", "\\", "\n", ""]
                     or group[3][:2] in ["\\", "\n", "<@", "(("]
                     or group[3][:3] in ["< @"]
@@ -437,11 +439,11 @@ class cortex:
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
-        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
+        eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
         push = {
             self.get_tokens_as_tuple(s): b
             for s, b in {
-                propulsion: -5.9,
+                wall: -5.9,
             }.items()
         }
         bad = [
@@ -484,7 +486,7 @@ class cortex:
                     remove_invalid_values=True,
                     sequence_bias=push,
                     bad_words_ids=bad,
-                    stop_word=propulsion,
+                    stop_word=wall,
                 )
 
                 if completion:
@@ -493,7 +495,7 @@ class cortex:
                         .replace("{{<", "{{")
                         .replace(">}}", "}}")
                     )
-                    if output.endswith(propulsion):
+                    if output.endswith(wall):
                         output = output[:-1]
                     break
 
@@ -547,16 +549,16 @@ class cortex:
         A:
         """
 
-        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
+        eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
         push = {
             self.get_tokens_as_tuple(s): b
             for s, b in {
-                propulsion: -5.9,
+                wall: -5.9,
             }.items()
         }
         bad = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
-            for token in [propulsion]
+            for token in [wall]
         ]
 
         try:

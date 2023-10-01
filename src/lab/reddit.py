@@ -4,6 +4,7 @@ import os
 import random
 import re
 import threading
+import traceback
 import time
 from copy import deepcopy
 from pprint import pprint
@@ -12,7 +13,7 @@ import asyncpraw
 from cerberus import Validator
 
 import head
-from common import ad, bc, get_daemon, get_identity, propulsion, ship
+from common import ad, bc, get_daemon, get_identity, wall, ship
 from events import post_event, subscribe_event
 
 
@@ -175,13 +176,13 @@ async def stalker(reddit, config):
                 op = get_identity(user)
 
                 context = [
-                    propulsion
+                    wall
                     + str(get_identity())
                     + ship
                     + " /r/"
                     + submission.subreddit.display_name,
-                    propulsion + str(op) + ship + " " + submission.title,
-                    propulsion + str(op) + ship + " " + submission.selftext,
+                    wall + str(op) + ship + " " + submission.title,
+                    wall + str(op) + ship + " " + submission.selftext,
                 ]
 
                 stalker = config["personas"].get(victim.get("stalker", None), None)
@@ -193,7 +194,7 @@ async def stalker(reddit, config):
                 )
 
                 if bias:
-                    prefix = propulsion + str(bias) + ship + " " + prefix
+                    prefix = wall + str(bias) + ship + " " + prefix
 
                 success, bias, output, seeded = await head.ctx.chat(
                     ctx=context,
@@ -250,7 +251,7 @@ async def stalker(reddit, config):
                 )
 
                 if bias:
-                    prefix = propulsion + str(bias) + ship + " " + prefix
+                    prefix = wall + str(bias) + ship + " " + prefix
 
                 success, bias, output, seeded = await head.ctx.chat(
                     ctx=context,
@@ -284,6 +285,7 @@ async def stalker(reddit, config):
                 )
             except Exception as e:
                 logging.error(e)
+                print(traceback.format_exc())
 
     tasks = {}
     while True:
@@ -372,13 +374,13 @@ async def subscribe_submissions(reddit, config):
                 prompt = persona.get("persona")
 
             context = [
-                propulsion
+                wall
                 + str(get_identity())
                 + ship
                 + " /r/"
                 + submission.subreddit.display_name,
-                propulsion + str(op) + ship + " " + submission.title,
-                propulsion + str(op) + ship + " " + submission.selftext,
+                wall + str(op) + ship + " " + submission.title,
+                wall + str(op) + ship + " " + submission.selftext,
             ]
             success, bias, output, seeded = await head.ctx.chat(
                 ctx=context,
@@ -457,7 +459,7 @@ async def subscribe_comments(reddit, config):
             if "persona" in sub:
                 persona = config["personas"].get(sub["persona"])
                 bias = persona.get("bias")
-                prefix = propulsion + str(bias) + ship + " " + persona.get("persona")
+                prefix = wall + str(bias) + ship + " " + persona.get("persona")
 
             submission = await reddit.submission(comment.submission)
             if filter_response(sub, config, submission, comment):
@@ -526,19 +528,17 @@ async def reply(obj, message, config):
 
 # Build context from a chain of comments.
 async def build_context(comment):
-    context = [propulsion + str(get_identity()) + ship + " " + str(comment.body)]
+    context = [wall + str(get_identity()) + ship + " " + str(comment.body)]
     parent = await comment.parent()
     await parent.load()
     while isinstance(parent, asyncpraw.models.Comment):
         await parent.refresh()
-        context.insert(
-            0, propulsion + str(get_identity()) + ship + " " + str(parent.body)
-        )
+        context.insert(0, wall + str(get_identity()) + ship + " " + str(parent.body))
         parent = await parent.parent()
         await parent.load()
     context.insert(
         0,
-        propulsion
+        wall
         + str(get_identity())
         + ship
         + " "

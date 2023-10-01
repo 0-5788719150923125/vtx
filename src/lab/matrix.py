@@ -10,7 +10,7 @@ from pprint import pprint
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
 
 import head
-from common import ad, bc, get_identity, propulsion, ship
+from common import ad, bc, get_identity, wall, ship
 
 logging.getLogger("nio").setLevel(logging.WARNING)
 
@@ -65,7 +65,7 @@ async def subscribe(user, password, config) -> None:
             if event.sender == client.user:
                 identity = str(bias)
 
-            head.ctx.build_context(propulsion + identity + ship + " " + message)
+            head.ctx.build_context(wall + identity + ship + " " + message)
 
             if "Architect" not in message:
                 if "m.relates_to" in event.source["content"]:

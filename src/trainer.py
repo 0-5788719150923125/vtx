@@ -258,11 +258,11 @@ if __name__ == "__main__":
         launch_model,
         cache_dir="models",
         padding_side=model_config["training"].get("padding_side", "left"),
-        model_max_length=model_config["training"].get(
-            "model_max_length", ai.tokenizer.model_max_length
-        ),
-        padding="max_length",
-        truncation=True,
+        # model_max_length=model_config["training"].get(
+        #     "model_max_length", ai.tokenizer.model_max_length
+        # ),
+        padding=False,
+        truncation=False,
     )
 
     print(ai.tokenizer)

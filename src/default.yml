@@ -84,7 +84,7 @@ root:
 # A very small model, which can be run on < 4GB of VRAM.
 toe:
   info: nailed to the foot
-  model: EleutherAI/pythia-70m
+  model: EleutherAI/gpt-neo-125M
   training:
     peft:
       type: "lora"

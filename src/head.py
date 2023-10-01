@@ -261,7 +261,7 @@ class cortex:
         temperature: float = 1.23,
         max_new_tokens: int = 222,
         decay_after_length: int = 33,
-        decay_factor: float = 0.00023,
+        decay_factor: float = 0.0000023,
     ):
         self.wait_in_queue()
 

@@ -99,12 +99,28 @@ class Client(discord.Client):
         for guild in sorted(
             self.guilds, key=lambda guild: guild.member_count, reverse=True
         ):
+            banned = await self.check_bans(guild=guild)
+            if banned:
+                continue
+
+            guilds.append(f"{guild.name} ({guild.id}:{guild.member_count})")
+        print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
+
+    async def on_guild_join(self, guild):
+        await self.check_bans(guild=guild)
+
+    async def check_bans(self, guild=None, user=None) -> bool:
+        if guild:
             if int(guild.id) in self.config["discord"].get("bannedServers", []):
                 print(f"leaving: {guild.name}")
                 await guild.leave()
-            else:
-                guilds.append(f"{guild.name} ({guild.id}:{guild.member_count})")
-        print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
+                return True
+
+        if user:
+            if int(user.id) in self.config["discord"].get("bannedusers", []):
+                return True
+
+        return False
 
     async def setup_hook(self) -> None:
         # self.discord_task = self.loop.create_task(self.think())
@@ -156,12 +172,8 @@ class Client(discord.Client):
 
     # check every Discord message
     async def on_message(self, message):
-        if message.guild:
-            if str(message.guild.id) in self.config["discord"].get("bannedServers", []):
-                await message.guild.leave()
-                return
-
-        if str(message.author.id) in self.config["discord"].get("bannedusers", []):
+        banned = self.check_bans(guild=message.guild, user=message.author)
+        if banned:
             return
 
         if self.config["discord"].get("logSenders", False):

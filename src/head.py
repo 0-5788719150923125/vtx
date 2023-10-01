@@ -270,6 +270,8 @@ class cortex:
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
+        eos = self.ai.tokenizer(propulsion, add_special_tokens=False).input_ids[0]
+
         push_sequences = {
             self.get_tokens_as_tuple(s): b
             for s, b in {
@@ -382,6 +384,7 @@ class cortex:
                     bad_words_ids=bad_tokens,
                     suppress_tokens=suppress_tokens,
                     stop_word=propulsion,
+                    eos_token_id=[eos],
                 )
 
                 generation = completion

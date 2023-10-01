@@ -13,11 +13,11 @@ outputs = model.generate(
     inputs=inputs,
     do_sample=True,
     temperature=0.7,
-    eta_cutoff=0.0003,
-    penalty_alpha=0.6,
-    top_k=4,
-    repetition_penalty=2.3,
-    no_repeat_ngram_size=9,
+    # eta_cutoff=0.0003,
+    # penalty_alpha=0.6,
+    # top_k=4,
+    # repetition_penalty=2.3,
+    # no_repeat_ngram_size=9,
     max_new_tokens=222,
 )
 print(tokenizer.decode(outputs[0], skip_special_tokens=True))

@@ -46,10 +46,6 @@ def validation(config):
         "focus": {"type": "dict"},
         "truncate_length": {"type": "integer"},
         "reload_interval": {"type": "integer"},
-        "bos_token": {"type": "string"},
-        "eos_token": {"type": "string"},
-        "unk_token": {"type": "string"},
-        "pad_token": {"type": "string"},
         "training": {
             "type": "dict",
             "schema": {
@@ -265,7 +261,7 @@ class cortex:
         temperature: float = 1.23,
         max_new_tokens: int = 222,
         decay_after_length: int = 33,
-        decay_factor: float = 0.0000023,
+        decay_factor: float = 0.0023,
     ):
         self.wait_in_queue()
 
@@ -374,7 +370,7 @@ class cortex:
                     top_k=4,
                     repetition_penalty=2.3,
                     encoder_repetition_penalty=0.999,
-                    # exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
@@ -425,6 +421,7 @@ class cortex:
 
             except Exception as e:
                 logging.error(e)
+                # print(traceback.format_exc())
 
         self.active = False
         return success, bias, output, seeded

@@ -49,8 +49,11 @@ async def client(config) -> None:
             # while message.is_waiting_for_reply:
             await message.answer_chat_action("typing")
 
-            if "?q" in message["text"].split():
-                output = await head.ctx.query(question=message["text"])
+            if "?q" in message["text"]:
+                prompt = message["text"].replace("?q", "")
+                while prompt.startswith(" "):
+                    prompt = prompt[1:]
+                output = await head.ctx.query(question=prompt)
             else:
                 success, bias, output, seeded = await head.ctx.chat(
                     bias=bias,

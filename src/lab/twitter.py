@@ -27,6 +27,7 @@ async def loop(config):
                 max_new_tokens=56,
                 decay_after_length=6,
                 decay_factor=2.3,
+                eos_tokens=[".", "?", "!"],
             )
             if output[0] == False:
                 continue

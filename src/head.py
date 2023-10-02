@@ -281,10 +281,6 @@ class cortex:
         push_sequences = {
             self.get_tokens_as_tuple(s): b
             for s, b in {
-                # "'t": 0.5,
-                # "\n": -8.0,
-                # "<|url|>": -20.0,
-                # "¶": 5.0,
                 "#": -2.0,
                 "< @": -20.0,
                 "<@": -20.0,
@@ -312,7 +308,6 @@ class cortex:
                 "<((",
                 "((",
                 "(((",
-                # "<|url|>",
                 f"{ship}\n",
                 f"{ship} \n",
             ]
@@ -448,6 +443,7 @@ class cortex:
         max_new_tokens: int = 111,
         decay_after_length: int = 99,
         decay_factor: float = 0.000023,
+        eos_tokens: list | None = None,
     ):
         self.wait_in_queue()
 
@@ -464,6 +460,17 @@ class cortex:
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
             for token in ["{{<"]
         ]
+
+        eos_token_ids = [
+            self.ai.tokenizer.convert_tokens_to_ids(self.ai.tokenizer.tokenize(wall)[0])
+        ]
+        if eos_tokens:
+            for token in eos_tokens:
+                eos_token_ids.append(
+                    self.ai.tokenizer.convert_tokens_to_ids(
+                        self.ai.tokenizer.tokenize(token)[0]
+                    )
+                )
 
         attempt = 0
         max_attempts = 10
@@ -500,9 +507,7 @@ class cortex:
                     remove_invalid_values=True,
                     sequence_bias=push,
                     bad_words_ids=bad,
-                    eos_token_id=self.ai.tokenizer.convert_tokens_to_ids(
-                        self.ai.tokenizer.tokenize(wall)[0]
-                    ),
+                    eos_token_id=eos_token_ids,
                 )
 
                 if completion:
@@ -577,13 +582,15 @@ class cortex:
             for token in [wall]
         ]
 
+        prompt = dedent(prompt)
+
         try:
             temperature = 0.3
             seed = nist_beacon()
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
             completion = self.ai.generate(
-                prompt=dedent(prompt),
+                prompt=prompt,
                 do_sample=True,
                 min_length=23,
                 max_new_tokens=max_new_tokens,
@@ -593,7 +600,7 @@ class cortex:
                 top_k=4,
                 repetition_penalty=1.95,
                 encoder_repetition_penalty=0.999,
-                exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                # exponential_decay_length_penalty=(decay_after_length, decay_factor),
                 no_repeat_ngram_size=9,
                 low_memory=self.config.get("low_memory", False),
                 renormalize_logits=True,
@@ -609,8 +616,15 @@ class cortex:
                 ),
             )
 
-            while completion.endswith("\n"):
+            while len(prompt) > 0:
                 completion = completion[1:]
+                prompt = prompt[1:]
+
+            if completion.endswith("Q"):
+                completion = completion[:-1]
+
+            while completion.endswith("\n"):
+                completion = completion[:-1]
 
             output = completion
 

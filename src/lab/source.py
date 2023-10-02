@@ -182,7 +182,12 @@ async def response(config, focus):
 
     sanitized = remove_invisible_characters(strip_emojis(output))
 
-    if wall + str(bias) + ship + " " + sanitized in messages[focus]:
+    # sanitized = re.sub(r"\s+", "", sanitized)
+
+    while sanitized.startswith(" "):
+        sanitized = sanitized[1:]
+
+    if sanitized == "" or wall + str(bias) + ship + " " + sanitized in messages[focus]:
         if len(messages[focus]) > 0:
             messages[focus].pop(0)
         return

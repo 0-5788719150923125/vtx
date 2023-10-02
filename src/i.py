@@ -9,12 +9,13 @@ import shutil
 import sys
 from pprint import pprint
 
+import jsonlines
 import praw
 import requests
 from bs4 import BeautifulSoup
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
 
-from common import config, get_identity, get_past_datetime, wall, ship
+from common import config, get_identity, get_past_datetime, ship, wall
 
 
 def compile_book():
@@ -534,3 +535,63 @@ def create_evil():
                     except Exception as e:
                         logging.error(e)
         csvwriter.writerows(evils)
+
+
+def create_instructions():
+    if os.path.exists("/lab/instruct/natural"):
+        shutil.rmtree("/lab/instruct/natural")
+    if not os.path.exists("/lab/instruct/natural"):
+        os.makedirs("/lab/instruct/natural")
+    with jsonlines.open("/lab/instruct/unnatural/full_data.jsonl") as f:
+        instance = 0
+        for line in f.iter():
+            instance = instance + 1
+            # if instance > 5:
+            #     return
+            with open(
+                "/lab/instruct/natural/" + f"instruction-{instance}a.md",
+                "a",
+                newline="",
+            ) as file:
+                # pprint(line)
+                file.write("## TRIGGER\n---\n")
+                file.write(line["instances"][0]["input"] + "\n\n")
+                file.write("## ECO\n---\n")
+                file.write(line["instruction"] + "\n\n")
+                if "reformulations" in line:
+                    file.write("## ECHO\n---\n")
+                    file.write(line["reformulations"][0]["instruction"] + "\n\n")
+                if "constraints" in line["instances"][0]:
+                    if line["instances"][0]["constraints"] is not None:
+                        word = random.choice(
+                            ["CONSTRAINTS", "LAW", "RULE", "DEMAND", "ACTION"]
+                        )
+                        file.write(f"## {word}\n---\n")
+                        file.write(line["instances"][0]["constraints"] + "\n\n")
+                file.write("## PREDICTION\n---\n")
+                file.write(line["instances"][0]["output"] + "\n\n")
+            if "reformulations" in line:
+                with open(
+                    "/lab/instruct/natural/" + f"instruction-{instance}b.md",
+                    "a",
+                    newline="",
+                ) as file:
+                    file.write("## TRIGGER\n---\n")
+                    file.write(line["reformulations"][0]["input"] + "\n\n")
+                    file.write("## ECO\n---\n")
+                    file.write(line["reformulations"][0]["instruction"] + "\n\n")
+                    file.write("## PREDICTION\n---\n")
+                    file.write(line["reformulations"][0]["output"] + "\n\n")
+                if len(line["reformulations"]) > 1:
+                    with open(
+                        "/lab/instruct/natural/" + f"instruction-{instance}c.md",
+                        "a",
+                        newline="",
+                    ) as file:
+                        word = random.choice(["TRIGGER", "SIGNAL", "EVENT"])
+                        file.write(f"## {word}\n---\n")
+                        file.write(line["reformulations"][1]["input"] + "\n\n")
+                        file.write("## ECO\n---\n")
+                        file.write(line["reformulations"][1]["instruction"] + "\n\n")
+                        file.write("## PREDICTION\n---\n")
+                        file.write(line["reformulations"][1]["output"] + "\n\n")

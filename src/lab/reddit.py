@@ -4,8 +4,8 @@ import os
 import random
 import re
 import threading
-import traceback
 import time
+import traceback
 from copy import deepcopy
 from pprint import pprint
 
@@ -13,7 +13,7 @@ import asyncpraw
 from cerberus import Validator
 
 import head
-from common import ad, bc, get_daemon, get_identity, wall, ship
+from common import ad, bc, get_daemon, get_identity, ship, wall
 from events import post_event, subscribe_event
 
 
@@ -186,7 +186,7 @@ async def stalker(reddit, config):
                 ]
 
                 stalker = config["personas"].get(victim.get("stalker", None), None)
-                bias = stalker.get("bias", None) if stalker else None
+                bias = stalker.get("bias", False) if stalker else False
                 prefix = (
                     stalker.get("persona")
                     if stalker
@@ -243,9 +243,9 @@ async def stalker(reddit, config):
                 context = await build_context(comment=comment)
 
                 stalker = config["personas"].get(victim.get("stalker", None), None)
-                bias = stalker.get("bias", None) if stalker else None
+                bias = stalker.get("bias", False) if stalker else False
                 prefix = (
-                    stalker.get("prompt")
+                    stalker.get("persona")
                     if stalker
                     else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
                 )

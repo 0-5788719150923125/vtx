@@ -11,8 +11,8 @@ import sys
 import time
 import traceback
 import typing
-from itertools import chain
 from copy import deepcopy
+from itertools import chain
 from pprint import pprint
 from textwrap import dedent
 
@@ -34,9 +34,9 @@ from common import (
     config,
     focus,
     nist_beacon,
-    wall,
     remove_invisible_characters,
     ship,
+    wall,
 )
 
 

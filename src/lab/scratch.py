@@ -1,13 +1,33 @@
-from lab.aigen.aigen.TokenDataset import TokenDataset
-from transformers import AutoTokenizer
-from datasets import load_dataset, load_from_disk
+# from lab.aigen.aigen.TokenDataset import TokenDataset
+# from transformers import AutoTokenizer
+# from datasets import load_dataset, load_from_disk
 
-# from transformers import AutoModelForCausalLM, AutoTokenizer
+# import torch
+# from transformers import AutoModelForCausalLM, AutoTokenizer, RwkvConfig, RwkvModel
 
-model_name = "EleutherAI/pythia-1b-deduped"
+# # model_name = "EleutherAI/pythia-1b-deduped"
+# model_name = "RWKV/rwkv-4-169m-pile"
 
-tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir="/src/models")
-# model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir="/src/models")
+# string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+
+# https://huggingface.co/docs/transformers/model_doc/rwkv
+# This stuff was used to use RWKV in RNN mode
+# tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir="/src/models")
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_name, cache_dir="/src/models", output_hidden_states=True
+# )
+# # model = RwkvModel.from_pretrained(model_name, cache_dir="/src/models")
+
+# inputs = tokenizer(string, return_tensors="pt")
+# # # Feed everything to the model
+# outputs = model(inputs["input_ids"])
+# # print(outputs)
+# output_whole = outputs.hidden_states[-1]
+# print(output_whole)
+
+# outputs = model(inputs["input_ids"][:, :2])
+# print(outputs.hidden_states[-1])
+
 
 # my_dataset = load_dataset(
 #     "text", data_files="/lab/ink/content/docs/black.md", split="train"

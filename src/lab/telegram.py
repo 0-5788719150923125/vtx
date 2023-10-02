@@ -7,7 +7,7 @@ import re
 from aiogram import Bot, Dispatcher, types
 
 import head
-from common import ad, bc, get_daemon, get_identity, wall, ship
+from common import ad, bc, get_daemon, get_identity, ship, wall
 from events import post_event
 
 

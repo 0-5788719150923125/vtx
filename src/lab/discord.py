@@ -10,7 +10,7 @@ import requests
 from cerberus import Validator
 
 import head
-from common import ad, bc, bullets, get_identity, wall, ship
+from common import ad, bc, bullets, get_identity, ship, wall
 from events import subscribe_event
 
 response_frequency = 3  # out of 100

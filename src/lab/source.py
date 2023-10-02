@@ -16,10 +16,10 @@ from common import (
     ad,
     bc,
     get_identity,
-    wall,
     remove_invisible_characters,
     ship,
     strip_emojis,
+    wall,
 )
 
 context_length = 23

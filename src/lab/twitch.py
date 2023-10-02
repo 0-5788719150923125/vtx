@@ -11,7 +11,7 @@ from twitchAPI.type import AuthScope, ChatEvent
 
 import head
 import lab.source
-from common import ad, bc, get_identity, wall, ship
+from common import ad, bc, get_identity, ship, wall
 
 
 def main(config):

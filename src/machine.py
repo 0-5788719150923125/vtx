@@ -5,6 +5,7 @@ import time
 import memory
 from common import ad, bc, config
 
+# Quickly test stuff here
 from lab import scratch
 
 

@@ -102,7 +102,7 @@
         "detail": "View live Docker stats.",
         "type": "shell",
         "command": "docker stats"
-      }
+      },
     ],
     "inputs": [
       {
@@ -126,6 +126,7 @@
           "i.convert_video_to_ascii()",
           "i.juxtapose_data()",
           "i.create_evil()",
+          "i.create_instructions()"
         ]
       },
       {

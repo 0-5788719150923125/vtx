@@ -10,7 +10,7 @@ from pprint import pprint
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
 
 import head
-from common import ad, bc, get_identity, wall, ship
+from common import ad, bc, get_identity, ship, wall
 
 logging.getLogger("nio").setLevel(logging.WARNING)
 

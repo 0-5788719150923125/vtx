@@ -1,4 +1,5 @@
 matrix-nio>=0.21.2
+jsonlines>=4.0.0
 git+https://github.com/Lightning-Universe/lightning-Hivemind.git
 git+https://github.com/huggingface/peft.git
 /lab/aigen

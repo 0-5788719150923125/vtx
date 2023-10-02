@@ -445,6 +445,7 @@ if __name__ == "__main__":
             loggers=[logger],
             optimizer=stage.get("optimizer", "AdamW"),
             learning_rate=float(stage.get("learning_rate", 0.005)),
+            swa_lr=float(stage.get("swa_lr", None)),
             weight_decay=float(stage.get("weight_decay", 0.01)),
             warmup_steps=stage.get("warmup_steps", 0),
             gradient_clip_val=stage.get("gradient_clip_val", 0.5),

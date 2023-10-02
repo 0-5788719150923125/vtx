@@ -26,7 +26,7 @@ async def loop(config):
                 prompt=random.choice(topics),
                 max_new_tokens=56,
                 decay_after_length=6,
-                decay_factor=-0.23,
+                decay_factor=2.3,
             )
             if output[0] == False:
                 continue

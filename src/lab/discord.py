@@ -103,20 +103,20 @@ class Client(discord.Client):
             if banned:
                 continue
 
-            guilds.append(f"{guild.name} ({guild.id}:{guild.member_count})")
+            guilds.append(f"{guild.name} ({guild.member_count})")
         print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
 
     async def on_guild_join(self, guild):
         await self.check_bans(guild=guild)
 
     async def check_bans(self, guild=None, user=None) -> bool:
-        if guild:
+        if guild is not None:
             if int(guild.id) in self.config["discord"].get("bannedServers", []):
                 print(f"leaving: {guild.name}")
                 await guild.leave()
                 return True
 
-        if user:
+        if user is not None:
             if int(user.id) in self.config["discord"].get("bannedusers", []):
                 return True
 
@@ -172,14 +172,9 @@ class Client(discord.Client):
 
     # check every Discord message
     async def on_message(self, message):
-        banned = self.check_bans(guild=message.guild, user=message.author)
+        banned = await self.check_bans(guild=message.guild, user=message.author)
         if banned:
             return
-
-        if self.config["discord"].get("logSenders", False):
-            if message.guild.id:
-                print(f"guild: {message.guild.id}")
-            print(f"sender: {message.author.id}")
 
         reply = random.choice([True, False])
 
@@ -193,6 +188,11 @@ class Client(discord.Client):
             or message.content == ""
         ):
             return
+
+        if self.config["discord"].get("logSenders", False):
+            if message.guild is not None:
+                message.content = message.content + f" (guild:{message.guild.id})"
+            message.content = message.content + f" (sender:{message.author.id})"
 
         # every message is added to local cache, for building prompt
         if message.content.lower() != "gen" and message.author != self.user:

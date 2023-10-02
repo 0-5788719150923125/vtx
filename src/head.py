@@ -90,6 +90,8 @@ def validation(config):
                                 "allowed": ["AdamW", "Lion", "SophiaH"],
                             },
                             "learning_rate": {"type": "float"},
+                            "swa_lr": {"type": "float"},
+                            "stride": {"type": "integer"},
                             "update_period": {"type": "integer"},
                             "block_size": {"type": "integer"},
                             "num_steps": {"type": "integer"},

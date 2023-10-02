@@ -18,7 +18,13 @@ from textwrap import dedent
 
 import numpy as np
 import torch
-from aigen import aigen
+
+mode = os.environ.get("DEV_MODE", None)
+if mode == "true":
+    from lab.aigen.aigen import aigen
+else:
+    from aigen import aigen
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
 
@@ -262,8 +268,8 @@ class cortex:
         bias=None,
         temperature: float = 1.23,
         max_new_tokens: int = 222,
-        decay_after_length: int = 44,
-        decay_factor: float = 11e-1,
+        decay_after_length: int = 33,
+        decay_factor: float = 0.000023,
     ):
         self.wait_in_queue()
 
@@ -276,8 +282,9 @@ class cortex:
             self.get_tokens_as_tuple(s): b
             for s, b in {
                 # "'t": 0.5,
-                "\n": -8.0,
+                # "\n": -8.0,
                 # "<|url|>": -20.0,
+                # "¶": 5.0,
                 "#": -2.0,
                 "< @": -20.0,
                 "<@": -20.0,
@@ -285,6 +292,7 @@ class cortex:
                 "((": -20.0,
             }.items()
         }
+        # push_sequences[self.ai.tokenizer.eos_token] = -20.0
         bad_tokens = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
             # Many of these tokens were chosen from past experience with ugly patterns
@@ -375,7 +383,7 @@ class cortex:
                     top_k=4,
                     repetition_penalty=2.3,
                     encoder_repetition_penalty=0.999,
-                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    # exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
@@ -386,7 +394,9 @@ class cortex:
                     sequence_bias=push_sequences,
                     bad_words_ids=bad_tokens,
                     suppress_tokens=suppress_tokens,
-                    stop_word=wall,
+                    eos_token_id=self.ai.tokenizer.convert_tokens_to_ids(
+                        self.ai.tokenizer.tokenize(wall)[0]
+                    ),
                 )
 
                 generation = completion
@@ -490,7 +500,9 @@ class cortex:
                     remove_invalid_values=True,
                     sequence_bias=push,
                     bad_words_ids=bad,
-                    stop_word=wall,
+                    eos_token_id=self.ai.tokenizer.convert_tokens_to_ids(
+                        self.ai.tokenizer.tokenize(wall)[0]
+                    ),
                 )
 
                 if completion:
@@ -592,7 +604,9 @@ class cortex:
                 suppress_tokens=[eos],
                 sequence_bias=push,
                 bad_words_ids=bad,
-                stop_word="Q:",
+                eos_token_id=self.ai.tokenizer.convert_tokens_to_ids(
+                    self.ai.tokenizer.tokenize("Q:")[0]
+                ),
             )
 
             while completion.endswith("\n"):

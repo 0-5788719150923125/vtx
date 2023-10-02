@@ -30,6 +30,7 @@ services:
       - .env
     environment:
       FOCUS: ${FOCUS:-heart}
+      DEV_MODE: true
 
   ctx:
     image: ghcr.io/0-5788719150923125/ctx:latest

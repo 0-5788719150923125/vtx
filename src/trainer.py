@@ -3,11 +3,14 @@ import os
 import random
 import shutil
 
-from aigen import aigen
+mode = os.environ.get("DEV_MODE", None)
+if mode == "true":
+    from lab.aigen.aigen import aigen
+    from lab.aigen.aigen.TokenDataset import TokenDataset, merge_datasets
+else:
+    from aigen import aigen
+    from aigen.TokenDataset import TokenDataset, merge_datasets
 
-# from aigen.TokenDataset import TokenDataset, NewTokenDataset, merge_datasets
-from lab.aigen.aigen.TokenDataset import TokenDataset, NewTokenDataset, merge_datasets
-from aigen.tokenizers import train_tokenizer
 from peft import (
     AdaLoraConfig,
     LoraConfig,
@@ -120,6 +123,7 @@ def create_dataset(
                     block_size=block_size,
                     line_by_line=line_by_line,
                     tokenizer=tokenizer,
+                    stride=stride,
                 )
                 os.remove("/tmp/lines.txt")
             else:
@@ -145,13 +149,7 @@ def create_dataset(
         else:
             dataset = merge_datasets(collection, equalize=False)
     else:
-        # dataset = TokenDataset(
-        #     intermediate_path,
-        #     block_size=block_size,
-        #     line_by_line=line_by_line,
-        #     tokenizer=tokenizer,
-        # )
-        dataset = NewTokenDataset(
+        dataset = TokenDataset(
             intermediate_path,
             tokenizer=tokenizer,
             block_size=block_size,
@@ -445,7 +443,7 @@ if __name__ == "__main__":
             loggers=[logger],
             optimizer=stage.get("optimizer", "AdamW"),
             learning_rate=float(stage.get("learning_rate", 0.005)),
-            swa_lr=float(stage.get("swa_lr", None)),
+            swa_lr=stage.get("swa_lr", None),
             weight_decay=float(stage.get("weight_decay", 0.01)),
             warmup_steps=stage.get("warmup_steps", 0),
             gradient_clip_val=stage.get("gradient_clip_val", 0.5),

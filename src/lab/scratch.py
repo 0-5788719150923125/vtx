@@ -1,5 +1,6 @@
-from lab.aigen.aigen.TokenDataset import TokenDataset, NewTokenDataset
+from lab.aigen.aigen.TokenDataset import TokenDataset
 from transformers import AutoTokenizer
+from datasets import load_dataset, load_from_disk
 
 # from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -8,8 +9,13 @@ model_name = "EleutherAI/pythia-1b-deduped"
 tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir="/src/models")
 # model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir="/src/models")
 
+# my_dataset = load_dataset(
+#     "text", data_files="/lab/ink/content/docs/black.md", split="train"
+# )
 
-string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+# print(my_dataset["text"])
+
+# string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 
 # print(
 #     TokenDataset(
@@ -30,24 +36,24 @@ string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmo
 #     )
 # )
 
-print(string)
+# print(string)
 
-tokenizer.pad_token = tokenizer.eos_token
+# tokenizer.pad_token = tokenizer.eos_token
 
-inputs = tokenizer(
-    string,
-    max_length=16,
-    padding=True,
-    truncation=True,
-    stride=4,
-    return_overflowing_tokens=True,
-)
+# inputs = tokenizer(
+#     string,
+#     max_length=16,
+#     padding=True,
+#     truncation=True,
+#     stride=4,
+#     return_overflowing_tokens=True,
+# )
 
-print(inputs)
+# print(inputs)
 
-inputs = inputs.convert_to_tensors("pt")
+# inputs = inputs.convert_to_tensors("pt")
 
-print(inputs)
+# print(inputs)
 
 # inputs = tokenizer("Harry Potter is", return_tensors="pt")["input_ids"]
 # inputs = None

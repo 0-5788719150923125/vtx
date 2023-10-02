@@ -200,7 +200,7 @@ async def stalker(reddit, config):
                     ctx=context,
                     bias=bias,
                     prefix=prefix,
-                    decay_after_length=66,
+                    # decay_after_length=66,
                 )
 
                 msg = (
@@ -257,7 +257,7 @@ async def stalker(reddit, config):
                     ctx=context,
                     bias=bias,
                     prefix=prefix,
-                    decay_after_length=66,
+                    # decay_after_length=66,
                 )
 
                 msg = (
@@ -386,7 +386,7 @@ async def subscribe_submissions(reddit, config):
                 ctx=context,
                 prefix=prompt,
                 bias=bias,
-                decay_after_length=66,
+                # decay_after_length=66,
             )
 
             msg = (
@@ -468,7 +468,7 @@ async def subscribe_comments(reddit, config):
             success, bias, output, seeded = await head.ctx.chat(
                 ctx=context,
                 prefix=prefix,
-                decay_after_length=66,
+                # decay_after_length=66,
             )
 
             msg = comment.body[:66] + "..." if len(comment.body) > 66 else comment.body

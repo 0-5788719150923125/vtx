@@ -24,13 +24,16 @@ async def loop(config):
             topics = config.get("topics", ["AI alignment"])
             output = await head.ctx.prompt(
                 prompt=random.choice(topics),
+                min_new_tokens=11,
                 max_new_tokens=56,
-                decay_after_length=6,
-                decay_factor=2.3,
-                eos_tokens=[".", "?", "!"],
+                ideas=config.get("ideas", None),
+                # decay_after_length=6,
+                # decay_factor=2.3,
+                eos_tokens=[".", "?", "!", "\n"],
             )
-            if output[0] == False:
+            if output == False:
                 continue
+            print(bc.CORE + "ONE@TWITTER: " + ad.TEXT + output)
             try:
                 await tweet(output)
             except Exception as e:
@@ -48,4 +51,3 @@ async def tweet(message: str = "This is an automated test."):
         access_token_secret=os.environ["TWITTERACCESSTOKENSECRET"],
     )
     response = client.create_tweet(text=message)
-    print(bc.CORE + "ONE@TWITTER: " + ad.TEXT + message)

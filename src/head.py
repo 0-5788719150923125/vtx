@@ -268,7 +268,7 @@ class cortex:
         bias=None,
         temperature: float = 1.23,
         max_new_tokens: int = 222,
-        decay_after_length: int = 33,
+        # decay_after_length: int = 33,
         decay_factor: float = 0.000023,
     ):
         self.wait_in_queue()
@@ -440,9 +440,11 @@ class cortex:
     def prompt(
         self,
         prompt="",
+        ideas: dict | None = None,
+        min_new_tokens: int = 11,
         max_new_tokens: int = 111,
-        decay_after_length: int = 99,
-        decay_factor: float = 0.000023,
+        # decay_after_length: int = 99,
+        # decay_factor: float = 0.000023,
         eos_tokens: list | None = None,
     ):
         self.wait_in_queue()
@@ -450,15 +452,15 @@ class cortex:
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
         eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
-        push = {
-            self.get_tokens_as_tuple(s): b
-            for s, b in {
-                wall: -5.9,
-            }.items()
-        }
+
+        sequence_biases = {wall: -20.0}
+        if ideas is not None:
+            sequence_biases = {**sequence_biases, **ideas}
+
+        push = {self.get_tokens_as_tuple(s): b for s, b in sequence_biases.items()}
         bad = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
-            for token in ["{{<"]
+            for token in ["{{<", wall]
         ]
 
         eos_token_ids = [
@@ -480,16 +482,29 @@ class cortex:
                 seed = nist_beacon()
 
                 if attempt > 0:
-                    decay_factor = decay_factor / 2
+                    # decay_factor = decay_factor / 2
                     temperature = temperature / 2
 
                 attempt += 1
+
+                from transformers import StoppingCriteriaList
+
+                stopping_criteria_list = StoppingCriteriaList(
+                    [
+                        [self.ai.tokenizer.eos_token_id],
+                        [
+                            self.ai.tokenizer.eos_token_id,
+                            self.ai.tokenizer.eos_token_id,
+                        ],
+                    ]
+                )
 
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.ai.generate(
                     prompt=prompt,
                     do_sample=True,
-                    min_length=23,
+                    # min_length=min_length,
+                    min_new_tokens=min_new_tokens,
                     max_new_tokens=max_new_tokens,
                     temperature=temperature,
                     eta_cutoff=0.0003,
@@ -497,7 +512,7 @@ class cortex:
                     top_k=4,
                     repetition_penalty=1.95,
                     encoder_repetition_penalty=0.999,
-                    exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    # exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
@@ -508,6 +523,8 @@ class cortex:
                     sequence_bias=push,
                     bad_words_ids=bad,
                     eos_token_id=eos_token_ids,
+                    # pad_token_id=self.ai.tokenizer.eos_token_id,
+                    # stopping_criteria=stopping_criteria_list,
                 )
 
                 if completion:
@@ -518,16 +535,23 @@ class cortex:
                     )
                     if output.endswith(wall):
                         output = output[:-1]
+                    while "\n" in output:
+                        output = output.replace("\n", " ")
+                    while "  " in output:
+                        output = output.replace("  ", " ")
+                    while "\n" in output:
+                        output = output.replace("\n", " ")
+                    output = remove_invisible_characters(output)
                     break
 
-                output = [False, prompt]
+                output = False
                 if attempt == max_attempts:
                     raise Exception(f"FAILED PROMPT: {prompt}")
                 continue
 
             except Exception as e:
                 logging.error(e)
-                output = [False, e]
+                output = False
 
         self.active = False
         return output

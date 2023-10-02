@@ -34,3 +34,4 @@ chromadb>=0.4.12
 pytorch_optimizer>=2.11.2
 torchvision>=0.15.2
 datasets>=2.14.5
+jsonlines>=4.0.0

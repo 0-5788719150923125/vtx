@@ -546,7 +546,7 @@ def create_instructions():
         instance = 0
         for line in f.iter():
             instance = instance + 1
-            # if instance > 5:
+            # if instance > 1000:
             #     return
             with open(
                 "/lab/instruct/natural/" + f"instruction-{instance}a.md",
@@ -554,44 +554,54 @@ def create_instructions():
                 newline="",
             ) as file:
                 # pprint(line)
-                file.write("## TRIGGER\n---\n")
-                file.write(line["instances"][0]["input"] + "\n\n")
+                if not line["instances"][0]["input"].startswith("None"):
+                    file.write("## TRIGGER\n---\n")
+                    file.write(line["instances"][0]["input"] + "\n\n")
                 file.write("## ECO\n---\n")
                 file.write(line["instruction"] + "\n\n")
                 if "reformulations" in line:
                     file.write("## ECHO\n---\n")
                     file.write(line["reformulations"][0]["instruction"] + "\n\n")
                 if "constraints" in line["instances"][0]:
-                    if line["instances"][0]["constraints"] is not None:
+                    if (
+                        not line["instances"][0]["constraints"]
+                        .lower()
+                        .startswith("none")
+                    ):
                         word = random.choice(
                             ["CONSTRAINTS", "LAW", "RULE", "DEMAND", "ACTION"]
                         )
                         file.write(f"## {word}\n---\n")
                         file.write(line["instances"][0]["constraints"] + "\n\n")
-                file.write("## PREDICTION\n---\n")
-                file.write(line["instances"][0]["output"] + "\n\n")
+                if not line["instances"][0]["output"].startswith("None"):
+                    file.write("## PREDICTION\n---\n")
+                    file.write(line["instances"][0]["output"] + "\n\n")
             if "reformulations" in line:
                 with open(
                     "/lab/instruct/natural/" + f"instruction-{instance}b.md",
                     "a",
                     newline="",
                 ) as file:
-                    file.write("## TRIGGER\n---\n")
-                    file.write(line["reformulations"][0]["input"] + "\n\n")
+                    if not line["reformulations"][0]["input"].startswith("None"):
+                        file.write("## TRIGGER\n---\n")
+                        file.write(line["reformulations"][0]["input"] + "\n\n")
                     file.write("## ECO\n---\n")
                     file.write(line["reformulations"][0]["instruction"] + "\n\n")
-                    file.write("## PREDICTION\n---\n")
-                    file.write(line["reformulations"][0]["output"] + "\n\n")
+                    if not line["reformulations"][0]["output"].startswith("None"):
+                        file.write("## PREDICTION\n---\n")
+                        file.write(line["reformulations"][0]["output"] + "\n\n")
                 if len(line["reformulations"]) > 1:
                     with open(
                         "/lab/instruct/natural/" + f"instruction-{instance}c.md",
                         "a",
                         newline="",
                     ) as file:
-                        word = random.choice(["TRIGGER", "SIGNAL", "EVENT"])
-                        file.write(f"## {word}\n---\n")
-                        file.write(line["reformulations"][1]["input"] + "\n\n")
+                        if not line["reformulations"][1]["input"].startswith("None"):
+                            word = random.choice(["TRIGGER", "SIGNAL", "EVENT"])
+                            file.write(f"## {word}\n---\n")
+                            file.write(line["reformulations"][1]["input"] + "\n\n")
                         file.write("## ECO\n---\n")
                         file.write(line["reformulations"][1]["instruction"] + "\n\n")
-                        file.write("## PREDICTION\n---\n")
-                        file.write(line["reformulations"][1]["output"] + "\n\n")
+                        if not line["reformulations"][1]["output"].startswith("None"):
+                            file.write("## PREDICTION\n---\n")
+                            file.write(line["reformulations"][1]["output"] + "\n\n")

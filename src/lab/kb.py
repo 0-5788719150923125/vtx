@@ -156,8 +156,8 @@ class Ink:
             output = await head.ctx.prompt(
                 prompt=self.staged,
                 max_new_tokens=111,
-                decay_after_length=33,
-                decay_factor=-0.23,
+                # decay_after_length=33,
+                # decay_factor=-0.23,
             )
             if output[0] == False:
                 return

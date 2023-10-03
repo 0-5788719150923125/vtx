@@ -199,6 +199,12 @@ class Client(discord.Client):
                 author_id = author_id[::-1]
             head.ctx.build_context(wall + author_id + ship + " " + message.content)
 
+        # We need to place all of the following logic into a dedicated function. We need to
+        # check the incoming message for a URL, and if it exists, we need to return. We need
+        # to watch the on_message_edit event, and continue the function after it fires. The
+        # reason is, embeds are not available here. The on_message_edit event will fire after
+        # this one, and it will contain embed information, like title and description.
+
         # sanitized = re.sub(
         #     r"http\S+",
         #     "<|url|>",

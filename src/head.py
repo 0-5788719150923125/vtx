@@ -640,9 +640,12 @@ class cortex:
                 ),
             )
 
-            while len(prompt) > 0:
+            while len(prompt) > 2:
                 completion = completion[1:]
                 prompt = prompt[1:]
+
+            while completion.endswith("\n"):
+                completion = completion[2:]
 
             if completion.endswith("Q"):
                 completion = completion[:-1]

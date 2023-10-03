@@ -159,7 +159,7 @@ class Ink:
                 # decay_after_length=33,
                 # decay_factor=-0.23,
             )
-            if output[0] == False:
+            if output == False:
                 return
             content = output
             if self.combine:

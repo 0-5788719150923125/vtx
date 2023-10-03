@@ -29,7 +29,8 @@ async def loop(config):
                 ideas=config.get("ideas", None),
                 # decay_after_length=6,
                 # decay_factor=2.3,
-                eos_tokens=[".", "?", "!", "\n"],
+                eos_tokens=[".", "?", "!", "\n", "\n\n", "\\"],
+                cleanup=True,
             )
             if output == False:
                 continue

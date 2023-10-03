@@ -457,6 +457,7 @@ class cortex:
         # decay_after_length: int = 99,
         # decay_factor: float = 0.000023,
         eos_tokens: list | None = None,
+        cleanup: bool = False,
     ):
         self.wait_in_queue()
 
@@ -546,13 +547,14 @@ class cortex:
                     )
                     if output.endswith(wall):
                         output = output[:-1]
-                    while "\n" in output:
-                        output = output.replace("\n", " ")
-                    while "  " in output:
-                        output = output.replace("  ", " ")
-                    while "\n" in output:
-                        output = output.replace("\n", " ")
-                    output = remove_invisible_characters(output)
+                    if cleanup:
+                        while "\n" in output:
+                            output = output.replace("\n", " ")
+                        while "  " in output:
+                            output = output.replace("  ", " ")
+                        while "\n" in output:
+                            output = output.replace("\n", " ")
+                        output = remove_invisible_characters(output)
                     break
 
                 output = False

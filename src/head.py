@@ -283,7 +283,10 @@ class cortex:
         push_sequences = {
             self.get_tokens_as_tuple(s): b
             for s, b in {
+                wall: 2.3,
+                "\n": 3.3,
                 "#": -2.0,
+                "<": -2.0,
                 "< @": -20.0,
                 "<@": -20.0,
                 "[[": -20.0,
@@ -391,7 +394,7 @@ class cortex:
                     top_k=4,
                     repetition_penalty=2.3,
                     encoder_repetition_penalty=0.999,
-                    # exponential_decay_length_penalty=(decay_after_length, decay_factor),
+                    exponential_decay_length_penalty=(max_new_tokens, -0.44),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
@@ -425,7 +428,6 @@ class cortex:
                     or bool(re.search(variables, group[3]))
                     or group[3] == ""
                     or wall in group[3]
-                    or "<|url|>" in group[3]
                     or group[3][:1] in [">", "~", '"', "“", " ", "\\", "\n", ""]
                     or group[3][:2] in ["\\", "\n", "<@", "(("]
                     or group[3][:3] in ["< @"]

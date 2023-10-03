@@ -267,9 +267,11 @@ class cortex:
         ctx=None,
         bias=None,
         temperature: float = 1.23,
+        min_new_tokens: int = 1,
         max_new_tokens: int = 222,
         # decay_after_length: int = 33,
-        decay_factor: float = 0.000023,
+        # decay_factor: float = 0.000023,
+        eos_tokens: list | None = None,
     ):
         self.wait_in_queue()
 
@@ -326,6 +328,17 @@ class cortex:
             )
         )
 
+        eos_token_ids = [
+            self.ai.tokenizer.convert_tokens_to_ids(self.ai.tokenizer.tokenize(wall)[0])
+        ]
+        if eos_tokens:
+            for token in eos_tokens:
+                eos_token_ids.append(
+                    self.ai.tokenizer.convert_tokens_to_ids(
+                        self.ai.tokenizer.tokenize(token)[0]
+                    )
+                )
+
         context = self.context
         if ctx:
             context = deepcopy(ctx)
@@ -370,7 +383,7 @@ class cortex:
                 completion = self.ai.generate(
                     prompt=prompt,
                     do_sample=True,
-                    min_length=23,
+                    min_new_tokens=min_new_tokens,
                     max_new_tokens=max_new_tokens,
                     temperature=temperature,
                     eta_cutoff=0.0003,
@@ -389,9 +402,7 @@ class cortex:
                     sequence_bias=push_sequences,
                     bad_words_ids=bad_tokens,
                     suppress_tokens=suppress_tokens,
-                    eos_token_id=self.ai.tokenizer.convert_tokens_to_ids(
-                        self.ai.tokenizer.tokenize(wall)[0]
-                    ),
+                    eos_token_id=eos_token_ids,
                 )
 
                 generation = completion

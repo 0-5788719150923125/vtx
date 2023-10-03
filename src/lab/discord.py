@@ -158,7 +158,9 @@ class Client(discord.Client):
                 if str(recent_author_id) != str(self.user.id):
                     bias = recent_author_id
 
-                success, bias, output, seeded = await head.ctx.chat(bias, context)
+                success, bias, output, seeded = await head.ctx.chat(
+                    bias, context, max_new_tokens=333
+                )
                 if success == False:
                     return
 
@@ -280,7 +282,7 @@ class Client(discord.Client):
                             no_transform = True
 
                 success, bias, output, seeded = await head.ctx.chat(
-                    bias=bias, prefix=prefix
+                    bias=bias, prefix=prefix, max_new_tokens=333
                 )
 
                 if output == False:
@@ -364,7 +366,7 @@ class Client(discord.Client):
                 if str(message.channel.type) == "private":
                     bias = str(self.user.id)
                     success, bias, output, seeded = await head.ctx.chat(
-                        bias=bias, prefix=prefix, ctx=context
+                        bias=bias, prefix=prefix, ctx=context, max_new_tokens=333
                     )
                     if success == False:
                         return
@@ -378,7 +380,9 @@ class Client(discord.Client):
                     )
                     transformed = output
                 else:
-                    success, bias, output, seeded = await head.ctx.chat(ctx=context)
+                    success, bias, output, seeded = await head.ctx.chat(
+                        ctx=context, max_new_tokens=333
+                    )
                     if success == False:
                         return
                     head.ctx.edit_message(

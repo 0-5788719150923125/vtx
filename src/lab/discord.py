@@ -218,7 +218,7 @@ class Client(discord.Client):
         #             f"{message.content} | {embed.title} | {embed.description}"
         #         )
 
-        # message_log = message.content
+        message_log = message.content
         # from pprint import pprint
 
         # pprint(message)

@@ -34,7 +34,7 @@ def validation(config):
     schema = {
         "use_self_token": {"type": "boolean"},
         "export_dms": {"type": "boolean"},
-        "logSenders": {"type": "boolean"},
+        "debug": {"type": "boolean"},
         "bannedUsers": {"type": "list"},
         "bannedServers": {"type": "list"},
         "servers": {
@@ -189,11 +189,6 @@ class Client(discord.Client):
         ):
             return
 
-        if self.config["discord"].get("logSenders", False):
-            if message.guild is not None:
-                message.content = message.content + f" (guild:{message.guild.id})"
-            message.content = message.content + f" (sender:{message.author.id})"
-
         # every message is added to local cache, for building prompt
         if message.content.lower() != "gen" and message.author != self.user:
             author_id = str(message.author.id)
@@ -203,7 +198,30 @@ class Client(discord.Client):
                 )
                 author_id = author_id[::-1]
             head.ctx.build_context(wall + author_id + ship + " " + message.content)
-            print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + message.content)
+
+        # sanitized = re.sub(
+        #     r"http\S+",
+        #     "<|url|>",
+        #     string,
+        # )
+        # if message.embeds:
+        #     print("Truuuu")
+        # for embed in message.embeds:
+        #     if embed.type == "rich":
+        #         message.content = (
+        #             f"{message.content} | {embed.title} | {embed.description}"
+        #         )
+
+        # message_log = message.content
+        # from pprint import pprint
+
+        # pprint(message)
+        if self.config["discord"].get("debug", False):
+            if message.guild is not None:
+                message_log = message_log + f" (guild:{message.guild.id})"
+            message_log = message_log + f" (sender:{message.author.id})"
+
+        print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + message_log)
 
         # generate responses
         if "gen" in message.content.lower():

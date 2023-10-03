@@ -648,7 +648,10 @@ class cortex:
                 completion = completion[:-1]
 
             while completion.endswith("\n"):
-                completion = completion[:-1]
+                completion = completion[:-2]
+
+            while completion.endswith(r"\n"):
+                completion = completion[:-2]
 
             output = completion
 

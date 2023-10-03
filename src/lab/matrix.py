@@ -67,24 +67,38 @@ async def subscribe(user, password, config) -> None:
 
             head.ctx.build_context(wall + identity + ship + " " + message)
 
-            if "Architect" not in message:
-                if "m.relates_to" in event.source["content"]:
-                    if "m.in_reply_to" not in event.source["content"]["m.relates_to"]:
+            passed = False
+            if "!Q" in message:
+                passed = True
+            if not passed:
+                if "Architect" not in message:
+                    if "m.relates_to" in event.source["content"]:
+                        if (
+                            "m.in_reply_to"
+                            not in event.source["content"]["m.relates_to"]
+                        ):
+                            return
+                        if "luciferianink" not in event.source["content"]["body"]:
+                            return
+                    else:
                         return
-                    if "luciferianink" not in event.source["content"]["body"]:
-                        return
-                else:
-                    return
 
             print(bc.FOLD + "ONE@MATRIX: " + ad.TEXT + message)
 
             task = asyncio.create_task(client.room_typing(room.room_id))
             await asyncio.gather(task)
 
-            success, bias, output, seeded = await head.ctx.chat(
-                prefix="I am Ryan's bot, and I am connected to GUN's Matrix room.",
-                bias=bias,
-            )
+            if "!Q" in message:
+                message = message.replace(" !Q ", " ")
+                message = message.replace("!Q ", "")
+                message = message.replace("!Q", "")
+                output = await head.ctx.query(question=message)
+                success = True
+            else:
+                success, bias, output, seeded = await head.ctx.chat(
+                    prefix="I am Ryan's bot, and I am connected to GUN's Matrix room.",
+                    bias=bias,
+                )
 
             if success == False:
                 print(output)

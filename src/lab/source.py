@@ -174,7 +174,7 @@ async def response(config, focus):
         ctx=messages[focus],
         prefix=persona,
         max_new_tokens=222,
-        eos_tokens=["\n"],
+        eos_tokens=["\n", "\n\n", "\\"],
     )
 
     if success == False:

@@ -92,7 +92,7 @@ async def subscribe(user, password, config) -> None:
                 message = message.replace(" !Q ", " ")
                 message = message.replace("!Q ", "")
                 message = message.replace("!Q", "")
-                output = await head.ctx.query(question=message)
+                output = await head.ctx.query(question=message, temperature=0.7)
                 success = True
             else:
                 success, bias, output, seeded = await head.ctx.chat(

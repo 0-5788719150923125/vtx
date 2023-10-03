@@ -439,6 +439,8 @@ class cortex:
                 output = remove_invisible_characters(group[3].replace(r"\n", "\n"))
                 while "  " in output:
                     output = output.replace("  ", " ")
+                while output.endswith("\\"):
+                    output = output[:-1]
                 break
 
             except Exception as e:
@@ -451,6 +453,7 @@ class cortex:
     def prompt(
         self,
         prompt="",
+        temperature: float = 1.23,
         ideas: dict | None = None,
         min_new_tokens: int = 11,
         max_new_tokens: int = 111,
@@ -490,7 +493,6 @@ class cortex:
         max_attempts = 10
         while attempt < max_attempts:
             try:
-                temperature = 1.23
                 seed = nist_beacon()
 
                 if attempt > 0:
@@ -554,6 +556,8 @@ class cortex:
                             output = output.replace("  ", " ")
                         while "\n" in output:
                             output = output.replace("\n", " ")
+                        while output.endswith("\\"):
+                            output = output[:-1]
                         output = remove_invisible_characters(output)
                     break
 
@@ -573,6 +577,7 @@ class cortex:
     def query(
         self,
         question="",
+        temperature: float = 1.23,
         max_new_tokens: int = 333,
         decay_after_length: int = 66,
         decay_factor: float = 0.023,
@@ -622,7 +627,6 @@ class cortex:
         prompt = dedent(prompt)
 
         try:
-            temperature = 0.3
             seed = nist_beacon()
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
@@ -632,7 +636,7 @@ class cortex:
                 min_length=23,
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
-                eta_cutoff=0.0003,
+                eta_cutoff=0.002,
                 penalty_alpha=0.6,
                 top_k=4,
                 repetition_penalty=1.95,
@@ -657,7 +661,7 @@ class cortex:
                 completion = completion[1:]
                 prompt = prompt[1:]
 
-            while completion.endswith("\n"):
+            while completion.startswith("\n"):
                 completion = completion[2:]
 
             if completion.endswith("Q"):

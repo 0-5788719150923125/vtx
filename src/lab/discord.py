@@ -275,11 +275,9 @@ class Client(discord.Client):
                 ):
                     server = self.config["discord"]["servers"][int(message.guild.id)]
                     if server is not None:
-                        if "persona" in server:
-                            persona = self.config["personas"].get(server.get("persona"))
-                            bias = persona.get("bias")
-                            prefix = persona.get("persona")
-                            no_transform = True
+                        persona = self.config["personas"].get(server.get("persona", {}))
+                        bias = persona.get("bias", None)
+                        prefix = persona.get("persona", None)
 
                 success, bias, output, seeded = await head.ctx.chat(
                     bias=bias, prefix=prefix, max_new_tokens=333
@@ -287,14 +285,11 @@ class Client(discord.Client):
 
                 if output == False:
                     return
-                elif no_transform:
+                if prefix:
                     transformed = output
                 else:
                     transformed = transformer(bias, output)
-        except Exception as e:
-            logging.error(e)
 
-        try:
             if len(transformed) > 2000:
                 transformed = transformed[:1997] + "..."
 
@@ -314,7 +309,7 @@ class Client(discord.Client):
                     wall + str(return_message.id) + ship + " " + transformed,
                 )
 
-            head.ctx.build_context(wall + bot_id + ship + " " + output[1])
+            head.ctx.build_context(wall + bot_id + ship + " " + output)
         except Exception as e:
             print(e)
             import traceback

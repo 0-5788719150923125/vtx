@@ -276,7 +276,7 @@ class cortex:
     ):
         self.wait_in_queue()
 
-        if not prefix:
+        if prefix is None:
             prefix = "Humans, AI, and daemons have a conversation together:"
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
@@ -292,13 +292,14 @@ class cortex:
                 "<3": -10.0,
                 "<": -20.0,
                 " <": -20.0,
+                " <@": -20.0,
                 "< @": -20.0,
                 "<@": -20.0,
                 "[[": -20.0,
                 "((": -20.0,
             }.items()
         }
-        # push_sequences[self.ai.tokenizer.eos_token] = -20.0
+
         bad_tokens = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
             # Many of these tokens were chosen from past experience with ugly patterns

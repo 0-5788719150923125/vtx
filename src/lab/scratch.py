@@ -2,20 +2,37 @@
 # from transformers import AutoTokenizer
 # from datasets import load_dataset, load_from_disk
 
+# https://huggingface.co/docs/transformers/model_doc/rwkv
+# import time
 # import torch
 # from transformers import AutoModelForCausalLM, AutoTokenizer, RwkvConfig, RwkvModel
 
-# # model_name = "EleutherAI/pythia-1b-deduped"
-# model_name = "RWKV/rwkv-4-169m-pile"
+# model_name = "RWKV/rwkv-4-430m-pile"
 
 # string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
-# https://huggingface.co/docs/transformers/model_doc/rwkv
-# This stuff was used to use RWKV in RNN mode
-# tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir="/src/models")
-# model = AutoModelForCausalLM.from_pretrained(
-#     model_name, cache_dir="/src/models", output_hidden_states=True
+
+# tokenizer = AutoTokenizer.from_pretrained(
+#     model_name,
+#     cache_dir="/src/models",
 # )
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_name,
+#     cache_dir="/src/models",
+#     output_hidden_states=True,
+#     device_map="auto",
+# )
+
+# state = None
+
+# while True:
+#     inputs = tokenizer(string, return_tensors="pt")
+#     outputs = model(inputs["input_ids"][:, :2].to(model.device.type), state=state)
+#     state = outputs.state
+#     time.sleep(1)
+
+# # model_name = "EleutherAI/pythia-1b-deduped"
+
 # # model = RwkvModel.from_pretrained(model_name, cache_dir="/src/models")
 
 # inputs = tokenizer(string, return_tensors="pt")
@@ -28,6 +45,37 @@
 # outputs = model(inputs["input_ids"][:, :2])
 # print(outputs.hidden_states[-1])
 
+
+# from transformers import AutoTokenizer, RwkvConfig, RwkvModel
+
+# model_name = "RWKV/rwkv-4-169m-pile"
+
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_name, cache_dir="/src/models", output_hidden_states=True
+# )
+# tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir="/src/models")
+
+# inputs = tokenizer("This is an example.", return_tensors="pt")
+# # Feed everything to the model
+# outputs = model(inputs["input_ids"])
+# output_whole = outputs.hidden_states[-1]
+
+# print(output_whole)
+
+# outputs1 = model.generate(
+#     inputs["input_ids"],
+#     state=outputs.state,
+#     output_hidden_states=True,
+#     return_dict_in_generate=True,
+# )
+# print(outputs1["hidden_states"][0][-1][-1])
+
+# outputs2 = model.generate(
+#     inputs["input_ids"],
+#     state=outputs1["hidden_states"][0],
+#     output_hidden_states=True,
+#     return_dict_in_generate=True,
+# )
 
 # my_dataset = load_dataset(
 #     "text", data_files="/lab/ink/content/docs/black.md", split="train"
@@ -89,4 +137,6 @@
 #     no_repeat_ngram_size=9,
 #     max_new_tokens=222,
 # )
+# print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+# print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 # print(tokenizer.decode(outputs[0], skip_special_tokens=True))

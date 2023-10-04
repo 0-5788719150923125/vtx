@@ -246,6 +246,7 @@ class cortex:
                 adapter=adapter,
                 precision=self.config.get("precision", None),
             )
+
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))
         except Exception as e:
@@ -283,10 +284,14 @@ class cortex:
         push_sequences = {
             self.get_tokens_as_tuple(s): b
             for s, b in {
+                f"\n{wall}": 2.3,
                 wall: 2.3,
-                "\n": 3.3,
+                "\n": 2.3,
                 "#": -2.0,
-                "<": -2.0,
+                "<#": -20.0,
+                "<3": -10.0,
+                "<": -20.0,
+                " <": -20.0,
                 "< @": -20.0,
                 "<@": -20.0,
                 "[[": -20.0,
@@ -389,7 +394,7 @@ class cortex:
                     min_new_tokens=min_new_tokens,
                     max_new_tokens=max_new_tokens,
                     temperature=temperature,
-                    eta_cutoff=0.0003,
+                    eta_cutoff=0.003,
                     penalty_alpha=0.6,
                     top_k=4,
                     repetition_penalty=2.3,

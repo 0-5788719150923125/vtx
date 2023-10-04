@@ -315,8 +315,11 @@ class Client(discord.Client):
                 )
 
             head.ctx.build_context(wall + bot_id + ship + " " + output[1])
-        except:
-            print(bc.CORE + "Failed to send Discord message." + ad.TEXT)
+        except Exception as e:
+            print(e)
+            import traceback
+
+            print(traceback.format_exc())
 
     # Handle bots that update messages token-by-token
     async def on_message_edit(self, before, after):

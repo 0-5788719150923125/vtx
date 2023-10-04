@@ -37,7 +37,7 @@ mind:
 # A recurrent neural network, and a labor of love by its community.
 heart:
   info: with everything you got
-  model: RWKV/rwkv-4-169m-pile
+  model: RWKV/rwkv-4-430m-pile
   training:
     gradient_checkpointing: False
     peft:

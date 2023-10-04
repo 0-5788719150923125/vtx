@@ -37,9 +37,15 @@
 #         string = tokenizer.decode(
 #             model.generate(
 #                 inputs["input_ids"].to(model.device.type),
-#                 max_new_tokens=12,
+#                 max_new_tokens=3,
 #                 do_sample=True,
-#                 temperature=1.59,
+#                 temperature=1.23,
+#                 top_k=4,
+#                 penalty_alpha=0.6,
+#                 eta_cutoff=0.0003,
+#                 repetition_penalty=2.3,
+#                 no_repeat_ngram_size=9,
+#                 state=state,
 #             )[0]
 #         )
 #         while len(string) > 1024:

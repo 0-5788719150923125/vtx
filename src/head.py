@@ -44,6 +44,7 @@ def validation(config):
     schema = {
         "info": {"type": "string"},
         "model": {"type": "string"},
+        "mode": {"type": "string", "allowed": ["transformer", "rnn"]},
         "gpu_index": {"type": "integer"},
         "precision": {"type": "integer", "allowed": [4, 8, 16, 32]},
         "low_memory": {"type": "boolean"},
@@ -390,12 +391,13 @@ class cortex:
 
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.ai.generate(
+                    mode=self.config.get("mode", "transformer"),
                     prompt=prompt,
                     do_sample=True,
                     min_new_tokens=min_new_tokens,
                     max_new_tokens=max_new_tokens,
                     temperature=temperature,
-                    eta_cutoff=0.003,
+                    eta_cutoff=0.0003,
                     penalty_alpha=0.6,
                     top_k=4,
                     repetition_penalty=2.3,

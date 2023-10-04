@@ -4,12 +4,13 @@
 
 # https://huggingface.co/docs/transformers/model_doc/rwkv
 # import time
+
 # import torch
 # from transformers import AutoModelForCausalLM, AutoTokenizer, RwkvConfig, RwkvModel
 
 # model_name = "RWKV/rwkv-4-430m-pile"
 
-# string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+# string = "Once upon a time,"
 
 
 # tokenizer = AutoTokenizer.from_pretrained(
@@ -21,15 +22,31 @@
 #     cache_dir="/src/models",
 #     output_hidden_states=True,
 #     device_map="auto",
+#     torch_dtype=torch.bfloat16,
 # )
+
+# # model = model.eval()
 
 # state = None
 
-# while True:
-#     inputs = tokenizer(string, return_tensors="pt")
-#     outputs = model(inputs["input_ids"][:, :2].to(model.device.type), state=state)
-#     state = outputs.state
-#     time.sleep(1)
+# with torch.no_grad():
+#     while True:
+#         inputs = tokenizer(string, return_tensors="pt")
+#         outputs = model(inputs["input_ids"][:, :2].to(model.device.type), state=state)
+#         state = outputs.state
+#         string = tokenizer.decode(
+#             model.generate(
+#                 inputs["input_ids"].to(model.device.type),
+#                 max_new_tokens=12,
+#                 do_sample=True,
+#                 temperature=1.59,
+#             )[0]
+#         )
+#         while len(string) > 1024:
+#             string = string[1:]
+#         print("------------------")
+#         print(string)
+#         time.sleep(1)
 
 # # model_name = "EleutherAI/pythia-1b-deduped"
 
@@ -137,6 +154,7 @@
 #     no_repeat_ngram_size=9,
 #     max_new_tokens=222,
 # )
+# print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 # print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 # print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 # print(tokenizer.decode(outputs[0], skip_special_tokens=True))

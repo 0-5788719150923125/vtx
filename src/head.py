@@ -284,10 +284,10 @@ class cortex:
         push_sequences = {
             self.get_tokens_as_tuple(s): b
             for s, b in {
-                f"\n{wall}": 2.3,
-                wall: 2.3,
-                "\n": 2.3,
-                "#": -2.0,
+                f"\n{wall}": 1.1,
+                wall: 1.1,
+                "\n": 1.1,
+                "#": -10.0,
                 "<#": -20.0,
                 "<3": -10.0,
                 "<": -20.0,

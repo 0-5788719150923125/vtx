@@ -1,6 +1,6 @@
 lightning>=2.0.8
 beautifulsoup4>=4.12.2
-transformers>=4.33.3
+transformers>=4.33.4
 tensorboard>=2.14.0
 # tensorboardX>=2.6.2.2
 apscheduler>=3.10.4

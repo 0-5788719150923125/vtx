@@ -25,14 +25,12 @@
 #     torch_dtype=torch.bfloat16,
 # )
 
-# # model = model.eval()
-
 # state = None
 
 # with torch.no_grad():
 #     while True:
 #         inputs = tokenizer(string, return_tensors="pt")
-#         outputs = model(inputs["input_ids"][:, :2].to(model.device.type), state=state)
+#         outputs = model(inputs["input_ids"].to(model.device.type), state=state)
 #         state = outputs.state
 #         string = tokenizer.decode(
 #             model.generate(

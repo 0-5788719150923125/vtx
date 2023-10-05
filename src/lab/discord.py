@@ -278,6 +278,7 @@ class Client(discord.Client):
                         persona = self.config["personas"].get(server.get("persona", {}))
                         bias = persona.get("bias", None)
                         prefix = persona.get("persona", None)
+                        no_transform = True
 
                 success, bias, output, seeded = await head.ctx.chat(
                     bias=bias, prefix=prefix, max_new_tokens=333
@@ -285,7 +286,7 @@ class Client(discord.Client):
 
                 if output == False:
                     return
-                if prefix:
+                if no_transform:
                     transformed = output
                 else:
                     transformed = transformer(bias, output)

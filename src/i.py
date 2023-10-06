@@ -532,19 +532,19 @@ def create_evil():
         os.remove("/lab/EVIL/train/EVIL.md")
     if not os.path.exists("/lab/EVIL/train"):
         os.makedirs("/lab/EVIL/train")
-    with open("/lab/EVIL/train/" + "EVIL.md", "a", newline="") as file:
-        for t in ["encoder", "decoder"]:
-            for s in ["dev", "train", "test"]:
-                l = open("/lab/EVIL/" + t + "-" + s + ".in", "r").read().split("\n")
-                r = open("/lab/EVIL/" + t + "-" + s + ".out", "r").read().split("\n")
-                for i, v in enumerate(l):
-                    try:
-                        string = (
-                            f"## INPUT\n\n{l[i]}\n\n## OUTPUT\n\n```\n{r[i]}\n```\n\n"
-                        )
+    for t in ["encoder", "decoder"]:
+        for s in ["dev", "train", "test"]:
+            l = open("/lab/EVIL/" + t + "-" + s + ".in", "r").read().split("\n")
+            r = open("/lab/EVIL/" + t + "-" + s + ".out", "r").read().split("\n")
+            for i, v in enumerate(l):
+                try:
+                    string = f"## INPUT\n\n{l[i]}\n\n## OUTPUT\n\n```\n{r[i]}\n```\n"
+                    with open(
+                        f"/lab/EVIL/train/cmd{str(i)}.md", "w", newline=""
+                    ) as file:
                         file.write(string)
-                    except Exception as e:
-                        logging.error(e)
+                except Exception as e:
+                    logging.error(e)
 
 
 def create_instructions():
@@ -586,7 +586,6 @@ def create_instructions():
                 if not line["instances"][0]["output"].startswith("None"):
                     file.write("## OUTPUT\n---\n")
                     file.write(line["instances"][0]["output"] + "\n\n")
-                file.write("<|break|>")
             if "reformulations" in line:
                 with open(
                     "/lab/instruct/natural/" + f"instruction-{instance}b.md",
@@ -601,7 +600,6 @@ def create_instructions():
                     if not line["reformulations"][0]["output"].startswith("None"):
                         file.write("## OUTPUT\n---\n")
                         file.write(line["reformulations"][0]["output"] + "\n\n")
-                    file.write("<|break|>")
                 if len(line["reformulations"]) > 1:
                     with open(
                         "/lab/instruct/natural/" + f"instruction-{instance}c.md",
@@ -616,7 +614,6 @@ def create_instructions():
                         if not line["reformulations"][1]["output"].startswith("None"):
                             file.write("## OUTPUT\n---\n")
                             file.write(line["reformulations"][1]["output"] + "\n\n")
-                        file.write("<|break|>")
             # with open(
             #     "/lab/instruct/natural/" + f"instruction-{instance}a.md",
             #     "a",

@@ -298,6 +298,8 @@ class cortex:
                 "<@": -20.0,
                 "[[": -20.0,
                 "((": -20.0,
+                " ((": -20.0,
+                "(((": -20.0,
             }.items()
         }
 
@@ -318,8 +320,8 @@ class cortex:
                 "< @",
                 "<\@",
                 "<((",
-                "((",
-                "(((",
+                # "((",
+                # "(((",
                 f"{ship}\n",
                 f"{ship} \n",
             ]
@@ -420,9 +422,11 @@ class cortex:
                 temp_history = deepcopy(history)
                 # Sometimes, the input prompt is not the same as what is in text, because
                 # tokenizers are weird. So, we leave a small buffer when removing the prompt here.
-                while len(temp_history) > 2:
+                while len(temp_history) > 3:
                     generation = generation[1:]
                     temp_history = temp_history[1:]
+                while generation.endswith(wall):
+                    generation = generation[:-1]
                 mentions = "(?:[<][@])(\d+\s*\d*)"
                 variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
                 group = re.search(r"(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)

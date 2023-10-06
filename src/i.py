@@ -178,7 +178,7 @@ def prepare_discord_messages():
     def sanitizer(string):
         sanitized = re.sub(
             r"http\S+",
-            "<|url|>",
+            "((url))",
             string,
         )
         sanitized = re.sub(
@@ -211,10 +211,15 @@ def prepare_discord_messages():
                         if i["content"] != "":
                             i["content"] = i["content"]
                         if i["embeds"][0]["title"]:
-                            i["content"] = i["content"] + " " + i["embeds"][0]["title"]
+                            i["content"] = (
+                                i["content"] + " | ((" + i["embeds"][0]["title"] + "))"
+                            )
                         if i["embeds"][0]["description"]:
                             i["content"] = (
-                                i["content"] + " " + i["embeds"][0]["description"]
+                                i["content"]
+                                + " | (("
+                                + i["embeds"][0]["description"]
+                                + "))"
                             )
 
                     author_id = i["author"]["id"]
@@ -246,14 +251,16 @@ def prepare_discord_messages():
                                             if result["embeds"][0]["title"]:
                                                 result["content"] = (
                                                     result["content"]
-                                                    + " "
+                                                    + " | (("
                                                     + result["embeds"][0]["title"]
+                                                    + "))"
                                                 )
                                             if result["embeds"][0]["description"]:
                                                 result["content"] = (
                                                     result["content"]
-                                                    + " "
+                                                    + " | (("
                                                     + result["embeds"][0]["description"]
+                                                    + "))"
                                                 )
                                         sanitized = sanitizer(result["content"])
                                         if len(result["mentions"]) > 0:
@@ -360,14 +367,14 @@ def fetch_from_reddit():
                         wall
                         + str(bias)
                         + ship
-                        + " "
+                        + " (("
                         + submission.title
-                        + " "
+                        + ")) | "
                         + submission.selftext.replace("\n", "\\n")
                     )
                     sanitized = re.sub(
                         r"http\S+",
-                        "<|url|>",
+                        "((url))",
                         original_submission,
                     )
                     context = [sanitized]
@@ -393,7 +400,7 @@ def fetch_from_reddit():
 
                     sanitized = re.sub(
                         r"http\S+",
-                        "<|url|>",
+                        "((url))",
                         wall + str(bias) + ship + " " + reply.body.replace("\n", "\\n"),
                     )
                     context.append(sanitized)

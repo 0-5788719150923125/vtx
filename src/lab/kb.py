@@ -5,6 +5,7 @@ import os
 import random
 import time
 
+import yaml
 from cerberus import Validator
 
 import head
@@ -36,7 +37,7 @@ def main(config):
                 if random.random() > frequency:
                     continue
                 asyncio.run(ink.write(t, entry))
-        time.sleep(60)
+        time.sleep(66.6)
 
 
 if __name__ == "main":
@@ -95,6 +96,7 @@ class Ink:
         self.dir = ""
         self.file = ""
         self.tags = []
+        self.new_tokens = 111
 
     def get_length(self, string):
         tokens = head.ctx.ai.tokenizer(string, return_tensors="pt")["input_ids"]
@@ -125,6 +127,9 @@ class Ink:
                 elif key == "frequency":
                     continue
                 else:
+                    if isinstance(value, list):
+                        joined = "\n  - ".join(value.sort())
+                        value = f"\n  - {joined}"
                     self.prompt = self.prompt + f"\n{key.capitalize()}: {value}"
         else:
             self.title = entry.get("title")
@@ -136,6 +141,7 @@ class Ink:
         if os.path.exists(f):
             self.staged = read_from_file(f)
         else:
+            self.new_tokens = 333
             self.created = True
         self.full_doc = self.staged
 
@@ -155,7 +161,7 @@ class Ink:
             self.chunk_prompt()
             output = await head.ctx.prompt(
                 prompt=self.staged,
-                max_new_tokens=111,
+                max_new_tokens=self.new_tokens,
                 # decay_after_length=33,
                 # decay_factor=-0.23,
             )

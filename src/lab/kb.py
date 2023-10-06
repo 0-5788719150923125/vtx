@@ -10,12 +10,12 @@ from cerberus import Validator
 
 import head
 from common import (
-    ad,
-    bc,
-    config,
-    deterministic_short_hash,
-    read_from_file,
-    write_to_file,
+  ad,
+  bc,
+  config,
+  deterministic_short_hash,
+  read_from_file,
+  write_to_file,
 )
 from events import post_event
 
@@ -128,7 +128,8 @@ class Ink:
                     continue
                 else:
                     if isinstance(value, list):
-                        joined = "\n  - ".join(value.sort())
+                        value.sort()
+                        joined = "\n  - ".join(value)
                         value = f"\n  - {joined}"
                     self.prompt = self.prompt + f"\n{key.capitalize()}: {value}"
         else:
@@ -187,3 +188,6 @@ class Ink:
 
         except Exception as e:
             logging.error(e)
+            import traceback
+
+            print(traceback.format_exc())

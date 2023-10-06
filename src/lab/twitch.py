@@ -70,15 +70,11 @@ async def client(config):
                     focus = config["twitch"].get("focus", "alpha")
                     personas = config["twitch"].get("personas")
                     name = random.choice(personas)
-                    persona = config["personas"].get(name)
+
                     lab.source.send(message.text, focus, "sin")
-                    prefix = persona.get(
-                        "persona",
-                        "My name is Ryan, Ink, or the Architect. I will answer questions for my audience.",
-                    )
-                    bias = str(persona.get("bias", get_identity()))
+
                     success, bias, output, seeded = await head.ctx.chat(
-                        bias=bias, prefix=prefix, max_new_tokens=111
+                        personas=personas, max_new_tokens=222
                     )
                     if success == False:
                         return

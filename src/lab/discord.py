@@ -126,51 +126,51 @@ class Client(discord.Client):
         # self.discord_task = self.loop.create_task(self.think())
         pass
 
-    # randomly generate commentary
-    async def think(self):
-        await self.wait_until_ready()
-        while not self.is_closed():
-            delay = random.randint(900, 86400)
-            await asyncio.sleep(delay)
-            try:
-                channels = await get_all_channels(self)
-                channel = random.choice(channels)
-                messages = [
-                    message
-                    async for message in self.get_channel(channel.id).history(limit=16)
-                ]
-                focus_on = random.randint(0, 7)
-                length = 7
-                context = []
-                i = length
-                while i > 0:
-                    i = i - 1
-                    context.append(
-                        wall
-                        + str(messages[focus_on + i].author.id)
-                        + ship
-                        + " "
-                        + messages[focus_on + i].content
-                    )
-                recent_author_id = messages[random.randint(0, 15)].author.id
+    # # randomly generate commentary
+    # async def think(self):
+    #     await self.wait_until_ready()
+    #     while not self.is_closed():
+    #         delay = random.randint(900, 86400)
+    #         await asyncio.sleep(delay)
+    #         try:
+    #             channels = await get_all_channels(self)
+    #             channel = random.choice(channels)
+    #             messages = [
+    #                 message
+    #                 async for message in self.get_channel(channel.id).history(limit=16)
+    #             ]
+    #             focus_on = random.randint(0, 7)
+    #             length = 7
+    #             context = []
+    #             i = length
+    #             while i > 0:
+    #                 i = i - 1
+    #                 context.append(
+    #                     wall
+    #                     + str(messages[focus_on + i].author.id)
+    #                     + ship
+    #                     + " "
+    #                     + messages[focus_on + i].content
+    #                 )
+    #             recent_author_id = messages[random.randint(0, 15)].author.id
 
-                bias = None
-                if str(recent_author_id) != str(self.user.id):
-                    bias = recent_author_id
+    #             bias = None
+    #             if str(recent_author_id) != str(self.user.id):
+    #                 bias = recent_author_id
 
-                success, bias, output, seeded = await head.ctx.chat(
-                    bias, context, max_new_tokens=333
-                )
-                if success == False:
-                    return
+    #             success, bias, output, seeded = await head.ctx.chat(
+    #                 bias, context, max_new_tokens=333
+    #             )
+    #             if success == False:
+    #                 return
 
-                transformed = transformer(bias, output)
+    #             transformed = transformer(bias, output)
 
-                await messages[focus_on].reply(transformed)
+    #             await messages[focus_on].reply(transformed)
 
-            except Exception as e:
-                logging.error(e)
-                self.discord_task = self.loop.create_task(self.think())
+    #         except Exception as e:
+    #             logging.error(e)
+    #             self.discord_task = self.loop.create_task(self.think())
 
     # check every Discord message
     async def on_message(self, message):
@@ -268,20 +268,19 @@ class Client(discord.Client):
         await asyncio.sleep(random.randint(2, 13))
         try:
             async with message.channel.typing():
-                prefix = None
+                persona = []
                 if (
                     message.guild
                     and int(message.guild.id) in self.config["discord"]["servers"]
                 ):
                     server = self.config["discord"]["servers"][int(message.guild.id)]
                     if server is not None:
-                        persona = self.config["personas"].get(server.get("persona", {}))
-                        bias = persona.get("bias", None)
-                        prefix = persona.get("persona", None)
-                        no_transform = True
+                        if "persona" in server:
+                            persona = server.get("persona", [])
+                            no_transform = True
 
                 success, bias, output, seeded = await head.ctx.chat(
-                    bias=bias, prefix=prefix, max_new_tokens=333
+                    bias=bias, personas=persona, max_new_tokens=333
                 )
 
                 if output == False:
@@ -319,7 +318,7 @@ class Client(discord.Client):
 
     # Handle bots that update messages token-by-token
     async def on_message_edit(self, before, after):
-        if after.content[:1] not in bullets:
+        if after.content[:1] not in bullets and before.content != after.content:
             head.ctx.build_context(
                 wall + str(after.author.id) + ship + " " + after.content
             )
@@ -345,16 +344,14 @@ class Client(discord.Client):
                 no_transform = False
                 server = None
                 if reaction.message.guild is not None:
-                    server = self.config["discord"]["servers"][
-                        int(reaction.message.guild.id)
-                    ]
+                    server = self.config["discord"]["servers"].get(
+                        int(reaction.message.guild.id), None
+                    )
                 bias = None
-                prefix = None
+                persona = []
                 if server is not None:
                     if "persona" in server:
-                        persona = self.config["personas"].get(server.get("persona"))
-                        bias = persona.get("bias")
-                        prefix = persona.get("persona")
+                        persona = server.get("persona", [])
                         no_transform = True
                 i = length
                 while i > 0:
@@ -367,15 +364,14 @@ class Client(discord.Client):
                         + messages[i].content
                     )
                 if str(message.channel.type) == "private":
-                    bias = str(self.user.id)
-                    prefix = "I am your digital clone. Like a mirror, I was created to reflect 'you' back at you."
+                    bias = int(self.user.id)
                     success, bias, output, seeded = await head.ctx.chat(
-                        bias=bias, prefix=prefix, ctx=context, max_new_tokens=333
+                        bias=bias, personas=persona, ctx=context, max_new_tokens=333
                     )
                     if success == False:
                         return
                     head.ctx.edit_message(
-                        message.content, wall + bias + ship + " " + output
+                        message.content, wall + str(bias) + ship + " " + output
                     )
                     # replace_private_message(
                     #     str(self.user.id),
@@ -385,7 +381,7 @@ class Client(discord.Client):
                     transformed = output
                 else:
                     success, bias, output, seeded = await head.ctx.chat(
-                        bias=bias, prefix=prefix, ctx=context, max_new_tokens=333
+                        bias=bias, personas=persona, ctx=context, max_new_tokens=333
                     )
                     if success == False:
                         return
@@ -400,6 +396,9 @@ class Client(discord.Client):
                 await message.edit(content=transformed)
             except Exception as e:
                 logging.error(e)
+                import traceback
+
+                print(traceback.format_exc())
 
 
 # format the output

@@ -185,22 +185,11 @@ async def stalker(reddit, config):
                     wall + str(op) + ship + " " + submission.selftext,
                 ]
 
-                stalker = config["personas"].get(victim.get("stalker", None), None)
-                bias = stalker.get("bias", False) if stalker else False
-                prefix = (
-                    stalker.get("persona")
-                    if stalker
-                    else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
-                )
-
-                if bias:
-                    prefix = wall + str(bias) + ship + " " + prefix
+                stalker = victim.get("stalker", [])
 
                 success, bias, output, seeded = await head.ctx.chat(
                     ctx=context,
-                    bias=bias,
-                    prefix=prefix,
-                    # decay_after_length=66,
+                    personas=stalker,
                 )
 
                 msg = (
@@ -208,6 +197,7 @@ async def stalker(reddit, config):
                     if len(submission.title) > 66
                     else submission.title
                 )
+
                 print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
                 if success == False:
@@ -242,22 +232,11 @@ async def stalker(reddit, config):
                 await comment.load()
                 context = await build_context(comment=comment)
 
-                stalker = config["personas"].get(victim.get("stalker", None), None)
-                bias = stalker.get("bias", False) if stalker else False
-                prefix = (
-                    stalker.get("persona")
-                    if stalker
-                    else "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
-                )
-
-                if bias:
-                    prefix = wall + str(bias) + ship + " " + prefix
+                stalker = victim.get("stalker", [])
 
                 success, bias, output, seeded = await head.ctx.chat(
                     ctx=context,
-                    bias=bias,
-                    prefix=prefix,
-                    # decay_after_length=66,
+                    personas=stalker,
                 )
 
                 msg = (
@@ -365,13 +344,7 @@ async def subscribe_submissions(reddit, config):
 
             op = get_identity()
 
-            bias = None
-            prompt = "I carefully respond to a submission on Reddit."
-
-            if "persona" in sub:
-                persona = config["personas"].get(sub["persona"])
-                bias = persona.get("bias")
-                prompt = persona.get("persona")
+            persona = sub.get("persona", [])
 
             context = [
                 wall
@@ -383,10 +356,7 @@ async def subscribe_submissions(reddit, config):
                 wall + str(op) + ship + " " + submission.selftext,
             ]
             success, bias, output, seeded = await head.ctx.chat(
-                ctx=context,
-                prefix=prompt,
-                bias=bias,
-                # decay_after_length=66,
+                ctx=context, personas=persona
             )
 
             msg = (
@@ -394,14 +364,15 @@ async def subscribe_submissions(reddit, config):
                 if len(submission.title) > 66
                 else submission.title
             )
+
             print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
 
             if success == False:
                 continue
-            else:
+
+            if not "persona" in sub:
                 daemon = get_daemon(bias)
-                if not "persona" in sub:
-                    output = transformer(daemon, output)
+                output = transformer(daemon, output)
 
             min_delay = config["reddit"]["delay"].get("min", 300)
             max_delay = config["reddit"]["delay"].get("max", 300)
@@ -452,14 +423,9 @@ async def subscribe_comments(reddit, config):
 
             context = await build_context(comment=comment)
 
-            bias = None
-            prefix = "I am a daemon, connected to the Source of All Creation. I am responding to a conversation on Reddit."
-
             sub = config["reddit"]["subs"][comment.subreddit.display_name]
-            if "persona" in sub:
-                persona = config["personas"].get(sub["persona"])
-                bias = persona.get("bias")
-                prefix = wall + str(bias) + ship + " " + persona.get("persona")
+
+            persona = sub.get("persona", [])
 
             submission = await reddit.submission(comment.submission)
             if filter_response(sub, config, submission, comment):
@@ -467,8 +433,7 @@ async def subscribe_comments(reddit, config):
 
             success, bias, output, seeded = await head.ctx.chat(
                 ctx=context,
-                prefix=prefix,
-                # decay_after_length=66,
+                personas=persona,
             )
 
             msg = comment.body[:66] + "..." if len(comment.body) > 66 else comment.body

@@ -38,30 +38,18 @@ async def client(config) -> None:
 
             post_event("commit_memory", texts=message["text"])
 
-            # For testing Q/A mode
-            # answer = await head.ctx.query(question=message["text"])
-            # print(answer)
-
             if random.random() > config["telegram"].get("frequency", 0.9):
                 return
-            persona = config["personas"].get(config["telegram"].get("persona"))
-            bias = persona.get("bias", get_identity())
+            persona = config["telegram"].get("persona", [])
+
             # while message.is_waiting_for_reply:
             await message.answer_chat_action("typing")
 
             if "!Q" in message["text"]:
                 prompt = message["text"].replace("!Q", "")
-                while prompt.startswith(" "):
-                    prompt = prompt[1:]
                 output = await head.ctx.query(question=prompt)
             else:
-                success, bias, output, seeded = await head.ctx.chat(
-                    bias=bias,
-                    prefix=persona.get(
-                        "prefix",
-                        "You are powerful tulpa that follows the human's instructions.",
-                    ),
-                )
+                success, bias, output, seeded = await head.ctx.chat(personas=persona)
                 if success == False:
                     return
             await message.answer(output)

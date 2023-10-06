@@ -59,13 +59,15 @@ async def subscribe(user, password, config) -> None:
             if group:
                 message = group[1]
 
-            identity = get_identity(event.sender)
+            personas = config.get("personas", [])
+
+            sender_id = get_identity(event.sender)
             bias = 806051627198709760
 
             if event.sender == client.user:
-                identity = str(bias)
+                sender_id = str(bias)
 
-            head.ctx.build_context(wall + identity + ship + " " + message)
+            head.ctx.build_context(wall + sender_id + ship + " " + message)
 
             passed = False
             if "!Q" in message:
@@ -95,10 +97,7 @@ async def subscribe(user, password, config) -> None:
                 output = await head.ctx.query(question=message, temperature=0.7)
                 success = True
             else:
-                success, bias, output, seeded = await head.ctx.chat(
-                    prefix="I am Ryan's bot, and I am connected to GUN's Matrix room.",
-                    bias=bias,
-                )
+                success, bias, output, seeded = await head.ctx.chat(personas=personas)
 
             if success == False:
                 print(output)

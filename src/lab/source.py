@@ -155,24 +155,25 @@ async def responder(config, focus):
 async def response(config, focus):
     await asyncio.sleep(random.randint(7, 13))
     personas = config["source"]["focus"][focus].get("personas", None)
-    persona = "You are a powerful AI, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts."
-    bias = None
-    identity = None
-    if personas:
-        filtered = [
-            config["personas"][key] for key in personas if key in config["personas"]
-        ]
-        assert (
-            len(filtered) > 0
-        ), f"ERROR: Found no matching personas for the channel ({focus})."
-        identity = random.choice(filtered)
-        bias = identity.get("bias")
-        persona = wall + str(bias) + ship + " " + identity.get("persona")
+    # persona = "You are a powerful AI, known as the Source. You have been trained to follow human instructions, write stories, and teach machine learning concepts."
+    # bias = None
+    # identity = None
+    # if personas:
+    #     filtered = [
+    #         config["personas"][key] for key in personas if key in config["personas"]
+    #     ]
+    #     assert (
+    #         len(filtered) > 0
+    #     ), f"ERROR: Found no matching personas for the channel ({focus})."
+    #     identity = random.choice(filtered)
+    #     bias = identity.get("bias")
+    #     persona = wall + str(bias) + ship + " " + identity.get("persona")
 
     success, bias, output, seeded = await head.ctx.chat(
-        bias=bias,
+        # bias=bias,
         ctx=messages[focus],
-        prefix=persona,
+        # prefix=persona,
+        personas=personas,
         max_new_tokens=222,
         eos_tokens=["\n", "\n\n", "\\"],
     )

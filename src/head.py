@@ -15,6 +15,7 @@ from copy import deepcopy
 from itertools import chain
 from pprint import pprint
 from textwrap import dedent
+from typing import List, Union
 
 import numpy as np
 import torch
@@ -136,13 +137,14 @@ def validation(config):
 
 
 class cortex:
-    def __init__(self, config, focus):
+    def __init__(self, config, personas, focus):
         if not validation(config):
             raise Exception(f"Something is wrong with the {focus} configuration.")
         self.active = False
         self.ai = None
         self.focus = focus
         self.config = config
+        self.personas = personas
         self.context = [
             wall + "975174695399854150" + ship + " I am a robot.",
             wall + "1051994502333726841" + ship + " I am a ghost.",
@@ -265,20 +267,31 @@ class cortex:
     @to_thread
     def chat(
         self,
-        prefix=None,
+        # prefix=None,
         ctx=None,
-        bias=None,
+        bias: int = None,
         temperature: float = 1.23,
         min_new_tokens: int = 1,
         max_new_tokens: int = 222,
         # decay_after_length: int = 33,
         # decay_factor: float = 0.000023,
+        personas: List[str] = [],
         eos_tokens: list | None = None,
     ):
         self.wait_in_queue()
 
-        if prefix is None:
-            prefix = "Humans, AI, and daemons have a conversation together:"
+        if isinstance(personas, str):
+            personas = [personas]
+
+        persona = "I am a powerful AI, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning fundamentals."
+        if bias is None and len(personas) > 0:
+            filtered = [self.personas[key] for key in personas if key in self.personas]
+            assert (
+                len(filtered) > 0
+            ), f"ERROR: Found no matching personas found in [{str(personas)}]."
+            choice = random.choice(filtered)
+            bias = choice.get("bias")
+            persona = wall + str(bias) + ship + " " + choice.get("persona")
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
@@ -351,11 +364,11 @@ class cortex:
                     )
                 )
 
-        context = self.context
+        context = deepcopy(self.context)
         if ctx:
             context = deepcopy(ctx)
 
-        context.insert(0, prefix)
+        context.insert(0, persona)
 
         history = (
             self.truncate_context(
@@ -701,7 +714,7 @@ class cortex:
 
 
 # Load the model and schedule periodic reloading
-ctx = cortex(config[focus], focus)
+ctx = cortex(config[focus], config["personas"], focus)
 reload_interval = config[focus].get("reload_interval", 0)
 if reload_interval > 0:
     scheduler = BackgroundScheduler()
@@ -709,6 +722,7 @@ if reload_interval > 0:
         cortex,
         args=(
             config[focus],
+            config["personas"],
             focus,
         ),
         trigger="interval",

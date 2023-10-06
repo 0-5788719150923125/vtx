@@ -348,65 +348,70 @@ def fetch_from_reddit():
                 submissions = reddit.subreddit(sub).top(limit=limit)
 
             for submission in submissions:
-                bias = get_identity()
                 total = total + 1
                 os.system("clear")
                 print("archiving /r/" + sub)
                 print("archived " + str(total) + " submissions")
 
-                author = submission.author
-                if author:
-                    if author.name in config["reddit"]["replacers"]:
-                        bias = config["reddit"]["replacers"][author.name]
-
-                context = []
-                with open(
-                    "/lab/reddit/" + sub + "/" + submission.id + ".txt", "a"
-                ) as file:
-                    original_submission = (
-                        wall
-                        + str(bias)
-                        + ship
-                        + " (("
-                        + submission.title
-                        + ")) | "
-                        + submission.selftext.replace("\n", "\\n")
-                    )
-                    sanitized = re.sub(
-                        r"http\S+",
-                        "((url))",
-                        original_submission,
-                    )
-                    context = [sanitized]
-                    file.write("".join(context))
                 dump_replies(
                     replies=submission.comments,
-                    context=context,
+                    submission=submission,
+                    context=["default"],
                 )
 
-        def dump_replies(replies, context):
+        def dump_replies(replies, submission, context=[]):
             for reply in replies:
-                if isinstance(reply, praw.models.MoreComments):
-                    continue
-
                 with open(
                     "/lab/reddit/" + sub + "/" + reply.submission.id + ".txt", "a"
                 ) as file:
-                    bias = get_identity()
-                    author = reply.author
-                    if author:
-                        if author.name in config["reddit"]["replacers"]:
-                            bias = config["reddit"]["replacers"][author.name]
+                    if isinstance(reply, praw.models.MoreComments):
+                        continue
 
-                    sanitized = re.sub(
-                        r"http\S+",
-                        "((url))",
-                        wall + str(bias) + ship + " " + reply.body.replace("\n", "\\n"),
-                    )
-                    context.append(sanitized)
-                    file.write("\n" + " ".join(context))
+                    context[0] = submission
+                    context.append(reply)
 
-                dump_replies(reply.replies, context)
+                    for line in context:
+                        if getattr(line, "title", None) is not None:
+                            bias = get_identity()
+                            author = line.author
+                            if author:
+                                if author.name in config["reddit"]["replacers"]:
+                                    bias = config["reddit"]["replacers"][author.name]
+                            original_submission = (
+                                wall
+                                + str(bias)
+                                + ship
+                                + " (("
+                                + line.title
+                                + ")) | "
+                                + line.selftext.replace("\n", "\\n")
+                            )
+                            sanitized = re.sub(
+                                r"http\S+",
+                                "((url))",
+                                original_submission,
+                            )
+                            file.write(sanitized + " ")
+                            continue
+                        bias = get_identity()
+                        author = line.author
+                        if author:
+                            if author.name in config["reddit"]["replacers"]:
+                                bias = config["reddit"]["replacers"][author.name]
+
+                        sanitized = re.sub(
+                            r"http\S+",
+                            "((url))",
+                            wall
+                            + str(bias)
+                            + ship
+                            + " "
+                            + line.body.replace("\n", "\\n"),
+                        )
+                        file.write(sanitized + " ")
+                    file.write("\n")
+
+                dump_replies(reply.replies, submission, context)
                 context.pop()
 
         main()
@@ -671,3 +676,47 @@ def create_instructions():
             #             if not line["reformulations"][1]["output"].startswith("None"):
             #                 file.write("## PREDICTION\n---\n")
             #                 file.write(line["reformulations"][1]["output"] + "\n\n")
+
+
+def create_logic():
+    if os.path.exists("/lab/logic/train"):
+        shutil.rmtree("/lab/logic/train")
+    if not os.path.exists("/lab/logic/train"):
+        os.makedirs("/lab/logic/train")
+    with open("/lab/logic/AND.csv", "r", newline="") as file:
+        lines = csv.reader(file)
+        for line in lines:
+            with open(f"/lab/logic/train/AND{line[0]}.txt", "w", newline="") as file:
+                operator = random.choice(["and", "AND", "&&"])
+                file.write(f"if {line[1]} {operator} {line[2]}, then {line[3]}")
+
+    with open("/lab/logic/IMPLICATION.csv", "r", newline="") as file:
+        lines = csv.reader(file)
+        for line in lines:
+            with open(
+                f"/lab/logic/train/IMPLICATION{line[0]}.txt", "w", newline=""
+            ) as file:
+                file.write(
+                    f"if {line[2]} is sufficient for {line[1]}, then {line[1]} implies {line[2]} is {line[3]}"
+                )
+
+    with open("/lab/logic/NOT.csv", "r", newline="") as file:
+        lines = csv.reader(file)
+        for line in lines:
+            with open(f"/lab/logic/train/NOT{line[0]}.txt", "w", newline="") as file:
+                operator = random.choice(["is not", "is NOT", "!="])
+                file.write(f"if X1 is {line[1]}, then Target {operator} {line[2]}")
+
+    with open("/lab/logic/OR.csv", "r", newline="") as file:
+        lines = csv.reader(file)
+        for line in lines:
+            with open(f"/lab/logic/train/OR{line[0]}.txt", "w", newline="") as file:
+                operator = random.choice(["or", "OR", "||"])
+                file.write(f"if {line[1]} {operator} {line[2]}, then {line[3]}")
+
+    with open("/lab/logic/XOR.csv", "r", newline="") as file:
+        lines = csv.reader(file)
+        for line in lines:
+            with open(f"/lab/logic/train/XOR{line[0]}.txt", "w", newline="") as file:
+                operator = random.choice(["xor", "XOR", "exclusive or"])
+                file.write(f"if {line[1]} {operator} {line[2]}, then {line[3]}")

@@ -126,7 +126,8 @@
           "i.convert_video_to_ascii()",
           "i.juxtapose_data()",
           "i.create_evil()",
-          "i.create_instructions()"
+          "i.create_instructions()",
+          "i.create_logic()"
         ]
       },
       {

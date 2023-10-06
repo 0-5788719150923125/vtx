@@ -112,6 +112,7 @@ def validation(config):
                 "schema": {
                     "bias": {"type": "integer"},
                     "persona": {"type": "string"},
+                    "disposition": {"type": "list"},
                 },
             },
         }

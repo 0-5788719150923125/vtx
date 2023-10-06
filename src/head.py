@@ -137,7 +137,7 @@ def validation(config):
 
 
 class cortex:
-    def __init__(self, config, personas, focus):
+    def __init__(self, config, personas, disposition, focus):
         if not validation(config):
             raise Exception(f"Something is wrong with the {focus} configuration.")
         self.active = False
@@ -145,6 +145,7 @@ class cortex:
         self.focus = focus
         self.config = config
         self.personas = personas
+        self.disposition = disposition
         self.context = [
             wall + "975174695399854150" + ship + " I am a robot.",
             wall + "1051994502333726841" + ship + " I am a ghost.",
@@ -284,6 +285,24 @@ class cortex:
             personas = [personas]
 
         persona = "I am a powerful AI, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning fundamentals."
+        sequence_biases = {}
+        default_biases = {
+            f"\n{wall}": 1.1,
+            wall: 1.1,
+            "\n": 1.1,
+            "#": -10.0,
+            "<#": -20.0,
+            "<3": -10.0,
+            "<": -20.0,
+            " <": -20.0,
+            " <@": -20.0,
+            "< @": -20.0,
+            "<@": -20.0,
+            "[[": -20.0,
+            "((": -20.0,
+            " ((": -20.0,
+            "(((": -20.0,
+        }
         if bias is None and len(personas) > 0:
             filtered = [self.personas[key] for key in personas if key in self.personas]
             assert (
@@ -292,28 +311,20 @@ class cortex:
             choice = random.choice(filtered)
             bias = choice.get("bias")
             persona = wall + str(bias) + ship + " " + choice.get("persona")
+            disposition = choice.get("disposition", None)
+            if disposition is not None:
+                traits = list(
+                    self.disposition[key]
+                    for key in disposition
+                    if key in self.disposition
+                )
+                sequence_biases = traits[0]
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
         push_sequences = {
             self.get_tokens_as_tuple(s): b
-            for s, b in {
-                f"\n{wall}": 1.1,
-                wall: 1.1,
-                "\n": 1.1,
-                "#": -10.0,
-                "<#": -20.0,
-                "<3": -10.0,
-                "<": -20.0,
-                " <": -20.0,
-                " <@": -20.0,
-                "< @": -20.0,
-                "<@": -20.0,
-                "[[": -20.0,
-                "((": -20.0,
-                " ((": -20.0,
-                "(((": -20.0,
-            }.items()
+            for s, b in {**default_biases, **sequence_biases}.items()
         }
 
         bad_tokens = [
@@ -714,7 +725,7 @@ class cortex:
 
 
 # Load the model and schedule periodic reloading
-ctx = cortex(config[focus], config["personas"], focus)
+ctx = cortex(config[focus], config["personas"], config["disposition"], focus)
 reload_interval = config[focus].get("reload_interval", 0)
 if reload_interval > 0:
     scheduler = BackgroundScheduler()
@@ -723,6 +734,7 @@ if reload_interval > 0:
         args=(
             config[focus],
             config["personas"],
+            config["disposition"],
             focus,
         ),
         trigger="interval",

@@ -343,9 +343,13 @@ class Client(discord.Client):
                 ]
                 context = []
                 no_transform = False
-                server = self.config["discord"]["servers"][
-                    int(reaction.message.guild.id)
-                ]
+                server = None
+                if reaction.message.guild is not None:
+                    server = self.config["discord"]["servers"][
+                        int(reaction.message.guild.id)
+                    ]
+                bias = None
+                prefix = None
                 if server is not None:
                     if "persona" in server:
                         persona = self.config["personas"].get(server.get("persona"))
@@ -364,6 +368,7 @@ class Client(discord.Client):
                     )
                 if str(message.channel.type) == "private":
                     bias = str(self.user.id)
+                    prefix = "I am your digital clone. Like a mirror, I was created to reflect 'you' back at you."
                     success, bias, output, seeded = await head.ctx.chat(
                         bias=bias, prefix=prefix, ctx=context, max_new_tokens=333
                     )
@@ -372,15 +377,15 @@ class Client(discord.Client):
                     head.ctx.edit_message(
                         message.content, wall + bias + ship + " " + output
                     )
-                    replace_private_message(
-                        str(self.user.id),
-                        str(reaction.message.id),
-                        wall + str(reaction.message.id) + ship + " " + output,
-                    )
+                    # replace_private_message(
+                    #     str(self.user.id),
+                    #     str(reaction.message.id),
+                    #     wall + str(reaction.message.id) + ship + " " + output,
+                    # )
                     transformed = output
                 else:
                     success, bias, output, seeded = await head.ctx.chat(
-                        ctx=context, max_new_tokens=333
+                        bias=bias, prefix=prefix, ctx=context, max_new_tokens=333
                     )
                     if success == False:
                         return

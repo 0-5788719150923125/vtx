@@ -455,6 +455,8 @@ class cortex:
                     output = output.replace("  ", " ")
                 while output.endswith("\\"):
                     output = output[:-1]
+                if output == "":
+                    continue
                 break
 
             except Exception as e:

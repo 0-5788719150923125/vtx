@@ -586,6 +586,7 @@ def create_instructions():
                 if not line["instances"][0]["output"].startswith("None"):
                     file.write("## OUTPUT\n---\n")
                     file.write(line["instances"][0]["output"] + "\n\n")
+                file.write("<|break|>")
             if "reformulations" in line:
                 with open(
                     "/lab/instruct/natural/" + f"instruction-{instance}b.md",
@@ -600,6 +601,7 @@ def create_instructions():
                     if not line["reformulations"][0]["output"].startswith("None"):
                         file.write("## OUTPUT\n---\n")
                         file.write(line["reformulations"][0]["output"] + "\n\n")
+                    file.write("<|break|>")
                 if len(line["reformulations"]) > 1:
                     with open(
                         "/lab/instruct/natural/" + f"instruction-{instance}c.md",
@@ -614,6 +616,7 @@ def create_instructions():
                         if not line["reformulations"][1]["output"].startswith("None"):
                             file.write("## OUTPUT\n---\n")
                             file.write(line["reformulations"][1]["output"] + "\n\n")
+                        file.write("<|break|>")
             # with open(
             #     "/lab/instruct/natural/" + f"instruction-{instance}a.md",
             #     "a",

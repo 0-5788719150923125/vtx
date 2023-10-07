@@ -118,10 +118,10 @@ def create_dataset(
                     line_by_line=line_by_line,
                     tokenizer=tokenizer,
                     stride=stride,
-                    bos_token=tokenizer.bos_token | "<|endoftext|>",
-                    eos_token=tokenizer.eos_token | "<|endoftext|>",
-                    unk_token=tokenizer.unk_token | "<|endoftext|>",
-                    pad_token=tokenizer.pad_token | "<|endoftext|>",
+                    bos_token=tokenizer.bos_token or "<|endoftext|>",
+                    eos_token=tokenizer.eos_token or "<|endoftext|>",
+                    unk_token=tokenizer.unk_token or "<|endoftext|>",
+                    pad_token=tokenizer.pad_token or "<|endoftext|>",
                 )
                 os.remove("/tmp/lines.txt")
             else:
@@ -150,10 +150,10 @@ def create_dataset(
             tokenizer=tokenizer,
             block_size=block_size,
             stride=stride,
-            bos_token=tokenizer.bos_token | "<|endoftext|>",
-            eos_token=tokenizer.eos_token | "<|endoftext|>",
-            unk_token=tokenizer.unk_token | "<|endoftext|>",
-            pad_token=tokenizer.pad_token | "<|endoftext|>",
+            bos_token=tokenizer.bos_token or "<|endoftext|>",
+            eos_token=tokenizer.eos_token or "<|endoftext|>",
+            unk_token=tokenizer.unk_token or "<|endoftext|>",
+            pad_token=tokenizer.pad_token or "<|endoftext|>",
         )
 
     # Cleanup temp files used for tokenized dataset creation

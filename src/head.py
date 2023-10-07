@@ -299,9 +299,10 @@ class cortex:
             "< @": -20.0,
             "<@": -20.0,
             "[[": -20.0,
-            "((": -20.0,
-            " ((": -20.0,
-            "(((": -20.0,
+            "((": -30.0,
+            " ((": -30.0,
+            "(((": -30.0,
+            " (((": -30.0,
         }
         if bias is None and len(personas) > 0:
             filtered = [self.personas[key] for key in personas if key in self.personas]

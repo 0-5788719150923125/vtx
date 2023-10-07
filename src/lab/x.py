@@ -11,7 +11,7 @@ from common import ad, bc
 
 
 def main(config):
-    asyncio.run(loop(config["twitter"]))
+    asyncio.run(loop(config["x"]))
 
 
 if __name__ == "main":
@@ -34,7 +34,7 @@ async def loop(config):
             )
             if output == False:
                 continue
-            print(bc.CORE + "ONE@TWITTER: " + ad.TEXT + output)
+            print(bc.CORE + "ONE@X: " + ad.TEXT + output)
             # try:
             #     await tweet(output)
             # except Exception as e:
@@ -43,12 +43,12 @@ async def loop(config):
 
 
 async def tweet(message: str = "This is an automated test."):
-    client = tweepy.Client(bearer_token=os.environ["TWITTERBEARERTOKEN"])
+    client = tweepy.Client(bearer_token=os.environ["XBEARERTOKEN"])
 
     client = tweepy.Client(
-        consumer_key=os.environ["TWITTERCONSUMERKEY"],
-        consumer_secret=os.environ["TWITTERCONSUMERSECRET"],
-        access_token=os.environ["TWITTERACCESSTOKEN"],
-        access_token_secret=os.environ["TWITTERACCESSTOKENSECRET"],
+        consumer_key=os.environ["XCONSUMERKEY"],
+        consumer_secret=os.environ["XCONSUMERSECRET"],
+        access_token=os.environ["XACCESSTOKEN"],
+        access_token_secret=os.environ["XACCESSTOKENSECRET"],
     )
     response = client.create_tweet(text=message)

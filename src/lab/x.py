@@ -26,7 +26,7 @@ async def loop(config):
                 prompt=random.choice(topics),
                 min_new_tokens=11,
                 max_new_tokens=56,
-                ideas=config.get("ideas", None),
+                disposition=config.get("disposition", None),
                 # decay_after_length=6,
                 # decay_factor=2.3,
                 eos_tokens=[".", "?", "!", "\n", "\n\n", "\\"],
@@ -35,10 +35,10 @@ async def loop(config):
             if output == False:
                 continue
             print(bc.CORE + "ONE@TWITTER: " + ad.TEXT + output)
-            try:
-                await tweet(output)
-            except Exception as e:
-                logging.error(e)
+            # try:
+            #     await tweet(output)
+            # except Exception as e:
+            #     logging.error(e)
         time.sleep(66.6)
 
 

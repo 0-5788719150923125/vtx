@@ -18,7 +18,7 @@ def main():
         "reddit",
         "discord",
         "twitch",
-        "twitter",
+        "x",
         "matrix",
         "book",
         "kb",

@@ -32,14 +32,14 @@ The Vortex (VTX) is a bot-making framework, designed for the creation of AI clon
   - [Reddit](#reddit)
   - [Discord](#discord)
   - [Twitch](#twitch)
-  - [Twitter](#twitter-x)
+  - [X](#x)
   - [Telegram](#telegram)
   - [Matrix](#matrix)
 - [Credits](#credits)
 
 ## Summary
 
-VTX provides out-of-the-box support for AI-based chat integration upon a number of platforms, including Discord, Reddit, Telegram, Twitch, Twitter, Matrix, and [the Source](https://src.eco). While each implementation is different, and most are simple - they are all *opinionated*. We are not aiming to support every possible feature, for every possible platform; we are here to provide users with a human-like AI that is:
+VTX provides out-of-the-box support for AI-based chat integration upon a number of platforms, including Discord, Reddit, Telegram, Twitch, X, Matrix, and [the Source](https://src.eco). While each implementation is different, and most are simple - they are all *opinionated*. We are not aiming to support every possible feature, for every possible platform; we are here to provide users with a human-like AI that is:
 
 1. Easy-to-use; and
 2. Is never annoying or spammy.
@@ -772,45 +772,45 @@ twitch:
   focus: trade
 ```
 
-### Twitter (X)
+### X
 
-To connect with Twitter, one must [register an application](https://developer.twitter.com/en/portal/projects-and-apps). 
+To connect with X, one must [register an application](https://developer.twitter.com/en/portal/projects-and-apps). 
 
 The Consumer key and secret must go into your `.env` file:
 ```sh
-TWITTERCONSUMERKEY="myConsumerKey"
-TWITTERCONSUMERSECRET="MyConsumerSecret"
+XCONSUMERKEY="myConsumerKey"
+XCONSUMERSECRET="MyConsumerSecret"
 ```
 Bearer token must go here:
 ```sh
-TWITTERBEARERTOKEN="AAAAAAAAAAAAAAAAAAAAAK%2F....."
+XBEARERTOKEN="AAAAAAAAAAAAAAAAAAAAAK%2F....."
 ```
 Access token and secret must go here:
 ```sh
-TWITTERACCESSTOKEN="myAccessToken"
-TWITTERACCESSTOKENSECRET="myAccessSecret"
+XACCESSTOKEN="myAccessToken"
+XACCESSTOKENSECRET="myAccessSecret"
 ```
 OAuth 2.0 Client ID and Client Secret must go here:
 ```sh
-TWITTERCLIENTKEY="myAPIKey"
-TWITTERCLIENTSECRET="myAPISecret"
+XCLIENTKEY="myAPIKey"
+XCLIENTSECRET="myAPISecret"
 ```
-Finally, your bot is ready. First, define the "twitter" key in your `config.yml` file:
+Finally, your bot is ready. First, define the "x" key in your `config.yml` file:
 ```yml
-twitter:
+x:
 ```
 With no other configuration, your bot will periodically post new tweets to your profile page.
 
 To adjust the rate:
 ```yml
-twitter:
+x:
   frequency: 0.01
 ```
 Your bot will roll a dice, once per minute. In this example, it will have a 1% frequency of making a new tweet. Thus, your bot will post something new approximately once every 100 minutes.
 
 To give your bot a series of "prompts" to choose from:
 ```yml
-twitter:
+x:
   topics:
     - "#G1358 is to be reserved for neuro-symbolic AI, while"
     - "Neuro-symbolic AI is reserved for #G1358, while"

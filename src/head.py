@@ -495,7 +495,7 @@ class cortex:
         self,
         prompt="",
         temperature: float = 1.23,
-        ideas: dict | None = None,
+        disposition: dict | None = None,
         min_new_tokens: int = 11,
         max_new_tokens: int = 111,
         # decay_after_length: int = 99,
@@ -510,8 +510,11 @@ class cortex:
         eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
 
         sequence_biases = {wall: -20.0}
-        if ideas is not None:
-            sequence_biases = {**sequence_biases, **ideas}
+        if disposition is not None:
+            traits = list(
+                self.disposition[key] for key in disposition if key in self.disposition
+            )
+            sequence_biases = {**sequence_biases, **traits[0]}
 
         push = {self.get_tokens_as_tuple(s): b for s, b in sequence_biases.items()}
         bad = [

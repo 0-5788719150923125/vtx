@@ -24,21 +24,19 @@ async def loop(config):
             topics = config.get("topics", ["AI alignment"])
             output = await head.ctx.prompt(
                 prompt=random.choice(topics),
-                min_new_tokens=11,
+                min_new_tokens=16,
                 max_new_tokens=56,
                 disposition=config.get("disposition", None),
-                # decay_after_length=6,
-                # decay_factor=2.3,
                 eos_tokens=[".", "?", "!", "\n", "\n\n", "\\"],
                 cleanup=True,
             )
             if output == False:
                 continue
             print(bc.CORE + "ONE@X: " + ad.TEXT + output)
-            # try:
-            #     await tweet(output)
-            # except Exception as e:
-            #     logging.error(e)
+            try:
+                await tweet(output)
+            except Exception as e:
+                logging.error(e)
         time.sleep(66.6)
 
 

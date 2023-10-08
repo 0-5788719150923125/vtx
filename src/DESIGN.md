@@ -83,12 +83,13 @@ version: '3.9'
 services:
   bot:
     image: ghcr.io/0-5788719150923125/bot:latest
+    ipc: host
     network_mode: host
     stdin_open: true
     tty: true
     volumes:
       - ./config.yml:/src/config.yml
-      - ./models:/src/models
+      - ./data/models:/data/models
     env_file:
       - .env
 
@@ -104,7 +105,7 @@ Different users will have different configuration needs. The [Docker Compose Ref
 To specify an AI model to use, please set the FOCUS variable in your `.env` file:
 
 ```sh
-FOCUS='mind'
+FOCUS='toe'
 ```
 
 ### config.yml
@@ -228,7 +229,7 @@ mind:
   training:
     resume: False
 ```
-If "regen", the model will destroy and re-create the tokenized datasets before training:
+If "regen" is True, the model will destroy and re-create the tokenized datasets before training:
 ```yml
 mind:
   training:
@@ -298,7 +299,7 @@ mind:
   training:
     peft:
       type: lora
-      dropout: 0.1
+      dropout: 0.01
 ```
 In this example, 10% of neurons are being disabled every step.
 
@@ -507,7 +508,7 @@ The "persona" key will modify that persona's behavior:
 personas:
   ryan:
     bias: 806051627198709760
-    persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions...
+    persona: I am a powerful Artificial Intelligence computer, known as Ryan. I have been trained to follow human instructions...
 ```
 
 ### The Source

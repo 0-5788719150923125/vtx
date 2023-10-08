@@ -31,7 +31,7 @@ model_folder = "models/" + focus
 
 # Join every file located in a particular directory
 def create_dataset(
-    path="/src",
+    path="/lab",
     tokenizer=None,
     block_size: int = 1024,
     stride: int = 16,
@@ -45,7 +45,6 @@ def create_dataset(
         "/lab/reaper/public",
         "/lab/aigen/aigen/static",
         "/lab/opencog/learn/learn-lang-diary",
-        "/src/models",
         "/src/__pycache__",
         "/src/lab/__pycache__",
     ]
@@ -209,7 +208,7 @@ if __name__ == "__main__":
     peft_config = None
     use_petals = model_config.get("petals", False)
     if "peft" in model_config["training"]:
-        output_dir = "data/adapters/" + focus
+        output_dir = "/data/adapters/" + focus
         p = model_config["training"].get("peft")
         if resume == True:
             if model_config.get("petals", False):

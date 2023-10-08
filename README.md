@@ -28,10 +28,10 @@ To provide a simple, opinionated framework for human cloning experiments.
 
 # Dashboard
 
-- [lab](http://localhost:6006)
-- [src](http://localhost:9666)
 - [book](http://localhost:42000)
+- [src](http://localhost:9666)
 - [IPFS gateway](http://localhost:9090)
+- [TensorBoard](http://localhost:6006)
 
 # Mirrors
 

@@ -1,7 +1,6 @@
 __pycache__
 .env
 .git
-gen/
 lab/
 node_modules
 src/config.yml

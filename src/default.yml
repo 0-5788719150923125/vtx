@@ -11,6 +11,11 @@ personas:
     bias: 806051627198709760
     persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
+# Sequence biases; needs more documentation.
+disposition:
+  researcher:
+    "AI": 2.0
+
 # The Source model intentionally ships with no defaults. Its intended use is for your
 # own experimentation and development.
 source:

@@ -173,13 +173,13 @@ if __name__ == "__main__":
     fresh_logs = False
     resume = model_config["training"].get("resume", False)
     if model_config["training"].get("regen", False):
-        if os.path.exists("/gen/datasets/" + focus):
-            shutil.rmtree("/gen/datasets/" + focus)
+        if os.path.exists("/data/datasets/" + focus):
+            shutil.rmtree("/data/datasets/" + focus)
 
     # Resume training on an existing model, or start with a fresh base model
     if resume == True:
         fresh_logs = False
-        if not os.path.exists("/src/models/" + focus + "/pytorch_model.bin"):
+        if not os.path.exists("/data/models/" + focus + "/pytorch_model.bin"):
             launch_model = base_model
             model_folder = None
 
@@ -187,17 +187,17 @@ if __name__ == "__main__":
         fresh_logs = True
         launch_model = base_model
         model_folder = None
-        if os.path.exists("/src/models/" + focus):
-            shutil.rmtree("/src/models/" + focus)
-        if os.path.exists("/src/embeddings/" + focus):
-            shutil.rmtree("/src/embeddings/" + focus)
+        if os.path.exists("/data/models/" + focus):
+            shutil.rmtree("/data/models/" + focus)
+        if os.path.exists("/data/embeddings/" + focus):
+            shutil.rmtree("/data/embeddings/" + focus)
 
     # Start with a fresh logs directory
     if fresh_logs == True:
-        if os.path.exists("/gen/logs/" + focus):
-            shutil.rmtree("/gen/logs/" + focus)
+        if os.path.exists("/data/logs/" + focus):
+            shutil.rmtree("/data/logs/" + focus)
 
-    output_dir = "models/" + focus
+    output_dir = "/data/models/" + focus
 
     pre_seq_len = 0
     if "peft" in model_config["training"]:
@@ -209,12 +209,12 @@ if __name__ == "__main__":
     peft_config = None
     use_petals = model_config.get("petals", False)
     if "peft" in model_config["training"]:
-        output_dir = "adapters/" + focus
+        output_dir = "data/adapters/" + focus
         p = model_config["training"].get("peft")
         if resume == True:
             if model_config.get("petals", False):
                 if p["type"] == "prefix":
-                    output_dir = "/src/embeddings/" + focus
+                    output_dir = "/data/embeddings/" + focus
         else:
             if p["type"] == "lora":
                 peft_config = LoraConfig(
@@ -244,7 +244,7 @@ if __name__ == "__main__":
                 if use_petals:
                     tuning_mode = "ptune"
                     pre_seq_len = p.get("num_virtual_tokens")
-                    output_dir = "/src/embeddings/" + focus
+                    output_dir = "/data/embeddings/" + focus
                 else:
                     peft_config = PromptTuningConfig(
                         task_type="CAUSAL_LM",
@@ -254,7 +254,7 @@ if __name__ == "__main__":
                 if use_petals:
                     tuning_mode = "deep_ptune"
                     pre_seq_len = p.get("num_virtual_tokens")
-                    output_dir = "/src/embeddings/" + focus
+                    output_dir = "/data/embeddings/" + focus
                 else:
                     peft_config = PrefixTuningConfig(
                         task_type="CAUSAL_LM",
@@ -266,8 +266,8 @@ if __name__ == "__main__":
         model=launch_model,
         model_folder=model_folder,
         petals=use_petals,
-        cache_dir="models",
-        embeddings_dir="/src/embeddings/" + focus,
+        cache_dir="/data/models",
+        embeddings_dir="/data/embeddings/" + focus,
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
         precision=model_config.get("precision", None),
@@ -278,7 +278,7 @@ if __name__ == "__main__":
 
     ai.tokenizer = AutoTokenizer.from_pretrained(
         launch_model,
-        cache_dir="models",
+        cache_dir="/data/models",
         padding=False,
         padding_side=model_config["training"].get("padding_side", "left"),
         truncation=True,
@@ -321,7 +321,7 @@ if __name__ == "__main__":
                         )
 
                         cached = (
-                            "/gen/datasets/"
+                            "/data/datasets/"
                             + focus
                             + "/"
                             + dataset
@@ -345,7 +345,7 @@ if __name__ == "__main__":
 
                         try:
                             shutil.rmtree(
-                                "/gen/datasets/"
+                                "/data/datasets/"
                                 + focus
                                 + "/"
                                 + dataset
@@ -358,7 +358,7 @@ if __name__ == "__main__":
                             pass
 
                         os.makedirs(
-                            "/gen/datasets/"
+                            "/data/datasets/"
                             + focus
                             + "/"
                             + dataset
@@ -420,14 +420,16 @@ if __name__ == "__main__":
     if get_trainable:
         ai.model.print_trainable_parameters()
 
-    elif os.path.exists("/src/models/" + focus) == False:
-        os.makedirs("/src/models/" + focus)
+    elif os.path.exists("/data/models/" + focus) == False:
+        os.makedirs("/data/models/" + focus)
 
     for n, p in ai.model.named_parameters():
         if "lora" in n.lower():
             p.requires_grad = True
 
-    logger = loggers.TensorBoardLogger("/gen/logs", name=focus, default_hp_metric=False)
+    logger = loggers.TensorBoardLogger(
+        "/data/logs", name=focus, default_hp_metric=False
+    )
 
     # Train the model
     for i, stage in enumerate(model_config["training"]["stages"]):

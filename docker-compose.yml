@@ -21,11 +21,11 @@ services:
         NODE_MAJOR_VERSION: 20
         WRANGLER_VERSION: 3.8.0
     volumes:
-      - ./book:/book
-      - ./gen:/gen
-      - ./lab:/lab
       - ./src:/src
+      - ./lab:/lab
+      - ./data:/data
       - ./lab/aigen:/src/lab/aigen
+      - ./book:/book
     env_file:
       - .env
     environment:

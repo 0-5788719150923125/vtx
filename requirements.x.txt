@@ -1,4 +1,4 @@
-matrix-nio>=0.22.0
+matrix-nio[e2e]>=0.22.0
 git+https://github.com/Lightning-Universe/lightning-Hivemind.git
 git+https://github.com/huggingface/peft.git
 /lab/aigen

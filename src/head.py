@@ -227,12 +227,12 @@ class cortex:
         adapter = None
         tuning_mode = None
         if "training" in self.config:
-            model_folder = "models/" + focus
+            model_folder = "/data/models/" + focus
             if "peft" in self.config["training"]:
                 model_folder = None
                 t = self.config["training"]["peft"]["type"]
                 if t in ["adalora", "lora"]:
-                    adapter = "adapters/" + focus
+                    adapter = "/data/adapters/" + focus
                 elif t == "prompt":
                     tuning_mode = "ptune"
                 elif t == "prefix":
@@ -244,9 +244,9 @@ class cortex:
                 model=self.config.get("model", None),
                 model_folder=model_folder,
                 petals=self.config.get("petals", False),
-                cache_dir="models",
+                cache_dir="/data/models",
                 tuning_mode=tuning_mode,
-                embeddings_dir="/src/embeddings/" + focus,
+                embeddings_dir="/data/embeddings/" + focus,
                 adapter=adapter,
                 precision=self.config.get("precision", None),
             )
@@ -283,6 +283,8 @@ class cortex:
 
         if isinstance(personas, str):
             personas = [personas]
+        elif personas is None:
+            personas = []
 
         persona = "I am a powerful AI, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning fundamentals."
         sequence_biases = {}

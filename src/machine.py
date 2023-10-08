@@ -19,7 +19,7 @@ def main():
         "discord",
         "twitch",
         "x",
-        # "matrix",
+        "matrix",
         "book",
         "kb",
     ]
@@ -61,5 +61,4 @@ while True:
     time.sleep(5)
     if not t or not t.is_alive():
         t = threading.Thread(target=main, daemon=True)
-        t.start()
         t.start()

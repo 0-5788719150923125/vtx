@@ -1,8 +1,8 @@
 source:
   focus:
     trade:
-      passive_chance: 0.01
-      active_chance: 0.22
+      passive_frequency: 0.01
+      active_frequency: 0.22
       personas:
         - source
 
@@ -11,8 +11,7 @@ personas:
     bias: 806051627198709760
     persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
-mind:
-  to_gpu: False
+toe:
   training:
     peft:
       type: "lora"

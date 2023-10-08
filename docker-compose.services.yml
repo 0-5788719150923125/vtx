@@ -3,15 +3,15 @@ version: '3.9'
 services:
   tb:
     image: ghcr.io/0-5788719150923125/bot:latest
-    command: tensorboard --logdir /gen/logs --bind_all --samples_per_plugin scalars=999999999
+    command: tensorboard --logdir /data/logs --bind_all --samples_per_plugin scalars=999999999
     volumes:
-      - ./gen:/gen
+      - ./data:/data
     ports:
       - 6006:6006
 
   pet:
     image: learningathome/petals:main
-    command: python -m petals.cli.run_server bigscience/bloom-560m --public_name "https://src.eco" --cache_dir /src/models --num_blocks 24 --torch_dtype float32
+    command: python -m petals.cli.run_server bigscience/bloom-560m --public_name "https://src.eco" --cache_dir /data/models --num_blocks 24 --torch_dtype bfloat16
     restart: 'always'
     network_mode: 'host'
     ipc: host
@@ -20,8 +20,8 @@ services:
         limits:
           cpus: '0.75'
     volumes:
-      - ./src/models:/src/models
-      - ./src/adapters:/src/adapters
+      - ./data/models:/data/models
+      - ./data/adapters:/data/adapters
     environment:
       HIVEMIND_LOGLEVEL: ERROR
 

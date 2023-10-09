@@ -1,3 +1,30 @@
+# ------ Retrieval Augmented Generation -------#
+
+# from transformers import RagRetriever, RagTokenForGeneration, RagTokenizer
+
+# tokenizer = RagTokenizer.from_pretrained(
+#     "facebook/rag-token-nq", cache_dir="/data/models"
+# )
+# retriever = RagRetriever.from_pretrained(
+#     "facebook/rag-token-nq",
+#     cache_dir="/data/models",
+#     index_name="exact",
+#     use_dummy_dataset=True,
+# )
+# model = RagTokenForGeneration.from_pretrained(
+#     "facebook/rag-token-nq",
+#     retriever=retriever,
+#     cache_dir="/data/models",
+# )
+
+# input_dict = tokenizer.prepare_seq2seq_batch(
+#     "what is the sum of 2+2?", return_tensors="pt"
+# )
+
+# generated = model.generate(input_ids=input_dict["input_ids"], max_new_tokens=66)
+# print(tokenizer.batch_decode(generated, skip_special_tokens=True)[0])
+
+
 # from lab.aigen.aigen.TokenDataset import TokenDataset
 # from transformers import AutoTokenizer
 # from datasets import load_dataset, load_from_disk

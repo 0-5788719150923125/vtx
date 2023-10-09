@@ -377,14 +377,14 @@ def fetch_from_reddit():
                                 if author.name in config["reddit"]["replacers"]:
                                     bias = config["reddit"]["replacers"][author.name]
                             original_submission = (
-                                wall
-                                + str(bias)
-                                + ship
-                                + " (("
-                                + line.title
-                                + ")) | "
-                                + line.selftext.replace("\n", "\\n")
+                                wall + str(bias) + ship + " ((" + line.title + "))"
                             )
+                            if line.selftext:
+                                original_submission = (
+                                    original_submission
+                                    + " | "
+                                    + line.selftext.replace("\n", "\\n")
+                                )
                             sanitized = re.sub(
                                 r"http\S+",
                                 "((url))",

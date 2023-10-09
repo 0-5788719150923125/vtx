@@ -50,7 +50,7 @@
         "label": "up",
         "detail": "Start the services in a development environment.",
         "type": "shell",
-        "command": "FOCUS=${input:env} docker compose  -f docker-compose.yml -f docker-compose.live.yml -f docker-compose.services.yml up",
+        "command": "FOCUS=${input:env} docker compose  -f docker-compose.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up",
         "windows": {
           "command": "$env:FOCUS = '${input:env}'; docker compose up"
         }

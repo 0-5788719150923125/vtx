@@ -453,7 +453,7 @@ class cortex:
                     generation = generation[1:]
                     temp_history = temp_history[1:]
                 while generation.endswith(wall):
-                    generation = generation[:-1]
+                    generation = generation.rstrip(wall)
                 mentions = "(?:[<][@])(\d+\s*\d*)"
                 variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
                 group = re.search(r"(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
@@ -481,7 +481,7 @@ class cortex:
                 while "  " in output:
                     output = output.replace("  ", " ")
                 while output.endswith("\\"):
-                    output = output[:-1]
+                    output = output.rstrip("\\")
                 if output == "":
                     continue
                 break
@@ -596,16 +596,14 @@ class cortex:
                         .replace(">}}", "}}")
                     )
                     if output.endswith(wall):
-                        output = output[:-1]
+                        output = output.rstrip(wall)
                     if cleanup:
                         while "\n" in output:
                             output = output.replace("\n", " ")
                         while "  " in output:
                             output = output.replace("  ", " ")
-                        while "\n" in output:
-                            output = output.replace("\n", " ")
                         while output.endswith("\\"):
-                            output = output[:-1]
+                            output = output.rstrip("\\")
                         output = remove_invisible_characters(output)
                     break
 
@@ -647,11 +645,11 @@ class cortex:
 
         Q:
 
-        What is Docker?
+        What is a question?
 
         A:
 
-        Docker is a platform that simplifies application deployment by creating lightweight, portable containers to package and run software and its dependencies consistently across different environments. It enables developers to isolate and manage applications, making it easier to deploy and scale them across various systems while ensuring consistency. Docker has become a fundamental tool in DevOps and containerization workflows.
+        I don't know, but this is an answer!
 
         Q:
 
@@ -662,10 +660,7 @@ class cortex:
 
         eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
         push = {
-            self.get_tokens_as_tuple(s): b
-            for s, b in {
-                wall: -5.9,
-            }.items()
+            self.get_tokens_as_tuple(s): b for s, b in {wall: -5.9, "Q:": 3.0}.items()
         }
         bad = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
@@ -710,16 +705,16 @@ class cortex:
                 prompt = prompt[1:]
 
             while completion.startswith("\n"):
-                completion = completion[2:]
+                completion = completion.lstrip("\n")
 
             if completion.endswith("Q"):
-                completion = completion[:-1]
+                completion = completion.rstrip("Q")
 
             while completion.endswith("\n"):
-                completion = completion[:-2]
+                completion = completion.rstrip("\n")
 
             while completion.endswith(r"\n"):
-                completion = completion[:-2]
+                completion = completion.rstrip(r"\n")
 
             output = completion
 

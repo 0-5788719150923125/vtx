@@ -47,6 +47,7 @@ async def client(config) -> None:
 
             if "!Q" in message["text"]:
                 prompt = message["text"].replace("!Q", "")
+                bias = get_identity()
                 output = await head.ctx.query(question=prompt)
             else:
                 success, bias, output, seeded = await head.ctx.chat(personas=persona)

@@ -268,14 +268,11 @@ class cortex:
     @to_thread
     def chat(
         self,
-        # prefix=None,
         ctx=None,
         bias: int = None,
         temperature: float = 1.23,
         min_new_tokens: int = 1,
         max_new_tokens: int = 222,
-        # decay_after_length: int = 33,
-        # decay_factor: float = 0.000023,
         personas: List[str] = [],
         eos_tokens: list | None = None,
     ):
@@ -332,23 +329,7 @@ class cortex:
 
         bad_tokens = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
-            # Many of these tokens were chosen from past experience with ugly patterns
-            # output by various models.
             for token in [
-                "<br>",
-                "<br/>",
-                "<{@",
-                "<[@",
-                "<#",
-                "<#@",
-                "<@",
-                "<@@",
-                "<@@@",
-                "< @",
-                "<\@",
-                "<((",
-                # "((",
-                # "(((",
                 f"{ship}\n",
                 f"{ship} \n",
             ]
@@ -359,8 +340,7 @@ class cortex:
                 chain.from_iterable(
                     [
                         self.ai.tokenizer(token, add_special_tokens=False).input_ids
-                        # Many of these tokens were chosen from past experience with ugly patterns
-                        # output by various models.
+                        # Suppress ugly patterns the model may sometimes bias towards.
                         for token in ["((", "(((", "<@", "< @"]
                     ]
                 )
@@ -392,8 +372,8 @@ class cortex:
             + "\n"
         )
 
-        while "  " in history:
-            history = history.replace("  ", " ")
+        # while "  " in history:
+        #     history = history.replace("  ", " ")
 
         prompt = history + wall
         if bias:
@@ -459,18 +439,16 @@ class cortex:
                 group = re.search(r"(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
                 if (
                     group is None
-                    or group[0] is None
                     or group[2] is None
                     or group[3] is None
-                    or seed[0] is None
+                    or group[3] == ""
+                    or group[3] in prompt
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
-                    or group[3] == ""
                     or wall in group[3]
                     or group[3][:1] in [">", "~", '"', "“", " ", "\\", "\n", ""]
                     or group[3][:2] in ["\\", "\n", "<@", "(("]
                     or group[3][:3] in ["< @"]
-                    or group[3] in prompt
                 ):
                     if attempt == max_attempts:
                         raise Exception(generation)
@@ -478,17 +456,17 @@ class cortex:
                 success = True
                 bias = group[2]
                 output = remove_invisible_characters(group[3].replace(r"\n", "\n"))
-                while "  " in output:
-                    output = output.replace("  ", " ")
+                # while "  " in output:
+                #     output = output.replace("  ", " ")
                 while output.endswith("\\"):
                     output = output.rstrip("\\")
-                if output == "":
-                    continue
+                # if output == "":
+                #     continue
                 break
 
             except Exception as e:
                 logging.error(e)
-                # print(traceback.format_exc())
+
         self.active = False
         return success, bias, output, seeded
 
@@ -500,8 +478,6 @@ class cortex:
         disposition: dict | None = None,
         min_new_tokens: int = 11,
         max_new_tokens: int = 111,
-        # decay_after_length: int = 99,
-        # decay_factor: float = 0.000023,
         eos_tokens: list | None = None,
         cleanup: bool = False,
     ):
@@ -549,23 +525,10 @@ class cortex:
 
                 attempt += 1
 
-                from transformers import StoppingCriteriaList
-
-                stopping_criteria_list = StoppingCriteriaList(
-                    [
-                        [self.ai.tokenizer.eos_token_id],
-                        [
-                            self.ai.tokenizer.eos_token_id,
-                            self.ai.tokenizer.eos_token_id,
-                        ],
-                    ]
-                )
-
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.ai.generate(
                     prompt=prompt,
                     do_sample=True,
-                    # min_length=min_length,
                     min_new_tokens=min_new_tokens,
                     max_new_tokens=max_new_tokens,
                     temperature=temperature,
@@ -585,8 +548,6 @@ class cortex:
                     sequence_bias=push,
                     bad_words_ids=bad,
                     eos_token_id=eos_token_ids,
-                    # pad_token_id=self.ai.tokenizer.eos_token_id,
-                    # stopping_criteria=stopping_criteria_list,
                 )
 
                 if completion:

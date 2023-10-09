@@ -2,6 +2,10 @@ import importlib
 import threading
 import time
 
+import debugpy
+
+debugpy.listen(("0.0.0.0", 5678))
+
 import memory
 from common import ad, bc, config
 

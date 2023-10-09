@@ -43,6 +43,13 @@ def validation(config):
                 "type": "dict",
                 "schema": {
                     "frequency": {"type": "number"},
+                    "frequencies": {
+                        "type": "dict",
+                        "schema": {
+                            "local": {"type": "float"},
+                            "global": {"type": "float"},
+                        },
+                    },
                     "stalker": {"type": "string"},
                     "min": {"type": "integer"},
                     "max": {"type": "integer"},
@@ -91,12 +98,30 @@ async def client(config):
         password=os.environ["REDDITPASSWORD"],
     ) as reddit:
         subscribe_event("kb_updated", receive_kb_updates)
+        await follow_victims(reddit, config["reddit"])
         await asyncio.gather(
             subscribe_comments(reddit, config),
             subscribe_submissions(reddit, config),
             stalker(reddit, config),
             manage_submissions(reddit, config),
         )
+
+
+async def follow_victims(reddit, config):
+    if not config["stalk"]:
+        return
+    for user in config["stalk"]:
+        victim = config["stalk"].get(user)
+        redditor = await reddit.redditor(user)
+        async for comment in redditor.comments.new(limit=10):
+            # Subscribe to my victim's subreddits
+            # subreddit = await reddit.subreddit(comment.subreddit.display_name)
+            # await subreddit.load()
+            # print(subreddit.subscribers)
+            if comment.subreddit.display_name not in config["subs"]:
+                config["subs"][comment.subreddit.display_name] = {
+                    "frequency": victim.get("proximal_frequency", 0.0001)
+                }
 
 
 queued = []

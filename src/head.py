@@ -320,8 +320,6 @@ class cortex:
                             traits[k] = traits.get(k, 0) + v
                 sequence_biases = traits
 
-        max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
-
         push_sequences = {
             self.get_tokens_as_tuple(s): b
             for s, b in {**default_biases, **sequence_biases}.items()
@@ -404,7 +402,7 @@ class cortex:
                     prompt=prompt,
                     do_sample=True,
                     min_new_tokens=min_new_tokens,
-                    max_new_tokens=max_new_tokens,
+                    max_new_tokens=self.config.get("max_new_tokens", max_new_tokens),
                     temperature=temperature,
                     eta_cutoff=0.0003,
                     penalty_alpha=0.6,
@@ -483,8 +481,6 @@ class cortex:
     ):
         self.wait_in_queue()
 
-        max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
-
         eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
 
         sequence_biases = {wall: -20.0}
@@ -530,7 +526,7 @@ class cortex:
                     prompt=prompt,
                     do_sample=True,
                     min_new_tokens=min_new_tokens,
-                    max_new_tokens=max_new_tokens,
+                    max_new_tokens=self.config.get("max_new_tokens", max_new_tokens),
                     temperature=temperature,
                     eta_cutoff=0.0003,
                     penalty_alpha=0.6,
@@ -591,8 +587,6 @@ class cortex:
     ):
         self.wait_in_queue()
 
-        max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
-
         prompt = f"""
         I am a powerful artificial intelligence, who helps users to answer their questions. For example:
 
@@ -638,7 +632,7 @@ class cortex:
                 prompt=prompt,
                 do_sample=True,
                 min_length=23,
-                max_new_tokens=max_new_tokens,
+                max_new_tokens=self.config.get("max_new_tokens", max_new_tokens),
                 temperature=temperature,
                 eta_cutoff=0.002,
                 penalty_alpha=0.6,

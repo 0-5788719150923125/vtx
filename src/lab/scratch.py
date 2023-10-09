@@ -6,48 +6,54 @@
 # import time
 
 # import torch
-# from transformers import AutoModelForCausalLM, AutoTokenizer, RwkvConfig, RwkvModel
+# from transformers import (
+#     AutoModelForCausalLM,
+#     AutoTokenizer,
+#     RwkvConfig,
+#     RwkvForCausalLM,
+#     RwkvModel,
+# )
 
 # model_name = "RWKV/rwkv-4-430m-pile"
 
-# string = "Once upon a time,"
-
-
 # tokenizer = AutoTokenizer.from_pretrained(
 #     model_name,
-#     cache_dir="/src/models",
+#     cache_dir="/data/models",
 # )
 # model = AutoModelForCausalLM.from_pretrained(
 #     model_name,
-#     cache_dir="/src/models",
+#     cache_dir="/data/models",
 #     output_hidden_states=True,
 #     device_map="auto",
 #     torch_dtype=torch.bfloat16,
 # )
 
-# state = None
-
 # with torch.no_grad():
+#     state = None
+#     string = "Once upon a time,"
 #     while True:
 #         inputs = tokenizer(string, return_tensors="pt")
-#         outputs = model(inputs["input_ids"].to(model.device.type), state=state)
-#         state = outputs.state
-#         string = tokenizer.decode(
-#             model.generate(
-#                 inputs["input_ids"].to(model.device.type),
-#                 max_new_tokens=3,
-#                 do_sample=True,
-#                 temperature=1.23,
-#                 top_k=4,
-#                 penalty_alpha=0.6,
-#                 eta_cutoff=0.0003,
-#                 repetition_penalty=2.3,
-#                 no_repeat_ngram_size=9,
-#                 state=state,
-#             )[0]
-#         )
-#         while len(string) > 1024:
-#             string = string[1:]
+#         if state is None:
+#             outputs = model(inputs["input_ids"].to(model.device.type))
+#         else:
+#             outputs = model(inputs["input_ids"].to(model.device.type), state=state[-1])
+#             state = outputs.state
+#             string = tokenizer.decode(
+#                 model.generate(
+#                     inputs["input_ids"].to(model.device.type),
+#                     max_new_tokens=3,
+#                     do_sample=True,
+#                     temperature=0.7,
+#                     top_k=4,
+#                     penalty_alpha=0.6,
+#                     eta_cutoff=0.0003,
+#                     repetition_penalty=2.3,
+#                     no_repeat_ngram_size=9,
+#                     state=state[-1],
+#                 )[0]
+#             )
+#         # while len(string) > 1024:
+#         #     string = string[1:]
 #         print("------------------")
 #         print(string)
 #         time.sleep(1)

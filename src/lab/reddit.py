@@ -90,16 +90,13 @@ async def client(config):
         username=os.environ["REDDITAGENT"],
         password=os.environ["REDDITPASSWORD"],
     ) as reddit:
-        try:
-            subscribe_event("kb_updated", receive_kb_updates)
-            await asyncio.gather(
-                subscribe_comments(reddit, config),
-                subscribe_submissions(reddit, config),
-                stalker(reddit, config),
-                manage_submissions(reddit, config),
-            )
-        except Exception as e:
-            logging.error(e)
+        subscribe_event("kb_updated", receive_kb_updates)
+        await asyncio.gather(
+            subscribe_comments(reddit, config),
+            subscribe_submissions(reddit, config),
+            stalker(reddit, config),
+            manage_submissions(reddit, config),
+        )
 
 
 queued = []

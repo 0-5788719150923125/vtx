@@ -316,12 +316,12 @@ class cortex:
             persona = wall + str(bias) + ship + " " + choice.get("persona")
             disposition = choice.get("disposition", None)
             if disposition is not None:
-                traits = list(
-                    self.disposition[key]
-                    for key in disposition
-                    if key in self.disposition
-                )
-                sequence_biases = traits[0]
+                traits = {}
+                for key in disposition:
+                    if key in self.disposition:
+                        for k, v in self.disposition.get(key).items():
+                            traits[k] = traits.get(k, 0) + v
+                sequence_biases = traits
 
         max_new_tokens = self.config.get("max_new_tokens", max_new_tokens)
 
@@ -513,10 +513,12 @@ class cortex:
 
         sequence_biases = {wall: -20.0}
         if disposition is not None:
-            traits = list(
-                self.disposition[key] for key in disposition if key in self.disposition
-            )
-            sequence_biases = {**sequence_biases, **traits[0]}
+            traits = {}
+            for key in disposition:
+                if key in self.disposition:
+                    for k, v in self.disposition.get(key).items():
+                        traits[k] = traits.get(k, 0) + v
+            sequence_biases = {**sequence_biases, **traits}
 
         push = {self.get_tokens_as_tuple(s): b for s, b in sequence_biases.items()}
         bad = [

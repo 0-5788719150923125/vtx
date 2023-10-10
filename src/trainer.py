@@ -286,11 +286,11 @@ if __name__ == "__main__":
     print(ai.tokenizer)
 
     # Create a tokenized dataset from every directory specified in config file
-    def build_inputs(stage):
+    def build_inputs(c):
         datasets = {}
-        block_size = stage.get("block_size", ai.model_max_length)
-        stride = stage.get("stride", 0)
-        for collection in stage["datasets"]:
+        block_size = c.get("block_size", ai.model_max_length)
+        stride = c.get("stride", 0)
+        for collection in c["datasets"]:
             for dataset in config["collections"][collection]:
                 if dataset not in datasets:
                     line_by_line = False
@@ -391,16 +391,14 @@ if __name__ == "__main__":
 
         # Merge all tokenized datasets into a single dataset for training
         collected = []
-        for collection in stage["datasets"]:
+        for collection in c["datasets"]:
             for dataset in config["collections"][collection]:
                 duplicate = 0
                 while dataset + str(duplicate) in datasets:
                     collected.append(datasets[dataset + str(duplicate)])
                     duplicate = duplicate + 1
         if len(collected) > 1:
-            return merge_datasets(
-                collected, equalize=stage.get("equalize_datasets", False)
-            )
+            return merge_datasets(collected, equalize=c.get("equalize_datasets", False))
         else:
             return collected[0]
 
@@ -431,34 +429,33 @@ if __name__ == "__main__":
     )
 
     # Train the model
-    for i, stage in enumerate(model_config["training"]["stages"]):
-        inputs = build_inputs(stage)
-        ai.train(
-            train_data=inputs,
-            batch_size=stage.get("batch_size", 1),
-            num_steps=stage.get("num_steps", 33333),
-            generate_every=model_config["training"].get("generate_every", 500),
-            save_every=model_config["training"].get("save_every", 1000),
-            n_gpu=1,
-            output_dir=output_dir,
-            loggers=[logger],
-            optimizer=stage.get("optimizer", "AdamW"),
-            learning_rate=float(stage.get("learning_rate", 0.005)),
-            swa_lr=stage.get("swa_lr", None),
-            weight_decay=float(stage.get("weight_decay", 0.01)),
-            warmup_steps=stage.get("warmup_steps", 0),
-            gradient_clip_val=stage.get("gradient_clip_val", 0.5),
-            update_period=stage.get("update_period", 10),
-            gradient_accumulation_steps=stage.get("gradient_accumulation_steps", 1),
-            train_transformers_only=stage.get("train_transformers_only", False),
-            num_layers_freeze=stage.get("num_layers_freeze", 0),
-            scheduler=stage.get("scheduler", "get_linear_schedule_with_warmup"),
-            progress_bar_refresh_rate=1,
-            seed=nist_beacon()[1],
-            prune=stage.get("prune", 0.0),
-            petals=use_petals,
-            use_deepspeed=False,
-            hivemind=model_config["training"].get("hivemind", False),
-            target_batch_size=stage.get("target_batch_size", 8192),
-            stage=i,
-        )
+    c = model_config["training"]
+    inputs = build_inputs(c)
+    ai.train(
+        train_data=inputs,
+        batch_size=c.get("batch_size", 1),
+        num_steps=c.get("num_steps", 33333),
+        generate_every=c.get("generate_every", 500),
+        save_every=c.get("save_every", 1000),
+        n_gpu=1,
+        output_dir=output_dir,
+        loggers=[logger],
+        optimizer=c.get("optimizer", "AdamW"),
+        learning_rate=float(c.get("learning_rate", 0.005)),
+        swa_lr=c.get("swa_lr", None),
+        weight_decay=float(c.get("weight_decay", 0.01)),
+        warmup_steps=c.get("warmup_steps", 0),
+        gradient_clip_val=c.get("gradient_clip_val", 0.5),
+        update_period=c.get("update_period", 10),
+        gradient_accumulation_steps=c.get("gradient_accumulation_steps", 1),
+        train_transformers_only=c.get("train_transformers_only", False),
+        num_layers_freeze=c.get("num_layers_freeze", 0),
+        scheduler=c.get("scheduler", "get_linear_schedule_with_warmup"),
+        progress_bar_refresh_rate=1,
+        seed=nist_beacon()[1],
+        prune=c.get("prune", 0.0),
+        petals=use_petals,
+        use_deepspeed=False,
+        hivemind=model_config["training"].get("hivemind", False),
+        target_batch_size=c.get("target_batch_size", 8192),
+    )

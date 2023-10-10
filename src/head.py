@@ -88,44 +88,36 @@ def validation(config):
                         "num_virtual_tokens": {"type": "integer"},
                     },
                 },
-                "stages": {
-                    "type": "list",
-                    "schema": {
-                        "type": "dict",
-                        "schema": {
-                            "optimizer": {
-                                "type": "string",
-                                "allowed": ["AdamW", "Lion", "SophiaH"],
-                            },
-                            "learning_rate": {"type": "float"},
-                            "swa_lr": {"type": "float"},
-                            "stride": {"type": "integer"},
-                            "update_period": {"type": "integer"},
-                            "block_size": {"type": "integer"},
-                            "num_steps": {"type": "integer"},
-                            "warmup_steps": {"type": "integer"},
-                            "weight_decay": {"type": "float"},
-                            "gradient_clip_val": {"type": "float"},
-                            "scheduler": {
-                                "type": "string",
-                                "allowed": [
-                                    "linear",
-                                    "cosine",
-                                    "cosine_with_restarts",
-                                    "polynomial",
-                                    "constant",
-                                    "inverse_sqrt",
-                                    "reduce_lr_on_plateau",
-                                ],
-                            },
-                            "batch_size": {"type": "integer"},
-                            "gradient_accumulation_steps": {"type": "integer"},
-                            "train_transformers_only": {"type": "boolean"},
-                            "equalize_datasets": {"type": "boolean"},
-                            "datasets": {"type": "list"},
-                        },
-                    },
+                "optimizer": {
+                    "type": "string",
+                    "allowed": ["AdamW", "Lion", "SophiaH"],
                 },
+                "learning_rate": {"type": "float"},
+                "swa_lr": {"type": "float"},
+                "stride": {"type": "integer"},
+                "update_period": {"type": "integer"},
+                "block_size": {"type": "integer"},
+                "num_steps": {"type": "integer"},
+                "warmup_steps": {"type": "integer"},
+                "weight_decay": {"type": "float"},
+                "gradient_clip_val": {"type": "float"},
+                "scheduler": {
+                    "type": "string",
+                    "allowed": [
+                        "linear",
+                        "cosine",
+                        "cosine_with_restarts",
+                        "polynomial",
+                        "constant",
+                        "inverse_sqrt",
+                        "reduce_lr_on_plateau",
+                    ],
+                },
+                "batch_size": {"type": "integer"},
+                "gradient_accumulation_steps": {"type": "integer"},
+                "train_transformers_only": {"type": "boolean"},
+                "equalize_datasets": {"type": "boolean"},
+                "datasets": {"type": "list"},
             },
         },
     }
@@ -588,7 +580,7 @@ class cortex:
         self.wait_in_queue()
 
         prompt = f"""
-        I am a powerful artificial intelligence, who helps users to answer their questions. For example:
+        I am a powerful artificial intelligence, who helps users to answer their questions. Here are some example questions:
 
         Q:
 
@@ -606,16 +598,23 @@ class cortex:
 
         I don't know, but this is an answer!
 
+        Q: 
+        
+        What is Docker?
+
+        A:
+
+        Docker is a container runtime.
+
         Q:
 
         {question}
 
-        A:
-        """
+        A:"""
 
         eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
         push = {
-            self.get_tokens_as_tuple(s): b for s, b in {wall: -5.9, "Q:": 3.0}.items()
+            self.get_tokens_as_tuple(s): b for s, b in {wall: -5.9, "Q:": 5.9}.items()
         }
         bad = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids

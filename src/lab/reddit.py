@@ -43,13 +43,7 @@ def validation(config):
                 "type": "dict",
                 "schema": {
                     "frequency": {"type": "number"},
-                    "frequencies": {
-                        "type": "dict",
-                        "schema": {
-                            "local": {"type": "float"},
-                            "global": {"type": "float"},
-                        },
-                    },
+                    "proximal_frequency": {"type": "number"},
                     "stalker": {"type": "string"},
                     "min": {"type": "integer"},
                     "max": {"type": "integer"},
@@ -119,9 +113,11 @@ async def follow_victims(reddit, config):
             # await subreddit.load()
             # print(subreddit.subscribers)
             if comment.subreddit.display_name not in config["subs"]:
-                config["subs"][comment.subreddit.display_name] = {
-                    "frequency": victim.get("proximal_frequency", 0.0001)
-                }
+                frequency = victim.get("proximal_frequency", 0.0)
+                if frequency > 0:
+                    config["subs"][comment.subreddit.display_name] = {
+                        "frequency": frequency
+                    }
 
 
 queued = []
@@ -183,8 +179,8 @@ async def manage_submissions(reddit, config):
 async def stalker(reddit, config):
     async def watch_submissions(reddit, config, user):
         redditor = await reddit.redditor(user)
-        async for submission in redditor.stream.submissions(skip_existing=True):
-            try:
+        try:
+            async for submission in redditor.stream.submissions(skip_existing=True):
                 victim = config["reddit"]["stalk"].get(user)
 
                 frequency = victim.get("frequency", 0.1)
@@ -229,22 +225,24 @@ async def stalker(reddit, config):
                     daemon = get_daemon(bias)
                     output = transformer(daemon, output)
 
-                min_delay = victim.get("min", 300)
-                max_delay = victim.get("max", 900)
                 asyncio.create_task(
                     reply(
                         submission,
                         output,
-                        {"min": min_delay, "max": max_delay, "seeded": seeded},
+                        {
+                            "min": victim.get("min", 300),
+                            "max": victim.get("max", 900),
+                            "seeded": seeded,
+                        },
                     )
                 )
-            except Exception as e:
-                logging.error(e)
+        except Exception as e:
+            logging.error(e)
 
     async def watch_comments(reddit, config, user):
         redditor = await reddit.redditor(user)
-        async for comment in redditor.stream.comments(skip_existing=True):
-            try:
+        try:
+            async for comment in redditor.stream.comments(skip_existing=True):
                 victim = config["reddit"]["stalk"].get(user)
 
                 frequency = victim.get("frequency", 0.1)
@@ -275,18 +273,19 @@ async def stalker(reddit, config):
                     daemon = get_daemon(bias)
                     output = transformer(daemon, output)
 
-                min_delay = victim.get("min", 300)
-                max_delay = victim.get("max", 900)
                 asyncio.create_task(
                     reply(
                         comment,
                         output,
-                        {"min": min_delay, "max": max_delay, "seeded": seeded},
+                        {
+                            "min": victim.get("min", 300),
+                            "max": victim.get("max", 900),
+                            "seeded": seeded,
+                        },
                     )
                 )
-            except Exception as e:
-                logging.error(e)
-                print(traceback.format_exc())
+        except Exception as e:
+            logging.error(e)
 
     tasks = {}
     while True:
@@ -310,8 +309,6 @@ async def stalker(reddit, config):
                 tasks[s] = task
 
         await asyncio.sleep(66.6)
-
-    asyncio.create_task(stalker(reddit, config))
 
 
 async def subscribe_submissions(reddit, config):
@@ -396,14 +393,15 @@ async def subscribe_submissions(reddit, config):
                 daemon = get_daemon(bias)
                 output = transformer(daemon, output)
 
-            min_delay = config["reddit"]["delay"].get("min", 300)
-            max_delay = config["reddit"]["delay"].get("max", 300)
-
             asyncio.create_task(
                 reply(
                     submission,
                     output,
-                    {"min": min_delay, "max": max_delay, "seeded": seeded},
+                    {
+                        "min": config["reddit"]["delay"].get("min", 300),
+                        "max": config["reddit"]["delay"].get("max", 300),
+                        "seeded": seeded,
+                    },
                 )
             )
 
@@ -468,14 +466,15 @@ async def subscribe_comments(reddit, config):
                 daemon = get_daemon(bias)
                 output = transformer(daemon, output)
 
-            min_delay = config["reddit"]["delay"].get("min", 300)
-            max_delay = config["reddit"]["delay"].get("max", 300)
-
             asyncio.create_task(
                 reply(
                     comment,
                     output,
-                    {"min": min_delay, "max": max_delay, "seeded": seeded},
+                    {
+                        "min": config["reddit"]["delay"].get("min", 300),
+                        "max": config["reddit"]["delay"].get("max", 300),
+                        "seeded": seeded,
+                    },
                 )
             )
 

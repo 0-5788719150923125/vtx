@@ -26,7 +26,7 @@
         "label": "test",
         "detail": "Run all tests with Robot Framework.",
         "type": "shell",
-        "command": "docker compose exec bot robot --outputdir /book/static/tests /src/tests",
+        "command": "docker compose exec lab robot --outputdir /book/static/tests /src/tests",
       },
       {
         "label": "build",
@@ -59,18 +59,18 @@
         "label": "train",
         "detail": "Train a model.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.train.yml run -e FOCUS=${input:env} bot python3 trainer.py"
+        "command": "docker compose -f docker-compose.yml -f docker-compose.train.yml run -e FOCUS=${input:env} lab python3 trainer.py"
       },
       {
         "label": "i",
         "detail": "Prepare your data in various ways.",
         "type": "shell",
-        "command": "docker compose run bot python3 -c \"import i; ${input:i}\"",
+        "command": "docker compose run lab python3 -c \"import i; ${input:i}\"",
         "runOptions": {
           "instanceLimit": 3
         },
         "windows": {
-          "command": "docker compose run bot python3 -c \\\"import i; ${input:i}\\\""
+          "command": "docker compose run lab python3 -c \\\"import i; ${input:i}\\\""
         }
       },
       {
@@ -134,7 +134,7 @@
         "type": "pickString",
         "id": "ship",
         "description": "Which ship should I enter?",
-        "options": ["bot", "ctx", "dash", "ipfs", "pet"]
+        "options": ["lab", "ctx", "dash", "ipfs", "pet"]
       }
     ]
   }

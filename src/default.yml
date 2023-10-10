@@ -64,19 +64,18 @@ soul:
     peft:
       type: "prefix"
       num_virtual_tokens: 128
-    stages:
-      - learning_rate: 0.001
-        block_size: 256
-        num_steps: 33333
-        warmup_steps: 250
-        weight_decay: 0.01
-        gradient_clip_val: 1.23
-        scheduler: cosine
-        batch_size: 6
-        train_transformers_only: False
-        equalize_datasets: False
-        datasets:
-          - default
+    learning_rate: 0.001
+    block_size: 256
+    num_steps: 33333
+    warmup_steps: 250
+    weight_decay: 0.01
+    gradient_clip_val: 1.23
+    scheduler: cosine
+    batch_size: 6
+    train_transformers_only: False
+    equalize_datasets: False
+    datasets:
+      - default
 
 # An extremely capable transformer based on GPT-NeoX architecture.
 root:

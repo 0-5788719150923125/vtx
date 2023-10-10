@@ -47,12 +47,12 @@ To provide a simple, opinionated framework for human cloning experiments.
 - `git submodule update --init --recursive` to fetch remote datasets.
 - Place configurations into src/config.yml. ([default.yml](./vtx/default.yml))
 - Put new datasets into lab/{dataset_name}. Also specify them in config.yml.
-- Put credentials into a .env file at the root of this project. ([example.env](./examples/bot/.env))
+- Put credentials into a .env file at the root of this project. ([example.env](./examples/lab/.env))
 - Use VSCode tasks as a reference.
 - The "build" task will build a Docker image from source files.
 - The "i" task is used for data retrieval and preparation tasks.
 - The "train" task is used to train your models.
-- The "up" task is used to run your bot.
+- The "up" task is used to run your lab.
 - Ask me questions.
 
 For thorough documentation, [please visit this link](https://studio.src.eco/nail/vtx/).

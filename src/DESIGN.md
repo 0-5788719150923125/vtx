@@ -68,10 +68,10 @@ By default, GPUs are not available inside of Docker. In order to share your GPU 
 A very basic VTX configuration will contain three files:
 
 1. A `docker-compose.yml` file (to orchestrate Docker)
-2. A `config.yml` file (to customize your bot)
+2. A `config.yml` file (to customize your lab)
 3. A `.env` file (to hold secrets, like passwords)
 
-[This example project](https://github.com/0-5788719150923125/vtx/tree/main/examples/bot) should work universally, without any additional configuration, on any platform that meets the minumum requirements.
+[This example project](https://github.com/0-5788719150923125/vtx/tree/main/examples/lab) should work universally, without any additional configuration, on any platform that meets the minumum requirements.
 
 ### Docker
 
@@ -81,8 +81,8 @@ The most basic `docker-compose.yml` configuration will look something like this:
 version: '3.9'
 
 services:
-  bot:
-    image: ghcr.io/0-5788719150923125/bot:latest
+  lab:
+    image: ghcr.io/0-5788719150923125/lab:latest
     ipc: host
     network_mode: host
     stdin_open: true
@@ -341,29 +341,24 @@ mind:
       type: prefix
       num_virtual_tokens: 24
 ```
-Your model can be trained sequentially, in multiple stages, each with its own set of hyperparameters.
-
-To set the learning rate of a stage, define the "learning_rate" key:
+To set the learning rate, define the "learning_rate" key:
 ```yml
 mind:
   training:
-    stage:
-      - learning_rate: 0.001
+    learning_rate: 0.001
 ```
 To set the total number of training iterations, use "num_steps". To set the number of warmup steps - where the learning rate starts from 0, and increases to the value specified by "learning_rate" - set the "warmup_steps" key:
 ```yml
 mind:
   training:
-    stage:
-      - num_steps: 100000
-        warmup_steps: 1000
+    num_steps: 100000
+    warmup_steps: 1000
 ```
 To set the number of batches of data provided to the model during each training step:
 ```yml
 mind:
   training:
-    stage:
-      - batch_size: 3
+      batch_size: 3
 ```
 Reducing batch size is the best way to reduce the amount of VRAM required for training.
 
@@ -371,9 +366,8 @@ Gradient accumulation is a great way to emulate the effects of an increased batc
 ```yml
 mind:
   training:
-    stage:
-      - batch_size: 3
-        gradient_accumulation_steps: 6
+    batch_size: 3
+    gradient_accumulation_steps: 6
 ```
 Given the above settings, the model will essentially train with batch sizes of 18 - spread across 6 training steps (which is 5 more than it would consume otherwise, if batch_size was set to 18.)
 
@@ -381,8 +375,7 @@ To set the size of each batch provided to the model during training, use "block_
 ```yml
 mind:
   training:
-    stage:
-      - block_size: 2048
+    block_size: 2048
 ```
 Another way to reduce memory consumption during training (at the cost of ~20% decrease in training speed), is to enable gradient checkpointing:
 ```yml
@@ -396,15 +389,13 @@ To choose a specific scheduler to use with the AdamW optimizer, set the "schedul
 ```yml
 mind:
   training:
-    stage:
-      - scheduler: cosine
+    scheduler: cosine
 ```
 To freeze X number of lower layers (preventing weight updates):
 ```yml
 mind:
   training:
-    stage:
-      - num_layers_freeze: 5
+    num_layers_freeze: 5
 ```
 If using PEFT training methods, this option will have no effect.
 
@@ -412,38 +403,33 @@ Decaying weights at each training step is a good way to prevent overfitting (mem
 ```yml
 mind:
   training:
-    stage:
-      - weight_decay: 0.01
+    weight_decay: 0.01
 ```
 To set the maximum allowed adjustments to a weight during training:
 ```yml
 mind:
   training:
-    stage:
-      - max_grad_norm: 0.5
+    max_grad_norm: 0.5
 ```
 To train multi-head self-attention and feed-forward sub-layers exclusively:
 ```yml
 mind:
   training:
-    stage:
-      - train_transformers_only: True
+    train_transformers_only: True
 ```
 Take an equal number of samples from each dataset, so as not to bias toward one or the other:
 ```yml
 mind:
   training:
-    stage:
-      - equalize_datasets: False
+    equalize_datasets: False
 ```
 To specify a collection of datasets to train upon (or multiple collections):
 ```yml
 mind:
   training:
-    stage:
-      - datasets:
-        - collection1
-        - collection2
+    datasets:
+      - collection1
+      - collection2
 ```
 ### Datasets
 
@@ -465,7 +451,7 @@ In this example, "lab/dataset1" and "lab/dataset2" must exist in a folder locate
 You must also remember to bind a lab/ directory into your Docker container, as shown in this `docker-compose.yml` example:
 ```yml
 services:
-  bot:
+  lab:
     volumes:
       - ./lab:/lab
 ```

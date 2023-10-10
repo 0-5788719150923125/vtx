@@ -10,14 +10,12 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 To provide a simple, opinionated framework for human cloning experiments.
 
-# API
-
-- ws://localhost:9666/ws
-
 # Interface
 
-- https://src.eco/
-- https://discord.gg/mp4WXHpNZr
+- [book](http://localhost:42000)
+- [src](http://localhost:9666)
+- [IPFS](http://localhost:9090)
+- [TensorBoard](http://localhost:6006)
 
 # Training data
 
@@ -25,20 +23,6 @@ To provide a simple, opinionated framework for human cloning experiments.
 - [https://fate.agency/](https://bafybeigz5tzb7kbxeeb6fd7bka5dk3lxuh4g5hujvszaad4xwyw2yjwhne.ipfs.nftstorage.link/)
 - [https://research.gq/](https://research.gq/#/page/getting%20started)
 - [The Pile](https://bafybeiftud3ppm5n5uudtirm4cf5zgonn44no2qg57isduo5gjeaqvvt2u.ipfs.nftstorage.link/)
-
-# Dashboard
-
-- [book](http://localhost:42000)
-- [src](http://localhost:9666)
-- [IPFS gateway](http://localhost:9090)
-- [TensorBoard](http://localhost:6006)
-
-# Mirrors
-
-- https://chatbook.dev/
-- https://chatbook.org/
-- http://Alpha8.888/?focus=backbone.lumbar.6/
-- http://Omega8.888.ipns.localhost:8080/?focus=backbone.lumbar.5/
 
 # Instructions
 

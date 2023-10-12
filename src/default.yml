@@ -83,7 +83,7 @@ root:
   model: EleutherAI/pythia-1b-deduped
   training:
     peft:
-      type: "lora"
+      type: "ia3"
 
 # A very small model, which can be run on < 4GB of VRAM.
 toe:

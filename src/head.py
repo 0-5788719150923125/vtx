@@ -54,6 +54,7 @@ def validation(config):
         "focus": {"type": "dict"},
         "truncate_length": {"type": "integer"},
         "reload_interval": {"type": "integer"},
+        "adapters": {"type": "list"},
         "training": {
             "type": "dict",
             "schema": {
@@ -71,9 +72,10 @@ def validation(config):
                 "peft": {
                     "type": "dict",
                     "schema": {
+                        "name": {"type": "string"},
                         "type": {
                             "type": "string",
-                            "allowed": ["adalora", "lora", "prefix", "prompt"],
+                            "allowed": ["adalora", "ia3", "lora", "prefix", "prompt"],
                         },
                         "r": {"type": "integer"},
                         "alpha": {"type": "integer"},
@@ -83,6 +85,8 @@ def validation(config):
                             "allowed": ["none", "lora_only", "all"],
                         },
                         "target_modules": {"type": "list"},
+                        "feedforward_modules": {"type": "list"},
+                        "init_ia3_weights": {"type": "boolean"},
                         "rank_pattern": {"type": "dict"},
                         "alpha_pattern": {"type": "dict"},
                         "num_virtual_tokens": {"type": "integer"},
@@ -224,7 +228,8 @@ class cortex:
                 model_folder = None
                 t = self.config["training"]["peft"]["type"]
                 if t in ["adalora", "lora"]:
-                    adapter = "/data/adapters/" + focus
+                    adapter_name = self.config.get("adapters", ["main"])[0]
+                    adapter = "/data/adapters/" + focus + "/" + adapter_name
                 elif t == "prompt":
                     tuning_mode = "ptune"
                 elif t == "prefix":
@@ -419,7 +424,7 @@ class cortex:
                 temp_history = deepcopy(history)
                 # Sometimes, the input prompt is not the same as what is in text, because
                 # tokenizers are weird. So, we leave a small buffer when removing the prompt here.
-                while len(temp_history) > 4:
+                while len(temp_history) > 5:
                     generation = generation[1:]
                     temp_history = temp_history[1:]
                 while generation.endswith(wall):
@@ -658,8 +663,11 @@ class cortex:
                 completion = completion[1:]
                 prompt = prompt[1:]
 
+            while completion.startswith(" "):
+                completion = completion.lstrip(" ")
+
             while completion.startswith("\n"):
-                completion = completion.lstrip("\n")
+                completion = completion.lstrip("\n\r")
 
             if completion.endswith("Q"):
                 completion = completion.rstrip("Q")

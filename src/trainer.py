@@ -13,6 +13,7 @@ else:
 
 from peft import (
     AdaLoraConfig,
+    IA3Config,
     LoraConfig,
     PeftConfig,
     PeftModel,
@@ -34,7 +35,8 @@ def create_dataset(
     path="/lab",
     tokenizer=None,
     block_size: int = 1024,
-    stride: int = 16,
+    stride: int = 0,
+    samples: float = 1.0,
     line_by_line=False,
     shuffle=False,
 ):
@@ -85,6 +87,8 @@ def create_dataset(
     files = list_full_paths(path)
     if shuffle:
         random.shuffle(files)
+
+    files = [item for item in files if random.random() <= samples]
 
     intermediate_path = "/tmp/intermediate.txt"
 
@@ -208,8 +212,8 @@ if __name__ == "__main__":
     peft_config = None
     use_petals = model_config.get("petals", False)
     if "peft" in model_config["training"]:
-        output_dir = "/data/adapters/" + focus
         p = model_config["training"].get("peft")
+        output_dir = "/data/adapters/" + focus + "/" + p.get("name", "main")
         if resume == True:
             if model_config.get("petals", False):
                 if p["type"] == "prefix":
@@ -238,6 +242,12 @@ if __name__ == "__main__":
                     rank_pattern=p.get("rank_pattern", {}),
                     alpha_pattern=p.get("alpha_pattern", {}),
                     modules_to_save=p.get("modules_to_save", None),
+                )
+            elif p["type"] == "ia3":
+                peft_config = IA3Config(
+                    task_type="CAUSAL_LM",
+                    target_modules=p.get("target_modules", None),
+                    feedforward_modules=p.get("feedforward_modules", None),
                 )
             elif p["type"] == "prompt":
                 if use_petals:
@@ -369,11 +379,20 @@ if __name__ == "__main__":
                         shuffle = False
                         if duplicate > 0:
                             shuffle = True
+                        samples = 1.0
+                        if config["collections"][collection][dataset] is not None:
+                            stride = config["collections"][collection][dataset].get(
+                                "stride", stride
+                            )
+                            samples = config["collections"][collection][dataset].get(
+                                "samples", samples
+                            )
                         ds = create_dataset(
                             path="/" + dataset,
                             tokenizer=ai.tokenizer,
                             block_size=block_size,
                             stride=stride,
+                            samples=samples,
                             line_by_line=line_by_line,
                             shuffle=shuffle,
                         )

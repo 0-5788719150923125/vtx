@@ -1,25 +1,20 @@
-.env
-!examples/bot/.env
 __pycache__
+.env
+!examples/lab/.env
 data/*
-node_modules
 src/config.yml
-src/models/*
-src/adapters/*
-src/embeddings/*
-src/*.html
-src/*.xml
-lab/*
-lab/logseq/*
-lab/config.yml
-!lab/logseq/config.edn
-!lab/pages
-!lab/journals
-!lab/library
-lab/library/original
-lab/library/train
+# lab/*
+# lab/logseq/*
+# !lab/logseq/config.edn
+# !lab/pages
+# !lab/journals
+# !lab/library
+# lab/library/original
+# lab/library/train
 book/content/**/
 book/static/tests
 book/resources
 book/public
+book/static/tests
 !.keep
+!.gitignore

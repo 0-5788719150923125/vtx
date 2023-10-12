@@ -74,6 +74,24 @@
         }
       },
       {
+        "label": "prepare",
+        "detail": "Prepare your datasets.",
+        "type": "shell",
+        "command": "docker compose run lab python3 /lab/${input:lab}/prepare.py",
+        "runOptions": {
+          "instanceLimit": 3
+        },
+      },
+      {
+        "label": "fetch",
+        "detail": "Download your datasets.",
+        "type": "shell",
+        "command": "docker compose run lab python3 /lab/${input:lab}/fetch.py",
+        "runOptions": {
+          "instanceLimit": 3
+        },
+      },
+      {
         "label": "add",
         "detail": "Add the book/ directory to IPFS.",
         "type": "shell",
@@ -110,6 +128,11 @@
         "id": "env",
         "description": "Which model should I train?",
         "options": ["source", "mind", "heart", "soul", "root", "toe"]
+      },
+      {
+        "type": "promptString",
+        "id": "lab",
+        "description": "Which lab directory will you interact with?",
       },
       {
         "type": "pickString",

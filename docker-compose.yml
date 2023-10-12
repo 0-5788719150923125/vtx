@@ -26,7 +26,6 @@ services:
       - ./data:/data
       - ./lab/aigen:/src/lab/aigen
       - ./book:/book
-      - /data/documents/Library of Light and Shadow:/lab/library/original
     env_file:
       - .env
     environment:

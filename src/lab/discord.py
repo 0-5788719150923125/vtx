@@ -415,10 +415,10 @@ def transformer(bias, text):
 
 # Log private messages
 def log_private_message(user_id, message):
-    if not os.path.exists("/lab/discord/live"):
-        os.makedirs("/lab/discord/live")
+    if not os.path.exists("/lab/discord/private"):
+        os.makedirs("/lab/discord/private")
 
-    with open("/lab/discord/live/" + user_id + ".txt", "a") as txt_file:
+    with open("/lab/discord/private/" + user_id + ".txt", "a") as txt_file:
         sanitized = re.sub(
             r"http\S+",
             f"((({str(get_identity())})))",
@@ -430,7 +430,7 @@ def log_private_message(user_id, message):
 # Replace a private message
 def replace_private_message(user_id, message_id, message):
     # Open the input and output files
-    user_log = "/lab/discord/live/" + user_id
+    user_log = "/lab/discord/private/" + user_id
     # Open the input and temporary files
     try:
         with open(user_log + ".txt", "r") as input_file, open(

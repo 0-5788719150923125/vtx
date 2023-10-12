@@ -37,3 +37,4 @@ torchvision>=0.15.2
 datasets>=2.14.5
 jsonlines>=4.0.0
 faiss-cpu>=1.7.4
+pypdf>=3.16.4

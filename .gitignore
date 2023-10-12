@@ -15,6 +15,9 @@ lab/config.yml
 !lab/logseq/config.edn
 !lab/pages
 !lab/journals
+!lab/library
+lab/library/original
+lab/library/train
 book/content/**/
 book/static/tests
 book/resources

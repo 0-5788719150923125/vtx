@@ -149,6 +149,8 @@ async def manage_submissions(reddit, config):
             for name in subreddits:
                 sub = subreddits.get(name)
                 allowed = False
+                if sub is None:
+                    continue
                 if "tags" in sub:
                     target = sub["tags"][0]
                     if target in my_tags:

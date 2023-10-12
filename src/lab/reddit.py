@@ -60,6 +60,7 @@ def validation(config):
             "keysrules": {"type": "string"},
             "valuesrules": {
                 "type": "dict",
+                "nullable": True,
                 "schema": {
                     "limit": {"type": "integer"},
                     "frequency": {"type": "float"},
@@ -316,6 +317,8 @@ async def subscribe_submissions(reddit, config):
         active = []
         subs = config["reddit"]["subs"]
         for sub in subs:
+            if subs[sub] is None:
+                continue
             if "frequency" in subs[sub]:
                 if subs[sub].get("frequency", 0) <= 0:
                     continue
@@ -407,6 +410,7 @@ async def subscribe_submissions(reddit, config):
 
     except Exception as e:
         logging.error(e)
+        print(traceback.format_exc())
 
     asyncio.create_task(subscribe_submissions(reddit, config))
 
@@ -415,9 +419,12 @@ async def subscribe_submissions(reddit, config):
 async def subscribe_comments(reddit, config):
     try:
         active = []
-        for sub in config["reddit"]["subs"]:
-            if "frequency" in config["reddit"]["subs"][sub]:
-                if config["reddit"]["subs"][sub].get("frequency", 0) <= 0:
+        subs = config["reddit"]["subs"]
+        for sub in subs:
+            if subs[sub] is None:
+                continue
+            if "frequency" in subs[sub]:
+                if subs[sub].get("frequency", 0) <= 0:
                     continue
                 active.append(sub)
 
@@ -480,6 +487,7 @@ async def subscribe_comments(reddit, config):
 
     except Exception as e:
         logging.error(e)
+        print(traceback.format_exc())
 
     asyncio.create_task(subscribe_comments(reddit, config))
 

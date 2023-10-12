@@ -10,9 +10,8 @@ def compile_book():
 
 
 def deploy_book():
-    cloudflare_account_id = "a85a0cf89a8db6a8286fb4cba43558c2"
     project_name = "pen"
-    command = f"WRANGLER_SEND_METRICS=true CLOUDFLARE_ACCOUNT_ID={cloudflare_account_id} wrangler pages deploy --project-name {project_name} --directory /book/public"
+    command = f"WRANGLER_SEND_METRICS=true wrangler pages deploy --project-name {project_name} --directory /book/public"
     os.system(command)
 
 
@@ -21,7 +20,7 @@ def convert_video_to_ascii():
     os.system(command)
 
 
-def upload_via_scp():
+def upload_model_via_scp():
     command = f"scp -i /home/crow/Documents/creds/Oracle/one.key -r ./src/adapters/mind opc@129.159.66.224:/home/opc/vtx/src/adapters/mind"
     os.system(command)
 

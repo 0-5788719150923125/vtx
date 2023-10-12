@@ -139,10 +139,11 @@
         "id": "i",
         "description": "Which task should I execute?",
         "options": [
-          "i.crawl()",
           "i.compile_book()",
           "i.deploy_book()",
-          "i.convert_video_to_ascii()"
+          "i.convert_video_to_ascii()",
+          "i.upload_model_via_scp()",
+          "i.crawl()",
         ]
       },
       {

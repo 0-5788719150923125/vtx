@@ -167,6 +167,8 @@ def create_dataset(
 
 
 if __name__ == "__main__":
+    p = model_config["training"]
+    train_type = p.get("type", "standard")
     base_model = model_config["model"]
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
@@ -174,8 +176,8 @@ if __name__ == "__main__":
 
     launch_model = None
     fresh_logs = False
-    resume = model_config["training"].get("resume", False)
-    if model_config["training"].get("regen", False):
+    resume = p.get("resume", False)
+    if p.get("regen", False):
         if os.path.exists("/data/datasets/" + focus):
             shutil.rmtree("/data/datasets/" + focus)
 
@@ -200,75 +202,63 @@ if __name__ == "__main__":
         if os.path.exists("/data/logs/" + focus):
             shutil.rmtree("/data/logs/" + focus)
 
-    output_dir = "/data/models/" + focus
-
-    pre_seq_len = 0
-    if "peft" in model_config["training"]:
-        p = model_config["training"].get("peft")
-        if p["type"] == "prefix":
-            pre_seq_len = p.get("num_virtual_tokens")
-
     tuning_mode = None
     peft_config = None
+    pre_seq_len = 0
     use_petals = model_config.get("petals", False)
-    if "peft" in model_config["training"]:
-        p = model_config["training"].get("peft")
-        output_dir = "/data/adapters/" + focus + "/" + p.get("name", "base")
-        if resume == True:
-            if model_config.get("petals", False):
-                if p["type"] == "prefix":
-                    output_dir = "/data/embeddings/" + focus
+    output_dir = "/data/adapters/" + focus + "/" + p.get("name", "base")
+    if train_type == "lora":
+        peft_config = LoraConfig(
+            task_type="CAUSAL_LM",
+            r=p.get("r", 4),
+            lora_alpha=p.get("alpha", 16),
+            lora_dropout=p.get("dropout", 0.1),
+            bias=p.get("bias", "none"),
+            target_modules=p.get("target_modules", None),
+            rank_pattern=p.get("rank_pattern", {}),
+            alpha_pattern=p.get("alpha_pattern", {}),
+            modules_to_save=p.get("modules_to_save", None),
+        )
+    elif train_type == "adalora":
+        peft_config = LoraConfig(
+            task_type="CAUSAL_LM",
+            r=p.get("r", 4),
+            lora_alpha=p.get("alpha", 16),
+            lora_dropout=p.get("dropout", 0.1),
+            bias=p.get("bias", "none"),
+            target_modules=p.get("target_modules", None),
+            rank_pattern=p.get("rank_pattern", {}),
+            alpha_pattern=p.get("alpha_pattern", {}),
+            modules_to_save=p.get("modules_to_save", None),
+        )
+    elif train_type == "ia3":
+        peft_config = IA3Config(
+            task_type="CAUSAL_LM",
+            target_modules=p.get("target_modules", None),
+            feedforward_modules=p.get("feedforward_modules", None),
+        )
+    elif train_type == "prompt":
+        if use_petals:
+            tuning_mode = "ptune"
+            pre_seq_len = p.get("num_virtual_tokens")
+            output_dir = "/data/embeddings/" + focus
         else:
-            if p["type"] == "lora":
-                peft_config = LoraConfig(
-                    task_type="CAUSAL_LM",
-                    r=p.get("r", 4),
-                    lora_alpha=p.get("alpha", 16),
-                    lora_dropout=p.get("dropout", 0.1),
-                    bias=p.get("bias", "none"),
-                    target_modules=p.get("target_modules", None),
-                    rank_pattern=p.get("rank_pattern", {}),
-                    alpha_pattern=p.get("alpha_pattern", {}),
-                    modules_to_save=p.get("modules_to_save", None),
-                )
-            elif p["type"] == "adalora":
-                peft_config = LoraConfig(
-                    task_type="CAUSAL_LM",
-                    r=p.get("r", 4),
-                    lora_alpha=p.get("alpha", 16),
-                    lora_dropout=p.get("dropout", 0.1),
-                    bias=p.get("bias", "none"),
-                    target_modules=p.get("target_modules", None),
-                    rank_pattern=p.get("rank_pattern", {}),
-                    alpha_pattern=p.get("alpha_pattern", {}),
-                    modules_to_save=p.get("modules_to_save", None),
-                )
-            elif p["type"] == "ia3":
-                peft_config = IA3Config(
-                    task_type="CAUSAL_LM",
-                    target_modules=p.get("target_modules", None),
-                    feedforward_modules=p.get("feedforward_modules", None),
-                )
-            elif p["type"] == "prompt":
-                if use_petals:
-                    tuning_mode = "ptune"
-                    pre_seq_len = p.get("num_virtual_tokens")
-                    output_dir = "/data/embeddings/" + focus
-                else:
-                    peft_config = PromptTuningConfig(
-                        task_type="CAUSAL_LM",
-                        num_virtual_tokens=p.get("num_virtual_tokens", 24),
-                    )
-            elif p["type"] == "prefix":
-                if use_petals:
-                    tuning_mode = "deep_ptune"
-                    pre_seq_len = p.get("num_virtual_tokens")
-                    output_dir = "/data/embeddings/" + focus
-                else:
-                    peft_config = PrefixTuningConfig(
-                        task_type="CAUSAL_LM",
-                        num_virtual_tokens=p.get("num_virtual_tokens", 24),
-                    )
+            peft_config = PromptTuningConfig(
+                task_type="CAUSAL_LM",
+                num_virtual_tokens=p.get("num_virtual_tokens", 24),
+            )
+    elif train_type == "prefix":
+        if use_petals:
+            tuning_mode = "deep_ptune"
+            pre_seq_len = p.get("num_virtual_tokens")
+            output_dir = "/data/embeddings/" + focus
+        else:
+            peft_config = PrefixTuningConfig(
+                task_type="CAUSAL_LM",
+                num_virtual_tokens=p.get("num_virtual_tokens", 24),
+            )
+    else:
+        output_dir = "/data/models/" + focus
 
     # Instantiate the model object
     ai = aigen(
@@ -280,16 +270,14 @@ if __name__ == "__main__":
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
         precision=model_config.get("precision", None),
-        gradient_checkpointing=model_config["training"].get(
-            "gradient_checkpointing", True
-        ),
+        gradient_checkpointing=p.get("gradient_checkpointing", True),
     )
 
     ai.tokenizer = AutoTokenizer.from_pretrained(
         launch_model,
         cache_dir="/data/models",
         padding=False,
-        padding_side=model_config["training"].get("padding_side", "left"),
+        padding_side=p.get("padding_side", "left"),
         truncation=True,
     )
 
@@ -422,7 +410,7 @@ if __name__ == "__main__":
             return collected[0]
 
     get_trainable = False
-    if "peft" in model_config["training"]:
+    if train_type != "standard":
         if not use_petals:
             get_trainable = True
             if resume == True:
@@ -439,42 +427,40 @@ if __name__ == "__main__":
     elif os.path.exists("/data/models/" + focus) == False:
         os.makedirs("/data/models/" + focus)
 
-    for n, p in ai.model.named_parameters():
-        if "lora" in n.lower():
-            p.requires_grad = True
+    for name, param in ai.model.named_parameters():
+        if "lora" in name.lower():
+            param.requires_grad = True
 
     logger = loggers.TensorBoardLogger(
         "/data/logs", name=focus, default_hp_metric=False
     )
 
     # Train the model
-    c = model_config["training"]
-    inputs = build_inputs(c)
     ai.train(
-        train_data=inputs,
+        train_data=build_inputs(p),
         n_gpu=1,
         petals=use_petals,
+        hivemind=p.get("hivemind", False),
         use_deepspeed=False,
         seed=nist_beacon()[1],
         output_dir=output_dir,
         loggers=[logger],
         progress_bar_refresh_rate=1,
-        batch_size=c.get("batch_size", 1),
-        num_steps=c.get("num_steps", 33333),
-        generate_every=c.get("generate_every", 500),
-        save_every=c.get("save_every", 1000),
-        optimizer=c.get("optimizer", "AdamW"),
-        learning_rate=float(c.get("learning_rate", 0.005)),
-        swa_lr=c.get("swa_lr", None),
-        weight_decay=float(c.get("weight_decay", 0.01)),
-        warmup_steps=c.get("warmup_steps", 0),
-        gradient_clip_val=c.get("gradient_clip_val", 0.5),
-        update_period=c.get("update_period", 10),
-        gradient_accumulation_steps=c.get("gradient_accumulation_steps", 1),
-        train_transformers_only=c.get("train_transformers_only", False),
-        num_layers_freeze=c.get("num_layers_freeze", 0),
-        scheduler=c.get("scheduler", "get_linear_schedule_with_warmup"),
-        prune=c.get("prune", 0.0),
-        hivemind=model_config["training"].get("hivemind", False),
-        target_batch_size=c.get("target_batch_size", 8192),
+        batch_size=p.get("batch_size", 1),
+        num_steps=p.get("num_steps", 33333),
+        generate_every=p.get("generate_every", 500),
+        save_every=p.get("save_every", 1000),
+        optimizer=p.get("optimizer", "AdamW"),
+        learning_rate=float(p.get("learning_rate", 0.005)),
+        swa_lr=p.get("swa_lr", None),
+        weight_decay=float(p.get("weight_decay", 0.01)),
+        warmup_steps=p.get("warmup_steps", 0),
+        gradient_clip_val=p.get("gradient_clip_val", 0.5),
+        update_period=p.get("update_period", 10),
+        gradient_accumulation_steps=p.get("gradient_accumulation_steps", 1),
+        train_transformers_only=p.get("train_transformers_only", False),
+        num_layers_freeze=p.get("num_layers_freeze", 0),
+        scheduler=p.get("scheduler", "get_linear_schedule_with_warmup"),
+        prune=p.get("prune", 0.0),
+        target_batch_size=p.get("target_batch_size", 8192),
     )

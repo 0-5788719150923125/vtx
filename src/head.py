@@ -69,29 +69,31 @@ def validation(config):
                     "type": "string",
                     "allowed": ["left", "right"],
                 },
-                "peft": {
-                    "type": "dict",
-                    "schema": {
-                        "name": {"type": "string"},
-                        "type": {
-                            "type": "string",
-                            "allowed": ["adalora", "ia3", "lora", "prefix", "prompt"],
-                        },
-                        "r": {"type": "integer"},
-                        "alpha": {"type": "integer"},
-                        "dropout": {"type": "float"},
-                        "bias": {
-                            "type": "string",
-                            "allowed": ["none", "lora_only", "all"],
-                        },
-                        "target_modules": {"type": "list"},
-                        "feedforward_modules": {"type": "list"},
-                        "init_ia3_weights": {"type": "boolean"},
-                        "rank_pattern": {"type": "dict"},
-                        "alpha_pattern": {"type": "dict"},
-                        "num_virtual_tokens": {"type": "integer"},
-                    },
+                "name": {"type": "string"},
+                "type": {
+                    "type": "string",
+                    "allowed": [
+                        "adalora",
+                        "ia3",
+                        "lora",
+                        "prefix",
+                        "prompt",
+                        "standard",
+                    ],
                 },
+                "r": {"type": "integer"},
+                "alpha": {"type": "integer"},
+                "dropout": {"type": "float"},
+                "bias": {
+                    "type": "string",
+                    "allowed": ["none", "lora_only", "all"],
+                },
+                "target_modules": {"type": "list"},
+                "feedforward_modules": {"type": "list"},
+                "init_ia3_weights": {"type": "boolean"},
+                "rank_pattern": {"type": "dict"},
+                "alpha_pattern": {"type": "dict"},
+                "num_virtual_tokens": {"type": "integer"},
                 "optimizer": {
                     "type": "string",
                     "allowed": ["AdamW", "Lion", "SophiaH"],
@@ -224,18 +226,19 @@ class cortex:
         tuning_mode = None
         if "training" in self.config:
             model_folder = "/data/models/" + focus
-            if "peft" in self.config["training"]:
+            t = self.config["training"].get("type", "standard")
+            if t in ["adalora", "lora"]:
                 model_folder = None
-                t = self.config["training"]["peft"]["type"]
-                if t in ["adalora", "lora"]:
-                    adapters = [
-                        f"/data/adapters/{focus}/{name}"
-                        for name in self.config.get("adapters", ["base"])
-                    ]
-                elif t == "prompt":
-                    tuning_mode = "ptune"
-                elif t == "prefix":
-                    tuning_mode == "deep_ptune"
+                adapters = [
+                    f"/data/adapters/{focus}/{name}"
+                    for name in self.config.get("adapters", ["base"])
+                ]
+            elif t == "prompt":
+                model_folder = None
+                tuning_mode = "ptune"
+            elif t == "prefix":
+                model_folder = None
+                tuning_mode == "deep_ptune"
 
         try:
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + focus)

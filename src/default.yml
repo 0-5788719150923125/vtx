@@ -36,8 +36,7 @@ mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
   training:
-    peft:
-      type: "lora"
+    type: "lora"
 
 # A recurrent neural network, and a labor of love by its community.
 heart:
@@ -45,8 +44,7 @@ heart:
   model: RWKV/rwkv-4-430m-pile
   training:
     gradient_checkpointing: False
-    peft:
-      type: "lora"
+    type: "lora"
 
 # The product of a large research community, who is attempting to decentralize 
 # deep learning.
@@ -61,9 +59,8 @@ soul:
     save_every: 100
     padding_side: left
     model_max_length: 256
-    peft:
-      type: "prefix"
-      num_virtual_tokens: 128
+    type: "prefix"
+    num_virtual_tokens: 128
     learning_rate: 0.001
     block_size: 256
     num_steps: 33333
@@ -82,16 +79,14 @@ root:
   info: producing crotalus since 1999 
   model: EleutherAI/pythia-1b-deduped
   training:
-    peft:
-      type: "ia3"
+    type: "standard"
 
 # A very small model, which can be run on < 4GB of VRAM.
 toe:
   info: nailed to the foot
   model: EleutherAI/gpt-neo-125M
   training:
-    peft:
-      type: "lora"
+    type: "lora"
 
 collections:
   default:

@@ -260,11 +260,11 @@ mind:
   training:
     hivemind: True
 ```
-If the "peft" key exists, the model will be trained with Parameter Efficient Fine-Tuning (PEFT):
+To train the model with a standard loop:
 ```yml
 mind:
   training:
-    peft:
+    type: standard
 ```
 Currently, we support three types of PEFT (Low Rank Adaptation, Prefix-Tuning, and Prompt-Tuning).
 
@@ -272,8 +272,7 @@ Low Rank Adaptation (LoRA) is enabled with this key:
 ```yml
 mind:
   training:
-    peft:
-      type: lora
+    type: lora
 ```
 For Prefix or Prompt Tuning, replace "lora" with "prefix" or "prompt", respectively.
 
@@ -281,25 +280,22 @@ To set the size of your LoRA weight matrices:
 ```yml
 mind:
   training:
-    peft:
-      type: lora
-      r: 4
+    type: lora
+    r: 4
 ```
 To set the level of "pull" that LoRA layers have on the overall model:
 ```yml
 mind:
   training:
-    peft:
-      type: lora
-      alpha: 16
+    type: lora
+    alpha: 16
 ```
 To disable a percentage of random LoRA neurons during each training step:
 ```yml
 mind:
   training:
-    peft:
-      type: lora
-      dropout: 0.01
+    type: lora
+    dropout: 0.01
 ```
 In this example, 10% of neurons are being disabled every step.
 
@@ -307,22 +303,20 @@ To also train biases, set "bias" to "all" or "lora_only". Else, set to "none", t
 ```yml
 mind:
   training:
-    peft:
-      type: lora
-      bias: all
+    type: lora
+    bias: all
 ```
 To override default LoRA layers with model-specific layers, one must inspect the foundation model, and list the desired layers in "target_modules":
 ```yml
 mind:
   training:
-    peft:
-      type: lora
-      target_modules:
-        - k_proj
-        - v_proj
-        - q_proj
-        - out_proj
-        - etc...
+    type: lora
+    target_modules:
+      - k_proj
+      - v_proj
+      - q_proj
+      - out_proj
+      - etc...
 ```
 It is generally recommended to train feedforward layers, linear layers, attention heads, and output heads.
 
@@ -330,16 +324,14 @@ In addition to LoRA, Prefix-Tuning and Prompt-Tuning are supported:
 ```yml
 mind:
   training:
-    peft:
-      type: prompt
+    type: prompt
 ```
 To specify the number of prefix tokens to use (increasing the size of your model):
 ```yml
 mind:
   training:
-    peft:
-      type: prefix
-      num_virtual_tokens: 24
+    type: prefix
+    num_virtual_tokens: 24
 ```
 To set the learning rate, define the "learning_rate" key:
 ```yml

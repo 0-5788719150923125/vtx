@@ -1,3 +1,17 @@
+# ------ Local Agents -------- #
+
+# import torch
+# from transformers import AutoModelForCausalLM, AutoTokenizer, LocalAgent
+
+# checkpoint = "bigcode/starcoder"
+# model = AutoModelForCausalLM.from_pretrained(
+#     checkpoint, device_map="auto", torch_dtype=torch.bfloat16
+# )
+# tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+
+# agent = LocalAgent(model, tokenizer)
+# agent.run("Draw me a picture of rivers and lakes.")
+
 # ------ Retrieval Augmented Generation -------#
 
 # from transformers import RagRetriever, RagTokenForGeneration, RagTokenizer

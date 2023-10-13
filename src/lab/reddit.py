@@ -412,7 +412,6 @@ async def subscribe_submissions(reddit, config):
 
     except Exception as e:
         logging.error(e)
-        print(traceback.format_exc())
 
     asyncio.create_task(subscribe_submissions(reddit, config))
 
@@ -489,7 +488,6 @@ async def subscribe_comments(reddit, config):
 
     except Exception as e:
         logging.error(e)
-        print(traceback.format_exc())
 
     asyncio.create_task(subscribe_comments(reddit, config))
 

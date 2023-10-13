@@ -213,7 +213,7 @@ if __name__ == "__main__":
     use_petals = model_config.get("petals", False)
     if "peft" in model_config["training"]:
         p = model_config["training"].get("peft")
-        output_dir = "/data/adapters/" + focus + "/" + p.get("name", "main")
+        output_dir = "/data/adapters/" + focus + "/" + p.get("name", "base")
         if resume == True:
             if model_config.get("petals", False):
                 if p["type"] == "prefix":

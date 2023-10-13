@@ -220,7 +220,7 @@ class cortex:
             logging.error(e)
 
         model_folder = None
-        adapter = None
+        adapters = None
         tuning_mode = None
         if "training" in self.config:
             model_folder = "/data/models/" + focus
@@ -228,8 +228,10 @@ class cortex:
                 model_folder = None
                 t = self.config["training"]["peft"]["type"]
                 if t in ["adalora", "lora"]:
-                    adapter_name = self.config.get("adapters", ["main"])[0]
-                    adapter = "/data/adapters/" + focus + "/" + adapter_name
+                    adapters = [
+                        f"/data/adapters/{focus}/{name}"
+                        for name in self.config.get("adapters", ["base"])
+                    ]
                 elif t == "prompt":
                     tuning_mode = "ptune"
                 elif t == "prefix":
@@ -244,7 +246,7 @@ class cortex:
                 cache_dir="/data/models",
                 tuning_mode=tuning_mode,
                 embeddings_dir="/data/embeddings/" + focus,
-                adapter=adapter,
+                adapters=adapters,
                 precision=self.config.get("precision", None),
             )
 

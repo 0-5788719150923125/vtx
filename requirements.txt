@@ -39,3 +39,4 @@ jsonlines>=4.0.0
 faiss-cpu>=1.7.4
 pypdf>=3.16.4
 GitPython>=3.1.37
+nltk>=3.8.1

@@ -6,25 +6,47 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 "Go play in the lab."
 
-# Goals
+# goals
 
 To provide a simple, opinionated framework for human cloning experiments.
 
-# Interface
+# console
+```
+Swarm state: healthy
+
+...2vYiga, 256.0 RPS  |                                 ########                             |
+...vMfXzi, 3688.5 RPS |#########################                                             |
+...i9CA9T, 2776.2 RPS |                              ###############                         |
+...33Pgb9, 2108.6 RPS |###############                                                       |
+...Ap3RUq, 256.0 RPS  |                                     ########                         |
+...7mhsNH, 256.0 RPS  |                         ########                                     |
+...iRUz6M, 2767.3 RPS |               ###############                                        |
+...zbDrjo, 3500.3 RPS |                                             #########################|
+
+
+Legend:
+
+# - online
+J - joining     (loading blocks)
+? - unreachable (port forwarding/NAT/firewall issues, see below)
+_ - offline     (just disconnected)
+```
+
+# interface
 
 - [book](http://localhost:42000)
 - [src](http://localhost:9666)
 - [IPFS](http://localhost:9090)
 - [TensorBoard](http://localhost:6006)
 
-# Training data
+# data
 
 - https://ink.university/
 - [https://fate.agency/](https://bafybeigz5tzb7kbxeeb6fd7bka5dk3lxuh4g5hujvszaad4xwyw2yjwhne.ipfs.nftstorage.link/)
 - [https://research.gq/](https://research.gq/#/page/getting%20started)
 - [The Pile](https://bafybeiftud3ppm5n5uudtirm4cf5zgonn44no2qg57isduo5gjeaqvvt2u.ipfs.nftstorage.link/)
 
-# Instructions
+# instructions
 
 - Clone this repo.
 - Install Docker.

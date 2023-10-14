@@ -439,6 +439,7 @@ if __name__ == "__main__":
     ai.train(
         train_data=build_inputs(p),
         n_gpu=1,
+        benchmark=False,
         petals=use_petals,
         hivemind=p.get("hivemind", False),
         use_deepspeed=False,

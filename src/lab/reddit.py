@@ -337,7 +337,7 @@ async def subscribe_submissions(reddit, config):
                 try:
                     tags = subs[submission.subreddit.display_name].get("tags")
                     global my_tags
-                    if my_tags:
+                    if my_tags is not None:
                         tags = my_tags + tags
                     post_event(
                         "new_reddit_submission",

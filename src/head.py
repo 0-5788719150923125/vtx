@@ -229,10 +229,7 @@ class cortex:
             t = self.config["training"].get("type", "standard")
             if t in ["adalora", "lora"]:
                 model_folder = None
-                adapters = [
-                    f"/data/adapters/{focus}/{name}"
-                    for name in self.config.get("adapters", ["base"])
-                ]
+                adapters = self.config.get("adapters", ["base"])
             elif t == "prompt":
                 model_folder = None
                 tuning_mode = "ptune"
@@ -249,6 +246,7 @@ class cortex:
                 cache_dir="/data/models",
                 tuning_mode=tuning_mode,
                 embeddings_dir="/data/embeddings/" + focus,
+                adapter_dir="/data/adapters/" + focus,
                 adapters=adapters,
                 precision=self.config.get("precision", None),
             )

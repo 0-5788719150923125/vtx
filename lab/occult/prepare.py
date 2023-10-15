@@ -9,9 +9,9 @@ from pypdf import PdfReader
 from common import list_full_paths
 
 # The Library: https://bafybeihwrs43mak3fn23cr5fw3vvnwi5mpyykenjgt4cinytdznnvmyjti.ipfs.nftstorage.link/
-original_root = "/lab/library/original"
+original_root = "/lab/occult/original"
 original_paths = list_full_paths(original_root)
-new_root = "/lab/library/train"
+new_root = "/lab/occult/train"
 
 if os.path.exists(new_root):
     shutil.rmtree(new_root)

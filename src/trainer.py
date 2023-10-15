@@ -206,7 +206,8 @@ if __name__ == "__main__":
     peft_config = None
     pre_seq_len = 0
     use_petals = model_config.get("petals", False)
-    output_dir = "/data/adapters/" + focus + "/" + p.get("name", "base")
+    adapter = p.get("name", "base")
+    output_dir = "/data/adapters/" + focus + "/" + adapter
     if train_type == "lora":
         peft_config = LoraConfig(
             task_type="CAUSAL_LM",
@@ -424,15 +425,15 @@ if __name__ == "__main__":
     if get_trainable:
         ai.model.print_trainable_parameters()
 
-    elif os.path.exists("/data/models/" + focus) == False:
-        os.makedirs("/data/models/" + focus)
+    elif os.path.exists("/data/models/" + focus + "/" + adapter) == False:
+        os.makedirs("/data/models/" + focus + "/" + adapter)
 
     for name, param in ai.model.named_parameters():
         if "lora" in name.lower():
             param.requires_grad = True
 
     logger = loggers.TensorBoardLogger(
-        "/data/logs", name=focus, default_hp_metric=False
+        "/data/logs", name=focus + "/" + adapter, default_hp_metric=True
     )
 
     # Train the model

@@ -10,12 +10,12 @@ from cerberus import Validator
 
 import head
 from common import (
-  ad,
-  bc,
-  config,
-  deterministic_short_hash,
-  read_from_file,
-  write_to_file,
+    ad,
+    bc,
+    config,
+    deterministic_short_hash,
+    read_from_file,
+    write_to_file,
 )
 from events import post_event
 
@@ -96,7 +96,7 @@ class Ink:
         self.dir = ""
         self.file = ""
         self.tags = []
-        self.new_tokens = 111
+        self.new_tokens = 33
 
     def get_length(self, string):
         tokens = head.ctx.ai.tokenizer(string, return_tensors="pt")["input_ids"]
@@ -143,7 +143,6 @@ class Ink:
             self.staged = read_from_file(f)
         else:
             self.new_tokens = 333
-            self.created = True
         self.full_doc = self.staged
 
     def chunk_prompt(self):

@@ -9,6 +9,7 @@ services:
     tty: true
     stdin_open: true
     user: 1000:1000
+    # privileged: true
     build:
       context: .
       dockerfile: Dockerfile.${ARCH:-x64}
@@ -26,6 +27,7 @@ services:
       - ./data:/data
       - ./lab/aigen:/src/lab/aigen
       - ./book:/book
+      - /var/run/docker.sock:/var/run/docker.sock
     env_file:
       - .env
     environment:
@@ -36,3 +38,7 @@ services:
     image: ghcr.io/0-5788719150923125/ctx:latest
     restart: 'always'
     network_mode: host
+    env_file:
+      - .env
+    environment:
+      FOCUS: ${ANONYMOUS:-true}

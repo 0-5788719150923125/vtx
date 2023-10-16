@@ -103,9 +103,10 @@ def main():
                                         sanitized = sanitizer(result["content"])
                                         if len(result["mentions"]) > 0:
                                             for mention in result["mentions"]:
+                                                t = transform_author(mention)
                                                 sanitized = sanitized.replace(
                                                     "@" + mention["nickname"],
-                                                    "<@" + str(mention["id"]) + ">",
+                                                    "<@" + str(t) + ">",
                                                 )
                                         sanitized = transform_message(sanitized)
                                         content = (
@@ -124,9 +125,10 @@ def main():
                             sanitized = sanitizer(i["content"])
                             if len(i["mentions"]) > 0:
                                 for mention in i["mentions"]:
+                                    t = transform_author(mention)
                                     sanitized = sanitized.replace(
                                         "@" + mention["nickname"],
-                                        "<@" + str(mention["id"]) + ">",
+                                        "<@" + str(t) + ">",
                                     )
                             sanitized = transform_message(sanitized)
                             content = wall + author_id + ship + " " + sanitized
@@ -137,25 +139,29 @@ def main():
         except Exception as e:
             failures += 1
 
-        os.system("clear")
+        # os.system("clear")
         print("preparing Discord messages")
         print(f"{successes} successes, {failures} failures")
 
 
 # Replace unapproved bots with random IDs, so as not to bias the model toward poor outputs
 def transform_author(author):
-    if (
-        str(author["id"]) == "975174695399854150"
-        or str(author["id"]) == "315826602187554816"
-        or str(author["id"]) == "1053270121218592798"
-    ):  # Eliza, Kitsunetsuki, MAINNFRAME
+    if str(author["id"]) in [
+        "975174695399854150",
+        "315826602187554816",
+        "1053270121218592798",
+    ]:  # Eliza, Kitsunetsuki, MAINNFRAME
         return str(author["id"])
-    elif str(author["id"]) == "1055993037077106718":  # Samn
+    elif (
+        str(author["id"]) == "1055993037077106718"
+        or author["name"].startswith("Ghost-")
+        or author["name"].startswith("G-")
+        or author["nickname"].startswith("Ghost-")
+        or author["nickname"].startswith("G-")
+    ):  # Samn and Ghosts
         return str(get_identity())
-    elif "Ghost-" in author["name"]:
-        return str(get_identity())
-    else:
-        return False
+
+    return False
 
 
 # Replace third person messaging from bots, so as not to bias the model towards this format

@@ -206,6 +206,7 @@ if __name__ == "__main__":
     peft_config = None
     pre_seq_len = 0
     use_petals = model_config.get("petals", False)
+    use_hivemind = model_config.get("hivemind", False)
     adapter = p.get("name", "base")
     output_dir = "/data/adapters/" + focus + "/" + adapter
     if train_type == "lora":
@@ -442,12 +443,11 @@ if __name__ == "__main__":
         n_gpu=1,
         benchmark=False,
         petals=use_petals,
-        hivemind=p.get("hivemind", False),
+        hivemind=use_hivemind,
         use_deepspeed=False,
         seed=nist_beacon()[1],
         output_dir=output_dir,
         loggers=[logger],
-        progress_bar_refresh_rate=1,
         batch_size=p.get("batch_size", 1),
         num_steps=p.get("num_steps", 33333),
         generate_every=p.get("generate_every", 500),

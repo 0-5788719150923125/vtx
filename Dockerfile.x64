@@ -5,8 +5,17 @@ ENV TRANSFORMERS_CACHE="/tmp"
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+    ca-certificates \
     curl \
+    gnupg \
     && rm -rf /var/lib/apt/lists/*
+
+RUN install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    chmod a+r /etc/apt/keyrings/docker.gpg && \
+    echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu" \
+    $(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+    tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 ARG NODE_MAJOR_VERSION
 
@@ -15,6 +24,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR_VERSION.x | bash -
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
     clang \
+    containerd.io \
+    docker-ce \
+    docker-ce-cli \ 
+    docker-buildx-plugin \
+    docker-compose-plugin \
     git \
     libclang-dev \
     libopencv-dev \
@@ -94,6 +108,9 @@ RUN mkdir /.cache && \
     chmod -R 777 /nltk_data
 
 ENV FOCUS='toe'
+
+# RUN groupadd docker 
+# RUN usermod -aG docker root
 
 CMD ["nodemon", "--ext", "*.py, *.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]
 

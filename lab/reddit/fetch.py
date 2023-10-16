@@ -3,6 +3,7 @@ import random
 import re
 import shutil
 import sys
+from datetime import datetime
 
 sys.path.append("/src")
 
@@ -63,33 +64,46 @@ def main():
                 print("archived " + str(total) + " submissions")
 
                 with open(
-                    f"{root_dir}/train/{sub}/submissions/" + submission.id + ".txt", "a"
+                    f"{root_dir}/train/{sub}/submissions/" + submission.id + ".md", "a"
                 ) as file:
-                    file.write(f"## RECORD\n---\n```\n")
-                    file.write(f"submission.id: {submission.id}\n")
-                    file.write(f"submission.created: {submission.created_utc}\n")
-                    file.write(f"submission.title: {submission.title}\n")
-                    file.write(f"submission.subreddit: /r/{submission.subreddit}\n")
+                    file.write("```\n")
+                    if random.random() > 0.5:
+                        created = datetime.utcfromtimestamp(
+                            submission.created_utc
+                        ).strftime("%Y-%m-%d @ %H:%M")
+                    else:
+                        created = submission.created_utc
+
+                    s_variant = random.choice(["submission", "s"])
+                    props = [
+                        f"{s_variant}.id: {submission.id}\n",
+                        f"{s_variant}.created: {created}\n",
+                        f"{s_variant}.title: {submission.title}\n",
+                        f"{s_variant}.subreddit: /r/{submission.subreddit}\n",
+                        f"{s_variant}.score: {submission.score}\n",
+                        f"{s_variant}.permalink: https://reddit.com{submission.permalink}\n",
+                    ]
+
                     author = submission.author
-                    if author:
+                    if author is not None:
                         if author.name in config["reddit"]["replacers"]:
                             author = config["reddit"]["replacers"][author.name]
-                    file.write(f"submission.author: {author}\n")
-                    file.write(f"submission.score: {submission.score}\n")
-                    file.write(
-                        f"submission.permalink: https://reddit.com{submission.permalink}\n"
-                    )
+                        props.append(f"{s_variant}.author: {author}\n")
+
                     if submission.selftext != "":
-                        file.write("```\n\n## ECO\n---\n")
                         sanitized = re.sub(
                             r"http\S+",
                             "((url))",
                             submission.selftext.replace("\n", "\\n"),
                         )
-                        file.write(sanitized)
+                        props.append(f"{s_variant}.text: " + sanitized + "\n")
                     else:
-                        file.write("```\n\n## TRIGGER\n---\n")
-                        file.write(f"[((({get_identity()})))]({submission.url})")
+                        props.append(f"{s_variant}.image: {submission.url}" + "\n")
+
+                    random.shuffle(props)
+                    for prop in props:
+                        file.write(prop)
+                    file.write("```")
 
                 dump_replies(
                     replies=submission.comments,
@@ -103,36 +117,47 @@ def main():
                     continue
 
                 with open(
-                    f"{root_dir}/train/{sub}/comments/" + reply.id + ".txt",
+                    f"{root_dir}/train/{sub}/comments/" + reply.id + ".md",
                     "a",
                 ) as file:
                     context.append(reply)
 
-                    file.write(f"## RECORD\n---\n```\n")
-                    file.write(f"reply.id: {reply.id}\n")
-                    file.write(f"reply.created: {reply.created_utc}\n")
-                    file.write(f"reply.parent_id: {reply.parent_id}\n")
+                    if random.random() > 0.5:
+                        created = datetime.utcfromtimestamp(reply.created_utc).strftime(
+                            "%Y-%m-%d @ %H:%M"
+                        )
+                    else:
+                        created = submission.created_utc
+
+                    file.write("```\n")
+                    c_variant = random.choice(["comment", "reply", "c", "r"])
+                    props = [
+                        f"{c_variant}.id: {reply.id}\n",
+                        f"{c_variant}.created: {created}\n",
+                        f"{c_variant}.parent.id: {reply.parent_id}\n",
+                        f"{c_variant}.score: {reply.score}\n",
+                        f"{c_variant}.permalink: https://reddit.com{reply.permalink}\n",
+                    ]
+
                     author = reply.author
-                    if author:
+                    if author is not None:
                         if author.name in config["reddit"]["replacers"]:
                             author = config["reddit"]["replacers"][author.name]
-                    props = [
-                        f"reply.score: {reply.score}\n",
-                        f"reply.author: {author}\n",
-                    ]
-                    random.shuffle(props)
-                    file.write(props[0])
-                    file.write(props[1])
-                    file.write(
-                        f"reply.permalink: https://reddit.com{reply.permalink}\n"
-                    )
-                    file.write("```\n\n## ECO\n---\n")
+                        props.append(f"{c_variant}.author: {author}\n")
+
                     sanitized = re.sub(
                         r"http\S+",
                         "((url))",
-                        reply.body.replace("\n", "\\n"),
+                        f"{c_variant}.text: " + reply.body.replace("\n", "\\n"),
                     )
-                    file.write(sanitized)
+                    props.append(sanitized + "\n")
+
+                    random.shuffle(props)
+
+                    for prop in props:
+                        file.write(prop)
+
+                    file.write("```")
 
                 dump_replies(reply.replies, submission, context)
                 context.pop()

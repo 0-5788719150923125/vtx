@@ -43,7 +43,8 @@ def main():
         if os.path.exists(f"{root_dir}/train/{sub}"):
             shutil.rmtree(f"{root_dir}/train/{sub}")
 
-        os.makedirs(f"{root_dir}/train/{sub}")
+        os.makedirs(f"{root_dir}/train/{sub}/submissions")
+        os.makedirs(f"{root_dir}/train/{sub}/comments")
 
         identities = {}
 
@@ -61,6 +62,35 @@ def main():
                 print("archiving /r/" + sub)
                 print("archived " + str(total) + " submissions")
 
+                with open(
+                    f"{root_dir}/train/{sub}/submissions/" + submission.id + ".txt", "a"
+                ) as file:
+                    file.write(f"## RECORD\n---\n```\n")
+                    file.write(f"submission.id: {submission.id}\n")
+                    file.write(f"submission.created: {submission.created_utc}\n")
+                    file.write(f"submission.title: {submission.title}\n")
+                    file.write(f"submission.subreddit: /r/{submission.subreddit}\n")
+                    author = submission.author
+                    if author:
+                        if author.name in config["reddit"]["replacers"]:
+                            author = config["reddit"]["replacers"][author.name]
+                    file.write(f"submission.author: {author}\n")
+                    file.write(f"submission.score: {submission.score}\n")
+                    file.write(
+                        f"submission.permalink: https://reddit.com{submission.permalink}\n"
+                    )
+                    if submission.selftext != "":
+                        file.write("```\n\n## ECO\n---\n")
+                        sanitized = re.sub(
+                            r"http\S+",
+                            "((url))",
+                            submission.selftext.replace("\n", "\\n"),
+                        )
+                        file.write(sanitized)
+                    else:
+                        file.write("```\n\n## TRIGGER\n---\n")
+                        file.write(f"[((({get_identity()})))]({submission.url})")
+
                 dump_replies(
                     replies=submission.comments,
                     submission=submission,
@@ -69,55 +99,40 @@ def main():
 
         def dump_replies(replies, submission, context=[]):
             for reply in replies:
-                with open(
-                    f"{root_dir}/train/{sub}/" + reply.submission.id + ".txt", "a"
-                ) as file:
-                    if isinstance(reply, praw.models.MoreComments):
-                        continue
+                if isinstance(reply, praw.models.MoreComments):
+                    continue
 
-                    context[0] = submission
+                with open(
+                    f"{root_dir}/train/{sub}/comments/" + reply.id + ".txt",
+                    "a",
+                ) as file:
                     context.append(reply)
 
-                    for line in context:
-                        if getattr(line, "title", None) is not None:
-                            bias = get_identity()
-                            author = line.author
-                            if author:
-                                if author.name in config["reddit"]["replacers"]:
-                                    bias = config["reddit"]["replacers"][author.name]
-                            original_submission = (
-                                wall + str(bias) + ship + " ((" + line.title + "))"
-                            )
-                            if line.selftext:
-                                original_submission = (
-                                    original_submission
-                                    + " | "
-                                    + line.selftext.replace("\n", "\\n")
-                                )
-                            sanitized = re.sub(
-                                r"http\S+",
-                                "((url))",
-                                original_submission,
-                            )
-                            file.write(sanitized + " ")
-                            continue
-                        bias = get_identity()
-                        author = line.author
-                        if author:
-                            if author.name in config["reddit"]["replacers"]:
-                                bias = config["reddit"]["replacers"][author.name]
-
-                        sanitized = re.sub(
-                            r"http\S+",
-                            "((url))",
-                            wall
-                            + str(bias)
-                            + ship
-                            + " "
-                            + line.body.replace("\n", "\\n"),
-                        )
-                        file.write(sanitized + " ")
-                    file.write("\n")
+                    file.write(f"## RECORD\n---\n```\n")
+                    file.write(f"reply.id: {reply.id}\n")
+                    file.write(f"reply.created: {reply.created_utc}\n")
+                    file.write(f"reply.parent_id: {reply.parent_id}\n")
+                    author = reply.author
+                    if author:
+                        if author.name in config["reddit"]["replacers"]:
+                            author = config["reddit"]["replacers"][author.name]
+                    props = [
+                        f"reply.score: {reply.score}\n",
+                        f"reply.author: {author}\n",
+                    ]
+                    random.shuffle(props)
+                    file.write(props[0])
+                    file.write(props[1])
+                    file.write(
+                        f"reply.permalink: https://reddit.com{reply.permalink}\n"
+                    )
+                    file.write("```\n\n## ECO\n---\n")
+                    sanitized = re.sub(
+                        r"http\S+",
+                        "((url))",
+                        reply.body.replace("\n", "\\n"),
+                    )
+                    file.write(sanitized)
 
                 dump_replies(reply.replies, submission, context)
                 context.pop()

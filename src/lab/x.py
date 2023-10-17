@@ -27,7 +27,7 @@ async def loop(config):
                 min_new_tokens=16,
                 max_new_tokens=56,
                 disposition=config.get("disposition", None),
-                eos_tokens=[".", "?", "!", "\n", "\n\n", "\\"],
+                eos_tokens=[".", "?", "!", "\n", "\n\n", "\\", '"'],
                 cleanup=True,
             )
             if output == False:

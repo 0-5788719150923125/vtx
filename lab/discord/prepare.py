@@ -139,7 +139,7 @@ def main():
         except Exception as e:
             failures += 1
 
-        # os.system("clear")
+        os.system("clear")
         print("preparing Discord messages")
         print(f"{successes} successes, {failures} failures")
 
@@ -160,8 +160,10 @@ def transform_author(author):
         or author["nickname"].startswith("G-")
     ):  # Samn and Ghosts
         return str(get_identity())
+    elif author["isBot"]:
+        return False
 
-    return False
+    return author["id"]
 
 
 # Replace third person messaging from bots, so as not to bias the model towards this format

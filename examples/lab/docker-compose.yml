@@ -6,7 +6,6 @@ services:
     network_mode: host
     stdin_open: true
     tty: true
-    user: 1000:1000
     volumes:
       - ./config.yml:/src/config.yml
       - ./data/models:/data/models

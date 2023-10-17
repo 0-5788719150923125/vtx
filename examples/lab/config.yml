@@ -13,5 +13,4 @@ personas:
 
 toe:
   training:
-    peft:
-      type: "lora"
+    type: "lora"

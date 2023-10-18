@@ -492,14 +492,14 @@ def send_webhook(
     tags=None,
     config=None,
 ):
-    if allowed_tags and tags:
-        allowed = False
+    allowed = False
+    if allowed_tags is not None and tags is not None:
         for tag in tags:
             if tag in allowed_tags:
                 allowed = True
                 break
-        if not allowed:
-            return
+    if not allowed:
+        return
 
     if config:
         avatar_url = config.get("avatar", avatar_url)

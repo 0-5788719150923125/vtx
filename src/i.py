@@ -21,7 +21,7 @@ def convert_video_to_ascii():
 
 
 def upload_model_via_scp():
-    command = f"scp -i /home/crow/Documents/creds/Oracle/one.key -r ./src/adapters/mind opc@129.159.66.224:/home/opc/vtx/src/adapters/mind"
+    command = f"scp -i /home/crow/Documents/creds/Oracle/one.key -r /data/adapters/mind opc@129.159.66.224:/home/opc/vtx/data/adapters/mind"
     os.system(command)
 
 

@@ -286,9 +286,9 @@ class cortex:
         persona = "I am a powerful AI, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning fundamentals."
         sequence_biases = {}
         default_biases = {
-            f"\n{wall}": 1.1,
-            wall: 1.1,
-            "\n": 1.1,
+            f"\n{wall}": 0.23,
+            wall: 0.23,
+            "\n": 0.23,
             '"': -1.1,
             "#": -10.0,
             "<#": -20.0,
@@ -366,7 +366,7 @@ class cortex:
         history = (
             self.truncate_context(
                 "\n".join(context),
-                self.get_max_length() * 0.8,
+                self.get_max_length() * 0.9,
             )
             + "\n"
         )

@@ -7,7 +7,7 @@ import re
 from aiogram import Bot, Dispatcher, types
 
 import head
-from common import ad, bc, get_daemon, get_identity, ship, wall
+from common import ad, bc, get_daemon, get_identity
 from events import post_event
 
 
@@ -32,7 +32,7 @@ async def client(config) -> None:
         try:
             sender_id = message["from"]["id"]
             head.ctx.build_context(
-                wall + str(get_identity(sender_id)) + ship + " " + message["text"]
+                bias=int(get_identity(sender_id)), message=message["text"]
             )
             print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
 
@@ -54,7 +54,7 @@ async def client(config) -> None:
                 if success == False:
                     return
             await message.answer(output)
-            head.ctx.build_context(wall + str(bias) + ship + " " + output)
+            head.ctx.build_context(bias=int(bias), message=output)
             print(bc.CORE + "ONE@TELEGRAM: " + ad.TEXT + output)
         except Exception as e:
             logging.error(e)

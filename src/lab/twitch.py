@@ -11,7 +11,7 @@ from twitchAPI.type import AuthScope, ChatEvent
 
 import head
 import lab.source
-from common import ad, bc, get_identity, ship, wall
+from common import ad, bc, get_identity
 
 
 def main(config):
@@ -58,7 +58,7 @@ async def client(config):
 
             async def on_message(message):
                 viewer = str(get_identity(message.user.name))
-                head.ctx.build_context(wall + viewer + ship + " " + message.text)
+                head.ctx.build_context(bias=int(viewer), message=message.text)
 
                 if self.active == True:
                     return
@@ -78,7 +78,7 @@ async def client(config):
                     )
                     if success == False:
                         return
-                    head.ctx.build_context(wall + bias + ship + " " + output)
+                    head.ctx.build_context(bias=int(bias), message=output)
                     await asyncio.sleep(random.choice([7, 8, 9]))
                     print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output}")
                     await chat.send_message(self.channel, f"[{name.upper()}] " + output)

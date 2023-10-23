@@ -13,7 +13,7 @@ import asyncpraw
 from cerberus import Validator
 
 import head
-from common import ad, bc, get_daemon, get_identity, ship, wall
+from common import ad, bc, get_daemon, get_identity
 from events import post_event, subscribe_event
 
 
@@ -197,13 +197,12 @@ async def stalker(reddit, config):
                 op = get_identity(user)
 
                 context = [
-                    wall
-                    + str(get_identity())
-                    + ship
-                    + " /r/"
-                    + submission.subreddit.display_name,
-                    wall + str(op) + ship + " " + submission.title,
-                    wall + str(op) + ship + " " + submission.selftext,
+                    {
+                        "bias": get_identity(),
+                        "message": f"/r/{submission.subreddit.display_name}",
+                    },
+                    {"bias": int(op), "message": submission.title},
+                    {"bias": int(op), "message": submission.selftext},
                 ]
 
                 stalker = victim.get("stalker", [])
@@ -371,13 +370,12 @@ async def subscribe_submissions(reddit, config):
             persona = sub.get("persona", [])
 
             context = [
-                wall
-                + str(get_identity())
-                + ship
-                + " /r/"
-                + submission.subreddit.display_name,
-                wall + str(op) + ship + " " + submission.title,
-                wall + str(op) + ship + " " + submission.selftext,
+                {
+                    "bias": get_identity(),
+                    "message": f"/r/{submission.subreddit.display_name}",
+                },
+                {"bias": int(op), "message": submission.title},
+                {"bias": int(op), "message": submission.selftext},
             ]
             success, bias, output, seeded = await head.ctx.chat(
                 ctx=context, personas=persona
@@ -522,23 +520,16 @@ async def reply(obj, message, config):
 
 # Build context from a chain of comments.
 async def build_context(comment):
-    context = [wall + str(get_identity()) + ship + " " + str(comment.body)]
+    context = [{"bias": get_identity(), "message": comment.body}]
     parent = await comment.parent()
     await parent.load()
     while isinstance(parent, asyncpraw.models.Comment):
         await parent.refresh()
-        context.insert(0, wall + str(get_identity()) + ship + " " + str(parent.body))
+        context.insert(0, {"bias": get_identity(), "message": parent.body})
         parent = await parent.parent()
         await parent.load()
     context.insert(
-        0,
-        wall
-        + str(get_identity())
-        + ship
-        + " "
-        + str(parent.title)
-        + " => "
-        + str(parent.selftext),
+        0, {"bias": get_identity(), "message": f"{parent.title} => {parent.selftext}"}
     )
     return context
 

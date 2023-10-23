@@ -12,15 +12,7 @@ import websockets
 from cerberus import Validator
 
 import head
-from common import (
-    ad,
-    bc,
-    get_identity,
-    remove_invisible_characters,
-    ship,
-    strip_emojis,
-    wall,
-)
+from common import ad, bc, get_identity, remove_invisible_characters, strip_emojis
 
 context_length = 23
 
@@ -122,7 +114,7 @@ async def listener(config, focus):
 
             append = True
             for item in messages[focus]:
-                if state["message"] in item:
+                if state["message"] in item["message"]:
                     append = False
                     break
 
@@ -132,7 +124,7 @@ async def listener(config, focus):
                         "active_frequency", 0.66
                     )
                 messages[focus].append(
-                    wall + str(get_identity()) + ship + " " + state["message"]
+                    {"bias": int(get_identity()), "message": state["message"]}
                 )
                 print(bc.FOLD + f"ONE@FOLD:" + ad.TEXT + " " + state["message"])
 
@@ -174,7 +166,7 @@ async def response(config, focus):
     while sanitized.startswith(" "):
         sanitized = sanitized[1:]
 
-    if sanitized == "" or wall + str(bias) + ship + " " + sanitized in messages[focus]:
+    if sanitized == "" or {"bias": int(bias), "message": sanitized} in messages[focus]:
         if len(messages[focus]) > 0:
             messages[focus].pop(0)
         return
@@ -187,7 +179,8 @@ async def response(config, focus):
 
     print(color + responder + ad.TEXT + " " + sanitized)
 
-    messages[focus].append(wall + str(bias) + ship + " " + sanitized)
+    messages[focus].append({"bias": int(bias), "message": sanitized})
+
     mine[focus] = True
     frequency[focus] = config["source"]["focus"][focus].get("passive_frequency", 0.01)
     send(sanitized, focus, "cos", bias)

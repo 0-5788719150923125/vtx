@@ -10,7 +10,7 @@ from pprint import pprint
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
 
 import head
-from common import ad, bc, get_identity, ship, wall
+from common import ad, bc, get_identity
 
 logging.getLogger("nio").setLevel(logging.WARNING)
 
@@ -67,7 +67,7 @@ async def subscribe(user, password, config) -> None:
             if event.sender == client.user:
                 sender_id = str(bias)
 
-            head.ctx.build_context(wall + sender_id + ship + " " + message)
+            head.ctx.build_context(bias=int(sender_id), message=message)
 
             passed = False
             if "!Q" in message:

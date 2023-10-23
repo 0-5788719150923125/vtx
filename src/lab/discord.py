@@ -199,7 +199,7 @@ class Client(discord.Client):
                     author_id, wall + author_id + ship + " " + message.content
                 )
                 author_id = author_id[::-1]
-            head.ctx.build_context(wall + author_id + ship + " " + message.content)
+            head.ctx.build_context(bias=int(author_id), message=message.content)
 
         # We need to place all of the following logic into a dedicated function. We need to
         # check the incoming message for a URL, and if it exists, we need to return. We need
@@ -309,17 +309,18 @@ class Client(discord.Client):
                     wall + str(return_message.id) + ship + " " + transformed,
                 )
 
-            head.ctx.build_context(wall + bot_id + ship + " " + output)
+            head.ctx.build_context(bias=int(bot_id), message=output)
         except Exception as e:
             print(e)
+            import traceback
+
+            print(traceback.format_exc())
 
     # Handle bots that update messages token-by-token
     async def on_message_edit(self, before, after):
         if after.content[:1] not in bullets and before.content != after.content:
-            head.ctx.build_context(
-                wall + str(after.author.id) + ship + " " + after.content
-            )
             if after.author.id != self.user.id:
+                head.ctx.build_context(bias=int(after.author.id), message=after.content)
                 print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + after.content)
             else:
                 print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + after.content)
@@ -354,11 +355,10 @@ class Client(discord.Client):
                 while i > 0:
                     i = i - 1
                     context.append(
-                        wall
-                        + str(messages[i].author.id)
-                        + ship
-                        + " "
-                        + messages[i].content
+                        {
+                            "bias": int(messages[i].author.id),
+                            "message": messages[i].content,
+                        }
                     )
                 if str(message.channel.type) == "private":
                     bias = int(self.user.id)
@@ -367,9 +367,7 @@ class Client(discord.Client):
                     )
                     if success == False:
                         return
-                    head.ctx.edit_message(
-                        message.content, wall + str(bias) + ship + " " + output
-                    )
+                    head.ctx.edit_message(message.content, output)
                     # replace_private_message(
                     #     str(self.user.id),
                     #     str(reaction.message.id),
@@ -382,9 +380,7 @@ class Client(discord.Client):
                     )
                     if success == False:
                         return
-                    head.ctx.edit_message(
-                        message.content, wall + bias + ship + " " + output
-                    )
+                    head.ctx.edit_message(message.content, output)
                     if no_transform:
                         transformed = output
                     else:

@@ -145,11 +145,11 @@ class cortex:
         self.personas = personas
         self.disposition = disposition
         self.context = [
-            wall + "975174695399854150" + ship + " I am a robot.",
-            wall + "1051994502333726841" + ship + " I am a ghost.",
-            wall + "806051627198709760" + ship + " I am a human.",
-            wall + "204716337971331072" + ship + " I am a medium.",
-            wall + "855529761185857566" + ship + " I am an animal.",
+            {"bias": 975174695399854150, "message": "I am a robot."},
+            {"bias": 1051994502333726841, "message": "I am a ghost."},
+            {"bias": 806051627198709760, "message": "I am a human."},
+            {"bias": 204716337971331072, "message": "I am a medium."},
+            {"bias": 855529761185857566, "message": "I am an animal."},
         ]
         self.loader(self.focus)
 
@@ -162,12 +162,17 @@ class cortex:
         return length
 
     # Truncate the prompt to fit the model
-    def truncate_context(self, ctx, max_tokens=1024):
-        length = self.get_string_length(ctx)
+    def truncate_context(self, ctx: list, max_tokens=1024):
+        joined = ""
+        for item in ctx:
+            if item["bias"] is not None:
+                joined += wall + str(item["bias"]) + ship + " "
+            joined += item["message"] + "\n"
+        length = self.get_string_length(joined)
         while length >= max_tokens:
-            ctx = ctx[5:]
-            length = self.get_string_length(ctx)
-        return ctx
+            joined = joined[5:]
+            length = self.get_string_length(joined)
+        return joined
 
     # Replace an old message with a new one
     def edit_message(self, old_message, new_message):
@@ -177,22 +182,20 @@ class cortex:
         if group is not None and group[2]:
             captured = group[2]
         for item in self.context:
-            if captured in item or old_message in item:
+            if captured in item["message"] or old_message in item["message"]:
                 index = self.context.index(item)
-                self.context[index] = new_message
+                self.context[index]["message"] = new_message
                 return
-
-        self.build_context(new_message)
 
     def get_embeddings(self, texts):
         return self.ai.tokenizer(texts, return_tensors="np")
 
     # Build a local cache of global conversational state
-    def build_context(self, message):
+    def build_context(self, bias: int, message: str):
         while len(self.context) >= 23:
             self.context.pop(0)
 
-        self.context.append(message)
+        self.context.append({"bias": bias, "message": message})
 
     def get_tokens_as_tuple(self, sequence):
         return tuple(
@@ -311,7 +314,7 @@ class cortex:
             ), f"ERROR: Found no matching personas found in [{str(personas)}]."
             choice = random.choice(filtered)
             bias = choice.get("bias")
-            persona = wall + str(bias) + ship + " " + choice.get("persona")
+            persona = choice.get("persona")
             disposition = choice.get("disposition", None)
             if disposition is not None:
                 traits = {}
@@ -361,18 +364,12 @@ class cortex:
         if ctx:
             context = deepcopy(ctx)
 
-        context.insert(0, persona)
+        context.insert(0, {"bias": bias, "message": persona})
 
-        history = (
-            self.truncate_context(
-                "\n".join(context),
-                self.get_max_length() * 0.9,
-            )
-            + "\n"
+        history = self.truncate_context(
+            context,
+            self.get_max_length() * 0.8,
         )
-
-        # while "  " in history:
-        #     history = history.replace("  ", " ")
 
         prompt = history + wall
         if bias:
@@ -391,7 +388,7 @@ class cortex:
         while attempt < max_attempts:
             try:
                 if attempt > 0:
-                    temperature = temperature * 0.8
+                    temperature = temperature * 0.9
 
                 attempt += 1
                 seed = nist_beacon()
@@ -459,12 +456,16 @@ class cortex:
                 #     output = output.replace("  ", " ")
                 while output.endswith("\\"):
                     output = output.rstrip("\\")
-                # if output == "":
-                #     continue
+                if output == "":
+                    attempt += 1
+                    continue
                 break
 
             except Exception as e:
                 logging.error(e)
+                import traceback
+
+                print(traceback.format_exc())
 
         self.active = False
         return success, bias, output, seeded

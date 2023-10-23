@@ -177,6 +177,10 @@ if __name__ == "__main__":
     launch_model = None
     fresh_logs = False
     resume = p.get("resume", False)
+    use_petals = model_config.get("petals", False)
+    use_hivemind = model_config.get("hivemind", False)
+    adapter = p.get("name", "base")
+
     if p.get("regen", False):
         if os.path.exists("/data/datasets/" + focus):
             shutil.rmtree("/data/datasets/" + focus)
@@ -199,15 +203,12 @@ if __name__ == "__main__":
 
     # Start with a fresh logs directory
     if fresh_logs == True:
-        if os.path.exists("/data/logs/" + focus):
-            shutil.rmtree("/data/logs/" + focus)
+        if os.path.exists("/data/logs/" + focus + "/" + adapter):
+            shutil.rmtree("/data/logs/" + focus + "/" + adapter)
 
     tuning_mode = None
     peft_config = None
     pre_seq_len = 0
-    use_petals = model_config.get("petals", False)
-    use_hivemind = model_config.get("hivemind", False)
-    adapter = p.get("name", "base")
     output_dir = "/data/adapters/" + focus + "/" + adapter
     if train_type == "lora":
         peft_config = LoraConfig(

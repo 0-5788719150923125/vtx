@@ -85,6 +85,7 @@ def validation(config):
         "model": {"type": "string"},
         "precision": {"type": "integer"},
         "max_new_tokens": {"type": "integer"},
+        "adapters": {"type": "list"},
         "training": {"type": "dict"},
         "gpu_index": {"type": "integer"},
         "low_memory": {"type": "boolean"},

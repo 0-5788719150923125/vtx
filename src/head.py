@@ -425,7 +425,7 @@ class cortex:
                 temp_history = deepcopy(history)
                 # Sometimes, the input prompt is not the same as what is in text, because
                 # tokenizers are weird. So, we leave a small buffer when removing the prompt here.
-                while len(temp_history) > 5:
+                while len(temp_history) > 6:
                     generation = generation[1:]
                     temp_history = temp_history[1:]
                 while generation.endswith(wall):

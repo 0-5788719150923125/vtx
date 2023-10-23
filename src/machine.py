@@ -2,10 +2,6 @@ import importlib
 import threading
 import time
 
-import debugpy
-
-debugpy.listen(("0.0.0.0", 5678))
-
 from common import ad, bc, config
 
 # Quickly test stuff here

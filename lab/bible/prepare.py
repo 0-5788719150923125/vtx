@@ -24,9 +24,9 @@ def main():
             reader = csv.DictReader(f)
             # batch = random.randint(1, 5)
             # book = None
+            os.system("clear")
+            print(f"writing {count}")
             for row in reader:
-                os.system("clear")
-                print(f"writing {count}")
                 book = row["Book"]
                 chapter = row["Chapter"]
                 verse = row["Verse"]

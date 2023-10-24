@@ -3,7 +3,7 @@ import time
 
 import debugpy
 
-time.sleep(3)
+time.sleep(1)
 debugpy.listen(("0.0.0.0", 5678))
 
 frequency = random.seed()

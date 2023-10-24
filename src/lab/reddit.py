@@ -34,6 +34,7 @@ def validation(config):
         "filter": {"type": "list"},
         "delay": {
             "type": "dict",
+            "nullable": True,
             "schema": {"min": {"type": "integer"}, "max": {"type": "integer"}},
         },
         "stalk": {

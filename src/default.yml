@@ -102,6 +102,7 @@ collections:
 
 reddit:
   enabled: False
+  delay:
   filter:
     - layerzero
   subs:

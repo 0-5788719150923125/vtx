@@ -1,3 +1,17 @@
+# ------ Datasets -------- #
+
+# import sys
+
+# sys.path.append("/src")
+# from datasets import load_dataset
+
+# from common import list_full_paths
+
+# data = load_dataset(
+#     path="/lab/journals", data_files=list_full_paths("/lab/journals"), split="train"
+# )
+# print(data)
+
 # ------ Local Agents -------- #
 
 # import torch

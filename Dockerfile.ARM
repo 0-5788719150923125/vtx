@@ -70,10 +70,10 @@ ARG WRANGLER_VERSION
 # RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
 RUN npm i -g nodemon@$NODEMON_VERSION
 
-COPY data/adapters /data/adapters
-COPY data/embeddings /data/embeddings
-COPY src/ /src
 COPY lab/ /lab
+COPY data/adapters/ /data/adapters
+COPY data/embeddings/ /data/embeddings
+COPY src/ /src
 COPY book/ /book
 
 RUN python3 -m venv venv/x \

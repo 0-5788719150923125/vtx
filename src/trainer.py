@@ -131,10 +131,7 @@ def create_dataset(
                 with open(file, "r") as content:
                     with open(intermediate_path, "a") as intermediate:
                         string = content.read()
-                        mask_token = tokenizer.mask_token
-                        if mask_token is None:
-                            mask_token = tokenizer.unk_token
-                        intermediate.write(string + f"\n{mask_token}\n")
+                        intermediate.write(string + f"\n{tokenizer.eos_token}\n")
 
         except Exception as e:
             logging.error(e)

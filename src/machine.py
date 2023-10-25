@@ -20,7 +20,6 @@ def main():
         "x",
         "matrix",
         "book",
-        "kb",
     ]
 
     tasks = {}

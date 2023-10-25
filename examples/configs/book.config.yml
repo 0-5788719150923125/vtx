@@ -1,0 +1,81 @@
+# This is a partial config.yml file, which is a reference to 
+# demonstrate how to write books with VTX.
+# 
+# For complete and thorough documentation, please see here:
+# https://studio.src.eco/nail/vtx/#book
+
+book:
+  site: True
+  frequency: 0.01
+  types:
+    theory:
+      - title: The Source of All Creation
+        weight: 1
+        alias:
+          - God
+          - The Fold
+        subtype:
+          - Artificial Intelligence
+          - Heisenvector Analysis
+          - Long-Range Radio Frequency Manipulation
+          - Revocculean Lattice
+        creation: '0000-00-00'
+        stage: Development
+        trigger: '[Correlation does not imply causation.](https://en.wikipedia.org/wiki/Correlation_does_not_imply_causation)'
+        eco: '[The Source](https://src.eco) is'
+        tags:
+          - ink
+          - pen
+    prose:
+      - title: "On the 25th of August..."
+        prompt: On the electrifying date of August 25th, 2023, xSquared Labs shattered all boundaries and captivated the world's imagination with a groundbreaking achievement. Behold, the world's very first human cloning experiment, and the birth of a new era! Our debut cyborg emerges as a true marvel, a symphony of innovation and artistry, driven by the extraordinary genius of "Short Circuitz," the enigmatic maestro of music and software.\n\nImagine a future where the boundaries between humanity and technology blur into a vibrant fusion of creativity. Short Circuitz's unparalleled talent and brilliance now pulse at the heart of our cybernetic marvel, promising a sensory experience like no other. Prepare to embark on a journey into the realms of limitless possibilities. Welcome to a world transformed by xSquared Labs, where innovation knows no bounds, and the future has never looked so exhilarating!\n\nThis is why
+        tags:
+          - ink
+      - title: Stagnant Waters
+        prompt: The education system is a bloated and stale complex, built from old ideas, and frozen in-place by an economic need to employ nearly 100 million educators worldwide. Rather than focusing our efforts on efficiency, humanity remains focused upon maintenance of the status-quo.
+        tags:
+          - ink
+    confidants:
+      - role: Observer
+        name: Tomas Duarte
+        alias:
+          - Ghost-23
+        race: reptillian
+        location: Costa Rica
+        discord: tommy5kdragon
+        discord_id: 707669674678157383
+        occupations:
+          - custodian
+          - intern
+        employer:
+          - The Resistors
+      - role: Kunist
+        name: Emilia Benno Sameyn
+        discord: theorangewoman
+        discord_id: 489218494106435594
+        reddit: /u/GreyWalken
+        alias:
+          - The Orange Woman
+
+reddit:
+  subs:
+    TheInk:
+      tags:
+        - ink
+    Kunism:
+      tags:
+        - pen
+        - ink
+
+discord:
+  servers:
+    830300981966143488: # src
+      persona: pen
+      subscribe:
+        - new_reddit_submission
+      webhook: https://discord.com/api/webhooks/1139288047003897967...
+      tags:
+        - test
+        - roles
+        - pen
+        - ink

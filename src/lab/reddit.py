@@ -93,7 +93,7 @@ async def client(config):
         username=os.environ["REDDITAGENT"],
         password=os.environ["REDDITPASSWORD"],
     ) as reddit:
-        subscribe_event("kb_updated", receive_kb_updates)
+        subscribe_event("book_updated", receive_book_updates)
         await follow_victims(reddit, config["reddit"])
         await asyncio.gather(
             subscribe_comments(reddit, config),
@@ -125,7 +125,7 @@ async def follow_victims(reddit, config):
 queued = []
 
 
-async def receive_kb_updates(title, content, tags):
+async def receive_book_updates(title, content, tags):
     queued.append({"title": title, "content": content, "tags": tags})
 
 

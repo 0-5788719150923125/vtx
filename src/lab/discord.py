@@ -80,7 +80,6 @@ def subscribe_events(config):
                     send_webhook,
                     webhook_url=data.get("webhook"),
                     content=f"Event: {event}",
-                    allowed_tags=data.get("tags", None),
                     config=data,
                 )
             except Exception as e:
@@ -481,11 +480,11 @@ def send_webhook(
     thumbnail: str = "https://styles.redditmedia.com/t5_2sqtn6/styles/communityIcon_xfdgcz8156751.png",
     footer: str = "/r/TheInk",
     content: str = "For immediate disclosure...",
-    allowed_tags=None,
     tags=None,
     config=None,
 ):
     allowed = False
+    allowed_tags = config.get("tags", None)
     if allowed_tags is not None and tags is not None:
         for tag in tags:
             if tag in allowed_tags:

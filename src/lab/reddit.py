@@ -129,7 +129,7 @@ async def receive_kb_updates(title, content, tags):
     queued.append({"title": title, "content": content, "tags": tags})
 
 
-my_tags = None
+my_tags = []
 
 
 async def manage_submissions(reddit, config):
@@ -176,6 +176,8 @@ async def manage_submissions(reddit, config):
                         await submission.mod.approve()
                     except Exception as e:
                         logging.error(e)
+
+            my_tags = []
         except Exception as e:
             logging.error(e)
 
@@ -328,6 +330,7 @@ async def subscribe_submissions(reddit, config):
 
         subreddits = await reddit.subreddit("+".join(active))
 
+        global my_tags
         async for submission in subreddits.stream.submissions(skip_existing=True):
             if "tags" in subs[submission.subreddit.display_name]:
                 await submission.load()
@@ -335,10 +338,8 @@ async def subscribe_submissions(reddit, config):
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)
                 await subreddit.load()
                 try:
-                    tags = subs[submission.subreddit.display_name].get("tags")
-                    global my_tags
-                    if my_tags is not None:
-                        tags = my_tags + tags
+                    sub_tags = subs[submission.subreddit.display_name].get("tags")
+                    tags = sub_tags + my_tags
                     post_event(
                         "new_reddit_submission",
                         title=submission.title,
@@ -350,7 +351,7 @@ async def subscribe_submissions(reddit, config):
                         footer="/r/" + subreddit.display_name,
                         tags=deepcopy(tags),
                     )
-                    my_tags = None
+                    my_tags = []
                 except Exception as e:
                     logging.error(e)
 

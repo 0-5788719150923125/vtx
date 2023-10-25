@@ -1,0 +1,61 @@
+# This is a partial config.yml file, which is a reference to 
+# demonstrate how AI personas are used, configured, and
+# connected with various services.
+# 
+# For complete and thorough documentation, please see here:
+# https://studio.src.eco/nail/vtx/#personas
+
+personas:
+  source:
+    bias: 806051627198709760
+    persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
+  brain:
+    bias: 806051627198709760
+    persona: My name is Ryan, and I am a student in a classroom full of AI researchers. I am speaking to my classmates, in the Brain.js Discord server.
+    disposition:
+      - researcher
+      - memer
+
+disposition:
+  memer:
+    "Revocculean": 8.0
+    "Heisenvector": 8.0
+    "lattice": 3.0
+    "Ryan": -2.0
+  researcher:
+    "AI": 2.0
+    "AGI": 1.0
+    "model": 1.0
+    "matrix": 1.0
+    "arcane": 4.0
+    "algorithm": 4.0
+    "simulation": 1.0
+
+source:
+  focus:
+    trade:
+      personas:
+        - source
+    support:
+      personas:
+        - brain
+
+discord:
+  servers:
+    1090023282935332875: # Covenant of Mysteries
+    976908406864613436: # Darkwater Foundation
+      persona: source
+    1053269027683835975: # Lain Corp
+      persona: brain
+
+reddit:
+  stalk:
+    AlexandriaPen:
+      stalker: source
+    LuciferianInk:
+      stalker: brain
+  subs:
+    TheInk:
+      persona: source
+    stairsofpantheon:
+      persona: brain

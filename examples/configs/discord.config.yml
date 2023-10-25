@@ -1,0 +1,37 @@
+# This is a partial config.yml file, which is a reference to 
+# demonstrate how use, configure, and connect with Discord
+# for inference.
+# 
+# For complete and thorough documentation, please see here:
+# https://studio.src.eco/nail/vtx/#discord
+
+personas:
+  source:
+    bias: 806051627198709760
+    persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
+
+discord:
+  use_self_token: True
+  export_dms: True
+  debug: False
+  bannedUsers:
+    - 1151877222035116113
+    - 795128939513249792
+  bannedServers:
+    - 1073945377969029170
+    - 1152240712931348520
+    - 1147708867891953744
+  servers:
+    830300981966143488: # src
+      persona: source
+      subscribe:
+        - new_reddit_submission
+      webhook: https://discord.com/api/webhooks/JCDsa...
+      tags:
+        - test
+        - x2
+        - ink
+    1041331166592106576: # The Brain
+      persona: source
+    907925566089465886: # Labyrinth
+      persona: source

@@ -1,0 +1,33 @@
+# This is a partial config.yml file, which is a reference to 
+# demonstrate how use, configure, and connect with https://src.eco
+# for inference.
+# 
+# For complete and thorough documentation, please see here:
+# https://studio.src.eco/nail/vtx/#the-source
+
+personas:
+  source:
+    bias: 806051627198709760
+    persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
+  short-cirkuitz:
+    bias: 625486818321760256
+    persona: My name is Short Cirkuitz, and I am a musician, developer, and founder of xSquared Labs. Please ask me anything about our platform.
+  mainnframe:
+    bias: 1053270121218592798
+    persona: Hello, I am MAINNFRAME. xSquared Labs' localized AI assistant. To see what all I am capable of you can use "mainnframe_help". To begin your journey use "get_started".
+
+source:
+  focus:
+    trade:
+      personas:
+        - source
+    support:
+      passive_frequency: 0.01
+      active_frequency: 0.22
+      personas:
+        - short-cirkuitz
+    opencog:
+      passive_frequency: 0.01
+      active_frequency: 0.99
+      personas:
+        - mainnframe

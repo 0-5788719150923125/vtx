@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   tb:
-    image: ghcr.io/0-5788719150923125/bot:latest
+    image: ghcr.io/0-5788719150923125/lab:latest
     command: tensorboard --logdir /data/logs --bind_all --samples_per_plugin scalars=999999999
     volumes:
       - ./data:/data

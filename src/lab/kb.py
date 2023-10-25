@@ -25,7 +25,7 @@ def main(config):
     if not result:
         return
 
-    allowed_types = ["confidants", "prose"]
+    allowed_types = ["confidants", "prose", "theory"]
 
     while True:
         ink = Ink()
@@ -69,6 +69,25 @@ def validation(config):
                         "allow_unknown": True,
                         "schema": {
                             "role": {"type": "string"},
+                        },
+                    },
+                },
+                "theory": {
+                    "type": "list",
+                    "schema": {
+                        "type": "dict",
+                        # "allow_unknown": True,
+                        "schema": {
+                            "title": {"type": "string"},
+                            "frequency": {"type": "float"},
+                            "weight": {"type": "integer"},
+                            "alias": {"type": "list"},
+                            "subtype": {"type": "list"},
+                            "creation": {"type": "string"},
+                            "stage": {"type": "string"},
+                            "trigger": {"type": "string"},
+                            "eco": {"type": "string"},
+                            "tags": {"type": "list"},
                         },
                     },
                 },
@@ -132,6 +151,22 @@ class Ink:
                         joined = "\n  - ".join(value)
                         value = f"\n  - {joined}"
                     self.prompt = self.prompt + f"\n{key.capitalize()}: {value}"
+        if self.type == "theory":
+            title = entry.get("title")
+            self.title = f"{self.type.title()}: {title}"
+            self.prompt = read_from_file(f"/src/lab/templates/{self.type}.tpl")
+            for key in list(entry):
+                value = entry.get(key)
+                if key == "frequency":
+                    continue
+                else:
+                    if isinstance(value, list):
+                        value.sort()
+                        joined = "\n  - ".join(value)
+                        value = f"\n  - {joined}"
+                    self.prompt = self.prompt.replace(f"{{{{{key}}}}}", str(value))
+            self.file = deterministic_short_hash(self.title, length=7) + ".md"
+            f = f"{self.dir}/{self.file}"
         else:
             self.title = entry.get("title")
             self.prompt = "# " + self.title + "\n---\n" + entry.get("prompt")

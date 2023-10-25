@@ -86,9 +86,11 @@ def main():
 
                     author = submission.author
                     if author is not None:
-                        if author.name in config["reddit"]["replacers"]:
-                            author = config["reddit"]["replacers"][author.name]
                         props.append(f"{s_variant}.author: {author}\n")
+                        author_id = get_identity(author)
+                        if author.name in config["reddit"]["replacers"]:
+                            author_id = config["reddit"]["replacers"][author.name]
+                        props.append(f"{s_variant}.author.id: {author_id}\n")
 
                     if submission.selftext != "":
                         sanitized = re.sub(
@@ -141,9 +143,11 @@ def main():
 
                     author = reply.author
                     if author is not None:
-                        if author.name in config["reddit"]["replacers"]:
-                            author = config["reddit"]["replacers"][author.name]
                         props.append(f"{c_variant}.author: {author}\n")
+                        author_id = get_identity(author)
+                        if author.name in config["reddit"]["replacers"]:
+                            author_id = config["reddit"]["replacers"][author.name]
+                        props.append(f"{c_variant}.author.id: {author_id}\n")
 
                     sanitized = re.sub(
                         r"http\S+",

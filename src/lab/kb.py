@@ -3,6 +3,7 @@ import logging
 import math
 import os
 import random
+import re
 import time
 
 import yaml
@@ -212,10 +213,15 @@ class Ink:
                 file_name=self.file,
                 content=content,
             )
+            pattern = re.compile(r"^(---\n.+\#{2}\sRECORD)", re.DOTALL)
+            group = re.search(pattern, content)
+            clean = content
+            if group is not None and group[0] is not None:
+                clean = content.replace(group[0], "## RECORD")
             post_event(
                 "kb_updated",
                 title=self.title,
-                content=content,
+                content=clean,
                 tags=self.tags,
             )
             print(bc.CORE + "ONE@KB: " + ad.TEXT + self.title)

@@ -540,10 +540,13 @@ async def build_context(comment):
 def transformer(name, text):
     pronoun = random.choice(["My", "A"])
     types = random.choice(["daemon", "friend", "robot"])
-    verb = random.choice(["says", "said", "wants to say", "whispers", "thinks"])
+    verb = random.choice(["says", "whispers", "thinks", "believes"])
+    leader = "Penny"
+    if os.environ["REDDITAGENT"] == "AlexandriaPen":
+        leader = "Ink"
     responses = [
         f'{pronoun} {types} {verb}, "{text}"',
-        f'Penny {verb}, "{text}"',
+        f'{leader} {verb}, "{text}"',
         f'{name} {verb}, "{text}"',
         f"{text}",
     ]

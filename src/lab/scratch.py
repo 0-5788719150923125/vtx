@@ -1,3 +1,30 @@
+# from transformers import AutoTokenizer
+
+# tokenizer = AutoTokenizer.from_pretrained("RWKV/rwkv-4-169m-pile")
+
+# tokenized_texts = tokenizer("this is a test", return_tensors="pt")
+
+
+# import lightning as L
+# from torch.utils.data import Dataset
+
+
+# class TextDataset(Dataset):
+#     def __init__(self, tokenized_texts):
+#         self.tokenized_texts = tokenized_texts
+
+#     def __len__(self):
+#         return len(self.tokenized_texts)
+
+#     def __getitem__(self, idx):
+#         return self.tokenized_texts[idx]
+
+
+# # Create the Lightning AI Dataset.
+# dataset = TextDataset(tokenized_texts)
+
+# print(len(dataset))
+
 # ------ Datasets -------- #
 
 # import sys

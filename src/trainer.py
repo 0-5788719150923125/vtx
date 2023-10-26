@@ -276,10 +276,13 @@ if __name__ == "__main__":
     ai.tokenizer = AutoTokenizer.from_pretrained(
         launch_model,
         cache_dir="/data/models",
-        padding=False,
+        padding="max_length",
         padding_side=p.get("padding_side", "left"),
+        return_overflowing_tokens=True,
         truncation=True,
     )
+    if ai.tokenizer.pad_token is None:
+        ai.tokenizer.pad_token = ai.tokenizer.eos_token
 
     print(ai.tokenizer)
 

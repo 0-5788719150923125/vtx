@@ -71,6 +71,15 @@
         }
       },
       {
+        "label": "upload",
+        "detail": "Upload config and adapters to a remote server via SSH.",
+        "type": "shell",
+        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && docker context use one && ARCH='ARM' docker compose cp src/config.yml lab:/src/config.yml && docker context use default",
+        "windows": {
+          "command": "$env:FOCUS = '${input:env}'; docker compose up"
+        }
+      },
+      {
         "label": "train",
         "detail": "Train a model.",
         "type": "shell",

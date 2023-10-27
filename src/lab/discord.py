@@ -9,6 +9,7 @@ import discord
 import requests
 from cerberus import Validator
 
+import eye
 import head
 from common import ad, bc, bullets, get_identity, ship, wall
 from events import subscribe_event
@@ -171,6 +172,13 @@ class Client(discord.Client):
     #             logging.error(e)
     #             self.discord_task = self.loop.create_task(self.think())
 
+    def analyze_image(self, urls):
+        preds = []
+        for url in urls:
+            pred = eye.ctx.analyze_image(url)
+            preds.append(pred)
+        return preds
+
     # check every Discord message
     async def on_message(self, message):
         banned = await self.check_bans(guild=message.guild, user=message.author)
@@ -187,6 +195,7 @@ class Client(discord.Client):
             message.author == self.user
             or message.content[:1] in bullets
             or message.content == ""
+            and len(message.attachments) < 1
         ):
             return
 
@@ -199,6 +208,25 @@ class Client(discord.Client):
                 )
                 author_id = author_id[::-1]
             head.ctx.build_context(bias=int(author_id), message=message.content)
+
+        urls = []
+        watched = ["imgur.com", ".png", ".jpg", ".jpeg", ".gif", ".webp"]
+        for embed in message.embeds:
+            for seq in watched:
+                if seq in embed.url.lower():
+                    urls.append(embed.url)
+        if len(urls) > 0:
+            preds = self.analyze_image(urls)
+            pred = f"(This appears to be: {', '.join(preds)})"
+            head.ctx.build_context(bias=int(self.user.id), message=pred)
+            await message.channel.send(pred)
+        elif len(message.attachments) > 0:
+            for attachment in message.attachments:
+                urls.append(attachment.url)
+            preds = self.analyze_image(urls)
+            pred = f"(This appears to be: {', '.join(preds)})"
+            head.ctx.build_context(bias=int(self.user.id), message=pred)
+            await message.channel.send(pred)
 
         # We need to place all of the following logic into a dedicated function. We need to
         # check the incoming message for a URL, and if it exists, we need to return. We need

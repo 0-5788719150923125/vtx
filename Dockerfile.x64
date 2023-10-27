@@ -99,10 +99,12 @@ COPY requirements.x.txt ./
 
 RUN pip install -r requirements.x.txt
 
-RUN mkdir /.cache && \
+RUN mkdir /data && \
+    mkdir /.cache && \
     mkdir /.config && \
     mkdir /.triton && \
     mkdir /nltk_data && \
+    chmod -R 777 /data && \
     chmod -R 777 /.cache && \
     chmod -R 777 /.config && \
     chmod -R 777 /.triton && \

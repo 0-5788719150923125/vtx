@@ -74,7 +74,7 @@
         "label": "upload",
         "detail": "Upload config and adapters to a remote server via SSH.",
         "type": "shell",
-        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && docker context use one && ARCH='ARM' docker compose cp src/config.yml lab:/src/config.yml && docker context use default",
+        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && scp -i one.key -r data/adapters opc@129.159.66.224:/home/opc/vtx/data/adapters && docker context use one && ARCH='ARM' docker compose cp src/config.yml lab:/src/config.yml && docker context use default",
         "windows": {
           "command": "$env:FOCUS = '${input:env}'; docker compose up"
         }

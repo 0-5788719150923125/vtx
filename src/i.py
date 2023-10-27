@@ -20,11 +20,6 @@ def convert_video_to_ascii():
     os.system(command)
 
 
-def upload_model_via_scp():
-    command = f"scp -i /home/crow/Documents/creds/Oracle/one.key -r /data/adapters/mind opc@129.159.66.224:/home/opc/vtx/data/adapters/mind"
-    os.system(command)
-
-
 # Grab all internal links from a web page
 def crawl(site="https://ink.university"):
     html = requests.get(site).content

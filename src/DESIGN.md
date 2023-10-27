@@ -168,6 +168,16 @@ To see other options, run each of the following commands. They will print availa
 docker
 docker compose
 ```
+### Remote Orchestration
+
+Connect to a remote Docker daemon via SSH proxy. Needs more explanation here.
+```sh
+eval "$(ssh-agent -s)"
+ssh-add /path/to/ssh-key/one.key
+docker -H ssh://user@hostname ps
+docker context create one --docker "host=ssh://user@hostname"
+docker context use one
+```
 
 ### Models
 

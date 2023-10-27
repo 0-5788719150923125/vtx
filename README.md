@@ -62,13 +62,3 @@ _ - offline     (just disconnected)
 - Ask me questions.
 
 For thorough documentation, [please visit this link](https://studio.src.eco/nail/vtx/).
-
-
-
-## Remote
-
-eval "$(ssh-agent -s)"
-ssh-add /home/crow/Documents/creds/Oracle/one.key
-docker -H ssh://opc@129.159.66.224 ps
-docker context create oracle --docker "host=ssh://opc@129.159.66.224"
-docker context use oracle

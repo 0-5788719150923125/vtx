@@ -7,6 +7,5 @@ services:
       - ./lab:/lab
       - ./data:/data
       - ./lab/aigen:/src/lab/aigen
-      - ./book:/book
     environment:
       DEV_MODE: true

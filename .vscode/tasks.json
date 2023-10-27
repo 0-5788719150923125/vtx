@@ -110,7 +110,7 @@
         "label": "add",
         "detail": "Add the book/ directory to IPFS.",
         "type": "shell",
-        "command": "OUTPUT=$(docker compose exec ipfs ipfs add -r /book/public --pin=false --cid-version=1 --quieter) && sed -i '$ d' ./book/config.yaml && echo '      url: https://ipfs.io/ipfs/'$OUTPUT >> ./book/config.yaml",
+        "command": "OUTPUT=$(docker compose -f docker-compose.yml -f docker-compose.dev.yml exec ipfs ipfs add -r /book/public --pin=false --cid-version=1 --quieter) && sed -i '$ d' ./book/config.yaml && echo '      url: https://ipfs.io/ipfs/'$OUTPUT >> ./book/config.yaml",
       },
       {
         "label": "auto",

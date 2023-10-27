@@ -136,6 +136,7 @@ async def manage_submissions(reddit, config):
     global my_tags
     global queued
     subreddits = config["reddit"]["subs"]
+    cache_miss = {}
     while True:
         try:
             await asyncio.sleep(6.66)
@@ -144,6 +145,10 @@ async def manage_submissions(reddit, config):
             item = queued.pop(0)
             title = item["title"]
             content = item["content"]
+
+            if cache_miss.get(title, None) is None:
+                cache_miss[title] = 0
+
             # This is such a stupid hack, because passing information through
             # multiple events is hard.
             my_tags = item["tags"]
@@ -160,6 +165,7 @@ async def manage_submissions(reddit, config):
                     continue
                 # We submit to the first tag found
                 subreddit = await reddit.subreddit(name)
+
                 edited = False
                 async for submission in subreddit.search(
                     query=f"title:'{title}'", syntax="lucene"
@@ -168,10 +174,19 @@ async def manage_submissions(reddit, config):
                         await submission.edit(body=content)
                         await submission.mod.approve()
                         edited = True
+                        cache_miss[title] = 0
                         break
+
                 if not edited:
-                    submission = await subreddit.submit(title=title, selftext=content)
+                    cache_miss[title] += 1
+                    print(f"cache miss {cache_miss[title]}")
+                    if cache_miss[title] <= 3:
+                        continue
+                    cache_miss[title] = 0
                     try:
+                        submission = await subreddit.submit(
+                            title=title, selftext=content
+                        )
                         await submission.load()
                         await submission.mod.approve()
                     except Exception as e:

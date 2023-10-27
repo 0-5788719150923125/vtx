@@ -22,17 +22,11 @@ services:
         NODE_MAJOR_VERSION: 20
         WRANGLER_VERSION: 3.8.0
     volumes:
-      - ./src:/src
-      - ./lab:/lab
-      - ./data:/data
-      - ./lab/aigen:/src/lab/aigen
-      - ./book:/book
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:
       - .env
     environment:
       FOCUS: ${FOCUS:-heart}
-      DEV_MODE: true
 
   ctx:
     image: ghcr.io/0-5788719150923125/ctx:latest

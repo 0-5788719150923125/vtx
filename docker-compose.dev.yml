@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  lab:
+    volumes:
+      - ./src:/src
+      - ./lab:/lab
+      - ./data:/data
+      - ./lab/aigen:/src/lab/aigen
+      - ./book:/book
+    environment:
+      DEV_MODE: true

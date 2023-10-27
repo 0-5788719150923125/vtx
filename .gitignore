@@ -10,3 +10,4 @@ book/public
 book/static/tests
 !.keep
 !.gitignore
+*.key

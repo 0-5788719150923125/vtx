@@ -41,3 +41,4 @@ pypdf>=3.16.4
 GitPython>=3.1.37
 nltk>=3.8.1
 contractions>=0.1.73
+torchmetrics>=1.2.0

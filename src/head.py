@@ -99,7 +99,7 @@ def validation(config):
                     "allowed": ["AdamW", "Lion", "SophiaH"],
                 },
                 "learning_rate": {"type": "float"},
-                "swa_lr": {"type": "float"},
+                "swa_learning_rate": {"type": "float"},
                 "stride": {"type": "integer"},
                 "update_period": {"type": "integer"},
                 "block_size": {"type": "integer"},
@@ -124,6 +124,8 @@ def validation(config):
                 "train_transformers_only": {"type": "boolean"},
                 "equalize_datasets": {"type": "boolean"},
                 "datasets": {"type": "list"},
+                "val_split": {"type": "float"},
+                "val_interval": {"type": "float"},
             },
         },
     }

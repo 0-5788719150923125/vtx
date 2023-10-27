@@ -445,7 +445,6 @@ if __name__ == "__main__":
         benchmark=False,
         petals=use_petals,
         hivemind=use_hivemind,
-        use_deepspeed=False,
         seed=nist_beacon()[1],
         output_dir=output_dir,
         loggers=[logger],
@@ -466,4 +465,6 @@ if __name__ == "__main__":
         scheduler=p.get("scheduler", "get_linear_schedule_with_warmup"),
         prune=p.get("prune", 0.0),
         target_batch_size=p.get("target_batch_size", 8192),
+        val_split=p.get("val_split", 0.0),
+        val_interval=p.get("val_interval", 1000),
     )

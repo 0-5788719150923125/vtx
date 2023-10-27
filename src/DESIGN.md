@@ -339,6 +339,12 @@ mind:
   training:
     learning_rate: 0.001
 ```
+To use Stochastic Weight Averaging, set the learning rate you want to use:
+```yml
+mind:
+  training:
+    swa_learning_rate: 0.01
+```
 To set the total number of training iterations, use "num_steps". To set the number of warmup steps - where the learning rate starts from 0, and increases to the value specified by "learning_rate" - set the "warmup_steps" key:
 ```yml
 mind:

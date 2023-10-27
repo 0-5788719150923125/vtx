@@ -12,6 +12,7 @@ from lab import scratch
 def main():
     allowed_services = [
         "source",
+        "smtp",
         "telegram",
         # "telegraph",
         "reddit",

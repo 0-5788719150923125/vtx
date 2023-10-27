@@ -84,8 +84,7 @@ COPY requirements.x.txt ./
 
 RUN pip install -r requirements.x.txt
 
-RUN mkdir /data && \
-    mkdir /.cache && \
+RUN mkdir /.cache && \
     mkdir /.config && \
     mkdir /.triton && \
     mkdir /nltk_data && \

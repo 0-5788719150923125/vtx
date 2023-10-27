@@ -862,7 +862,7 @@ A special thanks goes out to the following groups (in no particular order):
 - [IPFS](https://ipfs.tech/), for building an InterPlanetary File System. 
 - [Hugo](https://gohugo.io/), for powering something like 15 of my websites.
 - [Cloudflare](cloudflare.com), for protecting and serving.
-- [Microsoft](https://www.microsoft.com), because TypeScript and government back-doors.
+- [Microsoft](https://www.microsoft.com), because TypeScript, VSCode, and government back-doors.
 - [OpenAI](https://openai.com/), for being a crutch that, admittedly, led to progress.
 - [OpenCog Foundation](https://opencog.org/), for humbling me (and hacking my computer.)
 - [Discord](discord.com/), for hacking all of my friends.

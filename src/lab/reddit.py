@@ -104,7 +104,7 @@ async def client(config):
 
 
 async def follow_victims(reddit, config):
-    if not config["stalk"]:
+    if config["stalk"] is None:
         return
     for user in config["stalk"]:
         victim = config["stalk"].get(user)

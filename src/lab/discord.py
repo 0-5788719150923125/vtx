@@ -220,9 +220,9 @@ class Client(discord.Client):
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
             # await message.channel.send(pred)
-            # print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
-            if message.content == "":
-                message.content = pred
+            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
+            # if message.content == "":
+            #     message.content = pred
         elif len(message.attachments) > 0:
             for attachment in message.attachments:
                 urls.append(attachment.url)
@@ -230,9 +230,9 @@ class Client(discord.Client):
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
             await message.channel.send(pred)
-            # print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
-            if message.content == "":
-                message.content = pred
+            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
+            # if message.content == "":
+            #     message.content = pred
 
         if message.content == "":
             return

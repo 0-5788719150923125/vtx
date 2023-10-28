@@ -89,6 +89,7 @@ RUN mkdir /.cache && \
     mkdir /.triton && \
     mkdir /nltk_data && \
     mkdir -p /lab/discord && \
+    mkdir -p /lab/discord/private && \
     chmod -R 777 /data && \
     chmod -R 777 /.cache && \
     chmod -R 777 /.config && \

@@ -309,24 +309,25 @@ async def stalker(reddit, config):
 
     tasks = {}
     while True:
-        for task in list(tasks):
-            if tasks[task].done():
-                tasks.pop(task)
+        if config["reddit"].get("stalk", None) is not None:
+            for task in list(tasks):
+                if tasks[task].done():
+                    tasks.pop(task)
 
-        loop = asyncio.get_event_loop()
+            loop = asyncio.get_event_loop()
 
-        for user in config["reddit"]["stalk"]:
-            c = user + "-c"
-            if c not in tasks:
-                task = loop.create_task(watch_comments(reddit, config, user))
-                task.name = c
-                tasks[c] = task
+            for user in config["reddit"]["stalk"]:
+                c = user + "-c"
+                if c not in tasks:
+                    task = loop.create_task(watch_comments(reddit, config, user))
+                    task.name = c
+                    tasks[c] = task
 
-            s = user + "-s"
-            if s not in tasks:
-                task = loop.create_task(watch_submissions(reddit, config, user))
-                task.name = s
-                tasks[s] = task
+                s = user + "-s"
+                if s not in tasks:
+                    task = loop.create_task(watch_submissions(reddit, config, user))
+                    task.name = s
+                    tasks[s] = task
 
         await asyncio.sleep(66.6)
 

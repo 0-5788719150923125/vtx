@@ -217,18 +217,22 @@ class Client(discord.Client):
                     urls.append(embed.url)
         if len(urls) > 0:
             preds = self.analyze_image(urls)
-            pred = f"(This appears to be: {', '.join(preds)})"
+            pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
-            await message.channel.send(pred)
-            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
+            # await message.channel.send(pred)
+            # print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
+            if message.content == "":
+                message.content = pred
         elif len(message.attachments) > 0:
             for attachment in message.attachments:
                 urls.append(attachment.url)
             preds = self.analyze_image(urls)
-            pred = f"(This appears to be: {', '.join(preds)})"
+            pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
             await message.channel.send(pred)
-            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
+            # print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
+            if message.content == "":
+                message.content = pred
 
         if message.content == "":
             return

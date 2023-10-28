@@ -103,11 +103,13 @@ RUN mkdir /.cache && \
     mkdir /.config && \
     mkdir /.triton && \
     mkdir /nltk_data && \
+    mkdir -p /lab/discord && \
     chmod -R 777 /data && \
     chmod -R 777 /.cache && \
     chmod -R 777 /.config && \
     chmod -R 777 /.triton && \
-    chmod -R 777 /nltk_data
+    chmod -R 777 /nltk_data && \
+    chmod -R 777 /lab/discord
 
 ENV FOCUS='toe'
 

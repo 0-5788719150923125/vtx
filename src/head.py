@@ -136,7 +136,7 @@ def validation(config):
     return result
 
 
-class cortex:
+class Cortex:
     def __init__(self, config, personas, disposition, focus):
         if not validation(config):
             raise Exception(f"Something is wrong with the {focus} configuration.")
@@ -697,12 +697,12 @@ class cortex:
 
 
 # Load the model and schedule periodic reloading
-ctx = cortex(config[focus], config["personas"], config["disposition"], focus)
+ctx = Cortex(config[focus], config["personas"], config["disposition"], focus)
 reload_interval = config[focus].get("reload_interval", 0)
 if reload_interval > 0:
     scheduler = BackgroundScheduler()
     scheduler.add_job(
-        cortex,
+        Cortex,
         args=(
             config[focus],
             config["personas"],

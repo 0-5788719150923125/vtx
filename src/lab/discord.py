@@ -220,6 +220,7 @@ class Client(discord.Client):
             pred = f"(This appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
             await message.channel.send(pred)
+            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
         elif len(message.attachments) > 0:
             for attachment in message.attachments:
                 urls.append(attachment.url)
@@ -227,6 +228,10 @@ class Client(discord.Client):
             pred = f"(This appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
             await message.channel.send(pred)
+            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
+
+        if message.content == "":
+            return
 
         # We need to place all of the following logic into a dedicated function. We need to
         # check the incoming message for a URL, and if it exists, we need to return. We need

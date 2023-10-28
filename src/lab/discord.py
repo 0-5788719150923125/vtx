@@ -229,7 +229,7 @@ class Client(discord.Client):
             preds = self.analyze_image(urls)
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
-            await message.channel.send(pred)
+            # await message.channel.send(pred)
             print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
             # if message.content == "":
             #     message.content = pred

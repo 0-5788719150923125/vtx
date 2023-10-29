@@ -1,3 +1,57 @@
+# ------- Ray ------- #
+# import time
+
+# import ray
+# import torch
+# from transformers import AutoModelForCausalLM, AutoTokenizer
+
+
+# @ray.remote
+# def generate():
+#     model_name = "EleutherAI/pythia-410m-deduped"
+
+#     tokenizer = AutoTokenizer.from_pretrained(
+#         model_name, cache_dir="/data/models", padding_side="left"
+#     )
+#     model = AutoModelForCausalLM.from_pretrained(
+#         model_name,
+#         cache_dir="/data/models",
+#         output_hidden_states=True,
+#         device_map="cpu",
+#         torch_dtype=torch.bfloat16,
+#     )
+#     generated = model.generate(
+#         max_new_tokens=333,
+#         do_sample=True,
+#         temperature=0.7,
+#         top_k=4,
+#         penalty_alpha=0.6,
+#         eta_cutoff=0.0003,
+#         repetition_penalty=2.3,
+#         no_repeat_ngram_size=9,
+#         output_hidden_states=True,
+#         return_dict_in_generate=True,
+#     )
+#     return tokenizer.decode(generated["sequences"][0], skip_special_tokens=False)
+
+
+# ray.init(num_cpus=4)
+
+# # Call the generate() function
+# start_time = time.time()
+# generated_text = ray.get(generate.remote())
+# # generated_text = generate()
+# end_time = time.time()
+
+# execution_time = end_time - start_time
+# print(f"Execution time: {execution_time} seconds")
+
+# # Shutdown Ray
+# # ray.shutdown()
+
+# # Print the generated text
+# print(generated_text)
+
 # # ------ ViT ------- #
 
 # import requests
@@ -107,22 +161,6 @@
 
 # ------- inference ------- #
 # import time
-
-# import torch
-# from transformers import AutoModelForCausalLM, AutoTokenizer
-
-# model_name = "EleutherAI/pythia-410m-deduped"
-
-# tokenizer = AutoTokenizer.from_pretrained(
-#     model_name, cache_dir="/data/models", padding_side="left"
-# )
-# model = AutoModelForCausalLM.from_pretrained(
-#     model_name,
-#     cache_dir="/data/models",
-#     output_hidden_states=True,
-#     device_map="auto",
-#     torch_dtype=torch.bfloat16,
-# )
 
 # string = "Once upon a time,"
 

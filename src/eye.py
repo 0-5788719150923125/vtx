@@ -8,11 +8,12 @@ from transformers import AutoFeatureExtractor, ViTForImageClassification
 
 class Vision:
     def __init__(self):
+        model = "facebook/deit-tiny-patch16-224"
         self.feature_extractor = AutoFeatureExtractor.from_pretrained(
-            "facebook/deit-tiny-patch16-224"
+            model, cache_dir="/data/models"
         )
         self.model = ViTForImageClassification.from_pretrained(
-            "facebook/deit-tiny-patch16-224"
+            model, cache_dir="/data/models"
         )
 
     # Function to convert and preprocess the image

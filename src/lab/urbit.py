@@ -8,8 +8,7 @@ def main(config):
         if not planet and not os.path.exists(f"/data/urbit/one.comet"):
             with open(f"/data/urbit/one.comet", "w") as file:
                 pass
-        else:
-            # If True, expects a planet to exist under /data/urbit.
+        elif planet and os.path.exists(f"/data/urbit/one"):
             pass
 
         time.sleep(66.6)

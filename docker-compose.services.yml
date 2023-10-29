@@ -27,6 +27,7 @@ services:
 
   ipfs:
     image: ipfs/kubo:latest
+    restart: 'always'
     command: daemon --init-profile=lowpower
     ports:
       - 9090:8080
@@ -34,16 +35,22 @@ services:
       - ./book:/book
       - data:/data/ipfs
 
-  # port:
-  #   image: tloncorp/vere:edge
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.25'
-  #         memory: 1GB
-  #   ports:
-  #     - 9090:80
-  #     - 34343:34343/udp
+  bit:
+    image: tloncorp/vere
+    restart: 'always'
+    # command: /bin/start-urbit
+    # tty: true
+    stdin_open: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 2GB
+    volumes:
+      - ./data/urbit:/urbit
+    ports:
+      - 9099:80
+      - 34343:34343/udp
 
 volumes:
   data:

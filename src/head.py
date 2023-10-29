@@ -423,15 +423,9 @@ class Cortex:
                     eos_token_id=eos_token_ids,
                 )
 
-                generation = completion
-                temp_history = deepcopy(history)
-                # Sometimes, the input prompt is not the same as what is in text, because
-                # tokenizers are weird. So, we leave a small buffer when removing the prompt here.
-                while len(temp_history) > 11:
-                    generation = generation[1:]
-                    temp_history = temp_history[1:]
-                while generation.endswith(wall):
-                    generation = generation.rstrip(wall)
+                generation = "\n".join(
+                    completion.split("\n")[len(history.splitlines()) :]
+                ).rstrip(wall)
                 mentions = "(?:[<][@])(\d+\s*\d*)"
                 variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
                 group = re.search(r"(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
@@ -453,11 +447,9 @@ class Cortex:
                     continue
                 success = True
                 bias = group[2]
-                output = remove_invisible_characters(group[3].replace(r"\n", "\n"))
-                # while "  " in output:
-                #     output = output.replace("  ", " ")
-                while output.endswith("\\"):
-                    output = output.rstrip("\\")
+                output = remove_invisible_characters(
+                    group[3].replace(r"\n", "\n")
+                ).rstrip("\\")
                 if output == "":
                     attempt += 1
                     continue
@@ -555,17 +547,13 @@ class Cortex:
                         completion.replace(r"\n", "\n")
                         .replace("{{<", "{{")
                         .replace(">}}", "}}")
-                    )
-                    if output.endswith(wall):
-                        output = output.rstrip(wall)
+                    ).rstrip(wall)
                     if cleanup:
                         while "\n" in output:
                             output = output.replace("\n", " ")
                         while "  " in output:
                             output = output.replace("  ", " ")
-                        while output.endswith("\\"):
-                            output = output.rstrip("\\")
-                        output = remove_invisible_characters(output)
+                        output = remove_invisible_characters(output).rstrip("\\")
                     break
 
                 output = False
@@ -670,22 +658,13 @@ class Cortex:
                 completion = completion[1:]
                 prompt = prompt[1:]
 
-            while completion.startswith(" "):
-                completion = completion.lstrip(" ")
-
-            while completion.startswith("\n"):
-                completion = completion.lstrip("\n\r")
-
-            if completion.endswith("Q"):
-                completion = completion.rstrip("Q")
-
-            while completion.endswith("\n"):
-                completion = completion.rstrip("\n")
-
-            while completion.endswith(r"\n"):
-                completion = completion.rstrip(r"\n")
-
-            output = completion
+            output = (
+                completion.lstrip(" ")
+                .lstrip("\n\r")
+                .rstrip("Q")
+                .rstrip("\n")
+                .rstrip(r"\n")
+            )
 
         except Exception as e:
             logging.error(e)

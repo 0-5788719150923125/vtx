@@ -1,4 +1,5 @@
 import importlib
+import os
 import threading
 import time
 
@@ -6,6 +7,12 @@ from common import ad, bc, config
 
 # Quickly test stuff here
 from lab import scratch
+
+if os.environ.get("DEV_MODE", "false") == "true":
+    import debugpy
+
+    time.sleep(1)
+    debugpy.listen(("0.0.0.0", 5678))
 
 
 # This is the main loop

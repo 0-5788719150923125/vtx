@@ -372,6 +372,11 @@ async def subscribe_submissions(reddit, config):
                     logging.error(e)
 
             frequency = subs[submission.subreddit.display_name].get("frequency", 0)
+            if config["reddit"].get("stalk"):
+                if config["reddit"]["stalk"].get(submission.author):
+                    frequency = config["reddit"]["stalk"][submission.author].get(
+                        "frequency", frequency
+                    )
 
             sub = subs[submission.subreddit.display_name]
 
@@ -454,6 +459,11 @@ async def subscribe_comments(reddit, config):
             frequency = config["reddit"]["subs"][comment.subreddit.display_name].get(
                 "frequency", 0
             )
+            if config["reddit"].get("stalk"):
+                if config["reddit"]["stalk"].get(comment.author):
+                    frequency = config["reddit"]["stalk"][comment.author].get(
+                        "frequency", frequency
+                    )
 
             roll = random.random()
             if parent.author == os.environ["REDDITAGENT"]:

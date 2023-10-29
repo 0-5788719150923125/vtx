@@ -400,6 +400,8 @@ async def subscribe_submissions(reddit, config):
                 {"bias": int(op), "message": submission.title},
                 {"bias": int(op), "message": submission.selftext},
             ]
+
+            print(frequency)
             success, bias, output, seeded = await head.ctx.chat(
                 ctx=context, personas=persona
             )
@@ -485,6 +487,7 @@ async def subscribe_comments(reddit, config):
             if filter_response(sub, config, submission, comment):
                 continue
 
+            print(frequency)
             success, bias, output, seeded = await head.ctx.chat(
                 ctx=context,
                 personas=persona,

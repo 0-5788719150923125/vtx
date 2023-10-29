@@ -169,7 +169,9 @@ class Cortex:
         for item in ctx:
             if item["bias"] is not None:
                 joined += wall + str(item["bias"]) + ship + " "
-            joined += item["message"] + "\n"
+            joined += item["message"]
+            if ctx.index(item) != len(ctx) - 1:
+                joined += "\n"
         length = self.get_string_length(joined)
         while length >= max_tokens:
             joined = joined[5:]
@@ -373,7 +375,8 @@ class Cortex:
             self.get_max_length() * 0.8,
         )
 
-        prompt = history + wall
+        prompt = history + "\n" + wall
+
         if bias:
             assert len(str(bias)) in [
                 18,

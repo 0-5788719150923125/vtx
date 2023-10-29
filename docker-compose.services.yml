@@ -55,6 +55,7 @@ services:
           memory: 2GB
     volumes:
       - ./data/urbit:/urbit
+    network_mode: host
     ports:
       - 9099:80
       - 34343:34343/udp

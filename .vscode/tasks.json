@@ -62,8 +62,8 @@
         "command": "docker context use ${input:context}",
       },
       {
-        "label": "orchestrate",
-        "detail": "Deploy the local stack to a remote server via SSH.",
+        "label": "remote",
+        "detail": "Test the local stack against a remote Docker daemon via SSH.",
         "type": "shell",
         "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && docker context use one && ARCH='ARM' FOCUS=${input:env} docker compose up && docker context use default",
         "windows": {
@@ -83,7 +83,10 @@
         "label": "train",
         "detail": "Train a model.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml run -e FOCUS=${input:env} lab python3 trainer.py"
+        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml run -e FOCUS=${input:env} lab python3 trainer.py",
+        "runOptions": {
+          "instanceLimit": 3
+        },
       },
       {
         "label": "i",
@@ -151,7 +154,7 @@
         "type": "pickString",
         "id": "env",
         "description": "Which model should I focus on?",
-        "options": ["source", "mind", "heart", "soul", "root", "toe"]
+        "options": ["source", "aura", "mind", "heart", "soul", "toe"]
       },
       {
         "type": "promptString",

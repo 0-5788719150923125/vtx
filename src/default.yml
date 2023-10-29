@@ -33,6 +33,13 @@ source:
       passive_frequency: 0.01
       active_frequency: 0.99
 
+# An extremely capable transformer based on GPT-NeoX architecture.
+aura:
+  info: like a bird
+  model: tiiuae/falcon-rw-1b
+  training:
+    type: "lora"
+
 # An extremely powerful model, trained on a lot of data, and just barely capable of
 # running on 8GB of VRAM without quantization.
 mind:
@@ -76,13 +83,6 @@ soul:
     equalize_datasets: False
     datasets:
       - default
-
-# An extremely capable transformer based on GPT-NeoX architecture.
-root:
-  info: producing crotalus since 1999 
-  model: EleutherAI/pythia-1b-deduped
-  training:
-    type: "standard"
 
 # A very small model, which can be run on < 4GB of VRAM.
 toe:

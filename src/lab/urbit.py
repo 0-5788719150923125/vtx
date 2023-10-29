@@ -4,7 +4,7 @@ import time
 
 def main(config):
     planet = config["urbit"].get("planet", False)
-    if not not os.path("/data/urbit"):
+    if not os.path.exists("/data/urbit"):
         os.mkdir("/data/urbit")
     while True:
         if not planet and not os.path.exists(f"/data/urbit/one.comet"):

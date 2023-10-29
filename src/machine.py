@@ -19,15 +19,15 @@ if os.environ.get("DEV_MODE", "false") == "true":
 def main():
     allowed_services = [
         "source",
+        "book",
         "smtp",
         "telegram",
-        # "telegraph",
+        "matrix",
+        "urbit",
         "reddit",
         "discord",
         "twitch",
         "x",
-        "matrix",
-        "book",
     ]
 
     tasks = {}

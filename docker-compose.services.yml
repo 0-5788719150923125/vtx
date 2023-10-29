@@ -1,7 +1,16 @@
 version: '3.9'
 
 services:
-  tb:
+  ctx:
+    image: ghcr.io/0-5788719150923125/ctx:latest
+    restart: 'always'
+    network_mode: host
+    env_file:
+      - .env
+    environment:
+      FOCUS: ${ANONYMOUS:-true}
+
+  tbd:
     image: ghcr.io/0-5788719150923125/lab:latest
     command: tensorboard --logdir /data/logs --bind_all --samples_per_plugin scalars=999999999
     volumes:
@@ -25,7 +34,7 @@ services:
     environment:
       HIVEMIND_LOGLEVEL: ERROR
 
-  ipfs:
+  fil:
     image: ipfs/kubo:latest
     restart: 'always'
     command: daemon --init-profile=lowpower
@@ -38,8 +47,6 @@ services:
   bit:
     image: tloncorp/vere
     restart: 'always'
-    # command: /bin/start-urbit
-    # tty: true
     stdin_open: true
     deploy:
       resources:

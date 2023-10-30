@@ -3,14 +3,14 @@ import time
 
 
 def main(config):
-    planet = config["urbit"].get("planet", False)
+    moon = config["urbit"].get("moon", False)
     if not os.path.exists("/data/urbit"):
         os.mkdir("/data/urbit")
     while True:
-        if not planet and not os.path.exists(f"/data/urbit/one.comet"):
+        if not moon and not os.path.exists(f"/data/urbit/one.comet"):
             with open("/data/urbit/one.comet", "x") as file:
                 pass
-        elif planet and os.path.exists("/data/urbit/one"):
+        elif moon:
             pass
 
         time.sleep(66.6)

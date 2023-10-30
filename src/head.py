@@ -427,7 +427,7 @@ class Cortex:
                 )
 
                 generation = "\n".join(
-                    completion.split("\n")[len(history.splitlines()) :]
+                    completion.splitlines()[len(history.splitlines()) :]
                 ).rstrip(wall)
                 mentions = "(?:[<][@])(\d+\s*\d*)"
                 variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
@@ -441,21 +441,36 @@ class Cortex:
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
                     or wall in group[3]
-                    or group[3][:1] in [">", "~", '"', "“", " ", "\\", "\n", ""]
-                    or group[3][:2] in ["\\", "\n", "<@", "(("]
-                    or group[3][:3] in ["< @"]
+                    or group[3].startswith(
+                        tuple(
+                            [
+                                ">",
+                                "~",
+                                '"',
+                                "“",
+                                " ",
+                                "\\",
+                                "\n",
+                                "\\",
+                                "\n",
+                                "<@",
+                                "< @",
+                                "((",
+                            ]
+                        )
+                    )
                 ):
                     if attempt == max_attempts:
                         raise Exception(generation)
                     continue
-                success = True
-                bias = group[2]
                 output = remove_invisible_characters(
                     group[3].replace(r"\n", "\n")
                 ).rstrip("\\")
                 if output == "":
                     attempt += 1
                     continue
+                bias = group[2]
+                success = True
                 break
 
             except Exception as e:

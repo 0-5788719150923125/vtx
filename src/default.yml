@@ -7,7 +7,7 @@
 # stored in a .env file, at the root of this project. See {project_root}/examples/bot/.env for an example.
 
 urbit:
-  planet: False
+  moon: False
 
 personas:
   source:

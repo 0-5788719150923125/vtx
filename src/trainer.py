@@ -433,7 +433,8 @@ if __name__ == "__main__":
     )
 
     train_data = build_inputs(p)
-    print(f"Final dataset: {train_data}")
+    print("Final dataset:")
+    print(train_data)
 
     # Train the model
     ai.train(

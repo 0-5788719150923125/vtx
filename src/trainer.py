@@ -433,8 +433,7 @@ if __name__ == "__main__":
     )
 
     train_data = build_inputs(p)
-    print("Final dataset:")
-    print(train_data)
+    print(f"Final dataset: {bc.ROOT}{len(train_data)}{ad.TEXT} batches")
 
     # Train the model
     ai.train(

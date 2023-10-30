@@ -65,7 +65,7 @@
         "label": "remote",
         "detail": "Test the local stack against a remote Docker daemon via SSH.",
         "type": "shell",
-        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && docker context use one && ARCH='ARM' FOCUS=${input:env} docker compose up && docker context use default",
+        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && docker context use one && ARCH='ARM' FOCUS=${input:env} docker compose up",
         "windows": {
           "command": "$env:FOCUS = '${input:env}'; docker compose up"
         }
@@ -102,7 +102,7 @@
       },
       {
         "label": "prepare",
-        "detail": "Prepare your datasets.",
+        "detail": "Prepare a dataset.",
         "type": "shell",
         "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:lab}/prepare.py",
         "runOptions": {
@@ -111,7 +111,7 @@
       },
       {
         "label": "fetch",
-        "detail": "Download your datasets.",
+        "detail": "Download a dataset.",
         "type": "shell",
         "command": "docker compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:lab}/fetch.py",
         "runOptions": {
@@ -127,14 +127,22 @@
       {
         "label": "auto",
         "detail": "Turn on autopilot.",
-        "type": "shell",
-        "command": "docker compose up -d"
+        "command": "FOCUS=${input:env} docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up -d",
+        "windows": {
+          "command": "$env:FOCUS = '${input:env}'; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up -d"
+        }
       },
       {
         "label": "prune",
         "detail": "Prune all unused images, networks, and volumes.",
         "type": "shell",
         "command": "docker system prune -f && docker volume prune -f"
+      },
+      {
+        "label": "key",
+        "detail": "Fetch your Urbit access key.",
+        "type": "shell",
+        "command": "docker compose exec bit /bin/get-urbit-code"
       },
       {
         "label": "down",

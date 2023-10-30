@@ -38,7 +38,6 @@ def create_dataset(
     stride: int = 0,
     samples: float = 1.0,
     line_by_line=False,
-    shuffle=False,
 ):
     prefixes = [
         ".git",
@@ -85,8 +84,7 @@ def create_dataset(
     ]
 
     files = list_full_paths(path)
-    if shuffle:
-        random.shuffle(files)
+    random.shuffle(files)
 
     files = [item for item in files if random.random() <= samples]
 
@@ -108,8 +106,6 @@ def create_dataset(
             if skip == True:
                 print("skipping " + bc.CORE + str(file) + ad.TEXT)
                 continue
-            else:
-                print("loading " + str(file))
 
             if line_by_line == True:
                 with open(file, "r") as content:
@@ -135,6 +131,8 @@ def create_dataset(
 
         except Exception as e:
             logging.error(e)
+
+    print(f"Tokenizing: {path}")
 
     if line_by_line == True:
         collection = []
@@ -367,9 +365,6 @@ if __name__ == "__main__":
                             + "/"
                             + str(duplicate)
                         )
-                        shuffle = False
-                        if duplicate > 0:
-                            shuffle = True
                         samples = 1.0
                         if config["collections"][collection][dataset] is not None:
                             stride = config["collections"][collection][dataset].get(
@@ -385,7 +380,6 @@ if __name__ == "__main__":
                             stride=stride,
                             samples=samples,
                             line_by_line=line_by_line,
-                            shuffle=shuffle,
                         )
 
                         ds.save(cache_destination=cached)
@@ -438,9 +432,12 @@ if __name__ == "__main__":
         "/data/logs", name=focus + "/" + adapter, default_hp_metric=True
     )
 
+    train_data = build_inputs(p)
+    print(f"Final dataset: {train_data}")
+
     # Train the model
     ai.train(
-        train_data=build_inputs(p),
+        train_data=train_data,
         n_gpu=1,
         benchmark=False,
         petals=use_petals,

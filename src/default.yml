@@ -36,7 +36,7 @@ source:
 # An extremely capable transformer based on GPT-NeoX architecture.
 aura:
   info: like a bird
-  model: tiiuae/falcon-rw-1b
+  model: petals-team/falcon-rw-1b
   training:
     type: "lora"
 
@@ -52,6 +52,9 @@ mind:
 heart:
   info: with everything you got
   model: RWKV/rwkv-4-430m-pile
+  adapters:
+    - base
+    - behavior
   training:
     gradient_checkpointing: False
     type: "lora"

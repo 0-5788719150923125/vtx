@@ -10,6 +10,8 @@ from common import get_identity
 
 root_dir = "/lab/structure"
 
+num_samples = 100000
+
 
 # Create interesting structures
 def main():
@@ -36,26 +38,26 @@ def main():
         return samples
 
     with open(f"{root_dir}/train/random.csv", "w", newline="") as file:
-        agents = get_random_samples(10000)
+        agents = get_random_samples(num_samples)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
     with open(f"{root_dir}/train/mirror.csv", "w", newline="") as file:
-        agents = get_samples(10000)
+        agents = get_samples(num_samples)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         csvwriter.writerows(agents[1:])
 
     with open(f"{root_dir}/train/left-sorted-mirror.csv", "w", newline="") as file:
-        agents = get_samples(10000)
+        agents = get_samples(num_samples)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[0]), reverse=False)
         csvwriter.writerows(sorted_list)
 
     with open(f"{root_dir}/train/right-sorted-mirror.csv", "w", newline="") as file:
-        agents = get_samples(10000)
+        agents = get_samples(num_samples)
         csvwriter = csv.writer(file)
         csvwriter.writerow(["agent", "bot"])
         sorted_list = sorted(agents, key=lambda x: int(x[1]), reverse=True)
@@ -109,7 +111,7 @@ def main():
         )
         i = 0
         numbers = []
-        count = 3333
+        count = num_samples / 10
         while i < count:
             sequence = random_fibonacci_list(23)
             if random.random() < 0.5:

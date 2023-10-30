@@ -132,7 +132,7 @@ def create_dataset(
         except Exception as e:
             logging.error(e)
 
-    print(f"Tokenizing: {path}")
+    print(f"tokenizing: {bc.FOLD}{path}{ad.TEXT}")
 
     if line_by_line == True:
         collection = []
@@ -306,7 +306,7 @@ if __name__ == "__main__":
 
                     while duplicate >= 0:
                         print(
-                            "loading "
+                            "loading: "
                             + bc.FOLD
                             + focus
                             + "/"

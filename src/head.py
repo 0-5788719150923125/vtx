@@ -393,7 +393,7 @@ class Cortex:
         while attempt < max_attempts:
             try:
                 if attempt > 0:
-                    temperature = temperature * 0.9
+                    temperature *= 0.9
 
                 attempt += 1
                 seed = nist_beacon()
@@ -436,21 +436,18 @@ class Cortex:
                     group is None
                     or group[2] is None
                     or group[3] is None
-                    or group[3] == ""
                     or group[3] in prompt
+                    or wall in group[3]
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
-                    or wall in group[3]
                     or group[3].startswith(
                         tuple(
                             [
+                                " ",
                                 ">",
                                 "~",
                                 '"',
                                 "“",
-                                " ",
-                                "\\",
-                                "\n",
                                 "\\",
                                 "\n",
                                 "<@",
@@ -463,12 +460,7 @@ class Cortex:
                     if attempt == max_attempts:
                         raise Exception(generation)
                     continue
-                output = remove_invisible_characters(
-                    group[3].replace(r"\n", "\n")
-                ).rstrip("\\")
-                if output == "":
-                    attempt += 1
-                    continue
+                output = remove_invisible_characters(group[3].replace(r"\n", "\n"))
                 bias = group[2]
                 success = True
                 break

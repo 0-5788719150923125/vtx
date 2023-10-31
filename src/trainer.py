@@ -442,6 +442,7 @@ if __name__ == "__main__":
         benchmark=False,
         petals=use_petals,
         hivemind=use_hivemind,
+        deepspeed=p.get("deepspeed", False),
         seed=nist_beacon()[1],
         output_dir=output_dir,
         loggers=[logger],

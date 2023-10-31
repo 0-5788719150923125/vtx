@@ -6,31 +6,9 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 "Go play in the lab."
 
-# goals
+# mission
 
-To provide a simple, opinionated framework for human cloning experiments.
-
-# console
-```
-Swarm state: healthy
-
-...2vYiga, 256.0 RPS  |                                 ########                             |
-...vMfXzi, 3688.5 RPS |#########################                                             |
-...i9CA9T, 2776.2 RPS |                              ###############                         |
-...33Pgb9, 2108.6 RPS |###############                                                       |
-...Ap3RUq, 256.0 RPS  |                                     ########                         |
-...7mhsNH, 256.0 RPS  |                         ########                                     |
-...iRUz6M, 2767.3 RPS |               ###############                                        |
-...zbDrjo, 3500.3 RPS |                                             #########################|
-
-
-Legend:
-
-# - online
-J - joining     (loading blocks)
-? - unreachable (port forwarding/NAT/firewall issues, see below)
-_ - offline     (just disconnected)
-```
+To provide the masses with a simple, opinionated framework for human cloning experiments.
 
 # interface
 

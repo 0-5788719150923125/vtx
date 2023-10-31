@@ -401,7 +401,6 @@ async def subscribe_submissions(reddit, config):
                 {"bias": int(op), "message": submission.selftext},
             ]
 
-            print(frequency)
             success, bias, output, seeded = await head.ctx.chat(
                 ctx=context, personas=persona
             )
@@ -469,7 +468,7 @@ async def subscribe_comments(reddit, config):
 
             roll = random.random()
             if parent.author == os.environ["REDDITAGENT"]:
-                roll = roll / (len("ACTG") * 100)  # the optimal number of children
+                roll = roll / (len("ACTG"))  # the optimal number of children
             if roll >= frequency:
                 continue
 
@@ -487,7 +486,6 @@ async def subscribe_comments(reddit, config):
             if filter_response(sub, config, submission, comment):
                 continue
 
-            print(frequency)
             success, bias, output, seeded = await head.ctx.chat(
                 ctx=context,
                 personas=persona,

@@ -258,36 +258,11 @@ if __name__ == "__main__":
     else:
         output_dir = "/data/models/" + focus
 
-    # Instantiate the model object
-    ai = aigen(
-        model=launch_model,
-        model_folder=model_folder,
-        petals=use_petals,
-        cache_dir="/data/models",
-        embeddings_dir="/data/embeddings/" + focus,
-        tuning_mode=tuning_mode,
-        pre_seq_len=pre_seq_len,
-        precision=model_config.get("precision", None),
-        gradient_checkpointing=p.get("gradient_checkpointing", True),
-    )
-
-    ai.tokenizer = AutoTokenizer.from_pretrained(
-        launch_model,
-        cache_dir="/data/models",
-        padding="max_length",
-        padding_side=p.get("padding_side", "left"),
-        return_overflowing_tokens=True,
-        truncation=True,
-    )
-    if ai.tokenizer.pad_token is None:
-        ai.tokenizer.pad_token = ai.tokenizer.eos_token
-
-    print(ai.tokenizer)
-
     # Create a tokenized dataset from every directory specified in config file
-    def build_inputs(c):
+    def build_inputs(c, tokenizer):
         datasets = {}
-        block_size = c.get("block_size", ai.model_max_length)
+        block_size = c.get("block_size")
+        assert block_size, "You must set a block_size to use."
         stride = c.get("stride", 0)
         for collection in c["datasets"]:
             for dataset in config["collections"][collection]:
@@ -375,7 +350,7 @@ if __name__ == "__main__":
                             )
                         ds = create_dataset(
                             path="/" + dataset,
-                            tokenizer=ai.tokenizer,
+                            tokenizer=tokenizer,
                             block_size=block_size,
                             stride=stride,
                             samples=samples,
@@ -406,6 +381,36 @@ if __name__ == "__main__":
         else:
             return collected[0]
 
+    # Instantiate the model object
+    ai = aigen(
+        model=launch_model,
+        model_folder=model_folder,
+        petals=use_petals,
+        cache_dir="/data/models",
+        embeddings_dir="/data/embeddings/" + focus,
+        tuning_mode=tuning_mode,
+        pre_seq_len=pre_seq_len,
+        precision=model_config.get("precision", None),
+        gradient_checkpointing=p.get("gradient_checkpointing", True),
+    )
+
+    tokenizer = AutoTokenizer.from_pretrained(
+        launch_model,
+        cache_dir="/data/models",
+        padding="max_length",
+        padding_side=p.get("padding_side", "left"),
+        return_overflowing_tokens=True,
+        truncation=True,
+    )
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
+    ai.tokenizer = tokenizer
+
+    print(tokenizer)
+
+    train_data = build_inputs(p, tokenizer)
+
     get_trainable = False
     if train_type != "standard":
         if not use_petals:
@@ -432,7 +437,6 @@ if __name__ == "__main__":
         "/data/logs", name=focus + "/" + adapter, default_hp_metric=True
     )
 
-    train_data = build_inputs(p)
     print(f"Final dataset: {bc.ROOT}{len(train_data)}{ad.TEXT} batches")
 
     # Train the model

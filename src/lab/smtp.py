@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 from apscheduler.schedulers.background import BackgroundScheduler
 
 import head
-from common import ad, bc, unified_newlines
+from common import ad, bc, get_current_date, unified_newlines
 
 
 def main(config) -> None:
@@ -41,16 +41,21 @@ def send_email(config):
         print(f"{bc.CORE}ONE@SMTP: {ad.TEXT}" + "sending message to " + subscriber)
         output = asyncio.run(
             head.ctx.prompt(
-                prompt=config.get("subject") + "\n---\n" + config.get("prompt"),
+                prompt=f"""```
+title: {config.get('subject"')}
+author: {config.get('author', 'Ink')}
+date: {get_current_date()}
+description: A short email and a story, written for a friend.
+```
+
+# {config.get('subject')}
+---
+{config.get('prompt')}""",
                 temperature=0.7,
                 min_new_tokens=512,
                 max_new_tokens=768,
                 disposition=config.get("disposition", None),
-                eos_tokens=[
-                    "\n",
-                    "\n\n",
-                    "\\",
-                ],
+                eos_tokens=["\n", "\n\n", "\\", ".", "?", "!"],
             )
         )
 
@@ -65,9 +70,8 @@ def send_email(config):
             message["To"] = subscriber
             message["Subject"] = config.get("subject")
 
-            cleaned = "\n".join(output.splitlines()[2:])
-            signed = cleaned + "\n\n" + "Best Regards," + "\n\n" + "Ryan"
-            unified = unified_newlines(signed, 2)
+            cleaned = "\n".join(output.replace(r"\n", "\n").splitlines()[9:])
+            unified = unified_newlines(cleaned, 2)
             uniform = textwrap.dedent(unified)
 
             message.attach(MIMEText(uniform, "plain"))

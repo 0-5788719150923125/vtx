@@ -15,6 +15,7 @@ import time
 from datetime import datetime, timedelta
 from pprint import pprint
 
+import pytz
 import requests
 import yaml
 from cerberus import Validator
@@ -140,6 +141,12 @@ class bc:
 # Color codes after
 class ad:
     TEXT = "\033[0m"
+
+
+# Return today's date
+def get_current_date():
+    cst = pytz.timezone("America/Chicago")  # CST
+    return datetime.now(cst).strftime("%Y-%m-%d")
 
 
 # Replace all newlines with even spacing

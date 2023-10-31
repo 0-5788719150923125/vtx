@@ -37,18 +37,20 @@ def send_email(config):
     sender_email = os.environ["SMTP_EMAIL"]
     password = os.environ["SMTP_PASSWORD"]
 
+    subject = config.get("subject")
+
     for subscriber in config.get("to"):
         print(f"{bc.CORE}ONE@SMTP: {ad.TEXT}" + "sending message to " + subscriber)
         output = asyncio.run(
             head.ctx.prompt(
                 prompt=f"""```
-title: {config.get('subject"')}
+title: {subject}
 author: {config.get('author', 'Ink')}
 date: {get_current_date()}
 description: A short email and a story, written for a friend.
 ```
 
-# {config.get('subject')}
+# {subject}
 ---
 {config.get('prompt')}""",
                 temperature=0.7,
@@ -68,10 +70,10 @@ description: A short email and a story, written for a friend.
             message = MIMEMultipart()
             message["From"] = sender_email
             message["To"] = subscriber
-            message["Subject"] = config.get("subject")
+            message["Subject"] = subject
 
             cleaned = "\n".join(output.splitlines()[9:])
-            unified = unified_newlines(cleaned.replace(r"\n", "\n"), 2)
+            unified = unified_newlines(cleaned.replace(r"\r\n|\r|\n", "\n"), 2)
             uniform = textwrap.dedent(unified)
 
             message.attach(MIMEText(uniform, "plain"))

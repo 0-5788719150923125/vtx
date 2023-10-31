@@ -567,14 +567,13 @@ async def build_context(comment):
 def transformer(name, text):
     pronoun = random.choice(["My", "A"])
 
-    verb = random.choice(["says", "whispers", "thinks", "believes"])
+    verb = random.choice(["says", "said", "whispers"])
     leader = "Penny"
     minion = "daemon"
-    worker = "robot"
     if os.environ["REDDITAGENT"] == "AlexandriaPen":
         leader = "Ink"
         minion = "ghost"
-    types = random.choice([minion, "friend", worker])
+    types = random.choice([minion, "friend", "robot"])
     responses = [
         f'{pronoun} {types} {verb}, "{text}"',
         f'{leader} {verb}, "{text}"',

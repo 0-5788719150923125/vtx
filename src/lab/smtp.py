@@ -70,8 +70,8 @@ description: A short email and a story, written for a friend.
             message["To"] = subscriber
             message["Subject"] = config.get("subject")
 
-            cleaned = "\n".join(output.replace(r"\n", "\n").splitlines()[9:])
-            unified = unified_newlines(cleaned, 2)
+            cleaned = "\n".join(output.splitlines()[9:])
+            unified = unified_newlines(cleaned.replace(r"\n", "\n"), 2)
             uniform = textwrap.dedent(unified)
 
             message.attach(MIMEText(uniform, "plain"))

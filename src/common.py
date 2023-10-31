@@ -142,6 +142,14 @@ class ad:
     TEXT = "\033[0m"
 
 
+# Replace all newlines with even spacing
+def unified_newlines(text, len=2):
+    segment = "\n" * len
+    while segment in text:
+        text = text.replace(segment, "\n")
+    return text.replace("\n", segment)
+
+
 def run_shell_command(subprocess_args):
     # Start subprocess
     # bufsize = 1 means output is line buffered

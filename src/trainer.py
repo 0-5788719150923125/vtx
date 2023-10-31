@@ -29,6 +29,8 @@ from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_
 model_config = config[focus]
 model_folder = "models/" + focus
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 
 # Join every file located in a particular directory
 def create_dataset(
@@ -389,6 +391,7 @@ if __name__ == "__main__":
         return_overflowing_tokens=True,
         truncation=True,
     )
+
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 

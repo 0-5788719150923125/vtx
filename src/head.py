@@ -269,10 +269,15 @@ class Cortex:
         self.active = False
 
     def wait_in_queue(self):
+        max_wait_time = 15 * 60  # 15 minutes
         while self.active == True or not self.ai:
             time.sleep(1)
+            max_wait_time -= 1
+            if max_wait_time == 0:
+                return False
 
         self.active = True
+        return True
 
     @to_thread
     def chat(
@@ -285,7 +290,9 @@ class Cortex:
         personas: List[str] = [],
         eos_tokens: list | None = None,
     ):
-        self.wait_in_queue()
+        result = self.wait_in_queue()
+        if not result:
+            return False, 23, "", False
 
         if isinstance(personas, str):
             personas = [personas]
@@ -385,11 +392,12 @@ class Cortex:
                 19,
             ], f"The given bias ({str(bias)}) is of the wrong length."
             prompt += str(bias) + ship
+        else:
+            bias = 123
 
         attempt = 0
         max_attempts = 10
         success = False
-        output = None
         seeded = False
 
         while attempt < max_attempts:
@@ -487,7 +495,9 @@ class Cortex:
         eos_tokens: list | None = None,
         cleanup: bool = False,
     ):
-        self.wait_in_queue()
+        result = self.wait_in_queue()
+        if not result:
+            return
 
         eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
 
@@ -589,7 +599,9 @@ class Cortex:
         decay_after_length: int = 66,
         decay_factor: float = 0.023,
     ):
-        self.wait_in_queue()
+        result = self.wait_in_queue()
+        if not result:
+            return
 
         prompt = f"""
         I am a powerful artificial intelligence, who helps users to answer their questions. Here are some example questions:

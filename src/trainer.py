@@ -381,6 +381,21 @@ if __name__ == "__main__":
         else:
             return collected[0]
 
+    tokenizer = AutoTokenizer.from_pretrained(
+        launch_model,
+        cache_dir="/data/models",
+        padding="max_length",
+        padding_side=p.get("padding_side", "left"),
+        return_overflowing_tokens=True,
+        truncation=True,
+    )
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
+    print(tokenizer)
+
+    train_data = build_inputs(p, tokenizer)
+
     # Instantiate the model object
     ai = aigen(
         model=launch_model,
@@ -394,22 +409,7 @@ if __name__ == "__main__":
         gradient_checkpointing=p.get("gradient_checkpointing", True),
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(
-        launch_model,
-        cache_dir="/data/models",
-        padding="max_length",
-        padding_side=p.get("padding_side", "left"),
-        return_overflowing_tokens=True,
-        truncation=True,
-    )
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-
     ai.tokenizer = tokenizer
-
-    print(tokenizer)
-
-    train_data = build_inputs(p, tokenizer)
 
     get_trainable = False
     if train_type != "standard":

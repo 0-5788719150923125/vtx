@@ -3,7 +3,7 @@ import time
 
 
 def main(config):
-    moon = config["urbit"].get("moon", False)
+    moon = config["bit"].get("moon", False)
     if not os.path.exists("/data/urbit"):
         os.mkdir("/data/urbit")
     while True:

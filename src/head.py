@@ -40,6 +40,8 @@ from common import (
     wall,
 )
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 
 def validation(config):
     schema = {
@@ -399,6 +401,7 @@ class Cortex:
         max_attempts = 10
         success = False
         seeded = False
+        output = None
 
         while attempt < max_attempts:
             try:

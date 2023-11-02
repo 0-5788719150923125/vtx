@@ -106,7 +106,7 @@ def create_dataset(
                     skip = True
                     continue
             if skip == True:
-                print("skipping " + bc.CORE + str(file) + ad.TEXT)
+                print(f"skipping: {bc.CORE}{file}{ad.TEXT}")
                 continue
 
             if line_by_line == True:
@@ -115,6 +115,7 @@ def create_dataset(
                         lines.write(content.read())
                 datasets[file] = TokenDataset(
                     "/tmp/lines.txt",
+                    batch_size=100000,
                     block_size=block_size,
                     line_by_line=line_by_line,
                     tokenizer=tokenizer,
@@ -132,6 +133,7 @@ def create_dataset(
                         intermediate.write(string + f"\n{tokenizer.eos_token}\n")
 
         except Exception as e:
+            print(f"skipping: {bc.CORE}{file}{ad.TEXT}")
             logging.error(e)
 
     print(f"tokenizing: {bc.FOLD}{path}{ad.TEXT}")
@@ -148,6 +150,7 @@ def create_dataset(
         dataset = TokenDataset(
             intermediate_path,
             tokenizer=tokenizer,
+            batch_size=100000,
             block_size=block_size,
             stride=stride,
             bos_token=tokenizer.bos_token or "<|endoftext|>",

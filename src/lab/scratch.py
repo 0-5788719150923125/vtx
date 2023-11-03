@@ -162,6 +162,28 @@
 # ------- inference ------- #
 # import time
 
+# import torch
+# from transformers import (
+#     AutoModelForCausalLM,
+#     AutoTokenizer,
+#     RwkvConfig,
+#     RwkvForCausalLM,
+#     RwkvModel,
+# )
+
+# model_name = "EleutherAI/gpt-neo-125M"
+
+# tokenizer = AutoTokenizer.from_pretrained(
+#     model_name, cache_dir="/data/models", padding_side="left"
+# )
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_name,
+#     cache_dir="/data/models",
+#     output_hidden_states=True,
+#     device_map="auto",
+#     torch_dtype=torch.bfloat16,
+# )
+
 # string = "Once upon a time,"
 
 # inputs = tokenizer(string, return_tensors="pt")

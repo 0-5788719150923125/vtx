@@ -58,6 +58,7 @@ def create_dataset(
         "bin",
         "eot",
         "eps",
+        "epub",
         "docx",
         "gif",
         "ico",
@@ -133,7 +134,7 @@ def create_dataset(
                         intermediate.write(string + f"\n{tokenizer.eos_token}\n")
 
         except Exception as e:
-            print(f"skipping: {bc.CORE}{file}{ad.TEXT}")
+            print(f"failed: {bc.CORE}{file}{ad.TEXT}")
             logging.error(e)
 
     print(f"tokenizing: {bc.FOLD}{path}{ad.TEXT}")

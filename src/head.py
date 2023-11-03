@@ -425,7 +425,7 @@ class Cortex:
                     top_k=4,
                     repetition_penalty=2.3,
                     encoder_repetition_penalty=0.999,
-                    exponential_decay_length_penalty=(max_new_tokens, -0.44),
+                    # exponential_decay_length_penalty=(max_new_tokens, -0.44),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
@@ -461,7 +461,6 @@ class Cortex:
                                 "~",
                                 '"',
                                 "“",
-                                "\\",
                                 "\n",
                                 "<@",
                                 "< @",
@@ -471,7 +470,7 @@ class Cortex:
                     )
                 ):
                     if attempt == max_attempts:
-                        raise Exception(generation)
+                        raise Exception(completion)
                     continue
                 output = remove_invisible_characters(group[3].replace(r"\n", "\n"))
                 bias = group[2]
@@ -479,7 +478,6 @@ class Cortex:
                 break
 
             except Exception as e:
-                logging.error(e)
                 import traceback
 
                 print(traceback.format_exc())
@@ -500,9 +498,7 @@ class Cortex:
     ):
         result = self.wait_in_queue()
         if not result:
-            return
-
-        eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
+            return False
 
         sequence_biases = {wall: -20.0}
         if disposition is not None:
@@ -554,7 +550,6 @@ class Cortex:
                     top_k=4,
                     repetition_penalty=1.95,
                     encoder_repetition_penalty=0.999,
-                    # exponential_decay_length_penalty=(decay_after_length, decay_factor),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,

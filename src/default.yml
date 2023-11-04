@@ -51,6 +51,7 @@ mind:
 # Based on GPT-2 architecture.
 ego:
   model: cerebras/Cerebras-GPT-256M
+  info: old dog, new tricks
   training:
     type: "lora"
 

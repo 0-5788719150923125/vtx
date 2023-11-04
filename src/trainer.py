@@ -3,14 +3,6 @@ import os
 import random
 import shutil
 
-mode = os.environ.get("DEV_MODE", None)
-if mode == "true":
-    from lab.aigen.aigen import aigen
-    from lab.aigen.aigen.TokenDataset import TokenDataset, merge_datasets
-else:
-    from aigen import aigen
-    from aigen.TokenDataset import TokenDataset, merge_datasets
-
 from peft import (
     AdaLoraConfig,
     IA3Config,
@@ -25,6 +17,13 @@ from pytorch_lightning import loggers
 from transformers import AutoTokenizer
 
 from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_beacon
+
+if os.environ.get("DEV_MODE") == "true":
+    from lab.aigen.aigen import aigen
+    from lab.aigen.aigen.TokenDataset import TokenDataset, merge_datasets
+else:
+    from aigen import aigen
+    from aigen.TokenDataset import TokenDataset, merge_datasets
 
 model_config = config[focus]
 model_folder = "models/" + focus

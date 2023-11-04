@@ -54,7 +54,7 @@ def validation(config):
         "max_new_tokens": {"type": "integer"},
         "petals": {"type": "boolean"},
         "focus": {"type": "dict"},
-        "truncate_length": {"type": "integer"},
+        "context_length": {"type": "integer"},
         "reload_interval": {"type": "integer"},
         "adapters": {"type": "list"},
         "training": {
@@ -160,7 +160,7 @@ class Cortex:
         self.loader(self.focus)
 
     def get_max_length(self):
-        return self.config.get("truncate_length", self.ai.model_max_length)
+        return self.config.get("context_length", self.ai.model_max_length)
 
     # Tokenize a string, and get its length (in tokens)
     def get_string_length(self, string):
@@ -261,6 +261,14 @@ class Cortex:
                 adapters=adapters,
                 precision=self.config.get("precision", None),
             )
+
+            if self.config.get("context_length", None) is not None:
+                setattr(
+                    self.ai.model.config,
+                    "context_length",
+                    self.config.get("context_length"),
+                )
+            print(self.ai.model.config)
 
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
             print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))

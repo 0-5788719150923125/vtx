@@ -221,7 +221,7 @@ mind:
 Set the model's context window (if unset, this will be equal to the model's maximum allowed context length.) Smaller context windows can be used save memory:
 ```yml
 mind:
-  truncate_length: 1024
+  context_length: 1024
 ```
 Use the [Petals](https://github.com/bigscience-workshop/petals) network for collaborative training and inference:
 ```yml

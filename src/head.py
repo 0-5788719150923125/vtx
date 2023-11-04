@@ -286,7 +286,7 @@ class Cortex:
         self,
         ctx=None,
         bias: int = None,
-        temperature: float = 1.23,
+        temperature: float = 0.95,
         min_new_tokens: int = 1,
         max_new_tokens: int = 222,
         personas: List[str] = [],

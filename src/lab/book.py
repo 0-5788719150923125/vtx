@@ -121,11 +121,10 @@ class Ink:
         self.staged = ""
         self.full_doc = ""
         self.replace_at_index = 0
-        self.combine = False
         self.dir = ""
         self.file = ""
         self.tags = []
-        self.new_tokens = 33
+        self.new_tokens = 111
 
     def get_length(self, string):
         tokens = head.ctx.ai.tokenizer(string, return_tensors="pt")["input_ids"]
@@ -194,9 +193,7 @@ class Ink:
         partial = math.floor(self.model_max_length * 0.8)
         while self.get_length(self.staged) > partial:
             self.replace_at_index = random.randint(len(self.prompt), len(self.staged))
-            # print(f"replacing at index {self.replace_at_index}")
             self.staged = self.staged[: self.replace_at_index]
-            self.combine = True
 
     async def write(self, t, entry):
         try:
@@ -206,17 +203,13 @@ class Ink:
             self.chunk_prompt()
             output = await head.ctx.prompt(
                 prompt=self.staged,
+                min_new_tokens=self.new_tokens - 33,
                 max_new_tokens=self.new_tokens,
-                # decay_after_length=33,
-                # decay_factor=-0.23,
+                eos_tokens=[".", "?", "!", '."', '?"', '!"'],
             )
             if output == False:
                 return
             content = output
-            if self.combine:
-                self.combine = False
-                # content = output + self.full_doc[: self.replace_at_index]
-                # print(self.full_doc[: self.replace_at_index])
             write_to_file(
                 path=self.dir,
                 file_name=self.file,

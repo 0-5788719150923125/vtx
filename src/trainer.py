@@ -285,33 +285,12 @@ if __name__ == "__main__":
                                 "duplicate", 0
                             )
 
+                    cache_path = f"{focus}/{dataset}/{block_size}/{duplicate}"
+                    hashed = hash_directory("/" + dataset)
                     while duplicate >= 0:
-                        print(
-                            "loading: "
-                            + bc.FOLD
-                            + focus
-                            + "/"
-                            + dataset
-                            + "/"
-                            + str(block_size)
-                            + "/"
-                            + str(duplicate)
-                            + ad.TEXT
-                        )
+                        print(f"loading: {bc.FOLD}{cache_path}{ad.TEXT}")
 
-                        cached = (
-                            "/data/datasets/"
-                            + focus
-                            + "/"
-                            + dataset
-                            + "/"
-                            + str(block_size)
-                            + "/"
-                            + str(duplicate)
-                            + "/"
-                            + hash_directory("/" + dataset)
-                            + ".tar.gz"
-                        )
+                        cached = f"/data/datasets/{cache_path}/{hashed}.tar.gz"
 
                         if os.path.exists(cached):
                             datasets[dataset + str(duplicate)] = TokenDataset(
@@ -323,37 +302,16 @@ if __name__ == "__main__":
                             continue
 
                         try:
-                            shutil.rmtree(
-                                "/data/datasets/"
-                                + focus
-                                + "/"
-                                + dataset
-                                + "/"
-                                + str(block_size)
-                                + "/"
-                                + str(duplicate)
-                            )
+                            shutil.rmtree(f"/data/datasets/{cache_path}")
                         except:
                             pass
 
-                        os.makedirs(
-                            "/data/datasets/"
-                            + focus
-                            + "/"
-                            + dataset
-                            + "/"
-                            + str(block_size)
-                            + "/"
-                            + str(duplicate)
-                        )
+                        os.makedirs(f"/data/datasets/{cache_path}")
                         samples = 1.0
                         if config["collections"][collection][dataset] is not None:
-                            stride = config["collections"][collection][dataset].get(
-                                "stride", stride
-                            )
-                            samples = config["collections"][collection][dataset].get(
-                                "samples", samples
-                            )
+                            dataset_config = config["collections"][collection][dataset]
+                            stride = dataset_config.get("stride", stride)
+                            samples = dataset_config.get("samples", samples)
                         ds = create_dataset(
                             path="/" + dataset,
                             tokenizer=tokenizer,

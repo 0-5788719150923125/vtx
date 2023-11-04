@@ -431,7 +431,7 @@ class Cortex:
                     top_k=4,
                     repetition_penalty=2.3,
                     encoder_repetition_penalty=0.999,
-                    # exponential_decay_length_penalty=(max_new_tokens, -0.44),
+                    exponential_decay_length_penalty=(max_new_tokens, -0.44),
                     no_repeat_ngram_size=9,
                     low_memory=self.config.get("low_memory", False),
                     max_time=360,
@@ -478,7 +478,13 @@ class Cortex:
                     if attempt == max_attempts:
                         raise Exception(completion)
                     continue
-                output = remove_invisible_characters(group[3].replace(r"\n", "\n"))
+                output = (
+                    remove_invisible_characters(group[3].replace(r"\n", "\n"))
+                    .rstrip(f"\\")
+                    .rstrip("\\")
+                    .rstrip("!!")
+                    .rstrip("??")
+                )
                 bias = group[2]
                 success = True
                 break

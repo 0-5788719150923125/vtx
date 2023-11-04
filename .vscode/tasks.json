@@ -92,7 +92,7 @@
         "label": "i",
         "detail": "Prepare your data in various ways.",
         "type": "shell",
-        "command": "docker compose run lab python3 -c \"import i; ${input:i}\"",
+        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 -c \"import i; ${input:i}\"",
         "runOptions": {
           "instanceLimit": 3
         },

@@ -200,7 +200,7 @@ class Cortex:
 
     # Build a local cache of global conversational state
     def build_context(self, bias: int, message: str):
-        while len(self.context) >= 23:
+        while len(self.context) >= 100:
             self.context.pop(0)
 
         self.context.append({"bias": bias, "message": message})

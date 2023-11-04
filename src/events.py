@@ -13,18 +13,6 @@ def subscribe_event(event_type, fn, *args, **kwargs):
     subscribers[event_type].append((fn, args, kwargs))
 
 
-async def run_async_event_handlers(event_type, *args, **kwargs):
-    async_functions = []
-
-    for fn, fn_args, fn_kwargs in subscribers[event_type]:
-        if asyncio.iscoroutinefunction(fn):
-            async_functions.append(fn(*args, *fn_args, **kwargs, **fn_kwargs))
-        else:
-            fn(*args, *fn_args, **kwargs, **fn_kwargs)
-
-    await asyncio.gather(*async_functions)
-
-
 def post_event(event_type, *args, **kwargs):
     if event_type in subscribers:
         loop = asyncio.get_event_loop()
@@ -35,3 +23,15 @@ def post_event(event_type, *args, **kwargs):
             loop.run_until_complete(
                 run_async_event_handlers(event_type, *args, **kwargs)
             )
+
+
+async def run_async_event_handlers(event_type, *args, **kwargs):
+    async_functions = []
+
+    for fn, fn_args, fn_kwargs in subscribers[event_type]:
+        if asyncio.iscoroutinefunction(fn):
+            async_functions.append(fn(*args, *fn_args, **kwargs, **fn_kwargs))
+        else:
+            fn(*args, *fn_args, **kwargs, **fn_kwargs)
+
+    await asyncio.gather(*async_functions)

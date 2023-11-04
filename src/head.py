@@ -592,7 +592,7 @@ class Cortex:
     def query(
         self,
         question="",
-        temperature: float = 1.23,
+        temperature: float = 0.23,
         max_new_tokens: int = 333,
         decay_after_length: int = 66,
         decay_factor: float = 0.023,
@@ -600,6 +600,8 @@ class Cortex:
         result = self.wait_in_queue()
         if not result:
             return
+
+        eos_token = self.ai.tokenizer.eos_token
 
         prompt = f"""
         I am a powerful artificial intelligence, who helps users to answer their questions. Here are some example questions:
@@ -609,6 +611,8 @@ class Cortex:
         What is the meaning of life?
 
         A:
+
+        {eos_token}
 
         According to the Hitchhiker's Guide to the Galaxy, the answer to that question is "42".
 
@@ -620,6 +624,8 @@ class Cortex:
 
         I don't know, but this is an answer!
 
+        {eos_token}
+
         Q: 
         
         What is Docker?
@@ -628,20 +634,30 @@ class Cortex:
 
         Docker is a container runtime.
 
+        {eos_token}
+
         Q:
 
         {question}
 
         A:"""
 
-        eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
-        push = {
-            self.get_tokens_as_tuple(s): b for s, b in {wall: -5.9, "Q:": 5.9}.items()
-        }
+        # eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
+        # push = {
+        #     self.get_tokens_as_tuple(s): b for s, b in {wall: -5.9, "Q:": 5.9}.items()
+        # }
         bad = [
             self.ai.tokenizer(token, add_special_tokens=False).input_ids
             for token in [wall]
         ]
+
+        eos_token_ids = []
+        for token in [eos_token, "Q:", "Q:\n", "Q:\n\n", ":\n", ":\n\n"]:
+            eos_token_ids.append(
+                self.ai.tokenizer.convert_tokens_to_ids(
+                    self.ai.tokenizer.tokenize(token)[0]
+                )
+            )
 
         prompt = dedent(prompt)
 
@@ -668,21 +684,19 @@ class Cortex:
                 max_time=360,
                 seed=seed[1],
                 use_cache=True,
-                suppress_tokens=[eos],
-                sequence_bias=push,
+                # suppress_tokens=[eos],
+                # sequence_bias=push,
                 bad_words_ids=bad,
-                eos_token_id=self.ai.tokenizer.convert_tokens_to_ids(
-                    self.ai.tokenizer.tokenize("Q:")[0]
-                ),
+                eos_token_id=eos_token_ids,
             )
 
-            while len(prompt) > 2:
-                completion = completion[1:]
-                prompt = prompt[1:]
+            generation = "\n".join(completion.splitlines()[len(prompt.splitlines()) :])
 
             output = (
-                completion.lstrip(" ")
+                generation.lstrip(" ")
+                .lstrip("\n")
                 .lstrip("\n\r")
+                .rstrip("Q:")
                 .rstrip("Q")
                 .rstrip("\n")
                 .rstrip(r"\n")

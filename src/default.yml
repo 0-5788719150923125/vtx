@@ -33,7 +33,7 @@ source:
       passive_frequency: 0.01
       active_frequency: 0.99
 
-# An extremely capable transformer based on GPT-NeoX architecture.
+# An extremely capable transformer.
 aura:
   info: like a bird
   model: petals-team/falcon-rw-1b
@@ -45,6 +45,12 @@ aura:
 mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
+  training:
+    type: "lora"
+
+# Based on GPT-2 architecture.
+ego:
+  model: cerebras/Cerebras-GPT-256M
   training:
     type: "lora"
 

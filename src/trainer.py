@@ -392,12 +392,17 @@ if __name__ == "__main__":
         cache_dir="/data/models",
         padding="max_length",
         padding_side=p.get("padding_side", "left"),
+        use_fast=True,
         return_overflowing_tokens=True,
         truncation=True,
+        trust_remote_code=True,
     )
 
+    # extended = False
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+    #     tokenizer.add_special_tokens({"pad_token": str(tokenizer.eos_token)})
+    #     extended = True
 
     print(tokenizer)
 
@@ -417,6 +422,9 @@ if __name__ == "__main__":
     )
 
     ai.tokenizer = tokenizer
+
+    # if extended:
+    #     ai.model.resize_token_embeddings(len(ai.tokenizer))
 
     get_trainable = False
     if train_type != "standard":

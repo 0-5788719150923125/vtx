@@ -482,6 +482,7 @@ class Cortex:
                     remove_invisible_characters(group[3].replace(r"\n", "\n"))
                     .rstrip(f"\\")
                     .rstrip("\\")
+                    .rstrip("Q:")
                     .rstrip("!!")
                     .rstrip("??")
                 )
@@ -501,7 +502,7 @@ class Cortex:
     def prompt(
         self,
         prompt="",
-        temperature: float = 1.23,
+        temperature: float = 0.95,
         disposition: dict | None = None,
         min_new_tokens: int = 11,
         max_new_tokens: int = 111,

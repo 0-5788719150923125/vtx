@@ -16,6 +16,7 @@ To provide the masses with a simple, opinionated framework for human cloning exp
 - [src](http://localhost:9666)
 - [IPFS](http://localhost:9090)
 - [TensorBoard](http://localhost:6006)
+- [Urbit](http://localhost:9099)
 
 # data
 

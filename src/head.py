@@ -485,6 +485,7 @@ class Cortex:
                     .rstrip("Q:")
                     .rstrip("!!")
                     .rstrip("??")
+                    .rstrip(",")
                 )
                 bias = group[2]
                 success = True

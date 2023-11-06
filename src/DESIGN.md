@@ -12,13 +12,14 @@ The Vortex (VTX) is a bot-making framework, designed for the creation of AI clon
 
 <!--more-->
 
-[Join us on Discord!](https://discord.gg/dfdj2bn5MS) | [Github](https://github.com/0-5788719150923125/vtx) | [Support us on Patreon!](https://www.patreon.com/fold) | [Get Support!](https://src.eco/?focus=support)
+[Join us on Discord!](https://discord.gg/dfdj2bn5MS) | [Github](https://github.com/0-5788719150923125/vtx) | [Support us on Patreon!](https://www.patreon.com/fold) | [Get Support!](https://src.eco/?focus=support) | [Email](support@src.eco)
 
 ## Table of Contents
 
 - [Summary](#summary)
 - [Requirements](#requirements)
 - [Recommendations](#recommendations)
+- [Quick Start](#quick-start)
 - [Configuration](#configuration)
   - [Docker](#docker)
   - [.env](#env)
@@ -62,6 +63,29 @@ In addition to Docker, 8GB of system RAM and 10GB of available disk space are an
 While VTX can easily run inference on a CPU, we *strongly* recommend using a GPU. Sadly, Nvidia is the only supported manufacturer at this point (though other brands may work, and we will happily accept any pull requests!)
 
 By default, GPUs are not available inside of Docker. In order to share your GPU with Docker, you will need to install the [CUDA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/index.html).
+
+## Quick Start
+
+### Inference
+
+To quickly bring a functional project online, we recommend [downloading these project files](https://github.com/0-5788719150923125/vtx/tree/main/examples/lab), and bringing-up the Docker project. If all goes well, the container should download a functional AI model, load it into system memory, and begin "chatting" with others at [The Source](https://src.eco).
+
+### Training
+
+There are a lot of details that go into training, and we have yet to fully-document them here. For now, the basic lifecycle looks like this:
+
+1. Clone [this git repository](https://github.com/0-5788719150923125/vtx) to your device.
+2. Open it in VSCode.
+3. Use `CTRL + Shift + P` to use the various lifecycle tasks.
+4. Use the `up` task to bring your project online.
+5. Create a file at `src/config.yml`, and use it to apply your customizations.
+6. To train or fine-tune a model, all settings must be defined under a "training" key, under a [model](#models) key.
+7. [Datasets](#datasets) must be defined for training as well.
+8. Training data must exist in the local `lab/` folder. If necessary, you may need to create a `fetch.py` or `prepare.py` script, to prepare your data for training.
+9. Use the `fetch` and `prepare` tasks to run these data-preparation scripts.
+10. Use the `train` task to begin your training.
+
+There are so many steps that go into proper training, it would be impossible to document them all here. If you have any questions, please reach out to us via any of the channels listed at the top of this page!
 
 ## Configuration
 

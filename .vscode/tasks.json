@@ -92,16 +92,16 @@
         },
       },
       {
-        "label": "i",
+        "label": "web",
         "detail": "Prepare your data in various ways.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 -c \"import i; ${input:i}\"",
-        "runOptions": {
-          "instanceLimit": 3
-        },
-        "windows": {
-          "command": "docker compose run lab python3 -c \\\"import i; ${input:i}\\\""
-        }
+        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/cloudflare.py"
+      },
+      {
+        "label": "convert",
+        "detail": "Prepare your data in various ways.",
+        "type": "shell",
+        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/video.py"
       },
       {
         "label": "prepare",
@@ -120,12 +120,6 @@
         "runOptions": {
           "instanceLimit": 3
         },
-      },
-      {
-        "label": "add",
-        "detail": "Add the book/ directory to IPFS.",
-        "type": "shell",
-        "command": "OUTPUT=$(docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml exec fil ipfs add -r /book/public --pin=false --cid-version=1 --quieter) && sed -i '$ d' ./book/config.yaml && echo '      url: https://ipfs.io/ipfs/'$OUTPUT >> ./book/config.yaml",
       },
       {
         "label": "auto",

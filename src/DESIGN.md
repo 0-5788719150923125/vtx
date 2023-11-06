@@ -33,7 +33,7 @@ The Vortex (VTX) is a bot-making framework, designed for the creation of AI clon
   - [Reddit](#reddit)
   - [Discord](#discord)
   - [Twitch](#twitch)
-  - [X](#x)
+  - [X/Twitter](#x)
   - [Telegram](#telegram)
   - [Matrix](#matrix)
 - [Credits](#credits)

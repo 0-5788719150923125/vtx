@@ -702,6 +702,27 @@ discord:
 ```
 Without any other configuration, your bot will be capable of speaking in direct messages, or any server they've been added into.
 
+To set your bot's global response frequency:
+```yml
+discord:
+  frequency: 0.333
+```
+To set your bot's chance to respond to an @mention:
+```yml
+discord:
+  mention_self_frequency: 0.88
+```
+To set your bot's chance to reply as a different, mentioned user:
+```yml
+discord:
+  mention_any_frequency: 0.08
+```
+To put your bot into debug mode (and log addition information about each message to the terminal):
+```yml
+discord:
+  debug: True
+```
+
 To tell your bot to "act like" a specic person, in a specific server, define the "persona" key, under a key that matches each server's Discord ID:
 ```yml
 discord:

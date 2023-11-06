@@ -14,6 +14,9 @@ discord:
   use_self_token: True
   export_dms: True
   debug: False
+  frequency: 0.0333
+  mention_self_frequency: 0.88
+  mention_any_frequency: 0.08
   bannedUsers:
     - 1151877222035116113
     - 795128939513249792

@@ -14,10 +14,6 @@ import head
 from common import ad, bc, bullets, get_identity, ship, wall
 from events import subscribe_event
 
-response_frequency = 3  # out of 100
-mention_self_frequency = 88  # out of 100
-mention_any_frequency = 8  # out of 100
-
 
 def main(config):
     result = validation(config["discord"])
@@ -36,6 +32,9 @@ def validation(config):
         "use_self_token": {"type": "boolean"},
         "export_dms": {"type": "boolean"},
         "debug": {"type": "boolean"},
+        "frequency": {"type": "float"},
+        "mention_self_frequency": {"type": "float"},
+        "mention_any_frequency": {"type": "float"},
         "bannedUsers": {"type": "list"},
         "bannedServers": {"type": "list"},
         "servers": {
@@ -187,10 +186,6 @@ class Client(discord.Client):
 
         reply = random.choice([True, False])
 
-        bias = None
-        transformed = "ERROR: Me Found."
-        roll = random.randint(0, 100)
-
         if (
             message.author == self.user
             or message.content[:1] in bullets
@@ -198,6 +193,18 @@ class Client(discord.Client):
             and len(message.attachments) < 1
         ):
             return
+
+        bias = None
+        transformed = "ERROR: Me Found."
+        roll = random.random()
+
+        frequency = self.config["discord"].get("frequency", 0.0333)
+        mention_self_frequency = self.config["discord"].get(
+            "mention_self_frequency", 0.88
+        )
+        mention_any_frequency = self.config["discord"].get(
+            "mention_any_frequency", 0.08
+        )
 
         # every message is added to local cache, for building prompt
         if message.content.lower() != "gen" and message.author != self.user:
@@ -267,7 +274,7 @@ class Client(discord.Client):
 
         # generate responses
         if "gen" in message.content.lower():
-            roll = 1
+            roll = 0  # Always
             bias = 530243004334604311
             try:
                 if message.content == "gen":
@@ -278,24 +285,22 @@ class Client(discord.Client):
         else:
             # increase probability of a response if bot is mentioned
             if self.user.mentioned_in(message):
-                if random.randint(0, 100) < mention_self_frequency:
-                    roll = 1
+                frequency = mention_self_frequency
             # if a user is mentioned, attempt to respond as them
             elif len(message.mentions) > 0:
-                if random.randint(0, 100) < mention_any_frequency:
-                    roll = 1
+                frequency = mention_any_frequency
                 bias = int(message.mentions[0].id)
 
         # increase response probability in private channels
         no_transform = False
         if str(message.channel.type) == "private":
-            roll = 1
+            roll = 0  # Always
             bias = message.author.id
             no_transform = True
             reply = False
 
         # check frequency before generating a response
-        if roll > response_frequency:
+        if roll > frequency:
             return
 
         # generate a response from context and bias
@@ -312,6 +317,10 @@ class Client(discord.Client):
                         if "persona" in server:
                             persona = server.get("persona", [])
                             no_transform = True
+
+                if len(message.mentions) > 0 and not self.user.mentioned_in(message):
+                    no_transform = False
+                    persona = []
 
                 success, bias, output, seeded = await head.ctx.chat(
                     bias=bias, personas=persona, max_new_tokens=333

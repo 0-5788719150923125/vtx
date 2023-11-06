@@ -11,12 +11,14 @@ personas:
     persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
 
 reddit:
+  followup_frequency: 0.33
   delay:
     min: 120
     max: 600
   stalk:
     AlexandriaPen:
       frequency: 0.2
+      followup_frequency: 0.33
       stalker: source
       min: 30
       max: 90
@@ -25,6 +27,7 @@ reddit:
   subs:
     TheInk:
       frequency: 0.88
+      followup_frequency: 0.33
       persona: source
     stairsofpantheon:
       persona: brain

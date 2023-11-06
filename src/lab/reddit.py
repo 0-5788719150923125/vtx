@@ -32,6 +32,7 @@ def validation(config):
     schema = {
         "enabled": {"type": "boolean"},
         "filter": {"type": "list"},
+        "followup_frequency": {"type": "float"},
         "delay": {
             "type": "dict",
             "nullable": True,
@@ -45,6 +46,7 @@ def validation(config):
                 "schema": {
                     "frequency": {"type": "number"},
                     "proximal_frequency": {"type": "number"},
+                    "followup_frequency": {"type": "float"},
                     "stalker": {"type": "string"},
                     "min": {"type": "integer"},
                     "max": {"type": "integer"},
@@ -65,6 +67,7 @@ def validation(config):
                 "schema": {
                     "limit": {"type": "integer"},
                     "frequency": {"type": "float"},
+                    "followup_frequency": {"type": "float"},
                     "persona": {"type": "string"},
                     "skip": {"type": "boolean"},
                     "tags": {"type": "list"},
@@ -457,18 +460,26 @@ async def subscribe_comments(reddit, config):
             parent = await comment.parent()
             await parent.load()
 
-            frequency = config["reddit"]["subs"][comment.subreddit.display_name].get(
-                "frequency", 0
-            )
+            sub_config = config["reddit"]["subs"][comment.subreddit.display_name]
+
+            frequency = sub_config.get("frequency", 0)
+
             if config["reddit"].get("stalk"):
-                if config["reddit"]["stalk"].get(comment.author):
-                    frequency = config["reddit"]["stalk"][comment.author].get(
-                        "frequency", frequency
-                    )
+                stalker_config = config["reddit"]["stalk"].get(
+                    str(comment.author), None
+                )
+                if stalker_config is not None:
+                    frequency = stalker_config.get("frequency", frequency)
 
             roll = random.random()
             if parent.author == os.environ["REDDITAGENT"]:
-                roll = roll / (len("ACTG"))  # the optimal number of children
+                frequency = sub_config.get(
+                    "followup_frequency",
+                    config["reddit"].get("followup_frequency", 0.333),
+                )
+                if stalker_config is not None:
+                    frequency = stalker_config.get("followup_frequency", frequency)
+
             if roll >= frequency:
                 continue
 
@@ -478,12 +489,10 @@ async def subscribe_comments(reddit, config):
 
             context = await build_context(comment=comment)
 
-            sub = config["reddit"]["subs"][comment.subreddit.display_name]
-
-            persona = sub.get("persona", [])
+            persona = sub_config.get("persona", [])
 
             submission = await reddit.submission(comment.submission)
-            if filter_response(sub, config, submission, comment):
+            if filter_response(sub_config, config, submission, comment):
                 continue
 
             success, bias, output, seeded = await head.ctx.chat(
@@ -497,7 +506,7 @@ async def subscribe_comments(reddit, config):
             if success == False:
                 continue
 
-            if not "persona" in sub:
+            if not "persona" in sub_config:
                 daemon = get_daemon(bias)
                 output = transformer(daemon, output)
 

@@ -480,13 +480,16 @@ class Cortex:
                     continue
                 output = (
                     remove_invisible_characters(group[3].replace(r"\n", "\n"))
+                    .rstrip(" ")
                     .rstrip(f"\\")
                     .rstrip("\\")
                     .rstrip("Q:")
-                    .rstrip("!!")
-                    .rstrip("??")
                     .rstrip(",")
                 )
+                while output.endswith("!!"):
+                    output = output.rstrip("!")
+                while output.endswith("??"):
+                    output = output.rstrip("?")
                 bias = group[2]
                 success = True
                 break

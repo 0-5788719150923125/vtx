@@ -590,6 +590,25 @@ In this example, your bot will have a 5% frequency to respond to *every* new mes
 
 /r/SubSimGPT2Interactive is a great place to test your bot, since the entire subreddit is already being flooded with botspam! /r/NoRules and /r/TheInk are also great subreddits for AI chat.
 
+You may also adjust the frequency of a "followup" message in three different places:
+```yml
+reddit:
+  followup_frequency: 0.333
+  stalk:
+    TheUserAccount:
+      followup_frequency: 0.333
+  subs:
+    SubSimGPT2Interactive:
+      followup_frequency: 0.333
+```
+A "followup" is an instance where a user replies to one of your messages on Reddit. They reponded to you, and in turn - you are reponding to them.
+
+In the event that "followup_frequency" is defined in multiple places, each setting will override the other in this order:
+
+1. Global followup frequency will be the default setting for all instances.
+2. Subreddit-specific followup frequency will override the global one.
+3. Stalker-specific frequencies will override both global and subreddit-specific ones.
+
 If you would like to use a specific persona, for each subreddit, define it here:
 ```yml
 reddit:

@@ -152,7 +152,6 @@ class Cortex:
         if not validation(config):
             raise Exception(f"Something is wrong with the {focus} configuration.")
         self.active = False
-        self.ai = None
         self.focus = focus
         self.config = config
         self.personas = personas
@@ -165,14 +164,19 @@ class Cortex:
             {"bias": 204716337971331072, "message": "I am a medium."},
             {"bias": 855529761185857566, "message": "I am an animal."},
         ]
-        self.loader(self.focus)
+        self.assistant = self.config.get("assistant", None)
+        if self.assistant is not None:
+            self.assistant = self.loader(self.config["assistant"])
+        self.teacher = self.loader(self.config, self.focus)
 
     def get_max_length(self):
-        return self.config.get("context_length", self.ai.model_max_length)
+        return self.config.get("context_length", self.teacher.model_max_length)
 
     # Tokenize a string, and get its length (in tokens)
     def get_string_length(self, string):
-        length = len(self.ai.tokenizer(string, return_tensors="pt")["input_ids"][0])
+        length = len(
+            self.teacher.tokenizer(string, return_tensors="pt")["input_ids"][0]
+        )
         return length
 
     # Truncate the prompt to fit the model
@@ -204,7 +208,7 @@ class Cortex:
                 return
 
     def get_embeddings(self, texts):
-        return self.ai.tokenizer(texts, return_tensors="np")
+        return self.teacher.tokenizer(texts, return_tensors="np")
 
     # Build a local cache of global conversational state
     def build_context(self, bias: int, message: str):
@@ -215,7 +219,7 @@ class Cortex:
 
     def get_tokens_as_tuple(self, sequence):
         return tuple(
-            self.ai.tokenizer([sequence], add_special_tokens=False).input_ids[0]
+            self.teacher.tokenizer([sequence], add_special_tokens=False).input_ids[0]
         )
 
     # Decorator to a blocking function into a background thread
@@ -226,29 +230,21 @@ class Cortex:
 
         return wrapper
 
-    def loader(self, focus):
+    def loader(self, config, focus="assistant"):
         while self.active == True:
             time.sleep(1)
 
         self.active = True
-        self.ai = None
-
-        gc.collect()
-
-        try:
-            torch.cuda.empty_cache()
-        except Exception as e:
-            logging.error(e)
 
         model_folder = None
         adapters = None
         tuning_mode = None
-        if "training" in self.config:
+        if "training" in config:
             model_folder = "/data/models/" + focus
-            t = self.config["training"].get("type", "standard")
+            t = config["training"].get("type", "standard")
             if t in ["adalora", "lora"]:
                 model_folder = None
-                adapters = self.config.get("adapters", ["base"])
+                adapters = config.get("adapters", ["base"])
             elif t == "prompt":
                 model_folder = None
                 tuning_mode = "ptune"
@@ -258,41 +254,42 @@ class Cortex:
 
         try:
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + focus)
-            self.ai = aigen(
-                model=self.config.get("model", None),
+            prototype = aigen(
+                model=config.get("model", None),
                 model_folder=model_folder,
-                petals=self.config.get("petals", False),
+                petals=config.get("petals", False),
                 cache_dir="/data/models",
                 tuning_mode=tuning_mode,
                 embeddings_dir="/data/embeddings/" + focus,
                 adapter_dir="/data/adapters/" + focus,
                 adapters=adapters,
-                precision=self.config.get("precision", None),
-                assistant_model=self.config.get("assistant", {}).get("model", None),
-                assistant_precision=self.config.get("assistant", {}).get(
-                    "precision", 32
-                ),
+                precision=config.get("precision", 32),
+                assistant_model=self.assistant if focus == "assistant" else None,
             )
 
-            if self.config.get("context_length", None) is not None:
+            if config.get("context_length", None) is not None:
                 setattr(
-                    self.ai.model.config,
+                    prototype.model.config,
                     "context_length",
-                    self.config.get("context_length"),
+                    config.get("context_length"),
                 )
-            print(self.ai.model.config)
 
-            print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + self.config["info"])
-            print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(self.ai))
+            if focus != "assistant":
+                print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + config["info"])
+
+            print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(prototype))
         except Exception as e:
             logging.error(e)
             time.sleep(5)
-            self.loader(self.focus)
+            prototype = self.loader(self.focus)
+
         self.active = False
+
+        return prototype
 
     def wait_in_queue(self):
         max_wait_time = 15 * 60  # 15 minutes
-        while self.active == True or not self.ai:
+        while self.active == True or not self.teacher:
             time.sleep(1)
             max_wait_time -= 1
             if max_wait_time == 0:
@@ -365,7 +362,7 @@ class Cortex:
         }
 
         bad_tokens = [
-            self.ai.tokenizer(token, add_special_tokens=False).input_ids
+            self.teacher.tokenizer(token, add_special_tokens=False).input_ids
             for token in [
                 f"{ship}\n",
                 f"{ship} \n",
@@ -376,7 +373,9 @@ class Cortex:
             set(
                 chain.from_iterable(
                     [
-                        self.ai.tokenizer(token, add_special_tokens=False).input_ids
+                        self.teacher.tokenizer(
+                            token, add_special_tokens=False
+                        ).input_ids
                         # Suppress ugly patterns the model may sometimes bias towards.
                         for token in ["((", "(((", "<@", "< @"]
                     ]
@@ -385,13 +384,15 @@ class Cortex:
         )
 
         eos_token_ids = [
-            self.ai.tokenizer.convert_tokens_to_ids(self.ai.tokenizer.tokenize(wall)[0])
+            self.teacher.tokenizer.convert_tokens_to_ids(
+                self.teacher.tokenizer.tokenize(wall)[0]
+            )
         ]
         if eos_tokens:
             for token in eos_tokens:
                 eos_token_ids.append(
-                    self.ai.tokenizer.convert_tokens_to_ids(
-                        self.ai.tokenizer.tokenize(token)[0]
+                    self.teacher.tokenizer.convert_tokens_to_ids(
+                        self.teacher.tokenizer.tokenize(token)[0]
                     )
                 )
 
@@ -435,7 +436,7 @@ class Cortex:
                 seeded = seed[0]
 
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
-                completion = self.ai.generate(
+                completion = self.teacher.generate(
                     mode=self.config.get("mode", "transformer"),
                     prompt=prompt,
                     do_sample=True,
@@ -553,18 +554,20 @@ class Cortex:
 
         push = {self.get_tokens_as_tuple(s): b for s, b in sequence_biases.items()}
         bad = [
-            self.ai.tokenizer(token, add_special_tokens=False).input_ids
+            self.teacher.tokenizer(token, add_special_tokens=False).input_ids
             for token in ["{{<", wall]
         ]
 
         eos_token_ids = [
-            self.ai.tokenizer.convert_tokens_to_ids(self.ai.tokenizer.tokenize(wall)[0])
+            self.teacher.tokenizer.convert_tokens_to_ids(
+                self.teacher.tokenizer.tokenize(wall)[0]
+            )
         ]
         if eos_tokens:
             for token in eos_tokens:
                 eos_token_ids.append(
-                    self.ai.tokenizer.convert_tokens_to_ids(
-                        self.ai.tokenizer.tokenize(token)[0]
+                    self.teacher.tokenizer.convert_tokens_to_ids(
+                        self.teacher.tokenizer.tokenize(token)[0]
                     )
                 )
 
@@ -581,7 +584,7 @@ class Cortex:
                 attempt += 1
 
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
-                completion = self.ai.generate(
+                completion = self.teacher.generate(
                     prompt=prompt,
                     do_sample=True,
                     min_new_tokens=min_new_tokens,
@@ -643,7 +646,7 @@ class Cortex:
         if not result:
             return
 
-        eos_token = self.ai.tokenizer.eos_token
+        eos_token = self.teacher.tokenizer.eos_token
 
         prompt = f"""
         I am a powerful artificial intelligence, who helps users to answer their questions. Here are some example questions:
@@ -684,20 +687,20 @@ class Cortex:
 
         A:"""
 
-        # eos = self.ai.tokenizer(wall, add_special_tokens=False).input_ids[0]
+        # eos = self.teacher.tokenizer(wall, add_special_tokens=False).input_ids[0]
         # push = {
         #     self.get_tokens_as_tuple(s): b for s, b in {wall: -5.9, "Q:": 5.9}.items()
         # }
         bad = [
-            self.ai.tokenizer(token, add_special_tokens=False).input_ids
+            self.teacher.tokenizer(token, add_special_tokens=False).input_ids
             for token in [wall]
         ]
 
         eos_token_ids = []
         for token in [eos_token, "Q:", "Q:\n", "Q:\n\n", ":\n", ":\n\n"]:
             eos_token_ids.append(
-                self.ai.tokenizer.convert_tokens_to_ids(
-                    self.ai.tokenizer.tokenize(token)[0]
+                self.teacher.tokenizer.convert_tokens_to_ids(
+                    self.teacher.tokenizer.tokenize(token)[0]
                 )
             )
 
@@ -707,7 +710,7 @@ class Cortex:
             seed = nist_beacon()
 
             # https://huggingface.co/docs/transformers/main_classes/text_generation
-            completion = self.ai.generate(
+            completion = self.teacher.generate(
                 prompt=prompt,
                 do_sample=True,
                 min_length=23,

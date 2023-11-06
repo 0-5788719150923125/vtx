@@ -127,7 +127,7 @@ class Ink:
         self.new_tokens = 111
 
     def get_length(self, string):
-        tokens = head.ctx.ai.tokenizer(string, return_tensors="pt")["input_ids"]
+        tokens = head.ctx.teacher.tokenizer(string, return_tensors="pt")["input_ids"]
         return len(tokens[0])
 
     def create_prompt(self, entry):

@@ -77,13 +77,14 @@ There are a lot of details that go into training, and we have yet to fully-docum
 1. Clone [this git repository](https://github.com/0-5788719150923125/vtx) to your device.
 2. Open it in VSCode.
 3. Use `CTRL + Shift + P` to use the various lifecycle tasks.
-4. Use the `up` task to bring your project online.
-5. Create a file at `src/config.yml`, and use it to apply your customizations.
-6. To train or fine-tune a model, all settings must be defined under a "training" key, under a [model](#models) key.
-7. [Datasets](#datasets) must be defined for training as well.
-8. Training data must exist in the local `lab/` folder. If necessary, you may need to create a `fetch.py` or `prepare.py` script, to prepare your data for training.
-9. Use the `fetch` and `prepare` tasks to run these data-preparation scripts.
-10. Use the `train` task to begin your training.
+4. `git submodule update --init --recursive` to initialize submodules. Note: some of them will fail, because they're in private repos.
+5. Use the `up` task to bring your project online.
+6. Create a file at `src/config.yml`, and use it to apply your customizations.
+7. To train or fine-tune a model, all settings must be defined under a "training" key, under a [model](#models) key.
+8. [Datasets](#datasets) must be defined for training as well.
+9. Training data must exist in the local `lab/` folder. If necessary, you may need to create a `fetch.py` or `prepare.py` script, to prepare your data for training.
+10. Use the `fetch` and `prepare` tasks to run these data-preparation scripts.
+11. Use the `train` task to begin your training.
 
 There are so many steps that go into proper training, it would be impossible to document them all here. If you have any questions, please reach out to us via any of the channels listed at the top of this page!
 

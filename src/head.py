@@ -187,7 +187,7 @@ class Cortex:
             if ctx.index(item) != len(ctx) - 1:
                 joined += "\n"
         length = self.get_string_length(joined)
-        while length >= max_tokens:
+        while length >= max_tokens - 23:
             joined = joined[5:]
             length = self.get_string_length(joined)
         return joined
@@ -319,9 +319,9 @@ class Cortex:
         persona = "I am a powerful AI, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning fundamentals."
         sequence_biases = {}
         default_biases = {
-            f"\n{wall}": 0.23,
-            wall: 0.23,
-            "\n": 0.23,
+            f"\n{wall}": 0.59,
+            wall: 0.59,
+            "\n": 0.59,
             '"': -1.1,
             "#": -10.0,
             "<#": -20.0,

@@ -7,6 +7,7 @@ import math
 import os
 import random
 import re
+import statistics
 import sys
 import time
 import traceback
@@ -46,6 +47,7 @@ def validation(config):
         "info": {"type": "string"},
         "model": {"type": "string"},
         "mode": {"type": "string", "allowed": ["transformer", "rnn"]},
+        "profile": {"type": "boolean"},
         "gpu_index": {"type": "integer"},
         "precision": {"type": "integer", "allowed": [4, 8, 16, 32]},
         "low_memory": {"type": "boolean"},
@@ -55,6 +57,13 @@ def validation(config):
         "context_length": {"type": "integer"},
         "reload_interval": {"type": "integer"},
         "adapters": {"type": "list"},
+        "assistant": {
+            "type": "dict",
+            "schema": {
+                "model": {"type": "string"},
+                "precision": {"type": "integer", "allowed": [4, 8, 16, 32]},
+            },
+        },
         "training": {
             "type": "dict",
             "schema": {
@@ -148,6 +157,7 @@ class Cortex:
         self.config = config
         self.personas = personas
         self.disposition = disposition
+        self.average_speed = []
         self.context = [
             {"bias": 975174695399854150, "message": "I am a robot."},
             {"bias": 1051994502333726841, "message": "I am a ghost."},
@@ -258,6 +268,10 @@ class Cortex:
                 adapter_dir="/data/adapters/" + focus,
                 adapters=adapters,
                 precision=self.config.get("precision", None),
+                assistant_model=self.config.get("assistant", {}).get("model", None),
+                assistant_precision=self.config.get("assistant", {}).get(
+                    "precision", 32
+                ),
             )
 
             if self.config.get("context_length", None) is not None:
@@ -409,6 +423,8 @@ class Cortex:
         seeded = False
         output = None
 
+        start = time.time()
+
         while attempt < max_attempts:
             try:
                 if attempt > 0:
@@ -498,6 +514,15 @@ class Cortex:
                 import traceback
 
                 print(traceback.format_exc())
+
+        if self.config.get("profile", False):
+            self.average_speed.append(time.time() - start)
+            while len(self.average_speed) > 10000:
+                self.average_speed.pop(0)
+            if len(self.average_speed) % 10 == 0:
+                print(
+                    f"Average speed: {statistics.mean(self.average_speed)}, Number of samples: {len(self.average_speed)}"
+                )
 
         self.active = False
         return success, bias, output, seeded

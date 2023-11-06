@@ -3,6 +3,8 @@ import os
 import smtplib
 import textwrap
 import time
+from email.encoders import encode_7or8bit
+from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -70,13 +72,16 @@ description: A short email and a story, written for a friend.
             message = MIMEMultipart()
             message["From"] = sender_email
             message["To"] = subscriber
-            message["Subject"] = subject
+            message["Subject"] = Header(subject, "utf-8")
 
             cleaned = "\n".join(output.splitlines()[9:])
             unified = unified_newlines(cleaned.replace(r"\r\n|\r|\n", "\n"), 2)
             uniform = textwrap.dedent(unified)
 
-            message.attach(MIMEText(uniform, "plain"))
+            prepared = MIMEText(uniform, "plain", "utf-8")
+            encode_7or8bit(prepared)
+
+            message.attach(prepared)
             server.sendmail(sender_email, subscriber, message.as_string())
             server.quit()
         except smtplib.SMTPSenderRefused as e:

@@ -8,8 +8,6 @@ services:
     network_mode: host
     tty: true
     stdin_open: true
-    user: 1000:1000
-    # privileged: true
     build:
       context: .
       dockerfile: Dockerfile.${ARCH:-x64}

@@ -209,17 +209,18 @@ class Ink:
             )
             if output == False:
                 return
-            content = output
             write_to_file(
                 path=self.dir,
                 file_name=self.file,
-                content=content,
+                content=output,
             )
             pattern = re.compile(r"^(---\n.+\#{2}\sRECORD)", re.DOTALL)
-            group = re.search(pattern, content)
-            clean = content
+            group = re.search(pattern, output)
+            clean = output
             if group is not None and group[0] is not None:
-                clean = content.replace(group[0], "## RECORD")
+                clean = output.replace(group[0], "## RECORD")
+            elif self.type == "prose":
+                clean = "\n\n".join(output.splitlines()[2:])
             post_event(
                 "book_updated",
                 title=self.title,

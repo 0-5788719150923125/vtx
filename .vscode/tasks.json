@@ -93,13 +93,13 @@
       },
       {
         "label": "web",
-        "detail": "Prepare your data in various ways.",
+        "detail": "Deploy your book to CloudFlare.",
         "type": "shell",
         "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/cloudflare.py"
       },
       {
         "label": "convert",
-        "detail": "Prepare your data in various ways.",
+        "detail": "Convert a video to ASCII.",
         "type": "shell",
         "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/video.py"
       },

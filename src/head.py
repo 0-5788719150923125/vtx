@@ -152,7 +152,6 @@ class Cortex:
         if not validation(config):
             raise Exception(f"Something is wrong with the {focus} configuration.")
         self.active = False
-        self.focus = focus
         self.config = config
         self.personas = personas
         self.disposition = disposition
@@ -164,10 +163,9 @@ class Cortex:
             {"bias": 204716337971331072, "message": "I am a medium."},
             {"bias": 855529761185857566, "message": "I am an animal."},
         ]
-        self.assistant = self.config.get("assistant", None)
-        if self.assistant is not None:
+        if self.config.get("assistant") is not None:
             self.assistant = self.loader(self.config["assistant"])
-        self.teacher = self.loader(self.config, self.focus)
+        self.teacher = self.loader(self.config, focus)
 
     def get_max_length(self):
         return self.config.get("context_length", self.teacher.model_max_length)
@@ -199,7 +197,7 @@ class Cortex:
         matcher = re.compile(r'(\*")(.*)(?:"\*$)')
         group = re.search(matcher, old_message)
         captured = "J U X T A P O S I T I O N"[::-1]
-        if group is not None and group[2]:
+        if group is not None and group[2] is not None:
             captured = group[2]
         for item in self.context:
             if captured in item["message"] or old_message in item["message"]:
@@ -281,7 +279,7 @@ class Cortex:
         except Exception as e:
             logging.error(e)
             time.sleep(5)
-            prototype = self.loader(self.focus)
+            prototype = self.loader(focus)
 
         self.active = False
 

@@ -368,7 +368,7 @@ if __name__ == "__main__":
     train_data = build_inputs(p, tokenizer)
 
     # Instantiate the model object
-    ai = aigen(
+    prototype = aigen(
         model=launch_model,
         model_folder=model_folder,
         petals=use_petals,
@@ -380,30 +380,30 @@ if __name__ == "__main__":
         gradient_checkpointing=p.get("gradient_checkpointing", True),
     )
 
-    ai.tokenizer = tokenizer
+    prototype.tokenizer = tokenizer
 
     # if extended:
-    #     ai.model.resize_token_embeddings(len(ai.tokenizer))
+    #     prototype.model.resize_token_embeddings(len(prototype.tokenizer))
 
     get_trainable = False
     if train_type != "standard":
         if not use_petals:
             get_trainable = True
             if resume == True:
-                ai.model = PeftModel.from_pretrained(ai.model, output_dir)
-                setattr(ai.model.config, "is_prompt_learning", False)
-                setattr(ai.model.config, "is_trainable", True)
+                prototype.model = PeftModel.from_pretrained(prototype.model, output_dir)
+                setattr(prototype.model.config, "is_prompt_learning", False)
+                setattr(prototype.model.config, "is_trainable", True)
             else:
-                ai.model = get_peft_model(ai.model, peft_config)
+                prototype.model = get_peft_model(prototype.model, peft_config)
 
-    print(ai.model)
+    print(prototype.model)
     if get_trainable:
-        ai.model.print_trainable_parameters()
+        prototype.model.print_trainable_parameters()
 
     elif os.path.exists("/data/models/" + focus + "/" + adapter) == False:
         os.makedirs("/data/models/" + focus + "/" + adapter)
 
-    for name, param in ai.model.named_parameters():
+    for name, param in prototype.model.named_parameters():
         if "lora" in name.lower():
             param.requires_grad = True
 
@@ -414,7 +414,7 @@ if __name__ == "__main__":
     print(f"Final dataset: {bc.ROOT}{len(train_data)}{ad.TEXT} batches")
 
     # Train the model
-    ai.train(
+    prototype.train(
         train_data=train_data,
         n_gpu=1,
         benchmark=False,

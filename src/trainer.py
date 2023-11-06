@@ -181,7 +181,8 @@ if __name__ == "__main__":
     use_hivemind = model_config.get("hivemind", False)
     adapter = p.get("name", "base")
 
-    if p.get("regen", False):
+    regen = p.get("regen", False)
+    if regen:
         if os.path.exists("/data/datasets/" + focus):
             shutil.rmtree("/data/datasets/" + focus)
 
@@ -284,12 +285,13 @@ if __name__ == "__main__":
                                 "duplicate", 0
                             )
 
-                    cache_path = f"{focus}/{dataset}/{block_size}/{duplicate}"
+                    cache_path = f"{focus}/{dataset}/{str(block_size)}"
                     hashed = hash_directory("/" + dataset)
                     while duplicate >= 0:
-                        print(f"loading: {bc.FOLD}{cache_path}{ad.TEXT}")
+                        new_path = f"{cache_path}/{str(duplicate)}"
+                        print(f"loading: {bc.FOLD}{new_path}{ad.TEXT}")
 
-                        cached = f"/data/datasets/{cache_path}/{hashed}.tar.gz"
+                        cached = f"/data/datasets/{new_path}/{hashed}.tar.gz"
 
                         if os.path.exists(cached):
                             datasets[dataset + str(duplicate)] = TokenDataset(
@@ -297,15 +299,15 @@ if __name__ == "__main__":
                                 block_size=block_size,
                                 from_cache=True,
                             )
-                            duplicate = duplicate - 1
+                            duplicate -= 1
                             continue
 
                         try:
-                            shutil.rmtree(f"/data/datasets/{cache_path}")
+                            shutil.rmtree(f"/data/datasets/{new_path}")
                         except:
                             pass
 
-                        os.makedirs(f"/data/datasets/{cache_path}")
+                        os.makedirs(f"/data/datasets/{new_path}")
                         samples = 1.0
                         if config["collections"][collection][dataset] is not None:
                             dataset_config = config["collections"][collection][dataset]
@@ -324,7 +326,7 @@ if __name__ == "__main__":
 
                         datasets[dataset + str(duplicate)] = ds
 
-                        duplicate = duplicate - 1
+                        duplicate -= 1
 
                 else:
                     print(

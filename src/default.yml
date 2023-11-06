@@ -48,9 +48,16 @@ mind:
   training:
     type: "lora"
 
+# A revolution starts here.
+catalyst:
+  model: PY007/TinyLlama-1.1B-intermediate-step-715k-1.5T
+  info: a new breed
+  training:
+    type: "lora"
+
 # Based on GPT-2 architecture.
 ego:
-  model: cerebras/Cerebras-GPT-256M
+  model: microsoft/biogpt
   info: old dog, new tricks
   training:
     type: "lora"

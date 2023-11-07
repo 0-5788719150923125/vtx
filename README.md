@@ -22,6 +22,7 @@ To provide the masses with a simple, opinionated framework for human cloning exp
 
 - https://ink.university/
 - [https://fate.agency/](https://bafybeigz5tzb7kbxeeb6fd7bka5dk3lxuh4g5hujvszaad4xwyw2yjwhne.ipfs.nftstorage.link/)
+- [https://research.src.eco/](https://research.src.eco/#/page/getting%20started)
 - [The Pile](https://bafybeiftud3ppm5n5uudtirm4cf5zgonn44no2qg57isduo5gjeaqvvt2u.ipfs.nftstorage.link/)
 
 # instructions

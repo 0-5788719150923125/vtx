@@ -158,8 +158,8 @@ async def response(config, focus):
     )
 
     if success == False:
-        # if len(messages[focus]) > 0:
-        #     messages[focus].pop(0)
+        if len(messages[focus]) > 0:
+            messages[focus].pop(0)
         return
 
     sanitized = remove_invisible_characters(strip_emojis(output))
@@ -168,8 +168,8 @@ async def response(config, focus):
         sanitized = sanitized[1:]
 
     if sanitized == "" or {"bias": int(bias), "message": sanitized} in messages[focus]:
-        # if len(messages[focus]) > 0:
-        #     messages[focus].pop(0)
+        if len(messages[focus]) > 0:
+            messages[focus].pop(0)
         return
 
     color = bc.CORE

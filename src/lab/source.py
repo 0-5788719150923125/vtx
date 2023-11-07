@@ -74,6 +74,7 @@ def validation(config):
             },
         },
         "info": {"type": "string"},
+        "profile": {"type": "boolean"},
         "model": {"type": "string"},
         "precision": {"type": "integer"},
         "max_new_tokens": {"type": "integer"},

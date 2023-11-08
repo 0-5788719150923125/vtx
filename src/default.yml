@@ -35,8 +35,8 @@ source:
 
 # An extremely capable transformer.
 aura:
-  info: like a bird
-  model: petals-team/falcon-rw-1b
+  info: of life
+  model: RWKV/rwkv-4-1b5-pile
   training:
     type: "lora"
 

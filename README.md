@@ -35,7 +35,7 @@ To provide the masses with a simple, opinionated framework for human cloning exp
 - Put credentials into a .env file at the root of this project. ([example.env](./examples/lab/.env))
 - Use VSCode tasks as a reference.
 - The "build" task will build a Docker image from source files.
-- The "i" task is used for data retrieval and preparation tasks.
+- The "fetch" and "prepare" tasks are used for data retrieval and preparation.
 - The "train" task is used to train your models.
 - The "up" task is used to run your lab.
 - Ask me questions.

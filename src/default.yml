@@ -45,10 +45,6 @@ aura:
 mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
-  profile: True
-  assistant:
-    model: EleutherAI/gpt-neo-125M
-    precision: 32
   training:
     type: "lora"
 

@@ -234,26 +234,23 @@ class Cortex:
 
         self.active = True
 
-        model_folder = None
         adapters = None
         tuning_mode = None
+        model_folder = None
         if "training" in config:
-            model_folder = "/data/models/" + focus
             t = config["training"].get("type", "standard")
             if t in ["adalora", "lora"]:
-                model_folder = None
                 adapters = config.get("adapters", ["base"])
             elif t == "prompt":
-                model_folder = None
                 tuning_mode = "ptune"
             elif t == "prefix":
-                model_folder = None
                 tuning_mode == "deep_ptune"
-
+            else:
+                model_folder = "/data/models/" + focus
         try:
             print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + focus)
             prototype = aigen(
-                model=config.get("model", None),
+                model=config.get("model"),
                 model_folder=model_folder,
                 petals=config.get("petals", False),
                 cache_dir="/data/models",
@@ -265,7 +262,7 @@ class Cortex:
                 assistant_model=config.get("model") if focus == "assistant" else None,
             )
 
-            if config.get("context_length", None) is not None:
+            if config.get("context_length") is not None:
                 setattr(
                     prototype.model.config,
                     "context_length",
@@ -277,7 +274,7 @@ class Cortex:
             )
             print(f"{bc.ROOT}ONE@ROOT:{ad.TEXT} {str(prototype)}")
         except Exception as e:
-            logging.error(e)
+            logging.error(traceback.format_exc())
             time.sleep(5)
             prototype = self.loader(focus)
 

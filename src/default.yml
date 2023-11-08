@@ -33,7 +33,14 @@ source:
       passive_frequency: 0.01
       active_frequency: 0.99
 
-# An extremely capable transformer.
+# A revolution starts here.
+catalyst:
+  model: PY007/TinyLlama-1.1B-intermediate-step-715k-1.5T
+  info: a new breed
+  training:
+    type: "lora"
+
+# A large RNN.
 aura:
   info: of life
   model: RWKV/rwkv-4-1b5-pile
@@ -45,13 +52,6 @@ aura:
 mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
-  training:
-    type: "lora"
-
-# A revolution starts here.
-catalyst:
-  model: PY007/TinyLlama-1.1B-intermediate-step-715k-1.5T
-  info: a new breed
   training:
     type: "lora"
 

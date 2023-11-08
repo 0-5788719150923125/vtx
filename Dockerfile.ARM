@@ -23,6 +23,7 @@ RUN apt-get update -y \
     python3-packaging \
     python3-venv \
     unzip \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp

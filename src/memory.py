@@ -5,9 +5,9 @@ import numpy as np
 from chromadb import Documents, EmbeddingFunction, Embeddings, chromadb
 from chromadb.config import Settings
 
+import head
 from common import list_full_paths, random_string
 from events import subscribe_event
-from head import ctx
 
 focus = os.environ["FOCUS"]
 
@@ -40,17 +40,21 @@ def import_directory(path="/lab/ink"):
             logging.error(e)
 
 
-# import_directory()
+import_directory()
 
-# query = "What is Fodder's real name?"
+query = "What is The Architect's real name?"
 
-# results = collection.query(query_texts=[query], n_results=3)
+results = collection.query(query_texts=[query], n_results=3)
 
-# from transformers import pipeline
+from transformers import pipeline
 
-# qa_model = pipeline("question-answering")
+qa_model = pipeline(
+    model=head.ctx.teacher.model,
+    tokenizer=head.ctx.teacher.tokenizer,
+    task="question-answering",
+)
 
-# for i, document in enumerate(results["documents"][0]):
-#     output = qa_model(question=query, context=document)
-#     print(results["distances"][0][i])
-#     print(output)
+for i, document in enumerate(results["documents"][0]):
+    output = qa_model(question=query, context=document)
+    print(results["distances"][0][i])
+    print(output)

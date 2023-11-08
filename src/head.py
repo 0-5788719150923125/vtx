@@ -262,7 +262,7 @@ class Cortex:
                 adapter_dir="/data/adapters/" + focus,
                 adapters=adapters,
                 precision=config.get("precision", 32),
-                assistant_model=self.assistant if focus == "assistant" else None,
+                assistant_model=config.get("model") if focus == "assistant" else None,
             )
 
             if config.get("context_length", None) is not None:
@@ -272,10 +272,10 @@ class Cortex:
                     config.get("context_length"),
                 )
 
-            if focus != "assistant":
-                print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + config["info"])
-
-            print(bc.ROOT + "ONE@ROOT: " + ad.TEXT + str(prototype))
+            print(
+                f"{bc.FOLD}ONE@FOLD:{ad.TEXT} {config.get('info', 'to the regional manager')}"
+            )
+            print(f"{bc.ROOT}ONE@ROOT:{ad.TEXT} {str(prototype)}")
         except Exception as e:
             logging.error(e)
             time.sleep(5)

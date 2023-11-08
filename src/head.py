@@ -187,8 +187,8 @@ class Cortex:
             if ctx.index(item) != len(ctx) - 1:
                 joined += "\n"
         length = self.get_string_length(joined)
-        while length >= max_tokens - 23:
-            joined = joined[5:]
+        while length >= max_tokens:
+            joined = joined[10:]
             length = self.get_string_length(joined)
         return joined
 

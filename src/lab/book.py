@@ -137,10 +137,10 @@ class Ink:
             with open(os.path.join(self.dir, "_index.md"), "w") as file:
                 pass
 
-        if entry.get("role"):
+        if self.type == "confidants":
             self.role = entry.get("role").lower().replace(" ", "-")
-            self.tags.append("ink")
             self.tags.append("roles")
+            self.tags.append("ink")
 
             self.file = f"the-{self.role}.md"
             f = f"{self.dir}/{self.file}"

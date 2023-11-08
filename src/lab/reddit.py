@@ -195,7 +195,7 @@ async def manage_submissions(reddit, config):
                     except Exception as e:
                         logging.error(e)
 
-            my_tags = []
+            # my_tags = []
         except Exception as e:
             logging.error(e)
 
@@ -368,7 +368,7 @@ async def subscribe_submissions(reddit, config):
                         thumbnail=subreddit.community_icon,
                         link=submission.shortlink,
                         footer="/r/" + subreddit.display_name,
-                        tags=deepcopy(tags),
+                        tags=set(tags),
                     )
                     my_tags = []
                 except Exception as e:

@@ -72,7 +72,7 @@
       },
       {
         "label": "upload",
-        "detail": "Upload config and adapters to a remote server via SSH.",
+        "detail": "Upload adapters to a remote server via SSH.",
         "type": "shell",
         "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && scp -i one.key -r data/adapters opc@129.159.66.224:/home/opc/vtx/data"
       },
@@ -92,16 +92,10 @@
         },
       },
       {
-        "label": "web",
+        "label": "deploy",
         "detail": "Deploy your book to CloudFlare.",
         "type": "shell",
         "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/cloudflare.py"
-      },
-      {
-        "label": "convert",
-        "detail": "Convert a video to ASCII.",
-        "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/video.py"
       },
       {
         "label": "prepare",
@@ -165,18 +159,6 @@
         "type": "promptString",
         "id": "lab",
         "description": "Which lab directory will you interact with?",
-      },
-      {
-        "type": "pickString",
-        "id": "i",
-        "description": "Which task should I execute?",
-        "options": [
-          "i.compile_book()",
-          "i.deploy_book()",
-          "i.convert_video_to_ascii()",
-          "i.upload_model_via_scp()",
-          "i.crawl()",
-        ]
       },
       {
         "type": "pickString",

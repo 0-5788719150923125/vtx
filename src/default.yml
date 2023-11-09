@@ -52,6 +52,7 @@ aura:
 mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
+  profile: True
   training:
     type: "lora"
 

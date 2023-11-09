@@ -96,7 +96,7 @@ def main():
                         sanitized = re.sub(
                             r"http\S+",
                             "((url))",
-                            submission.selftext.replace("\n", "\\n"),
+                            submission.selftext,
                         )
                         props.append(f"{s_variant}.text: " + sanitized + "\n")
                     else:
@@ -152,7 +152,7 @@ def main():
                     sanitized = re.sub(
                         r"http\S+",
                         "((url))",
-                        f"{c_variant}.text: " + reply.body.replace("\n", "\\n"),
+                        f"{c_variant}.text: " + reply.body,
                     )
                     props.append(sanitized + "\n")
 

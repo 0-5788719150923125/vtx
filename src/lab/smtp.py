@@ -1,5 +1,6 @@
 import asyncio
 import os
+import re
 import smtplib
 import textwrap
 import time
@@ -49,7 +50,7 @@ def send_email(config):
 title: {subject}
 author: {config.get('author', 'Ink')}
 date: {get_current_date()}
-description: A short email and a story, written for a friend.
+description: {config.get('description', 'A short email and a story, written for a friend.')}
 ```
 
 # {subject}
@@ -76,7 +77,12 @@ description: A short email and a story, written for a friend.
 
             cleaned = "\n".join(output.splitlines()[9:])
             unified = unified_newlines(cleaned.replace(r"\r\n|\r|\n", "\n"), 2)
-            uniform = textwrap.dedent(unified)
+            redacted = re.sub(
+                r"http\S+",
+                "$REDACTED",
+                unified,
+            )
+            uniform = textwrap.dedent(redacted)
 
             prepared = MIMEText(uniform, "plain", "utf-8")
             encode_7or8bit(prepared)

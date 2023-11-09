@@ -138,3 +138,7 @@ reddit:
       frequency: 0.05
     heart:
       frequency: 0.5
+    xsquaredlabs:
+      frequency: 0.2
+    ARG:
+      frequency: 0.2

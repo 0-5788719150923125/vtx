@@ -8,7 +8,7 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 # mission
 
-To provide the masses with a simple, opinionated framework for human cloning experiments.
+To provide the masses with a simple, opinionated framework for human cloning experiments. The goal is to achieve as much as is possible with small models, on commodity hardware (i.e. your desktop computer).
 
 # interface
 

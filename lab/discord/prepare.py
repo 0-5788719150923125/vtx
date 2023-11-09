@@ -56,10 +56,7 @@ def main():
                             )
                         if i["embeds"][0]["description"]:
                             i["content"] = (
-                                i["content"]
-                                + " | (("
-                                + i["embeds"][0]["description"]
-                                + "))"
+                                i["content"] + " | " + i["embeds"][0]["description"]
                             )
 
                     author_id = i["author"]["id"]
@@ -96,9 +93,8 @@ def main():
                                             if result["embeds"][0]["description"]:
                                                 result["content"] = (
                                                     result["content"]
-                                                    + " | (("
+                                                    + " | "
                                                     + result["embeds"][0]["description"]
-                                                    + "))"
                                                 )
                                         sanitized = sanitizer(result["content"])
                                         if len(result["mentions"]) > 0:

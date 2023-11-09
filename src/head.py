@@ -87,6 +87,7 @@ def validation(config):
                         "adalora",
                         "ia3",
                         "lora",
+                        "lokr",
                         "prefix",
                         "prompt",
                         "standard",
@@ -239,7 +240,7 @@ class Cortex:
         model_folder = None
         if "training" in config:
             t = config["training"].get("type", "standard")
-            if t in ["adalora", "lora"]:
+            if t in ["adalora", "ia3", "lora", "lokr"]:
                 adapters = config.get("adapters", ["base"])
             elif t == "prompt":
                 tuning_mode = "ptune"

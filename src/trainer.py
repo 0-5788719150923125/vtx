@@ -6,6 +6,7 @@ import shutil
 from peft import (
     AdaLoraConfig,
     IA3Config,
+    LoKrConfig,
     LoraConfig,
     PeftConfig,
     PeftModel,
@@ -224,9 +225,11 @@ if __name__ == "__main__":
             modules_to_save=p.get("modules_to_save", None),
         )
     elif train_type == "adalora":
-        peft_config = LoraConfig(
+        peft_config = AdaLoraConfig(
             task_type="CAUSAL_LM",
             r=p.get("r", 4),
+            init_r=p.get("init_r", 12),
+            target_r=p.get("target_r", 8),
             lora_alpha=p.get("alpha", 16),
             lora_dropout=p.get("dropout", 0.1),
             bias=p.get("bias", "none"),
@@ -240,6 +243,22 @@ if __name__ == "__main__":
             task_type="CAUSAL_LM",
             target_modules=p.get("target_modules", None),
             feedforward_modules=p.get("feedforward_modules", None),
+        )
+    elif train_type == "lokr":
+        peft_config = LoKrConfig(
+            task_type="CAUSAL_LM",
+            r=p.get("r", 4),
+            alpha=p.get("alpha", 16),
+            rank_dropout=p.get("dropout", 0.0),
+            module_dropout=p.get("dropout", 0.0),
+            use_effective_conv2d=False,
+            decompose_both=True,
+            decompose_factor=1,
+            bias=p.get("bias", "none"),
+            target_modules=p.get("target_modules", None),
+            rank_pattern=p.get("rank_pattern", {}),
+            alpha_pattern=p.get("alpha_pattern", {}),
+            modules_to_save=p.get("modules_to_save", None),
         )
     elif train_type == "prompt":
         if use_petals:

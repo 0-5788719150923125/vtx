@@ -53,10 +53,11 @@ mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
   profile: True
+  # w/ assistant: 132s/message avg
   training:
     type: "lora"
 
-# Based on GPT-2 architecture.
+# Based on human physiology.
 ego:
   model: microsoft/biogpt
   info: old dog, new tricks

@@ -293,9 +293,8 @@ class Cortex:
                 continue
             if self.active:
                 continue
-            skip = True
+            skip = False
             for value in self.queue:
-                skip = False
                 if value["priority"]:
                     skip = True
                     if priority:

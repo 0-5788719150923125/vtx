@@ -156,6 +156,7 @@ class Cortex:
         self.config = config
         self.personas = personas
         self.disposition = disposition
+        self.queue = []
         self.average_speed = []
         self.context = [
             {"bias": 975174695399854150, "message": "I am a robot."},
@@ -283,21 +284,47 @@ class Cortex:
 
         return prototype
 
-    def wait_in_queue(self):
-        max_wait_time = 15 * 60  # 15 minutes
-        while self.active == True or not self.teacher:
-            time.sleep(1)
-            max_wait_time -= 1
-            if max_wait_time == 0:
-                return False
+    def wait_in_queue(self, priority=False):
+        self.queue.append({"me": self, "priority": priority})
 
-        self.active = True
-        return True
+        while True:
+            time.sleep(1)
+            if self.teacher is None:
+                continue
+            if self.active:
+                continue
+            skip = True
+            for value in self.queue:
+                skip = False
+                if value["priority"]:
+                    skip = True
+                    if priority:
+                        skip = False
+                    break
+
+            if skip:
+                continue
+
+            if self.active:
+                continue
+
+            self.active = True
+            return
+
+    def remove_from_queue(self, priority=False):
+        self.active = False
+        if priority:
+            for value in self.queue:
+                if value["priority"]:
+                    self.queue.pop(self.queue.index(value))
+                    return
+        self.queue.pop(0)
 
     @to_thread
     def chat(
         self,
         ctx=None,
+        priority: bool = False,
         bias: int = None,
         temperature: float = 0.95,
         min_new_tokens: int = 1,
@@ -305,9 +332,7 @@ class Cortex:
         personas: List[str] = [],
         eos_tokens: list | None = None,
     ):
-        result = self.wait_in_queue()
-        if not result:
-            return False, 23, "", False
+        self.wait_in_queue(priority)
 
         if isinstance(personas, str):
             personas = [personas]
@@ -521,7 +546,7 @@ class Cortex:
                     f"Average speed: {statistics.mean(self.average_speed)}, Number of samples: {len(self.average_speed)}"
                 )
 
-        self.active = False
+        self.remove_from_queue(priority)
         return success, bias, output, seeded
 
     @to_thread
@@ -535,9 +560,7 @@ class Cortex:
         eos_tokens: list | None = None,
         cleanup: bool = False,
     ):
-        result = self.wait_in_queue()
-        if not result:
-            return False
+        self.wait_in_queue()
 
         sequence_biases = {wall: -20.0}
         if disposition is not None:
@@ -626,7 +649,7 @@ class Cortex:
                 logging.error(e)
                 output = False
 
-        self.active = False
+        self.remove_from_queue()
         return output
 
     @to_thread
@@ -638,9 +661,7 @@ class Cortex:
         decay_after_length: int = 66,
         decay_factor: float = 0.023,
     ):
-        result = self.wait_in_queue()
-        if not result:
-            return
+        self.wait_in_queue()
 
         eos_token = self.teacher.tokenizer.eos_token
 
@@ -748,7 +769,7 @@ class Cortex:
             print(traceback.format_exc())
             output = e
 
-        self.active = False
+        self.remove_from_queue()
         return output
 
 

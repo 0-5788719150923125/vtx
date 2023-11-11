@@ -125,6 +125,8 @@ collections:
 reddit:
   enabled: False
   delay:
+    min: 120
+    max: 600
   filter:
     - layerzero
   subs:

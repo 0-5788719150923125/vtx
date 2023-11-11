@@ -323,7 +323,7 @@ class Client(discord.Client):
                     persona = []
 
                 success, bias, output, seeded = await head.ctx.chat(
-                    bias=bias, personas=persona, max_new_tokens=333
+                    bias=bias, personas=persona, priority=True, max_new_tokens=333
                 )
 
                 if output == False:
@@ -406,7 +406,11 @@ class Client(discord.Client):
                 if str(message.channel.type) == "private":
                     bias = int(self.user.id)
                     success, bias, output, seeded = await head.ctx.chat(
-                        bias=bias, personas=persona, ctx=context, max_new_tokens=333
+                        bias=bias,
+                        personas=persona,
+                        ctx=context,
+                        priority=True,
+                        max_new_tokens=333,
                     )
                     if success == False:
                         return
@@ -419,7 +423,11 @@ class Client(discord.Client):
                     transformed = output
                 else:
                     success, bias, output, seeded = await head.ctx.chat(
-                        bias=bias, personas=persona, ctx=context, max_new_tokens=333
+                        bias=bias,
+                        personas=persona,
+                        ctx=context,
+                        priority=True,
+                        max_new_tokens=333,
                     )
                     if success == False:
                         return

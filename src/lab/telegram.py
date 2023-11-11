@@ -46,11 +46,13 @@ async def client(config) -> None:
             await message.answer_chat_action("typing")
 
             if "!Q" in message["text"]:
-                prompt = message["text"].replace("!Q", "")
+                prompt = message["text"].replace("!Q", "").lstrip(" ")
                 bias = get_identity()
-                output = await head.ctx.query(question=prompt)
+                output = await head.ctx.query(question=prompt, priority=True)
             else:
-                success, bias, output, seeded = await head.ctx.chat(personas=persona)
+                success, bias, output, seeded = await head.ctx.chat(
+                    personas=persona, priority=True
+                )
                 if success == False:
                     return
             await message.answer(output)

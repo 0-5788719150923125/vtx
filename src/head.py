@@ -552,6 +552,7 @@ class Cortex:
     def prompt(
         self,
         prompt="",
+        priority: bool = False,
         temperature: float = 0.95,
         disposition: dict | None = None,
         min_new_tokens: int = 11,
@@ -559,7 +560,7 @@ class Cortex:
         eos_tokens: list | None = None,
         cleanup: bool = False,
     ):
-        self.wait_in_queue()
+        self.wait_in_queue(priority)
 
         sequence_biases = {wall: -20.0}
         if disposition is not None:
@@ -648,19 +649,20 @@ class Cortex:
                 logging.error(e)
                 output = False
 
-        self.remove_from_queue()
+        self.remove_from_queue(priority)
         return output
 
     @to_thread
     def query(
         self,
         question="",
+        priority: bool = False,
         temperature: float = 0.23,
         max_new_tokens: int = 333,
         decay_after_length: int = 66,
         decay_factor: float = 0.023,
     ):
-        self.wait_in_queue()
+        self.wait_in_queue(priority)
 
         eos_token = self.teacher.tokenizer.eos_token
 
@@ -768,7 +770,7 @@ class Cortex:
             print(traceback.format_exc())
             output = e
 
-        self.remove_from_queue()
+        self.remove_from_queue(priority)
         return output
 
 

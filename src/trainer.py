@@ -252,7 +252,7 @@ if __name__ == "__main__":
             rank_dropout=p.get("dropout", 0.0),
             module_dropout=p.get("dropout", 0.0),
             use_effective_conv2d=False,
-            decompose_both=True,
+            decompose_both=False,
             decompose_factor=1,
             target_modules=p.get("target_modules", None),
             rank_pattern=p.get("rank_pattern", {}),

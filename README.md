@@ -4,6 +4,8 @@
 
 Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
+![Adam](adam.jpg)
+
 "Go play in the lab."
 
 # mission

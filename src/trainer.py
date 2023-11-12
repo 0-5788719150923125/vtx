@@ -422,7 +422,7 @@ if __name__ == "__main__":
         os.makedirs("/data/models/" + focus + "/" + adapter)
 
     for name, param in prototype.model.named_parameters():
-        if "lora" in name.lower():
+        if "lora" in name.lower() or "lokr" in name.lower() or "ia3" in name.lower():
             param.requires_grad = True
 
     logger = loggers.TensorBoardLogger(

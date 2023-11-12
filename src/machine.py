@@ -7,7 +7,7 @@ import time
 from common import ad, bc, config
 
 # Quickly test stuff here
-from lab import scratch
+from lab import dev
 
 if os.environ.get("DEV_MODE", "false") == "true":
     import debugpy

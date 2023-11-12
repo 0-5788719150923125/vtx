@@ -254,7 +254,6 @@ if __name__ == "__main__":
             use_effective_conv2d=False,
             decompose_both=True,
             decompose_factor=1,
-            bias=p.get("bias", "none"),
             target_modules=p.get("target_modules", None),
             rank_pattern=p.get("rank_pattern", {}),
             alpha_pattern=p.get("alpha_pattern", {}),
@@ -427,7 +426,7 @@ if __name__ == "__main__":
             param.requires_grad = True
 
     logger = loggers.TensorBoardLogger(
-        "/data/logs", name=focus + "/" + adapter, default_hp_metric=True
+        "/data/logs", name=f"{focus}/{adapter}", default_hp_metric=True
     )
 
     print(f"Final dataset: {bc.ROOT}{len(train_data)}{ad.TEXT} batches")

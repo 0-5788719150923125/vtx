@@ -34,16 +34,16 @@ source:
       active_frequency: 0.99
 
 # A revolution starts here.
-catalyst:
+ghost:
   model: PY007/TinyLlama-1.1B-intermediate-step-715k-1.5T
-  info: a new breed
+  info: watching, waiting
   training:
     type: "lora"
 
 # A mainframe.
 frame:
   model: ibm/MoLM-350M-4B
-  info: Watching, waiting.
+  info: know thy name
 
 # A large RNN.
 aura:

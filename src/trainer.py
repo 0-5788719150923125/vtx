@@ -2,6 +2,7 @@ import logging
 import os
 import random
 import shutil
+import time
 
 from lightning.pytorch import loggers
 from moduleformer import (
@@ -189,7 +190,9 @@ if __name__ == "__main__":
     base_model = model_config["model"]
 
     print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
+    time.sleep(2)
     print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
+    time.sleep(3)
 
     launch_model = None
     fresh_logs = False
@@ -299,16 +302,6 @@ if __name__ == "__main__":
     else:
         output_dir = "/data/models/" + focus
 
-    if train_type == "pretrain":
-        # import difflib
-        pretrain_config = AutoConfig.from_pretrained(launch_model)
-        setattr(pretrain_config, "_name_or_path", focus)
-        for k, v in p.get("overrides").items():
-            setattr(pretrain_config, k, v)
-        # differ = difflib.Differ()
-        # diff = differ.compare(str(dict1), str(dict2))
-        print(pretrain_config)
-
     # Create a tokenized dataset from every directory specified in config file
     def build_inputs(c, tokenizer):
         datasets = {}
@@ -413,6 +406,16 @@ if __name__ == "__main__":
     print(tokenizer)
 
     train_data = build_inputs(p, tokenizer)
+
+    if train_type == "pretrain":
+        pretrain_config = AutoConfig.from_pretrained(launch_model)
+        print(f"{bc.CORE}original pretrain config:{ad.TEXT}")
+        print(pretrain_config)
+        setattr(pretrain_config, "_name_or_path", focus)
+        for k, v in p.get("overrides").items():
+            setattr(pretrain_config, k, v)
+        print(f"{bc.ROOT}modified pretrain config:{ad.TEXT}")
+        print(pretrain_config)
 
     # Instantiate the model object
     prototype = aigen(

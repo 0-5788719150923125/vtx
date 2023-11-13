@@ -1,4 +1,5 @@
 import logging
+import math
 import os
 import random
 import shutil
@@ -474,6 +475,10 @@ if __name__ == "__main__":
 
     print(f"Final dataset: {bc.ROOT}{len(train_data)}{ad.TEXT} batches")
 
+    val_interval = p.get("val_interval", 1000)
+    if val_interval > len(train_data):
+        val_interval = math.floor(len(train_data) / 10)
+
     # Train the model
     prototype.train(
         train_data=train_data,
@@ -503,5 +508,5 @@ if __name__ == "__main__":
         prune=p.get("prune", 0.0),
         target_batch_size=p.get("target_batch_size", 8192),
         val_split=p.get("val_split", 0.0),
-        val_interval=p.get("val_interval", 1000),
+        val_interval=val_interval,
     )

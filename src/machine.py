@@ -18,6 +18,8 @@ if os.environ.get("DEV_MODE", "false") == "true":
 
 # This is the main loop
 def main():
+    run_once = ["horde"]
+
     allowed_services = [
         "source",
         "bit",
@@ -29,7 +31,7 @@ def main():
         "discord",
         "twitch",
         "x",
-    ]
+    ] + run_once
 
     tasks = {}
 
@@ -58,6 +60,10 @@ def main():
                 task.start()
                 tasks[task.name] = task
                 print(bc.ROOT + f"ONE@{service.upper()}: " + ad.TEXT + "connected")
+
+        for s in run_once:
+            if s in allowed_services:
+                allowed_services.remove(s)
 
         time.sleep(66.6)
 

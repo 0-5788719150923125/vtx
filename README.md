@@ -10,7 +10,7 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 # mission
 
-To build a non-trivial, opinionated framework for human cloning experiments. Our goal is to standardize AGI (Artificial Generative Interfaces) through small models, on commodity hardware (i.e. your desktop computer).
+To build a non-trivial, opinionated framework for human cloning experiments. Our goal is to standardize AGI (Adaptive Generative Interfaces) through small models, on commodity hardware (i.e. your desktop computer).
 
 # interface
 

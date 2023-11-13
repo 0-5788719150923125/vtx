@@ -216,7 +216,7 @@ aura:
 
 etc...
 ```
-As of today, VTX ships with support for models named "source", "catalyst", "mind", "heart", "soul", "aura" or "toe". Each model uses a different architecture, while also serving different purposes. You can see the default values [here](https://github.com/0-5788719150923125/vtx/blob/main/src/default.yml).
+As of today, VTX ships with support for models named "source", "catalyst", "frame", "mind", "heart", "soul", "aura" or "toe". Each model uses a different architecture, while also serving different purposes. You can see the default values [here](https://github.com/0-5788719150923125/vtx/blob/main/src/default.yml).
 
 To set an arbitrary description of your model:
 ```yml

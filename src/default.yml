@@ -40,6 +40,11 @@ catalyst:
   training:
     type: "lora"
 
+# A mainframe.
+frame:
+  model: ibm/MoLM-350M-4B
+  info: Watching, waiting.
+
 # A large RNN.
 aura:
   info: of life
@@ -54,13 +59,6 @@ mind:
   model: EleutherAI/gpt-neo-1.3B
   profile: True
   # w/ assistant: 132s/message avg
-  training:
-    type: "lora"
-
-# Based on human physiology.
-ego:
-  model: microsoft/biogpt
-  info: old dog, new tricks
   training:
     type: "lora"
 

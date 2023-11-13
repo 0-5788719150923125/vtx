@@ -1,5 +1,6 @@
 matrix-nio[e2e]>=0.22.0
 ray>=2.7.1
+sacremoses>=0.1.1
 git+https://github.com/Lightning-Universe/lightning-Hivemind.git
 git+https://github.com/huggingface/peft.git
 git+https://github.com/IBM/ModuleFormer.git

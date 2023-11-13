@@ -3,6 +3,12 @@ import os
 import random
 import shutil
 
+from lightning.pytorch import loggers
+from moduleformer import (
+    ModuleFormerConfig,
+    ModuleFormerForCausalLM,
+    ModuleFormerForSequenceClassification,
+)
 from peft import (
     AdaLoraConfig,
     IA3Config,
@@ -14,8 +20,12 @@ from peft import (
     PromptTuningConfig,
     get_peft_model,
 )
-from pytorch_lightning import loggers
-from transformers import AutoTokenizer
+from transformers import (
+    AutoConfig,
+    AutoModelForCausalLM,
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+)
 
 from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_beacon
 
@@ -25,6 +35,12 @@ if os.environ.get("DEV_MODE") == "true":
 else:
     from aigen import aigen
     from aigen.TokenDataset import TokenDataset, merge_datasets
+
+AutoConfig.register("moduleformer", ModuleFormerConfig)
+AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)
+AutoModelForSequenceClassification.register(
+    ModuleFormerConfig, ModuleFormerForSequenceClassification
+)
 
 model_config = config[focus]
 model_folder = "models/" + focus
@@ -209,6 +225,7 @@ if __name__ == "__main__":
             shutil.rmtree("/data/logs/" + focus + "/" + adapter)
 
     tuning_mode = None
+    pretrain_config = None
     peft_config = None
     pre_seq_len = 0
     output_dir = "/data/adapters/" + focus + "/" + adapter
@@ -281,6 +298,16 @@ if __name__ == "__main__":
             )
     else:
         output_dir = "/data/models/" + focus
+
+    if train_type == "pretrain":
+        # import difflib
+        pretrain_config = AutoConfig.from_pretrained(launch_model)
+        setattr(pretrain_config, "_name_or_path", focus)
+        for k, v in p.get("overrides").items():
+            setattr(pretrain_config, k, v)
+        # differ = difflib.Differ()
+        # diff = differ.compare(str(dict1), str(dict2))
+        print(pretrain_config)
 
     # Create a tokenized dataset from every directory specified in config file
     def build_inputs(c, tokenizer):
@@ -364,6 +391,8 @@ if __name__ == "__main__":
         else:
             return collected[0]
 
+    device_map = "auto"
+
     tokenizer = AutoTokenizer.from_pretrained(
         launch_model,
         cache_dir="/data/models",
@@ -389,6 +418,7 @@ if __name__ == "__main__":
     prototype = aigen(
         model=launch_model,
         model_folder=model_folder,
+        config=pretrain_config,
         petals=use_petals,
         cache_dir="/data/models",
         embeddings_dir="/data/embeddings/" + focus,
@@ -396,6 +426,7 @@ if __name__ == "__main__":
         pre_seq_len=pre_seq_len,
         precision=model_config.get("precision", None),
         gradient_checkpointing=p.get("gradient_checkpointing", True),
+        device_map=device_map,
     )
 
     prototype.tokenizer = tokenizer
@@ -404,11 +435,20 @@ if __name__ == "__main__":
     #     prototype.model.resize_token_embeddings(len(prototype.tokenizer))
 
     get_trainable = False
-    if train_type != "standard":
+    if train_type not in ["standard", "pretrain"]:
         if not use_petals:
             get_trainable = True
             if resume == True:
-                prototype.model = PeftModel.from_pretrained(prototype.model, output_dir)
+                try:
+                    prototype.model = PeftModel.from_pretrained(
+                        prototype.model, output_dir
+                    )
+                except Exception as e:
+                    print(prototype.model)
+                    print(e)
+                assert isinstance(
+                    prototype.model, PeftModel
+                ), "Failed to convert prototype into a PeftModel."
                 setattr(prototype.model.config, "is_prompt_learning", False)
                 setattr(prototype.model.config, "is_trainable", True)
             else:

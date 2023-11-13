@@ -38,8 +38,9 @@
 
 # inputs = tokenizer(string, return_tensors="pt")
 # generated = model.generate(
-#     inputs["input_ids"].to(model.device.type),
-#     max_new_tokens=333,
+#     input_ids=inputs["input_ids"].to(model.device.type),
+#     attention_mask=inputs["attention_mask"].to(model.device.type),
+#     max_new_tokens=33,
 #     do_sample=True,
 #     temperature=0.7,
 #     top_k=4,

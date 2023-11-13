@@ -22,6 +22,17 @@ import numpy as np
 import torch
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
+from moduleformer import (
+    ModuleFormerConfig,
+    ModuleFormerForCausalLM,
+    ModuleFormerForSequenceClassification,
+)
+from transformers import (
+    AutoConfig,
+    AutoModelForCausalLM,
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+)
 
 from common import (
     ad,
@@ -38,6 +49,12 @@ if os.environ.get("DEV_MODE") == "true":
     from lab.aigen.aigen import aigen
 else:
     from aigen import aigen
+
+AutoConfig.register("moduleformer", ModuleFormerConfig)
+AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)
+AutoModelForSequenceClassification.register(
+    ModuleFormerConfig, ModuleFormerForSequenceClassification
+)
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

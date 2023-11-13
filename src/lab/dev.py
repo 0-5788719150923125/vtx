@@ -1,3 +1,19 @@
+# ------ Iterable Datasets ------- #
+
+# from datasets import load_dataset
+
+# dataset = load_dataset(
+#     "monology/pile-uncopyrighted",
+#     "all",
+#     split="train",
+#     streaming=True,
+#     cache_dir="/data/pile",
+# )
+# dataset.shuffle(seed=42, buffer_size=100)
+
+# print(next(iter(dataset)))
+
+
 # ------- ModuleFormers --------#
 
 # import time

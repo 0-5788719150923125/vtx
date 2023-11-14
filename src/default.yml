@@ -46,6 +46,9 @@ ghost:
 frame:
   model: ibm/MoLM-350M-4B
   info: know thy name
+  training:
+    overrides:
+      universal: True
 
 # A large RNN.
 aura:

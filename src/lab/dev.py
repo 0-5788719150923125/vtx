@@ -1,15 +1,20 @@
 # ------ Iterable Datasets ------- #
 
-# from datasets import load_dataset
+# import random
 
-# dataset = load_dataset(
-#     "monology/pile-uncopyrighted",
-#     "all",
+# import datasets
+
+# datasets.logging.set_verbosity_info()
+
+# dataset = datasets.load_dataset(
+#     "togethercomputer/RedPajama-Data-V2",
+#     name="default",
+#     snapshots=["2023-14"],
+#     # languages=["en"],
 #     split="train",
 #     streaming=True,
 #     cache_dir="/data/pile",
-# )
-# dataset.shuffle(seed=42, buffer_size=100)
+# ).shuffle(seed=random.randint(0, 9), buffer_size=100)
 
 # print(next(iter(dataset)))
 

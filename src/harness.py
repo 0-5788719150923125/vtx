@@ -508,6 +508,7 @@ if __name__ == "__main__":
         num_cycles=p.get("num_cycles", None),
         prune=p.get("prune", 0.0),
         target_batch_size=p.get("target_batch_size", 8192),
+        block_size=p.get("block_size", 2048),
         val_split=p.get("val_split", 0.0),
         val_interval=val_interval,
     )

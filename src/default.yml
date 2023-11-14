@@ -9,6 +9,8 @@
 bit:
   moon: False
 
+only: toehider
+
 personas:
   source:
     bias: 806051627198709760

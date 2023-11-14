@@ -1,0 +1,5 @@
+# git+https://github.com/F1zzTao/StableHordeAPI.py.git
+git+https://github.com/Lightning-Universe/lightning-Hivemind.git
+git+https://github.com/huggingface/peft.git
+git+https://github.com/IBM/ModuleFormer.git
+/lab/aigen

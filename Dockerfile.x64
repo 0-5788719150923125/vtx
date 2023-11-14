@@ -102,13 +102,13 @@ COPY requirements.x.txt ./
 
 RUN pip install -r requirements.x.txt
 
-RUN python3 -m venv venv/z \
-    && chmod +x venv/z/bin/activate \
-    && venv/z/bin/activate
+RUN python3 -m venv venv/y \
+    && chmod +x venv/y/bin/activate \
+    && venv/y/bin/activate
 
-COPY requirements.z.txt ./
+COPY requirements.y.txt ./
 
-RUN pip install -r requirements.z.txt
+RUN pip install -r requirements.y.txt
 
 RUN mkdir /.cache && \
     mkdir /.config && \

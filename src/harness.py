@@ -473,7 +473,11 @@ if __name__ == "__main__":
         "/data/logs", name=f"{focus}/{adapter}", default_hp_metric=True
     )
 
-    print(f"Final dataset: {bc.ROOT}{len(train_data)}{ad.TEXT} batches")
+    block_size = p.get("block_size", 2048)
+
+    print(
+        f"Final dataset: {bc.ROOT}{len(train_data)}{ad.TEXT} batches, {bc.ROOT}{len(train_data) * block_size}{ad.TEXT} tokens"
+    )
 
     val_interval = p.get("val_interval", 1000)
     if val_interval > len(train_data):
@@ -508,7 +512,7 @@ if __name__ == "__main__":
         num_cycles=p.get("num_cycles", None),
         prune=p.get("prune", 0.0),
         target_batch_size=p.get("target_batch_size", 8192),
-        block_size=p.get("block_size", 2048),
+        block_size=block_size,
         val_split=p.get("val_split", 0.0),
         val_interval=val_interval,
         supplement=p.get("supplement", False),

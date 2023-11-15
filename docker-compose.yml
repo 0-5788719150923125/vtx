@@ -12,8 +12,8 @@ services:
       context: .
       dockerfile: Dockerfile.${ARCH:-x64}
       shm_size: '1gb'
-      args: 
-        DCE_VERSION: 2.40.4
+      args:
+        DCE_VERSION: 2.42.3
         DOTNET_VERSION: 7.0.10
         HUGO_VERSION: 0.118.2
         NODEMON_VERSION: 3.0.1

@@ -24,7 +24,7 @@ def main():
 
     # Export direct messages
     if config["discord"]["export_dms"] == True:
-        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "{root_dir}/source/dm-%c.json" -f "JSON"'
+        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportdm --fuck-russia -t "{discord_token}" -o "{root_dir}/source/dm-%c.json" -f "JSON"'
         os.system(command)
 
     # For every server listed in config, iterate over options, and download messages
@@ -33,7 +33,7 @@ def main():
 
         skip = False
         s = config["discord"]["servers"][server]
-        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportguild --guild "{str(server)}" -t "{discord_token}" -o "{root_dir}/source/g-%g-%c.json" -f "JSON"'
+        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportguild --include-threads --include-archived-threads --fuck-russia --guild "{str(server)}" -t "{discord_token}" -o "{root_dir}/source/g-%g-%c.json" -f "JSON"'
         if s:
             if "skip" in s:
                 skip = s.get("skip", False)

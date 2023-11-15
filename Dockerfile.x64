@@ -84,8 +84,6 @@ RUN pip install -r requirements.txt
 ARG NODEMON_VERSION
 ARG WRANGLER_VERSION
 
-RUN pip install flash-attn --no-build-isolation
-
 RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
 
 COPY lab/ /lab

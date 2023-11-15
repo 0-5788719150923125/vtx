@@ -79,7 +79,7 @@ There are a lot of details that go into training, and we have yet to fully-docum
 3. Use `CTRL + Shift + P` to use the various lifecycle tasks.
 4. `git submodule update --init --recursive` to initialize submodules. Note: some of them will fail, because they're in private repos.
 5. Use the `up` task to bring your project online.
-6. Create a file at `src/config.yml`, and use it to apply your customizations.
+6. Create a file at `config.yml` at the root of this project, and use it to apply your customizations.
 7. To train or fine-tune a model, all settings must be defined under a "training" key, under a [model](#models) key.
 8. [Datasets](#datasets) must be defined for training as well.
 9. Training data must exist in the local `lab/` folder. If necessary, you may need to create a `fetch.py` or `prepare.py` script, to prepare your data for training.
@@ -113,7 +113,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./config.yml:/src/config.yml
+      - ./config.yml:/env/config.yml
       - ./data/models:/data/models
     env_file:
       - .env

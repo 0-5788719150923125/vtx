@@ -40,7 +40,7 @@ with open("/src/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 try:
-    with open("/src/config.yml", "r") as config_file:
+    with open("/env/config.yml", "r") as config_file:
         user_config = yaml.load(config_file, Loader=yaml.FullLoader)
         if "reddit" in user_config:
             user_config["reddit"]["enabled"] = True

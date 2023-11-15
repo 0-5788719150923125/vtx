@@ -7,3 +7,4 @@ services:
       - ./lab:/lab
       - ./data:/data
       - ./book:/book
+      - ./config.yml:/env/config.yml

@@ -2,7 +2,6 @@ __pycache__
 .env
 .git
 node_modules
-src/config.yml
 lab/
 !lab/opencog/atomspace
 !lab/opencog/learn

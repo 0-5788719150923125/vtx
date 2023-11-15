@@ -7,7 +7,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./config.yml:/src/config.yml
+      - ./config.yml:/env/config.yml
       - ./data/models:/data/models
     env_file:
       - .env

@@ -556,7 +556,8 @@ class Cortex:
         if self.config.get("profile", False):
             self.average_speed.append(time.time() - start)
             while len(self.average_speed) > 10000:
-                self.average_speed.pop(0)
+                for _ in range(10):
+                    self.average_speed.pop(0)
             if len(self.average_speed) % 10 == 0:
                 print(
                     f"Average speed: {statistics.mean(self.average_speed)}, Number of samples: {len(self.average_speed)}"

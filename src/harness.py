@@ -416,6 +416,8 @@ if __name__ == "__main__":
         print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
         print(pretrain_config)
 
+    precision = model_config.get("precision", 32)
+
     # Instantiate the model object
     prototype = aigen(
         model=launch_model,
@@ -426,12 +428,17 @@ if __name__ == "__main__":
         embeddings_dir="/data/embeddings/" + focus,
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
-        precision=model_config.get("precision", None),
+        precision=precision,
         gradient_checkpointing=p.get("gradient_checkpointing", True),
         device_map=device_map,
     )
 
     prototype.tokenizer = tokenizer
+
+    # This is a hack, for models that won't respect torch.dtype
+    if focus in ["frame"]:
+        if precision in [4, 8, 16]:
+            prototype.model.half()
 
     # if extended:
     #     prototype.model.resize_token_embeddings(len(prototype.tokenizer))

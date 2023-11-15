@@ -5,8 +5,6 @@ import random
 import shutil
 import time
 
-from aigen import aigen
-from aigen.TokenDataset import TokenDataset, merge_datasets
 from lightning.pytorch import loggers
 from moduleformer import (
     ModuleFormerConfig,
@@ -31,6 +29,8 @@ from transformers import (
     AutoTokenizer,
 )
 
+from aigen import aigen
+from aigen.TokenDataset import TokenDataset, merge_datasets
 from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_beacon
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)
@@ -465,7 +465,7 @@ if __name__ == "__main__":
             param.requires_grad = True
 
     logger = loggers.TensorBoardLogger(
-        "/data/logs", name=f"{focus}/{adapter}", default_hp_metric=True
+        f"/data/logs/{focus}", name=adapter, default_hp_metric=True
     )
 
     block_size = p.get("block_size", 2048)

@@ -116,6 +116,7 @@ toe:
 collections:
   default:
     src:
+    env:
     lab/aigen:
     lab/source:
     lab/fold:

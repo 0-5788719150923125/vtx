@@ -131,6 +131,7 @@ RUN mkdir /.cache && \
     chmod -R 777 /nltk_data && \
     chmod -R 777 /lab/discord
 
+ENV TZ="America/Chicago"
 ENV PYTHONPYCACHEPREFIX='/tmp/__pycache__'
 ENV FOCUS='toe'
 

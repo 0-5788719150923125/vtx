@@ -1,3 +1,1 @@
-# git+https://github.com/F1zzTao/StableHordeAPI.py.git
 git+https://github.com/Lightning-Universe/lightning-Hivemind.git
-# pydantic>=2.0.0

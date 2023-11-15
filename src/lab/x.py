@@ -7,7 +7,7 @@ import time
 import tweepy
 
 import head
-from common import ad, bc
+from common import colors
 
 
 def main(config):
@@ -32,7 +32,7 @@ async def loop(config):
             )
             if output == False:
                 continue
-            print(bc.CORE + "ONE@X: " + ad.TEXT + output)
+            print(colors.RED + "ONE@X: " + colors.WHITE + output)
             try:
                 await tweet(output)
             except Exception as e:

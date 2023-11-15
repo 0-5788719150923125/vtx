@@ -11,7 +11,7 @@ from cerberus import Validator
 
 import eye
 import head
-from common import ad, bc, bullets, get_identity, ship, wall
+from common import bullets, colors, get_identity, ship, wall
 from events import subscribe_event
 
 
@@ -103,7 +103,7 @@ class Client(discord.Client):
                 continue
 
             guilds.append(f"{guild.name} ({guild.member_count})")
-        print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + " => ".join(guilds))
+        print(colors.BLUE + "ONE@DISCORD: " + colors.WHITE + " => ".join(guilds))
 
     async def on_guild_join(self, guild):
         await self.check_bans(guild=guild)
@@ -227,7 +227,7 @@ class Client(discord.Client):
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
             # await message.channel.send(pred)
-            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
+            print(colors.RED + "ONE@DISCORD: " + colors.WHITE + pred)
             # if message.content == "":
             #     message.content = pred
         elif len(message.attachments) > 0:
@@ -237,7 +237,7 @@ class Client(discord.Client):
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
             # await message.channel.send(pred)
-            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + pred)
+            print(colors.RED + "ONE@DISCORD: " + colors.WHITE + pred)
             # if message.content == "":
             #     message.content = pred
 
@@ -270,7 +270,7 @@ class Client(discord.Client):
             message_log = message_log + f" (sender:{message.author.id})"
 
         if message.content != "":
-            print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + message_log)
+            print(colors.BLUE + "ONE@DISCORD: " + colors.WHITE + message_log)
 
         # generate responses
         if "gen" in message.content.lower():
@@ -336,7 +336,7 @@ class Client(discord.Client):
             if len(transformed) > 2000:
                 transformed = transformed[:1997] + "..."
 
-            print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + transformed)
+            print(colors.RED + "ONE@DISCORD: " + colors.WHITE + transformed)
 
             if reply == True:
                 return_message = await message.reply(transformed)
@@ -364,9 +364,9 @@ class Client(discord.Client):
         if after.content[:1] not in bullets and before.content != after.content:
             if after.author.id != self.user.id:
                 head.ctx.build_context(bias=int(after.author.id), message=after.content)
-                print(bc.FOLD + "ONE@DISCORD: " + ad.TEXT + after.content)
+                print(colors.BLUE + "ONE@DISCORD: " + colors.WHITE + after.content)
             else:
-                print(bc.CORE + "ONE@DISCORD: " + ad.TEXT + after.content)
+                print(colors.RED + "ONE@DISCORD: " + colors.WHITE + after.content)
 
     # Listen for reactions
     async def on_reaction_add(self, reaction, user):

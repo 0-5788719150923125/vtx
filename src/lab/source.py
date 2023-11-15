@@ -12,7 +12,7 @@ import websockets
 from cerberus import Validator
 
 import head
-from common import ad, bc, get_identity, remove_invisible_characters, strip_emojis
+from common import colors, get_identity, remove_invisible_characters, strip_emojis
 
 context_length = 23
 
@@ -127,7 +127,9 @@ async def listener(config, focus):
                 messages[focus].append(
                     {"bias": int(get_identity()), "message": state["message"]}
                 )
-                print(bc.FOLD + f"ONE@FOLD:" + ad.TEXT + " " + state["message"])
+                print(
+                    colors.BLUE + f"ONE@FOLD:" + colors.WHITE + " " + state["message"]
+                )
 
             while len(messages[focus]) > context_length:
                 messages[focus].pop(0)
@@ -172,13 +174,13 @@ async def response(config, focus):
             messages[focus].pop(0)
         return
 
-    color = bc.CORE
+    color = colors.RED
     responder = "ONE@CORE:"
     if seeded:
-        color = bc.ROOT
+        color = colors.GREEN
         responder = "ONE@ROOT:"
 
-    print(color + responder + ad.TEXT + " " + sanitized)
+    print(color + responder + colors.WHITE + " " + sanitized)
 
     messages[focus].append({"bias": int(bias), "message": sanitized})
 

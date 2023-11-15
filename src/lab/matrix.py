@@ -10,7 +10,7 @@ from pprint import pprint
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
 
 import head
-from common import ad, bc, get_identity
+from common import colors, get_identity
 
 logging.getLogger("nio").setLevel(logging.WARNING)
 
@@ -85,7 +85,7 @@ async def subscribe(user, password, config) -> None:
                     else:
                         return
 
-            print(bc.FOLD + "ONE@MATRIX: " + ad.TEXT + message)
+            print(colors.BLUE + "ONE@MATRIX: " + colors.WHITE + message)
 
             task = asyncio.create_task(client.room_typing(room.room_id))
             await asyncio.gather(task)
@@ -111,7 +111,7 @@ async def subscribe(user, password, config) -> None:
                 content={"msgtype": "m.text", "body": response},
             )
 
-            print(bc.CORE + "ONE@MATRIX: " + ad.TEXT + response)
+            print(colors.RED + "ONE@MATRIX: " + colors.WHITE + response)
 
         except Exception as e:
             logging.error(e)

@@ -13,7 +13,7 @@ import asyncpraw
 from cerberus import Validator
 
 import head
-from common import ad, bc, get_daemon, get_identity
+from common import colors, get_daemon, get_identity
 from events import post_event, subscribe_event
 
 
@@ -239,7 +239,7 @@ async def stalker(reddit, config):
                     else submission.title
                 )
 
-                print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
+                print(colors.BLUE + "ONE@REDDIT: " + colors.WHITE + msg)
 
                 if success == False:
                     continue
@@ -287,7 +287,7 @@ async def stalker(reddit, config):
                     if len(comment.body) > 66
                     else comment.body
                 )
-                print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
+                print(colors.BLUE + "ONE@REDDIT: " + colors.WHITE + msg)
 
                 if success == False:
                     continue
@@ -414,7 +414,7 @@ async def subscribe_submissions(reddit, config):
                 else submission.title
             )
 
-            print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
+            print(colors.BLUE + "ONE@REDDIT: " + colors.WHITE + msg)
 
             if success == False:
                 continue
@@ -501,7 +501,7 @@ async def subscribe_comments(reddit, config):
             )
 
             msg = comment.body[:66] + "..." if len(comment.body) > 66 else comment.body
-            print(bc.FOLD + "ONE@REDDIT: " + ad.TEXT + msg)
+            print(colors.BLUE + "ONE@REDDIT: " + colors.WHITE + msg)
 
             if success == False:
                 continue
@@ -547,11 +547,11 @@ async def reply(obj, message, config):
         )
         await obj.reply(message)
 
-        color = bc.CORE
+        color = colors.RED
         if config.get("seeded", False) == True:
-            color = bc.ROOT
+            color = colors.GREEN
 
-        print(color + "ONE@REDDIT: " + ad.TEXT + message)
+        print(color + "ONE@REDDIT: " + colors.WHITE + message)
     except Exception as e:
         logging.error(e)
 

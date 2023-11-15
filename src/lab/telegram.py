@@ -7,7 +7,7 @@ import re
 from aiogram import Bot, Dispatcher, types
 
 import head
-from common import ad, bc, get_daemon, get_identity
+from common import colors, get_daemon, get_identity
 from events import post_event
 
 
@@ -34,7 +34,7 @@ async def client(config) -> None:
             head.ctx.build_context(
                 bias=int(get_identity(sender_id)), message=message["text"]
             )
-            print(bc.FOLD + "ONE@TELEGRAM: " + ad.TEXT + message["text"])
+            print(colors.BLUE + "ONE@TELEGRAM: " + colors.WHITE + message["text"])
 
             post_event("commit_memory", texts=message["text"])
 
@@ -57,7 +57,7 @@ async def client(config) -> None:
                     return
             await message.answer(output)
             head.ctx.build_context(bias=int(bias), message=output)
-            print(bc.CORE + "ONE@TELEGRAM: " + ad.TEXT + output)
+            print(colors.RED + "ONE@TELEGRAM: " + colors.WHITE + output)
         except Exception as e:
             logging.error(e)
 

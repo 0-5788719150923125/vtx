@@ -31,7 +31,7 @@ from transformers import (
 
 from aigen import aigen
 from aigen.TokenDataset import TokenDataset, merge_datasets
-from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_beacon
+from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)
 AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)
@@ -120,7 +120,7 @@ def create_dataset(
                     skip = True
                     continue
             if skip == True:
-                print(f"skipping: {bc.CORE}{file}{ad.TEXT}")
+                print(f"skipping: {colors.RED}{file}{colors.WHITE}")
                 continue
 
             if line_by_line == True:
@@ -147,10 +147,10 @@ def create_dataset(
                         intermediate.write(string + f"\n{tokenizer.eos_token}\n")
 
         except Exception as e:
-            print(f"failed: {bc.CORE}{file}{ad.TEXT}")
+            print(f"failed: {colors.RED}{file}{colors.WHITE}")
             logging.error(e)
 
-    print(f"tokenizing: {bc.FOLD}{path}{ad.TEXT}")
+    print(f"tokenizing: {colors.BLUE}{path}{colors.WHITE}")
 
     if line_by_line == True:
         collection = []
@@ -185,9 +185,9 @@ if __name__ == "__main__":
     train_type = p.get("type", "standard")
     base_model = model_config["model"]
 
-    print("(" + bc.ROOT + "focus" + ad.TEXT + ")")
+    print("(" + colors.GREEN + "focus" + colors.WHITE + ")")
     time.sleep(2)
-    print(f"({bc.CORE}ed{ad.TEXT}) on the ({bc.FOLD}{focus}{ad.TEXT})")
+    print(f"({colors.RED}ed{colors.WHITE}) on the ({colors.BLUE}{focus}{colors.WHITE})")
     time.sleep(3)
 
     launch_model = None
@@ -323,7 +323,7 @@ if __name__ == "__main__":
                     hashed = hash_directory("/" + dataset)
                     while duplicate >= 0:
                         new_path = f"{cache_path}/{str(duplicate)}"
-                        print(f"loading: {bc.FOLD}{new_path}{ad.TEXT}")
+                        print(f"loading: {colors.BLUE}{new_path}{colors.WHITE}")
 
                         cached = f"/data/datasets/{new_path}/{hashed}.tar.gz"
 
@@ -364,7 +364,10 @@ if __name__ == "__main__":
 
                 else:
                     print(
-                        bc.ROOT + dataset + ad.text + " is already loaded into memory"
+                        colors.GREEN
+                        + dataset
+                        + colors.WHITE
+                        + " is already loaded into memory"
                     )
 
         # Merge all tokenized datasets into a single dataset for training
@@ -405,12 +408,12 @@ if __name__ == "__main__":
 
     if train_type == "pretrain":
         pretrain_config = AutoConfig.from_pretrained(launch_model)
-        print(f"{bc.CORE}original pretrain config:{ad.TEXT}")
+        print(f"{colors.RED}original pretrain config:{colors.WHITE}")
         print(pretrain_config)
         setattr(pretrain_config, "_name_or_path", focus)
         for k, v in p.get("overrides").items():
             setattr(pretrain_config, k, v)
-        print(f"{bc.ROOT}modified pretrain config:{ad.TEXT}")
+        print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
         print(pretrain_config)
 
     # Instantiate the model object
@@ -471,7 +474,7 @@ if __name__ == "__main__":
     block_size = p.get("block_size", 2048)
 
     print(
-        f"Final dataset: {bc.ROOT}{len(train_data)}{ad.TEXT} batches, {bc.ROOT}{len(train_data) * block_size}{ad.TEXT} tokens"
+        f"Final dataset: {colors.GREEN}{len(train_data)}{colors.WHITE} batches, {colors.GREEN}{len(train_data) * block_size}{colors.WHITE} tokens"
     )
 
     val_interval = p.get("val_interval", 1000)

@@ -11,7 +11,7 @@ from twitchAPI.type import AuthScope, ChatEvent
 
 import head
 import lab.source
-from common import ad, bc, get_identity
+from common import colors, get_identity
 
 
 def main(config):
@@ -66,7 +66,7 @@ async def client(config):
                 self.active = True
 
                 try:
-                    print(bc.FOLD + "ONE@TWITCH: " + ad.TEXT + message.text)
+                    print(colors.BLUE + "ONE@TWITCH: " + colors.WHITE + message.text)
                     focus = config["twitch"].get("focus", "alpha")
                     personas = config["twitch"].get("personas")
                     name = random.choice(personas)
@@ -80,7 +80,7 @@ async def client(config):
                         return
                     head.ctx.build_context(bias=int(bias), message=output)
                     await asyncio.sleep(random.choice([7, 8, 9]))
-                    print(f"{bc.CORE}ONE@TWITCH: {ad.TEXT}{output}")
+                    print(f"{colors.RED}ONE@TWITCH: {colors.WHITE}{output}")
                     await chat.send_message(self.channel, f"[{name.upper()}] " + output)
                 except Exception as e:
                     logging.error(e)

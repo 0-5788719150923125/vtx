@@ -4,7 +4,7 @@ import threading
 import time
 
 # import memory
-from common import ad, bc, config
+from common import colors, config
 
 # Quickly test stuff here
 from lab import dev
@@ -59,7 +59,12 @@ def main():
                 )
                 task.start()
                 tasks[task.name] = task
-                print(bc.ROOT + f"ONE@{service.upper()}: " + ad.TEXT + "connected")
+                print(
+                    colors.GREEN
+                    + f"ONE@{service.upper()}: "
+                    + colors.WHITE
+                    + "connected"
+                )
 
         for s in run_once:
             if s in allowed_services:

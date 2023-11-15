@@ -20,7 +20,6 @@ from typing import List, Union
 
 import numpy as np
 import torch
-from aigen import aigen
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
 from moduleformer import (
@@ -35,6 +34,7 @@ from transformers import (
     AutoTokenizer,
 )
 
+from aigen import aigen
 from common import (
     ad,
     bc,
@@ -263,7 +263,7 @@ class Cortex:
             else:
                 model_folder = "/data/models/" + focus
         try:
-            print(bc.FOLD + "ONE@FOLD: " + ad.TEXT + "focused on the " + focus)
+            print(colors.BLUE + "ONE@FOLD: " + colors.WHITE + "focused on the " + focus)
             prototype = aigen(
                 model=config.get("model"),
                 model_folder=model_folder,
@@ -285,9 +285,9 @@ class Cortex:
                 )
 
             print(
-                f"{bc.FOLD}ONE@FOLD:{ad.TEXT} {config.get('info', 'to the regional manager')}"
+                f"{colors.BLUE}ONE@FOLD:{colors.WHITE} {config.get('info', 'to the regional manager')}"
             )
-            print(f"{bc.ROOT}ONE@ROOT:{ad.TEXT} {str(prototype)}")
+            print(f"{colors.GREEN}ONE@ROOT:{colors.WHITE} {str(prototype)}")
         except Exception as e:
             logging.error(traceback.format_exc())
             time.sleep(5)

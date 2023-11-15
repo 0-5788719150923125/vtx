@@ -131,16 +131,12 @@ if not validation({"personas": config["personas"]}):
     )
 
 
-# Color codes before
-class bc:
-    FOLD = "\033[94m"
-    ROOT = "\033[92m"
-    CORE = "\033[91m"
-
-
-# Color codes after
-class ad:
-    TEXT = "\033[0m"
+# Color codes
+class colors:
+    BLUE = "\033[94m"
+    GREEN = "\033[92m"
+    RED = "\033[91m"
+    WHITE = "\033[0m"
 
 
 # Return today's date

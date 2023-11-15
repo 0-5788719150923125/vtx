@@ -12,7 +12,7 @@ from email.mime.text import MIMEText
 from apscheduler.schedulers.background import BackgroundScheduler
 
 import head
-from common import ad, bc, get_current_date, unified_newlines
+from common import colors, get_current_date, unified_newlines
 
 
 def main(config) -> None:
@@ -43,7 +43,9 @@ def send_email(config):
     subject = config.get("subject")
 
     for subscriber in config.get("to"):
-        print(f"{bc.CORE}ONE@SMTP: {ad.TEXT}" + "sending message to " + subscriber)
+        print(
+            f"{colors.RED}ONE@SMTP: {colors.WHITE}" + "sending message to " + subscriber
+        )
         output = asyncio.run(
             head.ctx.prompt(
                 prompt=f"""```

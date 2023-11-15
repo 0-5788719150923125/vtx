@@ -36,8 +36,7 @@ from transformers import (
 
 from aigen import aigen
 from common import (
-    ad,
-    bc,
+    colors,
     config,
     focus,
     nist_beacon,

@@ -12,8 +12,7 @@ from cerberus import Validator
 
 import head
 from common import (
-    ad,
-    bc,
+    colors,
     config,
     deterministic_short_hash,
     read_from_file,

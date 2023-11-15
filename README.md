@@ -32,7 +32,7 @@ To build a non-trivial, opinionated framework for human cloning experiments. Our
 - Clone this repo.
 - Install Docker.
 - `git submodule update --init --recursive` to fetch remote datasets.
-- Place configurations into src/config.yml. ([default.yml](./src/default.yml))
+- Place configurations into config.yml. ([default.yml](./src/default.yml))
 - Put new datasets into lab/{dataset_name}. Also specify them in config.yml.
 - Put credentials into a .env file at the root of this project. ([example.env](./examples/lab/.env))
 - Use VSCode tasks as a reference.

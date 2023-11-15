@@ -16,6 +16,8 @@ from events import subscribe_event
 
 
 def main(config):
+    if config["discord"] is None:
+        config["discord"] = {}
     result = validation(config["discord"])
     if not result:
         return
@@ -68,7 +70,9 @@ def validation(config):
 
 
 def subscribe_events(config):
-    servers = config["discord"].get("servers")
+    servers = config["discord"].get("servers", {})
+    if len(servers) == 0:
+        return
     for server in servers:
         if not servers[server] or not servers[server].get("subscribe"):
             continue
@@ -308,10 +312,9 @@ class Client(discord.Client):
         try:
             async with message.channel.typing():
                 persona = []
-                if (
-                    message.guild
-                    and int(message.guild.id) in self.config["discord"]["servers"]
-                ):
+                if message.guild and int(message.guild.id) in self.config[
+                    "discord"
+                ].get("servers", {}):
                     server = self.config["discord"]["servers"][int(message.guild.id)]
                     if server is not None:
                         if "persona" in server:
@@ -385,8 +388,10 @@ class Client(discord.Client):
                 no_transform = False
                 server = None
                 if reaction.message.guild is not None:
-                    server = self.config["discord"]["servers"].get(
-                        int(reaction.message.guild.id), None
+                    server = (
+                        self.config["discord"]
+                        .get("servers", {})
+                        .get(int(reaction.message.guild.id), None)
                     )
                 bias = None
                 persona = []

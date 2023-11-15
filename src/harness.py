@@ -5,6 +5,8 @@ import random
 import shutil
 import time
 
+from aigen import aigen
+from aigen.TokenDataset import TokenDataset, merge_datasets
 from lightning.pytorch import loggers
 from moduleformer import (
     ModuleFormerConfig,
@@ -30,13 +32,6 @@ from transformers import (
 )
 
 from common import ad, bc, config, focus, hash_directory, list_full_paths, nist_beacon
-
-if os.environ.get("DEV_MODE") == "true":
-    from lab.aigen.aigen import aigen
-    from lab.aigen.aigen.TokenDataset import TokenDataset, merge_datasets
-else:
-    from aigen import aigen
-    from aigen.TokenDataset import TokenDataset, merge_datasets
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)
 AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)

@@ -106,6 +106,7 @@ RUN mkdir /.cache && \
     chmod -R 777 /nltk_data && \
     chmod -R 777 /lab/discord
 
+ENV PYTHONPYCACHEPREFIX='/tmp/__pycache__'
 ENV FOCUS='toe'
 
 CMD ["nodemon", "--ext", "*.py, *.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]

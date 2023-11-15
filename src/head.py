@@ -20,6 +20,7 @@ from typing import List, Union
 
 import numpy as np
 import torch
+from aigen import aigen
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
 from moduleformer import (
@@ -44,11 +45,6 @@ from common import (
     ship,
     wall,
 )
-
-if os.environ.get("DEV_MODE") == "true":
-    from lab.aigen.aigen import aigen
-else:
-    from aigen import aigen
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)
 AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)

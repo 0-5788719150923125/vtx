@@ -50,13 +50,15 @@ except Exception as e:
     config = default_config
 
 
-def colorize_yaml(yaml_dict):
-    # Define ANSI color escape codes
-    color_codes = {
-        "red": "\033[91m",
-        "reset": "\033[0m",
-    }
+# Color codes
+class colors:
+    BLUE = "\033[94m"
+    GREEN = "\033[92m"
+    RED = "\033[91m"
+    WHITE = "\033[0m"
 
+
+def colorize_yaml(yaml_dict):
     # Convert the YAML dictionary to a string without type tags
     yaml_text = yaml.dump(yaml_dict, default_style=None)
 
@@ -82,7 +84,7 @@ def colorize_yaml(yaml_dict):
 
             # Check if the key should be colored based on whether it's within a list of dicts
             if within_list_of_dicts:
-                colored_key = f"{color_codes['red']}{key}{color_codes['reset']}"
+                colored_key = f"{colors.RED}{key}{colors.WHITE}"
                 lines[i] = f"{leading_whitespace}{colored_key}:{rest_of_line}"
 
         # Update the stack based on indentation
@@ -129,14 +131,6 @@ if not validation({"personas": config["personas"]}):
     raise Exception(
         "There is something wrong with the 'personas' key in your config.yml file."
     )
-
-
-# Color codes
-class colors:
-    BLUE = "\033[94m"
-    GREEN = "\033[92m"
-    RED = "\033[91m"
-    WHITE = "\033[0m"
 
 
 # Return today's date

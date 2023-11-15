@@ -1,1 +1,2 @@
 git+https://github.com/Lightning-Universe/lightning-Hivemind.git
+# horde-sdk>=0.7.23

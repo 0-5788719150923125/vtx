@@ -7,9 +7,9 @@
 # datasets.logging.set_verbosity_info()
 
 # dataset = datasets.load_dataset(
-#     "togethercomputer/RedPajama-Data-V2",
-#     name="default",
-#     snapshots=["2023-14"],
+#     "Muennighoff/natural-instructions",
+#     # name="default",
+#     # snapshots=["2023-14"],
 #     # languages=["en"],
 #     split="train",
 #     streaming=True,

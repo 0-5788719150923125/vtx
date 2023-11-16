@@ -40,4 +40,3 @@ nltk>=3.8.1
 contractions>=0.1.73
 torchmetrics>=1.2.0
 zstandard>=0.22.0
-flash-attn>=2.3.3

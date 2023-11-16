@@ -314,11 +314,11 @@ class Client(discord.Client):
                 persona = []
                 if message.guild and int(message.guild.id) in self.config[
                     "discord"
-                ].get("servers", {}):
+                ].get("servers"):
                     server = self.config["discord"]["servers"][int(message.guild.id)]
                     if server is not None:
                         if "persona" in server:
-                            persona = server.get("persona", [])
+                            persona = server.get("persona")
                             no_transform = True
 
                 if len(message.mentions) > 0 and not self.user.mentioned_in(message):

@@ -25,4 +25,3 @@ services:
       - .env
     environment:
       FOCUS: ${FOCUS:-heart}
-      # DEV_MODE: true

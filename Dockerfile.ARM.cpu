@@ -73,12 +73,6 @@ ARG WRANGLER_VERSION
 # RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
 RUN npm i -g nodemon@$NODEMON_VERSION
 
-COPY lab/ /lab
-COPY data/adapters/ /adapters
-COPY data/embeddings/ /embeddings
-COPY src/ /src
-COPY book/ /book
-
 RUN python3 -m venv venv/x \
     && chmod +x venv/x/bin/activate \
     && venv/x/bin/activate
@@ -94,6 +88,12 @@ RUN python3 -m venv venv/y \
 COPY requirements.y.txt ./
 
 RUN pip install -r requirements.y.txt
+
+COPY lab/ /lab
+COPY data/adapters/ /adapters
+COPY data/embeddings/ /embeddings
+COPY src/ /src
+COPY book/ /book
 
 RUN mkdir /.cache && \
     mkdir /.config && \

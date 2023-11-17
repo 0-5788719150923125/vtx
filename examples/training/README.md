@@ -29,9 +29,9 @@ Ctrl+C
 
 ### 3. Create your configuration files
 
-In the root of your project directory, create a file called `.env`. This file contains all of your secrets. Thus, DO NOT SHARE IT WITH ANYONE.
+In the root of your project directory, create a file called `.env`. This file contains all of your secrets. DO NOT SHARE IT WITH ANYONE.
 
-You may copy a blank `.env` file from here: [example.env](https://github.com/0-5788719150923125/vtx/blob/main/examples/lab/.env)
+You may copy a template `.env` file from here: [example.env](https://github.com/0-5788719150923125/vtx/blob/main/examples/lab/.env)
 
 Next, create a file called `config.yml` in the root of your project. We can leave this empty for now.
 

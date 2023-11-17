@@ -10,7 +10,7 @@ sys.path.append("/src")
 from common import get_identity, ship, wall
 
 root_dir = "/lab/supernatural"
-num_samples = 50
+num_samples = 10000
 
 
 def main():
@@ -32,7 +32,7 @@ def main():
         print(f"preparing {count} samples")
         ds = dataset.shuffle(seed=random.randint(0, 2**31), buffer_size=1)
         d = next(iter(ds))
-        with open(f"{root_dir}/train/{d.get('id')}.txt", "a") as file:
+        with open(f"{root_dir}/train/{d.get('id')}.txt", "w") as file:
             human = get_identity()
             robot = get_identity()
             file.write(f"{wall}{human}{ship} {d.get('definition')}\n")

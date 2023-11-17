@@ -34,7 +34,7 @@ from transformers import (
     AutoTokenizer,
 )
 
-from aigen import aigen
+from aigen.aigen import aigen
 from common import (
     colors,
     config,
@@ -103,6 +103,7 @@ def validation(config):
                         "prefix",
                         "prompt",
                         "standard",
+                        "pretrain",
                     ],
                 },
                 "r": {"type": "integer"},
@@ -122,6 +123,9 @@ def validation(config):
                     "type": "string",
                     "allowed": ["AdamW", "Lion", "SophiaH"],
                 },
+                "num_cycles": {"type": "integer"},
+                "supplement": {"type": "boolean"},
+                "overrides": {"type": "dict"},
                 "learning_rate": {"type": "float"},
                 "swa_learning_rate": {"type": "float"},
                 "stride": {"type": "integer"},

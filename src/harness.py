@@ -29,8 +29,8 @@ from transformers import (
     AutoTokenizer,
 )
 
-from aigen import aigen
-from aigen.TokenDataset import TokenDataset, merge_datasets
+from aigen.aigen import aigen
+from aigen.aigen.TokenDataset import TokenDataset, merge_datasets
 from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)

@@ -74,8 +74,8 @@ ARG WRANGLER_VERSION
 RUN npm i -g nodemon@$NODEMON_VERSION
 
 COPY lab/ /lab
-COPY data/adapters/ /data/adapters
-COPY data/embeddings/ /data/embeddings
+COPY data/adapters/ /adapters
+COPY data/embeddings/ /embeddings
 COPY src/ /src
 COPY book/ /book
 
@@ -101,7 +101,6 @@ RUN mkdir /.cache && \
     mkdir /nltk_data && \
     mkdir -p /lab/discord && \
     mkdir -p /lab/discord/private && \
-    chmod -R 777 /data && \
     chmod -R 777 /.cache && \
     chmod -R 777 /.config && \
     chmod -R 777 /.triton && \

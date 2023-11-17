@@ -10,7 +10,7 @@ sys.path.append("/src")
 from common import get_identity, ship, wall
 
 root_dir = "/lab/supernatural"
-num_samples = 10000
+num_samples = 1_000_000
 
 
 def main():
@@ -26,12 +26,15 @@ def main():
         cache_dir="/data/pile",
     )
 
+    ds = iter(dataset.shuffle(seed=random.randint(0, 2**31), buffer_size=10))
+
     count = 0
     while count <= num_samples:
         os.system("clear")
         print(f"preparing {count} samples")
-        ds = dataset.shuffle(seed=random.randint(0, 2**31), buffer_size=1)
-        d = next(iter(ds))
+        if count % 10:
+            ds = iter(dataset.shuffle(seed=random.randint(0, 2**31), buffer_size=10))
+        d = next(ds)
         with open(f"{root_dir}/train/{d.get('id')}.txt", "w") as file:
             human = get_identity()
             robot = get_identity()

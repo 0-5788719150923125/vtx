@@ -255,10 +255,16 @@ class Cortex:
         adapters = None
         tuning_mode = None
         model_folder = None
+        adapter_dir = "/data/adapters/" + focus
+        embeddings_dir = "/data/embeddings/" + focus
         if "training" in config:
             t = config["training"].get("type", "standard")
             if t in ["adalora", "ia3", "lora", "lokr"]:
                 adapters = config.get("adapters", ["base"])
+                for adapter in adapters:
+                    if not os.path.exists(f"{adapter_dir}/{adapter}/adapter_model.bin"):
+                        adapter_dir = "/adapters/" + focus
+                        break
             elif t == "prompt":
                 tuning_mode = "ptune"
             elif t == "prefix":
@@ -273,8 +279,8 @@ class Cortex:
                 petals=config.get("petals", False),
                 cache_dir="/data/models",
                 tuning_mode=tuning_mode,
-                embeddings_dir="/data/embeddings/" + focus,
-                adapter_dir="/data/adapters/" + focus,
+                embeddings_dir=embeddings_dir,
+                adapter_dir=adapter_dir,
                 adapters=adapters,
                 precision=config.get("precision", 32),
                 assistant_model=config.get("model") if focus == "assistant" else None,

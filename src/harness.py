@@ -39,148 +39,13 @@ AutoModelForSequenceClassification.register(
     ModuleFormerConfig, ModuleFormerForSequenceClassification
 )
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 model_config = config[focus]
 model_folder = "models/" + focus
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-
-# Join every file located in a particular directory
-def create_dataset(
-    path="/lab",
-    tokenizer=None,
-    block_size: int = 1024,
-    stride: int = 0,
-    samples: float = 1.0,
-    line_by_line=False,
-):
-    prefixes = [
-        ".git",
-        "/lab/reaper/logseq",
-        "/lab/reaper/assets",
-        "/lab/reaper/public",
-        "/lab/aigen/aigen/static",
-        "/lab/opencog/learn/learn-lang-diary",
-        "/src/__pycache__",
-        "/src/lab/__pycache__",
-    ]
-
-    suffixes = [
-        "7z",
-        "bib",
-        "bin",
-        "eot",
-        "eps",
-        "epub",
-        "docx",
-        "gif",
-        "ico",
-        ".in",
-        "jpg",
-        "jpeg",
-        "mp3",
-        "mp4",
-        "odt",
-        ".out",
-        "pdf",
-        "png",
-        "pt",
-        "pyc",
-        "related.tex",
-        "resources/content.xml",
-        "resources/meta.xml",
-        "sqlite",
-        "synctex",
-        "toascii",
-        "ttf",
-        "woff",
-        "woff2",
-        "xlsx",
-        "zip",
-    ]
-
-    files = list_full_paths(path)
-    random.shuffle(files)
-
-    files = [item for item in files if random.random() <= samples]
-
-    intermediate_path = "/tmp/intermediate.txt"
-
-    datasets = {}
-    for file in files:
-        try:
-            # Skip file paths and extensions that we can't process
-            skip = False
-            for suffix in suffixes:
-                if file.lower().endswith(suffix):
-                    skip = True
-                    continue
-            for prefix in prefixes:
-                if file.startswith(prefix):
-                    skip = True
-                    continue
-            if skip == True:
-                print(f"skipping: {colors.RED}{file}{colors.WHITE}")
-                continue
-
-            if line_by_line == True:
-                with open(file, "r") as content:
-                    with open("/tmp/lines.txt", "a") as lines:
-                        lines.write(content.read())
-                datasets[file] = TokenDataset(
-                    "/tmp/lines.txt",
-                    batch_size=100000,
-                    block_size=block_size,
-                    line_by_line=line_by_line,
-                    tokenizer=tokenizer,
-                    stride=stride,
-                    bos_token=tokenizer.bos_token or "<|endoftext|>",
-                    eos_token=tokenizer.eos_token or "<|endoftext|>",
-                    unk_token=tokenizer.unk_token or "<|endoftext|>",
-                    pad_token=tokenizer.pad_token or "<|endoftext|>",
-                )
-                os.remove("/tmp/lines.txt")
-            else:
-                with open(file, "r") as content:
-                    with open(intermediate_path, "a") as intermediate:
-                        string = content.read()
-                        intermediate.write(string + f"\n{tokenizer.eos_token}\n")
-
-        except Exception as e:
-            print(f"failed: {colors.RED}{file}{colors.WHITE}")
-            logging.error(e)
-
-    print(f"tokenizing: {colors.BLUE}{path}{colors.WHITE}")
-
-    if line_by_line == True:
-        collection = []
-        for dataset in datasets:
-            collection.append(datasets[dataset])
-        if len(collection) == 1:
-            dataset = collection[0]
-        else:
-            dataset = merge_datasets(collection, equalize=False)
-    else:
-        dataset = TokenDataset(
-            intermediate_path,
-            tokenizer=tokenizer,
-            batch_size=100000,
-            block_size=block_size,
-            stride=stride,
-            bos_token=tokenizer.bos_token or "<|endoftext|>",
-            eos_token=tokenizer.eos_token or "<|endoftext|>",
-            unk_token=tokenizer.unk_token or "<|endoftext|>",
-            pad_token=tokenizer.pad_token or "<|endoftext|>",
-        )
-
-    # Cleanup temp files used for tokenized dataset creation
-    if os.path.exists("/tmp/intermediate.txt"):
-        os.remove("/tmp/intermediate.txt")
-
-    return dataset
-
-
-if __name__ == "__main__":
+def main():
     p = model_config["training"]
     train_type = p.get("type", "standard")
     base_model = model_config["model"]
@@ -297,91 +162,6 @@ if __name__ == "__main__":
             )
     else:
         output_dir = "/data/models/" + focus
-
-    # Create a tokenized dataset from every directory specified in config file
-    def build_inputs(c, tokenizer):
-        datasets = {}
-        block_size = c.get("block_size")
-        assert block_size, "You must set a block_size to use."
-        stride = c.get("stride", 0)
-        for collection in c["datasets"]:
-            for dataset in config["collections"][collection]:
-                if dataset not in datasets:
-                    line_by_line = False
-                    duplicate = 0
-                    if config["collections"][collection][dataset] is not None:
-                        if "line_by_line" in config["collections"][collection][dataset]:
-                            line_by_line = config["collections"][collection][
-                                dataset
-                            ].get("line_by_line", False)
-                        if "duplicate" in config["collections"][collection][dataset]:
-                            duplicate = config["collections"][collection][dataset].get(
-                                "duplicate", 0
-                            )
-
-                    cache_path = f"{focus}/{dataset}/{str(block_size)}"
-                    hashed = hash_directory("/" + dataset)
-                    while duplicate >= 0:
-                        new_path = f"{cache_path}/{str(duplicate)}"
-                        print(f"loading: {colors.BLUE}{new_path}{colors.WHITE}")
-
-                        cached = f"/data/datasets/{new_path}/{hashed}.tar.gz"
-
-                        if os.path.exists(cached):
-                            datasets[dataset + str(duplicate)] = TokenDataset(
-                                cached,
-                                block_size=block_size,
-                                from_cache=True,
-                            )
-                            duplicate -= 1
-                            continue
-
-                        try:
-                            shutil.rmtree(f"/data/datasets/{new_path}")
-                        except:
-                            pass
-
-                        os.makedirs(f"/data/datasets/{new_path}")
-                        samples = 1.0
-                        if config["collections"][collection][dataset] is not None:
-                            dataset_config = config["collections"][collection][dataset]
-                            stride = dataset_config.get("stride", stride)
-                            samples = dataset_config.get("samples", samples)
-                        ds = create_dataset(
-                            path="/" + dataset,
-                            tokenizer=tokenizer,
-                            block_size=block_size,
-                            stride=stride,
-                            samples=samples,
-                            line_by_line=line_by_line,
-                        )
-
-                        ds.save(cache_destination=cached)
-
-                        datasets[dataset + str(duplicate)] = ds
-
-                        duplicate -= 1
-
-                else:
-                    print(
-                        colors.GREEN
-                        + dataset
-                        + colors.WHITE
-                        + " is already loaded into memory"
-                    )
-
-        # Merge all tokenized datasets into a single dataset for training
-        collected = []
-        for collection in c["datasets"]:
-            for dataset in config["collections"][collection]:
-                duplicate = 0
-                while dataset + str(duplicate) in datasets:
-                    collected.append(datasets[dataset + str(duplicate)])
-                    duplicate = duplicate + 1
-        if len(collected) > 1:
-            return merge_datasets(collected, equalize=c.get("equalize_datasets", False))
-        else:
-            return collected[0]
 
     device_map = "auto"
 
@@ -522,3 +302,216 @@ if __name__ == "__main__":
         val_interval=val_interval,
         supplement=p.get("supplement", False),
     )
+
+
+# Join every file located in a particular directory
+def create_dataset(
+    path="/lab",
+    tokenizer=None,
+    block_size: int = 1024,
+    stride: int = 0,
+    samples: float = 1.0,
+    line_by_line=False,
+):
+    prefixes = [
+        ".git",
+        "/lab/reaper/logseq",
+        "/lab/reaper/assets",
+        "/lab/reaper/public",
+        "/lab/aigen/aigen/static",
+        "/lab/opencog/learn/learn-lang-diary",
+        "/src/__pycache__",
+        "/src/lab/__pycache__",
+    ]
+
+    suffixes = [
+        "7z",
+        "bib",
+        "bin",
+        "eot",
+        "eps",
+        "epub",
+        "docx",
+        "gif",
+        "ico",
+        ".in",
+        "jpg",
+        "jpeg",
+        "mp3",
+        "mp4",
+        "odt",
+        ".out",
+        "pdf",
+        "png",
+        "pt",
+        "pyc",
+        "related.tex",
+        "resources/content.xml",
+        "resources/meta.xml",
+        "sqlite",
+        "synctex",
+        "toascii",
+        "ttf",
+        "woff",
+        "woff2",
+        "xlsx",
+        "zip",
+    ]
+
+    files = list_full_paths(path)
+    random.shuffle(files)
+
+    files = [item for item in files if random.random() <= samples]
+
+    intermediate_path = "/tmp/intermediate.txt"
+
+    datasets = {}
+    for file in files:
+        try:
+            # Skip file paths and extensions that we can't process
+            skip = False
+            for suffix in suffixes:
+                if file.lower().endswith(suffix):
+                    skip = True
+                    continue
+            for prefix in prefixes:
+                if file.startswith(prefix):
+                    skip = True
+                    continue
+            if skip == True:
+                print(f"skipping: {colors.RED}{file}{colors.WHITE}")
+                continue
+
+            if line_by_line == True:
+                with open(file, "r") as content:
+                    with open("/tmp/lines.txt", "a") as lines:
+                        lines.write(content.read())
+                datasets[file] = TokenDataset(
+                    "/tmp/lines.txt",
+                    batch_size=100000,
+                    block_size=block_size,
+                    line_by_line=line_by_line,
+                    tokenizer=tokenizer,
+                    stride=stride,
+                    bos_token=tokenizer.bos_token or "<|endoftext|>",
+                    eos_token=tokenizer.eos_token or "<|endoftext|>",
+                    unk_token=tokenizer.unk_token or "<|endoftext|>",
+                    pad_token=tokenizer.pad_token or "<|endoftext|>",
+                )
+                os.remove("/tmp/lines.txt")
+            else:
+                with open(file, "r") as content:
+                    with open(intermediate_path, "a") as intermediate:
+                        string = content.read()
+                        intermediate.write(string + f"\n{tokenizer.eos_token}\n")
+
+        except Exception as e:
+            print(f"failed: {colors.RED}{file}{colors.WHITE}")
+            logging.error(e)
+
+    print(f"tokenizing: {colors.BLUE}{path}{colors.WHITE}")
+
+    if line_by_line == True:
+        collection = []
+        for dataset in datasets:
+            collection.append(datasets[dataset])
+        if len(collection) == 1:
+            dataset = collection[0]
+        else:
+            dataset = merge_datasets(collection, equalize=False)
+    else:
+        dataset = TokenDataset(
+            intermediate_path,
+            tokenizer=tokenizer,
+            batch_size=100000,
+            block_size=block_size,
+            stride=stride,
+            bos_token=tokenizer.bos_token or "<|endoftext|>",
+            eos_token=tokenizer.eos_token or "<|endoftext|>",
+            unk_token=tokenizer.unk_token or "<|endoftext|>",
+            pad_token=tokenizer.pad_token or "<|endoftext|>",
+        )
+
+    # Cleanup temp files used for tokenized dataset creation
+    if os.path.exists("/tmp/intermediate.txt"):
+        os.remove("/tmp/intermediate.txt")
+
+    return dataset
+
+
+# Create a tokenized dataset from every directory specified in config file
+def build_inputs(c, tokenizer):
+    datasets = {}
+    block_size = c.get("block_size")
+    assert block_size, "You must set a block_size to use."
+    stride = c.get("stride", 0)
+    for collection in c["datasets"]:
+        for dataset in config["collections"][collection]:
+            if dataset not in datasets:
+                ds_config = config["collections"][collection][dataset] or {}
+
+                duplicate = ds_config.get("duplicate", 0)
+
+                cache_path = f"{focus}/{dataset}/{str(block_size)}"
+                hashed = hash_directory("/" + dataset)
+                while duplicate >= 0:
+                    new_path = f"{cache_path}/{str(duplicate)}"
+                    print(f"loading: {colors.BLUE}{new_path}{colors.WHITE}")
+
+                    cached = f"/data/datasets/{new_path}/{hashed}.tar.gz"
+
+                    if os.path.exists(cached):
+                        datasets[dataset + str(duplicate)] = TokenDataset(
+                            cached,
+                            block_size=block_size,
+                            from_cache=True,
+                        )
+                        duplicate -= 1
+                        continue
+
+                    try:
+                        shutil.rmtree(f"/data/datasets/{new_path}")
+                    except:
+                        pass
+
+                    os.makedirs(f"/data/datasets/{new_path}")
+
+                    ds = create_dataset(
+                        path="/" + dataset,
+                        tokenizer=tokenizer,
+                        block_size=block_size,
+                        stride=ds_config.get("stride", stride),
+                        samples=ds_config.get("samples", 1.0),
+                        line_by_line=ds_config.get("line_by_line", False),
+                    )
+
+                    ds.save(cache_destination=cached)
+
+                    datasets[dataset + str(duplicate)] = ds
+
+                    duplicate -= 1
+
+            else:
+                print(
+                    colors.GREEN
+                    + dataset
+                    + colors.WHITE
+                    + " is already loaded into memory"
+                )
+
+    # Merge all tokenized datasets into a single dataset for training
+    collected = []
+    for collection in c["datasets"]:
+        for dataset in config["collections"][collection]:
+            duplicate = 0
+            while dataset + str(duplicate) in datasets:
+                collected.append(datasets[dataset + str(duplicate)])
+                duplicate = duplicate + 1
+    if len(collected) > 1:
+        return merge_datasets(collected, equalize=c.get("equalize_datasets", False))
+    else:
+        return collected[0]
+
+
+if __name__ == "__main__":
+    main()

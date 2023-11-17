@@ -10,7 +10,7 @@ services:
     stdin_open: true
     build:
       context: .
-      dockerfile: Dockerfile.${ARCH:-x64}
+      dockerfile: Dockerfile.${ARCH:-x64}.${GPU:-nvidia}
       shm_size: '1gb'
       args:
         DCE_VERSION: 2.42.3

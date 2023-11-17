@@ -6,7 +6,7 @@ services:
       resources:
         reservations:
           devices:
-            - driver: ${GPU_MANUFACTURER:-nvidia}
+            - driver: ${GPU:-nvidia}
               capabilities: [gpu]
               device_ids: ['${TRAIN_GPU_INDEX:-0}']
     environment:

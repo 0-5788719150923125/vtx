@@ -95,7 +95,8 @@ COPY data/embeddings/ /embeddings
 COPY src/ /src
 COPY book/ /book
 
-RUN mkdir /.cache && \
+RUN mkdir /env && \
+    mkdir /.cache && \
     mkdir /.config && \
     mkdir /.triton && \
     mkdir /nltk_data && \

@@ -111,18 +111,21 @@ async def follow_victims(reddit, config):
         return
     for user in config["stalk"]:
         victim = config["stalk"].get(user)
-        redditor = await reddit.redditor(user)
-        async for comment in redditor.comments.new(limit=10):
-            # Subscribe to my victim's subreddits
-            # subreddit = await reddit.subreddit(comment.subreddit.display_name)
-            # await subreddit.load()
-            # print(subreddit.subscribers)
-            if comment.subreddit.display_name not in config["subs"]:
-                frequency = victim.get("proximal_frequency", 0.0)
-                if frequency > 0:
-                    config["subs"][comment.subreddit.display_name] = {
-                        "frequency": frequency
-                    }
+        try:
+            redditor = await reddit.redditor(user)
+            async for comment in redditor.comments.new(limit=10):
+                # Subscribe to my victim's subreddits
+                # subreddit = await reddit.subreddit(comment.subreddit.display_name)
+                # await subreddit.load()
+                # print(subreddit.subscribers)
+                if comment.subreddit.display_name not in config["subs"]:
+                    frequency = victim.get("proximal_frequency", 0.0)
+                    if frequency > 0:
+                        config["subs"][comment.subreddit.display_name] = {
+                            "frequency": frequency
+                        }
+        except:
+            logging.error(f"Failed to stalk {user}. Was their account deleted?")
 
 
 queued = []

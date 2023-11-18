@@ -293,7 +293,7 @@ def main():
         gradient_accumulation_steps=p.get("gradient_accumulation_steps", 1),
         train_transformers_only=p.get("train_transformers_only", False),
         num_layers_freeze=p.get("num_layers_freeze", 0),
-        scheduler=p.get("scheduler", "get_linear_schedule_with_warmup"),
+        scheduler=p.get("scheduler", "linear"),
         num_cycles=p.get("num_cycles", None),
         prune=p.get("prune", 0.0),
         target_batch_size=p.get("target_batch_size", 8192),

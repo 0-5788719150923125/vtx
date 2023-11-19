@@ -13,7 +13,7 @@ This work assumes that you already have some familiarity with AI, git, Docker, a
 
 Clone the entire project to a folder on your desktop:
 ```
-git clone https://github.com/0-5788719150923125/vtx.git /path/to/my/folder
+git clone --recurse-submodules https://github.com/0-5788719150923125/vtx.git path/to/my/directory
 ```
 
 ### 2. Initialize git submodules

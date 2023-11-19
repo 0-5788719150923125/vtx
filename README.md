@@ -29,7 +29,7 @@ To build a non-trivial, opinionated framework for human cloning experiments. Our
 
 # instructions
 
-- Clone this repo to a local directory: `git clone --recurse-submodules https://github.com/LuciferianInk/aigen.git path/to/my/directory`
+- Clone this repo to a local directory: `git clone --recurse-submodules https://github.com/0-5788719150923125/vtx.git path/to/my/directory`
 - Install Docker.
 - `git submodule update --init --recursive` to fetch remote datasets.
 - Place configurations into config.yml. ([default.yml](./src/default.yml))

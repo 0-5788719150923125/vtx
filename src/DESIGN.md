@@ -74,10 +74,10 @@ To quickly bring a functional project online, we recommend [downloading these pr
 
 There are a lot of details that go into training, and we have yet to fully-document them here. For now, the basic lifecycle looks like this:
 
-1. Clone [this git repository](https://github.com/0-5788719150923125/vtx) to your device.
+1. Clone [this git repository](https://github.com/0-5788719150923125/vtx) to your device with: `git clone --recurse-submodules https://github.com/0-5788719150923125/vtx.git path/to/my/directory`. Note: some of them will fail, because they're in private repos. Just press `Enter` to move past their prompts for authentication.
 2. Open it in VSCode.
 3. Use `CTRL + Shift + P` to use the various lifecycle tasks.
-4. `git submodule update --init --recursive` to initialize submodules. Note: some of them will fail, because they're in private repos.
+4. `git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'` to checkout submodules.
 5. Use the `up` task to bring your project online.
 6. Create a file at `config.yml` at the root of this project, and use it to apply your customizations.
 7. To train or fine-tune a model, all settings must be defined under a "training" key, under a [model](#models) key.

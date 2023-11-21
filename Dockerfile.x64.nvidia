@@ -96,6 +96,8 @@ COPY requirements.x.txt ./
 
 RUN pip install -r requirements.x.txt
 
+COPY lab/lightning-hivemind/ /lab/lightning-hivemind
+
 RUN python3 -m venv venv/y \
     && chmod +x venv/y/bin/activate \
     && venv/y/bin/activate

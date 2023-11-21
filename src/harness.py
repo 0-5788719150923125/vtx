@@ -266,6 +266,7 @@ def main():
             batch_size=batch_size,
             target_batch_size=p.get("target_batch_size", 8192),
             initial_peers=p.get("initial_peers", None),
+            # use_ipfs=True,
             verbose=True,
         )
         gradient_accumulation_steps = 1

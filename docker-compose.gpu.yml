@@ -8,4 +8,3 @@ services:
           devices:
             - driver: ${GPU_MANUFACTURER:-nvidia}
               capabilities: [gpu]
-              device_ids: ['${INFERENCE_GPU_INDEX:-0}']

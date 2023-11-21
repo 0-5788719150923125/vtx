@@ -228,6 +228,17 @@ To use a different base model:
 mind:
   model: bigscience/bloom-560m
 ```
+To place the model onto a specific device, use a device map:
+```yml
+mind:
+  device_map: auto
+```
+Some common options are:
+
+- auto = allow the project to place the model automatically
+- cpu = places the entire model on CPU
+- cuda:0 = place the device onto CUDA-enabled GPU at index 0
+
 Convert the model to 16 bit floating point weights for inference (saves memory, sacrifices precision):
 ```yml
 mind:

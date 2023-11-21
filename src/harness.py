@@ -164,8 +164,6 @@ def main():
     else:
         output_dir = "/data/models/" + focus
 
-    device_map = "auto"
-
     tokenizer = AutoTokenizer.from_pretrained(
         launch_model,
         cache_dir="/data/models",
@@ -211,7 +209,7 @@ def main():
         pre_seq_len=pre_seq_len,
         precision=precision,
         gradient_checkpointing=p.get("gradient_checkpointing", True),
-        device_map=device_map,
+        device_map=p.get("device_map", "auto"),
     )
 
     prototype.tokenizer = tokenizer

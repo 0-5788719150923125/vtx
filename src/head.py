@@ -59,6 +59,7 @@ def validation(config):
         "info": {"type": "string"},
         "model": {"type": "string"},
         "mode": {"type": "string", "allowed": ["transformer", "rnn"]},
+        "device_map": {"type": "string" or "dict"},
         "profile": {"type": "boolean"},
         "gpu_index": {"type": "integer"},
         "precision": {"type": "integer", "allowed": [4, 8, 16, 32]},
@@ -79,6 +80,7 @@ def validation(config):
         "training": {
             "type": "dict",
             "schema": {
+                "device_map": {"type": "string" or "dict"},
                 "resume": {"type": "boolean"},
                 "regen": {"type": "boolean"},
                 "generate_every": {"type": "integer"},
@@ -277,6 +279,7 @@ class Cortex:
             prototype = aigen(
                 model=config.get("model"),
                 model_folder=model_folder,
+                device_map=config.get("device_map", "auto"),
                 petals=config.get("petals", False),
                 cache_dir="/data/models",
                 tuning_mode=tuning_mode,

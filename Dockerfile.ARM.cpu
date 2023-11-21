@@ -112,6 +112,6 @@ ENV TZ="America/Chicago"
 ENV PYTHONPYCACHEPREFIX='/tmp/__pycache__'
 ENV FOCUS='toe'
 
-CMD ["nodemon", "--ext", "*.py, *.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]
+CMD ["nodemon", "--watch", "/src", "--watch", "/env", "--ext", "*.py,*.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]
 
 MAINTAINER R

@@ -253,6 +253,8 @@ def main():
     if get_trainable:
         prototype.model.print_trainable_parameters()
 
+    gradient_accumulation_steps = p.get("gradient_accumulation_steps", 1)
+
     strategy = p.get("strategy")
     if strategy == "hivemind":
         from lightning_hivemind.strategy import HivemindStrategy
@@ -260,6 +262,7 @@ def main():
         strategy = HivemindStrategy(
             target_batch_size=p.get("target_batch_size", 8192), verbose=True
         )
+        gradient_accumulation_steps = 1
 
     logger = loggers.TensorBoardLogger(
         f"/data/logs/{focus}", name=adapter, default_hp_metric=True
@@ -297,7 +300,7 @@ def main():
         warmup_steps=p.get("warmup_steps", 0),
         gradient_clip_val=p.get("gradient_clip_val", 0.5),
         update_period=p.get("update_period", 10),
-        gradient_accumulation_steps=p.get("gradient_accumulation_steps", 1),
+        gradient_accumulation_steps=gradient_accumulation_steps,
         train_transformers_only=p.get("train_transformers_only", False),
         num_layers_freeze=p.get("num_layers_freeze", 0),
         scheduler=p.get("scheduler", "linear"),

@@ -133,8 +133,8 @@ def main():
             rank_dropout=p.get("dropout", 0.0),
             module_dropout=p.get("dropout", 0.0),
             use_effective_conv2d=False,
-            decompose_both=False,
-            decompose_factor=1,
+            decompose_both=True,
+            decompose_factor=-1,
             target_modules=p.get("target_modules", None),
             rank_pattern=p.get("rank_pattern", {}),
             alpha_pattern=p.get("alpha_pattern", {}),
@@ -242,16 +242,16 @@ def main():
             else:
                 prototype.model = get_peft_model(prototype.model, peft_config)
 
-    print(prototype.model)
-    if get_trainable:
-        prototype.model.print_trainable_parameters()
-
     elif os.path.exists("/data/models/" + focus + "/" + adapter) == False:
         os.makedirs("/data/models/" + focus + "/" + adapter)
 
     for name, param in prototype.model.named_parameters():
         if "lora" in name.lower() or "lokr" in name.lower() or "ia3" in name.lower():
             param.requires_grad = True
+
+    print(prototype.model)
+    if get_trainable:
+        prototype.model.print_trainable_parameters()
 
     strategy = p.get("strategy")
     if strategy == "hivemind":

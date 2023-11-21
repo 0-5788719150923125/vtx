@@ -15,19 +15,12 @@ Clone the entire project to a folder on your desktop:
 ```
 git clone --recurse-submodules https://github.com/0-5788719150923125/vtx.git path/to/my/directory
 ```
-
-### 2. Initialize git submodules
-
-Open your project directory in VSCode, then open the integrated terminal. Run this command to initialize git submodules:
-```
-git submodule update --init --recursive
-```
 Some of these modules will ask for a username/password (which you will not have). That's okay, just skip them with:
 ```
-Ctrl+C
+Enter
 ```
 
-### 3. Create your configuration files
+### 2. Create your configuration files
 
 In the root of your project directory, create a file called `.env`. This file contains all of your secrets. DO NOT SHARE IT WITH ANYONE.
 
@@ -35,7 +28,7 @@ You may copy a template `.env` file from here: [example.env](https://github.com/
 
 Next, create a file called `config.yml` in the root of your project. We can leave this empty for now.
 
-### 4. Test your live environment
+### 3. Test your live environment
 
 By default, this project should function without any additional configuration. To quickly test it, use this series of VSCode commands:
 
@@ -57,7 +50,7 @@ If this works, you are ready to proceed. You can bring down the project in this 
 2. `Tasks: Run Task`
 3. `down`
 
-### 5. Prepare your model for training
+### 4. Prepare your model for training
 
 When your model came online, it used an adapter that was trained by somebody else. But we want to train our own model!
 
@@ -69,7 +62,7 @@ To do this, we need to take a few steps:
 
 Let's begin with data preparation.
 
-### 6. Fetch and prepare a dataset
+### 5. Fetch and prepare a dataset
 
 We are going to use Alexa's [Topical Chat](https://github.com/alexa/Topical-Chat) dataset, because we want to train bots how to chat with humans in a multi-user environment. Whereas most datasets will take a rather simplistic approach to data preparation, ours is quite different:
 
@@ -105,7 +98,7 @@ Now, let's transform that data into our special format:
 
 This will execute the `prepare.py` script found within lab/ghosts, and output our specially-crafted data into lab/ghosts/train.
 
-### 7. Define our dataset
+### 6. Define our dataset
 
 Now, let's make sure our `config.yml` file is aware of our prepared dataset. For now, let's define a collection called "test", and add our ghosts dataset to it:
 
@@ -119,7 +112,7 @@ See how we explicitly point directly to the path containing files we want to use
 
 You can actually add multiple directories to a collection - but let's move on for now.
 
-### 8. Define our model and training details
+### 7. Define our model and training details
 
 Also in our `config.yml` file, we need to define our model and training configuration. Each one of the following settings could be a topic of their own, but for now, just copy this example:
 
@@ -155,7 +148,7 @@ There are many, many other settings to work with. We encourage you to look at th
 
 Be aware: "batch_size", "block_size", and the size of your model (GPT-Neo 125M has 125M parameters) has a huge impact on training speed, and VRAM consumption. If training crashes, it's likely that you've run out of VRAM. Reduce these three settings to see if that helps.
 
-### 9. Launch the training
+### 8. Launch the training
 
 With all configuration in-place, let's begin the training:
 
@@ -168,7 +161,7 @@ This will launch a Docker container, import your dataset(s), tokenize that data,
 
 You can monitor progress via TensorBoard, [here](http://localhost:6006).
 
-### 10. Test the model
+### 9. Test the model
 
 When training is complete (or really, after "save_every" number of training steps), you may launch the project, and test your model:
 
@@ -187,6 +180,6 @@ Finally, you will see your bot chatting with others in the terminal.
 - RED: Your bot.
 - GREEN: Your bot (using true RNG).
 
-### 11. Have fun!
+### 10. Have fun!
 
 If you have any questions, feel free to contact us!

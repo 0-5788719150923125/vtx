@@ -52,7 +52,7 @@
         "type": "shell",
         "command": "FOCUS=${input:env} docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up",
         "windows": {
-          "command": "$env:FOCUS = '${input:env}'; docker compose up"
+          "command": "$env:FOCUS = '${input:env}'; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up"
         }
       },
       {

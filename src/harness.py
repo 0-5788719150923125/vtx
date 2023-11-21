@@ -22,6 +22,7 @@ from peft import (
     PromptTuningConfig,
     get_peft_model,
 )
+from pypdf import PdfReader
 from transformers import (
     AutoConfig,
     AutoModelForCausalLM,
@@ -341,7 +342,7 @@ def create_dataset(
         "mp4",
         "odt",
         ".out",
-        "pdf",
+        # "pdf",
         "png",
         "pt",
         "pyc",
@@ -361,7 +362,7 @@ def create_dataset(
     files = list_full_paths(path)
     random.shuffle(files)
 
-    files = [item for item in files if random.random() <= samples]
+    files = [item for item in files if random.random() < samples]
 
     intermediate_path = "/tmp/intermediate.txt"
 
@@ -402,8 +403,15 @@ def create_dataset(
             else:
                 with open(file, "r") as content:
                     with open(intermediate_path, "a") as intermediate:
-                        string = content.read()
-                        intermediate.write(string + f"\n{tokenizer.eos_token}\n")
+                        string = ""
+                        if file.lower().endswith("pdf"):
+                            reader = PdfReader(file)
+                            for i, page in enumerate(reader.pages):
+                                page = reader.pages[i].extract_text()
+                                string += page + "\n"
+                        else:
+                            string = content.read()
+                        intermediate.write(string + f"{tokenizer.eos_token}")
 
         except Exception as e:
             print(f"failed: {colors.RED}{file}{colors.WHITE}")

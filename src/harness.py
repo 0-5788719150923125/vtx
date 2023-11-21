@@ -60,7 +60,6 @@ def main():
     fresh_logs = False
     resume = p.get("resume", False)
     use_petals = model_config.get("petals", False)
-    use_hivemind = model_config.get("hivemind", False)
     adapter = p.get("name", "base")
 
     regen = p.get("regen", False)
@@ -196,6 +195,7 @@ def main():
         print(pretrain_config)
 
     precision = model_config.get("precision", 32)
+    device_map = p.get("device_map", "auto")
 
     # Instantiate the model object
     prototype = aigen(
@@ -209,7 +209,7 @@ def main():
         pre_seq_len=pre_seq_len,
         precision=precision,
         gradient_checkpointing=p.get("gradient_checkpointing", True),
-        device_map=p.get("device_map", "auto"),
+        device_map=device_map,
     )
 
     prototype.tokenizer = tokenizer
@@ -229,7 +229,7 @@ def main():
             if resume == True:
                 try:
                     prototype.model = PeftModel.from_pretrained(
-                        prototype.model, output_dir
+                        prototype.model, output_dir, device_map=device_map
                     )
                 except Exception as e:
                     print(prototype.model)
@@ -253,6 +253,14 @@ def main():
         if "lora" in name.lower() or "lokr" in name.lower() or "ia3" in name.lower():
             param.requires_grad = True
 
+    strategy = p.get("strategy")
+    if strategy == "hivemind":
+        from lightning_hivemind.strategy import HivemindStrategy
+
+        strategy = HivemindStrategy(
+            target_batch_size=p.get("target_batch_size", 8192), verbose=True
+        )
+
     logger = loggers.TensorBoardLogger(
         f"/data/logs/{focus}", name=adapter, default_hp_metric=True
     )
@@ -271,9 +279,9 @@ def main():
     prototype.train(
         train_data=train_data,
         n_gpu=1,
+        strategy=strategy,
         benchmark=False,
         petals=use_petals,
-        hivemind=use_hivemind,
         deepspeed=p.get("deepspeed", False),
         seed=nist_beacon()[1],
         output_dir=output_dir,
@@ -295,7 +303,6 @@ def main():
         scheduler=p.get("scheduler", "linear"),
         num_cycles=p.get("num_cycles", None),
         prune=p.get("prune", 0.0),
-        target_batch_size=p.get("target_batch_size", 8192),
         block_size=block_size,
         val_split=p.get("val_split", 0.0),
         val_interval=val_interval,

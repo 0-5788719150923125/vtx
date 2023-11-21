@@ -101,7 +101,7 @@
         "label": "prepare",
         "detail": "Prepare a dataset.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:lab}/prepare.py",
+        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:dir}/prepare.py",
         "runOptions": {
           "instanceLimit": 3
         },
@@ -110,7 +110,7 @@
         "label": "fetch",
         "detail": "Download a dataset.",
         "type": "shell",
-        "command": "docker compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:lab}/fetch.py",
+        "command": "docker compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:dir}/fetch.py",
         "runOptions": {
           "instanceLimit": 3
         },
@@ -157,7 +157,7 @@
       },
       {
         "type": "promptString",
-        "id": "lab",
+        "id": "dir",
         "description": "Which lab directory will you interact with?",
       },
       {

@@ -246,7 +246,7 @@ def main():
         os.makedirs("/data/models/" + focus + "/" + adapter)
 
     for name, param in prototype.model.named_parameters():
-        if "lora" in name.lower() or "lokr" in name.lower() or "ia3" in name.lower():
+        if any(l in name.lower() for l in ["lora", "lokr", "ia3", "base_layer"]):
             param.requires_grad = True
 
     print(prototype.model)

@@ -8,6 +8,7 @@ services:
           devices:
             - driver: ${GPU:-nvidia}
               capabilities: [gpu]
-    environment:
-      PETALS_LOGGING: False
-      HIVEMIND_LOGLEVEL: ERROR
+    # environment:
+    #   CUDA_VISIBLE_DEVICES: 0
+    #   PETALS_LOGGING: False
+    #   HIVEMIND_LOGLEVEL: ERROR

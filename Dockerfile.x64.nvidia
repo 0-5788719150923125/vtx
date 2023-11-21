@@ -125,6 +125,7 @@ RUN mkdir /env && \
 
 ENV TZ="America/Chicago"
 ENV PYTHONPYCACHEPREFIX='/tmp/__pycache__'
+ENV CUDA_DEVICE_ORDER=PCI_BUS_ID
 ENV FOCUS='toe'
 
 CMD ["nodemon", "--watch", "/src", "--watch", "/env", "--ext", "*.py,*.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]

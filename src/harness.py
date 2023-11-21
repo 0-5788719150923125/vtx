@@ -43,11 +43,14 @@ AutoModelForSequenceClassification.register(
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 model_config = config[focus]
+p = model_config["training"]
+
+device_map = p.get("device_map", "auto")
+
 model_folder = "models/" + focus
 
 
 def main():
-    p = model_config["training"]
     train_type = p.get("type", "standard")
     base_model = model_config["model"]
 
@@ -195,7 +198,6 @@ def main():
         print(pretrain_config)
 
     precision = model_config.get("precision", 32)
-    device_map = p.get("device_map", "auto")
 
     # Instantiate the model object
     prototype = aigen(
@@ -253,6 +255,7 @@ def main():
     if get_trainable:
         prototype.model.print_trainable_parameters()
 
+    batch_size = p.get("batch_size", 1)
     gradient_accumulation_steps = p.get("gradient_accumulation_steps", 1)
 
     strategy = p.get("strategy")
@@ -260,7 +263,10 @@ def main():
         from lightning_hivemind.strategy import HivemindStrategy
 
         strategy = HivemindStrategy(
-            target_batch_size=p.get("target_batch_size", 8192), verbose=True
+            batch_size=batch_size,
+            target_batch_size=p.get("target_batch_size", 8192),
+            initial_peers=p.get("initial_peers", None),
+            verbose=True,
         )
         gradient_accumulation_steps = 1
 
@@ -289,7 +295,7 @@ def main():
         seed=nist_beacon()[1],
         output_dir=output_dir,
         loggers=[logger],
-        batch_size=p.get("batch_size", 1),
+        batch_size=batch_size,
         num_steps=p.get("num_steps", 33333),
         generate_every=p.get("generate_every", 500),
         save_every=p.get("save_every", 1000),

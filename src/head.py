@@ -87,7 +87,6 @@ def validation(config):
                 "save_every": {"type": "integer"},
                 "gradient_checkpointing": {"type": "boolean"},
                 "petals": {"type": "boolean"},
-                "hivemind": {"type": "boolean"},
                 "deepspeed": {"type": "boolean"},
                 "model_max_length": {"type": "integer"},
                 "padding_side": {

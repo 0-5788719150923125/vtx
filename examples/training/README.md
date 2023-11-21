@@ -19,6 +19,10 @@ Some of these modules will ask for a username/password (which you will not have)
 ```
 Enter
 ```
+Finally, run this command to checkout the correct branch for each submodule:
+```
+git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
+```
 
 ### 2. Create your configuration files
 

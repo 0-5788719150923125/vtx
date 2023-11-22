@@ -5,6 +5,17 @@ import random
 import shutil
 import time
 
+from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
+
+model_config = config[focus]
+p = model_config["training"]
+
+devices = None
+device_map = p.get("device_map", "auto")
+if focus in ["frame"]:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    devices = device_map.split(":")[1]
+
 from lightning.pytorch import loggers
 from moduleformer import (
     ModuleFormerConfig,
@@ -32,7 +43,6 @@ from transformers import (
 
 from aigen.aigen import aigen
 from aigen.aigen.TokenDataset import TokenDataset, merge_datasets
-from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)
 AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)
@@ -41,11 +51,6 @@ AutoModelForSequenceClassification.register(
 )
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
-model_config = config[focus]
-p = model_config["training"]
-
-device_map = p.get("device_map", "auto")
 
 model_folder = "models/" + focus
 
@@ -290,6 +295,7 @@ def main():
         train_data=train_data,
         n_gpu=1,
         strategy=strategy,
+        devices=devices,
         benchmark=False,
         petals=use_petals,
         deepspeed=p.get("deepspeed", False),

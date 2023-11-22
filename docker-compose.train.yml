@@ -9,6 +9,5 @@ services:
             - driver: ${GPU:-nvidia}
               capabilities: [gpu]
     # environment:
-    #   CUDA_VISIBLE_DEVICES: 0
     #   PETALS_LOGGING: False
     #   HIVEMIND_LOGLEVEL: ERROR

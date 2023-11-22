@@ -49,3 +49,6 @@
 [submodule "lab/lightning-hivemind"]
 	path = lab/lightning-hivemind
 	url = https://github.com/LuciferianInk/lightning-Hivemind.git
+[submodule "lab/ModuleFormer"]
+	path = lab/ModuleFormer
+	url = https://github.com/IBM/ModuleFormer.git

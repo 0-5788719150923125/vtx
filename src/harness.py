@@ -221,13 +221,8 @@ def main():
 
     prototype.tokenizer = tokenizer
 
-    # This is a hack, for models that won't respect torch.dtype
-    # if focus in ["frame"]:
-    #     if precision in [4, 8, 16]:
-    #         prototype.model.half()
-
-    # if extended:
-    #     prototype.model.resize_token_embeddings(len(prototype.tokenizer))
+    if focus in ["frame"]:
+        prototype.model.training = True
 
     get_trainable = False
     if train_type not in ["standard", "pretrain"]:

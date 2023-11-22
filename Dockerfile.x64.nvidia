@@ -88,6 +88,8 @@ RUN pip install flash-attn --no-build-isolation
 
 RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
 
+COPY lab/ModuleFormer/ /lab/ModuleFormer
+
 RUN python3 -m venv venv/x \
     && chmod +x venv/x/bin/activate \
     && venv/x/bin/activate

@@ -13,4 +13,5 @@ lab/
 !lab/research
 !lab/pages
 !lab/lightning-hivemind
+!lab/ModuleFormer
 *.key

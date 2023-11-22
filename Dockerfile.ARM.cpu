@@ -73,6 +73,8 @@ ARG WRANGLER_VERSION
 # RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
 RUN npm i -g nodemon@$NODEMON_VERSION
 
+COPY lab/ModuleFormer/ /lab/ModuleFormer
+
 RUN python3 -m venv venv/x \
     && chmod +x venv/x/bin/activate \
     && venv/x/bin/activate
@@ -80,6 +82,8 @@ RUN python3 -m venv venv/x \
 COPY requirements.x.txt ./
 
 RUN pip install -r requirements.x.txt
+
+COPY lab/lightning-hivemind/ /lab/lightning-hivemind
 
 RUN python3 -m venv venv/y \
     && chmod +x venv/y/bin/activate \

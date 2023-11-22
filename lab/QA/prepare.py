@@ -1,10 +1,15 @@
 import os
 import shutil
+import sys
 import traceback
 
 import jsonlines
 
-root_dir = "/lab/qa"
+sys.path.append("/src")
+
+from common import get_identity, ship, wall
+
+root_dir = "/lab/QA"
 
 
 def main():
@@ -18,13 +23,8 @@ def main():
         for obj in reader:
             try:
                 extracted = list(obj.values())
-                string = f"""Q:
-
-{extracted[0]}
-
-A:
-
-{extracted[1]}"""
+                string = f"""{wall}{get_identity()}{ship} {extracted[0]}
+{wall}{get_identity()}{ship} {extracted[1]}"""
                 with open(f"{root_dir}/train/question{el}.txt", "w") as f:
                     el = el + 1
 

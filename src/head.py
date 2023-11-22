@@ -122,7 +122,7 @@ def validation(config):
                 "num_virtual_tokens": {"type": "integer"},
                 "optimizer": {
                     "type": "string",
-                    "allowed": ["AdaBelief", "AdamW", "Lion", "SophiaH"],
+                    "allowed": ["AdaBelief", "AdamW", "Lion", "Ranger21", "SophiaH"],
                 },
                 "num_cycles": {"type": "integer"},
                 "prune": {"type": "float"},

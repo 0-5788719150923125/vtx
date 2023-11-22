@@ -7,14 +7,14 @@
 # datasets.logging.set_verbosity_info()
 
 # dataset = datasets.load_dataset(
-#     "Muennighoff/natural-instructions",
-#     # name="default",
+#     "tiiuae/falcon-refinedweb",
+#     # name="sample",
 #     # snapshots=["2023-14"],
 #     # languages=["en"],
 #     split="train",
 #     streaming=True,
 #     cache_dir="/data/pile",
-# ).shuffle(seed=random.randint(0, 9), buffer_size=100)
+# ).shuffle(seed=random.randint(0, 9), buffer_size=10)
 
 # print(next(iter(dataset)))
 

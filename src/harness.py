@@ -5,6 +5,8 @@ import random
 import shutil
 import time
 
+import torch
+
 from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 
 model_config = config[focus]
@@ -32,6 +34,7 @@ from peft import (
     PrefixTuningConfig,
     PromptTuningConfig,
     get_peft_model,
+    prepare_model_for_kbit_training,
 )
 from pypdf import PdfReader
 from transformers import (
@@ -203,6 +206,7 @@ def main():
         print(pretrain_config)
 
     precision = model_config.get("precision", 32)
+    gradient_checkpointing = p.get("gradient_checkpointing", True)
 
     # Instantiate the model object
     prototype = aigen(
@@ -215,7 +219,7 @@ def main():
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
         precision=precision,
-        gradient_checkpointing=p.get("gradient_checkpointing", True),
+        gradient_checkpointing=gradient_checkpointing,
         device_map=device_map,
     )
 
@@ -224,18 +228,16 @@ def main():
     if focus in ["frame"]:
         prototype.model.training = True
 
-    get_trainable = False
-    if train_type not in ["standard", "pretrain"]:
-        if not use_petals:
-            get_trainable = True
+    if train_type not in ["standard", "pretrain"] and not use_petals:
+        if precision in [4, 8]:
+            prototype.model = prepare_model_for_kbit_training(
+                prototype.model, use_gradient_checkpointing=gradient_checkpointing
+            )
+        try:
             if resume == True:
-                try:
-                    prototype.model = PeftModel.from_pretrained(
-                        prototype.model, output_dir, device_map=device_map
-                    )
-                except Exception as e:
-                    print(prototype.model)
-                    print(e)
+                prototype.model = PeftModel.from_pretrained(
+                    prototype.model, output_dir, device_map=device_map
+                )
                 assert isinstance(
                     prototype.model, PeftModel
                 ), "Failed to convert prototype into a PeftModel."
@@ -243,16 +245,19 @@ def main():
                 setattr(prototype.model.config, "is_trainable", True)
             else:
                 prototype.model = get_peft_model(prototype.model, peft_config)
+        except Exception as e:
+            print(e)
 
     elif os.path.exists("/data/models/" + focus + "/" + adapter) == False:
         os.makedirs("/data/models/" + focus + "/" + adapter)
 
     for name, param in prototype.model.named_parameters():
         if any(l in name.lower() for l in ["lora", "lokr", "ia3", "base_layer"]):
+            param.data = param.data.to(torch.float32)
             param.requires_grad = True
 
     print(prototype.model)
-    if get_trainable:
+    if hasattr(prototype.model, "print_trainable_parameters"):
         prototype.model.print_trainable_parameters()
 
     batch_size = p.get("batch_size", 1)
@@ -305,7 +310,7 @@ def main():
         learning_rate=float(p.get("learning_rate", 0.005)),
         momentum=float(p.get("momentum", 0)),
         swa_lr=p.get("swa_lr", None),
-        weight_decay=float(p.get("weight_decay", 0.01)),
+        weight_decay=float(p.get("weight_decay", 0)),
         warmup_steps=p.get("warmup_steps", 0),
         gradient_clip_val=p.get("gradient_clip_val", 0.5),
         update_period=p.get("update_period", 10),

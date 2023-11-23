@@ -73,22 +73,6 @@ def validation(config):
                 },
             },
         },
-        "info": {"type": "string"},
-        "profile": {"type": "boolean"},
-        "model": {"type": "string"},
-        "precision": {"type": "integer"},
-        "max_new_tokens": {"type": "integer"},
-        "adapters": {"type": "list"},
-        "training": {"type": "dict"},
-        "gpu_index": {"type": "integer"},
-        "low_memory": {"type": "boolean"},
-        "petals": {"type": "boolean"},
-        "reload_interval": {"type": "integer"},
-        "truncate_length": {"type": "integer"},
-        "bos_token": {"type": "string"},
-        "eos_token": {"type": "string"},
-        "unk_token": {"type": "string"},
-        "pad_token": {"type": "string"},
     }
     v = Validator()
     result = v.validate(config, schema)

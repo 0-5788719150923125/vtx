@@ -124,6 +124,7 @@ def validation(config):
                     "type": "string",
                     "allowed": [
                         "AdaBelief",
+                        "Adan",
                         "AdamW",
                         "Lion",
                         "Ranger21",

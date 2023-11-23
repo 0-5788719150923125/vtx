@@ -153,7 +153,7 @@
         "type": "pickString",
         "id": "env",
         "description": "Which model should I focus on?",
-        "options": ["source", "frame", "aura", "mind", "heart", "soul", "ghost", "toe"]
+        "options": ["src", "frame", "aura", "mind", "heart", "soul", "ghost", "toe"]
       },
       {
         "type": "promptString",

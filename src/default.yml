@@ -24,7 +24,6 @@ disposition:
 # The Source model intentionally ships with no defaults. Its intended use is for your
 # own experimentation and development.
 source:
-  info: of all creation
   focus:
     trade:
       active_frequency: 0.66

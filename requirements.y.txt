@@ -1,3 +1,5 @@
 # git+https://github.com/Lightning-Universe/lightning-Hivemind.git
-/lab/lightning-hivemind
 # horde-sdk>=0.7.23
+peft>=0.6.2
+pydantic<2.0.0
+/lab/lightning-hivemind

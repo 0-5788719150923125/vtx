@@ -3,13 +3,13 @@ import io
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from PIL import Image
-from transformers import AutoFeatureExtractor, ViTForImageClassification
+from transformers import AutoImageProcessor, ViTForImageClassification
 
 
 class Vision:
     def __init__(self):
         model = "facebook/deit-tiny-patch16-224"
-        self.feature_extractor = AutoFeatureExtractor.from_pretrained(
+        self.image_processor = AutoImageProcessor.from_pretrained(
             model, cache_dir="/data/models"
         )
         self.model = ViTForImageClassification.from_pretrained(
@@ -41,7 +41,7 @@ class Vision:
         processed = self.preprocess_image(image)
         # image = Image.open("/data/meme.webp")
 
-        inputs = self.feature_extractor(images=processed, return_tensors="pt")
+        inputs = self.image_processor(images=processed, return_tensors="pt")
         outputs = self.model(**inputs)
         logits = outputs.logits
         # model predicts one of the 1000 ImageNet classes

@@ -6,5 +6,5 @@ services:
       resources:
         reservations:
           devices:
-            - driver: ${GPU_MANUFACTURER:-nvidia}
+            - driver: ${GPU:-nvidia}
               capabilities: [gpu]

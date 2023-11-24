@@ -1,3 +1,36 @@
+# ------ Q Training ------------ #
+
+# import time
+
+# import torch
+# from transformers import (
+#     AutoModelForCausalLM,
+#     AutoTokenizer,
+# )
+
+# model_name = "cerebras/Cerebras-GPT-111M"
+
+# tokenizer = AutoTokenizer.from_pretrained(
+#     model_name, cache_dir="/data/models"
+# )
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_name,
+#     cache_dir="/data/models",
+#     output_hidden_states=True,
+#     device_map="auto",
+#     torch_dtype=torch.bfloat16,
+#     load_in_4bit=True,
+#     bnb_4bit_quant_type="nf4",
+#     bnb_4bit_use_double_quant=True,
+#     bnb_4bit_compute_dtype=True
+# )
+
+# peft_config = IA3Config(
+#     task_type="CAUSAL_LM",
+#     target_modules=p.get("target_modules", None),
+#     feedforward_modules=p.get("feedforward_modules", None),
+# )
+
 # ------ Iterable Datasets ------- #
 
 # import random
@@ -179,20 +212,6 @@
 # dataset = TextDataset(tokenized_texts)
 
 # print(len(dataset))
-
-# ------ Datasets -------- #
-
-# import sys
-
-# sys.path.append("/src")
-# from datasets import load_dataset
-
-# from common import list_full_paths
-
-# data = load_dataset(
-#     path="/lab/journals", data_files=list_full_paths("/lab/journals"), split="train"
-# )
-# print(data)
 
 # ------ Local Agents -------- #
 

@@ -84,7 +84,6 @@ def main():
         if not os.path.exists("/data/models/" + focus + "/pytorch_model.bin"):
             launch_model = base_model
             model_folder = None
-
     else:
         fresh_logs = True
         launch_model = base_model
@@ -185,11 +184,8 @@ def main():
         trust_remote_code=True,
     )
 
-    # extended = False
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-    #     tokenizer.add_special_tokens({"pad_token": str(tokenizer.eos_token)})
-    #     extended = True
 
     print(tokenizer)
 
@@ -225,14 +221,10 @@ def main():
 
     prototype.tokenizer = tokenizer
 
-    if focus in ["frame"]:
-        prototype.model.training = True
-
     if train_type not in ["standard", "pretrain"] and not use_petals:
-        if precision in [4, 8]:
-            prototype.model = prepare_model_for_kbit_training(
-                prototype.model, use_gradient_checkpointing=gradient_checkpointing
-            )
+        prototype.model = prepare_model_for_kbit_training(
+            prototype.model, use_gradient_checkpointing=gradient_checkpointing
+        )
         try:
             if resume == True:
                 prototype.model = PeftModel.from_pretrained(
@@ -248,25 +240,22 @@ def main():
         except Exception as e:
             print(e)
 
-    elif os.path.exists("/data/models/" + focus + "/" + adapter) == False:
-        os.makedirs("/data/models/" + focus + "/" + adapter)
+    os.makedirs("/data/models/" + focus + "/" + adapter, exist_ok=True)
 
-    for name, param in prototype.model.named_parameters():
-        if any(l in name.lower() for l in ["lora", "lokr", "ia3", "base_layer"]):
-            param.data = param.data.to(torch.float32)
-            param.requires_grad = True
+    if hasattr(prototype.model, "training"):
+        prototype.model.training = True
 
     print(prototype.model)
     if hasattr(prototype.model, "print_trainable_parameters"):
         prototype.model.print_trainable_parameters()
 
-    batch_size = p.get("batch_size", 1)
     gradient_accumulation_steps = p.get("gradient_accumulation_steps", 1)
-
+    batch_size = p.get("batch_size", 1)
     strategy = p.get("strategy")
     if strategy == "hivemind":
         from lightning_hivemind.strategy import HivemindStrategy
 
+        gradient_accumulation_steps = 1
         strategy = HivemindStrategy(
             batch_size=batch_size,
             target_batch_size=p.get("target_batch_size", 8192),
@@ -274,21 +263,21 @@ def main():
             # use_ipfs=True,
             verbose=True,
         )
-        gradient_accumulation_steps = 1
 
-    logger = loggers.TensorBoardLogger(
-        f"/data/logs/{focus}", name=adapter, default_hp_metric=True
-    )
+    log_path = f"/data/logs/{focus}"
+    os.makedirs(f"{log_path}/{adapter}", exist_ok=True)
+
+    logger = loggers.TensorBoardLogger(log_path, name=adapter, default_hp_metric=True)
 
     block_size = p.get("block_size", 2048)
 
     print(
-        f"Final dataset: {colors.GREEN}{len(train_data)}{colors.WHITE} batches, {colors.GREEN}{len(train_data) * block_size}{colors.WHITE} tokens"
+        f"Training: {colors.GREEN}{len(train_data)}{colors.WHITE} batches, {colors.GREEN}{len(train_data) * block_size}{colors.WHITE} tokens"
     )
 
     val_interval = p.get("val_interval", 1000)
     if val_interval > len(train_data):
-        val_interval = math.floor(len(train_data) / 10)
+        val_interval = len(train_data)
 
     # Train the model
     prototype.train(
@@ -504,7 +493,7 @@ def build_inputs(c, tokenizer):
                     except:
                         pass
 
-                    os.makedirs(f"/data/datasets/{new_path}")
+                    os.makedirs(f"/data/datasets/{new_path}", exist_ok=True)
 
                     ds = create_dataset(
                         path="/" + dataset,

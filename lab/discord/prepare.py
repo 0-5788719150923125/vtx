@@ -112,7 +112,7 @@ def main():
                                             + " "
                                             + sanitized
                                         )
-                                        txt_file.write(f"{content}\n\n".format(content))
+                                        txt_file.write(f"{content}\n".format(content))
                                         successes += 1
                             except Exception as e:
                                 failures += 1
@@ -128,7 +128,7 @@ def main():
                                     )
                             sanitized = transform_message(sanitized)
                             content = wall + author_id + ship + " " + sanitized
-                            txt_file.write(f"{content}\n\n".format(content))
+                            txt_file.write(f"{content}\n".format(content))
                             successes += 1
                         except Exception as e:
                             failures += 1

@@ -57,5 +57,10 @@ services:
       - 9099:80
       - 34343:34343/udp
 
+  # hrd:
+  #   image: ghcr.io/haidra-org/ai-horde-worker
+  #   env_file:
+  #     - .env
+
 volumes:
   data:

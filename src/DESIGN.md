@@ -753,7 +753,7 @@ To set your bot's chance to reply as a different, mentioned user:
 discord:
   mention_any_frequency: 0.08
 ```
-To put your bot into debug mode (and log addition information about each message to the terminal):
+To put your bot into debug mode (and log additional information about each message to the terminal):
 ```yml
 discord:
   debug: True

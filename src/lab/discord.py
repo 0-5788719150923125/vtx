@@ -117,7 +117,9 @@ class Client(discord.Client):
 
         @tree.command(name="x", description="Plant a seed.")
         async def x_command(interaction):
-            await interaction.response.send_message("Please wait.", ephemeral=True)
+            await interaction.response.send_message(
+                "Please wait while I plant a seed for you.", ephemeral=True
+            )
             post_event(
                 "generate_image",
                 data={"source": "discord", "interaction": interaction},
@@ -168,7 +170,7 @@ class Client(discord.Client):
                         filename="nft.webp",
                     )
                     channel = self.get_channel(data["interaction"].channel.id)
-                    await channel.send(file=file)
+                    await channel.send("I made this for you:", file=file)
                 except:
                     traceback.format_exc()
 

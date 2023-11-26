@@ -52,30 +52,33 @@ async def generate():
     api = "http://localhost:5000/generate"
 
     data = {
-        "prompt": "(1robot:1.2), (head:1.3 and face:1.2) connected to a large (wire:1.3), wire is piercing the face, (((masterpiece))), ((top quality)), ((best quality)), (official art, colorful, anime, beautiful and aesthetic:1.2), (fractal art:1.3)",
+        "prompt": "((anime)), ((in the style of dragon ball z)), epic (((1robot:1.2))) (head:1.3) is connected to a large (wire:1.3), wire is piercing the ((face:1.2)), (((masterpiece))), ((top quality)), ((best quality)), (official art, colorful, anime, beautiful and aesthetic:1.2), (fractal art:1.3)",
         "models": ["GhostMix"],
-        "height": 512,
-        "width": 512,
+        "height": 1024,
+        "width": 1024,
         "sampler_name": "k_lms",
         "steps": 50,
         "control_type": "canny",
+        "image_is_control": True,
         "denoising_strength": 0.65,
-        "cfg_scale": 7.0,
-        "clip_skip": 1,
+        "cfg_scale": 7.5,
+        "clip_skip": 2,
+        "hires_fix": True,
+        "karras": True,
     }
 
-    async with aiohttp.ClientSession() as session:
+    timeout = aiohttp.ClientTimeout(total=3600)
+
+    async with aiohttp.ClientSession(timeout=timeout) as session:
         async with session.get(api, json=data) as response:
             if response.status // 100 != 2:
                 logging.error(f"GET request failed with status code: {response.status}")
                 logging.error(response.text())
+                return
 
             response_data = await response.json()
 
-            if "data" in response_data:
-                return response_data["data"]
-            else:
-                return "failed"
+            return response_data["data"]
 
 
 if __name__ == "__main__":

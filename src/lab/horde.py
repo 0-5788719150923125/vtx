@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import os
 from concurrent.futures import ThreadPoolExecutor
 
@@ -51,12 +52,12 @@ async def generate():
     api = "http://localhost:5000/generate"
 
     data = {
-        "prompt": "(1robot:1.2), (head:1.3 and face:1.2) connected to a large (wire:1.3), (masterpiece, top quality, best quality, official art, colorful, anime, beautiful and aesthetic:1.2), (fractal art:1.3)",
+        "prompt": "(1robot:1.2), (head:1.3 and face:1.2) connected to a large (wire:1.3), wire is piercing the face, (((masterpiece))), ((top quality)), ((best quality)), (official art, colorful, anime, beautiful and aesthetic:1.2), (fractal art:1.3)",
         "models": ["GhostMix"],
-        "height": 256,
-        "width": 256,
+        "height": 512,
+        "width": 512,
         "sampler_name": "k_lms",
-        "steps": 10,
+        "steps": 50,
         "control_type": "canny",
         "denoising_strength": 0.65,
         "cfg_scale": 7.0,
@@ -65,14 +66,9 @@ async def generate():
 
     async with aiohttp.ClientSession() as session:
         async with session.get(api, json=data) as response:
-            print("response returned")
-            print(response)
-
-            if response.status // 100 == 2:
-                print("GET request successful")
-            else:
-                print(f"GET request failed with status code: {response.status}")
-                print(response.text())
+            if response.status // 100 != 2:
+                logging.error(f"GET request failed with status code: {response.status}")
+                logging.error(response.text())
 
             response_data = await response.json()
 

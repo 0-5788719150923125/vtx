@@ -55,19 +55,18 @@ AutoModelForSequenceClassification.register(
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-model_folder = "models/" + focus
-
 
 def main():
-    train_type = p.get("type", "standard")
-    base_model = model_config["model"]
-
     print("(" + colors.GREEN + "focus" + colors.WHITE + ")")
     time.sleep(2)
     print(f"({colors.RED}ed{colors.WHITE}) on the ({colors.BLUE}{focus}{colors.WHITE})")
     time.sleep(3)
 
+    train_type = p.get("type", "standard")
+    base_model = model_config["model"]
+    model_folder = "/data/models/" + focus
     launch_model = None
+    tokenizer_model = base_model
     fresh_logs = False
     resume = p.get("resume", False)
     use_petals = model_config.get("petals", False)
@@ -81,7 +80,9 @@ def main():
     # Resume training on an existing model, or start with a fresh base model
     if resume == True:
         fresh_logs = False
-        if not os.path.exists("/data/models/" + focus + "/pytorch_model.bin"):
+        if not os.path.exists(
+            "/data/models/" + focus + "/pytorch_model.bin"
+        ) and not os.path.exists("/data/models/" + focus + "/model.safetensors"):
             launch_model = base_model
             model_folder = None
     else:
@@ -174,7 +175,7 @@ def main():
         output_dir = "/data/models/" + focus
 
     tokenizer = AutoTokenizer.from_pretrained(
-        launch_model,
+        tokenizer_model,
         cache_dir="/data/models",
         padding="max_length",
         padding_side=p.get("padding_side", "left"),
@@ -191,7 +192,7 @@ def main():
 
     train_data = build_inputs(p, tokenizer)
 
-    if train_type == "pretrain":
+    if train_type == "pretrain" and not resume:
         pretrain_config = AutoConfig.from_pretrained(launch_model)
         print(f"{colors.RED}original pretrain config:{colors.WHITE}")
         print(pretrain_config)
@@ -208,6 +209,7 @@ def main():
     prototype = aigen(
         model=launch_model,
         model_folder=model_folder,
+        tokenizer_model=tokenizer_model,
         config=pretrain_config,
         petals=use_petals,
         cache_dir="/data/models",

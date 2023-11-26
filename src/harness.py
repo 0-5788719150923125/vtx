@@ -279,7 +279,7 @@ def main():
 
     val_interval = p.get("val_interval", 1000)
     if val_interval > len(train_data):
-        val_interval = len(train_data)
+        val_interval = math.floor(len(train_data) / 2)
 
     # Train the model
     prototype.train(

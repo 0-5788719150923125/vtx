@@ -1,18 +1,22 @@
 import asyncio
+import base64
+import io
 import logging
 import os
 import random
 import re
+import threading
 from pprint import pprint
 
 import discord
 import requests
 from cerberus import Validator
+from discord import app_commands
 
 import eye
 import head
 from common import bullets, colors, get_identity, ship, wall
-from events import subscribe_event
+from events import post_event, subscribe_event
 
 
 def main(config):
@@ -70,6 +74,8 @@ def validation(config):
 
 
 def subscribe_events(config):
+    subscribe_event("receive_image", receive_image)
+
     servers = config["discord"].get("servers", {})
     if len(servers) == 0:
         return
@@ -90,6 +96,15 @@ def subscribe_events(config):
                 logging.error(e)
 
 
+needs_followup = []
+
+
+async def receive_image(data, image):
+    if data["source"] == "discord":
+        global needs_followup
+        needs_followup.append({**data, "image": image})
+
+
 # A class to control the entire Discord bot
 class Client(discord.Client):
     def __init__(self, *args, **kwargs):
@@ -97,6 +112,19 @@ class Client(discord.Client):
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):
+        # Register slash commands
+        tree = app_commands.CommandTree(self)
+
+        @tree.command(name="x", description="Plant a seed.")
+        async def x_command(interaction):
+            await interaction.response.send_message("Please wait.", ephemeral=True)
+            post_event(
+                "generate_image",
+                data={"source": "discord", "interaction": interaction},
+            )
+
+        await tree.sync()
+
         # List all Discord servers on startup
         guilds = []
         for guild in sorted(
@@ -126,8 +154,23 @@ class Client(discord.Client):
         return False
 
     async def setup_hook(self) -> None:
-        # self.discord_task = self.loop.create_task(self.think())
-        pass
+        self.responder = self.loop.create_task(self.respond_to_things())
+
+    async def respond_to_things(self) -> None:
+        global needs_followup
+        while True:
+            await asyncio.sleep(6.66)
+            while needs_followup:
+                try:
+                    data = needs_followup.pop()
+                    file = discord.File(
+                        io.BytesIO(base64.b64decode(data["image"])),
+                        filename="nft.webp",
+                    )
+                    channel = self.get_channel(data["interaction"].channel.id)
+                    await channel.send(file=file)
+                except:
+                    traceback.format_exc()
 
     # # randomly generate commentary
     # async def think(self):
@@ -511,6 +554,9 @@ async def get_all_channels(self):
     return text_channel_list
 
 
+client = None
+
+
 # Subscribe to a Discord bot via token
 async def run_client(config):
     discord_token = os.environ["DISCORDTOKEN"]
@@ -522,6 +568,7 @@ async def run_client(config):
     intents.reactions = True
     intents.message_content = True
 
+    global client
     client = Client(intents=intents, config=config)
 
     await client.start(discord_token)

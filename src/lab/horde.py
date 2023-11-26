@@ -1,64 +1,85 @@
 import asyncio
 import os
+from concurrent.futures import ThreadPoolExecutor
 
-# from horde_sdk.ai_horde_api.ai_horde_clients import AIHordeAPISimpleClient
-# from horde_sdk.ai_horde_api.apimodels import ImageGenerateAsyncRequest, ImageGeneration
+import aiohttp
+import requests
 
-# from stablehorde_api import GenerationInput, ModelGenerationInputStable, StableHordeAPI
-# from pydantic.functional_validators import field_validator
+from events import post_event, subscribe_event
 
 
 def main(config):
-    asyncio.run(generate())
+    asyncio.run(monitor())
+
+
+async def monitor():
+    queue = asyncio.Queue()
+
+    def build_queue(data):
+        queue.put_nowait(data)
+
+    subscribe_event("generate_image", build_queue)
+
+    processing_task = asyncio.create_task(process_queue(queue))
+
+    try:
+        while True:
+            await asyncio.sleep(6.66)
+
+    finally:
+        await queue.put(None)
+        await processing_task
+
+
+async def process_queue(queue):
+    while True:
+        print("processing generation request")
+        await asyncio.sleep(6.66)
+        item = await queue.get()
+        if item is None:
+            break
+        await asyncio.gather(respond(item))
+
+
+async def respond(data):
+    print(data)
+    image = await generate()
+    post_event("receive_image", data=data, image=image)
 
 
 async def generate():
-    pass
-    # simple_client = AIHordeAPISimpleClient()
+    api = "http://localhost:5000/generate"
 
-    # generations: list[ImageGeneration] = simple_client.image_generate_request(
-    #     ImageGenerateAsyncRequest(
-    #         apikey=key,
-    #         prompt="masterpiece, best quality, ((Yang Xueguo)), leviathan creature, terrifying",
-    #         models=["Deliberate"],
-    #     ),
-    # )
-    # print(generations[0])
-    # image = simple_client.generation_to_image(generations[0])
-    # print(image)
+    data = {
+        "prompt": "(1robot:1.2), (head:1.3 and face:1.2) connected to a large (wire:1.3), (masterpiece, top quality, best quality, official art, colorful, anime, beautiful and aesthetic:1.2), (fractal art:1.3)",
+        "models": ["GhostMix"],
+        "height": 256,
+        "width": 256,
+        "sampler_name": "k_lms",
+        "steps": 10,
+        "control_type": "canny",
+        "denoising_strength": 0.65,
+        "cfg_scale": 7.0,
+        "clip_skip": 1,
+    }
 
-    # image.save("/src/one.webp")
+    async with aiohttp.ClientSession() as session:
+        async with session.get(api, json=data) as response:
+            print("response returned")
+            print(response)
 
-    # key = os.environ["STABLE_HORDE_API_KEY"]
-    # client = StableHordeAPI(key)
-    # payload = GenerationInput(
-    #     "masterpiece, best quality, ((Yang Xueguo)), leviathan creature, terrifying",
-    #     # params=ModelGenerationInputStable(
-    #     #     height=512, width=768, steps=50, post_processing=["RealESRGAN_x4plus"]
-    #     # ),
-    #     # height=512,
-    #     nsfw=True,
-    #     censor_nsfw=False,
-    #     models=["Anything Diffusion"],
-    #     # n=1,
-    # )
-    # # payload can also be a dict, which is useful, if something new added
-    # txt2img_rsp = await client.txt2img_request(payload)
-    # img_uuid = txt2img_rsp.id
+            if response.status // 100 == 2:
+                print("GET request successful")
+            else:
+                print(f"GET request failed with status code: {response.status}")
+                print(response.text())
 
-    # done = False
-    # while not done:
-    #     # Checking every second if image is generated
-    #     await asyncio.sleep(15)
-    #     generate_check = await client.generate_check(img_uuid)
-    #     if generate_check.done == 1:
-    #         done = True
+            response_data = await response.json()
 
-    # # Generating a status which has all generations (in our case,
-    # # there should be 5 generations, because n is set to 5)
-    # generate_status = await client.generate_status(img_uuid)
-    # generations = generate_status.generations
-    # print(generations[0].img)
+            if "data" in response_data:
+                return response_data["data"]
+            else:
+                return "failed"
 
 
 if __name__ == "__main__":

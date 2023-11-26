@@ -138,7 +138,7 @@ toe:
     num_steps: 10000
     warmup_steps: 1000
     weight_decay: 0.01
-    gradient_clip_val: 0.5
+    gradient_clip_val: 1.0
     scheduler: cosine
     batch_size: 3
     gradient_accumulation_steps: 6

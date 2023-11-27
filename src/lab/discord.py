@@ -170,7 +170,7 @@ class Client(discord.Client):
                         filename="nft.webp",
                     )
                     channel = self.get_channel(data["interaction"].channel.id)
-                    await channel.send("I made this for you:", file=file)
+                    await channel.send(file=file)
                 except:
                     traceback.format_exc()
 

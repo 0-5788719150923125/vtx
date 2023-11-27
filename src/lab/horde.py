@@ -34,7 +34,6 @@ async def monitor():
 
 async def process_queue(queue):
     while True:
-        print("processing generation request")
         await asyncio.sleep(6.66)
         item = await queue.get()
         if item is None:
@@ -43,7 +42,6 @@ async def process_queue(queue):
 
 
 async def respond(data):
-    print(data)
     image = await generate()
     post_event("receive_image", data=data, image=image)
 
@@ -52,19 +50,19 @@ async def generate():
     api = "http://localhost:5000/generate"
 
     data = {
-        "prompt": "((anime)), ((in the style of dragon ball z)), epic (((1robot:1.2))) (head:1.3) is connected to a large (wire:1.3), wire is piercing the ((face:1.2)), (((masterpiece))), ((top quality)), ((best quality)), (official art, colorful, anime, beautiful and aesthetic:1.2), (fractal art:1.3)",
+        "prompt": "(((robot:1.2))) ((head:1.3)) with a large (wire:1.3) piercing his ((face:1.2)), (((masterpiece))), ((hyper-realistic)), ((photorealistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
         "models": ["GhostMix"],
-        "height": 1024,
-        "width": 1024,
+        "height": 512,
+        "width": 512,
         "sampler_name": "k_lms",
         "steps": 50,
         "control_type": "canny",
-        "image_is_control": True,
-        "denoising_strength": 0.85,
+        "image_is_control": False,
+        "denoising_strength": 0.65,
         "cfg_scale": 7.5,
-        "clip_skip": 2,
+        "clip_skip": 1,
         "hires_fix": True,
-        "karras": True,
+        "karras": False,
     }
 
     timeout = aiohttp.ClientTimeout(total=3600)

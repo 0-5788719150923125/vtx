@@ -299,6 +299,7 @@ def main():
         save_every=p.get("save_every", 1000),
         optimizer=p.get("optimizer", "AdamW"),
         learning_rate=float(p.get("learning_rate", 0.005)),
+        lookahead=p.get("lookahead", 0),
         momentum=float(p.get("momentum", 0)),
         swa_lr=p.get("swa_lr", None),
         weight_decay=float(p.get("weight_decay", 0)),

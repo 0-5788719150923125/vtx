@@ -60,7 +60,7 @@ async def generate():
         "steps": 50,
         "control_type": "canny",
         "image_is_control": True,
-        "denoising_strength": 0.65,
+        "denoising_strength": 0.85,
         "cfg_scale": 7.5,
         "clip_skip": 2,
         "hires_fix": True,

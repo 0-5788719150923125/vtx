@@ -125,8 +125,10 @@ class Client(discord.Client):
 
         @tree.command(name="x", description="Plant a seed.")
         async def x_command(interaction):
-            await interaction.response.send_message(
-                "Please wait while I plant a seed for you.", ephemeral=True
+            message = await interaction.response.send_message(
+                "Allow me to create something for you.",
+                ephemeral=False,
+                delete_after=3600,
             )
             # node = ray.put(interaction.response)
             producer.remote(

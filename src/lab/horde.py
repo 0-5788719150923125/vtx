@@ -56,7 +56,7 @@ async def generate():
                 mask = base64.b64encode(file.read()).decode("utf-8")
 
         data = {
-            "prompt": "robot head with a large contraption piercing through his face, monolithic, ancient monument, strong purple right eye and soft turquoise left eye",
+            "prompt": "(((cinematic))) robot head with a large contraption piercing through his face, monolithic, ancient monument, strong purple right eye and soft turquoise left eye, leviathan",
             # "prompt": "robot head with a large wire piercing his face, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
             "models": [
                 "Deliberate 3.0",
@@ -69,11 +69,11 @@ async def generate():
             "width": 1024,
             "sampler_name": "k_lms",
             "steps": 50,
-            "control_type": "canny",
+            "control_type": "depth",
             "image_is_control": True,
-            "denoising_strength": 0.8,
-            "cfg_scale": 7.0,
-            "clip_skip": 1,
+            "denoising_strength": 0.9,
+            "cfg_scale": 7.5,
+            "clip_skip": 2,
             "hires_fix": True,
             "karras": False,
             # "tis": [

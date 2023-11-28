@@ -32,7 +32,7 @@
         "label": "build",
         "detail": "Build and tag a new Docker image from the Dockerfile.",
         "type": "shell",
-        "command": "docker compose build"
+        "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml build"
       },
       {
         "label": "push",

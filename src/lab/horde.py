@@ -8,6 +8,7 @@ import aiohttp
 import ray
 import requests
 
+from common import colors
 from events import post_event, subscribe_event
 from pipe import consumer, producer, queue
 
@@ -54,7 +55,7 @@ async def generate():
                 mask = base64.b64encode(file.read()).decode("utf-8")
 
         data = {
-            "prompt": "(((cinematic))) robot head with a large contraption piercing through his face, monolithic, ancient monument, strong purple right eye and soft turquoise left eye, leviathan",
+            "prompt": "(((cinematic))) giant robot head with a large contraption piercing through his face, monolithic, ancient monument, ((colorful:1.2)), leviathan",
             # "prompt": "robot head with a large wire piercing his face, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
             "models": [
                 "Deliberate 3.0",
@@ -62,18 +63,20 @@ async def generate():
                 # "GhostMix"
             ],
             "source": source,
-            "mask": mask,
+            # "mask": mask,
+            "source_processing": "img2img",
             "height": 1024,
             "width": 1024,
-            "sampler_name": "k_lms",
+            "sampler_name": "k_dpm_2",
             "steps": 50,
-            "control_type": "depth",
-            "image_is_control": True,
-            "denoising_strength": 0.9,
+            "control_type": "hed",
+            "image_is_control": False,
+            "return_control_map": False,
+            "denoising_strength": 0.7,
             "cfg_scale": 7.5,
-            "clip_skip": 2,
+            "clip_skip": 1,
             "hires_fix": True,
-            "karras": False,
+            "karras": True,
             # "tis": [
             #     {"name": "4629", "strength": 1},
             #     {"name": "7808", "strength": 1},
@@ -86,6 +89,9 @@ async def generate():
 
         timeout = aiohttp.ClientTimeout(total=3600)
 
+        print(
+            f"{colors.RED}ONE@HORDE: {colors.WHITE} Requesting an image from the AI Horde. Please wait."
+        )
         async with aiohttp.ClientSession(timeout=timeout) as session:
             async with session.get(api, json=data) as response:
                 response_data = await response.json()

@@ -46,9 +46,9 @@ async def run_client(config):
     intents.reactions = True
     intents.message_content = True
 
-    client = Client.remote(intents=intents, config=config)
+    client = Client(intents=intents, config=config)
 
-    await client.start.remote(discord_token)
+    await client.start(discord_token)
 
 
 def validation(config):
@@ -113,7 +113,6 @@ def subscribe_events(config):
 
 
 # A class to control the entire Discord bot
-@ray.remote
 class Client(discord.Client):
     def __init__(self, *args, **kwargs):
         self.config = kwargs["config"]

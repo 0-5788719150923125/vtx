@@ -5,9 +5,11 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 
 import aiohttp
+import ray
 import requests
 
 from events import post_event, subscribe_event
+from pipe import consumer, producer, queue
 
 
 def main(config):
@@ -15,36 +17,27 @@ def main(config):
 
 
 async def monitor():
-    queue = asyncio.Queue()
-
-    def build_queue(data):
-        queue.put_nowait(data)
-
-    subscribe_event("generate_image", build_queue)
-
-    processing_task = asyncio.create_task(process_queue(queue))
-
-    try:
-        while True:
-            await asyncio.sleep(6.66)
-
-    finally:
-        await queue.put(None)
-        await processing_task
-
-
-async def process_queue(queue):
     while True:
-        await asyncio.sleep(6.66)
-        item = await queue.get()
-        if item is None:
-            break
-        await asyncio.gather(respond(item))
+        try:
+            await asyncio.sleep(6.66)
+            ref = consumer.remote(queue, "generate_image")
+            item = ray.get(ref)
 
-
-async def respond(data):
-    image = await generate()
-    post_event("receive_image", data=data, image=image)
+            if item:
+                print(item)
+                image = await generate()
+                print(image)
+                producer.remote(
+                    queue,
+                    {
+                        **item,
+                        "event": "publish_image",
+                        "response": "my response",
+                        "image": image,
+                    },
+                )
+        except Exception as e:
+            logging.error(e)
 
 
 async def generate():
@@ -67,15 +60,14 @@ async def generate():
             # "prompt": "robot head with a large wire piercing his face, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
             "models": [
                 "Deliberate 3.0",
-                "Deliberate"
-                # "Deliberate 3.0"
+                "Deliberate",
                 # "GhostMix"
             ],
             "source": source,
-            # "mask": mask,
+            "mask": mask,
             "height": 1024,
             "width": 1024,
-            "sampler_name": "DDIM",
+            "sampler_name": "k_lms",
             "steps": 50,
             "control_type": "canny",
             "image_is_control": True,
@@ -83,7 +75,7 @@ async def generate():
             "cfg_scale": 7.0,
             "clip_skip": 1,
             "hires_fix": True,
-            "karras": True,
+            "karras": False,
             # "tis": [
             #     {"name": "4629", "strength": 1},
             #     {"name": "7808", "strength": 1},

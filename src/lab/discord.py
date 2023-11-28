@@ -9,6 +9,7 @@ import threading
 from pprint import pprint
 
 import discord
+import ray
 import requests
 from cerberus import Validator
 from discord import app_commands
@@ -17,6 +18,7 @@ import eye
 import head
 from common import bullets, colors, get_identity, ship, wall
 from events import post_event, subscribe_event
+from pipe import consumer, producer, queue
 
 
 def main(config):
@@ -44,9 +46,9 @@ async def run_client(config):
     intents.reactions = True
     intents.message_content = True
 
-    client = Client(intents=intents, config=config)
+    client = Client.remote(intents=intents, config=config)
 
-    await client.start(discord_token)
+    await client.start.remote(discord_token)
 
 
 def validation(config):
@@ -90,7 +92,7 @@ def validation(config):
 
 
 def subscribe_events(config):
-    subscribe_event("receive_image", receive_image)
+    # subscribe_event("receive_image", receive_image)
 
     servers = config["discord"].get("servers", {})
     if len(servers) == 0:
@@ -115,13 +117,14 @@ def subscribe_events(config):
 needs_followup = []
 
 
-async def receive_image(data, image):
-    if data["source"] == "discord":
-        global needs_followup
-        needs_followup.append({**data, "image": image})
+# async def receive_image(data, image):
+#     if data["source"] == "discord":
+#         global needs_followup
+#         needs_followup.append({**data, "image": image})
 
 
 # A class to control the entire Discord bot
+@ray.remote
 class Client(discord.Client):
     def __init__(self, *args, **kwargs):
         self.config = kwargs["config"]
@@ -136,9 +139,14 @@ class Client(discord.Client):
             await interaction.response.send_message(
                 "Please wait while I plant a seed for you.", ephemeral=True
             )
-            post_event(
-                "generate_image",
-                data={"source": "discord", "interaction": interaction},
+            # node = ray.put(interaction.response)
+            producer.remote(
+                queue,
+                {
+                    "event": "generate_image",
+                    "source": "discord",
+                    "channel_id": interaction.channel.id,
+                },
             )
 
         await tree.sync()
@@ -175,21 +183,21 @@ class Client(discord.Client):
         self.responder = self.loop.create_task(self.respond_to_things())
 
     async def respond_to_things(self) -> None:
-        global needs_followup
-        while True:
-            await asyncio.sleep(6.66)
-            while needs_followup:
-                try:
+        try:
+            while True:
+                await asyncio.sleep(6.66)
+                ref = consumer.remote(queue, "publish_image")
+                item = ray.get(ref)
+                if item:
                     print("receiving image from the horde")
-                    data = needs_followup.pop()
                     file = discord.File(
-                        io.BytesIO(base64.b64decode(data["image"])),
+                        io.BytesIO(base64.b64decode(item["image"])),
                         filename="nft.webp",
                     )
-                    channel = self.get_channel(data["interaction"].channel.id)
+                    channel = self.get_channel(item["channel_id"])
                     await channel.send(file=file)
-                except:
-                    traceback.format_exc()
+        except Exception as e:
+            logging.error(e)
 
     # # randomly generate commentary
     # async def think(self):

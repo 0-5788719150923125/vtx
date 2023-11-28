@@ -63,22 +63,35 @@ async def generate():
                 mask = base64.b64encode(file.read()).decode("utf-8")
 
         data = {
-            "prompt": "robot head with a large electrical wire protruding from his face, monolithic, ancient monument, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
-            # "prompt": "robot head with a large wire piercing his face",
-            "models": ["GhostMix"],
+            "prompt": "robot head with a large contraption piercing through his face, monolithic, ancient monument, blues and greens",
+            # "prompt": "robot head with a large wire piercing his face, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
+            "models": [
+                "Deliberate 3.0",
+                "Deliberate"
+                # "Deliberate 3.0"
+                # "GhostMix"
+            ],
             "source": source,
             # "mask": mask,
             "height": 1024,
             "width": 1024,
             "sampler_name": "DDIM",
             "steps": 50,
-            "control_type": "depth",
+            "control_type": "canny",
             "image_is_control": True,
-            "denoising_strength": 0.85,
-            "cfg_scale": 6.0,
-            "clip_skip": 2,
+            "denoising_strength": 0.65,
+            "cfg_scale": 7.0,
+            "clip_skip": 1,
             "hires_fix": True,
-            "karras": False,
+            "karras": True,
+            # "tis": [
+            #     {"name": "4629", "strength": 1},
+            #     {"name": "7808", "strength": 1},
+            #     {"name": "grey", "strength": 1},
+            #     {"name": "brown", "strength": 1},
+            #     {"name": "color grey", "strength": 1},
+            #     {"name": "color brown", "strength": 1},
+            # ],
         }
 
         timeout = aiohttp.ClientTimeout(total=3600)
@@ -91,9 +104,7 @@ async def generate():
                         f"GET request failed with status code: {response.status}"
                     )
                     logging.error(response_data["err"])
-                    return
-
-                response_data = await response.json()
+                    return response_data["err"]
 
                 return response_data["data"]
 

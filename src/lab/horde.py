@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import logging
 import os
 from concurrent.futures import ThreadPoolExecutor
@@ -49,34 +50,55 @@ async def respond(data):
 async def generate():
     api = "http://localhost:5000/generate"
 
-    data = {
-        "prompt": "(((robot:1.2))) ((head:1.3)) with a large (wire:1.3) piercing his ((face:1.2)), (((masterpiece))), ((hyper-realistic)), ((photorealistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
-        "models": ["GhostMix"],
-        "height": 512,
-        "width": 512,
-        "sampler_name": "k_lms",
-        "steps": 50,
-        "control_type": "canny",
-        "image_is_control": False,
-        "denoising_strength": 0.65,
-        "cfg_scale": 7.5,
-        "clip_skip": 1,
-        "hires_fix": True,
-        "karras": False,
-    }
+    source = None
+    mask = None
 
-    timeout = aiohttp.ClientTimeout(total=3600)
+    try:
+        if os.path.exists("/data/source.jpg"):
+            with open("/data/source.jpg", "rb") as file:
+                source = base64.b64encode(file.read()).decode("utf-8")
 
-    async with aiohttp.ClientSession(timeout=timeout) as session:
-        async with session.get(api, json=data) as response:
-            if response.status // 100 != 2:
-                logging.error(f"GET request failed with status code: {response.status}")
-                logging.error(response.text())
-                return
+        if os.path.exists("/data/mask.jpg"):
+            with open("/data/mask.jpg", "rb") as file:
+                mask = base64.b64encode(file.read()).decode("utf-8")
 
-            response_data = await response.json()
+        data = {
+            "prompt": "robot head with a large electrical wire protruding from his face, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
+            # "prompt": "robot head with a large wire piercing his face",
+            "models": ["GhostMix"],
+            "source": source,
+            "mask": mask,
+            "height": 1024,
+            "width": 1024,
+            "sampler_name": "k_euler",
+            "steps": 50,
+            "control_type": "hed",
+            "image_is_control": True,
+            "denoising_strength": 0.85,
+            "cfg_scale": 7.5,
+            "clip_skip": 1,
+            "hires_fix": True,
+            "karras": False,
+        }
 
-            return response_data["data"]
+        timeout = aiohttp.ClientTimeout(total=3600)
+
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.get(api, json=data) as response:
+                response_data = await response.json()
+                if response.status != 200:
+                    logging.error(
+                        f"GET request failed with status code: {response.status}"
+                    )
+                    logging.error(response_data["err"])
+                    return
+
+                response_data = await response.json()
+
+                return response_data["data"]
+
+    except Exception as e:
+        logger.error(e)
 
 
 if __name__ == "__main__":

@@ -27,6 +27,7 @@ from moduleformer import (
 from peft import (
     AdaLoraConfig,
     IA3Config,
+    LoHaConfig,
     LoKrConfig,
     LoraConfig,
     PeftConfig,
@@ -136,11 +137,24 @@ def main():
             target_modules=p.get("target_modules", None),
             feedforward_modules=p.get("feedforward_modules", None),
         )
+    elif train_type == "loha":
+        peft_config = LoHaConfig(
+            task_type="CAUSAL_LM",
+            r=p.get("r", 8),
+            alpha=p.get("alpha", 8),
+            rank_dropout=p.get("dropout", 0.0),
+            module_dropout=p.get("dropout", 0.0),
+            use_effective_conv2d=False,
+            target_modules=p.get("target_modules", None),
+            rank_pattern=p.get("rank_pattern", {}),
+            alpha_pattern=p.get("alpha_pattern", {}),
+            modules_to_save=p.get("modules_to_save", None),
+        )
     elif train_type == "lokr":
         peft_config = LoKrConfig(
             task_type="CAUSAL_LM",
-            r=p.get("r", 4),
-            alpha=p.get("alpha", 16),
+            r=p.get("r", 8),
+            alpha=p.get("alpha", 8),
             rank_dropout=p.get("dropout", 0.0),
             module_dropout=p.get("dropout", 0.0),
             use_effective_conv2d=False,

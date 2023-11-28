@@ -99,6 +99,7 @@ def validation(config):
                     "allowed": [
                         "adalora",
                         "ia3",
+                        "loha",
                         "lora",
                         "lokr",
                         "prefix",

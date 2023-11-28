@@ -164,6 +164,7 @@ class Client(discord.Client):
             await asyncio.sleep(6.66)
             while needs_followup:
                 try:
+                    print("receiving image from the horde")
                     data = needs_followup.pop()
                     file = discord.File(
                         io.BytesIO(base64.b64decode(data["image"])),

@@ -29,8 +29,24 @@ def main(config):
     asyncio.run(run_client(config))
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main(config)
+
+
+# Subscribe to a Discord bot via token
+async def run_client(config):
+    discord_token = os.environ["DISCORDTOKEN"]
+    if not discord_token:
+        return
+    intents = discord.Intents.default()
+    intents.members = True
+    intents.messages = True
+    intents.reactions = True
+    intents.message_content = True
+
+    client = Client(intents=intents, config=config)
+
+    await client.start(discord_token)
 
 
 def validation(config):
@@ -555,26 +571,6 @@ async def get_all_channels(self):
             if permissions.send_messages:
                 text_channel_list.append(channel)
     return text_channel_list
-
-
-client = None
-
-
-# Subscribe to a Discord bot via token
-async def run_client(config):
-    discord_token = os.environ["DISCORDTOKEN"]
-    if not discord_token:
-        return
-    intents = discord.Intents.default()
-    intents.members = True
-    intents.messages = True
-    intents.reactions = True
-    intents.message_content = True
-
-    global client
-    client = Client(intents=intents, config=config)
-
-    await client.start(discord_token)
 
 
 def send_webhook(

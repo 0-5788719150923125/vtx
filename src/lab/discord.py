@@ -92,8 +92,6 @@ def validation(config):
 
 
 def subscribe_events(config):
-    # subscribe_event("receive_image", receive_image)
-
     servers = config["discord"].get("servers", {})
     if len(servers) == 0:
         return
@@ -112,15 +110,6 @@ def subscribe_events(config):
                 )
             except Exception as e:
                 logging.error(e)
-
-
-needs_followup = []
-
-
-# async def receive_image(data, image):
-#     if data["source"] == "discord":
-#         global needs_followup
-#         needs_followup.append({**data, "image": image})
 
 
 # A class to control the entire Discord bot

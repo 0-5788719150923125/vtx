@@ -20,10 +20,13 @@ class Broker:
         try:
             self.refs[event] = [] if event not in locals() else self.refs[event]
             if len(self.refs[event]) > 0:
-                return self.refs[event].pop(0)
+                item = self.refs[event].pop(0)
+                print(item)
+                return item
 
             try:
                 item = queue.get(block=True, timeout=1)
+                print(item)
             except Empty:
                 return False
 

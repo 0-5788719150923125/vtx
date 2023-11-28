@@ -63,20 +63,20 @@ async def generate():
                 mask = base64.b64encode(file.read()).decode("utf-8")
 
         data = {
-            "prompt": "robot head with a large electrical wire protruding from his face, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
+            "prompt": "robot head with a large electrical wire protruding from his face, monolithic, ancient monument, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
             # "prompt": "robot head with a large wire piercing his face",
             "models": ["GhostMix"],
             "source": source,
-            "mask": mask,
+            # "mask": mask,
             "height": 1024,
             "width": 1024,
-            "sampler_name": "k_euler",
+            "sampler_name": "DDIM",
             "steps": 50,
-            "control_type": "hed",
+            "control_type": "depth",
             "image_is_control": True,
             "denoising_strength": 0.85,
-            "cfg_scale": 7.5,
-            "clip_skip": 1,
+            "cfg_scale": 6.0,
+            "clip_skip": 2,
             "hires_fix": True,
             "karras": False,
         }

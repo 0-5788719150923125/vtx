@@ -88,7 +88,7 @@ def main():
                     if author is not None:
                         props.append(f"{s_variant}.author: {author}\n")
                         author_id = get_identity(author)
-                        if author.name in config["reddit"]["replacers"]:
+                        if author.name in config["reddit"].get("replacers", {}):
                             author_id = config["reddit"]["replacers"][author.name]
                         props.append(f"{s_variant}.author.id: {author_id}\n")
 
@@ -145,7 +145,7 @@ def main():
                     if author is not None:
                         props.append(f"{c_variant}.author: {author}\n")
                         author_id = get_identity(author)
-                        if author.name in config["reddit"]["replacers"]:
+                        if author.name in config["reddit"].get("replacers", {}):
                             author_id = config["reddit"]["replacers"][author.name]
                         props.append(f"{c_variant}.author.id: {author_id}\n")
 

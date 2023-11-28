@@ -17,29 +17,22 @@ class Broker:
         self.refs = {}
 
     def get_event(self, queue, event):
+        self.refs[event] = [] if event not in locals() else self.refs[event]
+        if len(self.refs[event]) > 0:
+            item = self.refs[event].pop(0)
+            return item
+
         try:
-            self.refs[event] = [] if event not in locals() else self.refs[event]
-            if len(self.refs[event]) > 0:
-                item = self.refs[event].pop(0)
-                print(item)
-                return item
+            item = queue.get(block=True, timeout=1)
+        except Empty:
+            return False
 
-            try:
-                item = queue.get(block=True, timeout=1)
-                print(item)
-            except Empty:
-                return False
-
-            if item is None:
-                return False
-            elif event == item["event"]:
-                return item
-            else:
-                self.set_event(event, item)
-        except Exception as e:
-            import traceback
-
-            logging.error(traceback.format_exc())
+        if item is None:
+            return False
+        elif event == item["event"]:
+            return item
+        else:
+            self.set_event(event, item)
 
     def set_event(self, event, item):
         self.refs[event] = item
@@ -50,15 +43,7 @@ broker = Broker.remote()
 
 @ray.remote
 def consumer(queue, event):
-    try:
-        ref = broker.get_event.remote(queue, event)
-        item = ray.get(ref)
-        # print(item)
-        if not item:
-            return False
-        else:
-            return item
-    except:
-        import traceback
-
-        logging.error(traceback.format_exc())
+    ref = broker.get_event.remote(queue, event)
+    item = ray.get(ref)
+    if item:
+        return item

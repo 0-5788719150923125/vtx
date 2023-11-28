@@ -130,7 +130,6 @@ class Client(discord.Client):
                 ephemeral=False,
                 delete_after=3600,
             )
-            # node = ray.put(interaction.response)
             producer.remote(
                 queue,
                 {
@@ -180,7 +179,6 @@ class Client(discord.Client):
                 ref = consumer.remote(queue, "publish_image")
                 item = ray.get(ref)
                 if item:
-                    print("receiving image from the horde")
                     file = discord.File(
                         io.BytesIO(base64.b64decode(item["image"])),
                         filename="nft.webp",

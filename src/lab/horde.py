@@ -24,9 +24,7 @@ async def monitor():
             item = ray.get(ref)
 
             if item:
-                print(item)
                 image = await generate()
-                print(image)
                 producer.remote(
                     queue,
                     {

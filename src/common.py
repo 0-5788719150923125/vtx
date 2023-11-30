@@ -231,8 +231,18 @@ def get_identity(seed=None, style="original"):
     elif style == "new":
         if seed is None:
             seed = random_string()
+
+        char_set = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
         hashed = hashlib.sha256(seed.encode()).hexdigest()
-        identity = "".join(char for char in hashed if char.isalnum())[:3]
+
+        decimal_value = int(hashed, 16)
+
+        length = 3
+        identity = ""
+        for _ in range(length):
+            decimal_value, index = divmod(decimal_value, len(char_set))
+            identity += char_set[index]
 
     return identity
 

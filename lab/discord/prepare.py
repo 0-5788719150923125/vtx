@@ -11,6 +11,8 @@ from common import config, get_identity, ship, wall
 
 root_dir = "/lab/discord"
 
+style = "original"
+
 
 # Format Discord messages for training
 def main():
@@ -23,7 +25,7 @@ def main():
         )
         sanitized = re.sub(
             r"@Unknown",
-            "<@" + str(get_identity()) + ">",
+            "<@" + str(get_identity(style=style)) + ">",
             sanitized,
         )
         return sanitized
@@ -36,104 +38,110 @@ def main():
 
     successes = 0
     failures = 0
+
     for filename in os.listdir(f"{root_dir}/source"):
-        try:
-            with open(os.path.join(f"{root_dir}/source", filename), "r") as file:
-                data = json.load(file)
+        # try:
+        with open(os.path.join(f"{root_dir}/source", filename), "r") as file:
+            data = json.load(file)
 
-                data_dict = {obj["id"]: obj for obj in data["messages"]}
+            data_dict = {obj["id"]: obj for obj in data["messages"]}
 
-                for i in data_dict.values():
-                    if i["type"] != "Default" and i["type"] != "Reply":
+            for i in data_dict.values():
+                if i["type"] not in ["Default", "Reply"]:
+                    continue
+
+                author_id = (
+                    i["author"]["id"]
+                    if style == "original"
+                    else get_identity(seed=str(i["author"]["id"]), style=style)
+                )
+
+                if len(i["embeds"]) > 0:
+                    if i["content"] != "":
+                        i["content"] = i["content"]
+                    if i["embeds"][0]["title"]:
+                        i["content"] = (
+                            i["content"] + " | ((" + i["embeds"][0]["title"] + "))"
+                        )
+                    if i["embeds"][0]["description"]:
+                        i["content"] = (
+                            i["content"] + " | " + i["embeds"][0]["description"]
+                        )
+
+                if i["author"]["isBot"] == True:
+                    author_id = transform_author(i["author"])
+                    if author_id == False:
                         continue
 
-                    if len(i["embeds"]) > 0:
-                        if i["content"] != "":
-                            i["content"] = i["content"]
-                        if i["embeds"][0]["title"]:
-                            i["content"] = (
-                                i["content"] + " | ((" + i["embeds"][0]["title"] + "))"
+                with open(f"{root_dir}/train/{filename}.txt", "a") as txt_file:
+                    if i["type"] == "Reply":
+                        message_ref_id = i["reference"]["messageId"]
+
+                        result = data_dict.get(message_ref_id, None)
+
+                        if result is not None:
+                            reply_author_id = (
+                                result["author"]["id"]
+                                if style == "original"
+                                else get_identity(
+                                    seed=str(result["author"]["id"]), style=style
+                                )
                             )
-                        if i["embeds"][0]["description"]:
-                            i["content"] = (
-                                i["content"] + " | " + i["embeds"][0]["description"]
-                            )
 
-                    author_id = i["author"]["id"]
+                            if result["author"]["isBot"] == True:
+                                reply_author_id = transform_author(result["author"])
 
-                    if i["author"]["isBot"] == True:
-                        author_id = transform_author(i["author"])
-                        if author_id == False:
-                            continue
-
-                    with open(f"{root_dir}/train/{filename}.txt", "a") as txt_file:
-                        if i["type"] == "Reply":
-                            try:
-                                message_ref_id = i["reference"]["messageId"]
-
-                                result = data_dict.get(message_ref_id, None)
-
-                                reply_author_id = result["author"]["id"]
-
-                                if result["author"]["isBot"] == True:
-                                    reply_author_id = transform_author(result["author"])
-
-                                if reply_author_id != False:
-                                    if result is not None:
-                                        if len(result["embeds"]) > 0:
-                                            if result["content"] != "":
-                                                result["content"] = result["content"]
-                                            if result["embeds"][0]["title"]:
-                                                result["content"] = (
-                                                    result["content"]
-                                                    + " | (("
-                                                    + result["embeds"][0]["title"]
-                                                    + "))"
-                                                )
-                                            if result["embeds"][0]["description"]:
-                                                result["content"] = (
-                                                    result["content"]
-                                                    + " | "
-                                                    + result["embeds"][0]["description"]
-                                                )
-                                        sanitized = sanitizer(result["content"])
-                                        if len(result["mentions"]) > 0:
-                                            for mention in result["mentions"]:
-                                                t = transform_author(mention)
-                                                sanitized = sanitized.replace(
-                                                    "@" + mention["nickname"],
-                                                    "<@" + str(t) + ">",
-                                                )
-                                        sanitized = transform_message(sanitized)
-                                        content = (
-                                            wall
-                                            + reply_author_id
-                                            + ship
-                                            + " "
-                                            + sanitized
-                                        )
+                            if reply_author_id != False:
+                                if result is not None:
+                                    if len(result["embeds"]) > 0:
+                                        if result["content"] != "":
+                                            result["content"] = result["content"]
+                                        if result["embeds"][0]["title"]:
+                                            result["content"] = (
+                                                result["content"]
+                                                + " | (("
+                                                + result["embeds"][0]["title"]
+                                                + "))"
+                                            )
+                                        if result["embeds"][0]["description"]:
+                                            result["content"] = (
+                                                result["content"]
+                                                + " | "
+                                                + result["embeds"][0]["description"]
+                                            )
+                                    sanitized = sanitizer(result["content"])
+                                    if len(result["mentions"]) > 0:
+                                        for mention in result["mentions"]:
+                                            t = transform_author(mention)
+                                            sanitized = sanitized.replace(
+                                                "@" + mention["nickname"],
+                                                "<@" + str(t) + ">",
+                                            )
+                                    sanitized = transform_message(sanitized)
+                                    content = (
+                                        wall + reply_author_id + ship + " " + sanitized
+                                    )
+                                    try:
                                         txt_file.write(f"{content}\n".format(content))
                                         successes += 1
-                            except Exception as e:
-                                failures += 1
+                                    except Exception as e:
+                                        failures += 1
 
-                        try:
-                            sanitized = sanitizer(i["content"])
-                            if len(i["mentions"]) > 0:
-                                for mention in i["mentions"]:
-                                    t = transform_author(mention)
-                                    sanitized = sanitized.replace(
-                                        "@" + mention["nickname"],
-                                        "<@" + str(t) + ">",
-                                    )
-                            sanitized = transform_message(sanitized)
-                            content = wall + author_id + ship + " " + sanitized
-                            txt_file.write(f"{content}\n".format(content))
-                            successes += 1
-                        except Exception as e:
-                            failures += 1
-        except Exception as e:
-            failures += 1
+                    sanitized = sanitizer(i["content"])
+                    if len(i["mentions"]) > 0:
+                        for mention in i["mentions"]:
+                            t = transform_author(mention)
+                            sanitized = sanitized.replace(
+                                "@" + mention["nickname"],
+                                "<@" + str(t) + ">",
+                            )
+                    sanitized = transform_message(sanitized)
+                    content = wall + author_id + ship + " " + sanitized
+                    try:
+                        txt_file.write(f"{content}\n".format(content))
+                        successes += 1
+                    except Exception as e:
+                        failures += 1
 
         os.system("clear")
         print("preparing Discord messages")
@@ -147,7 +155,11 @@ def transform_author(author):
         "315826602187554816",
         "1053270121218592798",
     ]:  # Eliza, Kitsunetsuki, MAINNFRAME
-        return str(author["id"])
+        return (
+            str(author["id"])
+            if style == "original"
+            else get_identity(seed=str(author["id"]), style=style)
+        )
     elif (
         str(author["id"]) == "1055993037077106718"
         or author["name"].startswith("Ghost-")
@@ -155,11 +167,15 @@ def transform_author(author):
         or author["nickname"].startswith("Ghost-")
         or author["nickname"].startswith("G-")
     ):  # Samn and Ghosts
-        return str(get_identity())
+        return str(get_identity(style=style))
     elif author["isBot"]:
         return False
 
-    return author["id"]
+    return (
+        author["id"]
+        if style == "original"
+        else get_identity(seed=str(author["id"]), style=style)
+    )
 
 
 # Replace third person messaging from bots, so as not to bias the model towards this format

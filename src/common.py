@@ -218,15 +218,21 @@ def make_random_deterministic(seed):
 
 
 # Generate a pseudo-identity, in the Discord ID format
-def get_identity(seed=None):
-    if seed is not None:
-        random.seed(seed)
+def get_identity(seed=None, style="original"):
+    if style == "original":
+        if seed is not None:
+            random.seed(seed)
 
-    count = random.choice([17, 18])
-    leading = random.choice("123456789")
-    identity = leading + "".join(random.choice("0123456789") for _ in range(count))
+        count = random.choice([17, 18])
+        leading = random.choice("123456789")
+        identity = leading + "".join(random.choice("0123456789") for _ in range(count))
 
-    random.seed()
+        random.seed()
+    elif style == "new":
+        if seed is None:
+            seed = random_string()
+        hashed = hashlib.sha256(seed.encode()).hexdigest()
+        identity = "".join(char for char in hashed if char.isalnum())[:3]
 
     return identity
 

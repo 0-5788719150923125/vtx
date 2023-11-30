@@ -315,7 +315,7 @@ def main():
         learning_rate=float(p.get("learning_rate", 0.005)),
         lookahead=p.get("lookahead", 0),
         momentum=float(p.get("momentum", 0)),
-        swa_lr=p.get("swa_lr", None),
+        swa_learning_rate=p.get("swa_learning_rate", None),
         weight_decay=float(p.get("weight_decay", 0)),
         warmup_steps=p.get("warmup_steps", 0),
         gradient_clip_val=p.get("gradient_clip_val", 0.5),

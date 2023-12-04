@@ -126,7 +126,7 @@ class Client(discord.Client):
         async def x_command(interaction):
             message = await interaction.response.send_message(
                 "Allow me to create something for you.",
-                ephemeral=False,
+                ephemeral=True,
                 delete_after=3600,
             )
             producer.remote(

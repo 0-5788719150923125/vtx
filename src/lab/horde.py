@@ -55,42 +55,41 @@ async def generate():
                 mask = base64.b64encode(file.read()).decode("utf-8")
 
         data = {
-            "prompt": "(((cinematic))) giant robot head with a large contraption piercing through his face, monolithic, ancient monument, ((colorful:1.2)), leviathan",
+            "prompt": "(masterpiece, top quality, best quality, official art, beautiful and aesthetic:1.2), (robot:1.3) with a ((tree branch:1.2)) growing through his face, (fractal art:1.3), ng_deepnegative_v1_75t, easynegative",
+            # "prompt": "giant robot head with a large contraption piercing through his face, monolithic, ancient monument, ((colorful:1.2)), (((cinematic))), leviathan###blue",
             # "prompt": "robot head with a large wire piercing his face, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
             "models": [
-                "Deliberate 3.0",
+                # "Deliberate 3.0",
                 # "Deliberate",
-                # "GhostMix"
+                "GhostMix",
+                # "DreamShaper"
             ],
             "source": source,
             # "mask": mask,
             "source_processing": "img2img",
-            "height": 1024,
-            "width": 1024,
-            "sampler_name": "k_dpm_2",
-            "steps": 50,
-            "control_type": "hed",
-            "image_is_control": False,
+            "height": 512,
+            "width": 512,
+            "sampler_name": "k_dpmpp_sde",
+            "steps": 30,
+            "control_type": "canny",
+            "image_is_control": True,
             "return_control_map": False,
-            "denoising_strength": 0.7,
-            "cfg_scale": 7.5,
-            "clip_skip": 1,
+            "denoising_strength": 0.4,
+            "cfg_scale": 7.0,
+            "clip_skip": 2,
             "hires_fix": True,
             "karras": True,
-            # "tis": [
-            #     {"name": "4629", "strength": 1},
-            #     {"name": "7808", "strength": 1},
-            #     {"name": "grey", "strength": 1},
-            #     {"name": "brown", "strength": 1},
-            #     {"name": "color grey", "strength": 1},
-            #     {"name": "color brown", "strength": 1},
-            # ],
+            "upscale": "x2",
+            "tis": [
+                {"name": "easynegative", "strength": 1},
+                {"name": "ng_deepnegative_v1_75t", "strength": 1},
+            ],
         }
 
         timeout = aiohttp.ClientTimeout(total=3600)
 
         print(
-            f"{colors.RED}ONE@HORDE: {colors.WHITE} Requesting an image from the AI Horde. Please wait."
+            f"{colors.RED}ONE@HORDE:{colors.WHITE} Requesting an image from the AI Horde. Please wait."
         )
         async with aiohttp.ClientSession(timeout=timeout) as session:
             async with session.get(api, json=data) as response:

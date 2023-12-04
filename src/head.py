@@ -271,7 +271,7 @@ class Cortex:
         embeddings_dir = "/data/embeddings/" + focus
         if "training" in config:
             t = config["training"].get("type", "standard")
-            if t in ["adalora", "ia3", "lora", "lokr"]:
+            if t not in ["standard", "pretrain"]:
                 adapters = config.get("adapters", ["base"])
                 for adapter in adapters:
                     if not os.path.exists(f"{adapter_dir}/{adapter}/adapter_model.bin"):

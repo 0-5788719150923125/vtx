@@ -17,7 +17,7 @@ from discord import app_commands
 import eye
 import head
 from common import bullets, colors, get_identity, ship, wall
-from pipe import consumer, producer
+from events import consumer, producer
 
 
 def main(config):

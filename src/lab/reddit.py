@@ -15,7 +15,7 @@ from cerberus import Validator
 
 import head
 from common import colors, get_daemon, get_identity
-from pipe import consumer, producer
+from events import consumer, producer
 
 
 def main(config) -> None:

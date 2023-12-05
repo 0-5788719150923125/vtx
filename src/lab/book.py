@@ -19,7 +19,7 @@ from common import (
     run_shell_command,
     write_to_file,
 )
-from pipe import producer
+from events import producer
 
 if __name__ == "main":
     main()

@@ -9,7 +9,7 @@ import ray
 import requests
 
 from common import colors
-from pipe import consumer, producer
+from events import consumer, producer
 
 
 def main(config):

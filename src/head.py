@@ -178,12 +178,12 @@ def validation(config):
 
 
 class Cortex:
-    def __init__(self, config, personas, disposition, generation_configs, focus):
+    def __init__(self, config, personas, disposition, transformers_config, focus):
         if not validation(config):
             raise Exception(f"Something is wrong with the {focus} configuration.")
         self.active = False
         self.config = config
-        self.generation_configs = generation_configs
+        self.transformers_config = transformers_config
         self.personas = personas
         self.disposition = disposition
         self.queue = []
@@ -492,7 +492,7 @@ class Cortex:
 
         start = time.time()
 
-        generation_config = self.generation_configs[generation_profile]
+        generation_config = self.transformers_config["generation"][generation_profile]
         temperature = (
             temperature
             if temperature is not None
@@ -520,7 +520,7 @@ class Cortex:
                     if min_new_tokens is not None
                     else generation_config.get("min_new_tokens", 1),
                     max_new_tokens=new_tokens,
-                    exponential_decay_length_penalty=(new_tokens, -0.44),
+                    # exponential_decay_length_penalty=(new_tokens, -0.44),
                     max_time=360,
                     seed=seed[1],
                     use_cache=True,
@@ -642,7 +642,7 @@ class Cortex:
                     )
                 )
 
-        generation_config = self.generation_configs[generation_profile]
+        generation_config = self.transformers_config["generation"][generation_profile]
         temperature = (
             temperature
             if temperature is not None
@@ -836,7 +836,7 @@ ctx = Cortex(
     config[focus],
     config["personas"],
     config["disposition"],
-    config["transformers"]["generation"],
+    config["transformers"],
     focus,
 )
 reload_interval = config[focus].get("reload_interval", 0)
@@ -848,7 +848,7 @@ if reload_interval > 0:
             config[focus],
             config["personas"],
             config["disposition"],
-            config["transformers"]["generation"],
+            config["transformers"],
             focus,
         ),
         trigger="interval",

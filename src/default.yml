@@ -26,13 +26,13 @@ disposition:
 source:
   focus:
     trade:
-      active_frequency: 0.66
+      active_frequency: 0.33
       passive_frequency: 0.01
       personas:
         - source
     support:
       passive_frequency: 0.01
-      active_frequency: 0.99
+      active_frequency: 0.33
 
 # A revolution starts here.
 ghost:
@@ -124,10 +124,22 @@ transformers:
       eta_cutoff: 0.0003
       penalty_alpha: 0.6
       top_k: 4
-      repetition_penalty: 1.5
+      repetition_penalty: 1.59
       encoder_repetition_penalty: 0.999
       no_repeat_ngram_size: 13
       low_memory: False
+    training:
+      do_sample: True
+      min_new_tokens: 11
+      max_new_tokens: 222
+      temperature: 0.95
+      eta_cutoff: 0.0003
+      penalty_alpha: 0.6
+      top_k: 4
+      repetition_penalty: 1.59
+      encoder_repetition_penalty: 0.999
+      no_repeat_ngram_size: 13
+      low_memory: True
     longform:
       do_sample: True
       min_new_tokens: 11

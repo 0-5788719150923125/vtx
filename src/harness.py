@@ -11,7 +11,7 @@ from common import colors, config, focus, hash_directory, list_full_paths, nist_
 
 model_config = config[focus]
 generation_config = config[focus].get(
-    "generation_profile", config["transformers"]["generation"]["default"]
+    "generation_profile", config["transformers"]["generation"]["training"]
 )
 p = model_config["training"]
 

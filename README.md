@@ -43,7 +43,11 @@ To build a non-trivial, opinionated framework for human cloning experiments. Our
 - The "up" task is used to run your lab.
 - Ask me questions.
 
-For thorough documentation, [please visit this link](https://studio.src.eco/nail/vtx/).
+# Troubleshooting
+
+- If, for some reason, a git submodule directory is empty, please try to `cd` into the module directory, and run this command: `git submodule update --init` 
+
+For complete documentation, [please visit this link](https://studio.src.eco/nail/vtx/).
 
 - Join us on Discord: [https://discord.gg/N3dsVuWfJr](https://discord.gg/N3dsVuWfJr)
 - Send me an email: [ink@src.eco](ink@src.eco)

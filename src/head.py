@@ -274,7 +274,11 @@ class Cortex:
             if t not in ["standard", "pretrain"]:
                 adapters = config.get("adapters", ["base"])
                 for adapter in adapters:
-                    if not os.path.exists(f"{adapter_dir}/{adapter}/adapter_model.bin"):
+                    if not os.path.exists(
+                        f"{adapter_dir}/{adapter}/adapter_model.bin"
+                    ) or not os.path.exists(
+                        f"{adapter_dir}/{adapter}/adapter_model.safetensors"
+                    ):
                         adapter_dir = "/adapters/" + focus
                         break
             elif t == "prompt":

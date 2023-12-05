@@ -14,7 +14,7 @@ To build a non-trivial, opinionated framework for human cloning experiments. Our
 
 # interface
 
-- [book](http://localhost:42000)
+- [book](http://localhost:42000) ([example](https://pen.university))
 - [src](http://localhost:9666)
 - [IPFS](http://localhost:9090)
 - [TensorBoard](http://localhost:6006)

@@ -20,6 +20,7 @@ from common import (
     write_to_file,
 )
 from events import post_event
+from pipe import producer, queue
 
 if __name__ == "main":
     main()
@@ -220,13 +221,17 @@ class Ink:
                 clean = output.replace(group[0], "## RECORD")
             elif self.type == "prose":
                 clean = "\n\n".join(output.splitlines()[2:])
-            post_event(
-                "book_updated",
-                title=self.title,
-                content=clean,
-                tags=self.tags,
-            )
             print(colors.RED + "ONE@KB: " + colors.WHITE + self.title)
+            producer(
+                queue,
+                {
+                    "event": "book_updated",
+                    "source": "book",
+                    "title": self.title,
+                    "content": clean,
+                    "tags": self.tags,
+                },
+            )
 
         except Exception as e:
             logging.error(e)

@@ -21,12 +21,10 @@ async def monitor():
     while True:
         try:
             await asyncio.sleep(6.66)
-            ref = consumer.remote(queue, "generate_image")
-            item = ray.get(ref)
-
+            item = consumer(queue, "generate_image")
             if item:
                 image = await generate()
-                producer.remote(
+                producer(
                     queue,
                     {
                         **item,

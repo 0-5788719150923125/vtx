@@ -129,7 +129,7 @@ class Client(discord.Client):
                 ephemeral=True,
                 delete_after=3600,
             )
-            producer.remote(
+            producer(
                 queue,
                 {
                     "event": "generate_image",
@@ -175,8 +175,7 @@ class Client(discord.Client):
         try:
             while True:
                 await asyncio.sleep(6.66)
-                ref = consumer.remote(queue, "publish_image")
-                item = ray.get(ref)
+                item = consumer(queue, "publish_image")
                 if item:
                     file = discord.File(
                         io.BytesIO(base64.b64decode(item["image"])),

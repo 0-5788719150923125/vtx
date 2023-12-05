@@ -10,11 +10,13 @@ from copy import deepcopy
 from pprint import pprint
 
 import asyncpraw
+import ray
 from cerberus import Validator
 
 import head
 from common import colors, get_daemon, get_identity
 from events import post_event, subscribe_event
+from pipe import consumer, producer, queue
 
 
 def main(config) -> None:
@@ -96,13 +98,13 @@ async def client(config):
         username=os.environ["REDDITAGENT"],
         password=os.environ["REDDITPASSWORD"],
     ) as reddit:
-        subscribe_event("book_updated", receive_book_updates)
         await follow_victims(reddit, config["reddit"])
         await asyncio.gather(
             subscribe_comments(reddit, config),
             subscribe_submissions(reddit, config),
             stalker(reddit, config),
             manage_submissions(reddit, config),
+            receive_events(),
         )
 
 
@@ -131,8 +133,13 @@ async def follow_victims(reddit, config):
 queued = []
 
 
-async def receive_book_updates(title, content, tags):
-    queued.append({"title": title, "content": content, "tags": tags})
+async def receive_events():
+    while True:
+        await asyncio.sleep(6.66)
+        item = consumer(queue, "book_updated")
+        if item:
+            print(item)
+            queued.append(item)
 
 
 my_tags = []

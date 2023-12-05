@@ -7,17 +7,12 @@ queue = Queue(maxsize=100)
 
 
 @ray.remote
-def producer(queue, item):
-    queue.put(item)
-
-
-@ray.remote
 class Broker:
     def __init__(self):
         self.refs = {}
 
     def get_event(self, queue, event):
-        self.refs[event] = [] if event not in locals() else self.refs[event]
+        self.refs[event] = [] if event not in self.refs else self.refs[event]
         if len(self.refs[event]) > 0:
             item = self.refs[event].pop(0)
             return item
@@ -29,19 +24,26 @@ class Broker:
 
         if item is None:
             return False
-        elif event == item["event"]:
+        if event == item["event"]:
             return item
-        else:
-            self.set_event(event, item)
 
-    def set_event(self, event, item):
-        self.refs[event] = item
+        self.cache_event(item["event"], item)
+        return False
+
+    def cache_event(self, event, item):
+        self.refs[event].append(item)
+
+    def queue_event(self, queue, item):
+        queue.put(item)
 
 
 broker = Broker.remote()
 
 
-@ray.remote
+def producer(queue, item):
+    broker.queue_event.remote(queue, item)
+
+
 def consumer(queue, event):
     ref = broker.get_event.remote(queue, event)
     item = ray.get(ref)

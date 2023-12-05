@@ -19,7 +19,7 @@ if os.environ.get("DEV_MODE", "false") == "true":
 # This is the main loop
 def main():
     allowed_services = [
-        # "source",
+        "source",
         "horde",
         "bit",
         "book",

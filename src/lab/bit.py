@@ -3,14 +3,16 @@ import time
 
 
 def main(config):
+    planet = config["bit"].get("planet", False)
     moon = config["bit"].get("moon", False)
     os.makedirs("/data/urbit", exist_ok=True)
     while True:
-        if not moon and not os.path.exists(f"/data/urbit/one.comet"):
+        if moon or planet:
+            pass
+        # Create a file, which will launch a comet.
+        elif not os.path.exists(f"/data/urbit/one.comet"):
             with open("/data/urbit/one.comet", "x") as file:
                 pass
-        elif moon:
-            pass
 
         time.sleep(66.6)
 

@@ -7,6 +7,7 @@
 # stored in a .env file, at the root of this project. See {project_root}/examples/bot/.env for an example.
 
 bit:
+  planet: False
   moon: False
 
 only: toehider
@@ -126,7 +127,7 @@ transformers:
       top_k: 4
       repetition_penalty: 2.3
       encoder_repetition_penalty: 0.999
-      no_repeat_ngram_size: 13
+      no_repeat_ngram_size: 9
       low_memory: False
     training:
       do_sample: True

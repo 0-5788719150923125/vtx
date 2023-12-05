@@ -16,8 +16,8 @@ To build a non-trivial, opinionated framework for human cloning experiments. Our
 
 - [book](http://localhost:42000) ([example](https://pen.university))
 - [src](http://localhost:9666)
+- [metrics](http://localhost:6006)
 - [IPFS](http://localhost:9090)
-- [TensorBoard](http://localhost:6006)
 - [Urbit](http://localhost:9099)
 
 # data
@@ -35,7 +35,7 @@ To build a non-trivial, opinionated framework for human cloning experiments. Our
 - Place configurations into config.yml. ([default.yml](./src/default.yml))
 - Put new datasets into lab/{dataset_name}. Also specify them in config.yml.
 - Put credentials into a .env file at the root of this project. ([example.env](./examples/lab/.env))
-- Find many other examples in [./examples].
+- Find many other examples in [./examples](./examples/).
 - Use VSCode tasks as a reference.
 - The "build" task will build a Docker image from source files.
 - The "fetch" and "prepare" tasks are used for data retrieval and preparation.

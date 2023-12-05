@@ -177,11 +177,12 @@ def validation(config):
 
 
 class Cortex:
-    def __init__(self, config, personas, disposition, focus):
+    def __init__(self, config, personas, disposition, generation_configs, focus):
         if not validation(config):
             raise Exception(f"Something is wrong with the {focus} configuration.")
         self.active = False
         self.config = config
+        self.generation_configs = generation_configs
         self.personas = personas
         self.disposition = disposition
         self.queue = []
@@ -271,6 +272,7 @@ class Cortex:
         embeddings_dir = "/data/embeddings/" + focus
         if "training" in config:
             t = config["training"].get("type", "standard")
+            pre_seq_len = 24
             if t not in ["standard", "pretrain"]:
                 adapters = config.get("adapters", ["base"])
                 for adapter in adapters:
@@ -283,8 +285,10 @@ class Cortex:
                         break
             elif t == "prompt":
                 tuning_mode = "ptune"
+                pre_seq_len = t.get("num_virtual_tokens", pre_seq_len)
             elif t == "prefix":
                 tuning_mode == "deep_ptune"
+                pre_seq_len = t.get("num_virtual_tokens", pre_seq_len)
             else:
                 model_folder = "/data/models/" + focus
         try:
@@ -300,6 +304,7 @@ class Cortex:
                 adapter_dir=adapter_dir,
                 adapters=adapters,
                 precision=config.get("precision", 32),
+                pre_seq_len=pre_seq_len,
                 assistant_model=config.get("model") if focus == "assistant" else None,
             )
 
@@ -364,11 +369,12 @@ class Cortex:
         ctx=None,
         priority: bool = False,
         bias: int = None,
-        temperature: float = 0.95,
-        min_new_tokens: int = 1,
-        max_new_tokens: int = 222,
+        temperature: float = None,
+        min_new_tokens: int = None,
+        max_new_tokens: int = None,
         personas: List[str] = [],
         eos_tokens: list | None = None,
+        generation_profile: str = "default",
     ):
         self.wait_in_queue(priority)
 
@@ -485,6 +491,14 @@ class Cortex:
 
         start = time.time()
 
+        generation_config = self.generation_configs[generation_profile]
+        temperature = (
+            temperature
+            if temperature is not None
+            else generation_config.get("temperature", 0.95)
+        )
+        new_tokens = max_new_tokens or generation_config.get("max_new_tokens", 333)
+
         while attempt < max_attempts:
             try:
                 if attempt > 0:
@@ -496,20 +510,16 @@ class Cortex:
 
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.teacher.generate(
-                    mode=self.config.get("mode", "transformer"),
                     prompt=prompt,
-                    do_sample=True,
-                    min_new_tokens=min_new_tokens,
-                    max_new_tokens=self.config.get("max_new_tokens", max_new_tokens),
+                    mode=self.config.get("mode", "transformer"),
+                    generation_config=generation_config,
+                    do_sample=generation_config.get("do_sample", True),
                     temperature=temperature,
-                    eta_cutoff=0.0003,
-                    penalty_alpha=0.6,
-                    top_k=4,
-                    repetition_penalty=2.3,
-                    encoder_repetition_penalty=0.999,
-                    exponential_decay_length_penalty=(max_new_tokens, -0.44),
-                    no_repeat_ngram_size=9,
-                    low_memory=self.config.get("low_memory", False),
+                    min_new_tokens=min_new_tokens
+                    if min_new_tokens is not None
+                    else generation_config.get("min_new_tokens", 1),
+                    max_new_tokens=new_tokens,
+                    exponential_decay_length_penalty=(new_tokens, -0.44),
                     max_time=360,
                     seed=seed[1],
                     use_cache=True,
@@ -593,12 +603,13 @@ class Cortex:
         self,
         prompt="",
         priority: bool = False,
-        temperature: float = 0.95,
+        temperature: float = None,
         disposition: dict | None = None,
-        min_new_tokens: int = 11,
-        max_new_tokens: int = 111,
+        min_new_tokens: int = None,
+        max_new_tokens: int = None,
         eos_tokens: list | None = None,
         cleanup: bool = False,
+        generation_profile: str = "longform",
     ):
         self.wait_in_queue(priority)
 
@@ -630,6 +641,14 @@ class Cortex:
                     )
                 )
 
+        generation_config = self.generation_configs[generation_profile]
+        temperature = (
+            temperature
+            if temperature is not None
+            else generation_config.get("temperature", 0.95)
+        )
+        new_tokens = max_new_tokens or generation_config.get("max_new_tokens", 333)
+
         attempt = 0
         max_attempts = 10
         while attempt < max_attempts:
@@ -645,17 +664,14 @@ class Cortex:
                 # https://huggingface.co/docs/transformers/main_classes/text_generation
                 completion = self.teacher.generate(
                     prompt=prompt,
-                    do_sample=True,
-                    min_new_tokens=min_new_tokens,
-                    max_new_tokens=self.config.get("max_new_tokens", max_new_tokens),
+                    mode=self.config.get("mode", "transformer"),
+                    generation_config=generation_config,
+                    do_sample=generation_config.get("do_sample", True),
                     temperature=temperature,
-                    eta_cutoff=0.0003,
-                    penalty_alpha=0.6,
-                    top_k=4,
-                    repetition_penalty=1.95,
-                    encoder_repetition_penalty=0.999,
-                    no_repeat_ngram_size=9,
-                    low_memory=self.config.get("low_memory", False),
+                    min_new_tokens=min_new_tokens
+                    if min_new_tokens is not None
+                    else generation_config.get("min_new_tokens", 1),
+                    max_new_tokens=new_tokens,
                     max_time=360,
                     seed=seed[1],
                     use_cache=True,
@@ -777,10 +793,10 @@ class Cortex:
                 eta_cutoff=0.002,
                 penalty_alpha=0.6,
                 top_k=4,
-                repetition_penalty=1.95,
+                repetition_penalty=1.5,
+                no_repeat_ngram_size=13,
                 encoder_repetition_penalty=0.999,
                 # exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                no_repeat_ngram_size=9,
                 low_memory=self.config.get("low_memory", False),
                 renormalize_logits=True,
                 remove_invalid_values=True,
@@ -815,7 +831,13 @@ class Cortex:
 
 
 # Load the model and schedule periodic reloading
-ctx = Cortex(config[focus], config["personas"], config["disposition"], focus)
+ctx = Cortex(
+    config[focus],
+    config["personas"],
+    config["disposition"],
+    config["transformers"]["generation"],
+    focus,
+)
 reload_interval = config[focus].get("reload_interval", 0)
 if reload_interval > 0:
     scheduler = BackgroundScheduler()
@@ -825,6 +847,7 @@ if reload_interval > 0:
             config[focus],
             config["personas"],
             config["disposition"],
+            config["transformers"]["generation"],
             focus,
         ),
         trigger="interval",

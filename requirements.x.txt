@@ -1,7 +1,7 @@
 matrix-nio[e2e]>=0.22.0
 ray>=2.7.1
 peft>=0.5.0
-petals>=2.2.0
+petals>=2.2.0.post1 
 pydantic<2.0.0
 # /lab/lightning-hivemind
 # git+https://github.com/huggingface/peft.git

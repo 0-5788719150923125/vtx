@@ -1,6 +1,6 @@
 lightning>=2.1.0
 beautifulsoup4>=4.12.2
-transformers>=4.34.1
+transformers>=4.35.2
 tensorboard>=2.14.0
 apscheduler>=3.10.4
 discord.py>=2.3.2

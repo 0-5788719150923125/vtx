@@ -119,6 +119,7 @@ async def subscribe_events(config):
                         footer=item["footer"],
                         content=f"Event: new_reddit_submission",
                     )
+                    break
 
 
 # A class to control the entire Discord bot

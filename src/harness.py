@@ -10,6 +10,9 @@ import torch
 from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 
 model_config = config[focus]
+generation_config = config[focus].get(
+    "generation_profile", config["transformers"]["generation"]["default"]
+)
 p = model_config["training"]
 
 devices = None
@@ -298,6 +301,7 @@ def main():
     # Train the model
     prototype.train(
         train_data=train_data,
+        generation_config=generation_config,
         n_gpu=1,
         strategy=strategy,
         devices=devices,

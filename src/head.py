@@ -139,6 +139,7 @@ def validation(config):
                 "overrides": {"type": "dict"},
                 "learning_rate": {"type": "float"},
                 "momentum": {"type": "float"},
+                "lookahead": {"type": "integer"},
                 "swa_learning_rate": {"type": "float"},
                 "stride": {"type": "integer"},
                 "update_period": {"type": "integer"},

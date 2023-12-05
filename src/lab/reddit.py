@@ -15,8 +15,7 @@ from cerberus import Validator
 
 import head
 from common import colors, get_daemon, get_identity
-from events import post_event, subscribe_event
-from pipe import consumer, producer, queue
+from pipe import consumer, producer
 
 
 def main(config) -> None:
@@ -136,9 +135,8 @@ queued = []
 async def receive_events():
     while True:
         await asyncio.sleep(6.66)
-        item = consumer(queue, "book_updated")
+        item = consumer("book_updated")
         if item:
-            print(item)
             queued.append(item)
 
 
@@ -369,16 +367,18 @@ async def subscribe_submissions(reddit, config):
                 try:
                     sub_tags = subs[submission.subreddit.display_name].get("tags")
                     tags = sub_tags + my_tags
-                    post_event(
-                        "new_reddit_submission",
-                        title=submission.title,
-                        description=submission.selftext,
-                        username="/u/" + submission.author.name,
-                        avatar_url=submission.author.icon_img,
-                        thumbnail=subreddit.community_icon,
-                        link=submission.shortlink,
-                        footer="/r/" + subreddit.display_name,
-                        tags=set(tags),
+                    producer(
+                        {
+                            "event": "new_reddit_submission",
+                            "title": submission.title,
+                            "description": submission.selftext,
+                            "username": "/u/" + submission.author.name,
+                            "avatar_url": submission.author.icon_img,
+                            "thumbnail": subreddit.community_icon,
+                            "link": submission.shortlink,
+                            "footer": "/r/" + subreddit.display_name,
+                            "tags": set(tags),
+                        },
                     )
                     my_tags = []
                 except Exception as e:

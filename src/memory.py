@@ -7,7 +7,6 @@ from chromadb.config import Settings
 
 import head
 from common import list_full_paths, random_string
-from events import subscribe_event
 
 focus = os.environ["FOCUS"]
 
@@ -27,7 +26,7 @@ def create_memory(texts):
         logging.error(e)
 
 
-subscribe_event("commit_memory", create_memory)
+# subscribe_event("commit_memory", create_memory)
 
 
 def import_directory(path="/lab/ink"):

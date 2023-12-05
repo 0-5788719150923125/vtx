@@ -8,7 +8,6 @@ from aiogram import Bot, Dispatcher, types
 
 import head
 from common import colors, get_daemon, get_identity
-from events import post_event
 
 
 def main(config):
@@ -36,7 +35,7 @@ async def client(config) -> None:
             )
             print(colors.BLUE + "ONE@TELEGRAM: " + colors.WHITE + message["text"])
 
-            post_event("commit_memory", texts=message["text"])
+            # post_event("commit_memory", texts=message["text"])
 
             if random.random() > config["telegram"].get("frequency", 0.9):
                 return

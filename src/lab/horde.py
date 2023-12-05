@@ -9,8 +9,7 @@ import ray
 import requests
 
 from common import colors
-from events import post_event, subscribe_event
-from pipe import consumer, producer, queue
+from pipe import consumer, producer
 
 
 def main(config):
@@ -21,11 +20,10 @@ async def monitor():
     while True:
         try:
             await asyncio.sleep(6.66)
-            item = consumer(queue, "generate_image")
+            item = consumer("generate_image")
             if item:
                 image = await generate()
                 producer(
-                    queue,
                     {
                         **item,
                         "event": "publish_image",
@@ -57,8 +55,8 @@ async def generate():
             # "prompt": "giant robot head with a large contraption piercing through his face, monolithic, ancient monument, ((colorful:1.2)), (((cinematic))), leviathan###blue",
             # "prompt": "robot head with a large wire piercing his face, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
             "models": [
-                # "Deliberate 3.0",
-                # "Deliberate",
+                "Deliberate 3.0",
+                "Deliberate",
                 "GhostMix",
                 # "DreamShaper"
             ],
@@ -102,7 +100,7 @@ async def generate():
                 return response_data["data"]
 
     except Exception as e:
-        logger.error(e)
+        logging.error(e)
 
 
 if __name__ == "__main__":

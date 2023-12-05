@@ -17,8 +17,7 @@ from discord import app_commands
 import eye
 import head
 from common import bullets, colors, get_identity, ship, wall
-from events import post_event, subscribe_event
-from pipe import consumer, producer, queue
+from pipe import consumer, producer
 
 
 def main(config):
@@ -27,7 +26,6 @@ def main(config):
     result = validation(config["discord"])
     if not result:
         return
-    subscribe_events(config)
     asyncio.run(run_client(config))
 
 
@@ -48,7 +46,7 @@ async def run_client(config):
 
     client = Client(intents=intents, config=config)
 
-    await client.start(discord_token)
+    await asyncio.gather(subscribe_events(config), client.start(discord_token))
 
 
 def validation(config):
@@ -91,25 +89,36 @@ def validation(config):
     return result
 
 
-def subscribe_events(config):
+async def subscribe_events(config):
     servers = config["discord"].get("servers", {})
     if len(servers) == 0:
         return
-    for server in servers:
-        if not servers[server] or not servers[server].get("subscribe"):
+    while True:
+        await asyncio.sleep(6.66)
+        item = consumer("new_reddit_submission")
+        if not item:
             continue
-        for event in servers[server].get("subscribe"):
-            data = servers[server]
-            try:
-                subscribe_event(
-                    event,
-                    send_webhook,
-                    webhook_url=data.get("webhook"),
-                    content=f"Event: {event}",
-                    config=data,
-                )
-            except Exception as e:
-                logging.error(e)
+        for server in servers:
+            data = servers.get(server)
+            if data is None:
+                continue
+            webhook_url = data.get("webhook")
+            if webhook_url is None:
+                continue
+            allowed_tags = data.get("tags", [])
+            for tag in item.get("tags", []):
+                if tag in allowed_tags:
+                    send_webhook(
+                        webhook_url=webhook_url,
+                        title=item["title"],
+                        link=item["link"],
+                        avatar_url=data.get("avatar", item["avatar_url"]),
+                        username=data.get("author", item["username"]),
+                        thumbnail=data.get("logo", item["thumbnail"]),
+                        description=item["description"],
+                        footer=item["footer"],
+                        content=f"Event: new_reddit_submission",
+                    )
 
 
 # A class to control the entire Discord bot
@@ -130,7 +139,6 @@ class Client(discord.Client):
                 delete_after=3600,
             )
             producer(
-                queue,
                 {
                     "event": "generate_image",
                     "source": "discord",
@@ -175,7 +183,7 @@ class Client(discord.Client):
         try:
             while True:
                 await asyncio.sleep(6.66)
-                item = consumer(queue, "publish_image")
+                item = consumer("publish_image")
                 if item:
                     file = discord.File(
                         io.BytesIO(base64.b64decode(item["image"])),
@@ -578,24 +586,7 @@ def send_webhook(
     thumbnail: str = "https://styles.redditmedia.com/t5_2sqtn6/styles/communityIcon_xfdgcz8156751.png",
     footer: str = "/r/TheInk",
     content: str = "For immediate disclosure...",
-    tags=None,
-    config=None,
 ):
-    allowed = False
-    allowed_tags = config.get("tags", None)
-    if allowed_tags is not None and tags is not None:
-        for tag in tags:
-            if tag in allowed_tags:
-                allowed = True
-                break
-    if not allowed:
-        return
-
-    if config:
-        avatar_url = config.get("avatar", avatar_url)
-        username = config.get("author", username)
-        thumbnail = config.get("logo", thumbnail)
-
     data = {
         "username": username,
         "avatar_url": avatar_url,

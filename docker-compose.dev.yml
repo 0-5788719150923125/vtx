@@ -8,3 +8,5 @@ services:
       - ./data:/data
       - ./book:/book
       - ./config.yml:/env/config.yml
+    environment:
+      DEV_MODE: 'true'

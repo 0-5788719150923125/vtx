@@ -4,7 +4,7 @@ frequency = random.seed()
 
 
 def main():
-    print("the main loop is like a constellation")
+    print("the main loop is a constellation")
     import machine
 
 

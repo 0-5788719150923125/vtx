@@ -10,7 +10,7 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 # mission
 
-To build a non-trivial, opinionated framework for human cloning experiments. Our goal is to standardize AGI (Adaptive Generative Interfaces) through small models, on commodity hardware (i.e. your desktop computer).
+To build a trivial, opinionated framework for human cloning experiments. Our goal is to standardize AGI (Adaptive Generative Interfaces) with a decentralized swarm of toy models, on commodity hardware (i.e. your desktop computer).
 
 # interface
 
@@ -43,9 +43,11 @@ To build a non-trivial, opinionated framework for human cloning experiments. Our
 - The "up" task is used to run your lab.
 - Ask me questions.
 
-# Troubleshooting
+# troubleshooting
 
 - If, for some reason, a git submodule directory is empty, please try to `cd` into the module directory, and run this command: `git submodule update --init` 
+
+# contact
 
 For complete documentation, [please visit this link](https://studio.src.eco/nail/vtx/).
 

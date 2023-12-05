@@ -110,7 +110,7 @@ toe:
   info: nailed to the foot
   model: EleutherAI/gpt-neo-125M
   training:
-    type: "lora"
+    type: "loha"
 
 collections:
   default:

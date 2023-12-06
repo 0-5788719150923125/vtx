@@ -248,6 +248,18 @@ class Client(discord.Client):
             preds.append(pred)
         return preds
 
+    async def send_dm(self, bias):
+        user = self.get_user(bias)
+        message = random.choice([
+            "Pardon, are you busy?",
+            "Hey, do you have a minute?",
+            "Can I ask you a question?",
+            "I need your help."
+        ])
+        if user:
+            await user.send(message)
+            print(colors.RED + "ONE@DISCORD: " + colors.WHITE + "DM: " + message)
+
     # check every Discord message
     async def on_message(self, message):
         banned = await self.check_bans(guild=message.guild, user=message.author)
@@ -364,6 +376,12 @@ class Client(discord.Client):
         # increase response probability in private channels
         no_transform = False
         if str(message.channel.type) == "private":
+            # if a user is mentioned in private, send a message to them
+            group = re.search(r"(?:[<][@])(\d{18,19})(?:[>])", message.content)
+            if group is not None and group[1] is not None:
+                bias = group[1]
+                await self.send_dm(bias=int(bias))
+                return
             roll = 0  # Always
             bias = message.author.id
             no_transform = True

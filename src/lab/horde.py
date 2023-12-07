@@ -68,7 +68,7 @@ async def generate():
             "sampler_name": "k_dpmpp_sde",
             "steps": 50,
             "control_type": "depth",
-            "denoising_strength": 0.4,
+            "denoising_strength": 0.8,
             "cfg_scale": 8.0,
             "clip_skip": 1,
             "hires_fix": False,

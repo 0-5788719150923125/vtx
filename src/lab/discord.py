@@ -9,7 +9,6 @@ import threading
 from pprint import pprint
 
 import discord
-import ray
 import requests
 from cerberus import Validator
 from discord import app_commands
@@ -31,7 +30,6 @@ def main(config):
 
 if __name__ == "__main__":
     main(config)
-
 
 # Subscribe to a Discord bot via token
 async def run_client(config):

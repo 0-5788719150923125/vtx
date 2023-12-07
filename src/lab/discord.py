@@ -537,7 +537,7 @@ class Client(discord.Client):
 # format the output
 def transformer(bias, text):
     responses = [
-        f'The ghost of <@{bias}> suggests, *"{text}"*',
+        f'The clone of <@{bias}> suggests, *"{text}"*',
         f'<@{bias}> says, *"{text}"*',
         f'<@{bias}> would say, *"{text}"*',
         f'They said, *"{text}"*',

@@ -51,34 +51,33 @@ async def generate():
                 mask = base64.b64encode(file.read()).decode("utf-8")
 
         data = {
-            "prompt": "(masterpiece, top quality, best quality, official art, beautiful and aesthetic:1.2), (robot:1.3) with a ((tree branch:1.2)) growing through his face, (fractal art:1.3), ng_deepnegative_v1_75t, easynegative",
-            # "prompt": "giant robot head with a large contraption piercing through his face, monolithic, ancient monument, ((colorful:1.2)), (((cinematic))), leviathan###blue",
-            # "prompt": "robot head with a large wire piercing his face, (((masterpiece))), ((hyper-realistic)), ((top quality)), ((best quality)), ((anime)), (colorful), (official art, beautiful and aesthetic:1.2)",
+            "prompt": "((monolithic stone robot head)) with a (((large tree branch growing into his face))), head and shoulders are visible, head is looking left, BadDream###nude, naked, ((bad quality, worst quality)), (((eyes, mouth, nose, legs, arms, hands, feet, teeth)))",
             "models": [
-                "Deliberate 3.0",
+                # "Deliberate 3.0",
                 "Deliberate",
-                "GhostMix",
-                # "DreamShaper"
+                "DreamShaper"
+                # "GhostMix",
             ],
             "source": source,
             # "mask": mask,
             "source_processing": "img2img",
+            "image_is_control": True,
+            "return_control_map": False,
             "height": 512,
             "width": 512,
             "sampler_name": "k_dpmpp_sde",
-            "steps": 30,
-            "control_type": "canny",
-            "image_is_control": True,
-            "return_control_map": False,
-            "denoising_strength": 0.4,
-            "cfg_scale": 7.0,
-            "clip_skip": 2,
-            "hires_fix": True,
-            "karras": True,
-            "upscale": "x2",
+            "steps": 50,
+            "control_type": "depth",
+            "denoising_strength": 0.333,
+            "cfg_scale": 8.0,
+            "clip_skip": 1,
+            "hires_fix": False,
+            "karras": False,
+            # "upscale": "x2",
             "tis": [
-                {"name": "easynegative", "strength": 1},
-                {"name": "ng_deepnegative_v1_75t", "strength": 1},
+                # {"name": "7808", "strength": 1}, ## easynegative
+                # {"name": "4629", "strength": 1}, ## ng_deepnegative_v1_75t
+                {"name": "72437", "strength": 1} ## BadDream
             ],
         }
 

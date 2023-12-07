@@ -248,13 +248,10 @@ def get_identity(seed=None, style="original"):
 
 
 def random_string(length=10):
-    # Define the characters you want to include in the random string
+
     characters = (
         string.ascii_letters + string.digits
-    )  # Letters (both uppercase and lowercase) and digits
-    # You can customize this by adding more characters as needed
-
-    # Use random.choices to generate the string
+    )
     random_string = "".join(random.choices(characters, k=length))
 
     return random_string

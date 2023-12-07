@@ -181,6 +181,7 @@ def transform_author(author):
 # Replace third person messaging from bots, so as not to bias the model towards this format
 def transform_message(message):
     matchers = [
+        r'(?:The clone of )(?:<@\d*>)(?: suggests, \*")(.*)(?:"\*$)',
         r'(?:The ghost of )(?:<@\d*>)(?: suggests, \*")(.*)(?:"\*$)',
         r'(?:<@\d*>)(?: says, \*")(.*)(?:"\*$)',
         r'(?:<@\d*>)(?: would say, \*")(.*)(?:"\*$)',

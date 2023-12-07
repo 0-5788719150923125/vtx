@@ -370,7 +370,9 @@ class Cortex:
         for memory in ctx:
             score = cosine_similarity(memory["message"], message)
             if score > 0.7:
-                print(f"{score}\n => {memory['message']}\nwas similar to\n => {message}\nso, we removed it")
+                print(
+                    f"{score}\n => {memory['message']}\nwas similar to\n => {message}\nso, we removed it"
+                )
                 return False
         return True
 
@@ -451,9 +453,7 @@ class Cortex:
             set(
                 chain.from_iterable(
                     [
-                        tokenizer(
-                            token, add_special_tokens=False
-                        ).input_ids
+                        tokenizer(token, add_special_tokens=False).input_ids
                         # Suppress ugly patterns the model may sometimes bias towards.
                         for token in ["((", "(((", "<@", "< @"]
                     ]
@@ -461,17 +461,11 @@ class Cortex:
             )
         )
 
-        eos_token_ids = [
-            tokenizer.convert_tokens_to_ids(
-                tokenizer.tokenize(wall)[0]
-            )
-        ]
+        eos_token_ids = [tokenizer.convert_tokens_to_ids(tokenizer.tokenize(wall)[0])]
         if eos_tokens:
             for token in eos_tokens:
                 eos_token_ids.append(
-                    tokenizer.convert_tokens_to_ids(
-                        tokenizer.tokenize(token)[0]
-                    )
+                    tokenizer.convert_tokens_to_ids(tokenizer.tokenize(token)[0])
                 )
 
         context = deepcopy(self.context)
@@ -841,6 +835,7 @@ class Cortex:
 
         self.remove_from_queue(priority)
         return output
+
 
 # Load the model and schedule periodic reloading
 ctx = Cortex(

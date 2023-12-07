@@ -51,11 +51,12 @@ async def generate():
                 mask = base64.b64encode(file.read()).decode("utf-8")
 
         data = {
-            "prompt": "((monolithic stone robot head)) with a (((large tree branch growing into his face))), head and shoulders are visible, head is looking left, BadDream###nude, naked, ((bad quality, worst quality)), (((eyes, mouth, nose, legs, arms, hands, feet, teeth)))",
+            # "prompt": "((monolithic stone robot head)) with a (((large tree branch growing into his face))), head and shoulders are visible, head is looking left, BadDream###nude, naked, ((bad quality, worst quality)), (((eyes, mouth, nose, legs, arms, hands, feet, teeth)))",
+            "prompt": "monolithic stone robot head with a large (wooden tree branch:1.2) growing into his face###(ugly, bad quality, worst quality, medium quality, low resolution, medium resolution, bad hands, blurry, distorted, twisted, watermark, mutant, amorphous, elongated, elastigirl, duplicate, tumor, cancer, fat, pregnant:1.3)",
             "models": [
                 # "Deliberate 3.0",
-                "Deliberate",
-                "DreamShaper"
+                # "Deliberate",
+                "DreamShaper",
                 # "GhostMix",
             ],
             "source": source,
@@ -65,10 +66,10 @@ async def generate():
             "return_control_map": False,
             "height": 512,
             "width": 512,
-            "sampler_name": "k_dpmpp_sde",
-            "steps": 50,
+            "sampler_name": "k_euler_a",
+            "steps": 30,
             "control_type": "depth",
-            "denoising_strength": 0.4,
+            "denoising_strength": 1,
             "cfg_scale": 8.0,
             "clip_skip": 1,
             "hires_fix": False,

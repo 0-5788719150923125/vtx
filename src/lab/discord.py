@@ -9,6 +9,7 @@ import threading
 from pprint import pprint
 
 import discord
+import ray
 import requests
 from cerberus import Validator
 from discord import app_commands
@@ -26,10 +27,15 @@ def main(config):
     if not result:
         return
     asyncio.run(run_client(config))
+    # wrap.remote(config)
 
 
 if __name__ == "__main__":
     main(config)
+
+@ray.remote(num_cpus=1)
+def wrap(config):
+    asyncio.run(run_client(config))
 
 # Subscribe to a Discord bot via token
 async def run_client(config):

@@ -58,8 +58,6 @@ RUN curl --location --remote-header-name --remote-name https://github.com/gohugo
     ln -s /usr/share/hugo/hugo /usr/bin/hugo && \
     hugo version
 
-ENV USE_OPENMP=1
-
 WORKDIR /src
 
 COPY requirements.txt setup.py ./

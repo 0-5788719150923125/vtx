@@ -379,6 +379,8 @@ class Cortex:
     ):
         self.wait_in_queue(priority)
 
+        tokenizer = self.teacher.tokenizer
+
         if isinstance(personas, str):
             personas = [personas]
         elif personas is None:
@@ -428,7 +430,7 @@ class Cortex:
         }
 
         bad_tokens = [
-            self.teacher.tokenizer(token, add_special_tokens=False).input_ids
+            tokenizer(token, add_special_tokens=False).input_ids
             for token in [
                 f"{ship}\n",
                 f"{ship} \n",
@@ -439,7 +441,7 @@ class Cortex:
             set(
                 chain.from_iterable(
                     [
-                        self.teacher.tokenizer(
+                        tokenizer(
                             token, add_special_tokens=False
                         ).input_ids
                         # Suppress ugly patterns the model may sometimes bias towards.
@@ -450,15 +452,15 @@ class Cortex:
         )
 
         eos_token_ids = [
-            self.teacher.tokenizer.convert_tokens_to_ids(
-                self.teacher.tokenizer.tokenize(wall)[0]
+            tokenizer.convert_tokens_to_ids(
+                tokenizer.tokenize(wall)[0]
             )
         ]
         if eos_tokens:
             for token in eos_tokens:
                 eos_token_ids.append(
-                    self.teacher.tokenizer.convert_tokens_to_ids(
-                        self.teacher.tokenizer.tokenize(token)[0]
+                    tokenizer.convert_tokens_to_ids(
+                        tokenizer.tokenize(token)[0]
                     )
                 )
 

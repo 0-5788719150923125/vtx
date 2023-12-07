@@ -20,7 +20,6 @@ if os.environ.get("DEV_MODE", "false") == "true":
 def main():
     allowed_services = [
         "source",
-        "horde",
         "bit",
         "book",
         "smtp",
@@ -29,6 +28,7 @@ def main():
         "reddit",
         "discord",
         "twitch",
+        "horde",
         "x",
     ]
 

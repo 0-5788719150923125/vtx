@@ -520,7 +520,7 @@ class Cortex:
                     if min_new_tokens is not None
                     else generation_config.get("min_new_tokens", 1),
                     max_new_tokens=new_tokens,
-                    # exponential_decay_length_penalty=(new_tokens, -0.44),
+                    exponential_decay_length_penalty=(new_tokens, -0.44),
                     max_time=360,
                     seed=seed[1],
                     use_cache=True,

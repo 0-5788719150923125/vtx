@@ -55,8 +55,8 @@ async def generate():
             "prompt": "monolithic stone robot head with a large (wooden tree branch:1.2) growing into his face###(ugly, bad quality, worst quality, medium quality, low resolution, medium resolution, bad hands, blurry, distorted, twisted, watermark, mutant, amorphous, elongated, elastigirl, duplicate, tumor, cancer, fat, pregnant:1.3)",
             "models": [
                 # "Deliberate 3.0",
-                # "Deliberate",
-                "DreamShaper",
+                "Deliberate",
+                # "DreamShaper",
                 # "GhostMix",
             ],
             "source": source,
@@ -68,8 +68,8 @@ async def generate():
             "width": 512,
             "sampler_name": "k_euler_a",
             "steps": 30,
-            "control_type": "depth",
-            "denoising_strength": 1,
+            "control_type": "hed",
+            "denoising_strength": 0.7,
             "cfg_scale": 8.0,
             "clip_skip": 1,
             "hires_fix": False,
@@ -78,7 +78,7 @@ async def generate():
             "tis": [
                 # {"name": "7808", "strength": 1}, ## easynegative
                 # {"name": "4629", "strength": 1}, ## ng_deepnegative_v1_75t
-                {"name": "72437", "strength": 1} ## BadDream
+                # {"name": "72437", "strength": 1} ## BadDream
             ],
         }
 

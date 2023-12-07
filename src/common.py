@@ -471,6 +471,10 @@ def cosine_similarity(text1, text2):
   dot_product = sum(a * b for a, b in zip(feature_vector1, feature_vector2))
   norm_product = (sum(a**2 for a in feature_vector1) ** 0.5) * (sum(b**2 for b in feature_vector2) ** 0.5)
 
+  # Prevent division by 0
+  if norm_product == 0:
+    return 0
+
   return dot_product / norm_product
 
 bullets = {

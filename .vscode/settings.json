@@ -7,7 +7,10 @@
     },
   },
   "black-formatter.args": ["--line-length", "88", "--exclude=lab/ModuleFormer/**"],
-  "isort.args":["--filter=lab/ModuleFormer/**", "--profile", "black"],
+  "isort.args":[
+    "--profile", 
+    "black", 
+  ],
   "isort.check": true,
   "prettier.enable": true,
   "prettier.requireConfig": true,

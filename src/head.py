@@ -12,6 +12,7 @@ import sys
 import time
 import traceback
 import typing
+from collections import Counter
 from copy import deepcopy
 from itertools import chain
 from pprint import pprint
@@ -23,26 +24,27 @@ import torch
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
 from moduleformer import (
-    ModuleFormerConfig,
-    ModuleFormerForCausalLM,
-    ModuleFormerForSequenceClassification,
+  ModuleFormerConfig,
+  ModuleFormerForCausalLM,
+  ModuleFormerForSequenceClassification,
 )
 from transformers import (
-    AutoConfig,
-    AutoModelForCausalLM,
-    AutoModelForSequenceClassification,
-    AutoTokenizer,
+  AutoConfig,
+  AutoModelForCausalLM,
+  AutoModelForSequenceClassification,
+  AutoTokenizer,
 )
 
 from aigen.aigen import aigen
 from common import (
-    colors,
-    config,
-    focus,
-    nist_beacon,
-    remove_invisible_characters,
-    ship,
-    wall,
+  colors,
+  config,
+  cosine_similarity,
+  focus,
+  nist_beacon,
+  remove_invisible_characters,
+  ship,
+  wall,
 )
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)
@@ -364,6 +366,14 @@ class Cortex:
                     return
         self.queue.pop(0)
 
+    def check_similarity(self, ctx, message):
+        for memory in ctx:
+            score = cosine_similarity(memory["message"], message)
+            if score > 0.8:
+                print(f"{score}\n => {memory['message']}\nwas similar to\n => {message}\nso, we removed it")
+                return False
+        return True
+
     @to_thread
     def chat(
         self,
@@ -577,6 +587,8 @@ class Cortex:
                     output = output.rstrip("!")
                 while output.endswith("??"):
                     output = output.rstrip("?")
+                if not self.check_similarity(context, group[3]):
+                    continue
                 bias = group[2]
                 success = True
                 break
@@ -829,7 +841,6 @@ class Cortex:
 
         self.remove_from_queue(priority)
         return output
-
 
 # Load the model and schedule periodic reloading
 ctx = Cortex(

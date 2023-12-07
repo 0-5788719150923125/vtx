@@ -15,11 +15,14 @@ import time
 from datetime import datetime, timedelta
 from pprint import pprint
 
+import nltk
 import pytz
 import requests
 import yaml
 from cerberus import Validator
 from mergedeep import Strategy, merge
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 
 wall = "¶"
 ship = ":>"
@@ -434,6 +437,41 @@ def get_past_datetime(time_description):
 
     return formatted_date_time
 
+def cosine_similarity(text1, text2):
+  """
+  Calculates the cosine similarity between two texts.
+
+  Args:
+    text1 (str): The first text.
+    text2 (str): The second text.
+
+  Returns:
+    float: The cosine similarity score between the texts.
+  """
+
+  # Lowercase and tokenize both texts
+  text1 = text1.lower()
+  text2 = text2.lower()
+  tokens1 = word_tokenize(text1)
+  tokens2 = word_tokenize(text2)
+
+  # Remove stop words from both tokenized texts
+  stop_words = set(stopwords.words('english'))
+  filtered_tokens1 = [token for token in tokens1 if token not in stop_words]
+  filtered_tokens2 = [token for token in tokens2 if token not in stop_words]
+
+  # Create a set containing unique keywords from both texts
+  unique_keywords = set(filtered_tokens1 + filtered_tokens2)
+
+  # Create feature vectors for both texts
+  feature_vector1 = [1 if token in filtered_tokens1 else 0 for token in unique_keywords]
+  feature_vector2 = [1 if token in filtered_tokens2 else 0 for token in unique_keywords]
+
+  # Calculate cosine similarity
+  dot_product = sum(a * b for a, b in zip(feature_vector1, feature_vector2))
+  norm_product = (sum(a**2 for a in feature_vector1) ** 0.5) * (sum(b**2 for b in feature_vector2) ** 0.5)
+
+  return dot_product / norm_product
 
 bullets = {
     "⠠",

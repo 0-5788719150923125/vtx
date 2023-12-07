@@ -77,9 +77,11 @@ RUN curl --location --remote-header-name --remote-name https://github.com/gohugo
 
 WORKDIR /src
 
-COPY requirements.txt ./
+COPY requirements.txt setup.py ./
 
 RUN pip install -r requirements.txt
+
+RUN python3 setup.py
 
 ARG NODEMON_VERSION
 ARG WRANGLER_VERSION

@@ -481,8 +481,6 @@ class Cortex:
                 19,
             ], f"The given bias ({str(bias)}) is of the wrong length."
             prompt += str(bias) + ship
-        else:
-            bias = 123
 
         attempt = 0
         max_attempts = 10

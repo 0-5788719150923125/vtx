@@ -98,11 +98,6 @@ def main():
         if os.path.exists("/data/embeddings/" + focus):
             shutil.rmtree("/data/embeddings/" + focus)
 
-    # Start with a fresh logs directory
-    if fresh_logs == True:
-        if os.path.exists("/data/logs/" + focus + "/" + adapter):
-            shutil.rmtree("/data/logs/" + focus + "/" + adapter)
-
     tuning_mode = None
     pretrain_config = None
     peft_config = None
@@ -283,8 +278,13 @@ def main():
             verbose=True,
         )
 
-    log_path = f"/data/logs/{focus}"
-    os.makedirs(f"{log_path}/{adapter}", exist_ok=True)
+    # Erase old logs
+    log_path = "/data/logs/" + focus
+    if fresh_logs == True:
+        if os.path.exists(log_path):
+            shutil.rmtree(log_path)
+
+    os.makedirs(log_path, exist_ok=True)
 
     logger = loggers.TensorBoardLogger(log_path, name=adapter, default_hp_metric=True)
 

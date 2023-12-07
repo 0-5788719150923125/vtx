@@ -316,6 +316,7 @@ def main():
         generate_every=p.get("generate_every", 500),
         save_every=p.get("save_every", 1000),
         optimizer=p.get("optimizer", "AdamW"),
+        loss_function=p.get("loss_function", "default"),
         learning_rate=float(p.get("learning_rate", 0.005)),
         lookahead=p.get("lookahead", 0),
         momentum=float(p.get("momentum", 0)),

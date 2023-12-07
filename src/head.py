@@ -24,27 +24,27 @@ import torch
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
 from moduleformer import (
-  ModuleFormerConfig,
-  ModuleFormerForCausalLM,
-  ModuleFormerForSequenceClassification,
+    ModuleFormerConfig,
+    ModuleFormerForCausalLM,
+    ModuleFormerForSequenceClassification,
 )
 from transformers import (
-  AutoConfig,
-  AutoModelForCausalLM,
-  AutoModelForSequenceClassification,
-  AutoTokenizer,
+    AutoConfig,
+    AutoModelForCausalLM,
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
 )
 
 from aigen.aigen import aigen
 from common import (
-  colors,
-  config,
-  cosine_similarity,
-  focus,
-  nist_beacon,
-  remove_invisible_characters,
-  ship,
-  wall,
+    colors,
+    config,
+    cosine_similarity,
+    focus,
+    nist_beacon,
+    remove_invisible_characters,
+    ship,
+    wall,
 )
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)

@@ -6,10 +6,17 @@
       "source.organizeImports": true
     },
   },
-  "black-formatter.args": ["--line-length", "88", "--exclude=lab/ModuleFormer/**"],
+  "black-formatter.args": [
+    "--line-length", 
+    "88", 
+    // "--extend-exclude", 
+    // "^lab/ModuleFormer/"
+  ],
   "isort.args":[
     "--profile", 
-    "black", 
+    "black",
+    "--skip-glob",
+    "lab/ModuleFormer/**"
   ],
   "isort.check": true,
   "prettier.enable": true,

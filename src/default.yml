@@ -61,7 +61,7 @@ hatred:
   info: at the gates
   model: cerebras/Cerebras-GPT-111M
   training:
-    type: lora
+    type: ia3
 
 # A mainframe.
 frame:

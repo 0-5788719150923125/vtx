@@ -63,6 +63,7 @@ def validation(config):
         "mode": {"type": "string", "allowed": ["transformer", "rnn"]},
         "device_map": {"type": "string" or "dict"},
         "profile": {"type": "boolean"},
+        "generation_profile": {"type": "string"},
         "gpu_index": {"type": "integer"},
         "precision": {"type": "integer", "allowed": [4, 8, 16, 32]},
         "low_memory": {"type": "boolean"},
@@ -281,7 +282,7 @@ class Cortex:
                 for adapter in adapters:
                     if not os.path.exists(
                         f"{adapter_dir}/{adapter}/adapter_model.bin"
-                    ) or not os.path.exists(
+                    ) and not os.path.exists(
                         f"{adapter_dir}/{adapter}/adapter_model.safetensors"
                     ):
                         adapter_dir = "/adapters/" + focus

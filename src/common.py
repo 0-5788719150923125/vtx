@@ -42,14 +42,17 @@ os.makedirs(cache_path)
 with open("/src/default.yml", "r") as config_file:
     default_config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-try:
+if os.path.exists("/env/config.yml"):
     with open("/env/config.yml", "r") as config_file:
         user_config = yaml.load(config_file, Loader=yaml.FullLoader)
         if "reddit" in user_config:
             user_config["reddit"]["enabled"] = True
         config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-except Exception as e:
-    logging.error(e)
+        logging.info("Successfully loaded your config.yml file.")
+else:
+    logging.warning(
+        "We did not find a configuration file at /env/config.yml. Loading default.yml."
+    )
     config = default_config
 
 
@@ -251,10 +254,7 @@ def get_identity(seed=None, style="original"):
 
 
 def random_string(length=10):
-
-    characters = (
-        string.ascii_letters + string.digits
-    )
+    characters = string.ascii_letters + string.digits
     random_string = "".join(random.choices(characters, k=length))
 
     return random_string
@@ -437,45 +437,53 @@ def get_past_datetime(time_description):
 
     return formatted_date_time
 
+
 def cosine_similarity(text1, text2):
-  """
-  Calculates the cosine similarity between two texts.
+    """
+    Calculates the cosine similarity between two texts.
 
-  Args:
-    text1 (str): The first text.
-    text2 (str): The second text.
+    Args:
+      text1 (str): The first text.
+      text2 (str): The second text.
 
-  Returns:
-    float: The cosine similarity score between the texts.
-  """
+    Returns:
+      float: The cosine similarity score between the texts.
+    """
 
-  # Lowercase and tokenize both texts
-  text1 = text1.lower()
-  text2 = text2.lower()
-  tokens1 = word_tokenize(text1)
-  tokens2 = word_tokenize(text2)
+    # Lowercase and tokenize both texts
+    text1 = text1.lower()
+    text2 = text2.lower()
+    tokens1 = word_tokenize(text1)
+    tokens2 = word_tokenize(text2)
 
-  # Remove stop words from both tokenized texts
-  stop_words = set(stopwords.words('english'))
-  filtered_tokens1 = [token for token in tokens1 if token not in stop_words]
-  filtered_tokens2 = [token for token in tokens2 if token not in stop_words]
+    # Remove stop words from both tokenized texts
+    stop_words = set(stopwords.words("english"))
+    filtered_tokens1 = [token for token in tokens1 if token not in stop_words]
+    filtered_tokens2 = [token for token in tokens2 if token not in stop_words]
 
-  # Create a set containing unique keywords from both texts
-  unique_keywords = set(filtered_tokens1 + filtered_tokens2)
+    # Create a set containing unique keywords from both texts
+    unique_keywords = set(filtered_tokens1 + filtered_tokens2)
 
-  # Create feature vectors for both texts
-  feature_vector1 = [1 if token in filtered_tokens1 else 0 for token in unique_keywords]
-  feature_vector2 = [1 if token in filtered_tokens2 else 0 for token in unique_keywords]
+    # Create feature vectors for both texts
+    feature_vector1 = [
+        1 if token in filtered_tokens1 else 0 for token in unique_keywords
+    ]
+    feature_vector2 = [
+        1 if token in filtered_tokens2 else 0 for token in unique_keywords
+    ]
 
-  # Calculate cosine similarity
-  dot_product = sum(a * b for a, b in zip(feature_vector1, feature_vector2))
-  norm_product = (sum(a**2 for a in feature_vector1) ** 0.5) * (sum(b**2 for b in feature_vector2) ** 0.5)
+    # Calculate cosine similarity
+    dot_product = sum(a * b for a, b in zip(feature_vector1, feature_vector2))
+    norm_product = (sum(a**2 for a in feature_vector1) ** 0.5) * (
+        sum(b**2 for b in feature_vector2) ** 0.5
+    )
 
-  # Prevent division by 0
-  if norm_product == 0:
-    return 0
+    # Prevent division by 0
+    if norm_product == 0:
+        return 0
 
-  return dot_product / norm_product
+    return dot_product / norm_product
+
 
 bullets = {
     "⠠",

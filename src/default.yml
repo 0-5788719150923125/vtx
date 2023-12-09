@@ -42,6 +42,13 @@ ghost:
   training:
     type: "lora"
 
+# A swarm of small models.
+ouroboros:
+  model: EleutherAI/pythia-70m
+  info: intelligence agency
+  training:
+    type: "lora"
+
 # A mainframe.
 frame:
   model: ibm/MoLM-350M-4B
@@ -113,13 +120,12 @@ toe:
     type: "loha"
 
 transformers:
-  # All generation settings come from here:
-  # https://huggingface.co/docs/transformers/main_classes/text_generation
+  # Generation settings come from here: https://huggingface.co/docs/transformers/main_classes/text_generation
   generation:
     default:
       do_sample: True
       min_new_tokens: 11
-      max_new_tokens: 222
+      max_new_tokens: 333
       temperature: 0.9
       eta_cutoff: 0.0003
       penalty_alpha: 0.6
@@ -136,7 +142,7 @@ transformers:
       eta_cutoff: 0.0003
       penalty_alpha: 0.6
       top_k: 4
-      repetition_penalty: 1.23
+      repetition_penalty: 1.0023
       # no_repeat_ngram_size: 13
       low_memory: False
     longform:

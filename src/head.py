@@ -366,13 +366,10 @@ class Cortex:
                     return
         self.queue.pop(0)
 
-    def check_similarity(self, ctx, message):
+    def check_similarity(self, ctx, message, threshold=0.7):
         for memory in ctx:
             score = cosine_similarity(memory["message"], message)
-            if score > 0.7:
-                print(
-                    f"{score}\n => {memory['message']}\nwas similar to\n => {message}\nso, we removed it"
-                )
+            if score > threshold:
                 return False
         return True
 

@@ -48,9 +48,9 @@ if os.path.exists("/env/config.yml"):
         if "reddit" in user_config:
             user_config["reddit"]["enabled"] = True
         config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-        logging.info("Successfully loaded your config.yml file.")
+        print("Successfully loaded your config.yml file.")
 else:
-    logging.warning(
+    print(
         "We did not find a configuration file at /env/config.yml. Loading default.yml."
     )
     config = default_config

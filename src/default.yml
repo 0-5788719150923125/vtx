@@ -43,11 +43,25 @@ ghost:
     type: "lora"
 
 # A swarm of small models.
-ouroboros:
+chaos:
   model: EleutherAI/pythia-70m
   info: intelligence agency
   training:
     type: "lora"
+
+# Train on conversations.
+envy:
+  info: the grass is greener
+  model: facebook/opt-350m
+  training:
+    type: lora
+
+# A GPT2-like model.
+hatred:
+  info: at the gates
+  model: cerebras/Cerebras-GPT-111M
+  training:
+    type: lora
 
 # A mainframe.
 frame:
@@ -124,7 +138,7 @@ transformers:
   generation:
     default:
       do_sample: True
-      min_new_tokens: 11
+      min_new_tokens: 1
       max_new_tokens: 333
       temperature: 0.9
       eta_cutoff: 0.0003
@@ -143,7 +157,6 @@ transformers:
       penalty_alpha: 0.6
       top_k: 4
       repetition_penalty: 1.0023
-      # no_repeat_ngram_size: 13
       low_memory: False
     longform:
       do_sample: True

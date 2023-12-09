@@ -493,7 +493,9 @@ class Cortex:
 
         start = time.time()
 
-        generation_config = self.transformers_config["generation"][generation_profile]
+        generation_config = self.transformers_config["generation"][
+            self.config.get("generation_profile", generation_profile)
+        ]
         temperature = (
             temperature
             if temperature is not None

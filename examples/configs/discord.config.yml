@@ -27,8 +27,6 @@ discord:
   servers:
     830300981966143488: # src
       persona: source
-      subscribe:
-        - new_reddit_submission
       webhook: https://discord.com/api/webhooks/JCDsa...
       tags:
         - test

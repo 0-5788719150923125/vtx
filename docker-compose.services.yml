@@ -44,14 +44,14 @@ services:
 
   bit:
     image: tloncorp/vere
-    command: /bin/start-urbit --loom=30
+    command: /bin/start-urbit --loom=29
     restart: 'always'
     stdin_open: true
     deploy:
       resources:
         limits:
-          cpus: '0.25'
-          memory: 1GB
+          cpus: '0.5'
+          memory: 2GB
     volumes:
       - ./data/urbit:/urbit
     ports:

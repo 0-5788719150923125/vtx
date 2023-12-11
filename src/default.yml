@@ -46,6 +46,7 @@ ghost:
 chaos:
   model: EleutherAI/pythia-70m
   info: intelligence agency
+  generation_profile: lowpenalty
   training:
     type: "lora"
 
@@ -53,13 +54,15 @@ chaos:
 envy:
   info: the grass is greener
   model: facebook/opt-350m
+  generation_profile: lowpenalty
   training:
     type: lora
 
 # A GPT2-like model.
-hatred:
+malice:
   info: at the gates
   model: cerebras/Cerebras-GPT-111M
+  generation_profile: lowpenalty
   training:
     type: ia3
 
@@ -169,6 +172,18 @@ transformers:
       repetition_penalty: 1.5
       encoder_repetition_penalty: 0.999
       no_repeat_ngram_size: 9
+      low_memory: False
+    lowpenalty:
+      do_sample: True
+      min_new_tokens: 1
+      max_new_tokens: 333
+      temperature: 0.9
+      eta_cutoff: 0.0003
+      penalty_alpha: 0.6
+      top_k: 4
+      repetition_penalty: 1.23
+      encoder_repetition_penalty: 0.999
+      # no_repeat_ngram_size: 15
       low_memory: False
 
 

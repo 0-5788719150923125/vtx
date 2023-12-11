@@ -1,7 +1,7 @@
 FROM nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND="noninteractive"
-ENV TRANSFORMERS_CACHE="/tmp"
+ENV HF_HOME="/tmp"
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

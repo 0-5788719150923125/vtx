@@ -44,11 +44,16 @@ with open("/src/default.yml", "r") as config_file:
 
 if os.path.exists("/env/config.yml"):
     with open("/env/config.yml", "r") as config_file:
-        user_config = yaml.load(config_file, Loader=yaml.FullLoader)
-        if "reddit" in user_config:
-            user_config["reddit"]["enabled"] = True
-        config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-        print("Successfully loaded your config.yml file.")
+        text = config_file.read()
+        if text == "":
+            print("The file at /env/config.yml was empty, so we loaded defaults.")
+            config = default_config
+        else:
+            user_config = yaml.load(text, Loader=yaml.FullLoader)
+            if "reddit" in user_config:
+                user_config["reddit"]["enabled"] = True
+            config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
+            print("Successfully loaded your config.yml file.")
 else:
     print(
         "We did not find a configuration file at /env/config.yml. Loading default.yml."

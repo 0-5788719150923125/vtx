@@ -128,6 +128,7 @@ toe:
     type: "lora"
     r: 4
     alpha: 16
+    dropout: 0.1
     bias: "none"
     target_modules:
       - k_proj

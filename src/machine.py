@@ -20,7 +20,7 @@ if os.environ.get("DEV_MODE", "false") == "true":
 def main():
     allowed_services = [
         "source",
-        "bit",
+        "urbit",
         "book",
         "smtp",
         "telegram",

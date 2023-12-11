@@ -55,8 +55,8 @@ async def generate():
             "prompt": "monolithic stone robot head with a large (wooden tree branch:1.2) growing into his face###(ugly, bad quality, worst quality, medium quality, low resolution, medium resolution, bad hands, blurry, distorted, twisted, watermark, mutant, amorphous, elongated, elastigirl, duplicate, tumor, cancer, fat, pregnant:1.3)",
             "models": [
                 # "Deliberate 3.0",
-                "Deliberate",
-                # "DreamShaper",
+                # "Deliberate",
+                "Dreamshaper",
                 # "GhostMix",
             ],
             "source": source,

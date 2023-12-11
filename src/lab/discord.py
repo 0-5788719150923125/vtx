@@ -9,7 +9,6 @@ import threading
 from pprint import pprint
 
 import discord
-import ray
 import requests
 from cerberus import Validator
 from discord import app_commands
@@ -27,15 +26,11 @@ def main(config):
     if not result:
         return
     asyncio.run(run_client(config))
-    # wrap.remote(config)
 
 
 if __name__ == "__main__":
     main(config)
 
-@ray.remote(num_cpus=1)
-def wrap(config):
-    asyncio.run(run_client(config))
 
 # Subscribe to a Discord bot via token
 async def run_client(config):
@@ -254,12 +249,14 @@ class Client(discord.Client):
 
     async def send_dm(self, bias):
         user = self.get_user(bias)
-        message = random.choice([
-            "Pardon, are you busy?",
-            "Hey, do you have a minute?",
-            "Can I ask you a question?",
-            "I need your help."
-        ])
+        message = random.choice(
+            [
+                "Pardon, are you busy?",
+                "Hey, do you have a minute?",
+                "Can I ask you a question?",
+                "I need your help.",
+            ]
+        )
         if user:
             await user.send(message)
             print(colors.RED + "ONE@DISCORD: " + colors.WHITE + "DM: " + message)

@@ -46,7 +46,7 @@ if os.path.exists("/env/config.yml"):
     with open("/env/config.yml", "r") as config_file:
         user_config = yaml.load(config_file, Loader=yaml.FullLoader)
         config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-        if "reddit" in user_config:
+        if "reddit" in config:
             config["reddit"]["enabled"] = True
         print("Successfully loaded your config.yml file.")
 else:

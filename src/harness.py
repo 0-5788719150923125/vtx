@@ -15,8 +15,8 @@ p = model_config["training"]
 devices = None
 device_map = p.get("device_map", "auto")
 # if focus in ["frame"]:
-#     os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 #     devices = device_map.split(":")[1]
+#     os.environ["CUDA_VISIBLE_DEVICES"] = str(devices)
 
 from lightning.pytorch import loggers
 from moduleformer import (

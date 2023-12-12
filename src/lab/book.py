@@ -66,6 +66,7 @@ def validation(config):
                         "schema": {
                             "title": {"type": "string"},
                             "prompt": {"type": "string"},
+                            "bias": {"type": "integer"},
                             "frequency": {"type": "float"},
                             "tags": {"type": "list"},
                         },
@@ -117,6 +118,7 @@ class Ink:
         self.model_max_length = head.ctx.get_max_length()
         self.title = ""
         self.prompt = ""
+        self.bias = ""
         self.staged = ""
         self.full_doc = ""
         self.replace_at_index = 0
@@ -198,10 +200,12 @@ class Ink:
         try:
             self.type = t
             self.tags = entry.get("tags", [])
+            # self.bias = entry.get("bias", None)
             self.create_prompt(entry)
             self.chunk_prompt()
             output = await head.ctx.prompt(
                 prompt=self.staged,
+                # bias=self.bias,
                 min_new_tokens=self.new_tokens - 33,
                 max_new_tokens=self.new_tokens,
                 eos_tokens=[".", "?", "!", '."', '?"', '!"'],

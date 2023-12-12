@@ -64,7 +64,7 @@ malice:
   model: cerebras/Cerebras-GPT-111M
   generation_profile: lowpenalty
   training:
-    type: ia3
+    type: lora
 
 # A mainframe.
 frame:
@@ -86,7 +86,6 @@ aura:
 mind:
   info: use your heads
   model: EleutherAI/gpt-neo-1.3B
-  profile: True
   training:
     type: "lora"
 
@@ -178,7 +177,7 @@ transformers:
       min_new_tokens: 1
       max_new_tokens: 333
       temperature: 0.9
-      eta_cutoff: 0.0003
+      eta_cutoff: 0.002
       penalty_alpha: 0.6
       top_k: 4
       repetition_penalty: 1.23

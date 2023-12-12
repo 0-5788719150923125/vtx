@@ -26,7 +26,7 @@ def main(config) -> None:
         day_of_week=settings.get("day", "tue"),
         hour=settings.get("hour", 8),
         minute=settings.get("minute", 0),
-        timezone="US/Central",
+        timezone=settings.get("timezone", "US/Central"),
     )
     scheduler.start()
     while True:

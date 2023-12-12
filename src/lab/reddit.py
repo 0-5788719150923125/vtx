@@ -103,7 +103,6 @@ async def client(config):
             subscribe_submissions(reddit, config),
             stalker(reddit, config),
             manage_submissions(reddit, config),
-            receive_events(),
         )
 
 
@@ -129,51 +128,31 @@ async def follow_victims(reddit, config):
             logging.error(f"Failed to stalk {user}. Was their account deleted?")
 
 
-queued = []
-
-
-async def receive_events():
-    while True:
-        await asyncio.sleep(6.66)
-        item = consumer("book_updated")
-        if item:
-            queued.append(item)
-
-
-my_tags = []
-
-
 async def manage_submissions(reddit, config):
-    global my_tags
-    global queued
     subreddits = config["reddit"]["subs"]
     cache_miss = {}
     while True:
         try:
             await asyncio.sleep(6.66)
-            if len(queued) == 0:
+            item = consumer("book_updated")
+            if not item:
                 continue
-            item = queued.pop(0)
+
             title = item["title"]
             content = item["content"]
 
-            if cache_miss.get(title, None) is None:
+            if cache_miss.get(title) is None:
                 cache_miss[title] = 0
 
-            # This is such a stupid hack, because passing information through
-            # multiple events is hard.
-            my_tags = item["tags"]
             for name in subreddits:
-                sub = subreddits.get(name)
-                allowed = False
-                if sub is None:
+                sub = subreddits.get(name, {})
+                if "tags" not in sub:
                     continue
-                if "tags" in sub:
-                    target = sub["tags"][0]
-                    if target in my_tags:
-                        allowed = True
-                if not allowed:
+
+                target = sub["tags"][0]
+                if target not in item["tags"]:
                     continue
+
                 # We submit to the first tag found
                 subreddit = await reddit.subreddit(name)
 
@@ -202,10 +181,10 @@ async def manage_submissions(reddit, config):
                         await submission.mod.approve()
                     except Exception as e:
                         logging.error(e)
+                break
 
-            # my_tags = []
         except Exception as e:
-            logging.error(e)
+            traceback.format_exc()
 
 
 async def stalker(reddit, config):
@@ -357,32 +336,26 @@ async def subscribe_submissions(reddit, config):
 
         subreddits = await reddit.subreddit("+".join(active))
 
-        global my_tags
         async for submission in subreddits.stream.submissions(skip_existing=True):
             if "tags" in subs[submission.subreddit.display_name]:
                 await submission.load()
                 await submission.author.load()
                 subreddit = await reddit.subreddit(submission.subreddit.display_name)
                 await subreddit.load()
-                try:
-                    sub_tags = subs[submission.subreddit.display_name].get("tags")
-                    tags = sub_tags + my_tags
-                    producer(
-                        {
-                            "event": "new_reddit_submission",
-                            "title": submission.title,
-                            "description": submission.selftext,
-                            "username": "/u/" + submission.author.name,
-                            "avatar_url": submission.author.icon_img,
-                            "thumbnail": subreddit.community_icon,
-                            "link": submission.shortlink,
-                            "footer": "/r/" + subreddit.display_name,
-                            "tags": set(tags),
-                        },
-                    )
-                    my_tags = []
-                except Exception as e:
-                    logging.error(e)
+                tags = subs[submission.subreddit.display_name].get("tags")
+                producer(
+                    {
+                        "event": "new_reddit_submission",
+                        "title": submission.title,
+                        "description": submission.selftext,
+                        "username": "/u/" + submission.author.name,
+                        "avatar_url": submission.author.icon_img,
+                        "thumbnail": subreddit.community_icon,
+                        "link": submission.shortlink,
+                        "footer": "/r/" + subreddit.display_name,
+                        "tags": set(tags),
+                    },
+                )
 
             frequency = subs[submission.subreddit.display_name].get("frequency", 0)
             if config["reddit"].get("stalk"):

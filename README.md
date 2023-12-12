@@ -19,6 +19,7 @@ To build a trivial, opinionated framework for human cloning experiments. Our goa
 - [metrics](http://localhost:6006)
 - [IPFS](http://localhost:9090)
 - [Urbit](http://localhost:9099)
+- [Petals](https://health.petals.dev/)
 
 # data
 

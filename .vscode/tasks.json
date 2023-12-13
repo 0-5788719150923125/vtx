@@ -91,7 +91,7 @@
           "command": "docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml run -e FOCUS=${input:env} lab python3 harness.py"
         },
         "runOptions": {
-          "instanceLimit": 3
+          "instanceLimit": 5
         },
       },
       {
@@ -156,7 +156,7 @@
         "type": "pickString",
         "id": "env",
         "description": "Which model should I focus on?",
-        "options": ["src", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]
+        "options": ["src", "one", "two", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]
       },
       {
         "type": "promptString",

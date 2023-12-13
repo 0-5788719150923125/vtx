@@ -292,7 +292,7 @@ def main():
         mine = json.loads(output.decode("utf-8"))
         craft = f"/p2p/{mine['ID']}"
         initial_peers.append(craft)
-        print(f"{color.GREEN}SHIP-0: {craft}")
+        print(f"{colors.GREEN}SHIP-0:{colors.WHITE} {craft}")
 
         gradient_accumulation_steps = 1
         strategy = HivemindStrategy(

@@ -186,7 +186,7 @@ class Client(discord.Client):
                 item = consumer("publish_image")
                 if item:
                     file = discord.File(
-                        io.BytesIO(base64.b64decode(item["image"])),
+                        io.BytesIO(base64.b64decode(item["response"])),
                         filename="nft.webp",
                     )
                     channel = self.get_channel(item["channel_id"])
@@ -240,10 +240,10 @@ class Client(discord.Client):
     #             logging.error(e)
     #             self.discord_task = self.loop.create_task(self.think())
 
-    def analyze_image(self, urls):
+    async def analyze_image(self, urls):
         preds = []
         for url in urls:
-            pred = eye.ctx.analyze_image(url)
+            pred = await eye.ctx.analyze_image(url)
             preds.append(pred)
         return preds
 
@@ -306,23 +306,19 @@ class Client(discord.Client):
                 if seq in embed.url.lower():
                     urls.append(embed.url)
         if len(urls) > 0:
-            preds = self.analyze_image(urls)
+            preds = await self.analyze_image(urls)
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
-            # await message.channel.send(pred)
-            print(colors.RED + "ONE@DISCORD: " + colors.WHITE + pred)
-            # if message.content == "":
-            #     message.content = pred
+            await message.channel.send(pred)
+            print(colors.GREEN + "ONE@DISCORD: " + colors.WHITE + pred)
         elif len(message.attachments) > 0:
             for attachment in message.attachments:
                 urls.append(attachment.url)
-            preds = self.analyze_image(urls)
+            preds = await self.analyze_image(urls)
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
-            # await message.channel.send(pred)
-            print(colors.RED + "ONE@DISCORD: " + colors.WHITE + pred)
-            # if message.content == "":
-            #     message.content = pred
+            await message.channel.send(pred)
+            print(colors.GREEN + "ONE@DISCORD: " + colors.WHITE + pred)
 
         # We need to place all of the following logic into a dedicated function. We need to
         # check the incoming message for a URL, and if it exists, we need to return. We need

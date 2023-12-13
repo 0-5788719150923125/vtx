@@ -13,29 +13,62 @@ from events import consumer, producer
 
 
 def main(config):
-    asyncio.run(monitor())
+    asyncio.run(gather())
 
 
-async def monitor():
+async def gather():
+    await asyncio.gather(
+        monitor("generate_image", "publish_image", generate),
+        monitor("caption_image", "publish_caption", caption),
+    )
+
+
+async def monitor(subscribe_event, publish_event, func):
     while True:
         try:
             await asyncio.sleep(6.66)
-            item = consumer("generate_image")
+            item = consumer(subscribe_event)
             if item:
-                image = await generate()
+                response = await func(**item)
                 producer(
                     {
                         **item,
-                        "event": "publish_image",
-                        "response": "my response",
-                        "image": image,
+                        "event": publish_event,
+                        "response": response,
                     },
                 )
         except Exception as e:
             logging.error(e)
 
 
-async def generate():
+async def caption(*args, **kwargs):
+    api = "http://localhost:5000/caption"
+
+    try:
+        data = {"source": kwargs["image"]}
+
+        timeout = aiohttp.ClientTimeout(total=3600)
+
+        print(
+            f"{colors.RED}ONE@HORDE:{colors.WHITE} Requesting a caption from the AI Horde. Please wait."
+        )
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.get(api, json=data) as response:
+                response_data = await response.json()
+                if response.status != 200:
+                    logging.error(
+                        f"GET request failed with status code: {response.status}"
+                    )
+                    logging.error(response_data["err"])
+                    return response_data["err"]
+
+                return response_data["data"]
+
+    except Exception as e:
+        logging.error(e)
+
+
+async def generate(*args, **kwargs):
     api = "http://localhost:5000/generate"
 
     source = None

@@ -1,9 +1,14 @@
+import asyncio
+import base64
 import io
+import time
 
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from PIL import Image
 from transformers import AutoImageProcessor, ViTForImageClassification
+
+from events import consumer, producer
 
 
 class Vision:
@@ -36,35 +41,33 @@ class Vision:
                 print(f"Error processing image: {e}")
             return None
 
-    def analyze_image(self, image):
-        # url = "http://images.cocodataset.org/val2017/000000039769.jpg"
+    async def analyze_image(self, image):
+        try:
+            url = image
+            response = requests.get(url)
+            if response.status_code != 200:
+                raise Exception(f"Error downloading image: {response.status_code}")
+            data = base64.b64encode(response.content).decode("utf-8")
+            producer(
+                {"event": "caption_image", "image": data},
+            )
+            count = 0
+            while count < 30:
+                await asyncio.sleep(6.66)
+                count += 1
+                item = consumer("publish_caption")
+                if item:
+                    return item["response"]
+        except Exception as e:
+            logging.error(e)
+        # If the AI Horde fails, use a local model
         processed = self.preprocess_image(image)
-        # image = Image.open("/data/meme.webp")
-
         inputs = self.image_processor(images=processed, return_tensors="pt")
         outputs = self.model(**inputs)
         logits = outputs.logits
-        # model predicts one of the 1000 ImageNet classes
         predicted_class_idx = logits.argmax(-1).item()
         prediction = self.model.config.id2label[predicted_class_idx]
         return prediction
 
 
 ctx = Vision()
-
-# ctx = cortex(config[focus], config["personas"], config["disposition"], focus)
-# reload_interval = config[focus].get("reload_interval", 0)
-# if reload_interval > 0:
-#     scheduler = BackgroundScheduler()
-#     scheduler.add_job(
-#         cortex,
-#         args=(
-#             config[focus],
-#             config["personas"],
-#             config["disposition"],
-#             focus,
-#         ),
-#         trigger="interval",
-#         minutes=reload_interval,
-#     )
-#     scheduler.start()

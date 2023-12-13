@@ -67,7 +67,6 @@ def main():
     base_model = model_config["model"]
     model_folder = "/data/models/" + focus
     launch_model = None
-    tokenizer_model = base_model
     fresh_logs = False
     resume = p.get("resume", False)
     use_petals = model_config.get("petals", False)
@@ -75,12 +74,10 @@ def main():
 
     regen = p.get("regen", False)
     if regen:
-        if os.path.exists("/data/datasets/" + focus):
-            shutil.rmtree("/data/datasets/" + focus)
+        shutil.rmtree(f"/data/datasets/{focus}", ignore_errors=True)
 
     # Resume training on an existing model, or start with a fresh base model
     if resume == True:
-        fresh_logs = False
         if not os.path.exists(
             "/data/models/" + focus + "/pytorch_model.bin"
         ) and not os.path.exists("/data/models/" + focus + "/model.safetensors"):
@@ -90,10 +87,8 @@ def main():
         fresh_logs = True
         launch_model = base_model
         model_folder = None
-        if os.path.exists("/data/models/" + focus):
-            shutil.rmtree("/data/models/" + focus)
-        if os.path.exists("/data/embeddings/" + focus):
-            shutil.rmtree("/data/embeddings/" + focus)
+        shutil.rmtree(f"/data/models/{focus}", ignore_errors=True)
+        shutil.rmtree(f"/data/embeddings/{focus}", ignore_errors=True)
 
     tuning_mode = None
     pretrain_config = None
@@ -184,7 +179,7 @@ def main():
         output_dir = "/data/models/" + focus
 
     tokenizer = AutoTokenizer.from_pretrained(
-        tokenizer_model,
+        base_model,
         cache_dir="/data/models",
         padding="max_length",
         padding_side=p.get("padding_side", "left"),
@@ -218,7 +213,7 @@ def main():
     prototype = aigen(
         model=launch_model,
         model_folder=model_folder,
-        tokenizer_model=tokenizer_model,
+        tokenizer=tokenizer,
         config=pretrain_config,
         petals=use_petals,
         cache_dir="/data/models",
@@ -278,8 +273,7 @@ def main():
     # Erase old logs
     log_path = "/data/logs/" + focus
     if fresh_logs == True:
-        if os.path.exists(log_path):
-            shutil.rmtree(log_path)
+        shutil.rmtree(log_path, ignore_errors=True)
 
     os.makedirs(log_path, exist_ok=True)
 
@@ -507,10 +501,7 @@ def build_inputs(c, tokenizer):
                         duplicate -= 1
                         continue
 
-                    try:
-                        shutil.rmtree(f"/data/datasets/{new_path}")
-                    except:
-                        pass
+                    shutil.rmtree(f"/data/datasets/{new_path}", ignore_errors=True)
 
                     os.makedirs(f"/data/datasets/{new_path}", exist_ok=True)
 

@@ -52,6 +52,8 @@ if os.path.exists("/env/config.yml"):
             user_config = yaml.load(text, Loader=yaml.FullLoader)
             if "reddit" in user_config:
                 user_config["reddit"]["enabled"] = True
+            if "discord" in user_config and "horde" in user_config:
+                user_config["discord"]["horde_enabled"] = True
             config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
             print("Successfully loaded your config.yml file.")
 else:

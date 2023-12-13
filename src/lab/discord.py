@@ -58,6 +58,7 @@ def validation(config):
         "mention_any_frequency": {"type": "float"},
         "bannedUsers": {"type": "list"},
         "bannedServers": {"type": "list"},
+        "horde_enabled": {"type": "boolean"},
         "servers": {
             "type": "dict",
             "keysrules": {"type": "integer"},
@@ -131,20 +132,22 @@ class Client(discord.Client):
         # Register slash commands
         tree = app_commands.CommandTree(self)
 
-        @tree.command(name="x", description="Plant a seed.")
-        async def x_command(interaction):
-            message = await interaction.response.send_message(
-                "Allow me to create something for you.",
-                ephemeral=True,
-                delete_after=3600,
-            )
-            producer(
-                {
-                    "event": "generate_image",
-                    "source": "discord",
-                    "channel_id": interaction.channel.id,
-                },
-            )
+        if self.config["discord"].get("horde_enabled", False):
+
+            @tree.command(name="x", description="Plant a seed.")
+            async def x_command(interaction):
+                message = await interaction.response.send_message(
+                    "Allow me to create something for you.",
+                    ephemeral=True,
+                    delete_after=3600,
+                )
+                producer(
+                    {
+                        "event": "generate_image",
+                        "source": "discord",
+                        "channel_id": interaction.channel.id,
+                    },
+                )
 
         await tree.sync()
 

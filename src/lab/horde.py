@@ -78,6 +78,9 @@ async def generate(config, *args, **kwargs):
         if os.path.exists("/data/source.jpg"):
             with open("/data/source.jpg", "rb") as file:
                 source = base64.b64encode(file.read()).decode("utf-8")
+        else:
+            with open("/src/static/source.jpg", "rb") as file:
+                source = base64.b64encode(file.read()).decode("utf-8")
 
         if os.path.exists("/data/mask.jpg"):
             with open("/data/mask.jpg", "rb") as file:

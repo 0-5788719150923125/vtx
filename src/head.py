@@ -490,7 +490,7 @@ class Cortex:
         max_attempts = 10
         success = False
         seeded = False
-        output = None
+        output = False
 
         start = time.time()
 

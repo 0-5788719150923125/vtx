@@ -8,6 +8,9 @@ services:
     env_file:
       - .env
 
+  # agi:
+  #   image: trueagi/hyperon
+
   tbd:
     image: ghcr.io/0-5788719150923125/lab:latest
     command: tensorboard --logdir /data/logs --bind_all --samples_per_plugin scalars=999999999

@@ -3,6 +3,7 @@
         "ms-python.python",
         "ms-python.black-formatter",
         "ms-python.isort",
-        "mhutchie.git-graph"
+        "mhutchie.git-graph",
+        "ms-azuretools.vscode-docker"
     ]
 }

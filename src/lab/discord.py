@@ -309,7 +309,7 @@ class Client(discord.Client):
             preds = await self.analyze_image(urls)
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
-            await message.channel.send(pred)
+            # await message.channel.send(pred)
             print(colors.GREEN + "ONE@DISCORD: " + colors.WHITE + pred)
         elif len(message.attachments) > 0:
             for attachment in message.attachments:
@@ -317,7 +317,7 @@ class Client(discord.Client):
             preds = await self.analyze_image(urls)
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
-            await message.channel.send(pred)
+            # await message.channel.send(pred)
             print(colors.GREEN + "ONE@DISCORD: " + colors.WHITE + pred)
 
         # We need to place all of the following logic into a dedicated function. We need to

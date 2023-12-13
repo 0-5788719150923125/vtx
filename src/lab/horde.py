@@ -84,16 +84,11 @@ async def generate(*args, **kwargs):
                 mask = base64.b64encode(file.read()).decode("utf-8")
 
         data = {
-            # "prompt": "((monolithic stone robot head)) with a (((large tree branch growing into his face))), head and shoulders are visible, head is looking left, BadDream###nude, naked, ((bad quality, worst quality)), (((eyes, mouth, nose, legs, arms, hands, feet, teeth)))",
             "prompt": "monolithic stone robot head with a large (wooden tree branch:1.2) growing into his face###(ugly, bad quality, worst quality, medium quality, low resolution, medium resolution, bad hands, blurry, distorted, twisted, watermark, mutant, amorphous, elongated, elastigirl, duplicate, tumor, cancer, fat, pregnant:1.3)",
             "models": [
-                # "Deliberate 3.0",
-                # "Deliberate",
                 "Dreamshaper",
-                # "GhostMix",
             ],
             "source": source,
-            # "mask": mask,
             "source_processing": "img2img",
             "image_is_control": False,
             "return_control_map": False,
@@ -107,7 +102,7 @@ async def generate(*args, **kwargs):
             "clip_skip": 1,
             "hires_fix": False,
             "karras": False,
-            # "upscale": "x2",
+            "upscale": "x2",
             "tis": [
                 # {"name": "7808", "strength": 1}, ## easynegative
                 # {"name": "4629", "strength": 1}, ## ng_deepnegative_v1_75t

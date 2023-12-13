@@ -253,5 +253,5 @@ def build_static_website():
     time.sleep(6.66)
     if not alive:
         run_shell_command(
-            "hugo server --source '/book' --port 42000 --noBuildLock --quiet"
+            "hugo server -F --source '/book' --port 42000 --noBuildLock --quiet"
         )

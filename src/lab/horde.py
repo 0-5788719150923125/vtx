@@ -13,23 +13,23 @@ from events import consumer, producer
 
 
 def main(config):
-    asyncio.run(gather())
+    asyncio.run(gather(config))
 
 
-async def gather():
+async def gather(config):
     await asyncio.gather(
-        monitor("generate_image", "publish_image", generate),
-        monitor("caption_image", "publish_caption", caption),
+        monitor("generate_image", "publish_image", generate, config),
+        monitor("caption_image", "publish_caption", caption, config),
     )
 
 
-async def monitor(subscribe_event, publish_event, func):
+async def monitor(subscribe_event, publish_event, func, config):
     while True:
         try:
             await asyncio.sleep(6.66)
             item = consumer(subscribe_event)
             if item:
-                response = await func(**item)
+                response = await func(config["horde"], **item)
                 producer(
                     {
                         **item,
@@ -41,7 +41,7 @@ async def monitor(subscribe_event, publish_event, func):
             logging.error(e)
 
 
-async def caption(*args, **kwargs):
+async def caption(config, *args, **kwargs):
     api = "http://localhost:5000/caption"
 
     try:
@@ -68,7 +68,7 @@ async def caption(*args, **kwargs):
         logging.error(e)
 
 
-async def generate(*args, **kwargs):
+async def generate(config, *args, **kwargs):
     api = "http://localhost:5000/generate"
 
     source = None
@@ -83,31 +83,49 @@ async def generate(*args, **kwargs):
             with open("/data/mask.jpg", "rb") as file:
                 mask = base64.b64encode(file.read()).decode("utf-8")
 
+        height = config.get("height", 256)
+        width = config.get("width", 256)
+
+        assert height % 64 == 0, "Image height should be a multiple of 64."
+        assert width % 64 == 0, "Image width should be a multiple of 64."
+
+        prompt = config.get("prompt")
+        if prompt is None:
+            prompt = "monolithic stone robot head with a large (wooden tree branch:1.2) growing into his face###(ugly, bad quality, worst quality, medium quality, low resolution, medium resolution, bad hands, blurry, distorted, twisted, watermark, mutant, amorphous, elongated, elastigirl, duplicate, tumor, cancer, fat, pregnant:1.3)"
+
+        negative_prompt = config.get("negative")
+        if negative_prompt is not None:
+            prompt += f"###{negative_prompt}"
+
         data = {
-            "prompt": "monolithic stone robot head with a large (wooden tree branch:1.2) growing into his face###(ugly, bad quality, worst quality, medium quality, low resolution, medium resolution, bad hands, blurry, distorted, twisted, watermark, mutant, amorphous, elongated, elastigirl, duplicate, tumor, cancer, fat, pregnant:1.3)",
-            "models": [
-                "Dreamshaper",
-            ],
+            "prompt": prompt,
+            "models": config.get(
+                "models",
+                [
+                    "Dreamshaper",
+                ],
+            ),
             "source": source,
             "source_processing": "img2img",
             "image_is_control": False,
             "return_control_map": False,
-            "height": 512,
-            "width": 512,
-            "sampler_name": "k_euler_a",
-            "steps": 30,
-            "control_type": "hed",
-            "denoising_strength": 0.7,
-            "cfg_scale": 8.0,
-            "clip_skip": 1,
-            "hires_fix": False,
-            "karras": False,
-            "upscale": "x2",
-            "tis": [
-                # {"name": "7808", "strength": 1}, ## easynegative
-                # {"name": "4629", "strength": 1}, ## ng_deepnegative_v1_75t
-                # {"name": "72437", "strength": 1} ## BadDream
-            ],
+            "height": height,
+            "width": width,
+            "sampler_name": config.get("sampler", "k_euler_a"),
+            "steps": config.get("steps", 30),
+            "control_type": config.get("control_type", "hed"),
+            "denoising_strength": config.get("denoising_strength", 0.7),
+            "cfg_scale": config.get("cfg_scale", 8.0),
+            "clip_skip": config.get("clip_skip", 1),
+            "hires_fix": config.get("hires_fix", False),
+            "karras": config.get("karras", False),
+            "upscale": config.get("upscale", None),
+            "tis": config.get(
+                "tis",
+                [
+                    # {"name": "72437", "strength": 1} ## BadDream
+                ],
+            ),
         }
 
         timeout = aiohttp.ClientTimeout(total=3600)

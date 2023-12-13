@@ -58,6 +58,12 @@ services:
       - 9099:80
       - 34343:34343/udp
 
+  uxo:
+    image: ghcr.io/0-5788719150923125/uxo:latest
+    network_mode: 'host'
+    env_file:
+      - .env
+
   # hrd:
   #   image: ghcr.io/haidra-org/ai-horde-worker
   #   env_file:

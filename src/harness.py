@@ -1,8 +1,11 @@
+import json
 import logging
 import math
 import os
 import random
+import re
 import shutil
+import subprocess
 import time
 
 import torch
@@ -261,12 +264,55 @@ def main():
     if strategy == "hivemind":
         from lightning_hivemind.strategy import HivemindStrategy
 
+        # initial_peers = p.get("initial_peers", None)
+        # Get my peers
+        command = "docker exec vtx-fil-1 ipfs swarm peers"
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        output, error = process.communicate()
+
+        peers = output.decode("utf-8").splitlines()
+
+        pattern = r"(/p2p/.*)"
+        initial_peers = []
+        for peer in peers:
+            match = re.search(pattern, peer)
+            if match:
+                initial_peers.append(match.group(1))
+                print(f"PIER-{peers.index(peer)}: {match.group(1)}")
+
+        # Get myself
+        command = "docker exec vtx-fil-1 ipfs id"
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        output, error = process.communicate()
+
+        mine = json.loads(output.decode("utf-8"))
+        craft = f"/p2p/{mine['ID']}"
+        initial_peers.append(craft)
+        print(f"{color.GREEN}SHIP-0: {craft}")
+
         gradient_accumulation_steps = 1
         strategy = HivemindStrategy(
             batch_size=batch_size,
             target_batch_size=p.get("target_batch_size", 8192),
-            initial_peers=p.get("initial_peers", None),
-            # use_ipfs=True,
+            initial_peers=initial_peers,
+            # initial_peers=[
+            #     # These came from a default Kubo config file's bootstrap peers.
+            #     # "/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt",
+            #     "/p2p/12D3KooWNbvFFq8kzS3eMonQYEmFyWTHboMZnHKr4XnN53gJKqhH",
+            #     # "/ip4/104.131.131.82/udp/4001/quic-v1/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
+            #     # "/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN",
+            #     # "/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa",
+            #     # "/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb",
+            # ],
+            # initial_peers=None,
+            # initial_peers=[
+            #     "/ip4/192.168.5.94/tcp/43945/p2p/12D3KooWJRFuYyM78oDvEi64R9S11aggTyWMSWXkDhei234HzqNQ"
+            # ],
+            use_ipfs=True,
             verbose=True,
         )
 

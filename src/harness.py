@@ -264,7 +264,6 @@ def main():
     if strategy == "hivemind":
         from lightning_hivemind.strategy import HivemindStrategy
 
-        # initial_peers = p.get("initial_peers", None)
         # Get my peers
         command = "docker exec vtx-fil-1 ipfs swarm peers"
         process = subprocess.Popen(
@@ -296,22 +295,10 @@ def main():
 
         gradient_accumulation_steps = 1
         strategy = HivemindStrategy(
+            run_id="src",
             batch_size=batch_size,
             target_batch_size=p.get("target_batch_size", 8192),
             initial_peers=initial_peers,
-            # initial_peers=[
-            #     # These came from a default Kubo config file's bootstrap peers.
-            #     # "/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt",
-            #     "/p2p/12D3KooWNbvFFq8kzS3eMonQYEmFyWTHboMZnHKr4XnN53gJKqhH",
-            #     # "/ip4/104.131.131.82/udp/4001/quic-v1/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
-            #     # "/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN",
-            #     # "/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa",
-            #     # "/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb",
-            # ],
-            # initial_peers=None,
-            # initial_peers=[
-            #     "/ip4/192.168.5.94/tcp/43945/p2p/12D3KooWJRFuYyM78oDvEi64R9S11aggTyWMSWXkDhei234HzqNQ"
-            # ],
             use_ipfs=True,
             verbose=True,
         )

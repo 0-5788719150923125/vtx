@@ -300,7 +300,7 @@ def main():
             target_batch_size=p.get("target_batch_size", 8192),
             initial_peers=initial_peers,
             use_ipfs=True,
-            verbose=True,
+            verbose=False,
         )
 
     # Erase old logs

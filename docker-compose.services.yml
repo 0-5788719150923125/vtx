@@ -32,8 +32,8 @@ services:
     volumes:
       - ./data/models:/data/models
       - ./data/adapters:/data/adapters
-    # environment:
-    #   HIVEMIND_LOGLEVEL: ERROR
+    environment:
+      HIVEMIND_LOGLEVEL: ERROR
 
   fil:
     image: ipfs/kubo:latest

@@ -152,6 +152,19 @@ def get_current_date():
     return datetime.now(cst).strftime("%Y-%m-%d")
 
 
+def get_directory_size(directory_path):
+    total_size = 0
+
+    for dirpath, dirnames, filenames in os.walk(directory_path):
+        for filename in filenames:
+            filepath = os.path.join(dirpath, filename)
+            total_size += os.path.getsize(filepath)
+
+    # Convert bytes to gigabytes
+    size_in_gb = total_size / (1024**3)
+    return size_in_gb
+
+
 # Replace all newlines with even spacing
 def unified_newlines(text, len=2):
     segment = "\n" * len

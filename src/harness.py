@@ -10,7 +10,15 @@ import time
 
 import torch
 
-from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
+from common import (
+    colors,
+    config,
+    focus,
+    get_directory_size,
+    hash_directory,
+    list_full_paths,
+    nist_beacon,
+)
 
 model_config = config[focus]
 p = model_config["training"]
@@ -313,9 +321,10 @@ def main():
     logger = loggers.TensorBoardLogger(log_path, name=adapter, default_hp_metric=True)
 
     block_size = p.get("block_size", 2048)
+    dataset_size = get_directory_size(f"/data/datasets/{focus}")
 
     print(
-        f"Training: {colors.GREEN}{len(train_data)}{colors.WHITE} batches, {colors.GREEN}{len(train_data) * block_size}{colors.WHITE} tokens"
+        f"Training data:\n{colors.GREEN}{dataset_size:.2f}{colors.WHITE} GB, {colors.GREEN}{len(train_data)}{colors.WHITE} batches, {colors.GREEN}{len(train_data) * block_size}{colors.WHITE} tokens"
     )
 
     val_interval = p.get("val_interval", 1000)

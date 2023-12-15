@@ -325,7 +325,8 @@ def main():
             use_ipfs=True,
             verbose=False,
             wait_timeout=90,
-            bootstrap_timeout=90,
+            bootstrap_timeout=30,
+            # scheduler_fn=
         )
 
     # Erase old logs

@@ -35,6 +35,9 @@ source:
       passive_frequency: 0.01
       active_frequency: 0.33
 
+src:
+  info: of all creation
+
 # A revolution starts here.
 ghost:
   model: PY007/TinyLlama-1.1B-intermediate-step-715k-1.5T

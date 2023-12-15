@@ -21,6 +21,10 @@ To build a trivial, opinionated framework for human cloning experiments. Our goa
 - [Urbit](http://localhost:9099)
 - [Petals](https://health.petals.dev/)
 
+# tools
+
+- [FVN VSCode Extension](https://github.com/0-5788719150923125/fvn)
+
 # data
 
 - https://ink.university/

@@ -299,7 +299,7 @@ def main():
         mine = json.loads(output.decode("utf-8"))
         craft = f"/p2p/{mine['ID']}"
         initial_peers.append(craft)
-        print(f"{colors.GREEN}SHIP-0:{colors.WHITE} {craft}")
+        print(f"{colors.GREEN}PIER-{len(initial_peers)}:{colors.WHITE} {craft}")
 
         gradient_accumulation_steps = 1
         strategy = HivemindStrategy(
@@ -334,7 +334,9 @@ def main():
     # Train the model
     prototype.train(
         train_data=train_data,
-        generation_config=config["transformers"]["generation"]["training"],
+        generation_config=config["transformers"]["generation"][
+            model_config.get("generation_profile", "training")
+        ],
         n_gpu=1,
         strategy=strategy,
         devices=devices,

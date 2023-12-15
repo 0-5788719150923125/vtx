@@ -86,9 +86,9 @@
         "label": "train",
         "detail": "Train a model.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd && docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml run -e FOCUS=${input:env} lab python3 harness.py",
+        "command": "docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil && docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml run -e FOCUS=${input:env} lab python3 harness.py",
         "windows": {
-          "command": "docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml run -e FOCUS=${input:env} lab python3 harness.py"
+          "command": "docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml run -e FOCUS=${input:env} lab python3 harness.py"
         },
         "runOptions": {
           "instanceLimit": 5

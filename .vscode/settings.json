@@ -10,13 +10,15 @@
     "--line-length", 
     "88", 
     "--force-exclude", 
-    "moduleformer/*.py"
+    "moduleformer/*.py|lightning_hivemind/*.py",
   ],
   "isort.args":[
     "--profile", 
     "black",
     "--skip-glob",
-    "lab/ModuleFormer/**"
+    "lab/ModuleFormer/**",
+    "--skip-glob",
+    "lab/lightning_hivemind/**"
   ],
   "isort.check": true,
   "prettier.enable": true,

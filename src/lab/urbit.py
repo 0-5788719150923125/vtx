@@ -3,8 +3,8 @@ import time
 
 
 def main(config):
-    planet = config["urbit"].get("planet", False)
     moon = config["urbit"].get("moon", False)
+    planet = config["urbit"].get("planet", False)
     os.makedirs("/data/urbit", exist_ok=True)
     if os.path.exists(f"/data/urbit/one"):
         if len(os.listdir("/data/urbit/one")) == 0:

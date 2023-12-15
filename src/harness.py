@@ -324,6 +324,8 @@ def main():
             initial_peers=initial_peers,
             use_ipfs=True,
             verbose=False,
+            wait_timeout=90,
+            bootstrap_timeout=90,
         )
 
     # Erase old logs

@@ -272,7 +272,13 @@ def main():
     if strategy == "hivemind":
         from lightning_hivemind.strategy import HivemindStrategy
 
-        # Get my peers
+        # Start with bootstrap peers
+        initial_peers = [
+            "/p2p/12D3KooWJb6YNtfYpvfL2C7cKfMqHorLFTcPAouY5yHU73R8UhZy",  # 59.src.eco
+            "/p2p/12D3KooWE6YAK8nte7Wky13WDMwxSmfgRecPystnxxcp793trVd2",  # 95.src.eco
+        ]
+
+        # Get my local peers
         command = "docker exec vtx-fil-1 ipfs swarm peers"
         process = subprocess.Popen(
             command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -282,14 +288,13 @@ def main():
         peers = output.decode("utf-8").splitlines()
 
         pattern = r"(/p2p/.*)"
-        initial_peers = []
+
         for peer in peers:
             match = re.search(pattern, peer)
             if match:
                 initial_peers.append(match.group(1))
-                print(f"PIER-{peers.index(peer)}: {match.group(1)}")
 
-        # Get myself
+        # Get my own peer ID
         command = "docker exec vtx-fil-1 ipfs id"
         process = subprocess.Popen(
             command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -299,7 +304,15 @@ def main():
         mine = json.loads(output.decode("utf-8"))
         craft = f"/p2p/{mine['ID']}"
         initial_peers.append(craft)
-        print(f"{colors.GREEN}PIER-{len(initial_peers)}:{colors.WHITE} {craft}")
+
+        delay = 1.0
+        for peer in initial_peers:
+            time.sleep(delay)
+            delay *= 0.8
+            color = colors.WHITE
+            if initial_peers.index(peer) == (len(initial_peers) - 1):
+                color = colors.GREEN
+            print(f"{color}PIER-{initial_peers.index(peer)}:{colors.WHITE} {peer}")
 
         gradient_accumulation_steps = 1
         strategy = HivemindStrategy(

@@ -308,13 +308,15 @@ def main():
         delay = 1.0
         for peer in initial_peers:
             time.sleep(delay)
-            delay *= 0.8
+            delay *= 0.75
             color = colors.WHITE
             if initial_peers.index(peer) == (len(initial_peers) - 1):
                 color = colors.GREEN
             print(f"{color}PIER-{initial_peers.index(peer)}:{colors.WHITE} {peer}")
 
-        gradient_accumulation_steps = 1
+        assert (
+            gradient_accumulation_steps == 1
+        ), "Gradient accumulation is not supported by HivemindStrategy. Use `target_batch_size` instead."
         strategy = HivemindStrategy(
             run_id="src",
             batch_size=batch_size,

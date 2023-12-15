@@ -2,12 +2,6 @@ version: '3.9'
 
 services:
   lab:
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: ${GPU:-nvidia}
-              capabilities: [gpu]
     environment:
       # PETALS_LOGGING: False
       HIVEMIND_LOGLEVEL: INFO

@@ -1,7 +1,6 @@
 __pycache__
 .env
 .git
-venv
 node_modules
 lab/
 !lab/opencog/atomspace
@@ -14,5 +13,6 @@ lab/
 !lab/research
 !lab/pages
 !lab/lightning-hivemind
+lab/lightning-hivemind/venv
 !lab/ModuleFormer
 *.key

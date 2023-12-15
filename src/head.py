@@ -97,6 +97,7 @@ def validation(config):
                     "allowed": ["left", "right"],
                 },
                 "name": {"type": "string"},
+                "strategy": {"type": "string"},
                 "type": {
                     "type": "string",
                     "allowed": [

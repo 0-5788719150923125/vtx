@@ -268,66 +268,65 @@ def main():
 
     gradient_accumulation_steps = p.get("gradient_accumulation_steps", 1)
     batch_size = p.get("batch_size", 1)
-    strategy = p.get("strategy")
-    if strategy == "hivemind":
-        from lightning_hivemind.strategy import HivemindStrategy
+    # if strategy == "hivemind":
+    #     from lightning_hivemind.strategy import HivemindStrategy
 
-        # Start with bootstrap peers
-        initial_peers = [
-            "/p2p/12D3KooWJb6YNtfYpvfL2C7cKfMqHorLFTcPAouY5yHU73R8UhZy",  # 59.src.eco
-            "/p2p/12D3KooWE6YAK8nte7Wky13WDMwxSmfgRecPystnxxcp793trVd2",  # 95.src.eco
-        ]
+    #     # Start with bootstrap peers
+    #     initial_peers = [
+    #         "/p2p/12D3KooWJb6YNtfYpvfL2C7cKfMqHorLFTcPAouY5yHU73R8UhZy",  # 59.src.eco
+    #         "/p2p/12D3KooWE6YAK8nte7Wky13WDMwxSmfgRecPystnxxcp793trVd2",  # 95.src.eco
+    #     ]
 
-        # Get my local peers
-        command = "docker exec vtx-fil-1 ipfs swarm peers"
-        process = subprocess.Popen(
-            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        output, error = process.communicate()
+    #     # Get my local peers
+    #     command = "docker exec vtx-fil-1 ipfs swarm peers"
+    #     process = subprocess.Popen(
+    #         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    #     )
+    #     output, error = process.communicate()
 
-        peers = output.decode("utf-8").splitlines()
+    #     peers = output.decode("utf-8").splitlines()
 
-        pattern = r"(/p2p/.*)"
+    #     pattern = r"(/p2p/.*)"
 
-        for peer in peers:
-            match = re.search(pattern, peer)
-            if match:
-                initial_peers.append(match.group(1))
+    #     for peer in peers:
+    #         match = re.search(pattern, peer)
+    #         if match:
+    #             initial_peers.append(match.group(1))
 
-        # Get my own peer ID
-        command = "docker exec vtx-fil-1 ipfs id"
-        process = subprocess.Popen(
-            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        output, error = process.communicate()
+    #     # Get my own peer ID
+    #     command = "docker exec vtx-fil-1 ipfs id"
+    #     process = subprocess.Popen(
+    #         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    #     )
+    #     output, error = process.communicate()
 
-        mine = json.loads(output.decode("utf-8"))
-        craft = f"/p2p/{mine['ID']}"
-        initial_peers.append(craft)
+    #     mine = json.loads(output.decode("utf-8"))
+    #     craft = f"/p2p/{mine['ID']}"
+    #     initial_peers.append(craft)
 
-        delay = 1.0
-        for peer in initial_peers:
-            time.sleep(delay)
-            delay *= 0.75
-            color = colors.WHITE
-            if initial_peers.index(peer) == (len(initial_peers) - 1):
-                color = colors.GREEN
-            print(f"{color}PIER-{initial_peers.index(peer)}:{colors.WHITE} {peer}")
+    #     delay = 1.0
+    #     for peer in initial_peers:
+    #         time.sleep(delay)
+    #         delay *= 0.75
+    #         color = colors.WHITE
+    #         if initial_peers.index(peer) == (len(initial_peers) - 1):
+    #             color = colors.GREEN
+    #         print(f"{color}PIER-{initial_peers.index(peer)}:{colors.WHITE} {peer}")
 
-        assert (
-            gradient_accumulation_steps == 1
-        ), "Gradient accumulation is not supported by HivemindStrategy. Use `target_batch_size` instead."
-        strategy = HivemindStrategy(
-            run_id="src",
-            batch_size=batch_size,
-            target_batch_size=p.get("target_batch_size", 8192),
-            initial_peers=initial_peers,
-            use_ipfs=True,
-            verbose=False,
-            wait_timeout=90,
-            bootstrap_timeout=30,
-            # scheduler_fn=
-        )
+    #     assert (
+    #         gradient_accumulation_steps == 1
+    #     ), "Gradient accumulation is not supported by HivemindStrategy. Use `target_batch_size` instead."
+    #     strategy = HivemindStrategy(
+    #         run_id="src",
+    #         batch_size=batch_size,
+    #         target_batch_size=p.get("target_batch_size", 8192),
+    #         initial_peers=initial_peers,
+    #         use_ipfs=True,
+    #         verbose=False,
+    #         wait_timeout=90,
+    #         bootstrap_timeout=30,
+    #         # scheduler_fn=
+    #     )
 
     # Erase old logs
     log_path = "/data/logs/" + focus
@@ -356,15 +355,15 @@ def main():
             model_config.get("generation_profile", "training")
         ],
         n_gpu=1,
-        strategy=strategy,
+        strategy=p.get("strategy"),
         devices=devices,
         benchmark=False,
         petals=use_petals,
-        deepspeed=p.get("deepspeed", False),
         seed=nist_beacon()[1],
         output_dir=output_dir,
         loggers=[logger],
         batch_size=batch_size,
+        target_batch_size=p.get("target_batch_size", 8192),
         num_steps=p.get("num_steps", 33333),
         generate_every=p.get("generate_every", 500),
         save_every=p.get("save_every", 1000),

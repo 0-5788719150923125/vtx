@@ -10,7 +10,7 @@
     "--line-length", 
     "88", 
     "--force-exclude", 
-    "moduleformer/(.*).py|lightning_hivemind/(.*).py",
+    "moduleformer/(.*).py|lightning_hivemind/(.*).py|tests/test_strategy.py",
   ],
   "isort.args":[
     "--profile", 

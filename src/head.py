@@ -98,6 +98,7 @@ def validation(config):
                 },
                 "name": {"type": "string"},
                 "strategy": {"type": "string"},
+                "initial_piers": {"type": "string"},
                 "type": {
                     "type": "string",
                     "allowed": [

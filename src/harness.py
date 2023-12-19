@@ -297,6 +297,7 @@ def main():
         ],
         n_gpu=1,
         strategy=p.get("strategy"),
+        initial_peers=p.get("initial_piers", []),
         devices=devices,
         benchmark=False,
         petals=use_petals,

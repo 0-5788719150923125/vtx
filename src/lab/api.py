@@ -17,6 +17,7 @@ app = Flask(__name__)
 @app.route("/generate")
 def generate():
     kwargs = request.get_json()
+    print(f"{colors.BLUE}ONE@API:{colors.WHITE} Received a valid prompt to this API.")
     output = asyncio.run(head.ctx.prompt(**kwargs))
     if not output:
         response = "Failed to generate an output from this API."

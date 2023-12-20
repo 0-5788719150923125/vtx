@@ -21,9 +21,6 @@ from common import (
 )
 from events import producer
 
-if __name__ == "main":
-    main()
-
 
 def main(config):
     book_config = config["book"]
@@ -48,7 +45,7 @@ def main(config):
         time.sleep(66.6)
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main(config)
 
 

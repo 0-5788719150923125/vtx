@@ -37,7 +37,7 @@ def main(config):
         time.sleep(6.66)
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main(config)
 
 

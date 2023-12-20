@@ -12,6 +12,9 @@ urbit:
 
 only: toehider
 
+api:
+  enabled: False
+
 personas:
   source:
     bias: 806051627198709760

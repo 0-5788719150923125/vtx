@@ -99,5 +99,5 @@ description: {config.get('description', 'A short email and a story, written for 
             print(f"Error Message: {error_msg}")
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main(config)

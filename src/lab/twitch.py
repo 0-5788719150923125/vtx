@@ -18,7 +18,7 @@ def main(config):
     asyncio.run(client(config))
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main(config)
 
 

@@ -16,14 +16,16 @@ app = Flask(__name__)
 
 @app.route("/generate")
 def generate():
-    kwargs = request.get_json()
-    print(f"{colors.BLUE}ONE@API:{colors.WHITE} Received a valid prompt to this API.")
-    output = asyncio.run(head.ctx.prompt(**kwargs))
-    if not output:
-        response = "Failed to generate an output from this API."
-        logging.error(response)
-        return jsonify(response), 400
-    print(f"{colors.RED}ONE@API:{colors.WHITE} {output}")
+    try:
+        kwargs = request.get_json()
+        print(f"{colors.BLUE}ONE@API:{colors.WHITE} Received a valid request via REST.")
+        output = asyncio.run(head.ctx.prompt(**kwargs))
+        if not output:
+            raise Exception("Failed to generate an output from this API.")
+    except Exception as e:
+        logging.error(e)
+        return jsonify(e), 400
+    print(f"{colors.RED}ONE@API:{colors.WHITE} Successfully responded to REST request.")
     return jsonify({"response": output}), 200
 
 

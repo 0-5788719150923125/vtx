@@ -3,56 +3,74 @@
     "tasks": [
       {
         "label": "ps",
-        "detail": "View a list of all running containers for this project.",
+        "detail": "View a list of all running containers.",
         "type": "shell",
-        "command": "docker compose ps"
+        "command": "TASK=ps sh controller.sh",
+        "windows": {
+          "command": "docker compose ps"
+        }
       },
       {
         "label": "logs",
         "detail": "View logs for all services.",
         "type": "shell",
-        "command": "docker compose logs --follow"
+        "command": "TASK=logs sh controller.sh",
+        "windows": {
+          "command": "docker compose logs --follow"
+        }
       },
       {
         "label": "exec",
         "detail": "Open an interactive shell in the specified container.",
         "type": "shell",
-        "command": "docker compose exec \"${input:ship}\" /bin/bash",
+        "command": "TASK=exec CONTAINER=\"${input:container}\" sh controller.sh",
         "windows": {
-          "command": "docker compose exec \\\"${input:ship}\\\" /bin/bash"
+          "command": "docker compose exec \\\"${input:container}\\\" /bin/bash"
         }
       },
       {
         "label": "test",
-        "detail": "Run all tests with Robot Framework.",
+        "detail": "Run all tests.",
         "type": "shell",
-        "command": "docker compose exec lab robot --outputdir /book/static/tests /src/tests",
+        "command": "TASK=test sh controller.sh",
+        "windows": {
+          "command": "docker compose exec lab robot --outputdir /book/static/tests /src/tests"
+        }
       },
       {
         "label": "build",
-        "detail": "Build and tag a new Docker image from the Dockerfile.",
+        "detail": "Build this project in Docker.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml build"
+        "command": "TASK=build sh controller.sh",
+        "windows": {
+          "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml build"
+        }
       },
       {
         "label": "push",
         "detail": "Push the newly-built Docker image to a registry.",
         "type": "shell",
-        "command": "docker compose push"
+        "command": "TASK=push sh controller.sh",
+        "windows": {
+          "command": "docker compose push"
+        }
       },
       {
         "label": "pull",
-        "detail": "Pull the latest Docker images for this project.",
+        "detail": "Pull the latest Docker images required by this project.",
         "type": "shell",
-        "command": "docker compose pull"
+        "command": "TASK=pull sh controller.sh",
+        "windows": {
+          "command": "docker compose pull"
+        }
       },
       {
         "label": "up",
-        "detail": "Start the services in a development environment.",
+        "detail": "Bring this stack of services online.",
         "type": "shell",
-        "command": "FOCUS=${input:env} docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up",
+        "command": "TASK=up FOCUS=${input:model} sh controller.sh",
         "windows": {
-          "command": "$env:FOCUS = '${input:env}'; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up"
+          "command": "$env:FOCUS = '${input:model}'; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up"
         }
       },
       {
@@ -60,21 +78,24 @@
         "detail": "Change Docker context.",
         "type": "shell",
         "command": "docker context use ${input:context}",
+        "windows": {
+          "command": "docker context use ${input:context}"
+        }
       },
       {
         "label": "remote",
         "detail": "Test the local stack against a remote Docker daemon via SSH.",
         "type": "shell",
-        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && docker context use one && ARCH='ARM' FOCUS=${input:env} docker compose up",
+        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && docker context use one && ARCH='ARM' FOCUS=${input:model} docker compose up",
         "windows": {
-          "command": "$env:FOCUS = '${input:env}'; docker compose up"
+          "command": "$env:FOCUS = '${input:model}'; docker compose up"
         }
       },
       {
         "label": "upload",
         "detail": "Upload adapters to a remote server via SSH.",
         "type": "shell",
-        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && scp -i one.key -r data/adapters opc@129.159.66.224:/home/opc/vtx/data"
+        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && scp -i one.key -r data/adapters opc@129.159.66.224:/home/opc/vtx/data",
       },
       {
         "label": "config",
@@ -86,9 +107,9 @@
         "label": "train",
         "detail": "Train a model.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil && docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml -f docker-compose.gpu.yml run -e FOCUS=${input:env} lab python3 harness.py",
+        "command": "TASK=train FOCUS=${input:model} sh controller.sh",
         "windows": {
-          "command": "docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml -f docker-compose.gpu.yml run -e FOCUS=${input:env} lab python3 harness.py"
+          "command": "docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml -f docker-compose.gpu.yml run -e FOCUS=${input:model} lab python3 harness.py"
         },
         "runOptions": {
           "instanceLimit": 5
@@ -98,13 +119,19 @@
         "label": "deploy",
         "detail": "Deploy your book to CloudFlare.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/cloudflare.py"
+        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/cloudflare.py",
+        "windows": {
+          "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/cloudflare.py"
+        }
       },
       {
         "label": "prepare",
         "detail": "Prepare a dataset.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:dir}/prepare.py",
+        "command": "TASK=prepare DATASET=${input:dataset} sh controller.sh",
+        "windows": {
+          "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:dataset}/prepare.py"
+        },
         "runOptions": {
           "instanceLimit": 3
         },
@@ -113,7 +140,10 @@
         "label": "fetch",
         "detail": "Download a dataset.",
         "type": "shell",
-        "command": "docker compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:dir}/fetch.py",
+        "command": "TASK=fetch DATASET=${input:dataset} sh controller.sh",
+        "windows": {
+          "command": "docker compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:dataset}/fetch.py"
+        },
         "runOptions": {
           "instanceLimit": 3
         },
@@ -121,47 +151,60 @@
       {
         "label": "auto",
         "detail": "Turn on autopilot.",
-        "command": "FOCUS=${input:env} docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up -d",
+        "type": "shell",
+        "command": "TASK=up FOCUS=${input:model} DETACHED=true sh controller.sh",
         "windows": {
-          "command": "$env:FOCUS = '${input:env}'; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up -d"
+          "command": "$env:FOCUS = '${input:model}'; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up -d"
         }
       },
       {
         "label": "prune",
         "detail": "Prune all unused images, networks, and volumes.",
         "type": "shell",
-        "command": "docker system prune -f && docker volume prune -f"
+        "command": "TASK=prune sh controller.sh",
+        "windows": {
+          "command": "docker system prune -f && docker volume prune -f"
+        }
       },
       {
         "label": "key",
         "detail": "Fetch your Urbit access key.",
         "type": "shell",
-        "command": "docker compose exec bit /bin/get-urbit-code"
+        "command": "TASK=key sh controller.sh",
+        "windows": {
+          "command": "docker compose exec bit /bin/get-urbit-code"
+        }
       },
       {
         "label": "down",
         "detail": "Stop the service in Docker.",
         "type": "shell",
-        "command": "docker compose down --remove-orphans"
+        "command": "TASK=down sh controller.sh",
+        "windows": {
+          "command": "docker compose down --remove-orphans"
+        }
       },
       {
         "label": "stats",
         "detail": "View live Docker stats.",
         "type": "shell",
-        "command": "docker stats"
+        "command": "TASK=stats sh controller.sh",
+        "windows": {
+          "command": "docker stats"
+        }
       },
     ],
     "inputs": [
       {
         "type": "pickString",
-        "id": "env",
+        "id": "model",
         "description": "Which model should I focus on?",
-        "options": ["src", "src1", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]
+        "options": ["src", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]
       },
       {
         "type": "promptString",
-        "id": "dir",
-        "description": "Which lab directory will you interact with?",
+        "id": "dataset",
+        "description": "Which dataset will you interact with?",
       },
       {
         "type": "pickString",
@@ -174,8 +217,8 @@
       },
       {
         "type": "pickString",
-        "id": "ship",
-        "description": "Which ship should I enter?",
+        "id": "container",
+        "description": "Which container should I enter?",
         "options": ["lab", "ctx", "tbd", "fil", "pet", "bit"]
       }
     ]

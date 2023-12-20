@@ -50,8 +50,7 @@ case $action in
         if [[ -z "$CONTAINER" ]]; then
             read -p "Which container should we enter? ${CONTAINERS} " CONTAINER
         fi
-        docker compose exec ${CONTAINER} /bin/bash 
-        ;;
+        docker compose exec ${CONTAINER} /bin/bash ;;
     "test") 
         docker compose exec lab robot --outputdir /book/static/tests /src/tests ;;
     "build") 

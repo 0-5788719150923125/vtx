@@ -1,5 +1,33 @@
 {
     "version": "2.0.0",
+    "inputs": [
+      {
+        "type": "pickString",
+        "id": "model",
+        "description": "Which model should I focus on?",
+        "options": ["src", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]
+      },
+      {
+        "type": "pickString",
+        "id": "container",
+        "description": "Which container should I enter?",
+        "options": ["lab", "ctx", "tbd", "fil", "pet", "bit"]
+      },
+      {
+        "type": "promptString",
+        "id": "dataset",
+        "description": "Which dataset will you interact with?",
+      },
+      {
+        "type": "pickString",
+        "id": "context",
+        "description": "Which context should I use?",
+        "options": [
+          "default",
+          "one"
+        ]
+      }
+    ],
     "tasks": [
       {
         "label": "ps",
@@ -192,34 +220,6 @@
         "windows": {
           "command": "docker stats"
         }
-      },
-    ],
-    "inputs": [
-      {
-        "type": "pickString",
-        "id": "model",
-        "description": "Which model should I focus on?",
-        "options": ["src", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]
-      },
-      {
-        "type": "promptString",
-        "id": "dataset",
-        "description": "Which dataset will you interact with?",
-      },
-      {
-        "type": "pickString",
-        "id": "context",
-        "description": "Which context should I use?",
-        "options": [
-          "default",
-          "one"
-        ]
-      },
-      {
-        "type": "pickString",
-        "id": "container",
-        "description": "Which container should I enter?",
-        "options": ["lab", "ctx", "tbd", "fil", "pet", "bit"]
       }
     ]
   }

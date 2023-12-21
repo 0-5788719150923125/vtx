@@ -21,7 +21,7 @@ To build a simple, opinionated framework for human cloning experiments. Our goal
 - Local, offline-first APIs for text generation, image interrogation, and pattern mining.
 - Swarm intelligence.
 - Rolling release cycles.
-- A hypothesis, a language, and a story.
+- A hypothesis, a language, a story.
 - [And much more!](https://studio.src.eco/nail/vtx/)
 
 # interface

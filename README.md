@@ -26,8 +26,8 @@ To build a simple, opinionated framework for human cloning experiments. Our goal
 
 # interface
 
+- [src](http://localhost:9666) ([example](https://src.eco))
 - [book](http://localhost:42000) ([example](https://pen.university))
-- [src](http://localhost:9666)
 - [metrics](http://localhost:6006)
 - [IPFS](http://localhost:9090)
 - [Urbit](http://localhost:9099)

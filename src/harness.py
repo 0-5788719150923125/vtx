@@ -57,7 +57,7 @@ from transformers import (
 )
 
 from aigen.aigen import aigen
-from aigen.aigen.TokenDataset import TokenDataset, merge_datasets
+from aigen.aigen.datasets import TokenDataset, merge_datasets
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)
 AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)
@@ -295,11 +295,9 @@ def main():
         generation_config=config["transformers"]["generation"][
             model_config.get("generation_profile", "training")
         ],
-        n_gpu=1,
         strategy=p.get("strategy"),
         initial_peers=p.get("initial_piers", []),
         devices=devices,
-        benchmark=False,
         petals=use_petals,
         seed=nist_beacon()[1],
         output_dir=output_dir,

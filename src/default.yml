@@ -186,7 +186,7 @@ transformers:
       eta_cutoff: 0.0003
       penalty_alpha: 0.6
       top_k: 4
-      repetition_penalty: 1.023
+      repetition_penalty: 1.1
       encoder_repetition_penalty: 0.999
       # no_repeat_ngram_size: 15
       low_memory: False

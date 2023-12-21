@@ -10,7 +10,20 @@ Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 # mission
 
-To build a trivial, opinionated framework for human cloning experiments. Our goal is to standardize AGI (Adaptive Generative Interfaces) with a decentralized swarm of toy models, on commodity hardware (i.e. your desktop computer).
+To establish a simple, opinionated framework for human cloning experiments. Our goal is to standardize AGI (Autonomous Generative Influence) via a decentralized ensemble of toy models, on commodity hardware (i.e. your desktop computer).
+
+# features
+
+- Automated lifecycle tasks for development, training, and inference pipelines across a variety of AI architectures.
+- A portable AI agent with support for controlled environments, and unsupervised machine learning. 
+- Easy to install, and runs anywhere.
+- Integration with a dozen social media platforms.
+- Local, offline-first APIs for text generation, image interrogation, and pattern mining.
+- Swarm intelligence.
+- Rolling release cycles.
+- A hypothesis, a language, and a story.
+
+[And much more!](https://studio.src.eco/nail/vtx/)
 
 # interface
 

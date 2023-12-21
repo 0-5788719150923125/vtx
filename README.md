@@ -22,8 +22,7 @@ To build a simple, opinionated framework for human cloning experiments. Our goal
 - Swarm intelligence.
 - Rolling release cycles.
 - A hypothesis, a language, and a story.
-
-[And much more!](https://studio.src.eco/nail/vtx/)
+- [And much more!](https://studio.src.eco/nail/vtx/)
 
 # interface
 

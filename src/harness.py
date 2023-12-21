@@ -273,7 +273,7 @@ def main():
     if fresh_logs == True:
         shutil.rmtree(log_path, ignore_errors=True)
 
-    os.makedirs(log_path, exist_ok=True)
+    os.makedirs(f"{log_path}/{adapter}", exist_ok=True)
 
     logger = loggers.TensorBoardLogger(log_path, name=adapter, default_hp_metric=True)
 

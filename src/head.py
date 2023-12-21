@@ -321,9 +321,10 @@ class Cortex:
                     config.get("context_length"),
                 )
 
-            print(
-                f"{colors.BLUE}ONE@FOLD:{colors.WHITE} {config.get('info', 'to the regional manager')}"
-            )
+            model_info = config.get("info", "to the regional manager")
+            print(f"{colors.BLUE}ONE@FOLD:{colors.WHITE} {model_info}")
+
+            prototype.optimize_for_inference()
             print(f"{colors.GREEN}ONE@ROOT:{colors.WHITE} {str(prototype)}")
         except Exception as e:
             logging.error(traceback.format_exc())

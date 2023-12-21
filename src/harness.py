@@ -205,7 +205,9 @@ def main():
 
     print(tokenizer)
 
-    train_data = build_inputs(p, tokenizer)
+    static_data = []
+    if len(p.get("datasets", [])) > 0:
+        static_data.append(build_static_datasets(p, tokenizer))
 
     if train_type == "pretrain" and not resume:
         pretrain_config = AutoConfig.from_pretrained(launch_model)
@@ -279,19 +281,26 @@ def main():
     logger = loggers.TensorBoardLogger(log_path, name=adapter, default_hp_metric=True)
 
     block_size = p.get("block_size", 2048)
-    dataset_size = get_directory_size(f"/data/datasets/{focus}")
-
-    print(
-        f"Training data:\n{colors.GREEN}{dataset_size:.2f}{colors.WHITE} GB, {colors.GREEN}{len(train_data)}{colors.WHITE} batches, {colors.GREEN}{len(train_data) * block_size}{colors.WHITE} tokens"
-    )
-
     val_interval = p.get("val_interval", 1000)
-    if val_interval > len(train_data):
-        val_interval = math.floor(len(train_data) / 2)
+
+    if len(static_data) > 0:
+        dataset_size = get_directory_size(f"/data/datasets/{focus}")
+
+        print(
+            f"Training data:\n{colors.GREEN}{dataset_size:.2f}{colors.WHITE} GB, {colors.GREEN}{len(static_data[0])}{colors.WHITE} batches, {colors.GREEN}{len(static_data[0]) * block_size}{colors.WHITE} tokens"
+        )
+
+        if val_interval > len(static_data[0]):
+            val_interval = math.floor(len(static_data[0]) / 2)
 
     # Train the model
     prototype.train(
-        train_data=train_data,
+        static_data=static_data,
+        streaming_data=[
+            {"dataset": "tiiuae/falcon-refinedweb", "content_key": "content"}
+        ]
+        if p.get("supplement", False)
+        else [],
         generation_config=config["transformers"]["generation"][
             model_config.get("generation_profile", "training")
         ],
@@ -326,7 +335,6 @@ def main():
         block_size=block_size,
         val_split=p.get("val_split", 0.0),
         val_interval=val_interval,
-        supplement=p.get("supplement", False),
     )
 
 
@@ -473,7 +481,7 @@ def create_dataset(
 
 
 # Create a tokenized dataset from every directory specified in config file
-def build_inputs(c, tokenizer):
+def build_static_datasets(c, tokenizer):
     datasets = {}
     block_size = c.get("block_size")
     assert block_size, "You must set a block_size to use."

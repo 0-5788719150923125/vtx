@@ -200,9 +200,6 @@ def main():
         trust_remote_code=True,
     )
 
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-
     print(tokenizer)
 
     static_data = []

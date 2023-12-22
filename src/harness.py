@@ -200,10 +200,13 @@ def main():
         trust_remote_code=True,
     )
 
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
     print(tokenizer)
 
     static_data = []
-    if len(p.get("datasets", [])) > 0:
+    if len(p["datasets"].get("static", [])) > 0:
         static_data.append(build_static_datasets(p, tokenizer))
 
     if train_type == "pretrain" and not resume:
@@ -290,14 +293,14 @@ def main():
         if val_interval > len(static_data[0]):
             val_interval = math.floor(len(static_data[0]) / 2)
 
+    streaming_data = []
+    for dataset in p["datasets"].get("streaming", []):
+        streaming_data.append(config["collections"]["streaming"][dataset.lower()])
+
     # Train the model
     prototype.train(
         static_data=static_data,
-        streaming_data=[
-            {"dataset": "tiiuae/falcon-refinedweb", "content_key": "content"}
-        ]
-        if p.get("supplement", False)
-        else [],
+        streaming_data=streaming_data,
         generation_config=config["transformers"]["generation"][
             model_config.get("generation_profile", "training")
         ],
@@ -481,16 +484,15 @@ def create_dataset(
 def build_static_datasets(c, tokenizer):
     datasets = {}
     block_size = c.get("block_size")
-    assert block_size, "You must set a block_size to use."
     stride = c.get("stride", 0)
-    for collection in c["datasets"]:
-        for dataset in config["collections"][collection]:
+    for collection in c["datasets"]["static"]:
+        for dataset in config["collections"]["static"][collection]:
             if dataset not in datasets:
-                ds_config = config["collections"][collection][dataset] or {}
+                ds_config = config["collections"]["static"][collection][dataset] or {}
 
                 duplicate = ds_config.get("duplicate", 0)
 
-                cache_path = f"{focus}/{dataset}/{str(block_size)}"
+                cache_path = f"{focus}/{str(block_size)}/{dataset}"
                 hashed = hash_directory("/" + dataset)
                 while duplicate >= 0:
                     new_path = f"{cache_path}/{str(duplicate)}"
@@ -536,8 +538,8 @@ def build_static_datasets(c, tokenizer):
 
     # Merge all tokenized datasets into a single dataset for training
     collected = []
-    for collection in c["datasets"]:
-        for dataset in config["collections"][collection]:
+    for collection in c["datasets"]["static"]:
+        for dataset in config["collections"]["static"][collection]:
             duplicate = 0
             while dataset + str(duplicate) in datasets:
                 collected.append(datasets[dataset + str(duplicate)])

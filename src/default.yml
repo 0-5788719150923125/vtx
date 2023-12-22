@@ -193,17 +193,32 @@ transformers:
 
 
 collections:
-  default:
-    src:
-    env:
-    lab/aigen:
-    lab/source:
-    lab/fold:
-    lab/ink:
-    lab/pen:
-    lab/journals:
-    lab/research:
-    lab/pages:
+  static:
+    default:
+      src:
+      env:
+      lab/aigen:
+      lab/source:
+      lab/fold:
+      lab/ink:
+      lab/pen:
+      lab/journals:
+      lab/research:
+      lab/pages:
+  streaming:
+    refinedweb:
+      repo: tiiuae/falcon-refinedweb
+      content_key: content
+      sample_size: 1000
+    redpajama2:
+      repo: togethercomputer/RedPajama-Data-V2
+      content_key: raw_content
+      sample_size: 100
+      snapshots:
+        - "2023-14"
+      name: default
+      languages: 
+        - "en"
 
 reddit:
   enabled: False

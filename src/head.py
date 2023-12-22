@@ -140,7 +140,6 @@ def validation(config):
                 },
                 "num_cycles": {"type": "integer"},
                 "prune": {"type": "float"},
-                "supplement": {"type": "boolean"},
                 "overrides": {"type": "dict"},
                 "learning_rate": {"type": "float"},
                 "momentum": {"type": "float"},

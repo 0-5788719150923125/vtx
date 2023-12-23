@@ -13,6 +13,7 @@ if ($env:TASK) {
     Write-Host "(exec)    Open an interactive shell in the specified container."
     Write-Host "(build)   Build this project in Docker."
     Write-Host "(test)    Run all tests."
+    Write-Host "(eval)    Run evaluation harness."
     Write-Host "(push)    Push the newly-built Docker image to a registry."
     Write-Host "(pull)    Pull the latest Docker images required by this project."
     Write-Host "(up)      Bring the stack online."
@@ -55,6 +56,9 @@ switch ($action) {
     }
     "test" {
         docker compose exec lab robot --outputdir /book/static/tests /src/tests
+    }
+    "eval" {
+        docker compose exec lab sh tests/eval.sh
     }
     "build" {
         docker compose build

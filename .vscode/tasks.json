@@ -66,6 +66,15 @@
         }
       },
       {
+        "label": "eval",
+        "detail": "Run evaluation harness.",
+        "type": "shell",
+        "command": "TASK=eval sh controller.sh",
+        "windows": {
+          "command": "docker compose exec lab sh tests/eval.sh"
+        }
+      },
+      {
         "label": "build",
         "detail": "Build this project in Docker.",
         "type": "shell",

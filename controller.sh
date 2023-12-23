@@ -15,6 +15,7 @@ else
     echo "(exec)    Open an interactive shell in the specified container."
     echo "(build)   Build this project in Docker."
     echo "(test)    Run all tests."
+    echo "(eval)    Run evalutation harness."
     echo "(push)    Push the newly-built Docker image to a registry."
     echo "(pull)    Pull the latest Docker images required by this project."
     echo "(up)      Bring the stack online."
@@ -53,6 +54,8 @@ case $action in
         docker compose exec ${CONTAINER} /bin/bash ;;
     "test") 
         docker compose exec lab robot --outputdir /book/static/tests /src/tests ;;
+    "eval") 
+        docker compose exec lab sh tests/eval.sh ;;
     "build") 
         docker compose build ;;
     "push") 

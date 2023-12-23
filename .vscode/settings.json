@@ -25,7 +25,7 @@
   "prettier.requireConfig": true,
   "prettier.useEditorConfig": true,
   "terminal.integrated.scrollback": 10000,
-  "search.useIgnoreFiles": false,
+  "search.useIgnoreFiles": true,
   "git.detectSubmodulesLimit": 100,
   "workbench.editor.limit.value": 3,
   "workbench.editor.limit.enabled": true

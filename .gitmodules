@@ -52,3 +52,6 @@
 [submodule "lab/ModuleFormer"]
 	path = lab/ModuleFormer
 	url = https://github.com/IBM/ModuleFormer.git
+[submodule "lab/reason"]
+	path = lab/reason
+	url = https://github.com/contrast-zone/reasoner.js.git

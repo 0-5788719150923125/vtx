@@ -42,6 +42,9 @@ async def run_client(config):
     intents.messages = True
     intents.reactions = True
     intents.message_content = True
+    intents.typing = True
+    intents.presences = True
+    intents.guilds = True
 
     client = Client(intents=intents, config=config)
 
@@ -257,7 +260,7 @@ class Client(discord.Client):
                 "Pardon, are you busy?",
                 "Hey, do you have a minute?",
                 "Can I ask you a question?",
-                "I need your help.",
+                "Would you help me with something?",
             ]
         )
         if user:

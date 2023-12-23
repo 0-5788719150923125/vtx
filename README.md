@@ -14,7 +14,7 @@ To build a simple, opinionated framework for human cloning experiments. Our goal
 
 # features
 
-- Automated lifecycle tasks for development, training, and inference pipelines across a variety of AI architectures.
+- Automated pipelines for development, training, and inference lifecycle tasks across a variety of AI architectures.
 - A portable AI agent with support for controlled environments, and unsupervised learning. 
 - Easy to install, runs anywhere.
 - Integration with a dozen social media platforms.

@@ -241,30 +241,26 @@ def main():
     prototype.tokenizer = tokenizer
 
     if train_type not in ["standard", "pretrain"] and not use_petals:
+        os.makedirs(f"/data/models/{focus}/{adapter}", exist_ok=True)
         prototype.model = prepare_model_for_kbit_training(
             prototype.model, use_gradient_checkpointing=gradient_checkpointing
         )
-        try:
-            if resume == True:
-                prototype.model = PeftModel.from_pretrained(
-                    prototype.model, output_dir, device_map=device_map
-                )
-                assert isinstance(
-                    prototype.model, PeftModel
-                ), "Failed to convert prototype into a PeftModel."
-                setattr(prototype.model.config, "is_prompt_learning", False)
-                setattr(prototype.model.config, "is_trainable", True)
-            else:
-                prototype.model = get_peft_model(prototype.model, peft_config)
-        except Exception as e:
-            print(e)
-
-    os.makedirs("/data/models/" + focus + "/" + adapter, exist_ok=True)
+        if resume == True:
+            prototype.model = PeftModel.from_pretrained(
+                prototype.model,
+                output_dir,
+                device_map=device_map,
+                is_trainable=True,
+            )
+            setattr(prototype.model.config, "is_prompt_learning", False)
+        else:
+            prototype.model = get_peft_model(prototype.model, peft_config)
 
     if hasattr(prototype.model, "training"):
         prototype.model.training = True
 
     print(prototype.model)
+
     if hasattr(prototype.model, "print_trainable_parameters"):
         prototype.model.print_trainable_parameters()
 

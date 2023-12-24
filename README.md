@@ -2,7 +2,7 @@
 
 "What is this place?" you ask.
 
-Mike shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
+Ryan shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 ![Adam](adam.jpg)
 

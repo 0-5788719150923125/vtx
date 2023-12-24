@@ -165,6 +165,7 @@ def validation(config):
                     ],
                 },
                 "finetune": {"type": "boolean"},
+                "checkpoint": {"type": "boolean"},
                 "batch_size": {"type": "integer"},
                 "gradient_accumulation_steps": {"type": "integer"},
                 "equalize_datasets": {"type": "boolean"},

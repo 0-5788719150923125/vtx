@@ -330,6 +330,7 @@ def main():
         val_split=p.get("val_split", 0.0),
         val_interval=val_interval,
         finetune=p.get("finetune", False),
+        checkpoint=p.get("checkpoint", False),
     )
 
 

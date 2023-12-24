@@ -65,8 +65,6 @@ AutoModelForSequenceClassification.register(
     ModuleFormerConfig, ModuleFormerForSequenceClassification
 )
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
 
 def main():
     print("(" + colors.GREEN + "focus" + colors.WHITE + ")")
@@ -74,7 +72,6 @@ def main():
     print(f"({colors.RED}ed{colors.WHITE}) on the ({colors.BLUE}{focus}{colors.WHITE})")
     time.sleep(3)
 
-    train_type = p.get("type", "standard")
     base_model = model_config["model"]
     model_folder = "/data/models/" + focus
     launch_model = None
@@ -105,89 +102,22 @@ def main():
     pretrain_config = None
     peft_config = None
     pre_seq_len = 0
-    output_dir = "/data/adapters/" + focus + "/" + adapter
-    if train_type == "lora":
-        peft_config = LoraConfig(
-            task_type="CAUSAL_LM",
-            r=p.get("r", 4),
-            lora_alpha=p.get("alpha", 16),
-            lora_dropout=p.get("dropout", 0.1),
-            bias=p.get("bias", "none"),
-            target_modules=p.get("target_modules", None),
-            rank_pattern=p.get("rank_pattern", {}),
-            alpha_pattern=p.get("alpha_pattern", {}),
-            modules_to_save=p.get("modules_to_save", None),
-        )
-    elif train_type == "adalora":
-        peft_config = AdaLoraConfig(
-            task_type="CAUSAL_LM",
-            r=p.get("r", 4),
-            init_r=p.get("init_r", 12),
-            target_r=p.get("target_r", 8),
-            lora_alpha=p.get("alpha", 16),
-            lora_dropout=p.get("dropout", 0.1),
-            bias=p.get("bias", "none"),
-            target_modules=p.get("target_modules", None),
-            rank_pattern=p.get("rank_pattern", {}),
-            alpha_pattern=p.get("alpha_pattern", {}),
-            modules_to_save=p.get("modules_to_save", None),
-        )
-    elif train_type == "ia3":
-        peft_config = IA3Config(
-            task_type="CAUSAL_LM",
-            target_modules=p.get("target_modules", None),
-            feedforward_modules=p.get("feedforward_modules", None),
-        )
-    elif train_type == "loha":
-        peft_config = LoHaConfig(
-            task_type="CAUSAL_LM",
-            r=p.get("r", 8),
-            alpha=p.get("alpha", 8),
-            rank_dropout=p.get("dropout", 0.0),
-            module_dropout=p.get("dropout", 0.0),
-            use_effective_conv2d=False,
-            target_modules=p.get("target_modules", None),
-            rank_pattern=p.get("rank_pattern", {}),
-            alpha_pattern=p.get("alpha_pattern", {}),
-            modules_to_save=p.get("modules_to_save", None),
-        )
-    elif train_type == "lokr":
-        peft_config = LoKrConfig(
-            task_type="CAUSAL_LM",
-            r=p.get("r", 8),
-            alpha=p.get("alpha", 8),
-            rank_dropout=p.get("dropout", 0.0),
-            module_dropout=p.get("dropout", 0.0),
-            use_effective_conv2d=False,
-            decompose_both=True,
-            decompose_factor=-1,
-            target_modules=p.get("target_modules", None),
-            rank_pattern=p.get("rank_pattern", {}),
-            alpha_pattern=p.get("alpha_pattern", {}),
-            modules_to_save=p.get("modules_to_save", None),
-        )
-    elif train_type == "prompt":
-        if use_petals:
-            tuning_mode = "ptune"
-            pre_seq_len = p.get("num_virtual_tokens")
-            output_dir = "/data/embeddings/" + focus
-        else:
-            peft_config = PromptTuningConfig(
-                task_type="CAUSAL_LM",
-                num_virtual_tokens=p.get("num_virtual_tokens", 24),
-            )
-    elif train_type == "prefix":
-        if use_petals:
-            tuning_mode = "deep_ptune"
-            pre_seq_len = p.get("num_virtual_tokens")
-            output_dir = "/data/embeddings/" + focus
-        else:
-            peft_config = PrefixTuningConfig(
-                task_type="CAUSAL_LM",
-                num_virtual_tokens=p.get("num_virtual_tokens", 24),
-            )
-    else:
-        output_dir = "/data/models/" + focus
+
+    output_dir = f"/data/models/{focus}"
+    train_type = p.get("type", "standard")
+
+    if train_type == "pretrain" and not resume:
+        pretrain_config = AutoConfig.from_pretrained(launch_model)
+        print(f"{colors.RED}original pretrain config:{colors.WHITE}")
+        print(pretrain_config)
+        setattr(pretrain_config, "_name_or_path", focus)
+        for k, v in p.get("overrides").items():
+            setattr(pretrain_config, k, v)
+        print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
+        print(pretrain_config)
+
+    if train_type not in ["standard", "pretrain"] and not use_petals:
+        output_dir = f"/data/adapters/{focus}/{adapter}"
 
     tokenizer = AutoTokenizer.from_pretrained(
         base_model,
@@ -200,26 +130,12 @@ def main():
         trust_remote_code=True,
     )
 
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-
     print(tokenizer)
 
     static_data = []
     if len(p["datasets"].get("static", [])) > 0:
         static_data.append(build_static_datasets(p, tokenizer))
 
-    if train_type == "pretrain" and not resume:
-        pretrain_config = AutoConfig.from_pretrained(launch_model)
-        print(f"{colors.RED}original pretrain config:{colors.WHITE}")
-        print(pretrain_config)
-        setattr(pretrain_config, "_name_or_path", focus)
-        for k, v in p.get("overrides").items():
-            setattr(pretrain_config, k, v)
-        print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
-        print(pretrain_config)
-
-    precision = model_config.get("precision", 32)
     gradient_checkpointing = p.get("gradient_checkpointing", True)
 
     # Instantiate the model object
@@ -233,28 +149,12 @@ def main():
         embeddings_dir="/data/embeddings/" + focus,
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
-        precision=precision,
+        precision=model_config.get("precision", 32),
         gradient_checkpointing=gradient_checkpointing,
         device_map=device_map,
     )
 
-    prototype.tokenizer = tokenizer
-
-    if train_type not in ["standard", "pretrain"] and not use_petals:
-        os.makedirs(f"/data/models/{focus}/{adapter}", exist_ok=True)
-        prototype.model = prepare_model_for_kbit_training(
-            prototype.model, use_gradient_checkpointing=gradient_checkpointing
-        )
-        if resume == True:
-            prototype.model = PeftModel.from_pretrained(
-                prototype.model,
-                output_dir,
-                device_map=device_map,
-                is_trainable=True,
-            )
-            setattr(prototype.model.config, "is_prompt_learning", False)
-        else:
-            prototype.model = get_peft_model(prototype.model, peft_config)
+    prototype.attach_adapter(output_dir, p)
 
     if hasattr(prototype.model, "training"):
         prototype.model.training = True

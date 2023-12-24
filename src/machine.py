@@ -69,10 +69,4 @@ def main():
         time.sleep(66.6)
 
 
-# Start the main loop in a thread
-t = None
-while True:
-    time.sleep(5)
-    if not t or not t.is_alive():
-        t = threading.Thread(target=main, daemon=True)
-        t.start()
+main()

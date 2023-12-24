@@ -53,8 +53,6 @@ AutoModelForSequenceClassification.register(
     ModuleFormerConfig, ModuleFormerForSequenceClassification
 )
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
 
 def validation(config):
     schema = {

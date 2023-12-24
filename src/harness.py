@@ -154,7 +154,10 @@ def main():
         device_map=device_map,
     )
 
-    prototype.attach_adapter(output_dir, p)
+    if resume:
+        prototype.load_adapter(output_dir)
+    else:
+        prototype.create_adapter(p)
 
     if hasattr(prototype.model, "training"):
         prototype.model.training = True

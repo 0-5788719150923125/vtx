@@ -323,14 +323,13 @@ def main():
         gradient_clip_val=p.get("gradient_clip_val", 0.5),
         update_period=p.get("update_period", 10),
         gradient_accumulation_steps=gradient_accumulation_steps,
-        train_transformers_only=p.get("train_transformers_only", False),
-        num_layers_freeze=p.get("num_layers_freeze", 0),
         scheduler=p.get("scheduler", "linear"),
         num_cycles=p.get("num_cycles", None),
         prune=p.get("prune", 0.0),
         block_size=block_size,
         val_split=p.get("val_split", 0.0),
         val_interval=val_interval,
+        finetune=p.get("finetune", False),
     )
 
 

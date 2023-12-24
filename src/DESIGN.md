@@ -435,12 +435,7 @@ mind:
   training:
     scheduler: cosine
 ```
-To freeze X number of lower layers (preventing weight updates):
-```yml
-mind:
-  training:
-    num_layers_freeze: 5
-```
+
 If using PEFT training methods, this option will have no effect.
 
 Decaying weights at each training step is a good way to prevent overfitting (memorization of data, instead of generalization):
@@ -454,12 +449,6 @@ To set the maximum allowed adjustments to a weight during training:
 mind:
   training:
     max_grad_norm: 0.5
-```
-To train multi-head self-attention and feed-forward sub-layers exclusively:
-```yml
-mind:
-  training:
-    train_transformers_only: True
 ```
 Take an equal number of samples from each dataset, so as not to bias toward one or the other:
 ```yml

@@ -130,10 +130,12 @@ def main():
     print(tokenizer)
 
     static_data = []
-    if len(p["datasets"].get("static", [])) > 0:
+    if len(train_config["datasets"].get("static", [])) > 0:
         static_data.append(build_static_datasets(p, tokenizer))
 
-    gradient_checkpointing = train_config.get("gradient_checkpointing", True)
+    streaming_data = []
+    for dataset in train_config["datasets"].get("streaming", []):
+        streaming_data.append(config["collections"]["streaming"][dataset.lower()])
 
     # Instantiate the model object
     prototype = aigen(
@@ -147,7 +149,6 @@ def main():
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
         precision=model_config.get("precision", 32),
-        gradient_checkpointing=gradient_checkpointing,
         device_map=device_map,
     )
 
@@ -166,10 +167,6 @@ def main():
     os.makedirs(f"{log_path}/{adapter}", exist_ok=True)
 
     logger = loggers.TensorBoardLogger(log_path, name=adapter, default_hp_metric=True)
-
-    streaming_data = []
-    for dataset in p["datasets"].get("streaming", []):
-        streaming_data.append(config["collections"]["streaming"][dataset.lower()])
 
     # Train the model
     prototype.train(
@@ -330,10 +327,10 @@ def create_dataset(
 
 
 # Create a tokenized dataset from every directory specified in config file
-def build_static_datasets(c, tokenizer):
+def build_static_datasets(config, tokenizer):
     datasets = {}
-    block_size = c.get("block_size")
-    stride = c.get("stride", 0)
+    block_size = config.get("block_size")
+    stride = config.get("stride", 0)
     for collection in c["datasets"]["static"]:
         for dataset in config["collections"]["static"][collection]:
             if dataset not in datasets:
@@ -394,7 +391,9 @@ def build_static_datasets(c, tokenizer):
                 collected.append(datasets[dataset + str(duplicate)])
                 duplicate = duplicate + 1
     if len(collected) > 1:
-        return merge_datasets(collected, equalize=c.get("equalize_datasets", False))
+        return merge_datasets(
+            collected, equalize=config.get("equalize_datasets", False)
+        )
     else:
         return collected[0]
 

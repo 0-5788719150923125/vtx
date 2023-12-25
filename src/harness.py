@@ -116,9 +116,6 @@ def main():
         print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
         print(pretrain_config)
 
-    if train_type not in ["standard", "pretrain"] and not use_petals:
-        output_dir = f"/data/adapters/{focus}/{adapter}"
-
     tokenizer = AutoTokenizer.from_pretrained(
         base_model,
         cache_dir="/data/models",
@@ -154,18 +151,12 @@ def main():
         device_map=device_map,
     )
 
-    if resume:
-        prototype.load_adapter(output_dir)
-    else:
-        prototype.create_adapter(p)
-
-    if hasattr(prototype.model, "training"):
-        prototype.model.training = True
-
-    print(prototype.model)
-
-    if hasattr(prototype.model, "print_trainable_parameters"):
-        prototype.model.print_trainable_parameters()
+    if train_type not in ["standard", "pretrain"] and not use_petals:
+        output_dir = f"/data/adapters/{focus}/{adapter}"
+        if resume:
+            prototype.load_adapter(output_dir)
+        else:
+            prototype.create_adapter(p)
 
     gradient_accumulation_steps = p.get("gradient_accumulation_steps", 1)
     batch_size = p.get("batch_size", 1)
@@ -178,19 +169,6 @@ def main():
     os.makedirs(f"{log_path}/{adapter}", exist_ok=True)
 
     logger = loggers.TensorBoardLogger(log_path, name=adapter, default_hp_metric=True)
-
-    block_size = p.get("block_size", 2048)
-    val_interval = p.get("val_interval", 1000)
-
-    if len(static_data) > 0:
-        dataset_size = get_directory_size(f"/data/datasets/{focus}")
-
-        print(
-            f"Training data:\n{colors.GREEN}{dataset_size:.2f}{colors.WHITE} GB, {colors.GREEN}{len(static_data[0])}{colors.WHITE} batches, {colors.GREEN}{len(static_data[0]) * block_size}{colors.WHITE} tokens"
-        )
-
-        if val_interval > len(static_data[0]):
-            val_interval = math.floor(len(static_data[0]) / 2)
 
     streaming_data = []
     for dataset in p["datasets"].get("streaming", []):
@@ -229,9 +207,9 @@ def main():
         scheduler=p.get("scheduler", "linear"),
         num_cycles=p.get("num_cycles", None),
         prune=p.get("prune", 0.0),
-        block_size=block_size,
+        block_size=p.get("block_size", 2048),
         val_split=p.get("val_split", 0.0),
-        val_interval=val_interval,
+        val_interval=p.get("val_interval", 1000),
         finetune=p.get("finetune", False),
         checkpoint=p.get("checkpoint", False),
     )

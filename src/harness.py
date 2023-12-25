@@ -183,7 +183,7 @@ def main():
         seed=nist_beacon()[1],
         output_dir=output_dir,
         loggers=[logger],
-        **p,
+        **train_config,
     )
 
 

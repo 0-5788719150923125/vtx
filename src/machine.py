@@ -4,7 +4,7 @@ import threading
 import time
 
 # import memory
-from common import colors, config
+from common import colorize_yaml, colors, config
 
 # Quickly test stuff here
 from lab import dev
@@ -14,6 +14,8 @@ if os.environ.get("DEV_MODE", "false") == "true":
 
     time.sleep(1)
     debugpy.listen(("0.0.0.0", 5678))
+
+print(colorize_yaml(config))
 
 
 # This is the main loop

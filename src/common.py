@@ -115,9 +115,6 @@ def colorize_yaml(yaml_dict):
     return colored_yaml
 
 
-print(colorize_yaml(config))
-
-
 def validation(config):
     schema = {
         "personas": {

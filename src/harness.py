@@ -21,10 +21,10 @@ from common import (
 )
 
 model_config = config[focus]
-p = model_config["training"]
+train_config = model_config["training"]
 
 devices = None
-device_map = p.get("device_map", "auto")
+device_map = train_config.get("device_map", "auto")
 if focus in ["frame"]:
     devices = device_map.split(":")[1]
     os.environ["CUDA_VISIBLE_DEVICES"] = str(devices)
@@ -76,11 +76,11 @@ def main():
     model_folder = "/data/models/" + focus
     launch_model = None
     fresh_logs = False
-    resume = p.get("resume", False)
+    resume = train_config.get("resume", False)
     use_petals = model_config.get("petals", False)
-    adapter = p.get("name", "base")
+    adapter = train_config.get("name", "base")
 
-    regen = p.get("regen", False)
+    regen = train_config.get("regen", False)
     if regen:
         shutil.rmtree(f"/data/datasets/{focus}", ignore_errors=True)
 
@@ -104,14 +104,14 @@ def main():
     pre_seq_len = 0
 
     output_dir = f"/data/models/{focus}"
-    train_type = p.get("type", "standard")
+    train_type = train_config.get("type", "standard")
 
     if train_type == "pretrain" and not resume:
         pretrain_config = AutoConfig.from_pretrained(launch_model)
         print(f"{colors.RED}original pretrain config:{colors.WHITE}")
         print(pretrain_config)
         setattr(pretrain_config, "_name_or_path", focus)
-        for k, v in p.get("overrides").items():
+        for k, v in train_config.get("overrides").items():
             setattr(pretrain_config, k, v)
         print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
         print(pretrain_config)
@@ -120,7 +120,7 @@ def main():
         base_model,
         cache_dir="/data/models",
         padding="max_length",
-        padding_side=p.get("padding_side", "left"),
+        padding_side=train_config.get("padding_side", "left"),
         use_fast=True,
         return_overflowing_tokens=True,
         truncation=True,
@@ -133,7 +133,7 @@ def main():
     if len(p["datasets"].get("static", [])) > 0:
         static_data.append(build_static_datasets(p, tokenizer))
 
-    gradient_checkpointing = p.get("gradient_checkpointing", True)
+    gradient_checkpointing = train_config.get("gradient_checkpointing", True)
 
     # Instantiate the model object
     prototype = aigen(
@@ -158,9 +158,6 @@ def main():
         else:
             prototype.create_adapter(p)
 
-    gradient_accumulation_steps = p.get("gradient_accumulation_steps", 1)
-    batch_size = p.get("batch_size", 1)
-
     # Erase old logs
     log_path = "/data/logs/" + focus
     if fresh_logs == True:
@@ -181,37 +178,12 @@ def main():
         generation_config=config["transformers"]["generation"][
             model_config.get("generation_profile", "training")
         ],
-        strategy=p.get("strategy"),
-        initial_peers=p.get("initial_piers", []),
         devices=devices,
         petals=use_petals,
         seed=nist_beacon()[1],
         output_dir=output_dir,
         loggers=[logger],
-        batch_size=batch_size,
-        target_batch_size=p.get("target_batch_size", 8192),
-        num_steps=p.get("num_steps", 33333),
-        generate_every=p.get("generate_every", 500),
-        save_every=p.get("save_every", 1000),
-        optimizer=p.get("optimizer", "AdamW"),
-        loss_function=p.get("loss_function", "default"),
-        learning_rate=float(p.get("learning_rate", 0.005)),
-        lookahead=p.get("lookahead", 0),
-        momentum=float(p.get("momentum", 0)),
-        swa_learning_rate=p.get("swa_learning_rate", None),
-        weight_decay=float(p.get("weight_decay", 0)),
-        warmup_steps=p.get("warmup_steps", 0),
-        gradient_clip_val=p.get("gradient_clip_val", 0.5),
-        update_period=p.get("update_period", 10),
-        gradient_accumulation_steps=gradient_accumulation_steps,
-        scheduler=p.get("scheduler", "linear"),
-        num_cycles=p.get("num_cycles", None),
-        prune=p.get("prune", 0.0),
-        block_size=p.get("block_size", 2048),
-        val_split=p.get("val_split", 0.0),
-        val_interval=p.get("val_interval", 1000),
-        finetune=p.get("finetune", False),
-        checkpoint=p.get("checkpoint", False),
+        **p,
     )
 
 

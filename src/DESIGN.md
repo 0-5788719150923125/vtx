@@ -275,11 +275,11 @@ mind:
   training:
     resume: True
 ```
-if "checkpoint" is True, training will take periodic checkpoints. If "resume" is also True, then training may resume from the latest checkpoint file.
+if "checkpoint" is greater than 0, training will take periodic checkpoints every N training steps. If "resume" is also True, then training may resume from the latest checkpoint file.
 ```yml
 mind:
   training:
-    checkpoint: True
+    checkpoint: 50
     resume: True
 ```
 If "regen" is True, the model will destroy and re-create the tokenized datasets before training:

@@ -1,3 +1,5 @@
+version: '3.3'
+
 services:
   lab:
     image: ghcr.io/0-5788719150923125/lab:latest

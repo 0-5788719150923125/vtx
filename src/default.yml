@@ -192,7 +192,7 @@ transformers:
       do_sample: True
       min_new_tokens: 1
       max_new_tokens: 333
-      temperature: 0.9
+      temperature: 0.7
       eta_cutoff: 0.0003
       penalty_alpha: 0.6
       top_k: 4

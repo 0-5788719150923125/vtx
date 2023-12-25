@@ -157,7 +157,7 @@ def main():
         if resume:
             prototype.load_adapter(output_dir)
         else:
-            prototype.create_adapter(p)
+            prototype.create_adapter(train_config)
 
     # Erase old logs
     log_path = "/data/logs/" + focus

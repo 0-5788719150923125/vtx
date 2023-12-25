@@ -57,7 +57,7 @@ from transformers import (
 )
 
 from aigen.aigen import aigen
-from aigen.aigen.datasets import TokenDataset, merge_datasets
+from aigen.aigen.datasets import StaticDataset, merge_datasets
 
 AutoConfig.register("moduleformer", ModuleFormerConfig)
 AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)
@@ -266,7 +266,7 @@ def create_dataset(
                 with open(file, "r") as content:
                     with open("/tmp/lines.txt", "a") as lines:
                         lines.write(content.read())
-                datasets[file] = TokenDataset(
+                datasets[file] = StaticDataset(
                     "/tmp/lines.txt",
                     batch_size=100000,
                     block_size=block_size,
@@ -307,7 +307,7 @@ def create_dataset(
         else:
             dataset = merge_datasets(collection, equalize=False)
     else:
-        dataset = TokenDataset(
+        dataset = StaticDataset(
             intermediate_path,
             tokenizer=tokenizer,
             batch_size=100000,
@@ -347,7 +347,7 @@ def build_static_datasets(train_config, tokenizer):
                     cached = f"/data/datasets/{new_path}/{hashed}.tar.gz"
 
                     if os.path.exists(cached):
-                        datasets[dataset + str(duplicate)] = TokenDataset(
+                        datasets[dataset + str(duplicate)] = StaticDataset(
                             cached,
                             block_size=block_size,
                             from_cache=True,

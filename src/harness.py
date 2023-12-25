@@ -131,7 +131,7 @@ def main():
 
     static_data = []
     if len(train_config["datasets"].get("static", [])) > 0:
-        static_data.append(build_static_datasets(p, tokenizer))
+        static_data.append(build_static_datasets(train_config, tokenizer))
 
     streaming_data = []
     for dataset in train_config["datasets"].get("streaming", []):
@@ -327,11 +327,11 @@ def create_dataset(
 
 
 # Create a tokenized dataset from every directory specified in config file
-def build_static_datasets(config, tokenizer):
+def build_static_datasets(train_config, tokenizer):
     datasets = {}
-    block_size = config.get("block_size")
-    stride = config.get("stride", 0)
-    for collection in c["datasets"]["static"]:
+    block_size = train_config.get("block_size")
+    stride = train_config.get("stride", 0)
+    for collection in train_config["datasets"]["static"]:
         for dataset in config["collections"]["static"][collection]:
             if dataset not in datasets:
                 ds_config = config["collections"]["static"][collection][dataset] or {}
@@ -384,7 +384,7 @@ def build_static_datasets(config, tokenizer):
 
     # Merge all tokenized datasets into a single dataset for training
     collected = []
-    for collection in c["datasets"]["static"]:
+    for collection in train_config["datasets"]["static"]:
         for dataset in config["collections"]["static"][collection]:
             duplicate = 0
             while dataset + str(duplicate) in datasets:
@@ -392,7 +392,7 @@ def build_static_datasets(config, tokenizer):
                 duplicate = duplicate + 1
     if len(collected) > 1:
         return merge_datasets(
-            collected, equalize=config.get("equalize_datasets", False)
+            collected, equalize=train_config.get("equalize_datasets", False)
         )
     else:
         return collected[0]

@@ -1,6 +1,5 @@
 #!/bin/sh
 
-DEVICE='nvidia'
 CONTAINERS='["lab", "ctx", "tbd", "fil", "pet", "bit"]'
 MODELS='["src", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]'
 
@@ -43,26 +42,26 @@ fi
 # Implement the controller
 case $action in
     "ps") 
-        docker compose ps ;;
+        docker-compose ps ;;
     "logs") 
-        docker compose logs --follow ;;
+        docker-compose logs --follow ;;
     "stats")
         docker stats ;;
     "exec") 
         if [[ -z "$CONTAINER" ]]; then
             read -p "Which container should we enter? ${CONTAINERS} " CONTAINER
         fi
-        docker compose exec ${CONTAINER} /bin/bash ;;
+        docker-compose exec ${CONTAINER} /bin/bash ;;
     "test") 
-        docker compose exec lab robot --outputdir /book/static/tests /src/tests ;;
+        docker-compose exec lab robot --outputdir /book/static/tests /src/tests ;;
     "eval") 
-        docker compose exec lab sh tests/eval.sh ;;
+        docker-compose exec lab sh tests/eval.sh ;;
     "build") 
-        docker compose build ;;
+        docker-compose build ;;
     "push") 
-        docker compose push ;;
+        docker-compose push ;;
     "pull") 
-        docker compose -f docker-compose.yml -f docker-compose.services.yml pull ;;
+        docker-compose -f docker-compose.yml -f docker-compose.services.yml pull ;;
     "up" | "auto")
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we focus on? ${MODELS} " FOCUS
@@ -73,28 +72,28 @@ case $action in
         if [[ "$DETACHED" == "true" ]]; then
             ARG1='-d'
         fi
-        FOCUS=${FOCUS} docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml $GPU up ${ARG1} ;;
+        FOCUS=${FOCUS} docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml $GPU up ${ARG1} ;;
     "train") 
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we train? ${MODELS} " FOCUS
         fi
-        docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil && docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=${FOCUS} lab python3 harness.py ;;
+        docker-compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil && docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=${FOCUS} lab python3 harness.py ;;
     "prepare") 
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we prepare? " DIRECTORY
         fi
-        docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${DATASET}/prepare.py ;;
+        docker-compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${DATASET}/prepare.py ;;
     "fetch")
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we fetch? " DIRECTORY
         fi
-        docker compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${DATASET}/fetch.py ;;
+        docker-compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${DATASET}/fetch.py ;;
     "prune")
         docker system prune -f && docker volume prune -f ;;
     "key")
-        docker compose exec bit /bin/get-urbit-code ;;
+        docker-compose exec bit /bin/get-urbit-code ;;
     "down")
-        docker compose down --remove-orphans ;;
+        docker-compose down --remove-orphans ;;
     *) 
         echo "Invalid selection." ;;
 esac

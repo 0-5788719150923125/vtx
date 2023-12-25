@@ -273,7 +273,14 @@ If "resume" is True, the model will continue training from where it previously h
 ```yml
 mind:
   training:
-    resume: False
+    resume: True
+```
+if "checkpoint" is True, training will take periodic checkpoints. If "resume" is also True, then training may resume from the latest checkpoint file.
+```yml
+mind:
+  training:
+    checkpoint: True
+    resume: True
 ```
 If "regen" is True, the model will destroy and re-create the tokenized datasets before training:
 ```yml

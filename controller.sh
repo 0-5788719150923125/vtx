@@ -1,5 +1,6 @@
 #!/bin/sh
 
+DEVICE='nvidia'
 CONTAINERS='["lab", "ctx", "tbd", "fil", "pet", "bit"]'
 MODELS='["src", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]'
 

@@ -1,0 +1,3 @@
+module "controller" {
+  source = "./modules"
+}

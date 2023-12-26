@@ -50,7 +50,7 @@ ode:
     resume: False
     regen: False
     type: "pretrain"
-    # strategy: ddp
+    strategy: ddp
     tokenizer: True
     overrides:
       universal: True

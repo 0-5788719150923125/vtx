@@ -84,16 +84,16 @@ def main():
 
     tokenizer_model = base_model
     if train_config.get("tokenizer", False):
-        # train_tokenizer(
-        #     files=list_full_paths("/lab/research"),
-        #     dropout=0.9,
-        #     vocab_size=train_config["overrides"].get("vocab_size"),
-        #     min_frequency=2,
-        #     save_path=f"/data/tokenizers",
-        #     prefix=focus,
-        #     serialize=True,
-        #     trim_offsets=True,
-        # )
+        train_tokenizer(
+            files=list_full_paths("/lab/research"),
+            dropout=0.9,
+            vocab_size=train_config["overrides"].get("vocab_size"),
+            min_frequency=2,
+            save_path=f"/data/tokenizers",
+            prefix=focus,
+            serialize=True,
+            trim_offsets=True,
+        )
         tokenizer_file = f"/data/tokenizers/{focus}/tokenizer.json"
         # vocab_file = f"/data/tokenizers/{focus}/vocab.json"
         # merges_file = f"/data/tokenizers/{focus}/merges.txt"

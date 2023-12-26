@@ -56,7 +56,7 @@ ode:
       universal: True
       world_size: 23
       activation_function: gelu
-      n_layer: 9
+      n_layer: 8
       n_head: 2
       k_att: 3
       k_mlp: 3
@@ -89,7 +89,7 @@ ode:
     num_steps: 10000
     warmup_steps: 10
     batch_size: 1
-    gradient_accumulation_steps: 1024
+    gradient_accumulation_steps: 64
     weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine

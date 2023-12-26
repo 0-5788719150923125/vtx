@@ -19,6 +19,7 @@ To build a simple, opinionated framework for human cloning experiments. Our goal
 - Easy to install, runs anywhere.
 - Integration with a dozen social media platforms.
 - Local, offline-first APIs for text generation, image interrogation, and pattern mining.
+- Designed for auto-scaling, distributed architectures.
 - Swarm intelligence.
 - Rolling release cycles.
 - A hypothesis, a language, a story.

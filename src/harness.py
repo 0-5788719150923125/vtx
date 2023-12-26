@@ -12,14 +12,14 @@ train_config = model_config["training"]
 
 devices = None
 device_map = train_config.get("device_map", "auto")
-if focus in ["frame"]:
+if focus in ["frame", "ode"]:
     devices = device_map.split(":")[1]
     os.environ["CUDA_VISIBLE_DEVICES"] = str(devices)
 
 from lightning.pytorch import loggers
 from pypdf import PdfReader
 from tokenizers import Tokenizer
-from transformers import AutoConfig, AutoTokenizer
+from transformers import AutoConfig, AutoTokenizer, PreTrainedTokenizerFast
 
 from aigen.aigen import aigen
 from aigen.aigen.datasets import StaticDataset, merge_datasets
@@ -80,40 +80,42 @@ def main():
         print(pretrain_config)
 
     tokenizer_model = base_model
-    # if True:
-    #     train_tokenizer(
-    #         files=list_full_paths("/lab/research"),
-    #         dropout=0.9,
-    #         vocab_size=24576,
-    #         min_frequency=2,
-    #         save_path=f"/data/tokenizers",
-    #         prefix=focus,
-    #         serialize=True,
-    #         trim_offsets=True,
-    #     )
-    #     tokenizer_model = f"/data/tokenizers/{focus}/tokenizer.json"
-    #     # tokenizer = Tokenizer.from_file("data/tokenizer-wiki.json")
-    #     tokenizer = Tokenizer.from_file(
-    #         tokenizer_model,
-    #         # cache_dir="/data/models",
-    #         # padding="max_length",
-    #         # padding_side=train_config.get("padding_side", "left"),
-    #         # use_fast=True,
-    #         # return_overflowing_tokens=True,
-    #         # truncation=True,
-    #         # trust_remote_code=True,
-    #     )
-
-    tokenizer = AutoTokenizer.from_pretrained(
-        tokenizer_model,
-        cache_dir="/data/models",
-        padding="max_length",
-        padding_side=train_config.get("padding_side", "left"),
-        use_fast=True,
-        return_overflowing_tokens=True,
-        truncation=True,
-        trust_remote_code=True,
-    )
+    if train_config.get("pretrain_tokenizer", False):
+        train_tokenizer(
+            files=list_full_paths("/lab/research"),
+            dropout=0.9,
+            vocab_size=24576,
+            min_frequency=2,
+            save_path=f"/data/tokenizers",
+            prefix=focus,
+            serialize=True,
+            trim_offsets=True,
+        )
+        tokenizer_model = f"/data/tokenizers/{focus}/tokenizer.json"
+        tokenizer = PreTrainedTokenizerFast(
+            tokenizer_file=tokenizer_model,
+            bos_token="<|endoftext|>",
+            eos_token="<|endoftext|>",
+            unk_token="<|endoftext|>",
+            pad_token="<|endoftext|>",
+            padding="max_length",
+            padding_side=train_config.get("padding_side", "left"),
+            use_fast=True,
+            return_overflowing_tokens=True,
+            truncation=True,
+            trust_remote_code=True,
+        )
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(
+            tokenizer_model,
+            cache_dir="/data/models",
+            padding="max_length",
+            padding_side=train_config.get("padding_side", "left"),
+            use_fast=True,
+            return_overflowing_tokens=True,
+            truncation=True,
+            trust_remote_code=True,
+        )
 
     print(tokenizer)
 

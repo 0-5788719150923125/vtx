@@ -1,5 +1,6 @@
 base:
   '*':
     - system
+    - vtx
     - docker
-    # - cuda
+    - cuda

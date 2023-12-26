@@ -8,5 +8,6 @@ system.packages.install:
       - ca-certificates 
       - curl 
       - gcc
+      - git
       - gnupg
       - vim

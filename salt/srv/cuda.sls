@@ -16,3 +16,6 @@ cuda.packages.update:
 
 nvidia-container-toolkit:
   pkg.installed
+
+'sudo shutdown -r +0:05':
+  cmd.run

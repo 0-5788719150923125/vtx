@@ -42,6 +42,8 @@ src:
   info: of all creation
 
 ode:
+  model: ibm/MoLM-350M-4B
+  info: sing with me
   precision: 16
   device_map: cuda:1
   context_length: 2048
@@ -54,7 +56,7 @@ ode:
       universal: True
       world_size: 23
       activation_function: gelu
-      n_layer: 16
+      n_layer: 8
       n_head: 2
       k_att: 3
       k_mlp: 3
@@ -65,7 +67,7 @@ ode:
       att_hidden: 256
       ffd_hidden: 512
       block_size: 128
-      gate_type: gmm
+      gate_type: mlp
       gating_size: 64
       aux_loss_type: mi
       aux_loss_weight: 0.1
@@ -90,15 +92,10 @@ ode:
     weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
-    # val_split: 0.05
-    # val_interval: 100000
+    checkpoint: 5
     datasets:
       streaming:
         - redpajama2
-      # static:
-      #   - chat
-      #   - platform
-      #   - specialization
 
 # A revolution starts here.
 ghost:

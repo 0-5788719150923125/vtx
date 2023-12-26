@@ -95,13 +95,13 @@ def main():
     #     # tokenizer = Tokenizer.from_file("data/tokenizer-wiki.json")
     #     tokenizer = Tokenizer.from_file(
     #         tokenizer_model,
-    #         cache_dir="/data/models",
-    #         padding="max_length",
-    #         padding_side=train_config.get("padding_side", "left"),
-    #         use_fast=True,
-    #         return_overflowing_tokens=True,
-    #         truncation=True,
-    #         trust_remote_code=True,
+    #         # cache_dir="/data/models",
+    #         # padding="max_length",
+    #         # padding_side=train_config.get("padding_side", "left"),
+    #         # use_fast=True,
+    #         # return_overflowing_tokens=True,
+    #         # truncation=True,
+    #         # trust_remote_code=True,
     #     )
 
     tokenizer = AutoTokenizer.from_pretrained(

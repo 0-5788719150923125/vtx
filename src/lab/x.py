@@ -21,9 +21,13 @@ if __name__ == "__main__":
 async def loop(config):
     while True:
         if random.random() < config.get("frequency", 0.001):
+            keywords = config.get("keywords", []) + ["#G1358"]
             topics = config.get("topics", ["AI alignment"])
+            topic = random.choice(topics)
+            keyword = random.choice(keywords)
+            prompt = topic.replace("{keyword}", keyword)
             output = await head.ctx.prompt(
-                prompt=random.choice(topics),
+                prompt=prompt,
                 min_new_tokens=16,
                 max_new_tokens=56,
                 disposition=config.get("disposition", None),

@@ -2,6 +2,7 @@ locals {
   prefix = var.prefix
   username = var.username
   public_key = var.public_key
+  private_key = var.private_key
 }
 
 resource "random_pet" "main" {
@@ -83,7 +84,8 @@ resource "azurerm_linux_virtual_machine" "main" {
   name                = random_pet.main.id
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  size                = "Standard_NC4as_T4_v3"
+  # size                = "Standard_NC4as_T4_v3"
+  size                = "Standard_B1s"
   admin_username      = local.username
   network_interface_ids = [
     azurerm_network_interface.main.id,
@@ -108,5 +110,39 @@ resource "azurerm_linux_virtual_machine" "main" {
     offer     = "0001-com-ubuntu-server-jammy"
     sku       = "22_04-lts"
     version   = "latest"
+  }
+
+  connection {
+    type        = "ssh"
+    user        = local.username
+    private_key = "${file(local.private_key)}"
+    host        = azurerm_linux_virtual_machine.main.public_ip_address
+  }
+
+  provisioner "file" {
+    source      = "./salt"
+    destination = "/home/${local.username}"
+  }
+
+  provisioner "remote-exec" {
+    on_failure = fail
+    inline = [
+      "set -o errexit",
+      "sudo curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring.gpg https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/3005/salt-archive-keyring.gpg",
+      "echo 'deb [signed-by=/etc/apt/keyrings/salt-archive-keyring.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/3005 jammy main' | sudo tee /etc/apt/sources.list.d/salt.list",
+      "export DEBIAN_FRONTEND='noninteractive'",
+      # "export NEEDRESTART_MODE=a",
+      "sudo apt-get update",
+      "sleep 60",
+      # "sudo apt-get upgrade -y",
+      "sudo apt-get install -y salt-minion salt-ssh",
+      # "sudo mkdir -p /etc/salt",
+      # "sudo mkdir -p /srv/salt",
+      "sudo cat salt/etc/minion >> /etc/salt/minion",
+      "sudo mv salt/srv/* /srv/salt/",
+      "sudo rm -rf salt",
+      "sudo systemctl enable salt-minion && sudo systemctl start salt-minion",
+      "sudo salt-call --local state.apply"
+    ]
   }
 }

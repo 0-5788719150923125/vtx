@@ -83,7 +83,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   name                = random_pet.main.id
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  size                = "Standard_B1s"
+  size                = "Standard_NC4as_T4_v3"
   admin_username      = local.username
   network_interface_ids = [
     azurerm_network_interface.main.id,

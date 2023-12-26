@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONTAINERS='["lab", "ctx", "tbd", "fil", "pet", "bit"]'
-MODELS='["src", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]'
+MODELS='["src", "ode", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]'
 
 # If defined, use the TASK variable.
 if [[ -n "$TASK" ]]; then

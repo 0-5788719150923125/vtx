@@ -18,10 +18,12 @@ if focus in ["frame"]:
 
 from lightning.pytorch import loggers
 from pypdf import PdfReader
+from tokenizers import Tokenizer
 from transformers import AutoConfig, AutoTokenizer
 
 from aigen.aigen import aigen
 from aigen.aigen.datasets import StaticDataset, merge_datasets
+from aigen.aigen.tokenizers import train_tokenizer
 from models import register_models
 
 register_models()
@@ -77,8 +79,33 @@ def main():
         print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
         print(pretrain_config)
 
+    tokenizer_model = base_model
+    # if True:
+    #     train_tokenizer(
+    #         files=list_full_paths("/lab/research"),
+    #         dropout=0.9,
+    #         vocab_size=24576,
+    #         min_frequency=2,
+    #         save_path=f"/data/tokenizers",
+    #         prefix=focus,
+    #         serialize=True,
+    #         trim_offsets=True,
+    #     )
+    #     tokenizer_model = f"/data/tokenizers/{focus}/tokenizer.json"
+    #     # tokenizer = Tokenizer.from_file("data/tokenizer-wiki.json")
+    #     tokenizer = Tokenizer.from_file(
+    #         tokenizer_model,
+    #         cache_dir="/data/models",
+    #         padding="max_length",
+    #         padding_side=train_config.get("padding_side", "left"),
+    #         use_fast=True,
+    #         return_overflowing_tokens=True,
+    #         truncation=True,
+    #         trust_remote_code=True,
+    #     )
+
     tokenizer = AutoTokenizer.from_pretrained(
-        base_model,
+        tokenizer_model,
         cache_dir="/data/models",
         padding="max_length",
         padding_side=train_config.get("padding_side", "left"),

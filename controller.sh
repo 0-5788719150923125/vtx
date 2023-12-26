@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 CONTAINERS='["lab", "ctx", "tbd", "fil", "pet", "bit"]'
 MODELS='["src", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]'
@@ -30,11 +30,11 @@ else
 fi
 
 # Import variables
-if [ -f '.env' ]; then
-    . './.env'
-else;
+if [ ! -f '.env' ]; then
     touch .env
 fi
+
+. './.env'
 
 # Set GPU mode
 if [[ "$DEVICE" != "cpu" ]]; then

@@ -8,7 +8,7 @@ cuda.keyring:
           && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
             sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
             sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-      # unless: test -f /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+      unless: test -f /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
 
 cuda.packages.update:
   pkg.uptodate:
@@ -16,7 +16,3 @@ cuda.packages.update:
 
 nvidia-container-toolkit:
   pkg.installed
-
-# '> /var/log/messages/':
-#   cmd.run:
-#     - unless: echo 'foo' > /tmp/.test && rm -f /tmp/.test

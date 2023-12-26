@@ -4,7 +4,6 @@ variable "zone" {
 }
 
 variable "prefix" {
-  type        = string
   default     = "vtx"
   description = "Prefix of all resources."
 }

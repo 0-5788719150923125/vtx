@@ -28,9 +28,11 @@ if ($env:TASK) {
 }
 
 # Import variables
-if (Test-Path '.env') {
-    . '.env'
+if (-not (Test-Path '.env')) {
+    New-Item -Path '.env' -ItemType 'file' -Force
 }
+
+. '.env'
 
 # Set GPU mode
 if ($env:DEVICE -ne "cpu") {

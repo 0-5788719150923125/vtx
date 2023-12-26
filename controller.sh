@@ -32,6 +32,8 @@ fi
 # Import variables
 if [ -f '.env' ]; then
     . './.env'
+else;
+    touch .env
 fi
 
 # Set GPU mode

@@ -12,9 +12,12 @@ train_config = model_config["training"]
 
 devices = None
 device_map = train_config.get("device_map", "auto")
-if focus in ["frame", "ode"]:
+if focus in ["frame"]:
     devices = device_map.split(":")[1]
     os.environ["CUDA_VISIBLE_DEVICES"] = str(devices)
+
+if focus in ["ode"]:
+    devices = -1
 
 from lightning.pytorch import loggers
 from pypdf import PdfReader
@@ -80,20 +83,24 @@ def main():
         print(pretrain_config)
 
     tokenizer_model = base_model
-    if train_config.get("pretrain_tokenizer", False):
+    if train_config.get("tokenizer", False):
         train_tokenizer(
             files=list_full_paths("/lab/research"),
             dropout=0.9,
-            vocab_size=24576,
+            vocab_size=train_config["overrides"].get("vocab_size"),
             min_frequency=2,
             save_path=f"/data/tokenizers",
             prefix=focus,
             serialize=True,
             trim_offsets=True,
         )
-        tokenizer_model = f"/data/tokenizers/{focus}/tokenizer.json"
+        tokenizer_file = f"/data/tokenizers/{focus}/tokenizer.json"
+        # vocab_file = f"/data/tokenizers/{focus}/vocab.json"
+        # merges_file = f"/data/tokenizers/{focus}/merges.txt"
         tokenizer = PreTrainedTokenizerFast(
-            tokenizer_file=tokenizer_model,
+            tokenizer_file=tokenizer_file,
+            # vocab_file=vocab_file,
+            # merges_file=merges_file,
             bos_token="<|endoftext|>",
             eos_token="<|endoftext|>",
             unk_token="<|endoftext|>",

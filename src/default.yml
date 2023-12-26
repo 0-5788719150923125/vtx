@@ -44,32 +44,31 @@ src:
 ode:
   model: ibm/MoLM-350M-4B
   info: sing with me
-  precision: 16
-  device_map: cuda:1
+  precision: 32
   context_length: 2048
   training:
-    device_map: cuda:1
     resume: False
     regen: False
     type: "pretrain"
-    pretrain_tokenizer: True
+    # strategy: ddp
+    tokenizer: True
     overrides:
       universal: True
       world_size: 23
       activation_function: gelu
-      n_layer: 12
+      n_layer: 9
       n_head: 2
       k_att: 3
       k_mlp: 3
       n_att_experts: 8
       n_mlp_experts: 16
       n_ctx: 2048 # history_length * n_layer
-      vocab_size: 24576
+      vocab_size: 12288
       n_embd: 768
       att_hidden: 256
       ffd_hidden: 512
       block_size: 128
-      gate_type: gmm
+      gate_type: mlp
       gating_size: 64
       aux_loss_type: mi
       aux_loss_weight: 0.1
@@ -280,7 +279,7 @@ collections:
       repo: togethercomputer/RedPajama-Data-V2
       sequential: True
       content_key: raw_content
-      sample_size: 100
+      sample_size: 1000
       snapshots:
         - "2023-14"
       name: default

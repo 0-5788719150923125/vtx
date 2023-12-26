@@ -1,39 +1,21 @@
 import asyncio
-import concurrent.futures
 import functools
-import gc
 import logging
-import math
 import os
 import random
 import re
 import statistics
-import sys
 import time
 import traceback
 import typing
-from collections import Counter
 from copy import deepcopy
 from itertools import chain
-from pprint import pprint
 from textwrap import dedent
 from typing import List, Union
 
 import numpy as np
-import torch
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
-from moduleformer import (
-    ModuleFormerConfig,
-    ModuleFormerForCausalLM,
-    ModuleFormerForSequenceClassification,
-)
-from transformers import (
-    AutoConfig,
-    AutoModelForCausalLM,
-    AutoModelForSequenceClassification,
-    AutoTokenizer,
-)
 
 from aigen.aigen import aigen
 from common import (
@@ -46,12 +28,9 @@ from common import (
     ship,
     wall,
 )
+from models import register_models
 
-AutoConfig.register("moduleformer", ModuleFormerConfig)
-AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)
-AutoModelForSequenceClassification.register(
-    ModuleFormerConfig, ModuleFormerForSequenceClassification
-)
+register_models()
 
 
 def validation(config):
@@ -467,9 +446,7 @@ class Cortex:
                     tokenizer.convert_tokens_to_ids(tokenizer.tokenize(token)[0])
                 )
 
-        context = deepcopy(self.context)
-        if ctx:
-            context = deepcopy(ctx)
+        context = deepcopy(ctx) if ctx else deepcopy(self.context)
 
         context.insert(0, {"bias": bias, "message": persona})
 

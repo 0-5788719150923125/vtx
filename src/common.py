@@ -5,7 +5,6 @@ import logging
 import os
 import random
 import re
-import secrets
 import selectors
 import shutil
 import string
@@ -31,7 +30,6 @@ focus = os.environ["FOCUS"]
 
 cache_path = "/tmp/torch"
 os.environ["PYTORCH_KERNEL_CACHE_PATH"] = cache_path
-os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 if os.path.exists(cache_path):
     shutil.rmtree(cache_path)

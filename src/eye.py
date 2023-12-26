@@ -1,10 +1,8 @@
 import asyncio
 import base64
 import io
-import time
 
 import requests
-from apscheduler.schedulers.background import BackgroundScheduler
 from PIL import Image
 from transformers import AutoImageProcessor, ViTForImageClassification
 

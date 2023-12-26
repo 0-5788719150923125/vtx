@@ -1,24 +1,11 @@
-import json
 import logging
-import math
 import os
 import random
 import re
 import shutil
-import subprocess
 import time
 
-import torch
-
-from common import (
-    colors,
-    config,
-    focus,
-    get_directory_size,
-    hash_directory,
-    list_full_paths,
-    nist_beacon,
-)
+from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 
 model_config = config[focus]
 train_config = model_config["training"]
@@ -30,40 +17,14 @@ if focus in ["frame"]:
     os.environ["CUDA_VISIBLE_DEVICES"] = str(devices)
 
 from lightning.pytorch import loggers
-from moduleformer import (
-    ModuleFormerConfig,
-    ModuleFormerForCausalLM,
-    ModuleFormerForSequenceClassification,
-)
-from peft import (
-    AdaLoraConfig,
-    IA3Config,
-    LoHaConfig,
-    LoKrConfig,
-    LoraConfig,
-    PeftConfig,
-    PeftModel,
-    PrefixTuningConfig,
-    PromptTuningConfig,
-    get_peft_model,
-    prepare_model_for_kbit_training,
-)
 from pypdf import PdfReader
-from transformers import (
-    AutoConfig,
-    AutoModelForCausalLM,
-    AutoModelForSequenceClassification,
-    AutoTokenizer,
-)
+from transformers import AutoConfig, AutoTokenizer
 
 from aigen.aigen import aigen
 from aigen.aigen.datasets import StaticDataset, merge_datasets
+from models import register_models
 
-AutoConfig.register("moduleformer", ModuleFormerConfig)
-AutoModelForCausalLM.register(ModuleFormerConfig, ModuleFormerForCausalLM)
-AutoModelForSequenceClassification.register(
-    ModuleFormerConfig, ModuleFormerForSequenceClassification
-)
+register_models()
 
 
 def main():

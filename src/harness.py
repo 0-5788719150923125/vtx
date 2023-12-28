@@ -10,14 +10,13 @@ from common import colors, config, focus, hash_directory, list_full_paths, nist_
 model_config = config[focus]
 train_config = model_config["training"]
 
-devices = None
-device_map = train_config.get("device_map", "auto")
-if focus in ["frame"]:
-    devices = device_map.split(":")[1]
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(devices)
+# devices = None
+# device_map = train_config.get("device_map", "auto")
+# if focus in ["frame"]:
+#     devices = device_map.split(":")[1]
+#     os.environ["CUDA_VISIBLE_DEVICES"] = str(devices)
 
-if focus in ["ode"]:
-    devices = -1
+# devices = train_config.get("devices", -1)
 
 from lightning.pytorch import loggers
 from pypdf import PdfReader
@@ -146,7 +145,7 @@ def main():
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
         precision=model_config.get("precision", 32),
-        device_map=device_map,
+        device_map=train_config.get("device_map", "auto"),
     )
 
     if train_type not in ["standard", "pretrain"] and not use_petals:
@@ -172,7 +171,6 @@ def main():
         generation_config=config["transformers"]["generation"][
             model_config.get("generation_profile", "training")
         ],
-        devices=devices,
         petals=use_petals,
         seed=nist_beacon()[1],
         output_dir=output_dir,

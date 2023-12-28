@@ -36,6 +36,11 @@ fi
 
 . './.env'
 
+# Setup config file
+if [ ! -f 'config.yml' ]; then
+    touch config.yml
+fi
+
 # Set GPU mode
 if [[ "$DEVICE" != "cpu" ]]; then
     GPU='-f docker-compose.gpu.yml'

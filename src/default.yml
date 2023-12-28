@@ -288,6 +288,7 @@ collections:
     c4:
       repo: c4
       name: en.noblocklist
+      content_key: text
 
 reddit:
   enabled: False

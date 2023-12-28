@@ -44,12 +44,15 @@
 #     name="en.noblocklist",
 #     # snapshots=["2023-14"],
 #     # languages=["en"],
-#     split="validation",
+#     # split="validation",
 #     streaming=True,
 #     cache_dir="/data/pile",
 # ).shuffle(seed=random.randint(0, 9), buffer_size=10)
 
-# print(next(iter(dataset)))
+# if "validation" in dataset.keys():
+#     print("found validation split")
+
+# print(next(iter(dataset["train"])))
 
 
 # ------- ModuleFormers --------#

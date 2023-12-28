@@ -131,6 +131,7 @@ def main():
 
     # Erase old logs
     log_path = "/data/logs/" + focus
+    train_config["log_path"] = log_path
     if fresh_logs == True:
         shutil.rmtree(log_path, ignore_errors=True)
 

@@ -285,6 +285,9 @@ collections:
       name: default
       languages: 
         - "en"
+    c4:
+      repo: c4
+      name: en.noblocklist
 
 reddit:
   enabled: False

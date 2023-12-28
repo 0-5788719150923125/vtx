@@ -40,11 +40,11 @@
 # datasets.logging.set_verbosity_info()
 
 # dataset = datasets.load_dataset(
-#     "tiiuae/falcon-refinedweb",
-#     # name="sample",
+#     "c4",
+#     name="en.noblocklist",
 #     # snapshots=["2023-14"],
 #     # languages=["en"],
-#     split="train",
+#     split="validation",
 #     streaming=True,
 #     cache_dir="/data/pile",
 # ).shuffle(seed=random.randint(0, 9), buffer_size=10)

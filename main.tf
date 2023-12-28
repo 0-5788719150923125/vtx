@@ -1,3 +1,3 @@
 module "controller" {
-  source = "./modules"
+  source = "./infra/terraform"
 }

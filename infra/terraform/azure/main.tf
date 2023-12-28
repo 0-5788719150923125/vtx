@@ -120,7 +120,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
 
   provisioner "file" {
-    source      = "./salt"
+    source      = "./infra/salt"
     destination = "/home/${local.username}"
   }
 

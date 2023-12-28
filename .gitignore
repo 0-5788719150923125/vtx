@@ -11,4 +11,5 @@ book/static/tests
 !.keep
 !.gitignore
 *terraform*
+!infra/terraform
 *.key

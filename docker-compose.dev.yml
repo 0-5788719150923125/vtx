@@ -5,6 +5,7 @@ services:
     volumes:
       - ./src:/src
       - ./lab:/lab
+      - ./infra:/infra
       - ./data:/data
       - ./book:/book
       - ./config.yml:/env/config.yml

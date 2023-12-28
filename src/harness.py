@@ -26,6 +26,7 @@ from transformers import AutoConfig, AutoTokenizer, PreTrainedTokenizerFast
 from aigen.aigen import aigen
 from aigen.aigen.datasets import StaticDataset, merge_datasets
 from aigen.aigen.tokenizers import train_tokenizer
+from aigen.aigen.tuners import optimize_hparams
 from extensions import register_models
 
 register_models()
@@ -133,8 +134,14 @@ def main():
     for dataset in train_config["datasets"].get("streaming", []):
         streaming_data.append(config["collections"]["streaming"][dataset.lower()])
 
-    # Instantiate the model object
-    prototype = aigen(
+    # Erase old logs
+    log_path = "/data/logs/" + focus
+    if fresh_logs == True:
+        shutil.rmtree(log_path, ignore_errors=True)
+
+    os.makedirs(f"{log_path}/{adapter}", exist_ok=True)
+
+    init_kwargs = dict(
         model=launch_model,
         model_folder=model_folder,
         tokenizer=tokenizer,
@@ -145,8 +152,18 @@ def main():
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
         precision=model_config.get("precision", 32),
-        device_map=train_config.get("device_map", "auto"),
+        device_map=model_config.get("device_map", "auto"),
     )
+
+    train_config["static_data"] = static_data
+    train_config["streaming_data"] = streaming_data
+
+    if train_config.get("tune", False):
+        optimize_hparams(init_kwargs, train_config)
+        return
+
+    # Instantiate the model object
+    prototype = aigen(**init_kwargs)
 
     if train_type not in ["standard", "pretrain"] and not use_petals:
         output_dir = f"/data/adapters/{focus}/{adapter}"
@@ -155,19 +172,10 @@ def main():
         else:
             prototype.create_adapter(train_config)
 
-    # Erase old logs
-    log_path = "/data/logs/" + focus
-    if fresh_logs == True:
-        shutil.rmtree(log_path, ignore_errors=True)
-
-    os.makedirs(f"{log_path}/{adapter}", exist_ok=True)
-
     logger = loggers.TensorBoardLogger(log_path, name=adapter, default_hp_metric=True)
 
     # Train the model
     prototype.train(
-        static_data=static_data,
-        streaming_data=streaming_data,
         generation_config=config["transformers"]["generation"][
             model_config.get("generation_profile", "training")
         ],

@@ -34,6 +34,11 @@ if (-not (Test-Path '.env')) {
 
 . '.env'
 
+# Setup config file
+if (-not (Test-Path 'config.yml')) {
+    New-Item -Path 'config.yml' -ItemType 'file' -Force
+}
+
 # Set GPU mode
 if ($env:DEVICE -ne "cpu") {
     $GPU = '-f docker-compose.gpu.yml'

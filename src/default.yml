@@ -46,11 +46,11 @@ ode:
   info: sing with me
   precision: 32
   context_length: 2048
+  device_map: cuda:1
   training:
-    resume: False
-    regen: False
     type: "pretrain"
     strategy: ddp
+    devices: -1
     tokenizer: True
     overrides:
       universal: True
@@ -94,6 +94,8 @@ ode:
     gradient_clip_val: 1.0
     scheduler: cosine
     checkpoint: 5
+    resume: True
+    regen: False
     datasets:
       streaming:
         - c4

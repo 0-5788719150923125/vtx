@@ -83,6 +83,16 @@ def main():
         print(pretrain_config)
 
     tokenizer_model = base_model
+    tokenizer_config = dict(
+        cache_dir="/data/models",
+        padding="max_length",
+        padding_side=train_config.get("padding_side", "left"),
+        use_fast=True,
+        return_overflowing_tokens=True,
+        truncation=True,
+        trust_remote_code=True,
+    )
+
     if train_config.get("tokenizer") is not None:
         train_tokenizer(
             files=list_full_paths("/lab/research"),
@@ -95,34 +105,19 @@ def main():
             trim_offsets=True,
         )
         tokenizer_file = f"/data/tokenizers/{focus}/tokenizer.json"
-        # vocab_file = f"/data/tokenizers/{focus}/vocab.json"
-        # merges_file = f"/data/tokenizers/{focus}/merges.txt"
         tokenizer = PreTrainedTokenizerFast(
             tokenizer_file=tokenizer_file,
-            # vocab_file=vocab_file,
-            # merges_file=merges_file,
             bos_token="<|endoftext|>",
             eos_token="<|endoftext|>",
             unk_token="<|endoftext|>",
             pad_token="<|endoftext|>",
-            padding="max_length",
-            padding_side=train_config.get("padding_side", "left"),
-            use_fast=True,
-            return_overflowing_tokens=True,
-            truncation=True,
-            trust_remote_code=True,
+            **tokenizer_config,
         )
     else:
-        tokenizer = AutoTokenizer.from_pretrained(
-            tokenizer_model,
-            cache_dir="/data/models",
-            padding="max_length",
-            padding_side=train_config.get("padding_side", "left"),
-            use_fast=True,
-            return_overflowing_tokens=True,
-            truncation=True,
-            trust_remote_code=True,
-        )
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_model, **tokenizer_config)
+
+    if hasattr(tokenizer, "pad_token") and tokenizer.pad_token is None:
+        setattr(tokenizer, "pad_token", tokenizer.eos_token)
 
     print(tokenizer)
 

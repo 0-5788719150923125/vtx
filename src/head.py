@@ -28,7 +28,7 @@ from common import (
     ship,
     wall,
 )
-from models import register_models
+from extensions import register_models
 
 register_models()
 

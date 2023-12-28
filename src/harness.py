@@ -27,7 +27,7 @@ from transformers import AutoConfig, AutoTokenizer, PreTrainedTokenizerFast
 from aigen.aigen import aigen
 from aigen.aigen.datasets import StaticDataset, merge_datasets
 from aigen.aigen.tokenizers import train_tokenizer
-from models import register_models
+from extensions import register_models
 
 register_models()
 
@@ -83,7 +83,7 @@ def main():
         print(pretrain_config)
 
     tokenizer_model = base_model
-    if train_config.get("tokenizer", False):
+    if train_config.get("tokenizer") is not None:
         train_tokenizer(
             files=list_full_paths("/lab/research"),
             dropout=0.9,

@@ -96,7 +96,7 @@ ode:
     checkpoint: 5
     datasets:
       streaming:
-        - redpajama2
+        - c4
 
 # A revolution starts here.
 ghost:
@@ -277,18 +277,19 @@ collections:
       sample_size: 1000
     redpajama2:
       repo: togethercomputer/RedPajama-Data-V2
-      sequential: True
       content_key: raw_content
       sample_size: 1000
       snapshots:
         - "2023-14"
-      name: default
+      subset: default
       languages: 
         - "en"
     c4:
       repo: c4
-      name: en.noblocklist
+      subset: en.noblocklist
       content_key: text
+      sequential: True
+      sample_size: 100
 
 reddit:
   enabled: False

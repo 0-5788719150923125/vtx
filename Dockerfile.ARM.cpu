@@ -3,14 +3,10 @@ FROM arm64v8/ubuntu:22.04
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV HF_HOME="/tmp"
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
     clang \
+    curl \
     gcc \
     git \
     libclang-dev \
@@ -22,6 +18,7 @@ RUN apt-get update -y \
     python3-pip \
     python3-packaging \
     python3-venv \
+    sqlite3 \
     unzip \
     vim \
     && rm -rf /var/lib/apt/lists/*

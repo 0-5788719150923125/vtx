@@ -5,19 +5,6 @@ import re
 import shutil
 import time
 
-from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
-
-model_config = config[focus]
-train_config = model_config["training"]
-
-# devices = None
-# device_map = train_config.get("device_map", "auto")
-# if focus in ["frame"]:
-#     devices = device_map.split(":")[1]
-#     os.environ["CUDA_VISIBLE_DEVICES"] = str(devices)
-
-# devices = train_config.get("devices", -1)
-
 from lightning.pytorch import loggers
 from pypdf import PdfReader
 from tokenizers import Tokenizer
@@ -27,27 +14,30 @@ from aigen.aigen import aigen
 from aigen.aigen.datasets import StaticDataset, merge_datasets
 from aigen.aigen.tokenizers import train_tokenizer
 from aigen.aigen.tuners import optimize_hparams
+from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 from extensions import register_models
 
 register_models()
 
-# import torch.distributed as dist
+verbose = True
+local_rank = int(os.environ.get("LOCAL_RANK", 0))
+world_rank = int(os.environ.get("WORLD_RANK", 0))
 
-# if dist.is_available() and dist.is_initialized():
-#     print("This message will only be printed on rank 0")
+if local_rank > 0:
+    verbose = False
 
-# print("my ranks are")
-# local_rank = int(os.environ.get("LOCAL_RANK", 0))
-# world_rank = int(os.environ.get("WORLD_RANK", 0))
-# print(local_rank, world_rank)
-# time.sleep(5)
+model_config = config[focus]
+train_config = model_config["training"]
 
 
 def main():
-    print("(" + colors.GREEN + "focus" + colors.WHITE + ")")
-    time.sleep(2)
-    print(f"({colors.RED}ed{colors.WHITE}) on the ({colors.BLUE}{focus}{colors.WHITE})")
-    time.sleep(3)
+    if verbose:
+        print("(" + colors.GREEN + "focus" + colors.WHITE + ")")
+        time.sleep(2)
+        print(
+            f"({colors.RED}ed{colors.WHITE}) on the ({colors.BLUE}{focus}{colors.WHITE})"
+        )
+        time.sleep(3)
 
     base_model = model_config["model"]
     model_folder = "/data/models/" + focus
@@ -85,13 +75,15 @@ def main():
 
     if train_type == "pretrain" and not resume:
         pretrain_config = AutoConfig.from_pretrained(launch_model)
-        print(f"{colors.RED}original pretrain config:{colors.WHITE}")
-        print(pretrain_config)
+        if verbose:
+            print(f"{colors.RED}original pretrain config:{colors.WHITE}")
+            print(pretrain_config)
         setattr(pretrain_config, "_name_or_path", focus)
         for k, v in train_config.get("overrides").items():
             setattr(pretrain_config, k, v)
-        print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
-        print(pretrain_config)
+        if verbose:
+            print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
+            print(pretrain_config)
 
     tokenizer_model = base_model
     tokenizer_config = dict(
@@ -130,7 +122,8 @@ def main():
     if hasattr(tokenizer, "pad_token") and tokenizer.pad_token is None:
         setattr(tokenizer, "pad_token", tokenizer.eos_token)
 
-    print(tokenizer)
+    if verbose:
+        print(tokenizer)
 
     static_data = []
     if len(train_config["datasets"].get("static", [])) > 0:

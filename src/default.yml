@@ -288,6 +288,7 @@ collections:
       content_key: text
       sequential: True
       sample_size: 100
+      val_samples: 100
 
 reddit:
   enabled: False

@@ -46,12 +46,12 @@ ode:
   info: sing with me
   precision: 32
   context_length: 2048
-  device_map: cuda:1
+  device_map: cuda:0
   training:
     type: "pretrain"
     # strategy: ddp
     devices:
-      - 1
+      - 0
     tokenizer: True
     overrides:
       universal: True

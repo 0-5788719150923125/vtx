@@ -2,7 +2,9 @@
   cmd.run:
     - cwd: /home/one/vtx
     - unless: test -f vtx/README.md
+    - runas: one
 
 "git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'":
   cmd.run:
     - cwd: /home/one/vtx
+    - runas: one

@@ -13,3 +13,4 @@ book/static/tests
 *terraform*
 !infra/terraform
 *.key
+*.db

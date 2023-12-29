@@ -158,7 +158,7 @@ def main():
     train_config["static_data"] = static_data
     train_config["streaming_data"] = streaming_data
 
-    if os.environ.get("JOB") == "trial":
+    if os.environ.get("TASK") == "trial":
         optimize_hparams(init_kwargs, train_config)
         return
 

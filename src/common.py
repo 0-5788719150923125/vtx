@@ -53,7 +53,7 @@ if os.path.exists("/env/config.yml"):
             if "discord" in user_config and "horde" in user_config:
                 user_config["discord"]["horde_enabled"] = True
             config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-            print("Successfully loaded your config.yml file.")
+            # print("Successfully loaded your config.yml file.")
 else:
     print(
         "We did not find a configuration file at /env/config.yml. Loading default.yml."

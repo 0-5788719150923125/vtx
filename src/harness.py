@@ -31,6 +31,17 @@ from extensions import register_models
 
 register_models()
 
+# import torch.distributed as dist
+
+# if dist.is_available() and dist.is_initialized():
+#     print("This message will only be printed on rank 0")
+
+# print("my ranks are")
+# local_rank = int(os.environ.get("LOCAL_RANK", 0))
+# world_rank = int(os.environ.get("WORLD_RANK", 0))
+# print(local_rank, world_rank)
+# time.sleep(5)
+
 
 def main():
     print("(" + colors.GREEN + "focus" + colors.WHITE + ")")
@@ -154,7 +165,7 @@ def main():
     train_config["static_data"] = static_data
     train_config["streaming_data"] = streaming_data
 
-    if train_config.get("tune", False):
+    if os.environ.get("JOB") == "trial":
         optimize_hparams(init_kwargs, train_config)
         return
 

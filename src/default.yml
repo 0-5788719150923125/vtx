@@ -49,8 +49,9 @@ ode:
   device_map: cuda:1
   training:
     type: "pretrain"
-    strategy: ddp
-    devices: -1
+    # strategy: ddp
+    devices:
+      - 1
     tokenizer: True
     overrides:
       universal: True
@@ -93,8 +94,8 @@ ode:
     weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
-    checkpoint: 5
-    resume: True
+    # checkpoint: 5
+    resume: False
     regen: False
     datasets:
       streaming:

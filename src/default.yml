@@ -90,7 +90,6 @@ ode:
     weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
-    # checkpoint: 5
     resume: False
     regen: False
     datasets:

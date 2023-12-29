@@ -23,6 +23,7 @@ else
     echo "(fetch)   Download a dataset."
     echo "(prepare) Prepare a dataset."
     echo "(train)   Train a model."
+    echo "(trial)   Search for optimal hyperparameters."
     echo "(prune)   Prune all unused images, networks, and volumes."
     echo "(key)     Fetch your Urbit access key."
     echo "(auto)    Turn on autopilot."
@@ -80,11 +81,14 @@ case $action in
             ARG1='-d'
         fi
         FOCUS=${FOCUS} docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml $GPU up ${ARG1} ;;
-    "train") 
+    "train" | "trial") 
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we train? ${MODELS} " FOCUS
         fi
-        docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil && docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=${FOCUS} lab python3 harness.py ;;
+        if [[ "$action" == "trial" ]]; then
+            ARG1='TASK=trial'
+        fi
+        docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil && docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=${FOCUS} lab ${ARG1} python3 harness.py ;;
     "prepare") 
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we prepare? " DIRECTORY

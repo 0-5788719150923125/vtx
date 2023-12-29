@@ -21,6 +21,7 @@ if ($env:TASK) {
     Write-Host "(fetch)   Download a dataset."
     Write-Host "(prepare) Prepare a dataset."
     Write-Host "(train)   Train a model."
+    Write-Host "(trial)   Search for optimal hyperparameters."
     Write-Host "(prune)   Prune all unused images, networks, and volumes."
     Write-Host "(key)     Fetch your Urbit access key."
 
@@ -89,12 +90,15 @@ switch ($action) {
         $env:FOCUS = $FOCUS
         docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml $GPU up $ARG1
     }
-    "train" {
+    "train", "trial" {
         if (-not $env:FOCUS) {
             $FOCUS = Read-Host "Which model should we train? $($MODELS -join ', ')"
         }
+        if ($action -eq "trial") {
+            $ARG1 = 'TASK=trial'
+        }
         docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil
-        docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=$FOCUS lab python3 harness.py
+        docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=$FOCUS lab $ARG1 python3 harness.py
     }
     "prepare" {
         if (-not $env:DATASET) {

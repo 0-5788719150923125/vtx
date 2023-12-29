@@ -153,6 +153,18 @@
         },
       },
       {
+        "label": "trial",
+        "detail": "Search for optimal hyperparameters.",
+        "type": "shell",
+        "command": "TASK=trial FOCUS=${input:model} sh controller.sh",
+        "windows": {
+          "command": "$env:FOCUS = '${input:model}'; $env:TASK = 'trial'; .\\controller.ps1"
+        },
+        "runOptions": {
+          "instanceLimit": 5
+        },
+      },
+      {
         "label": "deploy",
         "detail": "Deploy your book to CloudFlare.",
         "type": "shell",

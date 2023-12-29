@@ -50,7 +50,7 @@ ode:
   training:
     type: "pretrain"
     # strategy: ddp
-    devices: 
+    devices:
       - 1
     tokenizer: True
     overrides:

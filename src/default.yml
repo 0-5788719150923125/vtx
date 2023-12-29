@@ -272,11 +272,11 @@ collections:
     refinedweb:
       repo: tiiuae/falcon-refinedweb
       content_key: content
-      sample_size: 1000
+      buffer_size: 1000
     redpajama2:
       repo: togethercomputer/RedPajama-Data-V2
       content_key: raw_content
-      sample_size: 1000
+      buffer_size: 1000
       snapshots:
         - "2023-14"
       subset: default
@@ -287,7 +287,7 @@ collections:
       subset: en.noblocklist
       content_key: text
       sequential: True
-      sample_size: 100
+      buffer_size: 100
       val_samples: 100
 
 reddit:

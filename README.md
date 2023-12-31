@@ -66,6 +66,7 @@ For complete documentation, [please visit this link](https://studio.src.eco/nail
 # troubleshooting
 
 - If, for some reason, a git submodule directory is empty, please try to `cd` into the module directory, and run this command: `git submodule update --init` 
+- For Windows users, VSCode tasks will not work until you unblock the appropriate Powershell script: `Unblock-File -Path .\controller.ps1`
 
 # contact
 

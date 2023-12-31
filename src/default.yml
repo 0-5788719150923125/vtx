@@ -96,9 +96,15 @@ ode:
       streaming:
         - c4
 
+sign:
+  model: microsoft/phi-2
+  info: of things to come
+  training:
+    type: "lora"
+
 # A revolution starts here.
 ghost:
-  model: PY007/TinyLlama-1.1B-intermediate-step-715k-1.5T
+  model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   info: watching, waiting
   training:
     type: "lora"
@@ -280,13 +286,13 @@ collections:
       snapshots:
         - "2023-14"
       subset: default
+      sequential: True
       languages: 
         - "en"
     c4:
       repo: c4
       subset: en.noblocklist
       content_key: text
-      sequential: True
       buffer_size: 100
       val_samples: 100
 

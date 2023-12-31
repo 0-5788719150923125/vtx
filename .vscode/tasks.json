@@ -35,7 +35,7 @@
         "type": "shell",
         "command": "TASK=ps sh controller.sh",
         "windows": {
-          "command": "docker compose ps"
+          "command": "$env:TASK = 'ps'; .\\controller.ps1"
         }
       },
       {
@@ -44,7 +44,7 @@
         "type": "shell",
         "command": "TASK=logs sh controller.sh",
         "windows": {
-          "command": "docker compose logs --follow"
+          "command": "$env:TASK = 'logs'; .\\controller.ps1"
         }
       },
       {
@@ -53,7 +53,7 @@
         "type": "shell",
         "command": "TASK=exec CONTAINER=\"${input:container}\" sh controller.sh",
         "windows": {
-          "command": "docker compose exec \\\"${input:container}\\\" /bin/bash"
+          "command": "$env:TASK = 'exec'; $env:CONTAINER = '${input:container}'; .\\controller.ps1"
         }
       },
       {
@@ -62,7 +62,7 @@
         "type": "shell",
         "command": "TASK=test sh controller.sh",
         "windows": {
-          "command": "docker compose exec lab robot --outputdir /book/static/tests /src/tests"
+          "command": "$env:TASK = 'test'; .\\controller.ps1"
         }
       },
       {
@@ -71,7 +71,7 @@
         "type": "shell",
         "command": "TASK=eval sh controller.sh",
         "windows": {
-          "command": "docker compose exec lab sh tests/eval.sh"
+          "command": "$env:TASK = 'eval'; .\\controller.ps1"
         }
       },
       {
@@ -80,7 +80,7 @@
         "type": "shell",
         "command": "TASK=build sh controller.sh",
         "windows": {
-          "command": "docker compose -f docker-compose.yml -f docker-compose.gpu.yml build"
+          "command": "$env:TASK = 'build'; .\\controller.ps1"
         }
       },
       {
@@ -89,7 +89,7 @@
         "type": "shell",
         "command": "TASK=push sh controller.sh",
         "windows": {
-          "command": "docker compose push"
+          "command": "$env:TASK = 'push'; .\\controller.ps1"
         }
       },
       {
@@ -98,7 +98,7 @@
         "type": "shell",
         "command": "TASK=pull sh controller.sh",
         "windows": {
-          "command": "docker compose pull"
+          "command": "$env:TASK = 'pull'; .\\controller.ps1"
         }
       },
       {
@@ -107,7 +107,7 @@
         "type": "shell",
         "command": "TASK=up FOCUS=${input:model} sh controller.sh",
         "windows": {
-          "command": "$env:FOCUS = '${input:model}'; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up"
+          "command": "$env:TASK = 'up'; $env:FOCUS = '${input:model}'; .\\controller.ps1"
         }
       },
       {
@@ -146,7 +146,7 @@
         "type": "shell",
         "command": "TASK=train FOCUS=${input:model} sh controller.sh",
         "windows": {
-          "command": "docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml -f docker-compose.gpu.yml run -e FOCUS=${input:model} lab python3 harness.py"
+          "command": "$env:TASK = 'train'; $env:FOCUS = '${input:model}'; .\\controller.ps1"
         },
         "runOptions": {
           "instanceLimit": 5
@@ -158,7 +158,7 @@
         "type": "shell",
         "command": "TASK=trial FOCUS=${input:model} sh controller.sh",
         "windows": {
-          "command": "$env:FOCUS = '${input:model}'; $env:TASK = 'trial'; .\\controller.ps1"
+          "command": "$env:TASK = 'trial'; $env:FOCUS = '${input:model}'; .\\controller.ps1"
         },
         "runOptions": {
           "instanceLimit": 5
@@ -179,7 +179,7 @@
         "type": "shell",
         "command": "TASK=prepare DATASET=${input:dataset} sh controller.sh",
         "windows": {
-          "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:dataset}/prepare.py"
+          "command": "$env:TASK = 'prepare'; $env:DATASET = '${input:dataset}'; .\\controller.ps1"
         },
         "runOptions": {
           "instanceLimit": 3
@@ -191,7 +191,7 @@
         "type": "shell",
         "command": "TASK=fetch DATASET=${input:dataset} sh controller.sh",
         "windows": {
-          "command": "docker compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${input:dataset}/fetch.py"
+          "command": "$env:TASK = 'fetch'; $env:DATASET = '${input:dataset}'; .\\controller.ps1"
         },
         "runOptions": {
           "instanceLimit": 3
@@ -203,7 +203,7 @@
         "type": "shell",
         "command": "TASK=up FOCUS=${input:model} DETACHED=true sh controller.sh",
         "windows": {
-          "command": "$env:FOCUS = '${input:model}'; docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.gpu.yml -f docker-compose.services.yml up -d"
+          "command": "$env:TASK = 'up'; $env:FOCUS = '${input:model}'; $env:DETACHED = 'true'; .\\controller.ps1"
         }
       },
       {
@@ -212,7 +212,7 @@
         "type": "shell",
         "command": "TASK=prune sh controller.sh",
         "windows": {
-          "command": "docker system prune -f && docker volume prune -f"
+          "command": "$env:TASK = 'prune'; .\\controller.ps1"
         }
       },
       {
@@ -221,7 +221,7 @@
         "type": "shell",
         "command": "TASK=key sh controller.sh",
         "windows": {
-          "command": "docker compose exec bit /bin/get-urbit-code"
+          "command": "$env:TASK = 'key'; .\\controller.ps1"
         }
       },
       {
@@ -230,7 +230,7 @@
         "type": "shell",
         "command": "TASK=down sh controller.sh",
         "windows": {
-          "command": "docker compose down --remove-orphans"
+          "command": "$env:TASK = 'down'; .\\controller.ps1"
         }
       },
       {
@@ -239,7 +239,7 @@
         "type": "shell",
         "command": "TASK=stats sh controller.sh",
         "windows": {
-          "command": "docker stats"
+          "command": "$env:TASK = 'stats'; .\\controller.ps1"
         }
       }
     ]

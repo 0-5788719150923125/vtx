@@ -107,7 +107,7 @@ ghost:
   model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   info: watching, waiting
   training:
-    type: "lora"
+    type: "loha"
 
 # A swarm of small models.
 chaos:

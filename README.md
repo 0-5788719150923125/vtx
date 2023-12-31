@@ -47,18 +47,16 @@ To build a simple, opinionated framework for human cloning experiments. Our goal
 
 # instructions
 
+- Install Git and Docker.
 - Clone this repo to a local directory: `git clone --recurse-submodules https://github.com/0-5788719150923125/vtx.git path/to/my/directory`
 - Checkout the correct branches with: `git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'`
-- Install Docker.
 - Place configurations into config.yml. ([default.yml](./src/default.yml))
-- Put new datasets into lab/{dataset_name}. Also specify them in config.yml.
 - Put credentials into a .env file at the root of this project. ([example.env](./examples/lab/.env))
-- Find many other examples in [./examples](./examples/).
-- Use VSCode tasks as a reference.
-- The "build" task will build a Docker image from source files.
+- Find many other examples at [./examples](./examples/).
+- Use VSCode tasks, or the `controller.sh` script (on Linux/Mac) and/or the `controller.ps1` script on Windows.
+- The "up" task is used to bring your lab online.
 - The "fetch" and "prepare" tasks are used for data retrieval and preparation.
 - The "train" task is used to train your models.
-- The "up" task is used to run your lab.
 - Ask me questions.
 
 For complete documentation, [please visit this link](https://studio.src.eco/nail/vtx/).

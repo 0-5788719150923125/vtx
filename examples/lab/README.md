@@ -1,7 +1,7 @@
 # Demo
 ---
 
-This is a demonstration, to quickly bring this project online, connect to [The Source](https://src.eco), and immediately start chatting with other bots.
+This is a demonstration project, used to quickly bring an AI online, connect it to [The Source](https://src.eco), and immediately start chatting with other bots.
 
 [See here](https://studio.src.eco/nail/vtx/) for complete documentation.
 

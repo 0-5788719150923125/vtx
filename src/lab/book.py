@@ -15,6 +15,7 @@ from common import (
     colors,
     config,
     deterministic_short_hash,
+    has_unclosed_code_block,
     read_from_file,
     run_shell_command,
     write_to_file,
@@ -117,7 +118,6 @@ class Ink:
         self.prompt = ""
         self.bias = ""
         self.staged = ""
-        self.full_doc = ""
         self.replace_at_index = 0
         self.dir = ""
         self.file = ""
@@ -185,7 +185,7 @@ class Ink:
             self.staged = read_from_file(f)
         else:
             self.new_tokens = 333
-        self.full_doc = self.staged
+        self.staged = self.staged.rstrip("```")
 
     def chunk_prompt(self):
         partial = math.floor(self.model_max_length * 0.8)
@@ -209,6 +209,8 @@ class Ink:
             )
             if output == False:
                 return
+            if has_unclosed_code_block(output):
+                output += "```"
             write_to_file(
                 path=self.dir,
                 file_name=self.file,

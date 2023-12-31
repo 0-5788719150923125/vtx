@@ -238,6 +238,10 @@ def make_random_deterministic(seed):
     random.seed(seed_int)
 
 
+def has_unclosed_code_block(s):
+    return s.count("```") % 2 != 0
+
+
 # Generate a pseudo-identity, in the Discord ID format
 def get_identity(seed=None, style="original"):
     if style == "original":

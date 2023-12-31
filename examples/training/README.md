@@ -108,8 +108,9 @@ Now, let's make sure our `config.yml` file is aware of our prepared dataset. For
 
 ```yml
 collections:
-  test:
-    lab/ghosts/train:
+  static:
+    test:
+      lab/ghosts/train:
 ```
 
 See how we explicitly point directly to the path containing files we want to use? This is the pattern.
@@ -146,7 +147,8 @@ toe:
     save_every: 1000
     generate_every: 250
     datasets:
-      - test
+      static:
+        - test
 ```
 
 There are many, many other settings to work with. We encourage you to look at the (incomplete) [documentation here](https://studio.src.eco/nail/vtx), or to explore the source code in the [training harness](https://github.com/0-5788719150923125/vtx/blob/main/src/harness.py#L492).

@@ -291,6 +291,7 @@ collections:
         - "en"
     c4:
       repo: c4
+      sequential: True
       subset: en.noblocklist
       content_key: text
       buffer_size: 1000

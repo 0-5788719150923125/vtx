@@ -84,6 +84,7 @@ def validation(config):
                         "loha",
                         "lora",
                         "lokr",
+                        "oft",
                         "prefix",
                         "prompt",
                         "standard",

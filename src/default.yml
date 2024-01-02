@@ -53,12 +53,12 @@ ode:
       universal: True
       world_size: 23
       activation_function: gelu
-      n_layer: 8
+      n_layer: 6
       n_head: 2
       k_att: 3
-      k_mlp: 3
-      n_att_experts: 8
-      n_mlp_experts: 16
+      k_mlp: 2
+      n_att_experts: 6
+      n_mlp_experts: 12
       n_ctx: 2048 # history_length * n_layer
       vocab_size: 12288
       n_embd: 768

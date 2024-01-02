@@ -52,7 +52,7 @@ ode:
     overrides:
       universal: True
       world_size: 23
-      activation_function: gelu
+      activation_function: silu
       n_layer: 6
       n_head: 2
       k_att: 3
@@ -92,6 +92,7 @@ ode:
     scheduler: cosine
     resume: False
     regen: False
+    val_interval: 500
     datasets:
       streaming:
         - c4

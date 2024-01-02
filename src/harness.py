@@ -73,18 +73,6 @@ def main():
     output_dir = f"/data/models/{focus}"
     train_type = train_config.get("type", "standard")
 
-    if train_type == "pretrain" and not resume:
-        pretrain_config = AutoConfig.from_pretrained(launch_model)
-        if verbose:
-            print(f"{colors.RED}original pretrain config:{colors.WHITE}")
-            print(pretrain_config)
-        setattr(pretrain_config, "_name_or_path", focus)
-        for k, v in train_config.get("overrides").items():
-            setattr(pretrain_config, k, v)
-        if verbose:
-            print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
-            print(pretrain_config)
-
     tokenizer_model = base_model
     tokenizer_config = dict(
         cache_dir="/data/models",
@@ -124,6 +112,20 @@ def main():
 
     if verbose:
         print(tokenizer)
+
+    if train_type == "pretrain" and not resume:
+        pretrain_config = AutoConfig.from_pretrained(launch_model)
+        if verbose:
+            print(f"{colors.RED}original pretrain config:{colors.WHITE}")
+            print(pretrain_config)
+        setattr(pretrain_config, "_name_or_path", focus)
+        setattr(pretrain_config, "bos_token_id", tokenizer.bos_token_id)
+        setattr(pretrain_config, "eos_token_id", tokenizer.eos_token_id)
+        for k, v in train_config.get("overrides").items():
+            setattr(pretrain_config, k, v)
+        if verbose:
+            print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
+            print(pretrain_config)
 
     static_data = []
     if len(train_config["datasets"].get("static", [])) > 0:

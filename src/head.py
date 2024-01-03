@@ -60,14 +60,13 @@ def validation(config):
         "training": {
             "type": "dict",
             "schema": {
-                "device_map": {"type": "string" or "dict"},
+                "devices": {"type": ["string", "list"]},
                 "resume": {"type": "boolean"},
                 "regen": {"type": "boolean"},
                 "generate_every": {"type": "integer"},
                 "save_every": {"type": "integer"},
                 "gradient_checkpointing": {"type": "boolean"},
                 "petals": {"type": "boolean"},
-                "deepspeed": {"type": "boolean"},
                 "model_max_length": {"type": "integer"},
                 "padding_side": {
                     "type": "string",
@@ -92,8 +91,9 @@ def validation(config):
                     ],
                 },
                 "r": {"type": "integer"},
-                "alpha": {"type": "integer"},
-                "dropout": {"type": "float"},
+                "lora_alpha": {"type": "integer"},
+                "lora_dropout": {"type": "float"},
+                "use_rslora": {"type": "boolean"},
                 "bias": {
                     "type": "string",
                     "allowed": ["none", "lora_only", "all"],
@@ -147,7 +147,7 @@ def validation(config):
                 "batch_size": {"type": "integer"},
                 "gradient_accumulation_steps": {"type": "integer"},
                 "equalize_datasets": {"type": "boolean"},
-                "datasets": {"type": "list"},
+                "datasets": {"type": "dict"},
                 "val_split": {"type": "float"},
                 "val_interval": {"type": "float"},
             },

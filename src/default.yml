@@ -55,7 +55,7 @@ ode:
       activation_function: silu
       n_layer: 16
       n_head: 2
-      k_att: 3
+      k_att: 2
       k_mlp: 2
       n_att_experts: 6
       n_mlp_experts: 9
@@ -90,10 +90,10 @@ ode:
     scheduler: cosine
     resume: False
     regen: False
-    generate_every: 25
-    save_every: 50
-    checkpoint_every: 50
-    val_interval: 500
+    generate_every: 5
+    save_every: 10
+    checkpoint_every: 10
+    val_interval: 50
     datasets:
       streaming:
         - c4

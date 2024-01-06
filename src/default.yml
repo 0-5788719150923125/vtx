@@ -91,7 +91,7 @@ frame:
     num_steps: 10000
     warmup_steps: 10
     batch_size: 1
-    gradient_accumulation_steps: 64
+    gradient_accumulation_steps: 128
     weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine

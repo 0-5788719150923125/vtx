@@ -47,6 +47,7 @@ ode:
   training:
     type: "lora"
 
+# A fleet of Corvettes, trained on CPU.
 frame:
   model: ibm/MoLM-350M-4B
   info: sing with me
@@ -54,12 +55,34 @@ frame:
   context_length: 2048
   training:
     type: "pretrain"
+    datasets:
+      streaming:
+        - c4
     tokenizer: True
-    prune: 0.9
+    gradient_checkpointing: True
+    prune: 0.666
+    optimizer: Lion
+    scheduler: cosine
+    learning_rate: 0.000333
+    lookahead: 24
+    stride: 128
+    block_size: 256
+    warmup_steps: 100
+    num_steps: 10000
+    batch_size: 3
+    gradient_accumulation_steps: 42
+    weight_decay: 0.1
+    gradient_clip_val: 1.0
+    generate_every: 5
+    save_every: 10
+    checkpoint_every: 10
+    val_interval: 100
     overrides:
+      model: Prism
       universal: True
-      world_size: 23
+      world_size: 59
       activation_function: silu
+      gate_type: gmm
       n_layer: 6
       n_head: 3
       k_att: 6
@@ -67,41 +90,21 @@ frame:
       n_att_experts: 200
       n_mlp_experts: 300
       n_ctx: 96 # history_length * n_layer
-      vocab_size: 12288
       n_embd: 256
-      att_hidden: 42
-      ffd_hidden: 64
+      gating_size: 4
       block_size: 8
       history_length: 16
-      gating_size: 4
-      gate_type: gmm
+      att_hidden: 44
+      ffd_hidden: 64
       aux_loss_type: mi
       aux_loss_weight: 0.1
       resid_pdrop: 0.1
-      embd_pdrop: 0.1
+      embd_pdrop: 0.5
       attn_pdrop: 0.1
       moe_pdrop: 0.1
       sample_topk: 2
+      vocab_size: 12288
       tie_word_embeddings: True
-    gradient_checkpointing: True
-    optimizer: Lion
-    learning_rate: 0.000333
-    block_size: 512
-    stride: 128
-    num_steps: 10000
-    warmup_steps: 10
-    batch_size: 1
-    gradient_accumulation_steps: 128
-    weight_decay: 0.1
-    gradient_clip_val: 1.0
-    scheduler: cosine
-    generate_every: 5
-    save_every: 10
-    checkpoint_every: 10
-    val_interval: 100
-    datasets:
-      streaming:
-        - c4
 
 ghost:
   model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T

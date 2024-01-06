@@ -85,17 +85,18 @@ def main():
     )
 
     if train_config.get("tokenizer") is not None:
-        train_tokenizer(
-            files=list_full_paths("/lab/research"),
-            dropout=0.9,
-            vocab_size=train_config["overrides"].get("vocab_size"),
-            min_frequency=2,
-            save_path=f"/data/tokenizers",
-            prefix=focus,
-            serialize=True,
-            trim_offsets=True,
-        )
         tokenizer_file = f"/data/tokenizers/{focus}/tokenizer.json"
+        if not os.path.exists(tokenizer_file):
+            train_tokenizer(
+                files=list_full_paths("/lab/research"),
+                dropout=0.9,
+                vocab_size=train_config["overrides"].get("vocab_size"),
+                min_frequency=2,
+                save_path=f"/data/tokenizers",
+                prefix=focus,
+                serialize=True,
+                trim_offsets=True,
+            )
         tokenizer = PreTrainedTokenizerFast(
             tokenizer_file=tokenizer_file,
             bos_token="<|endoftext|>",

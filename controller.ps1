@@ -1,5 +1,5 @@
 $CONTAINERS = @("lab", "ctx", "tbd", "fil", "pet", "bit", "uxo")
-$MODELS = @("src", "ode", "sign", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe")
+$MODELS = @("src", "ode", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe")
 
 # If defined, use the TASK variable.
 if ($env:TASK) {

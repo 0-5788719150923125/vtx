@@ -49,20 +49,21 @@ frame:
   training:
     type: "pretrain"
     tokenizer: True
+    prune: 0.9
     overrides:
       universal: True
       world_size: 23
       activation_function: silu
-      n_layer: 3
-      n_head: 2
-      k_att: 9
-      k_mlp: 9
-      n_att_experts: 400
-      n_mlp_experts: 600
-      n_ctx: 48 # history_length * n_layer
+      n_layer: 6
+      n_head: 3
+      k_att: 6
+      k_mlp: 7
+      n_att_experts: 200
+      n_mlp_experts: 300
+      n_ctx: 96 # history_length * n_layer
       vocab_size: 12288
       n_embd: 256
-      att_hidden: 32
+      att_hidden: 42
       ffd_hidden: 64
       block_size: 8
       history_length: 16
@@ -74,7 +75,7 @@ frame:
       embd_pdrop: 0.1
       attn_pdrop: 0.1
       moe_pdrop: 0.1
-      sample_topk: 3
+      sample_topk: 2
       tie_word_embeddings: True
     gradient_checkpointing: True
     optimizer: Lion
@@ -84,7 +85,7 @@ frame:
     num_steps: 10000
     warmup_steps: 10
     batch_size: 1
-    gradient_accumulation_steps: 256
+    gradient_accumulation_steps: 64
     weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
@@ -106,8 +107,46 @@ ode:
 ghost:
   model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   info: watching, waiting
+  context_length: 4096
+  device_map: auto
+  precision: 16
+  petals: False
+  profile: True
+  generation_profile: lowestpenalty
   training:
-    type: "loha"
+    type: ia3
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+      - gate_proj
+      - up_proj
+      - down_proj
+    feedforward_modules:
+      - gate_proj
+      - up_proj
+      - down_proj
+    gradient_checkpointing: True
+    optimizer: AdamW
+    learning_rate: 0.001
+    block_size: 1024
+    stride: 128
+    num_steps: 10000
+    warmup_steps: 100
+    batch_size: 1
+    gradient_accumulation_steps: 16
+    weight_decay: 0.01
+    gradient_clip_val: 1.0
+    scheduler: cosine
+    val_split: 0.01
+    val_interval: 500
+    generate_every: 25
+    save_every: 50
+    checkpoint_every: 50
+    datasets:
+      streaming:
+        - redpajama2
 
 # A swarm of small models.
 chaos:

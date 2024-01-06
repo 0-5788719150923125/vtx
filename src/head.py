@@ -64,6 +64,7 @@ def validation(config):
                 "resume": {"type": "boolean"},
                 "regen": {"type": "boolean"},
                 "generate_every": {"type": "integer"},
+                "checkpoint_every": {"type": "integer"},
                 "save_every": {"type": "integer"},
                 "gradient_checkpointing": {"type": "boolean"},
                 "petals": {"type": "boolean"},

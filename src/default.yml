@@ -41,6 +41,12 @@ source:
 src:
   info: of all creation
 
+ode:
+  model: microsoft/phi-2
+  info: of things to come
+  training:
+    type: "lora"
+
 frame:
   model: ibm/MoLM-350M-4B
   info: sing with me
@@ -97,16 +103,9 @@ frame:
       streaming:
         - c4
 
-ode:
-  model: microsoft/phi-2
-  info: of things to come
-  training:
-    type: "lora"
-
-# A revolution starts here.
 ghost:
   model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
-  info: watching, waiting
+  info: a revolution starts here
   context_length: 4096
   device_map: auto
   precision: 16
@@ -148,49 +147,45 @@ ghost:
       streaming:
         - redpajama2
 
-# A swarm of small models.
 chaos:
   model: EleutherAI/pythia-70m
-  info: intelligence agency
+  info: a swarm of small models
   generation_profile: lowpenalty
   training:
     type: "lora"
 
-# Train on conversations.
 envy:
-  info: the grass is greener
   model: facebook/opt-350m
+  info: a simple transformer
   generation_profile: lowpenalty
   training:
     type: lora
 
-# A GPT2-like model.
 malice:
-  info: at the gates
   model: cerebras/Cerebras-GPT-111M
+  info: a GPT-2 architecture
   generation_profile: lowpenalty
   training:
     type: lora
 
-# A large RNN.
 aura:
-  info: of life
   model: RWKV/rwkv-4-1b5-pile
+  info: a large recurrent neural network
   training:
     type: "lora"
 
 # An extremely powerful model, trained on a lot of data, and just barely capable of
 # running on 8GB of VRAM without quantization.
 mind:
-  info: use your heads
   model: EleutherAI/gpt-neo-1.3B
+  info: use your heads
   training:
     type: "lora"
 
 # A recurrent neural network, and a labor of love by its community.
 heart:
-  info: with everything you got
   model: RWKV/rwkv-4-430m-pile
+  info: with everything you got
   adapters:
     - base
     - behavior
@@ -247,16 +242,6 @@ transformers:
       repetition_penalty: 2.3
       encoder_repetition_penalty: 0.999
       no_repeat_ngram_size: 15
-      low_memory: False
-    training:
-      do_sample: True
-      min_new_tokens: 11
-      max_new_tokens: 222
-      temperature: 0.7
-      eta_cutoff: 0.0003
-      penalty_alpha: 0.6
-      top_k: 4
-      repetition_penalty: 1.0023
       low_memory: False
     longform:
       do_sample: True

@@ -178,9 +178,6 @@ def main():
 
     # Train the model
     prototype.train(
-        generation_config=config["transformers"]["generation"][
-            model_config.get("generation_profile", "training")
-        ],
         petals=use_petals,
         seed=nist_beacon()[1],
         output_dir=output_dir,

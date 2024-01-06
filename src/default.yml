@@ -53,20 +53,20 @@ frame:
       universal: True
       world_size: 23
       activation_function: silu
-      n_layer: 16
+      n_layer: 3
       n_head: 2
-      k_att: 6
-      k_mlp: 6
-      n_att_experts: 120
-      n_mlp_experts: 60
-      n_ctx: 256 # history_length * n_layer
+      k_att: 9
+      k_mlp: 9
+      n_att_experts: 400
+      n_mlp_experts: 600
+      n_ctx: 48 # history_length * n_layer
       vocab_size: 12288
       n_embd: 256
       att_hidden: 32
       ffd_hidden: 64
-      block_size: 16
+      block_size: 8
       history_length: 16
-      gating_size: 8
+      gating_size: 4
       gate_type: gmm
       aux_loss_type: mi
       aux_loss_weight: 0.1
@@ -78,20 +78,20 @@ frame:
       tie_word_embeddings: True
     gradient_checkpointing: True
     optimizer: Lion
-    learning_rate: 0.0001
+    learning_rate: 0.000333
     block_size: 512
     stride: 128
     num_steps: 10000
     warmup_steps: 10
     batch_size: 1
-    gradient_accumulation_steps: 1024
+    gradient_accumulation_steps: 256
     weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
-    generate_every: 50
-    save_every: 100
-    checkpoint_every: 100
-    val_interval: 500
+    generate_every: 5
+    save_every: 10
+    checkpoint_every: 10
+    val_interval: 100
     datasets:
       streaming:
         - c4

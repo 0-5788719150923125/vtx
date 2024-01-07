@@ -1,10 +1,9 @@
-# the 2-bit is time, uncertainty, and we can represent the 3 bits simultaneously
-# by synchronizing their clock rates with a fleet of corvettes, returning to Mercury..
-# ...two loops around the planet.
+# the 2-bit is time, uncertainty, and we can represent the 3 bit by
+# synchronizing clock rates with a 120-ship fleet of corvettes, returning to Mercury..
 
 # 0: ping
 # 1: pang
-# 2: and-pong (two loops around one anchor)
+# 2: and-pong (A loop around the anchor, two bounces off the back wall)
 
 frame:
   model: ibm/MoLM-350M-4B
@@ -38,7 +37,7 @@ frame:
     overrides:
       model: Phraxos
       universal: True
-      world_size: 59
+      world_size: 58
       activation_function: silu
       gate_type: gmm
       n_layer: 16

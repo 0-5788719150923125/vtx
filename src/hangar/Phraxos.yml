@@ -1,0 +1,66 @@
+# the 2-bit is time, uncertainty, and we can represent the 3 bits simultaneously
+# by synchronizing them with a fleet of corvettes, trained on CPU, returning to Mercury..
+# ...two loops around the planet.
+
+# 0: ping
+# 1: pang
+# 2: and-pong (two loops around one anchor)
+
+frame:
+  model: ibm/MoLM-350M-4B
+  info: based, always
+  precision: 32
+  context_length: 2048
+  training:
+    type: "pretrain"
+    datasets:
+      streaming:
+        #OnlyToehider
+        - c4
+    tokenizer: True
+    gradient_checkpointing: True
+    prune: 0.666
+    optimizer: Lion
+    scheduler: cosine
+    learning_rate: 0.000333
+    lookahead: 5
+    weight_decay: 0.1
+    stride: 128
+    block_size: 512
+    warmup_steps: 10
+    num_steps: 10000
+    batch_size: 32
+    gradient_accumulation_steps: 32
+    gradient_clip_val: 1.0
+    generate_every: 5
+    save_every: 10
+    checkpoint_every: 10
+    val_interval: 250
+    overrides:
+      model: Phraxos
+      universal: True
+      world_size: 59
+      activation_function: silu
+      gate_type: gmm
+      n_layer: 16
+      n_head: 2
+      k_att: 6
+      k_mlp: 6
+      n_att_experts: 120
+      n_mlp_experts: 60
+      n_ctx: 256 # history_length * n_layer
+      n_embd: 256
+      gating_size: 16
+      block_size: 16
+      history_length: 16
+      att_hidden: 32
+      ffd_hidden: 64
+      aux_loss_type: mi
+      aux_loss_weight: 0.1
+      resid_pdrop: 0.1
+      embd_pdrop: 0.1
+      attn_pdrop: 0.1
+      moe_pdrop: 0.1
+      sample_topk: 3
+      vocab_size: 12288
+      tie_word_embeddings: True

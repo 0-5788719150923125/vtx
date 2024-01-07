@@ -47,13 +47,6 @@ ode:
   training:
     type: "lora"
 
-# the 2-bit is time, uncertainty, and we can represent the 3 bits simultaneously
-# by synchronizing them with a fleet of corvettes, trained on CPU, returning to Mercury..
-# ...two loops around the planet.
-# 0: ping
-# 1: pang
-# 2: and-pong
-
 frame:
   model: ibm/MoLM-350M-4B
   info: sing with me
@@ -63,7 +56,6 @@ frame:
     type: "pretrain"
     datasets:
       streaming:
-        #OnlyToehider
         - c4
         - redpajama2
     tokenizer: True

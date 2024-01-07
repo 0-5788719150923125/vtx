@@ -186,16 +186,51 @@ mind:
   training:
     type: "lora"
 
-# A recurrent neural network, and a labor of love by its community.
+# A recurrent neural network, and collaboration between adapters.
 heart:
-  model: RWKV/rwkv-4-430m-pile
+  model: RWKV/rwkv-4-169m-pile
   info: with everything you got
+  mode: transformer
   adapters:
-    - base
-    - behavior
+    - jan-6
   training:
+    name: feb-2
+    type: "ia3"
+    target_modules:
+      - key
+      - value
+      - receptance
+      - output
+      - "feed_forward.key"
+      - "feed_forward.receptance"
+      - "feed_forward.value"
+    feedforward_modules:
+      - output
+      - "feed_forward.key"
+      - "feed_forward.receptance"
+      - "feed_forward.value"
+    datasets:
+      streaming:
+        - c4
     gradient_checkpointing: False
-    type: "lora"
+    optimizer: AdaBelief
+    learning_rate: 0.001
+    swa_learning_rate: 0.01
+    block_size: 512
+    stride: 256
+    num_steps: 100000
+    warmup_steps: 10
+    weight_decay: 0.1
+    gradient_clip_val: 1.23
+    scheduler: cosine
+    batch_size: 1
+    gradient_accumulation_steps: 256
+    val_split: 0.05
+    val_interval: 500
+    generate_every: 5
+    save_every: 10
+    checkpoint_every: 10
+
 
 # The product of a large research community, who is attempting to decentralize 
 # deep learning.
@@ -204,8 +239,9 @@ soul:
   model: bigscience/bloom-560m
   petals: True
   training:
-    resume: False
-    regen: False
+    datasets:
+      streaming:
+        - redpajama2
     generate_every: 50
     save_every: 100
     padding_side: left
@@ -220,10 +256,7 @@ soul:
     gradient_clip_val: 1.23
     scheduler: cosine
     batch_size: 6
-    train_transformers_only: False
-    equalize_datasets: False
-    datasets:
-      - default
+    regen: False
 
 # A very small model, which can be run on < 4GB of VRAM.
 toe:

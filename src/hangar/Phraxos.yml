@@ -15,11 +15,10 @@ frame:
     type: "pretrain"
     datasets:
       streaming:
-        #OnlyToehider
         - c4
+        #OnlyToehider
     tokenizer: True
     gradient_checkpointing: True
-    prune: 0.666
     optimizer: Lion
     scheduler: cosine
     learning_rate: 0.000333

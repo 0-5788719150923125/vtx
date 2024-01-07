@@ -1,6 +1,18 @@
 $CONTAINERS = @("lab", "ctx", "tbd", "fil", "pet", "bit", "uxo")
 $MODELS = @("src", "ode", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe")
 
+# Check for docker
+if (!(Test-Path -Path "docker.exe")) {
+  Write-Error "Error: docker is not installed or not in PATH."
+  exit 1
+}
+
+# Check for docker-compose
+if (!(Test-Path -Path "docker-compose.exe")) {
+  Write-Error "Error: docker-compose is not installed or not in PATH."
+  exit 1
+}
+
 # If defined, use the TASK variable.
 if ($env:TASK) {
     $action = $env:TASK

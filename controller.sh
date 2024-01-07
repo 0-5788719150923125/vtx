@@ -3,6 +3,18 @@
 CONTAINERS='["lab", "ctx", "tbd", "fil", "pet", "bit", "uxo"]'
 MODELS='["src", "ode", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]'
 
+# Check for docker
+if ! command -v docker &> /dev/null; then
+  echo "Error: docker is not installed or not in PATH."
+  exit 1
+fi
+
+# Check for docker-compose
+if ! command -v docker-compose &> /dev/null; then
+  echo "Error: docker-compose is not installed or not in PATH."
+  exit 1
+fi
+
 # If defined, use the TASK variable.
 if [[ -n "$TASK" ]]; then
     action="$TASK"

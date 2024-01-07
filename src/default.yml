@@ -64,7 +64,6 @@ frame:
     optimizer: Lion
     scheduler: cosine
     learning_rate: 0.000333
-    lookahead: 4
     stride: 128
     block_size: 256
     warmup_steps: 100

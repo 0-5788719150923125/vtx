@@ -251,7 +251,7 @@ def create_dataset(
     datasets = {}
     for file in files:
         try:
-            # Skip file paths and extensions that we can't process
+            # Skip files we can't process
             skip = False
             for suffix in suffixes:
                 if file.lower().endswith(suffix):
@@ -261,8 +261,12 @@ def create_dataset(
                 if file.startswith(prefix):
                     skip = True
                     continue
+
             if skip == True:
-                print(f"skipping: {colors.RED}{file}{colors.WHITE}")
+                with open(intermediate_path, "a") as intermediate:
+                    # redact stuff we cannot use
+                    intermediate.write(f"void:{file}{tokenizer.eos_token}")
+                    print(f"skipping: {colors.RED}{file}{colors.WHITE}")
                 continue
 
             if line_by_line == True:

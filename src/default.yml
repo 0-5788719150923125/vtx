@@ -64,7 +64,7 @@ frame:
     optimizer: Lion
     scheduler: cosine
     learning_rate: 0.000333
-    lookahead: 4
+    lookahead: 2
     stride: 128
     block_size: 256
     warmup_steps: 100
@@ -76,7 +76,7 @@ frame:
     generate_every: 5
     save_every: 10
     checkpoint_every: 10
-    val_interval: 100
+    val_interval: 25
     overrides:
       model: Prism
       universal: True
@@ -85,7 +85,7 @@ frame:
       gate_type: gmm
       n_layer: 6
       n_head: 3
-      k_att: 6
+      k_att: 5
       k_mlp: 7
       n_att_experts: 200
       n_mlp_experts: 300

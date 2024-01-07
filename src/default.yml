@@ -64,12 +64,13 @@ frame:
     optimizer: Lion
     scheduler: cosine
     learning_rate: 0.000333
+    lookahead: 4
     stride: 128
     block_size: 256
     warmup_steps: 100
     num_steps: 10000
-    batch_size: 2
-    gradient_accumulation_steps: 64
+    batch_size: 1
+    gradient_accumulation_steps: 128
     weight_decay: 0.1
     gradient_clip_val: 1.0
     generate_every: 5

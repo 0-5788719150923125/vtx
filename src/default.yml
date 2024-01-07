@@ -85,7 +85,7 @@ frame:
       gate_type: gmm
       n_layer: 6
       n_head: 3
-      k_att: 5
+      k_att: 6
       k_mlp: 7
       n_att_experts: 200
       n_mlp_experts: 300

@@ -247,18 +247,15 @@ class Cortex:
                     config.get("context_length"),
                 )
 
+            focus = "assistant" if parent == "assistant" else focus
             prototype.optimize_for_inference()
 
             print(f"parent is {parent}")
 
             time.sleep(2)
-
-            focus = "assistant" if parent == "assistant" else focus
-
             print(f"focus is now {focus}")
 
             time.sleep(1)
-
             print(f"{colors.GREEN}ONE@ROOT:{colors.WHITE} {str(prototype)}")
 
             time.sleep(3)

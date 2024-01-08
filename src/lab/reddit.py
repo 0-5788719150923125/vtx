@@ -571,5 +571,8 @@ def transformer(name, text):
         f'{leader} {verb}, "{text}"',
         f'{name} {verb}, "{text}"',
         f"{text}",
+        f"{text}",
+        f"{text}",
+        f"{text}",
     ]
     return random.choice(responses)

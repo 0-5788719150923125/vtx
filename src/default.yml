@@ -194,34 +194,37 @@ heart:
     - base
   training:
     name: base
-    type: "ia3"
+    datasets:
+      streaming:
+        - c4
+    type: oft
+    r: 23
+    # r: 2334
+    module_dropout: 0.1
+    coft: True
+    eps: 0.0000666
     target_modules:
-      - key
-      - value
       - receptance
+      # - key
+      # - value
       - output
-      - "feed_forward.receptance"
-    feedforward_modules:
-      - "feed_forward.receptance"
-    # datasets:
-    #   streaming:
-    #     - c4
+      # - head
     gradient_checkpointing: False
-    optimizer: AdamW
+    optimizer: Lion
     learning_rate: 0.0001
     swa_learning_rate: 0.01
     block_size: 768
     stride: 256
     num_steps: 10000
     warmup_steps: 100
-    weight_decay: 0.001
+    weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
     batch_size: 1
     gradient_accumulation_steps: 16
     val_split: 0.01
     val_interval: 50
-    generate_every: 10
+    generate_every: 25
     save_every: 100
     checkpoint_every: 100
 

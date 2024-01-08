@@ -3,4 +3,3 @@
 peft>=0.7.1
 pydantic<2.0.0
 transformers>=4.35.2
-# transformers>=4.32.0,<4.35.0

@@ -109,7 +109,7 @@ case $action in
         fi
         docker compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${DATASET}/fetch.py ;;
     "prune")
-        docker system prune -f && docker volume prune -f ;;
+        docker system prune -a -f && docker volume prune -f ;;
     "key")
         docker compose exec bit /bin/get-urbit-code ;;
     "down")

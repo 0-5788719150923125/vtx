@@ -64,13 +64,13 @@ frame:
     optimizer: Lion
     scheduler: cosine
     learning_rate: 0.000333
-    lookahead: 2
-    stride: 128
+    lookahead: 3
     block_size: 256
-    warmup_steps: 100
+    stride: 128
+    warmup_steps: 10
     num_steps: 10000
     batch_size: 1
-    gradient_accumulation_steps: 128
+    gradient_accumulation_steps: 1024
     weight_decay: 0.1
     gradient_clip_val: 1.0
     generate_every: 5
@@ -87,8 +87,8 @@ frame:
       n_head: 3
       k_att: 6
       k_mlp: 7
-      n_att_experts: 200
-      n_mlp_experts: 300
+      n_att_experts: 300
+      n_mlp_experts: 200
       n_ctx: 96 # history_length * n_layer
       n_embd: 256
       gating_size: 4
@@ -99,13 +99,12 @@ frame:
       aux_loss_type: mi
       aux_loss_weight: 0.1
       resid_pdrop: 0.1
-      embd_pdrop: 0.5
+      embd_pdrop: 0.23
       attn_pdrop: 0.1
       moe_pdrop: 0.1
       sample_topk: 2
       vocab_size: 12288
       tie_word_embeddings: True
-      regen: False
 
 ghost:
   model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
@@ -188,13 +187,13 @@ mind:
 
 # A recurrent neural network, and collaboration between adapters.
 heart:
-  model: RWKV/rwkv-4-169m-pile
+  model: RWKV/rwkv-4-430m-pile
   info: with everything you got
   mode: transformer
   adapters:
-    - jan-6
+    - base
   training:
-    name: feb-2
+    name: base
     type: "ia3"
     target_modules:
       - key
@@ -205,7 +204,6 @@ heart:
       - "feed_forward.receptance"
       - "feed_forward.value"
     feedforward_modules:
-      - output
       - "feed_forward.key"
       - "feed_forward.receptance"
       - "feed_forward.value"
@@ -213,20 +211,20 @@ heart:
       streaming:
         - c4
     gradient_checkpointing: False
-    optimizer: AdaBelief
+    optimizer: AdamW
     learning_rate: 0.001
     swa_learning_rate: 0.01
     block_size: 512
     stride: 256
-    num_steps: 100000
+    num_steps: 10000
     warmup_steps: 10
-    weight_decay: 0.1
-    gradient_clip_val: 1.23
+    weight_decay: 0.01
+    gradient_clip_val: 1.0
     scheduler: cosine
     batch_size: 1
-    gradient_accumulation_steps: 256
+    gradient_accumulation_steps: 128
     val_split: 0.05
-    val_interval: 500
+    val_interval: 50
     generate_every: 5
     save_every: 10
     checkpoint_every: 10

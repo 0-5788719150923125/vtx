@@ -50,13 +50,7 @@ def validation(config):
         "context_length": {"type": "integer"},
         "reload_interval": {"type": "integer"},
         "adapters": {"type": "list"},
-        "assistant": {
-            "type": "dict",
-            "schema": {
-                "model": {"type": "string"},
-                "precision": {"type": "integer", "allowed": [4, 8, 16, 32]},
-            },
-        },
+        "assistant": {"type": "dict"},
         "training": {
             "type": "dict",
             "schema": {
@@ -76,6 +70,9 @@ def validation(config):
                 "name": {"type": "string"},
                 "strategy": {"type": "string"},
                 "initial_piers": {"type": "string"},
+                "alpha": {"type": "integer"},
+                "module_dropout": {"type": "float"},
+                "rank_dropout": {"type": "float"},
                 "type": {
                     "type": "string",
                     "allowed": [
@@ -179,9 +176,100 @@ class Cortex:
             {"bias": 204716337971331072, "message": "I am a medium."},
             {"bias": 855529761185857566, "message": "I am an animal."},
         ]
-        if self.config.get("assistant") is not None:
-            self.assistant = self.loader(self.config["assistant"])
+
+        self.assistant = None
         self.teacher = self.loader(self.config, focus)
+        if self.config.get("assistant") is not None:
+            self.assistant = self.loader(
+                self.config["assistant"], focus, parent="assistant"
+            )
+
+    def loader(self, config, focus="assistant", parent=focus):
+        print(colors.BLUE + "ONE@FOLD: " + colors.WHITE + "focused on the " + focus)
+
+        time.sleep(2)
+
+        model_info = config.get("info", "to the regional manager")
+        print(f"{colors.BLUE}ONE@FOLD:{colors.WHITE} {model_info}")
+
+        while self.active == True:
+            time.sleep(1)
+
+        time.sleep(5)
+
+        self.active = True
+
+        adapters = None
+        model_folder = None
+        adapter_dir = "/data/adapters/" + focus
+        embeddings_dir = "/data/embeddings/" + focus
+        tuning_mode = None
+        pre_seq_len = 24
+        if "training" in config:
+            t = config["training"].get("type", "standard")
+            if t not in ["standard", "pretrain"]:
+                adapters = config.get("adapters", ["base"])
+                for adapter in adapters:
+                    if not os.path.exists(
+                        f"{adapter_dir}/{adapter}/adapter_model.bin"
+                    ) and not os.path.exists(
+                        f"{adapter_dir}/{adapter}/adapter_model.safetensors"
+                    ):
+                        adapter_dir = "/adapters/" + focus
+                        break
+            elif t == "prompt":
+                tuning_mode = "ptune"
+                pre_seq_len = t.get("num_virtual_tokens", pre_seq_len)
+            elif t == "prefix":
+                tuning_mode == "deep_ptune"
+                pre_seq_len = t.get("num_virtual_tokens", pre_seq_len)
+            else:
+                model_folder = "/data/models/" + focus
+        try:
+            prototype = aigen(
+                model=config.get("model"),
+                model_folder=model_folder,
+                device_map=config.get("device_map", "auto"),
+                petals=config.get("petals", False),
+                cache_dir="/data/models",
+                tuning_mode=tuning_mode,
+                embeddings_dir=embeddings_dir,
+                adapter_dir=adapter_dir,
+                adapters=adapters,
+                precision=config.get("precision", 32),
+                pre_seq_len=pre_seq_len,
+            )
+
+            if config.get("context_length") is not None:
+                setattr(
+                    prototype.model.config,
+                    "context_length",
+                    config.get("context_length"),
+                )
+
+            prototype.optimize_for_inference()
+
+            print(f"parent is {parent}")
+
+            time.sleep(2)
+
+            focus = "assistant" if parent == "assistant" else focus
+
+            print(f"focus is now {focus}")
+
+            time.sleep(1)
+
+            print(f"{colors.GREEN}ONE@ROOT:{colors.WHITE} {str(prototype)}")
+
+            time.sleep(3)
+        except Exception as e:
+            logging.error(traceback.format_exc())
+            time.sleep(5)
+            prototype = self.loader(focus)
+
+        self.active = False
+
+        return prototype
 
     def get_max_length(self):
         return self.config.get("context_length", self.teacher.model_max_length)
@@ -243,76 +331,6 @@ class Cortex:
             return await asyncio.to_thread(func, *args, **kwargs)
 
         return wrapper
-
-    def loader(self, config, focus="assistant"):
-        while self.active == True:
-            time.sleep(1)
-
-        self.active = True
-
-        adapters = None
-        tuning_mode = None
-        model_folder = None
-        adapter_dir = "/data/adapters/" + focus
-        embeddings_dir = "/data/embeddings/" + focus
-        if "training" in config:
-            t = config["training"].get("type", "standard")
-            pre_seq_len = 24
-            if t not in ["standard", "pretrain"]:
-                adapters = config.get("adapters", ["base"])
-                for adapter in adapters:
-                    if not os.path.exists(
-                        f"{adapter_dir}/{adapter}/adapter_model.bin"
-                    ) and not os.path.exists(
-                        f"{adapter_dir}/{adapter}/adapter_model.safetensors"
-                    ):
-                        adapter_dir = "/adapters/" + focus
-                        break
-            elif t == "prompt":
-                tuning_mode = "ptune"
-                pre_seq_len = t.get("num_virtual_tokens", pre_seq_len)
-            elif t == "prefix":
-                tuning_mode == "deep_ptune"
-                pre_seq_len = t.get("num_virtual_tokens", pre_seq_len)
-            else:
-                model_folder = "/data/models/" + focus
-        try:
-            print(colors.BLUE + "ONE@FOLD: " + colors.WHITE + "focused on the " + focus)
-            prototype = aigen(
-                model=config.get("model"),
-                model_folder=model_folder,
-                device_map=config.get("device_map", "auto"),
-                petals=config.get("petals", False),
-                cache_dir="/data/models",
-                tuning_mode=tuning_mode,
-                embeddings_dir=embeddings_dir,
-                adapter_dir=adapter_dir,
-                adapters=adapters,
-                precision=config.get("precision", 32),
-                pre_seq_len=pre_seq_len,
-                assistant_model=config.get("model") if focus == "assistant" else None,
-            )
-
-            if config.get("context_length") is not None:
-                setattr(
-                    prototype.model.config,
-                    "context_length",
-                    config.get("context_length"),
-                )
-
-            model_info = config.get("info", "to the regional manager")
-            print(f"{colors.BLUE}ONE@FOLD:{colors.WHITE} {model_info}")
-
-            prototype.optimize_for_inference()
-            print(f"{colors.GREEN}ONE@ROOT:{colors.WHITE} {str(prototype)}")
-        except Exception as e:
-            logging.error(traceback.format_exc())
-            time.sleep(5)
-            prototype = self.loader(focus)
-
-        self.active = False
-
-        return prototype
 
     def wait_in_queue(self, priority=False):
         self.queue.append({"me": self, "priority": priority})
@@ -514,6 +532,7 @@ class Cortex:
                     bad_words_ids=bad_tokens,
                     suppress_tokens=suppress_tokens,
                     eos_token_id=eos_token_ids,
+                    assistant=self.assistant.model if self.assistant else None,
                 )
 
                 generation = "\n".join(

@@ -30,14 +30,29 @@ services:
   pet:
     image: learningathome/petals:main
     command: python -m petals.cli.run_server TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T --public_name "https://src.eco" --cache_dir /data/models --num_blocks 4 --torch_dtype bfloat16
-    # command: python -m petals.cli.run_server bigscience/bloom-560m --public_name "https://src.eco" --cache_dir /data/models --num_blocks 24 --torch_dtype bfloat16
     restart: 'always'
     network_mode: 'host'
     ipc: host
     deploy:
       resources:
         limits:
-          cpus: '0.75'
+          cpus: '0.1'
+    volumes:
+      - ./data/models:/data/models
+      - ./data/adapters:/data/adapters
+    environment:
+      HIVEMIND_LOGLEVEL: ERROR
+
+  pen:
+    image: learningathome/petals:main
+    command: python -m petals.cli.run_server bigscience/bloom-560m --public_name "https://src.eco" --cache_dir /data/models --num_blocks 4 --torch_dtype bfloat16
+    restart: 'always'
+    network_mode: 'host'
+    ipc: host
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
     volumes:
       - ./data/models:/data/models
       - ./data/adapters:/data/adapters

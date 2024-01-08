@@ -4,10 +4,10 @@ services:
   lab:
     volumes:
       - ./src:/src
+      - ./book:/book
+      - ./data:/data
       - ./lab:/lab
       - ./infra:/infra
-      - ./data:/data
-      - ./book:/book
       - ./config.yml:/env/config.yml
     environment:
       DEV_MODE: 'true'

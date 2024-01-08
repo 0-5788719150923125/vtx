@@ -8,3 +8,5 @@ services:
           devices:
             - driver: ${DEVICE:-nvidia}
               capabilities: [gpu]
+        limits:
+          cpus: '1.23'

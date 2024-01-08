@@ -70,7 +70,7 @@ frame:
     warmup_steps: 10
     num_steps: 10000
     batch_size: 1
-    gradient_accumulation_steps: 1024
+    gradient_accumulation_steps: 768
     weight_decay: 0.1
     gradient_clip_val: 1.0
     generate_every: 5
@@ -99,7 +99,7 @@ frame:
       aux_loss_type: mi
       aux_loss_weight: 0.1
       resid_pdrop: 0.1
-      embd_pdrop: 0.23
+      embd_pdrop: 0.023
       attn_pdrop: 0.1
       moe_pdrop: 0.1
       sample_topk: 2
@@ -205,9 +205,7 @@ heart:
     eps: 0.0000666
     target_modules:
       - receptance
-      - key
       - value
-      - output
     gradient_checkpointing: False
     optimizer: Lion
     learning_rate: 0.0001

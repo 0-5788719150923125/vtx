@@ -200,13 +200,9 @@ heart:
       - value
       - receptance
       - output
-      - "feed_forward.key"
       - "feed_forward.receptance"
-      - "feed_forward.value"
     feedforward_modules:
-      - "feed_forward.key"
       - "feed_forward.receptance"
-      - "feed_forward.value"
     datasets:
       streaming:
         - c4
@@ -214,15 +210,15 @@ heart:
     optimizer: AdamW
     learning_rate: 0.001
     swa_learning_rate: 0.01
-    block_size: 512
+    block_size: 768
     stride: 256
     num_steps: 10000
-    warmup_steps: 10
+    warmup_steps: 100
     weight_decay: 0.01
     gradient_clip_val: 1.0
     scheduler: cosine
     batch_size: 1
-    gradient_accumulation_steps: 128
+    gradient_accumulation_steps: 16
     val_split: 0.05
     val_interval: 50
     generate_every: 5

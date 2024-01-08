@@ -205,10 +205,7 @@ heart:
     eps: 0.0000666
     target_modules:
       - receptance
-      # - key
-      # - value
       - output
-      # - head
     gradient_checkpointing: False
     optimizer: Lion
     learning_rate: 0.0001
@@ -223,7 +220,7 @@ heart:
     batch_size: 1
     gradient_accumulation_steps: 16
     val_split: 0.01
-    val_interval: 50
+    val_interval: 250
     generate_every: 25
     save_every: 100
     checkpoint_every: 100

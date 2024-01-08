@@ -161,6 +161,12 @@ def main():
     train_config["static_data"] = static_data
     train_config["streaming_data"] = streaming_data
 
+    print("training on the following collections:")
+    print(f"static data: {static_data}")
+    print(f"streaming data: {streaming_data}")
+
+    time.sleep(3)
+
     if os.environ.get("TASK") == "trial":
         optimize_hparams(init_kwargs, train_config)
         return

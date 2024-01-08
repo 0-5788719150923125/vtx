@@ -53,12 +53,15 @@ To build a simple, opinionated framework for human cloning experiments. Our goal
 - Checkout the correct branches with: `git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'`
 - Place configurations into config.yml. ([default.yml](./src/default.yml))
 - Put credentials into a .env file at the root of this project. ([example.env](./examples/lab/.env))
-- Find many other examples at [./examples](./examples/).
 - Use VSCode tasks, or the `controller.sh` script (on Linux/Mac) and/or the `controller.ps1` script on Windows.
 - The "up" task is used to bring your lab online.
 - The "fetch" and "prepare" tasks are used for data retrieval and preparation.
 - The "train" task is used to train your models.
 - Ask me questions.
+
+# examples
+
+You will find many other examples about how to put the VTX into practice at: [./examples](./examples/)
 
 For complete documentation, [please visit this link](https://studio.src.eco/nail/vtx/).
 

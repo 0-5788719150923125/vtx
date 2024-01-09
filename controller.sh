@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINERS='["lab", "ctx", "tbd", "fil", "pet", "bit", "uxo"]'
+CONTAINERS='["lab", "ctx", "tbd", "ipf", "pet", "bit", "uxo"]'
 MODELS='["src", "ode", "frame", "aura", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]'
 
 # Check for docker
@@ -97,7 +97,7 @@ case $action in
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we train? ${MODELS} " FOCUS
         fi
-        docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd fil opt && docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=${FOCUS} -e TASK=${action} lab python3 harness.py ;;
+        docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd ipf opt && docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=${FOCUS} -e TASK=${action} lab python3 harness.py ;;
     "prepare") 
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we prepare? " DIRECTORY

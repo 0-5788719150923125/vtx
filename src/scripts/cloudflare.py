@@ -7,7 +7,7 @@ def compile_book():
 
 
 def add_site_to_ipfs():
-    command = "OUTPUT=$(docker exec vtx-fil-1 ipfs add -r /book/public --pin=false --cid-version=1 --quieter) && sed -i '$ d' /book/config.yaml && echo '      url: https://ipfs.io/ipfs/'$OUTPUT >> /book/config.yaml"
+    command = "OUTPUT=$(docker exec vtx-ipf-1 ipfs add -r /book/public --pin=false --cid-version=1 --quieter) && sed -i '$ d' /book/config.yaml && echo '      url: https://ipfs.io/ipfs/'$OUTPUT >> /book/config.yaml"
     os.system(command)
     print("added to ipfs")
 

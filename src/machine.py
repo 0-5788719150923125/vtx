@@ -3,17 +3,11 @@ import os
 import threading
 import time
 
-# import memory
+import memory
 from common import colorize_yaml, colors, config
 
-# Quickly test stuff here
+# test code in production here
 from lab import dev
-
-if os.environ.get("DEV_MODE", "false") == "true":
-    import debugpy
-
-    time.sleep(1)
-    debugpy.listen(("0.0.0.0", 5678))
 
 print(colorize_yaml(config))
 

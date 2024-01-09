@@ -14,6 +14,9 @@ frame:
     prune: 0.666
     optimizer: Lion
     scheduler: cosine
+    strategy: hivemind
+    initial_piers:
+      - /p2p/12D3KooWQpMNjwYNpfKLArytyQRb2DYzv59Kuahgjdiyzvpsxy8D
     learning_rate: 0.000333
     lookahead: 3
     block_size: 256
@@ -21,13 +24,13 @@ frame:
     warmup_steps: 10
     num_steps: 10000
     batch_size: 1
-    gradient_accumulation_steps: 768
+    target_batch_size: 768
     weight_decay: 0.1
     gradient_clip_val: 1.0
     generate_every: 5
     checkpoint_every: 10
     save_every: 10
-    val_interval: 25
+    val_interval: 1
     overrides:
       model: Prism
       universal: True
@@ -50,7 +53,7 @@ frame:
       aux_loss_type: mi
       aux_loss_weight: 0.1
       resid_pdrop: 0.1
-      embd_pdrop: 0.023
+      embd_pdrop: 0.23
       attn_pdrop: 0.1
       moe_pdrop: 0.1
       sample_topk: 2

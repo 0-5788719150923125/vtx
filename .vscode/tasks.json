@@ -11,7 +11,7 @@
         "type": "pickString",
         "id": "container",
         "description": "Which container should I enter?",
-        "options": ["lab", "ctx", "tbd", "fil", "pet", "pen", "bit", "uxo"]
+        "options": ["lab", "ctx", "tbd", "ipf", "pet", "pen", "bit", "uxo"]
       },
       {
         "type": "promptString",

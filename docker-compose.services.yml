@@ -59,10 +59,10 @@ services:
     environment:
       HIVEMIND_LOGLEVEL: ERROR
 
-  fil:
+  ipf:
     image: ipfs/kubo:latest
     restart: 'always'
-    command: daemon --init-profile=lowpower
+    command: daemon --init-profile=lowpower --migrate
     ports:
       - 9090:8080
     volumes:

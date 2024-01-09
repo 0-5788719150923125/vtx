@@ -10,9 +10,9 @@ from common import list_full_paths, random_string
 
 focus = os.environ["FOCUS"]
 
-client = chromadb.EphemeralClient(Settings(anonymized_telemetry=False))
+# client = chromadb.EphemeralClient(Settings(anonymized_telemetry=False))
 
-collection = client.get_or_create_collection(name=focus)
+# collection = client.get_or_create_collection(name=focus)
 
 
 def create_memory(texts):

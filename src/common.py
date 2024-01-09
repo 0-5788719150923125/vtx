@@ -36,9 +36,19 @@ if os.path.exists(cache_path):
 
 os.makedirs(cache_path)
 
+# Load the deck; a better way would be to import all
+# yml files from the given directory, at some sampling rate
+with open("/src/deck.yml", "r") as config_file:
+    on_deck = yaml.load(config_file, Loader=yaml.FullLoader)
+
 # Load configuration files from disk
 with open("/src/default.yml", "r") as config_file:
-    default_config = yaml.load(config_file, Loader=yaml.FullLoader)
+    default_config = merge(
+        {},
+        yaml.load(config_file, Loader=yaml.FullLoader),
+        on_deck,
+        strategy=Strategy.REPLACE,
+    )
 
 if os.path.exists("/env/config.yml"):
     with open("/env/config.yml", "r") as config_file:
@@ -53,7 +63,7 @@ if os.path.exists("/env/config.yml"):
             if "discord" in user_config and "horde" in user_config:
                 user_config["discord"]["horde_enabled"] = True
             config = merge({}, default_config, user_config, strategy=Strategy.REPLACE)
-            # print("Successfully loaded your config.yml file.")
+            print("Successfully loaded your config.yml file.")
 else:
     print(
         "We did not find a configuration file at /env/config.yml. Loading default.yml."

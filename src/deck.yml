@@ -1,0 +1,58 @@
+frame:
+  model: ibm/MoLM-350M-4B
+  info: sing with me
+  precision: 32
+  context_length: 2048
+  training:
+    type: "pretrain"
+    datasets:
+      streaming:
+        - c4
+        - redpajama2
+    tokenizer: True
+    gradient_checkpointing: True
+    prune: 0.666
+    optimizer: Lion
+    scheduler: cosine
+    learning_rate: 0.000333
+    lookahead: 3
+    block_size: 256
+    stride: 128
+    warmup_steps: 10
+    num_steps: 10000
+    batch_size: 1
+    gradient_accumulation_steps: 768
+    weight_decay: 0.1
+    gradient_clip_val: 1.0
+    generate_every: 5
+    checkpoint_every: 10
+    save_every: 10
+    val_interval: 25
+    overrides:
+      model: Prism
+      universal: True
+      world_size: 59
+      activation_function: silu
+      gate_type: gmm
+      n_layer: 6
+      n_head: 3
+      k_att: 6
+      k_mlp: 7
+      n_att_experts: 300
+      n_mlp_experts: 200
+      n_ctx: 96 # history_length * n_layer
+      n_embd: 256
+      gating_size: 4
+      block_size: 8
+      history_length: 16
+      att_hidden: 42
+      ffd_hidden: 64
+      aux_loss_type: mi
+      aux_loss_weight: 0.1
+      resid_pdrop: 0.1
+      embd_pdrop: 0.023
+      attn_pdrop: 0.1
+      moe_pdrop: 0.1
+      sample_topk: 2
+      vocab_size: 12288
+      tie_word_embeddings: True

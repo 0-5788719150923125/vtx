@@ -11,13 +11,14 @@ frame:
         - redpajama2
     tokenizer: True
     gradient_checkpointing: True
-    prune: 0.666
+    prune: 0.0
     optimizer: Lion
     scheduler: cosine
     strategy: hivemind
     initial_piers:
       - /p2p/Qmcibh1TRGwBPKgyDDHzKogFpudwUpFutx6M5oSAXSWsUa
       - /p2p/QmaDVEctc68ppnN1Xu7tSFodDmTjgVXx511vSZbDrmCmDe
+      - /p2p/QmeR8EkDPmxi79snPkfY16uX8w6g35RZH6K9UGc9HR6HuA
     learning_rate: 0.000333
     lookahead: 3
     block_size: 256

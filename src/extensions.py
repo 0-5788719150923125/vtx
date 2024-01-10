@@ -7,6 +7,7 @@ from transformers import (
 
 def register_models():
     register_moduleformer()
+    register_mamba()
 
 
 def register_moduleformer():
@@ -21,3 +22,9 @@ def register_moduleformer():
     AutoModelForSequenceClassification.register(
         ModuleFormerConfig, ModuleFormerForSequenceClassification
     )
+
+
+# Should be easy to implement:
+# https://huggingface.co/state-spaces/mamba-2.8b/discussions/2
+def register_mamba():
+    pass

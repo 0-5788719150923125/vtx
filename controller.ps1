@@ -126,7 +126,7 @@ switch ($action) {
         docker volume prune -f
     }
     "key" {
-        docker compose exec bit /bin/get-urbit-code
+        docker compose exec urb /bin/get-urbit-code
     }
     "down" {
         docker compose down --remove-orphans

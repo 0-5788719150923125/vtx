@@ -69,7 +69,7 @@ services:
       - ./book:/book
       - data:/data/ipfs
 
-  bit:
+  urb:
     image: tloncorp/vere
     command: /bin/start-urbit --loom=29
     restart: 'always'

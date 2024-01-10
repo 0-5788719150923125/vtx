@@ -5,6 +5,19 @@
 # For complete and thorough documentation, please see here:
 # https://studio.src.eco/nail/vtx/#x
 
+x:
+  frequency: 0.001
+  disposition:
+    - researcher
+    - memer
+    - tweeter
+  topics:
+    - "While #G1358 is reserved for"
+    - "#G1358 is likely"
+    - "Though #G1358 is often"
+    - "If #G1358 w"
+    - "What will you do about the spread of #G1358?"
+
 disposition:
   memer:
     "Revocculean": 8.0
@@ -22,16 +35,3 @@ disposition:
   tweeter:
     "\"": -5.0
     "\n": -10.0
-
-x:
-  frequency: 0.001
-  disposition:
-    - researcher
-    - memer
-    - tweeter
-  topics:
-    - "While #G1358 is reserved for"
-    - "#G1358 is likely"
-    - "Though #G1358 is often"
-    - "If #G1358 w"
-    - "What will you do about the spread of #G1358?"

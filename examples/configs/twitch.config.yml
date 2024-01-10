@@ -5,6 +5,12 @@
 # For complete and thorough documentation, please see here:
 # https://studio.src.eco/nail/vtx/#twitch
 
+twitch:
+  channel: missiontv
+  personas: 
+    - source
+  focus: support
+
 personas:
   source:
     bias: 806051627198709760
@@ -15,9 +21,3 @@ source:
     trade:
       personas:
         - source
-
-twitch:
-  channel: missiontv
-  personas: 
-    - source
-  focus: support

@@ -77,7 +77,8 @@ case $action in
     "eval") 
         docker compose exec lab sh tests/eval.sh ;;
     "build") 
-        docker compose build ;;
+        docker compose build && docker images | grep /lab ;;
+        # docker history <image>
     "push") 
         docker compose push ;;
     "pull") 

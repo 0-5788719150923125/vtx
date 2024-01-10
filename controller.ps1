@@ -82,6 +82,7 @@ switch ($action) {
     }
     "build" {
         docker compose build
+        docker images | Select-String "/lab"
     }
     "push" {
         docker compose push

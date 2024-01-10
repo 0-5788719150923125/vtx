@@ -1,15 +1,15 @@
 version: '3.9'
 
 services:
+  # agi:
+  #   image: trueagi/hyperon
+
   ctx:
     image: ghcr.io/0-5788719150923125/ctx:latest
     restart: 'always'
     network_mode: host
     env_file:
       - .env
-
-  # agi:
-  #   image: trueagi/hyperon
 
   tbd:
     image: ghcr.io/0-5788719150923125/lab:latest

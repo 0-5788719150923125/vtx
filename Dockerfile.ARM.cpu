@@ -92,10 +92,10 @@ COPY requirements.y.txt ./
 RUN pip install -r requirements.y.txt
 
 COPY lab/ /lab
-COPY data/adapters/ /adapters
-COPY data/embeddings/ /embeddings
 COPY src/ /src
 COPY book/ /book
+COPY data/embeddings/ /embeddings
+COPY data/adapters/ /adapters
 
 RUN mkdir /env && \
     mkdir /.cache && \

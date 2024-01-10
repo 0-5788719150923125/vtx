@@ -17,6 +17,7 @@ frame:
     strategy: hivemind
     initial_piers:
       - /p2p/12D3KooWQpMNjwYNpfKLArytyQRb2DYzv59Kuahgjdiyzvpsxy8D
+      - /p2p/Qmcibh1TRGwBPKgyDDHzKogFpudwUpFutx6M5oSAXSWsUa
     learning_rate: 0.000333
     lookahead: 3
     block_size: 256

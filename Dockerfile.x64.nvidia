@@ -80,14 +80,16 @@ WORKDIR /src
 
 COPY requirements.txt prepare.py ./
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt && \
+    pip cache purge
 
 RUN python3 prepare.py
 
 ARG NODEMON_VERSION
 ARG WRANGLER_VERSION
 
-RUN pip install flash-attn --no-build-isolation
+RUN pip install flash-attn --no-build-isolation && \
+    pip cache purge
 
 RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
 
@@ -100,7 +102,8 @@ RUN python3 -m venv /venv/x \
 
 COPY requirements.x.txt ./
 
-RUN pip install -r requirements.x.txt
+RUN pip install -r requirements.x.txt && \
+    pip cache purge
 
 RUN python3 -m venv /venv/y \
     && chmod +x /venv/y/bin/activate \
@@ -108,7 +111,8 @@ RUN python3 -m venv /venv/y \
 
 COPY requirements.y.txt ./
 
-RUN pip install -r requirements.y.txt
+RUN pip install -r requirements.y.txt && \
+    pip cache purge
 
 COPY lab/ /lab
 COPY src/ /src

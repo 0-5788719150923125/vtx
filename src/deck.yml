@@ -16,9 +16,11 @@ frame:
     scheduler: cosine
     strategy: hivemind
     initial_piers:
+      - /p2p/QmVtpsm7b91S5pYcjsreHKxoHU6wThBn6RFHPrUWXCBrzo # src.eco
     #   - /p2p/QmQUeTQh9xjPD4XTGqAhsVN3RGFfrc5NJ75YRGvynHYjFM
       - /p2p/QmaDVEctc68ppnN1Xu7tSFodDmTjgVXx511vSZbDrmCmDe
     #   - /p2p/QmeR8EkDPmxi79snPkfY16uX8w6g35RZH6K9UGc9HR6HuA
+      # - /p2p/QmcxZhZv6JaNEHDwTsHnAxDfA2HYAszgNrKcXiCkMzHc7P
     learning_rate: 0.000333
     lookahead: 3
     block_size: 256

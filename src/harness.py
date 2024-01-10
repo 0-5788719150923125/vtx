@@ -114,7 +114,7 @@ def main():
     if verbose:
         print(tokenizer)
 
-    if train_type == "pretrain" and not resume:
+    if train_type == "pretrain":
         pretrain_config = AutoConfig.from_pretrained(launch_model)
         if verbose:
             print(f"{colors.RED}original pretrain config:{colors.WHITE}")

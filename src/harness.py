@@ -55,7 +55,7 @@ def main():
     if resume == True:
         if not os.path.exists(
             "/data/models/" + focus + "/pytorch_model.bin"
-        ) and not os.path.exists("/data/models/" + focus + "/model.safetensors"):
+        ) or not os.path.exists("/data/models/" + focus + "/model.safetensors"):
             launch_model = base_model
             model_folder = None
     else:

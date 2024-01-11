@@ -138,35 +138,38 @@ heart:
     datasets:
       streaming:
         - c4
-    type: oft
-    r: 230
-    # r: 2334
+    # type: oft
+    # r: 23
+    # module_dropout: 0.1
+    # coft: True
+    # eps: 0.0000666
+    type: lokr
+    alpha: 32
+    rank_dropout: 0.1
     module_dropout: 0.1
-    coft: True
-    eps: 0.0000666
+    decompose_both: True
+    decompose_factor: -1
     target_modules:
-      # - key
       - receptance
-      # - value
-      - head
+      - value
+      - output
     gradient_checkpointing: False
     optimizer: AdamW
     learning_rate: 0.000666
-    swa_learning_rate: 0.01
-    block_size: 768
+    block_size: 512
     stride: 256
-    num_steps: 100000
-    warmup_steps: 1000
-    weight_decay: 0.1
-    gradient_clip_val: 1.23
+    num_steps: 25000
+    warmup_steps: 100
+    weight_decay: 0.01
+    gradient_clip_val: 1.0
     scheduler: cosine
     batch_size: 1
-    gradient_accumulation_steps: 4
+    gradient_accumulation_steps: 16
     val_split: 0.01
-    val_interval: 5000
-    generate_every: 250
-    save_every: 1000
-    checkpoint_every: 1000
+    val_interval: 1000
+    generate_every: 25
+    save_every: 100
+    checkpoint_every: 100
 
 
 # The product of a large research community, who is attempting to decentralize 

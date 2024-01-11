@@ -570,7 +570,7 @@ def transformer(name, text):
         f'{pronoun} {types} {verb}, "{text}"',
         f'{leader} {verb}, "{text}"',
         f'{name} {verb}, "{text}"',
-        f"{text}",
+        f'The other person says, "{text}"',
         f"{text}",
         f"{text}",
         f"{text}",

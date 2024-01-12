@@ -195,9 +195,9 @@ class Cortex:
         while self.active == True:
             time.sleep(1)
 
-        time.sleep(5)
-
         self.active = True
+
+        time.sleep(5)
 
         adapters = None
         model_folder = None

@@ -16,10 +16,10 @@ frame:
     scheduler: cosine
     strategy: hivemind
     initial_piers:
-      - /p2p/QmaDVEctc68ppnN1Xu7tSFodDmTjgVXx511vSZbDrmCmDe
+      - /p2p/QmQUeTQh9xjPD4XTGqAhsVN3RGFfrc5NJ75YRGvynHYjFM
     learning_rate: 0.000333
     lookahead: 3
-    block_size: 512
+    block_size: 384
     stride: 128
     warmup_steps: 10
     num_steps: 100000
@@ -40,9 +40,9 @@ frame:
       n_layer: 24
       n_head: 2
       k_att: 5
-      k_mlp: 6
-      n_att_experts: 99
-      n_mlp_experts: 66
+      k_mlp: 4
+      n_att_experts: 60
+      n_mlp_experts: 40
       n_ctx: 384 # history_length * n_layer
       n_embd: 256
       gating_size: 4

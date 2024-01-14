@@ -170,7 +170,7 @@ async def manage_submissions(reddit, config):
                 if not edited:
                     cache_miss[title] += 1
                     print(f"cache miss {cache_miss[title]}")
-                    if cache_miss[title] <= 3:
+                    if cache_miss[title] <= 10:
                         continue
                     cache_miss[title] = 0
                     try:

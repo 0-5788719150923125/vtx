@@ -16,20 +16,20 @@ frame:
     scheduler: cosine
     strategy: hivemind
     initial_piers:
-      - /p2p/QmeR8EkDPmxi79snPkfY16uX8w6g35RZH6K9UGc9HR6HuA
+      - /p2p/QmaDVEctc68ppnN1Xu7tSFodDmTjgVXx511vSZbDrmCmDe
     learning_rate: 0.000333
     lookahead: 3
-    block_size: 256
+    block_size: 512
     stride: 128
     warmup_steps: 10
-    num_steps: 10000
+    num_steps: 100000
     batch_size: 1
-    target_batch_size: 768
+    target_batch_size: 2048
     weight_decay: 0.1
     gradient_clip_val: 1.0
-    generate_every: 5
-    checkpoint_every: 10
-    save_every: 10
+    generate_every: 1
+    checkpoint_every: 0
+    save_every: 5
     val_interval: 25
     overrides:
       model: Prism
@@ -37,18 +37,18 @@ frame:
       world_size: 59
       activation_function: silu
       gate_type: gmm
-      n_layer: 6
-      n_head: 3
-      k_att: 6
-      k_mlp: 7
-      n_att_experts: 300
-      n_mlp_experts: 200
-      n_ctx: 96 # history_length * n_layer
+      n_layer: 24
+      n_head: 2
+      k_att: 5
+      k_mlp: 6
+      n_att_experts: 99
+      n_mlp_experts: 66
+      n_ctx: 384 # history_length * n_layer
       n_embd: 256
       gating_size: 4
       block_size: 8
       history_length: 16
-      att_hidden: 42
+      att_hidden: 32
       ffd_hidden: 64
       aux_loss_type: mi
       aux_loss_weight: 0.1

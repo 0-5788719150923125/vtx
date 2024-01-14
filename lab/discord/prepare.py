@@ -61,11 +61,11 @@ def main():
                         i["content"] = i["content"]
                     if i["embeds"][0]["title"]:
                         i["content"] = (
-                            i["content"] + " | ((" + i["embeds"][0]["title"] + "))"
+                            i["content"] + " ((" + i["embeds"][0]["title"] + "))"
                         )
                     if i["embeds"][0]["description"]:
                         i["content"] = (
-                            i["content"] + " | " + i["embeds"][0]["description"]
+                            i["content"] + " " + i["embeds"][0]["description"]
                         )
 
                 if i["author"]["isBot"] == True:
@@ -99,14 +99,14 @@ def main():
                                         if result["embeds"][0]["title"]:
                                             result["content"] = (
                                                 result["content"]
-                                                + " | (("
+                                                + " (("
                                                 + result["embeds"][0]["title"]
                                                 + "))"
                                             )
                                         if result["embeds"][0]["description"]:
                                             result["content"] = (
                                                 result["content"]
-                                                + " | "
+                                                + " "
                                                 + result["embeds"][0]["description"]
                                             )
                                     sanitized = sanitizer(result["content"])

@@ -55,3 +55,6 @@
 [submodule "lab/reason"]
 	path = lab/reason
 	url = https://github.com/contrast-zone/reasoner.js.git
+[submodule "lab/hivemind"]
+	path = lab/hivemind
+	url = https://github.com/learning-at-home/hivemind.git

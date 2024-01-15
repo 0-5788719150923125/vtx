@@ -58,5 +58,6 @@ frame:
       attn_pdrop: 0.1
       moe_pdrop: 0.1
       sample_topk: 2
+      layer_norm_epsilon: 1e-05
       vocab_size: 12288
       tie_word_embeddings: True

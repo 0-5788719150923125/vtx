@@ -224,12 +224,12 @@ transformers:
       do_sample: True
       min_new_tokens: 11
       max_new_tokens: 111
-      temperature: 1.23
+      temperature: 1.59
       eta_cutoff: 0.002
       penalty_alpha: 0.59
       top_k: 4
       repetition_penalty: 1.01
-      encoder_repetition_penalty: 0.999
+      # encoder_repetition_penalty: 0.999
       no_repeat_ngram_size: 9
       low_memory: False
     lowpenalty:

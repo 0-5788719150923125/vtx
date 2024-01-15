@@ -1,7 +1,7 @@
 frame:
   model: ibm/MoLM-350M-4B
   info: sing with me
-  precision: 16
+  precision: 32
   context_length: 2048
   training:
     type: "pretrain"

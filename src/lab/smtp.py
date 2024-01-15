@@ -61,6 +61,7 @@ description: {config.get('description', 'A short email and a story, written for 
                 temperature=0.7,
                 min_new_tokens=512,
                 max_new_tokens=768,
+                generation_profile="longform",
                 disposition=config.get("disposition", None),
                 eos_tokens=["\n", "\n\n", "\\", ".", "?", "!"],
             )

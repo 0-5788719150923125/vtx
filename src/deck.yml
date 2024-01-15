@@ -1,7 +1,7 @@
 frame:
   model: ibm/MoLM-350M-4B
   info: sing with me
-  precision: 32
+  precision: 16
   context_length: 2048
   training:
     type: "pretrain"
@@ -35,17 +35,17 @@ frame:
     overrides:
       model: Prism
       universal: True
-      world_size: 59
+      world_size: 23
       activation_function: silu
       gate_type: gmm
       n_layer: 24
       n_head: 2
-      k_att: 5
-      k_mlp: 4
-      n_att_experts: 60
-      n_mlp_experts: 40
+      k_att: 3
+      k_mlp: 3
+      n_att_experts: 64
+      n_mlp_experts: 32
       n_ctx: 384 # history_length * n_layer
-      n_embd: 256
+      n_embd: 384
       gating_size: 4
       block_size: 8
       history_length: 16

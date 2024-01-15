@@ -1,5 +1,6 @@
 # horde-sdk>=0.7.23
-/lab/lightning-hivemind
+/lab/hivemind
+# /lab/lightning-hivemind
 peft>=0.7.1
 pydantic<2.0.0
 transformers>=4.35.2

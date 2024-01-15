@@ -12,6 +12,7 @@ lab/
 !lab/journals
 !lab/research
 !lab/pages
+!lab/hivemind
 !lab/lightning-hivemind
 lab/lightning-hivemind/venv
 !lab/ModuleFormer

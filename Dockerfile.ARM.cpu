@@ -87,11 +87,12 @@ RUN python3 -m venv /venv/y \
     && chmod +x /venv/y/bin/activate \
     && /venv/y/bin/activate
 
+COPY lab/ /lab
+
 COPY requirements.y.txt ./
 
 RUN pip install -r requirements.y.txt
 
-COPY lab/ /lab
 COPY src/ /src
 COPY book/ /book
 COPY data/embeddings/ /embeddings

@@ -123,7 +123,7 @@ switch ($action) {
         docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/$DATASET/fetch.py
     }
     "prune" {
-        docker system prune -a -f
+        docker system prune -f
         docker volume prune -f
     }
     "key" {

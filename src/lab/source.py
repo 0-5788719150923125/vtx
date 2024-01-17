@@ -175,7 +175,7 @@ async def response(config, focus):
 
 def send(message, focus, mode, identifier=get_identity()):
     ws = websocket.WebSocket()
-    ws.connect("ws://localhost:9666/ws")
+    ws.connect("ws://127.0.0.1:9666/ws")
     ws.send(
         json.dumps(
             {

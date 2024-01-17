@@ -8,7 +8,6 @@ RUN apt-get update \
     ca-certificates \
     curl \
     gnupg \
-    sqlite3 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN install -m 0755 -d /etc/apt/keyrings && \
@@ -40,6 +39,7 @@ RUN apt-get update -y \
     python3-pip \
     python3-packaging \
     python3-venv \
+    sqlite3 \
     unzip \
     vim \
     && rm -rf /var/lib/apt/lists/*

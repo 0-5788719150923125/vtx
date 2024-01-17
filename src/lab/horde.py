@@ -42,7 +42,7 @@ async def monitor(subscribe_event, publish_event, func, config):
 
 
 async def caption(config, *args, **kwargs):
-    api = "http://localhost:5000/caption"
+    api = "http://127.0.0.1:5000/caption"
 
     try:
         data = {"source": kwargs["image"]}
@@ -69,7 +69,7 @@ async def caption(config, *args, **kwargs):
 
 
 async def generate(config, *args, **kwargs):
-    api = "http://localhost:5000/generate"
+    api = "http://127.0.0.1:5000/generate"
 
     source = None
     mask = None

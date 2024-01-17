@@ -63,8 +63,6 @@ services:
     image: ipfs/kubo:latest
     restart: 'always'
     command: daemon --init-profile=lowpower --migrate
-    ports:
-      - 9090:8080
     volumes:
       - ./book:/book
       - data:/data/ipfs
@@ -72,7 +70,7 @@ services:
   urb:
     image: tloncorp/vere
     command: /bin/start-urbit --loom=29
-    restart: 'always'
+    # restart: 'always'
     stdin_open: true
     deploy:
       resources:

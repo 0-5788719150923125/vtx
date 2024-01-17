@@ -101,6 +101,7 @@ switch ($action) {
             $ARG1 = '-d'
         }
         $env:FOCUS = $FOCUS
+        # Start-Process docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml watch --no-up -NoNewWindow -RedirectStandardOutput /dev/null -RedirectStandardError /dev/null
         docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml $GPU up $ARG1
     }
     "train", "trial" {

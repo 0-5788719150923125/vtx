@@ -550,7 +550,7 @@ async def build_context(comment):
         parent = await parent.parent()
         await parent.load()
     context.insert(
-        0, {"bias": get_identity(), "message": f"{parent.title} => {parent.selftext}"}
+        0, {"bias": get_identity(), "message": f"{parent.title}\n\n{parent.selftext}"}
     )
     return context
 

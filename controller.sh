@@ -93,6 +93,7 @@ case $action in
         if [[ "$DETACHED" == "true" ]]; then
             ARG1='-d'
         fi
+        # nohup docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml watch --no-up >/dev/null 2>&1 &
         FOCUS=${FOCUS} docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml $GPU up ${ARG1} ;;
     "train" | "trial") 
         if [[ -z "$FOCUS" ]]; then

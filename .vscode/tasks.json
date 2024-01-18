@@ -120,15 +120,6 @@
         }
       },
       {
-        "label": "remote",
-        "detail": "Test the local stack against a remote Docker daemon via SSH.",
-        "type": "shell",
-        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && docker context use one && ARCH='ARM' FOCUS=${input:model} docker compose up",
-        "windows": {
-          "command": "$env:FOCUS = '${input:model}'; docker compose up"
-        }
-      },
-      {
         "label": "upload",
         "detail": "Upload adapters to a remote server via SSH.",
         "type": "shell",

@@ -59,6 +59,11 @@ if [[ "$DEVICE" != "cpu" ]]; then
     GPU='-f docker-compose.gpu.yml'
 fi
 
+if test "$(docker context show)" = "one"; then
+    eval "$(ssh-agent -s)"
+    ssh-add one.key
+fi
+
 # Implement the controller
 case $action in
     "ps") 
@@ -93,6 +98,12 @@ case $action in
         if [[ "$DETACHED" == "true" ]]; then
             ARG1='-d'
         fi
+
+        if test "$(docker context show)" = "one"; then
+            FOCUS=${FOCUS} docker compose up
+            exit 1
+        fi
+
         # nohup docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml watch --no-up >/dev/null 2>&1 &
         FOCUS=${FOCUS} docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml $GPU up ${ARG1} ;;
     "train" | "trial") 

@@ -72,4 +72,4 @@ For complete documentation, [please visit this link](https://studio.src.eco/nail
 # contact
 
 - Join us on Discord: [https://discord.gg/N3dsVuWfJr](https://discord.gg/N3dsVuWfJr)
-- Send me an email: [ink@src.eco](ink@src.eco)
+- Send me an email: [ink@src.eco](mailto:ink@src.eco?subject=[GitHub]%20<title>)

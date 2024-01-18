@@ -4,7 +4,6 @@
         "ms-python.black-formatter",
         "ms-python.isort",
         "mhutchie.git-graph",
-        "ms-azuretools.vscode-docker",
-        "rangav.vscode-thunder-client"
+        "ms-azuretools.vscode-docker"
     ]
 }

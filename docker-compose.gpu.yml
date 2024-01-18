@@ -6,7 +6,7 @@ services:
       resources:
         reservations:
           devices:
-            - driver: ${DEVICE:-nvidia}
-              capabilities: [gpu]
+            - capabilities: ["gpu"]
+              count: all
         limits:
           cpus: '2.0'

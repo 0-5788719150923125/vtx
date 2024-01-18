@@ -261,11 +261,11 @@ def create_dataset(
             for suffix in suffixes:
                 if file.lower().endswith(suffix):
                     skip = True
-                    continue
+                    break
             for prefix in prefixes:
                 if file.startswith(prefix):
                     skip = True
-                    continue
+                    break
 
             if skip == True:
                 with open(intermediate_path, "a") as intermediate:

@@ -200,7 +200,6 @@ def create_dataset(
     block_size: int = 1024,
     stride: int = 0,
     samples: float = 1.0,
-    line_by_line=False,
 ):
     prefixes = [
         ".git",
@@ -275,62 +274,36 @@ def create_dataset(
                     print(f"skipping: {colors.RED}{file}{colors.WHITE}")
                 continue
 
-            if line_by_line == True:
-                with open(file, "r") as content:
-                    with open("/tmp/lines.txt", "a") as lines:
-                        lines.write(content.read())
-                datasets[file] = StaticDataset(
-                    "/tmp/lines.txt",
-                    batch_size=100000,
-                    block_size=block_size,
-                    line_by_line=line_by_line,
-                    tokenizer=tokenizer,
-                    stride=stride,
-                    bos_token=tokenizer.bos_token or "<|endoftext|>",
-                    eos_token=tokenizer.eos_token or "<|endoftext|>",
-                    unk_token=tokenizer.unk_token or "<|endoftext|>",
-                    pad_token=tokenizer.pad_token or "<|endoftext|>",
-                )
-                os.remove("/tmp/lines.txt")
-            else:
-                with open(file, "r") as content:
-                    with open(intermediate_path, "a") as intermediate:
-                        string = ""
-                        if file.lower().endswith("pdf"):
-                            reader = PdfReader(file)
-                            for i, page in enumerate(reader.pages):
-                                page = reader.pages[i].extract_text()
-                                string += page + "\n"
-                        else:
-                            string = content.read()
-                        intermediate.write(string + f"{tokenizer.eos_token}")
+            with open(file, "r") as content:
+                with open(intermediate_path, "a") as intermediate:
+                    string = ""
+                    if file.lower().endswith("pdf"):
+                        reader = PdfReader(file)
+                        for i, page in enumerate(reader.pages):
+                            page = reader.pages[i].extract_text()
+                            string += page + "\n"
+                    else:
+                        string = content.read()
+                    intermediate.write(string + f"{tokenizer.eos_token}")
 
         except Exception as e:
+            intermediate.write(f"void:{file}{tokenizer.eos_token}")
             print(f"failed: {colors.RED}{file}{colors.WHITE}")
             logging.error(e)
 
     print(f"tokenizing: {colors.BLUE}{path}{colors.WHITE}")
 
-    if line_by_line == True:
-        collection = []
-        for dataset in datasets:
-            collection.append(datasets[dataset])
-        if len(collection) == 1:
-            dataset = collection[0]
-        else:
-            dataset = merge_datasets(collection, equalize=False)
-    else:
-        dataset = StaticDataset(
-            intermediate_path,
-            tokenizer=tokenizer,
-            batch_size=100000,
-            block_size=block_size,
-            stride=stride,
-            bos_token=tokenizer.bos_token or "<|endoftext|>",
-            eos_token=tokenizer.eos_token or "<|endoftext|>",
-            unk_token=tokenizer.unk_token or "<|endoftext|>",
-            pad_token=tokenizer.pad_token or "<|endoftext|>",
-        )
+    dataset = StaticDataset(
+        intermediate_path,
+        tokenizer=tokenizer,
+        batch_size=100000,
+        block_size=block_size,
+        stride=stride,
+        bos_token=tokenizer.bos_token or "<|endoftext|>",
+        eos_token=tokenizer.eos_token or "<|endoftext|>",
+        unk_token=tokenizer.unk_token or "<|endoftext|>",
+        pad_token=tokenizer.pad_token or "<|endoftext|>",
+    )
 
     # Cleanup temp files used for tokenized dataset creation
     if os.path.exists("/tmp/intermediate.txt"):
@@ -378,7 +351,6 @@ def build_static_datasets(train_config, tokenizer):
                         block_size=block_size,
                         stride=ds_config.get("stride", stride),
                         samples=ds_config.get("samples", 1.0),
-                        line_by_line=ds_config.get("line_by_line", False),
                     )
 
                     ds.save(cache_destination=cached)

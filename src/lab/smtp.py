@@ -63,7 +63,7 @@ description: {config.get('description', 'A short email and a story, written for 
                 max_new_tokens=768,
                 generation_profile="longform",
                 disposition=config.get("disposition", None),
-                eos_tokens=["\n", "\n\n", "\\", ".", "?", "!"],
+                # eos_tokens=["\n", "\n\n", "\\", ".", "?", "!"],
             )
         )
 
@@ -78,8 +78,8 @@ description: {config.get('description', 'A short email and a story, written for 
             message["To"] = subscriber
             message["Subject"] = Header(subject, "utf-8")
 
-            cleaned = "\n".join(output.splitlines()[9:])
-            unified = unified_newlines(cleaned.replace(r"\r\n|\r|\n", "\n"), 2)
+            strip_prompt = "\n".join(output.splitlines()[9:])
+            unified = unified_newlines(strip_prompt.replace(r"\r\n|\r|\n", "\n"), 2)
             redacted = re.sub(
                 r"http\S+",
                 "$REDACTED",

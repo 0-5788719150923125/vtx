@@ -16,6 +16,7 @@ from typing import List, Union
 import numpy as np
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
+from transformers import PreTrainedTokenizerFast
 
 from aigen.aigen import aigen
 from common import (
@@ -69,7 +70,7 @@ def validation(config):
                 },
                 "name": {"type": "string"},
                 "strategy": {"type": "string"},
-                "initial_piers": {"type": "string"},
+                "initial_piers": {"type": "list"},
                 "alpha": {"type": "integer"},
                 "module_dropout": {"type": "float"},
                 "rank_dropout": {"type": "float"},
@@ -143,7 +144,9 @@ def validation(config):
                 "finetune": {"type": "boolean"},
                 "checkpoint": {"type": "boolean"},
                 "batch_size": {"type": "integer"},
+                "target_batch_size": {"type": "integer"},
                 "gradient_accumulation_steps": {"type": "integer"},
+                "tokenizer": {"type": "boolean"},
                 "equalize_datasets": {"type": "boolean"},
                 "datasets": {"type": "dict"},
                 "val_split": {"type": "float"},
@@ -205,6 +208,7 @@ class Cortex:
         embeddings_dir = "/data/embeddings/" + focus
         tuning_mode = None
         pre_seq_len = 24
+        tokenizer = None
         if "training" in config:
             t = config["training"].get("type", "standard")
             if t not in ["standard", "pretrain"]:
@@ -225,10 +229,20 @@ class Cortex:
                 pre_seq_len = t.get("num_virtual_tokens", pre_seq_len)
             else:
                 model_folder = "/data/models/" + focus
+                tokenizer_file = f"/data/tokenizers/{focus}/tokenizer.json"
+                tokenizer = PreTrainedTokenizerFast(
+                    tokenizer_file=tokenizer_file,
+                    # bos_token="<|endoftext|>",
+                    # eos_token="<|endoftext|>",
+                    # unk_token="<|endoftext|>",
+                    # pad_token="<|endoftext|>",
+                    # **tokenizer_config,
+                )
         try:
             prototype = aigen(
                 model=config.get("model"),
                 model_folder=model_folder,
+                tokenizer=tokenizer,
                 device_map=config.get("device_map", "auto"),
                 petals=config.get("petals", False),
                 cache_dir="/data/models",
@@ -578,6 +592,8 @@ class Cortex:
                 while output.endswith("??"):
                     output = output.rstrip("?")
                 if not self.check_similarity(context, group[3]):
+                    continue
+                if output == "(":
                     continue
                 bias = group[2]
                 success = True

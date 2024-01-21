@@ -19,25 +19,25 @@ from extensions import register_models
 
 register_models()
 
-verbose = True
 local_rank = int(os.environ.get("LOCAL_RANK", 0))
 world_rank = int(os.environ.get("WORLD_RANK", 0))
-
-if local_rank > 0:
-    verbose = False
 
 model_config = config[focus]
 train_config = model_config["training"]
 
 
+def print_once(text):
+    if local_rank == 0:
+        print(text)
+
+
 def main():
-    if verbose:
-        print("(" + colors.GREEN + "focus" + colors.WHITE + ")")
-        time.sleep(2)
-        print(
-            f"({colors.RED}ed{colors.WHITE}) on the ({colors.BLUE}{focus}{colors.WHITE})"
-        )
-        time.sleep(3)
+    print_once("(" + colors.GREEN + "focus" + colors.WHITE + ")")
+    time.sleep(2)
+    print_once(
+        f"({colors.RED}ed{colors.WHITE}) on the ({colors.BLUE}{focus}{colors.WHITE})"
+    )
+    time.sleep(3)
 
     base_model = model_config["model"]
     model_folder = "/data/models/" + focus
@@ -74,12 +74,11 @@ def main():
                         os.remove(filepath)
                     except OSError as e:
                         print(f"Error deleting file {filepath}: {e}")
-        model_folder = None
         shutil.rmtree(f"/data/embeddings/{focus}", ignore_errors=True)
+        model_folder = None
 
     tuning_mode = None
     pretrain_config = None
-    peft_config = None
     pre_seq_len = 0
 
     output_dir = f"/data/models/{focus}"
@@ -101,9 +100,9 @@ def main():
         if not os.path.exists(f"{tokenizer_model}/tokenizer.json"):
             tokenizer = train_tokenizer(
                 files=list_full_paths("/lab/research"),
-                dropout=0.95,
+                dropout=None,
                 vocab_size=train_config["overrides"].get("vocab_size"),
-                min_frequency=1,
+                min_frequency=2,
                 save_path=tokenizer_model,
             )
 
@@ -112,30 +111,19 @@ def main():
     if hasattr(tokenizer, "pad_token") and tokenizer.pad_token is None:
         setattr(tokenizer, "pad_token", tokenizer.eos_token)
 
-    if verbose:
-        print(tokenizer)
+    print_once(tokenizer)
 
     if train_type == "pretrain":
         pretrain_config = AutoConfig.from_pretrained(launch_model)
-        if verbose:
-            print(f"{colors.RED}original pretrain config:{colors.WHITE}")
-            print(pretrain_config)
+        print_once(f"{colors.RED}original pretrain config:{colors.WHITE}")
+        print_once(pretrain_config)
         setattr(pretrain_config, "_name_or_path", focus)
-        setattr(
-            pretrain_config,
-            "bos_token_id",
-            getattr(tokenizer, "bos_token_id", tokenizer.unk_token_id),
-        )
-        setattr(
-            pretrain_config,
-            "eos_token_id",
-            getattr(tokenizer, "eos_token_id", tokenizer.unk_token_id),
-        )
+        setattr(pretrain_config, "bos_token_id", tokenizer.bos_token_id)
+        setattr(pretrain_config, "eos_token_id", tokenizer.eos_token_id)
         for k, v in train_config.get("overrides").items():
             setattr(pretrain_config, k, v)
-        if verbose:
-            print(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
-            print(pretrain_config)
+        print_once(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
+        print_once(pretrain_config)
 
     static_data = []
     if len(train_config["datasets"].get("static", [])) > 0:
@@ -146,12 +134,11 @@ def main():
         streaming_data.append(config["collections"]["streaming"][dataset.lower()])
 
     # Erase old logs
-    log_path = "/data/logs/" + focus
-    train_config["log_path"] = log_path
+    train_config["log_path"] = "/data/logs/" + focus
     if fresh_logs == True:
-        shutil.rmtree(log_path, ignore_errors=True)
+        shutil.rmtree(train_config["log_path"], ignore_errors=True)
 
-    os.makedirs(f"{log_path}/{adapter}", exist_ok=True)
+    os.makedirs(f"{train_config['log_path']}/{adapter}", exist_ok=True)
 
     init_kwargs = dict(
         model=launch_model,
@@ -190,7 +177,9 @@ def main():
         else:
             prototype.create_adapter(train_config)
 
-    logger = loggers.TensorBoardLogger(log_path, name=adapter, default_hp_metric=True)
+    logger = loggers.TensorBoardLogger(
+        train_config["log_path"], name=adapter, default_hp_metric=True
+    )
 
     # Train the model
     prototype.train(

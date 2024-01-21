@@ -100,7 +100,7 @@ def main():
         if not os.path.exists(f"{tokenizer_model}/tokenizer.json"):
             tokenizer = train_tokenizer(
                 files=list_full_paths("/lab/research"),
-                dropout=None,
+                # dropout=0.001,
                 vocab_size=train_config["overrides"].get("vocab_size"),
                 min_frequency=2,
                 save_path=tokenizer_model,
@@ -298,10 +298,10 @@ def create_dataset(
         batch_size=100000,
         block_size=block_size,
         stride=stride,
-        bos_token=tokenizer.bos_token or "<|endoftext|>",
-        eos_token=tokenizer.eos_token or "<|endoftext|>",
-        unk_token=tokenizer.unk_token or "<|endoftext|>",
-        pad_token=tokenizer.pad_token or "<|endoftext|>",
+        bos_token=tokenizer.bos_token or "<|void|>",
+        eos_token=tokenizer.eos_token or "<|void|>",
+        unk_token=tokenizer.unk_token or "<|void|>",
+        pad_token=tokenizer.pad_token or "<|void|>",
     )
 
     # Cleanup temp files used for tokenized dataset creation

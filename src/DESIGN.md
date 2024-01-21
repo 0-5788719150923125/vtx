@@ -68,7 +68,7 @@ By default, GPUs are not available inside of Docker. In order to share your GPU 
 
 ### Inference
 
-To quickly bring a functional project online, we recommend [downloading these project files](https://github.com/0-5788719150923125/vtx/tree/main/examples/lab), and bringing-up the Docker project. If all goes well, the container should download a functional AI model, load it into system memory, and begin "chatting" with others at [The Source](https://src.eco).
+To quickly bring a functional project online, we recommend [downloading these project files](https://github.com/0-5788719150923125/vtx/tree/main/examples/inference), and bringing-up the Docker project. If all goes well, the container should download a functional AI model, load it into system memory, and begin "chatting" with others at [The Source](https://src.eco).
 
 ### Training
 
@@ -96,7 +96,7 @@ A very basic VTX configuration will contain three files:
 2. A `config.yml` file (to customize your lab)
 3. A `.env` file (to hold secrets, like passwords)
 
-[This example project](https://github.com/0-5788719150923125/vtx/tree/main/examples/lab) should work universally, without any additional configuration, on any platform that meets the minumum requirements.
+[This example project](https://github.com/0-5788719150923125/vtx/tree/main/examples/inference) should work universally, without any additional configuration, on any platform that meets the minumum requirements.
 
 ### Docker
 

@@ -92,7 +92,7 @@ There are so many steps that go into proper training, it would be impossible to 
 
 A very basic VTX configuration will contain three files:
 
-1. A `docker-compose.yml` file (to orchestrate Docker)
+1. A `compose.yml` file (to orchestrate Docker)
 2. A `config.yml` file (to customize your lab)
 3. A `.env` file (to hold secrets, like passwords)
 
@@ -100,7 +100,7 @@ A very basic VTX configuration will contain three files:
 
 ### Docker
 
-The most basic `docker-compose.yml` configuration will look something like this:
+The most basic `compose.yml` configuration will look something like this:
 
 ```yml
 version: '3.9'
@@ -488,7 +488,7 @@ collections:
 ```
 In this example, "lab/dataset1" and "lab/dataset2" must exist in a folder located at the root of your project. Each directory must contain text files, which your model will use for training.
 
-You must also remember to bind a lab/ directory into your Docker container, as shown in this `docker-compose.yml` example:
+You must also remember to bind a lab/ directory into your Docker container, as shown in this `compose.yml` example:
 ```yml
 services:
   lab:

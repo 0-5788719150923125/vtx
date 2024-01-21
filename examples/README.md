@@ -1,4 +1,4 @@
 # New here?
 ---
 
-Start in the the `examples/lab` folder.
+Start in the the `examples/inference` folder.

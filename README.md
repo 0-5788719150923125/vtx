@@ -50,7 +50,7 @@ To build a simple, opinionated framework for human cloning experiments. Our goal
 - Install Git and Docker.
 - Clone this repo to a local directory: `git clone --recurse-submodules https://github.com/0-5788719150923125/vtx.git path/to/my/directory`
 - Checkout the correct branches with: `git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'`
-- Place configurations into config.yml. ([default.yml](./src/default.yml))
+- Place configurations into a config.yml file. ([example](./src/1-parts.yml))
 - Put credentials into a .env file at the root of this project. ([example.env](./examples/inference/.env))
 - Use VSCode tasks, or the `controller.sh` script (on Linux/Mac) and/or the `controller.ps1` script on Windows.
 - The "up" task is used to bring your lab online.

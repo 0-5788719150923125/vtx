@@ -36,19 +36,18 @@ if os.path.exists(cache_path):
 
 os.makedirs(cache_path)
 
-# Load the deck; a better way would be to import all
-# yml files from the given directory, at some sampling rate
-with open("/src/deck.yml", "r") as config_file:
-    on_deck = yaml.load(config_file, Loader=yaml.FullLoader)
+config_files = ["/src/0-body.yml", "/src/1-parts.yml"]
 
 # Load configuration files from disk
-with open("/src/default.yml", "r") as config_file:
-    default_config = merge(
-        {},
-        yaml.load(config_file, Loader=yaml.FullLoader),
-        on_deck,
-        strategy=Strategy.REPLACE,
-    )
+default_config = {}
+for file in config_files:
+    with open(file, "r") as f:
+        default_config = merge(
+            {},
+            yaml.load(f, Loader=yaml.FullLoader),
+            default_config,
+            strategy=Strategy.REPLACE,
+        )
 
 if os.path.exists("/env/config.yml"):
     with open("/env/config.yml", "r") as config_file:

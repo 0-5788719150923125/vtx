@@ -12,11 +12,11 @@ api:
 ipfs:
   enabled: True
 
-only: toehider
-
 urbit:
   planet: False
   moon: False
+
+only: toehider
 
 personas:
   source:

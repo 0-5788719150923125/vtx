@@ -72,7 +72,7 @@ services:
   urb:
     image: tloncorp/vere
     command: /bin/start-urbit --loom=29
-    # restart: 'always'
+    restart: 'on-failure[:7]'
     stdin_open: true
     deploy:
       resources:

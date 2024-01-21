@@ -16,6 +16,7 @@ print(colorize_yaml(config))
 def main():
     allowed_services = [
         "api",
+        "ipfs",
         "source",
         "urbit",
         "book",

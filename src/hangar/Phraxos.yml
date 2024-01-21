@@ -47,7 +47,7 @@ frame:
       n_att_experts: 120
       n_mlp_experts: 60
       n_embd: 256
-      gating_size: 16
+      gating_size: 8
       block_size: 16
       history_length: 16
       att_hidden: 32

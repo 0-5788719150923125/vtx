@@ -17,6 +17,7 @@ frame:
     strategy: hivemind
     initial_piers:
       - /p2p/QmQrtoqhKbs4KLDM7Lk86iS2tg3fHhEGSitRaty7Hrkoej
+      - /p2p/QmVaTAkQiCeiYwnyXM86VyWNaVZTokbD2bg5UXWauNiNZN
     learning_rate: 0.000333
     block_size: 512
     stride: 128

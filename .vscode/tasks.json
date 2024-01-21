@@ -176,9 +176,9 @@
         "label": "deploy",
         "detail": "Deploy your book.",
         "type": "shell",
-        "command": "docker compose -f compose.yml -f compose.dev.yml exec lab python3 /src/edge/deploy/${input:edge}.py",
+        "command": "docker compose -f compose.yml -f compose.dev.yml exec lab python3 /src/edge/${input:edge}.py",
         "windows": {
-          "command": "docker compose -f compose.yml -f compose.dev.yml exec lab python3 /src/edge/deploy/${input:edge}.py"
+          "command": "docker compose -f compose.yml -f compose.dev.yml exec lab python3 /src/edge/${input:edge}.py"
         }
       },
       {

@@ -46,7 +46,6 @@ frame:
       k_mlp: 6
       n_att_experts: 120
       n_mlp_experts: 60
-      n_ctx: 256 # history_length * n_layer
       n_embd: 256
       gating_size: 16
       block_size: 16

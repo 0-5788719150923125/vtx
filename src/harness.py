@@ -100,7 +100,7 @@ def main():
         if not os.path.exists(f"{tokenizer_model}/tokenizer.json"):
             tokenizer = train_tokenizer(
                 files=list_full_paths("/lab/research"),
-                # dropout=0.001,
+                dropout=0.001,
                 vocab_size=train_config["overrides"].get("vocab_size"),
                 min_frequency=2,
                 save_path=tokenizer_model,

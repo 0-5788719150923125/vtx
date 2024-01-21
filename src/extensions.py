@@ -24,7 +24,10 @@ def register_moduleformer():
     )
 
 
-# Should be easy to implement:
 # https://huggingface.co/state-spaces/mamba-2.8b/discussions/2
 def register_mamba():
-    pass
+    from mamba_ssm.models.config_mamba import MambaConfig
+    from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
+
+    AutoConfig.register("mamba", MambaConfig)
+    AutoModelForCausalLM.register(MambaConfig, MambaLMHeadModel)

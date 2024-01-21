@@ -61,8 +61,20 @@ def main():
     else:
         fresh_logs = True
         launch_model = base_model
+        if os.path.exists(model_folder):
+            for filename in os.listdir(model_folder):
+                if (
+                    filename.endswith(".ckpt")
+                    or filename.endswith(".bin")
+                    or filename.endswith(".safetensors")
+                    or filename.endswith(".pth")
+                ):
+                    filepath = os.path.join(model_folder, filename)
+                    try:
+                        os.remove(filepath)
+                    except OSError as e:
+                        print(f"Error deleting file {filepath}: {e}")
         model_folder = None
-        shutil.rmtree(f"/data/models/{focus}", ignore_errors=True)
         shutil.rmtree(f"/data/embeddings/{focus}", ignore_errors=True)
 
     tuning_mode = None
@@ -91,7 +103,7 @@ def main():
                 files=list_full_paths("/lab/research"),
                 dropout=0.95,
                 vocab_size=train_config["overrides"].get("vocab_size"),
-                min_frequency=2,
+                min_frequency=1,
                 save_path=tokenizer_model,
             )
 

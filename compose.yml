@@ -18,7 +18,6 @@ services:
         HUGO_VERSION: 0.118.2
         NODEMON_VERSION: 3.0.1
         NODE_MAJOR_VERSION: 20
-        WRANGLER_VERSION: 3.8.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:

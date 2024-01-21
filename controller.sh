@@ -56,7 +56,7 @@ fi
 
 # Set GPU mode
 if [[ "$DEVICE" != "cpu" ]]; then
-    GPU='-f docker-compose.gpu.yml'
+    GPU='-f compose.gpu.yml'
 fi
 
 if test "$(docker context show)" = "one"; then
@@ -87,7 +87,7 @@ case $action in
     "push") 
         docker compose push ;;
     "pull") 
-        docker compose -f docker-compose.yml -f docker-compose.services.yml pull ;;
+        docker compose -f compose.yml -f compose.services.yml pull ;;
     "up" | "auto")
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we focus on? ${MODELS} " FOCUS
@@ -104,23 +104,23 @@ case $action in
             exit 1
         fi
 
-        # nohup docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml watch --no-up >/dev/null 2>&1 &
-        FOCUS=${FOCUS} docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml $GPU up ${ARG1} ;;
+        # nohup docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml watch --no-up >/dev/null 2>&1 &
+        FOCUS=${FOCUS} docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml $GPU up ${ARG1} ;;
     "train" | "trial") 
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we train? ${MODELS} " FOCUS
         fi
-        docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd ipf opt && docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=${FOCUS} -e TASK=${action} lab python3 harness.py ;;
+        docker compose -f compose.yml -f compose.services.yml up -d tbd ipf opt && docker compose -f compose.yml -f compose.dev.yml -f compose.train.yml $GPU run -e FOCUS=${FOCUS} -e TASK=${action} lab python3 harness.py ;;
     "prepare") 
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we prepare? " DIRECTORY
         fi
-        docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${DATASET}/prepare.py ;;
+        docker compose -f compose.yml -f compose.dev.yml run lab python3 /lab/${DATASET}/prepare.py ;;
     "fetch")
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we fetch? " DIRECTORY
         fi
-        docker compose  -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/${DATASET}/fetch.py ;;
+        docker compose  -f compose.yml -f compose.dev.yml run lab python3 /lab/${DATASET}/fetch.py ;;
     "prune")
         docker system prune -f && docker volume prune -f ;;
     "key")

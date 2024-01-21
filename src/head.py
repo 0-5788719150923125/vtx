@@ -229,20 +229,10 @@ class Cortex:
                 pre_seq_len = t.get("num_virtual_tokens", pre_seq_len)
             else:
                 model_folder = "/data/models/" + focus
-                tokenizer_file = f"/data/tokenizers/{focus}/tokenizer.json"
-                tokenizer = PreTrainedTokenizerFast(
-                    tokenizer_file=tokenizer_file,
-                    # bos_token="<|endoftext|>",
-                    # eos_token="<|endoftext|>",
-                    # unk_token="<|endoftext|>",
-                    # pad_token="<|endoftext|>",
-                    # **tokenizer_config,
-                )
         try:
             prototype = aigen(
                 model=config.get("model"),
                 model_folder=model_folder,
-                tokenizer=tokenizer,
                 device_map=config.get("device_map", "auto"),
                 petals=config.get("petals", False),
                 cache_dir="/data/models",

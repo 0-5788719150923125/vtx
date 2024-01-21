@@ -14,7 +14,7 @@ def main(config):
 app = Flask(__name__)
 
 
-@app.route("/generate")
+@app.route("/generate/", methods=["GET", "POST"])
 def generate():
     try:
         kwargs = request.get_json()

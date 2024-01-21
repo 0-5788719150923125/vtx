@@ -10,6 +10,4 @@ Examples:
 
 The goal is to have a simple general purpose approach that can be trained, but which can also adapt to new conditions, to reduce manual programming/configuration of control logic. It basically has to learn (discover) an equation that includes linear, sinusoidal, logarithmic/exponetial, and time components.
 
-Maybe neural networks? Which current libraries/algorithms are most relevant? sklearn?
-
 src: https://www.reddit.com/r/learnmachinelearning/comments/18bmj7o

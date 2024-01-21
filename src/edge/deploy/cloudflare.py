@@ -1,5 +1,7 @@
 import os
 
+wrangler_version = "3.23.0"
+
 
 def compile_book():
     command = f"hugo --source /book --noBuildLock"
@@ -14,7 +16,7 @@ def add_site_to_ipfs():
 
 def deploy_book():
     project_name = "pen"
-    command = f"WRANGLER_SEND_METRICS=true wrangler pages deploy --project-name {project_name} --directory /book/public"
+    command = f"yes | WRANGLER_SEND_METRICS=true npx wrangler pages deploy --project-name {project_name} --directory /book/public"
     os.system(command)
 
 

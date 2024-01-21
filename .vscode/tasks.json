@@ -26,6 +26,14 @@
           "default",
           "one"
         ]
+      },
+      {
+        "type": "pickString",
+        "id": "edge",
+        "description": "Which edge function?",
+        "options": [
+          "cloudflare",
+        ]
       }
     ],
     "tasks": [
@@ -36,6 +44,15 @@
         "command": "TASK=ps bash controller.sh",
         "windows": {
           "command": "$env:TASK = 'ps'; .\\controller.ps1"
+        }
+      },
+      {
+        "label": "stats",
+        "detail": "View live Docker stats.",
+        "type": "shell",
+        "command": "TASK=stats bash controller.sh",
+        "windows": {
+          "command": "$env:TASK = 'stats'; .\\controller.ps1"
         }
       },
       {
@@ -157,11 +174,11 @@
       },
       {
         "label": "deploy",
-        "detail": "Deploy your book to CloudFlare.",
+        "detail": "Deploy your book.",
         "type": "shell",
-        "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/cloudflare.py",
+        "command": "docker compose -f compose.yml -f compose.dev.yml exec lab python3 /src/edge/deploy/${input:edge}.py",
         "windows": {
-          "command": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec lab python3 /src/scripts/cloudflare.py"
+          "command": "docker compose -f compose.yml -f compose.dev.yml exec lab python3 /src/edge/deploy/${input:edge}.py"
         }
       },
       {
@@ -222,15 +239,6 @@
         "command": "TASK=down bash controller.sh",
         "windows": {
           "command": "$env:TASK = 'down'; .\\controller.ps1"
-        }
-      },
-      {
-        "label": "stats",
-        "detail": "View live Docker stats.",
-        "type": "shell",
-        "command": "TASK=stats bash controller.sh",
-        "windows": {
-          "command": "$env:TASK = 'stats'; .\\controller.ps1"
         }
       }
     ]

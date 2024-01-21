@@ -54,7 +54,7 @@ if (-not (Test-Path 'config.yml')) {
 
 # Set GPU mode
 if ($env:DEVICE -ne "cpu") {
-    $GPU = '-f docker-compose.gpu.yml'
+    $GPU = '-f compose.gpu.yml'
 }
 
 # Implement the controller
@@ -88,7 +88,7 @@ switch ($action) {
         docker compose push
     }
     "pull" {
-        docker compose -f docker-compose.yml -f docker-compose.services.yml pull
+        docker compose -f compose.yml -f compose.services.yml pull
     }
     "up", "auto" {
         if (-not $env:FOCUS) {
@@ -101,27 +101,27 @@ switch ($action) {
             $ARG1 = '-d'
         }
         $env:FOCUS = $FOCUS
-        # Start-Process docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml watch --no-up -NoNewWindow -RedirectStandardOutput /dev/null -RedirectStandardError /dev/null
-        docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.services.yml $GPU up $ARG1
+        # Start-Process docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml watch --no-up -NoNewWindow -RedirectStandardOutput /dev/null -RedirectStandardError /dev/null
+        docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml $GPU up $ARG1
     }
     "train", "trial" {
         if (-not $env:FOCUS) {
             $FOCUS = Read-Host "Which model should we train? $($MODELS -join ', ')"
         }
-        docker compose -f docker-compose.yml -f docker-compose.services.yml up -d tbd ipf opt
-        docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.train.yml $GPU run -e FOCUS=$FOCUS -e TASK=$action lab python3 harness.py
+        docker compose -f compose.yml -f compose.services.yml up -d tbd ipf opt
+        docker compose -f compose.yml -f compose.dev.yml -f compose.train.yml $GPU run -e FOCUS=$FOCUS -e TASK=$action lab python3 harness.py
     }
     "prepare" {
         if (-not $env:DATASET) {
             $DATASET = Read-Host "Which dataset should we prepare?"
         }
-        docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/$DATASET/prepare.py
+        docker compose -f compose.yml -f compose.dev.yml run lab python3 /lab/$DATASET/prepare.py
     }
     "fetch" {
         if (-not $env:DATASET) {
             $DATASET = Read-Host "Which dataset should we fetch?"
         }
-        docker compose -f docker-compose.yml -f docker-compose.dev.yml run lab python3 /lab/$DATASET/fetch.py
+        docker compose -f compose.yml -f compose.dev.yml run lab python3 /lab/$DATASET/fetch.py
     }
     "prune" {
         docker system prune -f

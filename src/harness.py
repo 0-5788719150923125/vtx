@@ -85,28 +85,17 @@ def main():
     )
 
     if train_config.get("tokenizer") is not None:
-        tokenizer_file = f"/data/tokenizers/{focus}/tokenizer.json"
-        if not os.path.exists(tokenizer_file):
-            train_tokenizer(
+        tokenizer_model = output_dir
+        if not os.path.exists(f"{tokenizer_model}/tokenizer.json"):
+            tokenizer = train_tokenizer(
                 files=list_full_paths("/lab/research"),
-                dropout=0.9,
+                dropout=0.95,
                 vocab_size=train_config["overrides"].get("vocab_size"),
                 min_frequency=2,
-                save_path=f"/data/tokenizers",
-                prefix=focus,
-                serialize=True,
-                trim_offsets=True,
+                save_path=tokenizer_model,
             )
-        tokenizer = PreTrainedTokenizerFast(
-            tokenizer_file=tokenizer_file,
-            bos_token="<|endoftext|>",
-            eos_token="<|endoftext|>",
-            unk_token="<|endoftext|>",
-            pad_token="<|endoftext|>",
-            **tokenizer_config,
-        )
-    else:
-        tokenizer = AutoTokenizer.from_pretrained(tokenizer_model, **tokenizer_config)
+
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_model, **tokenizer_config)
 
     if hasattr(tokenizer, "pad_token") and tokenizer.pad_token is None:
         setattr(tokenizer, "pad_token", tokenizer.eos_token)
@@ -120,8 +109,16 @@ def main():
             print(f"{colors.RED}original pretrain config:{colors.WHITE}")
             print(pretrain_config)
         setattr(pretrain_config, "_name_or_path", focus)
-        setattr(pretrain_config, "bos_token_id", tokenizer.bos_token_id)
-        setattr(pretrain_config, "eos_token_id", tokenizer.eos_token_id)
+        setattr(
+            pretrain_config,
+            "bos_token_id",
+            getattr(tokenizer, "bos_token_id", tokenizer.unk_token_id),
+        )
+        setattr(
+            pretrain_config,
+            "eos_token_id",
+            getattr(tokenizer, "eos_token_id", tokenizer.unk_token_id),
+        )
         for k, v in train_config.get("overrides").items():
             setattr(pretrain_config, k, v)
         if verbose:
@@ -287,7 +284,8 @@ def create_dataset(
                     intermediate.write(string + f"{tokenizer.eos_token}")
 
         except Exception as e:
-            intermediate.write(f"void:{file}{tokenizer.eos_token}")
+            with open(intermediate_path, "a") as intermediate:
+                intermediate.write(f"failed:{file}{tokenizer.eos_token}")
             print(f"failed: {colors.RED}{file}{colors.WHITE}")
             logging.error(e)
 

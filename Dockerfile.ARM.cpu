@@ -26,7 +26,6 @@ RUN apt-get update -y \
 WORKDIR /tmp
 
 ARG DOTNET_VERSION
-
 RUN curl -fSL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Runtime/$DOTNET_VERSION/dotnet-runtime-$DOTNET_VERSION-linux-x64.tar.gz \
     && dotnet_sha512='f15b6bf0ef0ce48901880bd89a5fa4b3ae6f6614ab416b23451567844448f2510cf5beeeef6c2ac33400ea013cda7b6d2a4477e7aa0f36461b94741161424c3e' \
     && echo "$dotnet_sha512 dotnet.tar.gz" | sha512sum -c - \
@@ -38,7 +37,6 @@ RUN curl -fSL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Runt
 LABEL sponsor="United Nations"
 
 ARG DCE_VERSION
-
 RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz/DiscordChatExporter/releases/download/$DCE_VERSION/DiscordChatExporter.Cli.zip && \
     mkdir -p /usr/share/dce && \
     unzip DiscordChatExporter.Cli.zip -d /usr/share/dce && \
@@ -46,7 +44,6 @@ RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz
     rm DiscordChatExporter.Cli.zip
 
 ARG HUGO_VERSION
-
 RUN curl --location --remote-header-name --remote-name https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-arm64.tar.gz && \
     mkdir -p /usr/share/hugo && \
     tar -zxf hugo_extended_${HUGO_VERSION}_linux-arm64.tar.gz -C /usr/share/hugo && \
@@ -64,12 +61,6 @@ RUN pip install -r requirements.txt
 RUN python3 prepare.py
 
 ARG NODEMON_VERSION
-ARG WRANGLER_VERSION
-
-# RUN pip install flash-attn --no-build-isolation
-
-# npm does not install correctly on this ARM image
-# RUN npm i -g nodemon@$NODEMON_VERSION wrangler@$WRANGLER_VERSION
 RUN npm i -g nodemon@$NODEMON_VERSION
 
 COPY lab/lightning-hivemind/ /lab/lightning-hivemind

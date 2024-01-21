@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  test:
+    image: rocm/pytorch:rocm5.7_ubuntu22.04_py3.10_pytorch_2.0.1
+    command: rocm-smi
+    stdin_open: true
+    tty: true
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    security_opt:
+      - seccomp:unconfined
+    group_add:
+      - video
+    # environment:
+    #   - ROC_ENABLE_PRE_VEGA: "1"
+    # command: /opt/rocm/bin/rocminfo

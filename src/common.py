@@ -290,7 +290,7 @@ def random_string(length=10):
 
 # Hash a string, return a name
 def get_daemon(seed=random_string(length=24)):
-    command = ["node", "/src/scripts/daemon.js", str(seed)]
+    command = ["node", "/src/edge/daemon.js", str(seed)]
     output = subprocess.check_output(
         command, universal_newlines=True, stderr=subprocess.STDOUT
     )

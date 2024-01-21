@@ -42,16 +42,16 @@ frame:
       k_mlp: 3
       n_att_experts: 66
       n_mlp_experts: 33
-      n_embd: 256
       gating_size: 4
       block_size: 8
       history_length: 256
+      n_embd: 256
       att_hidden: 32
       ffd_hidden: 64
       aux_loss_type: mi
       aux_loss_weight: 0.1
       resid_pdrop: 0.1
-      embd_pdrop: 0.23
+      embd_pdrop: 0.1
       attn_pdrop: 0.1
       moe_pdrop: 0.1
       sample_topk: 2

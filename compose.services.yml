@@ -13,6 +13,12 @@ services:
     env_file:
       - .env
 
+  uxo:
+    image: ghcr.io/0-5788719150923125/uxo:latest
+    network_mode: 'host'
+    env_file:
+      - .env
+
   tbd:
     image: ghcr.io/0-5788719150923125/lab:latest
     command: tensorboard --logdir /data/logs --bind_all --samples_per_plugin scalars=999999999
@@ -84,17 +90,6 @@ services:
     ports:
       - 9099:80
       - 34343:34343/udp
-
-  uxo:
-    image: ghcr.io/0-5788719150923125/uxo:latest
-    network_mode: 'host'
-    env_file:
-      - .env
-
-  # hrd:
-  #   image: ghcr.io/haidra-org/ai-horde-worker
-  #   env_file:
-  #     - .env
 
 volumes:
   data:

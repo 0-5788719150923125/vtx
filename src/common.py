@@ -36,7 +36,7 @@ if os.path.exists(cache_path):
 
 os.makedirs(cache_path)
 
-config_files = ["/src/0-body.yml", "/src/1-parts.yml"]
+config_files = ["/src/0-body.yml", "/src/1-parts.yml", "/src/2-data.yml"]
 
 # Load configuration files from disk
 default_config = {}

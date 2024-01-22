@@ -26,11 +26,11 @@ git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
 
 ### 2. Create your configuration files
 
-In the root of your project directory, create a file called `.env`. This file contains all of your secrets. DO NOT SHARE IT WITH ANYONE.
+In the root of this project, create a file named `.env`. This file contains all of your secrets. DO NOT SHARE IT WITH ANYONE.
 
-You may copy a template `.env` file from here: [example.env](https://github.com/0-5788719150923125/vtx/blob/main/examples/lab/.env)
+You may copy a template `.env` file from here: [example.env](https://github.com/0-5788719150923125/vtx/blob/main/examples/inference/.env)
 
-Next, create a file called `config.yml` in the root of your project. We can leave this empty for now.
+Next, create a file called `config.yml` in the root of our project. Leave it empty for now.
 
 ### 3. Test your live environment
 
@@ -48,7 +48,7 @@ If this works, your AI should progress through the following stages:
 3. Download the "GPT-Neo 125M" model, and save it to data/models.
 4. Attach a LoRA adapter (toe) to the model, and begin running inference (chatting) with [The Source](https://src.eco).
 
-If this works, you are ready to proceed. You can bring down the project in this way:
+If you have reached this step, you are ready to proceed. You may now bring down the project:
 
 1. `Ctrl+Shift+P`
 2. `Tasks: Run Task`
@@ -68,7 +68,7 @@ Let's begin with data preparation.
 
 ### 5. Fetch and prepare a dataset
 
-We are going to use Alexa's [Topical Chat](https://github.com/alexa/Topical-Chat) dataset, because we want to train bots how to chat with humans in a multi-user environment. Whereas most datasets will take a rather simplistic approach to data preparation, ours is quite different:
+We are going to use Alexa's [Topical Chat](https://github.com/alexa/Topical-Chat) dataset, because we want to train bots how to chat with humans in a multi-user environment. Whereas many datasets will take a rather simplistic approach to chat templates, ours is a bit different:
 
 Theirs:
 ```
@@ -82,7 +82,7 @@ Ours:
 ¶1051104179323678812:> I'm well, how are you?
 ```
 
-We do this because our bots are given the entire context of a conversation (every single user involved), rather than an isolated, 1-on-1 interaction between two users. I don't know if this is the best way to handle conversational AI - but it's how this project was designed! We're open to better ideas.
+We do this because our bots are given the identity of each message's sender, rather than an isolated, 1-on-1 interaction between two anonymous users. I don't know if this is a good way to handle conversational AI - but it's how we do it. We're open to better ideas.
 
 Anyway, let's fetch our dataset:
 
@@ -128,8 +128,8 @@ toe:
   training:
     type: "lora"
     r: 4
-    alpha: 16
-    dropout: 0.1
+    lora_alpha: 16
+    lora_dropout: 0.1
     bias: "none"
     target_modules:
       - k_proj
@@ -151,7 +151,7 @@ toe:
         - test
 ```
 
-There are many, many other settings to work with. We encourage you to look at the (incomplete) [documentation here](https://studio.src.eco/nail/vtx), or to explore the source code in the [training harness](https://github.com/0-5788719150923125/vtx/blob/main/src/harness.py#L492).
+There are many, many other settings to work with. We encourage you to look at the (incomplete) [documentation here](https://studio.src.eco/nail/vtx), or to explore the source code in our [training harness](https://github.com/0-5788719150923125/vtx/blob/main/src/harness.py#L492).
 
 Be aware: "batch_size", "block_size", and the size of your model (GPT-Neo 125M has 125M parameters) has a huge impact on training speed, and VRAM consumption. If training crashes, it's likely that you've run out of VRAM. Reduce these three settings to see if that helps.
 

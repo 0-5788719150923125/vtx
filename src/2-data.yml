@@ -1,3 +1,46 @@
+# This is a default configuration file, with some basic settings to get you started
+# DO NOT modify this file directly. Instead, create a file called "config.yml" in
+# the {project_root}/src directory, and apply your settings there.
+# Both files will be merged at runtime, with your custom config file taking priority.
+
+# Most of these services require some form of authentication. API keys and credentials should be
+# stored in a .env file, at the root of this project. See {project_root}/examples/inference/.env for an example.
+
+api:
+  enabled: False
+
+ipfs:
+  enabled: True
+
+urbit:
+  planet: False
+  moon: False
+
+only: toehider
+
+personas:
+  source:
+    bias: 806051627198709760
+    persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
+
+# Sequence biases; needs more documentation.
+disposition:
+  researcher:
+    "AI": 2.0
+
+# The Source model intentionally ships with no defaults. Its intended use is for your
+# own experimentation and development.
+source:
+  focus:
+    trade:
+      active_frequency: 0.33
+      passive_frequency: 0.01
+      personas:
+        - source
+    support:
+      passive_frequency: 0.01
+      active_frequency: 0.02
+
 collections:
   static:
     default:

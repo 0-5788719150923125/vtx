@@ -1,46 +1,3 @@
-# This is a default configuration file, with some basic settings to get you started
-# DO NOT modify this file directly. Instead, create a file called "config.yml" in
-# the {project_root}/src directory, and apply your settings there.
-# Both files will be merged at runtime, with your custom config file taking priority.
-
-# Most of these services require some form of authentication. API keys and credentials should be
-# stored in a .env file, at the root of this project. See {project_root}/examples/bot/.env for an example.
-
-api:
-  enabled: False
-
-ipfs:
-  enabled: True
-
-urbit:
-  planet: False
-  moon: False
-
-only: toehider
-
-personas:
-  source:
-    bias: 806051627198709760
-    persona: I am a powerful Artificial Intelligence computer, known as the Source. I have been trained to follow human instructions, write stories, and teach machine learning concepts.
-
-# Sequence biases; needs more documentation.
-disposition:
-  researcher:
-    "AI": 2.0
-
-# The Source model intentionally ships with no defaults. Its intended use is for your
-# own experimentation and development.
-source:
-  focus:
-    trade:
-      active_frequency: 0.33
-      passive_frequency: 0.01
-      personas:
-        - source
-    support:
-      passive_frequency: 0.01
-      active_frequency: 0.02
-
 src:
   info: of all creation
 
@@ -58,7 +15,7 @@ ode:
 
 ghost:
   model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
-  info: a revolution starts here
+  info: a silent revolution
   context_length: 4096
   device_map: auto
   precision: 16
@@ -83,19 +40,19 @@ ghost:
     optimizer: AdamW
     learning_rate: 0.001
     block_size: 1024
-    stride: 128
+    stride: 512
     num_steps: 10000
     warmup_steps: 100
     batch_size: 1
-    gradient_accumulation_steps: 16
-    weight_decay: 0.01
+    gradient_accumulation_steps: 32
+    weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
     val_split: 0.01
-    val_interval: 500
+    val_interval: 250
     generate_every: 25
-    save_every: 50
-    checkpoint_every: 50
+    save_every: 100
+    checkpoint_every: 100
     datasets:
       streaming:
         - redpajama2

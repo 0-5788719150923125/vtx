@@ -1,7 +1,7 @@
 #!/bin/bash
 
-CONTAINERS='["lab", "ctx", "tbd", "ipf", "pet", "bit", "uxo"]'
-MODELS='["src", "aura", "frame", "ode", "mind", "heart", "soul", "envy", "chaos", "malice", "ghost", "toe"]'
+CONTAINERS='["lab", "ctx", "uxo", "tbd", "ipf", "pet", "bit"]'
+MODELS='["src", "aura", "frame", "ode", "mind", "heart", "soul", "envy", "chaos", "ghost", "malice", "toe"]'
 
 # Check for docker
 if ! command -v docker &> /dev/null; then

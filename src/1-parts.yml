@@ -13,71 +13,6 @@ ode:
   training:
     type: "lora"
 
-ghost:
-  model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
-  info: a silent revolution
-  context_length: 4096
-  device_map: auto
-  precision: 16
-  petals: False
-  profile: True
-  generation_profile: lowestpenalty
-  training:
-    type: ia3
-    target_modules:
-      - q_proj
-      - k_proj
-      - v_proj
-      - o_proj
-      - gate_proj
-      - up_proj
-      - down_proj
-    feedforward_modules:
-      - gate_proj
-      - up_proj
-      - down_proj
-    gradient_checkpointing: True
-    optimizer: AdamW
-    learning_rate: 0.001
-    block_size: 1024
-    stride: 512
-    num_steps: 10000
-    warmup_steps: 100
-    batch_size: 1
-    gradient_accumulation_steps: 32
-    weight_decay: 0.1
-    gradient_clip_val: 1.0
-    scheduler: cosine
-    val_split: 0.01
-    val_interval: 250
-    generate_every: 25
-    save_every: 100
-    checkpoint_every: 100
-    datasets:
-      streaming:
-        - redpajama2
-
-chaos:
-  model: EleutherAI/pythia-70m
-  info: a swarm of small models
-  generation_profile: lowpenalty
-  training:
-    type: "lora"
-
-envy:
-  model: facebook/opt-350m
-  info: a simple transformer
-  generation_profile: lowpenalty
-  training:
-    type: lora
-
-malice:
-  model: cerebras/Cerebras-GPT-111M
-  info: a GPT-2 architecture
-  generation_profile: lowpenalty
-  training:
-    type: lora
-
 # An extremely powerful model, trained on a lot of data, and just barely capable of
 # running on 8GB of VRAM without quantization.
 mind:
@@ -131,7 +66,6 @@ heart:
     save_every: 100
     checkpoint_every: 100
 
-
 # The product of a large research community, who is attempting to decentralize 
 # deep learning.
 soul:
@@ -157,6 +91,68 @@ soul:
     scheduler: cosine
     batch_size: 6
     regen: False
+
+chaos:
+  model: EleutherAI/pythia-70m
+  info: a swarm of small models
+  generation_profile: lowpenalty
+  training:
+    type: "lora"
+
+envy:
+  model: facebook/opt-350m
+  info: a simple transformer
+  generation_profile: lowpenalty
+  training:
+    type: lora
+
+ghost:
+  model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
+  info: a silent revolution
+  context_length: 4096
+  device_map: auto
+  precision: 16
+  petals: False
+  profile: True
+  generation_profile: lowestpenalty
+  training:
+    type: ia3
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+      - gate_proj
+      - up_proj
+      - down_proj
+    feedforward_modules:
+      - gate_proj
+      - up_proj
+      - down_proj
+    gradient_checkpointing: True
+    optimizer: AdamW
+    learning_rate: 0.001
+    block_size: 1024
+    stride: 512
+    num_steps: 10000
+    warmup_steps: 100
+    batch_size: 1
+    gradient_accumulation_steps: 6
+    weight_decay: 0.1
+    gradient_clip_val: 1.0
+    scheduler: cosine
+    val_split: 0.01
+    val_interval: 250
+    generate_every: 25
+    save_every: 100
+    checkpoint_every: 100
+
+malice:
+  model: cerebras/Cerebras-GPT-111M
+  info: a GPT-2 architecture
+  generation_profile: lowpenalty
+  training:
+    type: lora
 
 # A very small model, which can be run on < 4GB of VRAM.
 toe:

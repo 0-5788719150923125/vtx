@@ -9,15 +9,13 @@ services:
     tty: true
     stdin_open: true
     build:
-      context: .
-      dockerfile: Dockerfile
       shm_size: '4gb'
       args:
         DCE_VERSION: 2.42.3
         DOTNET_VERSION: 7.0.10
         HUGO_VERSION: 0.118.2
         NODEMON_VERSION: 3.0.1
-        NODE_MAJOR_VERSION: 20
+        NODE_VERSION: 20
         SOURCE_IMAGE: nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
         ARCH: ${ARCH:-x64}
     volumes:
@@ -26,4 +24,6 @@ services:
       - .env
     environment:
       FOCUS: ${FOCUS:-toe}
+      # HIVEMIND_LOGLEVEL: info
+      PETALS_LOGGING: False
       RAY_memory_monitor_refresh_ms: 0

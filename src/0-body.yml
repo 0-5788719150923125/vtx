@@ -1,6 +1,6 @@
 frame:
   model: ibm/MoLM-350M-4B
-  info: sing with me
+  info: it like you stole it
   precision: 32
   context_length: 2048
   training:
@@ -17,6 +17,7 @@ frame:
     strategy: hivemind
     initial_piers:
       - /p2p/QmQrtoqhKbs4KLDM7Lk86iS2tg3fHhEGSitRaty7Hrkoej
+      - /p2p/QmVQHrurMrXmViCDQ4m9Sji9W4XTZxUv2UibFuzYK4rfrH
     learning_rate: 0.000333
     block_size: 512
     stride: 128

@@ -117,7 +117,7 @@ case $action in
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we train? ${MODELS} " FOCUS
         fi
-        docker compose -f compose.yml -f compose.services.yml up -d tbd ipf opt && docker compose -f compose.yml -f compose.dev.yml -f compose.train.yml $GPU run -e FOCUS=${FOCUS} -e TASK=${action} lab python3 harness.py ;;
+        docker compose -f compose.yml -f compose.services.yml up -d tbd ipf opt && docker compose -f compose.yml -f compose.dev.yml $GPU run -e FOCUS=${FOCUS} -e TASK=${action} lab python3 harness.py ;;
     "prepare") 
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we prepare? " DIRECTORY

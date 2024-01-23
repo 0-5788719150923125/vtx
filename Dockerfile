@@ -1,5 +1,4 @@
-ARG SOURCE_IMAGE=$SOURCE_IMAGE
-
+ARG SOURCE_IMAGE
 FROM $SOURCE_IMAGE
 
 ENV DEBIAN_FRONTEND="noninteractive"
@@ -19,8 +18,8 @@ RUN install -m 0755 -d /etc/apt/keyrings && \
     $(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
     tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-ARG NODE_MAJOR_VERSION
-RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR_VERSION.x | bash -
+ARG NODE_VERSION
+RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash -
 
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \

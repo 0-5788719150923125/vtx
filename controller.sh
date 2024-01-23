@@ -57,6 +57,7 @@ fi
 # Set GPU mode
 GPU=''
 if [[ "$ARCH" == "ARM" ]]; then
+    echo "building for ARM"
     GPU='-f compose.ARM.yml'
 elif [[ "$DEVICE" == "amd" ]]; then
     GPU='-f compose.amd.yml'

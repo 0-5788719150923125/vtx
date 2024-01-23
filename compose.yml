@@ -10,7 +10,7 @@ services:
     stdin_open: true
     build:
       context: .
-      dockerfile: Dockerfile.${ARCH:-x64}
+      dockerfile: Dockerfile
       shm_size: '4gb'
       args:
         DCE_VERSION: 2.42.3

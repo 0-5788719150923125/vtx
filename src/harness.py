@@ -23,7 +23,7 @@ register_models()
 local_rank = int(os.environ.get("LOCAL_RANK", 0))
 world_rank = int(os.environ.get("WORLD_RANK", 0))
 
-# load ships, if any
+# load ship designs
 if "class" in config[focus]:
     config = get_ship_class(config, focus)
 

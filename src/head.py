@@ -835,7 +835,7 @@ class Cortex:
         return output
 
 
-# load ships, if any
+# load ship designs
 if "class" in config[focus]:
     config = get_ship_class(config, focus)
 

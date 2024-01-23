@@ -1,5 +1,5 @@
 # ship designs must be immutable; or unchanging. an objective cost function 
-# is tied to our ability to accurately identify "changes" made to a model's 
+# grounds our ability to accurately identify "changes" made to a model's 
 # specification, over-time. for example, the "Phraxos" class will never inherit 
 # the "class" key from his descendant, the "Button" class. the probabilistic 
 # model needs to infer the missing keys. what we are trying to capture is the 

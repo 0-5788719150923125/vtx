@@ -3,25 +3,22 @@ src:
 
 aura:
   model: RWKV/rwkv-5-world-1b5
-  info: a large recurrent neural network
+  info: a modern recurrent neural network
   training:
     type: "lora"
 
 ode:
   model: microsoft/phi-2
-  info: of things to come
+  info: to things that were
   training:
     type: "lora"
 
-# An extremely powerful model, trained on a lot of data, and just barely capable of
-# running on 8GB of VRAM without quantization.
 mind:
   model: EleutherAI/gpt-neo-1.3B
   info: use your heads
   training:
     type: "lora"
 
-# A recurrent neural network, and collaboration between adapters.
 heart:
   model: RWKV/rwkv-4-430m-pile
   info: with everything you got
@@ -66,11 +63,9 @@ heart:
     save_every: 100
     checkpoint_every: 100
 
-# The product of a large research community, who is attempting to decentralize 
-# deep learning.
 soul:
-  info: because nobody has one
   model: bigscience/bloom-560m
+  info: because nobody has one
   petals: True
   training:
     datasets:
@@ -149,7 +144,7 @@ ghost:
 
 malice:
   model: cerebras/Cerebras-GPT-111M
-  info: a GPT-2 architecture
+  info: a GPT-2 clone
   generation_profile: lowpenalty
   training:
     type: lora

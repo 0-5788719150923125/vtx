@@ -3,7 +3,7 @@
 # the {project_root}/src directory, and apply your settings there.
 # Both files will be merged at runtime, with your custom config file taking priority.
 
-# Most of these services require some form of authentication. API keys and credentials should be
+# Many of these services require some form of authentication. API keys and credentials should be
 # stored in a .env file, at the root of this project. See {project_root}/examples/inference/.env for an example.
 
 api:

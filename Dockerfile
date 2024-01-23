@@ -67,7 +67,7 @@ RUN curl --location --remote-header-name --remote-name https://github.com/Tyrrrz
 
 ARG ARCH
 ARG HUGO_VERSION
-RUN curl --location --remote-header-name --remote-name https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz && \
+RUN curl --location --remote-header-name --remote-name https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-$ARCH.tar.gz && \
     mkdir -p /usr/share/hugo && \
     tar -zxf hugo_extended_${HUGO_VERSION}_linux-$ARCH.tar.gz -C /usr/share/hugo && \
     chmod -R 755 /usr/share/hugo && \

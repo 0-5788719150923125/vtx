@@ -16,11 +16,16 @@ from aigen.aigen.tokenizers import train_tokenizer
 from aigen.aigen.tuners import optimize_hparams
 from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 from extensions import register_models
+from modeling import get_ship_class
 
 register_models()
 
 local_rank = int(os.environ.get("LOCAL_RANK", 0))
 world_rank = int(os.environ.get("WORLD_RANK", 0))
+
+# load ships, if any
+if "class" in config[focus]:
+    config = get_ship_class(config, focus)
 
 model_config = config[focus]
 train_config = model_config["training"]

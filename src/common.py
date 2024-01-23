@@ -70,6 +70,10 @@ else:
     config = default_config
 
 
+def merge_dict(old, new):
+    return merge({}, old, new, strategy=Strategy.REPLACE)
+
+
 # Color codes
 class colors:
     BLUE = "\033[94m"

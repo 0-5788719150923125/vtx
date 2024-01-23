@@ -3,7 +3,7 @@
 
 # 0: ping
 # 1: pang
-# 2: and-pong (A loop around the anchor, two bounces off the back wall)
+# 2: and-pong (A loop around the anchor, or a bounce off two walls in the corner)
 
 frame:
   model: ibm/MoLM-350M-4B
@@ -15,7 +15,6 @@ frame:
     datasets:
       streaming:
         - c4
-        #OnlyToehider
     tokenizer: True
     gradient_checkpointing: True
     optimizer: Lion

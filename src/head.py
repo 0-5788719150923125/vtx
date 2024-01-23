@@ -30,6 +30,7 @@ from common import (
     wall,
 )
 from extensions import register_models
+from modeling import get_ship_class
 
 register_models()
 
@@ -38,6 +39,7 @@ def validation(config):
     schema = {
         "info": {"type": "string"},
         "model": {"type": "string"},
+        "class": {"type": "string"},
         "mode": {"type": "string", "allowed": ["transformer", "rnn"]},
         "device_map": {"type": "string" or "dict"},
         "profile": {"type": "boolean"},
@@ -832,6 +834,10 @@ class Cortex:
         self.remove_from_queue(priority)
         return output
 
+
+# load ships, if any
+if "class" in config[focus]:
+    config = get_ship_class(config, focus)
 
 # Load the model and schedule periodic reloading
 ctx = Cortex(

@@ -17,5 +17,6 @@ lab/
 lab/lightning-hivemind/venv
 !lab/ModuleFormer
 *.ckpt
+**/*.ckpt
 *.key
 *.db

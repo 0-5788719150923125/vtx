@@ -2,62 +2,62 @@
 # is tied to our ability to accurately identify "changes" made to a model's 
 # specification, over-time. for example, the "Phraxos" class will never inherit 
 # the "class" key from his descendant, the "Button" class. the probabilistic 
-# model needs to infer the missing keys
+# model needs to infer the missing keys. what we are trying to capture is the 
+# "meaning" of every change, through the evolution of this spec
 
-src:
-  model: ibm/MoLM-350M-4B
-  class: Button
-  info: of all creation
-  precision: 32
-  context_length: 2048
-  training:
-    type: "pretrain"
-    datasets:
-      streaming:
-        - wikitext
-    tokenizer: True
-    gradient_checkpointing: True
-    optimizer: Lion
-    scheduler: cosine
-    learning_rate: 0.000333
-    lookahead: 11
-    block_size: 512
-    warmup_steps: 100
-    num_steps: 100000
-    batch_size: 1
-    gradient_accumulation_steps: 1024
-    weight_decay: 0.1
-    gradient_clip_val: 1.0
-    val_split: 0.1
-    val_interval: 25
-    generate_every: 1
-    checkpoint_every: 5
-    save_every: 5
-    overrides:
-      model: Prism
-      universal: True
-      world_size: 44
-      activation_function: laplace
-      gate_type: gmm
-      n_layer: 6
-      n_head: 2
-      k_att: 5
-      k_mlp: 4
-      n_att_experts: 8
-      n_mlp_experts: 23
-      n_embd: 256
-      gating_size: 4
-      block_size: 8
-      history_length: 256
-      att_hidden: 16
-      ffd_hidden: 32
-      aux_loss_type: mi
-      aux_loss_weight: 0.1
-      resid_pdrop: 0
-      embd_pdrop: 0
-      attn_pdrop: 0
-      moe_pdrop: 0
-      sample_topk: 3
-      layer_norm_epsilon: 1e-05
-      vocab_size: 12288
-      tie_word_embeddings: True
+model: ibm/MoLM-350M-4B
+class: Button
+info: of all creation
+precision: 32
+context_length: 2048
+training:
+  type: "pretrain"
+  datasets:
+    streaming:
+      - wikitext
+  tokenizer: True
+  gradient_checkpointing: True
+  optimizer: Lion
+  scheduler: cosine
+  learning_rate: 0.000333
+  lookahead: 11
+  block_size: 512
+  warmup_steps: 100
+  num_steps: 100000
+  batch_size: 1
+  gradient_accumulation_steps: 1024
+  weight_decay: 0.1
+  gradient_clip_val: 1.0
+  val_split: 0.1
+  val_interval: 25
+  generate_every: 1
+  checkpoint_every: 5
+  save_every: 5
+  overrides:
+    model: Button
+    universal: True
+    world_size: 44
+    activation_function: laplace
+    gate_type: gmm
+    n_layer: 6
+    n_head: 2
+    k_att: 5
+    k_mlp: 4
+    n_att_experts: 8
+    n_mlp_experts: 23
+    n_embd: 256
+    gating_size: 4
+    block_size: 8
+    history_length: 256
+    att_hidden: 16
+    ffd_hidden: 32
+    aux_loss_type: mi
+    aux_loss_weight: 0.1
+    resid_pdrop: 0
+    embd_pdrop: 0
+    attn_pdrop: 0
+    moe_pdrop: 0
+    sample_topk: 3
+    layer_norm_epsilon: 1e-05
+    vocab_size: 12288
+    tie_word_embeddings: True

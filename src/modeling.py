@@ -12,6 +12,8 @@ def get_ship_class(config, focus):
     c = config[focus].get("class")
     with open(f"/src/hangar/{c}.yml", "r") as file:
         class_config = yaml.load(file, Loader=yaml.FullLoader)
+        spec = {focus: class_config}
+        print(spec)
         print(f"class {c} was found")
         time.sleep(2)
-        return merge_dict(class_config, config)
+        return merge_dict(spec, config)

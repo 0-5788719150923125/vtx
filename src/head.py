@@ -164,14 +164,14 @@ def validation(config):
 
 
 class Cortex:
-    def __init__(self, config, personas, disposition, transformers_config, focus):
-        if not validation(config):
+    def __init__(self, config, focus):
+        if not validation(config[focus]):
             raise Exception(f"Something is wrong with the {focus} configuration.")
         self.active = False
-        self.config = config
-        self.transformers_config = transformers_config
-        self.personas = personas
-        self.disposition = disposition
+        self.config = config[focus]
+        self.transformers_config = config["transformers"]
+        self.personas = config["personas"]
+        self.disposition = config["disposition"]
         self.queue = []
         self.average_speed = []
         self.context = [
@@ -840,25 +840,13 @@ if "class" in config[focus]:
     config = get_ship_class(config, focus)
 
 # Load the model and schedule periodic reloading
-ctx = Cortex(
-    config[focus],
-    config["personas"],
-    config["disposition"],
-    config["transformers"],
-    focus,
-)
+ctx = Cortex(config, focus)
 reload_interval = config[focus].get("reload_interval", 0)
 if reload_interval > 0:
     scheduler = BackgroundScheduler()
     scheduler.add_job(
         Cortex,
-        args=(
-            config[focus],
-            config["personas"],
-            config["disposition"],
-            config["transformers"],
-            focus,
-        ),
+        args=(config[focus], focus),
         trigger="interval",
         minutes=reload_interval,
     )

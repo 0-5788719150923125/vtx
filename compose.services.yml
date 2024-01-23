@@ -37,7 +37,6 @@ services:
     logging:
       driver: none
 
-
   pet:
     image: learningathome/petals:main
     command: python -m petals.cli.run_server TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T --public_name "https://src.eco" --cache_dir /data/models --num_blocks 4 --torch_dtype bfloat16

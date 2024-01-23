@@ -125,6 +125,8 @@ def main():
         setattr(pretrain_config, "_name_or_path", focus)
         setattr(pretrain_config, "bos_token_id", tokenizer.bos_token_id)
         setattr(pretrain_config, "eos_token_id", tokenizer.eos_token_id)
+        setattr(pretrain_config, "pad_token_id", tokenizer.pad_token_id)
+        setattr(pretrain_config, "unk_token_id", tokenizer.unk_token_id)
         for k, v in train_config.get("overrides").items():
             setattr(pretrain_config, k, v)
         print_once(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")

@@ -1,6 +1,5 @@
-# This is a default configuration file, with some basic settings to get you started
-# DO NOT modify this file directly. Instead, create a file called "config.yml" in
-# the {project_root}/src directory, and apply your settings there.
+# DO NOT modify this file directly, unless you have a good reason. Instead, create 
+# a file called "config.yml" in the {project_root} directory, and apply your settings inside.
 # Both files will be merged at runtime, with your custom config file taking priority.
 
 # Many of these services require some form of authentication. API keys and credentials should be

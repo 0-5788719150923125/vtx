@@ -125,7 +125,10 @@
         "command": "TASK=up FOCUS=${input:model} bash controller.sh",
         "windows": {
           "command": "$env:TASK = 'up'; $env:FOCUS = '${input:model}'; .\\controller.ps1"
-        }
+        },
+        "runOptions": {
+          "instanceLimit": 2
+        },
       },
       {
         "label": "context",

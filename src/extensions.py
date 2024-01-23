@@ -25,6 +25,7 @@ def register_moduleformer():
 
 
 # https://huggingface.co/state-spaces/mamba-2.8b/discussions/2
+# https://github.com/state-spaces/mamba/blob/main/mamba_ssm/modules/mamba_simple.py
 def register_mamba():
     pass
     # from mamba_ssm.models.config_mamba import MambaConfig

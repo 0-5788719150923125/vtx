@@ -85,8 +85,8 @@ RUN pip install -r requirements.txt && \
 
 RUN python3 prepare.py
 
-RUN pip install flash-attn --no-build-isolation && \
-    pip cache purge
+# RUN pip install flash-attn --no-build-isolation && \
+#     pip cache purge
 
 ARG NODEMON_VERSION
 RUN npm i -g nodemon@$NODEMON_VERSION

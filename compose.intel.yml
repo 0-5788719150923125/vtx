@@ -6,3 +6,7 @@ services:
       args:
         ARCH: amd64
         SOURCE_IMAGE: intel/intel-optimized-ml
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'

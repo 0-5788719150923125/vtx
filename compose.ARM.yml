@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  lab:
+    build:
+      args:
+        SOURCE_IMAGE: arm64v8/ubuntu:22.04

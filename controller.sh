@@ -55,8 +55,9 @@ if [ ! -f 'config.yml' ]; then
 fi
 
 # Set GPU mode
-if [[ "$DEVICE" != "cpu" ]]; then
-    GPU=''
+GPU=''
+if [[ "$ARCH" == "ARM" ]]; then
+    GPU='-f compose.ARM.yml'
 elif [[ "$DEVICE" == "amd" ]]; then
     GPU='-f compose.amd.yml'
 elif [[ "$DEVICE" == "intel" ]]; then

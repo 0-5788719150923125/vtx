@@ -56,7 +56,11 @@ fi
 
 # Set GPU mode
 if [[ "$DEVICE" != "cpu" ]]; then
-    GPU='-f compose.gpu.yml'
+    if [[ "$DEVICE" == "amd" ]]; then
+        GPU='-f compose.amd.yml'
+    else
+        GPU='-f compose.nvidia.yml'
+    fi
 fi
 
 if test "$(docker context show)" = "one"; then

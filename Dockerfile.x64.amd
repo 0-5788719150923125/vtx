@@ -1,3 +1,0 @@
-FROM rocm/pytorch:rocm5.7_ubuntu22.04_py3.10_pytorch_2.0.1
-
-RUN echo "This image has never been built or tested on real AMD hardware. We recommend copying relevant settings from `Dockerfile.x64.nvidia` into this Dockerfile."

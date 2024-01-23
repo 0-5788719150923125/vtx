@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  lab:
+    build:
+      args:
+        SOURCE_IMAGE: intel/intel-optimized-ml

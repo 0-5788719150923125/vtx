@@ -7,6 +7,8 @@ from common import merge_dict
 
 
 def get_ship_class(config, focus):
+    """Merge model designs into the global configuration."""
+
     print("loading ship design")
     time.sleep(5)
     c = config[focus].get("class")

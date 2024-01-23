@@ -111,7 +111,6 @@ case $action in
             FOCUS=${FOCUS} docker compose up
             exit 1
         fi
-
         # nohup docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml watch --no-up >/dev/null 2>&1 &
         FOCUS=${FOCUS} docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml $GPU up ${ARG1} ;;
     "train" | "trial") 

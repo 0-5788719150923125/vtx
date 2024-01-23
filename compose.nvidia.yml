@@ -2,6 +2,9 @@ version: '3.9'
 
 services:
   lab:
+    build:
+      args:
+        ARCH: amd64
     deploy:
       resources:
         reservations:

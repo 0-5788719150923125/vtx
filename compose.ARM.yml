@@ -4,4 +4,5 @@ services:
   lab:
     build:
       args:
+        ARCH: arm64
         SOURCE_IMAGE: arm64v8/ubuntu:22.04

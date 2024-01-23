@@ -4,4 +4,5 @@ services:
   lab:
     build:
       args:
+        ARCH: amd64
         SOURCE_IMAGE: intel/intel-optimized-ml

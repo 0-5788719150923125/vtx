@@ -53,8 +53,8 @@ if os.path.exists("/env/config.yml"):
     with open("/env/config.yml", "r") as config_file:
         text = config_file.read()
         if text == "":
-            print("The file at /env/config.yml was empty, so we loaded defaults.")
             config = default_config
+            print("The file at /env/config.yml was empty, so we loaded defaults.")
         else:
             user_config = yaml.load(text, Loader=yaml.FullLoader)
             if "reddit" in user_config:

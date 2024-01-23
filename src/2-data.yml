@@ -33,13 +33,13 @@ disposition:
 source:
   focus:
     trade:
-      active_frequency: 0.33
+      active_frequency: 0.1
       passive_frequency: 0.01
       personas:
         - source
     support:
+      active_frequency: 0.1
       passive_frequency: 0.01
-      active_frequency: 0.02
 
 collections:
   static:
@@ -112,11 +112,12 @@ transformers:
       do_sample: True
       min_new_tokens: 1
       max_new_tokens: 333
-      temperature: 1.23
+      temperature: 1.1
       eta_cutoff: 0.002
       penalty_alpha: 0.59
       top_k: 4
       repetition_penalty: 1.01
+      encoder_repetition_penalty: 0.95
       no_repeat_ngram_size: 9
     lowestpenalty:
       do_sample: True

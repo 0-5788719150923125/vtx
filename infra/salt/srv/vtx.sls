@@ -9,6 +9,6 @@ vtx.checkout_submodules:
   cmd.run:
     - name: >
         git submodule foreach 'git reset --hard && git checkout . && git clean -fdx' || true
+    - cwd: /home/one/vtx
     - unless: test -f vtx/src/aigen/README.md
     - runas: one
-    - cwd: /home/one/vtx

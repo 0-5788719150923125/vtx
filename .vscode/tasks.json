@@ -38,6 +38,15 @@
     ],
     "tasks": [
       {
+        "label": "init",
+        "detail": "Prepare this workspace.",
+        "type": "shell",
+        "command": "TASK=init bash controller.sh",
+        "windows": {
+          "command": "$env:TASK = 'init'; .\\controller.ps1"
+        }
+      },
+      {
         "label": "ps",
         "detail": "View a list of all running containers.",
         "type": "shell",

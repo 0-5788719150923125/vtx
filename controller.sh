@@ -77,6 +77,11 @@ fi
 
 # Implement the controller
 case $action in
+    "repair" | "init")
+        git pull
+        git submodule update
+        git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
+        ;;
     "ps") 
         docker compose ps ;;
     "logs") 
@@ -116,12 +121,22 @@ case $action in
             exit 1
         fi
         # nohup docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml watch --no-up >/dev/null 2>&1 &
-        FOCUS=${FOCUS} docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml $GPU up ${ARG1} ;;
+        FOCUS=${FOCUS} docker compose \
+            -f compose.yml \
+            -f compose.dev.yml  \
+            -f compose.services.yml \
+            $GPU up ${ARG1} ;;
     "train" | "trial") 
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we train? ${MODELS} " FOCUS
         fi
-        docker compose -f compose.yml -f compose.services.yml up -d tbd ipf && docker compose -f compose.yml -f compose.dev.yml $GPU run -e FOCUS=${FOCUS} -e TASK=${action} lab python3 harness.py ;;
+        docker compose \
+            -f compose.yml \
+            -f compose.services.yml up -d \
+            tbd ipf docker compose \
+            -f compose.yml \
+            -f compose.dev.yml \
+            $GPU run -e FOCUS=${FOCUS} -e TASK=${action} lab python3 harness.py ;;
     "prepare") 
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we prepare? " DIRECTORY

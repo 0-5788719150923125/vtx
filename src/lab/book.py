@@ -251,6 +251,4 @@ def build_static_website():
         alive = True
     time.sleep(6.66)
     if not alive:
-        run_shell_command(
-            "hugo server -F --source '/book' --port 8882 --noBuildLock --quiet"
-        )
+        run_shell_command("hugo server -F --source '/book' --port 8882 --noBuildLock")

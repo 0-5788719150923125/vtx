@@ -21,6 +21,7 @@ if [[ -n "$TASK" ]]; then
 else
     # Prompt for input.
     echo "Use keywords to control the VTX:"
+    echo "(init)    Prepare this workspace."
     echo "(ps)      View a list of all running containers."
     echo "(stats)   View live Docker stats."
     echo "(logs)    View logs for all services."
@@ -39,6 +40,7 @@ else
     echo "(prune)   Prune all unused images, networks, and volumes."
     echo "(key)     Fetch your Urbit access key."
     echo "(auto)    Turn on autopilot."
+    echo "(repair)  Force-fix this workspace."
     read -p "Enter the keyword corresponding to your desired action: " action
 fi
 

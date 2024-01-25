@@ -149,7 +149,6 @@ malice:
   training:
     type: lora
 
-# A very small model, which can be run on < 4GB of VRAM.
 toe:
   info: nailed to the foot
   model: EleutherAI/gpt-neo-125M

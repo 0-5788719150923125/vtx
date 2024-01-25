@@ -7,4 +7,4 @@ services:
     volumes:
       - ./data:/data
     ports:
-      - 6007:8080
+      - 8884:8080

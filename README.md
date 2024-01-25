@@ -29,10 +29,11 @@ To create a simple, opinionated framework for genetic experiments. Our goal is t
 
 - [src](http://localhost:8880) ([example](https://src.eco))
 - [api](http://localhost:8881)
-- [book](http://localhost:42000) ([example](https://pen.university))
-- [metrics](http://localhost:6006)
-- [Optuna](http://localhost:6007)
-- [Urbit](http://localhost:9099)
+- [book](http://localhost:8882) ([example](https://pen.university))
+- [TensorBoard](http://localhost:8883)
+- [Optuna](http://localhost:8884)
+- [Urbit](http://localhost:8885)
+- [Chat](https://chat.petals.dev/)
 - [Petals](https://health.petals.dev/)
 
 # tools
@@ -51,7 +52,7 @@ To create a simple, opinionated framework for genetic experiments. Our goal is t
 - Install Git and Docker.
 - Clone this repo to a local directory: `git clone --recurse-submodules https://github.com/0-5788719150923125/vtx.git path/to/my/directory`
 - Checkout the correct branches with: `git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'`
-- Place configurations into a config.yml file. ([example](./src/1-parts.yml))
+- Place configurations into a config.yml file. ([example 1](./src/1-parts.yml), [example 2](./src/2-data.yml))
 - Put credentials into a .env file at the root of this project. ([example.env](./examples/inference/.env))
 - Use VSCode tasks, or the `controller.sh` script (on Linux/Mac) and/or the `controller.ps1` script on Windows.
 - The "up" task is used to bring your lab online.

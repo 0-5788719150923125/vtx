@@ -2,11 +2,6 @@ version: '3.9'
 
 services:
   lab:
-    # develop:
-    #   watch:
-    #     - action: sync
-    #       path: ./config.yml
-    #       target: /env/config.yml
     volumes:
       - ./src:/src
       - ./book:/book

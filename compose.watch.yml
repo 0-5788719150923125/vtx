@@ -1,0 +1,9 @@
+version: '3.9'
+
+services:
+  lab:
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./config.yml
+          target: /env/config.yml

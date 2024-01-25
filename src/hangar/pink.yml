@@ -23,7 +23,7 @@ training:
   warmup_steps: 100
   num_steps: 100000
   batch_size: 1
-  gradient_accumulation_steps: 1024
+  gradient_accumulation_steps: 2048
   weight_decay: 0.1
   gradient_clip_val: 1.0
   val_split: 0.1
@@ -40,15 +40,15 @@ training:
     intermediate_size: 1472 # heads * layers * value_heads * 2
     max_position_embeddings: 2048 # context length
     num_hidden_layers: 23
-    num_attention_heads: 6
+    num_attention_heads: 4
     num_key_value_heads: 2
     attention_bias: True
     attention_dropout: 0.2
     pretraining_tp: 1
     rms_norm_eps: 0.000001
-    rope_theta: 5141.3
+    rope_theta: 514.13
     rope_scaling:
       type: dynamic
-      factor: 0.9
+      factor: 1.01
     tie_word_embeddings: True
     vocab_size: 31950

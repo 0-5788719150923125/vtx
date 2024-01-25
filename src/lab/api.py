@@ -8,7 +8,7 @@ from common import colors
 
 
 def main(config):
-    app.run(debug=False, host="0.0.0.0", port=5010)
+    app.run(debug=False, host="0.0.0.0", port=8881)
 
 
 app = Flask(__name__)

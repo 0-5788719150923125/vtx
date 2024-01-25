@@ -88,7 +88,7 @@ async def listener(config, focus):
             "passive_frequency", 0.01
         )
         mine[focus] = False
-    async with websockets.connect("ws://127.0.0.1:9666/ws") as websocket:
+    async with websockets.connect("ws://127.0.0.1:8880/ws") as websocket:
         await websocket.send(json.dumps({"focus": focus}).encode("utf-8"))
         while True:
             deep = await websocket.recv()
@@ -175,7 +175,7 @@ async def response(config, focus):
 
 def send(message, focus, mode, identifier=get_identity()):
     ws = websocket.WebSocket()
-    ws.connect("ws://127.0.0.1:9666/ws")
+    ws.connect("ws://127.0.0.1:8880/ws")
     ws.send(
         json.dumps(
             {

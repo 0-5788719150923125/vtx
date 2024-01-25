@@ -27,7 +27,8 @@ To create a simple, opinionated framework for genetic experiments. Our goal is t
 
 # interface
 
-- [src](http://localhost:9666) ([example](https://src.eco))
+- [src](http://localhost:8880) ([example](https://src.eco))
+- [api](http://localhost:8881)
 - [book](http://localhost:42000) ([example](https://pen.university))
 - [metrics](http://localhost:6006)
 - [Optuna](http://localhost:6007)

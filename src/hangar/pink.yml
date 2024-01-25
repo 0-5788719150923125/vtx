@@ -1,0 +1,54 @@
+# class names will be normalized. we will teach the model
+# to repair typos in case-sensitive user inputs; we leave 
+# our mistakes behind; its about gaining intuition, and learning
+# how to learn again.
+
+model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
+class: pink
+info: the mistake of all creation
+precision: 32
+training:
+  type: "pretrain"
+  datasets:
+    streaming:
+      - wikitext
+  tokenizer: True
+  gradient_checkpointing: True
+  optimizer: Lion
+  scheduler: cosine
+  learning_rate: 0.00022
+  lookahead: 7
+  block_size: 512
+  stride: 256
+  warmup_steps: 100
+  num_steps: 100000
+  batch_size: 1
+  gradient_accumulation_steps: 1024
+  weight_decay: 0.1
+  gradient_clip_val: 1.0
+  val_split: 0.1
+  val_interval: 25
+  generate_every: 1
+  checkpoint_every: 5
+  save_every: 5
+  overrides:
+    model: pink
+    model_type: llama
+    hidden_act: laplace
+    initializer_range: 0.1
+    hidden_size: 48
+    intermediate_size: 1472 # heads * layers * value_heads * 2
+    max_position_embeddings: 2048 # context length
+    num_hidden_layers: 23
+    num_attention_heads: 6
+    num_key_value_heads: 2
+    attention_bias: True
+    attention_dropout: 0.2
+    pretraining_tp: 1
+    rms_norm_eps: 0.000001
+    rope_theta: 5141.3
+    rope_scaling:
+      type: dynamic
+      factor: 0.9
+    tie_word_embeddings: True
+    vocab_size: 31950

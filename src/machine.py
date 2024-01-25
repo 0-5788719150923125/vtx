@@ -15,18 +15,18 @@ print(colorize_yaml(config))
 # This is the main loop
 def main():
     allowed_services = [
-        "api",
-        "ipfs",
         "source",
-        "urbit",
+        "api",
         "book",
-        "smtp",
-        "telegram",
+        "ipfs",
+        "urbit",
         "matrix",
+        "telegram",
         "reddit",
         "discord",
         "twitch",
         "horde",
+        "smtp",
         "x",
     ]
 

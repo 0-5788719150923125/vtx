@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  opt:
+    image: ghcr.io/optuna/optuna-dashboard
+    command: sqlite:////data/optuna.sqlite3
+    volumes:
+      - ./data:/data
+    ports:
+      - 6007:8080
+    logging:
+      driver: none

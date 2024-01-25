@@ -110,6 +110,8 @@ COPY lab/ /lab
 
 COPY requirements.y.txt ./
 
+COPY src/aigen /src/aigen
+
 RUN pip install -r requirements.y.txt && \
     pip cache purge
 
@@ -119,17 +121,7 @@ COPY data/embeddings/ /embeddings
 COPY data/adapters/ /adapters
 
 RUN mkdir /env && \
-    mkdir /.cache && \
-    mkdir /.config && \
-    mkdir /.triton && \
-    mkdir /nltk_data && \
-    mkdir -p /lab/discord && \
-    mkdir -p /lab/discord/private && \
-    chmod -R 777 /.cache && \
-    chmod -R 777 /.config && \
-    chmod -R 777 /.triton && \
-    chmod -R 777 /nltk_data && \
-    chmod -R 777 /lab/discord
+    mkdir -p /lab/discord/private
 
 ENV TZ="America/Chicago"
 ENV PYTHONPYCACHEPREFIX='/tmp/__pycache__'

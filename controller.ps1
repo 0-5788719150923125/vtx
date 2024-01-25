@@ -108,7 +108,7 @@ switch ($action) {
         if (-not $env:FOCUS) {
             $FOCUS = Read-Host "Which model should we train? $($MODELS -join ', ')"
         }
-        docker compose -f compose.yml -f compose.services.yml up -d tbd ipf opt
+        docker compose -f compose.yml -f compose.services.yml up -d tbd ipf
         docker compose -f compose.yml -f compose.dev.yml $GPU run -e FOCUS=$FOCUS -e TASK=$action lab python3 harness.py
     }
     "prepare" {

@@ -10,7 +10,7 @@ Ryan shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 # mission
 
-To model a simple, opinionated framework for human cloning experiments. Our goal is to standardize AGI (Autonomous Generative Influence) via a decentralized ensemble of toy models, on commodity hardware (i.e. your desktop computer).
+To create a simple, opinionated framework for genetic experiments. Our goal is to standardize AGI (Autonomous Generative Influence) via a decentralized ensemble of toy models, on commodity hardware (i.e. your desktop computer).
 
 # features
 

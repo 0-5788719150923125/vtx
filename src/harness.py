@@ -10,10 +10,17 @@ from pypdf import PdfReader
 from tokenizers import Tokenizer
 from transformers import AutoConfig, AutoTokenizer, PreTrainedTokenizerFast
 
-from aigen.aigen import aigen
-from aigen.aigen.datasets import StaticDataset, merge_datasets
-from aigen.aigen.tokenizers import train_tokenizer
-from aigen.aigen.tuners import optimize_hparams
+try:
+    from aigen.aigen import aigen
+    from aigen.aigen.datasets import StaticDataset, merge_datasets
+    from aigen.aigen.tokenizers import train_tokenizer
+    from aigen.aigen.tuners import optimize_hparams
+except:
+    from aigen import aigen
+    from aigen.datasets import StaticDataset, merge_datasets
+    from aigen.tokenizers import train_tokenizer
+    from aigen.tuners import optimize_hparams
+
 from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 from extensions import register_models
 from modeling import get_ship_class

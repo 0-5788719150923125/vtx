@@ -18,7 +18,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
 from transformers import PreTrainedTokenizerFast
 
-from aigen.aigen import aigen
+try:
+    from aigen.aigen import aigen
+except:
+    from aigen import aigen
+
 from common import (
     colors,
     config,

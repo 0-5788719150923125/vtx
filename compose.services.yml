@@ -27,16 +27,6 @@ services:
     ports:
       - 6006:6006
 
-  opt:
-    image: ghcr.io/optuna/optuna-dashboard
-    command: sqlite:////data/optuna.sqlite3
-    volumes:
-      - ./data:/data
-    ports:
-      - 6007:8080
-    logging:
-      driver: none
-
   pet:
     image: learningathome/petals:main
     command: python -m petals.cli.run_server TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T --public_name "https://src.eco" --cache_dir /data/models --num_blocks 4 --torch_dtype bfloat16
@@ -80,7 +70,6 @@ services:
   urb:
     image: tloncorp/vere
     command: /bin/start-urbit --loom=29
-    # restart: 'always'
     stdin_open: true
     deploy:
       resources:

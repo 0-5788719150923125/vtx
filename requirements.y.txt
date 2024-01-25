@@ -1,3 +1,4 @@
+/src/aigen
 /lab/hivemind
 peft>=0.7.1
 pydantic<2.0.0

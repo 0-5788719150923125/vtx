@@ -11,13 +11,13 @@ services:
     build:
       shm_size: '4gb'
       args:
+        ARCH: ${ARCH:-x64}
+        SOURCE_IMAGE: nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
         DCE_VERSION: 2.42.3
         DOTNET_VERSION: 7.0.10
         HUGO_VERSION: 0.118.2
         NODEMON_VERSION: 3.0.1
         NODE_VERSION: 20
-        SOURCE_IMAGE: nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
-        ARCH: ${ARCH:-x64}
     deploy:
       resources:
         limits:

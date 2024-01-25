@@ -56,7 +56,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.1'
+          cpus: '0.23'
     volumes:
       - ./data/models:/data/models
       - ./data/adapters:/data/adapters

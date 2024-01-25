@@ -18,6 +18,10 @@ services:
         NODE_VERSION: 20
         SOURCE_IMAGE: nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
         ARCH: ${ARCH:-x64}
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:

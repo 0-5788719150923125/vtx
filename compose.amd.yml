@@ -16,9 +16,5 @@ services:
       - seccomp:unconfined
     group_add:
       - video
-    deploy:
-      resources:
-        limits:
-          cpus: '2.0'
     # environment:
     #   - ROC_ENABLE_PRE_VEGA: "1"

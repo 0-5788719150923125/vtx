@@ -19,6 +19,26 @@ services:
     env_file:
       - .env
 
+  # tra:
+  #   image: traefik:latest
+  #   command:
+  #     - "--api.insecure=true"
+  #     - "--api.dashboard=true"
+  #     - "--providers.docker=true"
+  #     - "--providers.docker.exposedbydefault=true"
+  #     - "--providers.docker.watch=true"
+  #     - "--entrypoints.web.address=:80"
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.traefik.rule=Host(`traefik.localhost`)"
+  #     - "traefik.http.routers.traefik.service=api@internal"
+  #   ports:
+  #     - "8888:8080"
+  #     - "8889:80"
+  #     - "8890:443"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+
   tbd:
     image: ghcr.io/0-5788719150923125/lab:latest
     command: tensorboard --logdir /data/logs --bind_all --samples_per_plugin scalars=999999999

@@ -8,5 +8,3 @@ services:
       - ./data:/data
     ports:
       - 6007:8080
-    logging:
-      driver: none

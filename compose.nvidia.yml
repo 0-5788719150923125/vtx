@@ -11,5 +11,3 @@ services:
           devices:
             - capabilities: ["gpu"]
               count: all
-        limits:
-          cpus: '2.0'

@@ -144,8 +144,6 @@ def main():
         setattr(pretrain_config, "unk_token_id", tokenizer.unk_token_id)
         for k, v in train_config.get("overrides").items():
             setattr(pretrain_config, k, v)
-        print_once(f"{colors.GREEN}modified pretrain config:{colors.WHITE}")
-        print_once(pretrain_config)
 
     static_data = []
     if len(train_config["datasets"].get("static", [])) > 0:

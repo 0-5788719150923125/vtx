@@ -7,3 +7,5 @@ services:
         - action: sync+restart
           path: ./config.yml
           target: /env/config.yml
+    env_file:
+      - one.env

@@ -108,7 +108,7 @@ case $action in
 
         if test "$(docker context show)" = "one"; then
             # FOCUS=${FOCUS} docker compose up
-            FOCUS=${FOCUS} docker compose -f compose.yml -f compose.watch.yml watch
+            FOCUS=${FOCUS} docker compose -f compose.yml -f compose.watch.yml $GPU watch
             exit 1
         fi
         # nohup docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml watch --no-up >/dev/null 2>&1 &

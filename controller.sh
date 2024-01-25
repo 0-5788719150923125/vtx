@@ -54,9 +54,18 @@ if [ ! -f 'config.yml' ]; then
     touch config.yml
 fi
 
+CONTEXT='default'
+if test "$(docker context show)" = "one"; then
+    CONTEXT='one'
+    eval "$(ssh-agent -s)"
+    ssh-add one.key
+fi
+
 # Set GPU mode
 GPU=''
-if [[ "$ARCH" == "ARM" ]]; then
+if [[ "$CONTEXT" == "one" ]]; then
+    GPU='-f compose.ARM.yml'
+elif [[ "$ARCH" == "ARM" ]]; then
     GPU='-f compose.ARM.yml'
 elif [[ "$DEVICE" == "amd" ]]; then
     GPU='-f compose.amd.yml'
@@ -64,11 +73,6 @@ elif [[ "$DEVICE" == "intel" ]]; then
     GPU='-f compose.intel.yml'
 else
     GPU='-f compose.nvidia.yml'
-fi
-
-if test "$(docker context show)" = "one"; then
-    eval "$(ssh-agent -s)"
-    ssh-add one.key
 fi
 
 # Implement the controller

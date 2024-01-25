@@ -9,3 +9,12 @@ services:
           target: /env/config.yml
     env_file:
       - one.env
+
+  ctx:
+    image: ghcr.io/0-5788719150923125/ctx:latest
+    restart: 'always'
+    network_mode: host
+    environment:
+      ANONYMOUS: ${ANONYMOUS:-true}
+    env_file:
+      - one.env

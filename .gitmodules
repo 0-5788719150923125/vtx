@@ -6,25 +6,13 @@
 	url = https://github.com/LuciferianInk/aigen.git
 [submodule "lab/source"]
 	path = lab/source
-	url = https://gitlab.com/the-resistance/thesource.fm
+	url = https://gitlab.com/the-resistance/src.eco
 [submodule "lab/ink"]
 	path = lab/ink
 	url = https://gitlab.com/singulari-org/ink.university
 [submodule "lab/pen"]
 	path = lab/pen
 	url = https://gitlab.com/the-resistance/pen.university
-[submodule "lab/cp"]
-	path = lab/cp
-	url = https://gitlab.com/hollowpoint-org/carrotpredator.com
-[submodule "lab/reaper"]
-	path = lab/reaper
-	url = https://gitlab.com/hollowpoint-org/reaper
-[submodule "lab/home"]
-	path = lab/home
-	url = https://gitlab.com/hollowpoint-org/luciferian.ink
-[submodule "lab/ELIZA"]
-	path = lab/ELIZA
-	url = https://gitlab.com/original-design/eliza
 [submodule "lab/opencog/learn"]
 	path = lab/opencog/learn
 	url = https://github.com/opencog/learn
@@ -58,3 +46,15 @@
 [submodule "lab/hivemind"]
 	path = lab/hivemind
 	url = https://github.com/learning-at-home/hivemind.git
+[submodule "lab/reaper"]
+	path = lab/reaper
+	url = https://gitlab.com/hollowpoint-org/reaper
+[submodule "lab/cp"]
+	path = lab/cp
+	url = https://gitlab.com/hollowpoint-org/carrotpredator.com
+[submodule "lab/home"]
+	path = lab/home
+	url = https://gitlab.com/hollowpoint-org/luciferian.ink
+[submodule "lab/ELIZA"]
+	path = lab/ELIZA
+	url = https://gitlab.com/original-design/eliza

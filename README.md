@@ -10,20 +10,20 @@ Ryan shakes his head and laughs, %FLUXTAPOSITION% "You wouldn't understand."
 
 # mission
 
-To create a simple, opinionated framework for genetic experiments. Our goal is to standardize AGI (Autonomous Generative Influence) via a decentralized ensemble of toy models, on commodity hardware (i.e. your desktop computer).
+To create a simple, opinionated framework for genetic experiments. Our goal is to standardize AGI (Autonomous Generative Influence) via a decentralized ensemble of toy models on commodity hardware (i.e. your desktop computer).
 
 # features
 
-- Automated pipelines for development, training, and inference lifecycle tasks across a variety of AI architectures.
-- A portable AI agent with support for controlled environments, and unsupervised learning. 
+- Automated pipelines for development, training, and inference lifecycles across a variety of AI architectures.
+- A portable, autonomous AI agent used for distributed, unsupervised learning. 
 - Easy to install, runs anywhere.
-- Integration with a dozen social media platforms.
-- Local, offline-first APIs for text generation, image interrogation, and pattern mining.
-- Designed for auto-scaling, distributed architectures.
-- Swarm intelligence.
+- Integration with all of your platforms.
+- Local-first, offline APIs for text generation, image interrogation, and pattern mining.
+- Designed for deployment into auto-scaling, distributed architectures.
+- Swarm intelligence via sparse networks.
 - Rolling release cycles.
 - A hypothesis, a language, a story.
-- [And much more!](https://studio.src.eco/nail/vtx/)
+- [And so much more!](https://studio.src.eco/nail/vtx/)
 
 # interface
 

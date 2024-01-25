@@ -2,7 +2,7 @@
 author: "Luciferian Ink"
 title: "{{title}}"
 weight: {{weight}}
-categories: "theory"
+categories: "assertion"
 tags: {{tags}}
 menu: ""
 draft: false

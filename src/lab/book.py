@@ -29,7 +29,7 @@ def main(config):
     if not result:
         return
 
-    allowed_types = ["confidants", "prose", "theory"]
+    allowed_types = ["confidants", "prose", "assertion"]
 
     while True:
         ink = Ink()
@@ -80,7 +80,7 @@ def validation(config):
                         },
                     },
                 },
-                "theory": {
+                "assertion": {
                     "type": "list",
                     "schema": {
                         "type": "dict",
@@ -158,7 +158,7 @@ class Ink:
                         joined = "\n  - ".join(value)
                         value = f"\n  - {joined}"
                     self.prompt = self.prompt + f"\n{key.capitalize()}: {value}"
-        elif self.type == "theory":
+        elif self.type == "assertion":
             title = entry.get("title")
             self.title = f"{self.type.title()}: {title}"
             self.prompt = read_from_file(f"/src/lab/templates/{self.type}.tpl")

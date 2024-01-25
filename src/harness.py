@@ -21,7 +21,15 @@ except:
     from aigen.tokenizers import train_tokenizer
     from aigen.tuners import optimize_hparams
 
-from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
+from common import (
+    colors,
+    config,
+    focus,
+    get_identity,
+    hash_directory,
+    list_full_paths,
+    nist_beacon,
+)
 from extensions import register_models
 from modeling import get_ship_class
 
@@ -145,7 +153,9 @@ def main():
 
     streaming_data = []
     for dataset in train_config["datasets"].get("streaming", []):
-        streaming_data.append(config["collections"]["streaming"][dataset.lower()])
+        streaming_config = config["collections"]["streaming"][dataset.lower()]
+        streaming_config["identity_function"] = get_identity
+        streaming_data.append(streaming_config)
 
     # Erase old logs
     train_config["log_path"] = "/data/logs/" + focus

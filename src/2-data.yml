@@ -82,6 +82,11 @@ collections:
       content_key: text
       buffer_size: 1000
       val_samples: 1000
+    instruct:
+      repo: Muennighoff/natural-instructions
+      buffer_size: 1000
+      sample_rate: 0.01
+      val_samples: 1000
 
 # https://huggingface.co/docs/transformers/main_classes/text_generation
 transformers:

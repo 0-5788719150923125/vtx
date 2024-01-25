@@ -6,7 +6,7 @@
 model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
 class: pink
 info: the mistake of all creation
-precision: 64
+precision: 32
 training:
   type: "pretrain"
   datasets:

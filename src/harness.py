@@ -20,15 +20,15 @@ from modeling import get_ship_class
 
 register_models()
 
-local_rank = int(os.environ.get("LOCAL_RANK", 0))
-world_rank = int(os.environ.get("WORLD_RANK", 0))
-
 # load ship designs
 if "class" in config[focus]:
     config = get_ship_class(config, focus)
 
 model_config = config[focus]
 train_config = model_config["training"]
+
+local_rank = int(os.environ.get("LOCAL_RANK", 0))
+world_rank = int(os.environ.get("WORLD_RANK", 0))
 
 
 def print_once(text):

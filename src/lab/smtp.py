@@ -58,7 +58,7 @@ description: {config.get('description', 'A short email and a story, written for 
 # {subject}
 ---
 {config.get('prompt')}""",
-                temperature=0.7,
+                temperature=1.1,
                 min_new_tokens=512,
                 max_new_tokens=768,
                 generation_profile="longform",

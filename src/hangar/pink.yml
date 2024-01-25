@@ -20,7 +20,7 @@ training:
   lookahead: 7
   block_size: 512
   stride: 256
-  warmup_steps: 100
+  warmup_steps: 10
   num_steps: 100000
   batch_size: 1
   gradient_accumulation_steps: 2048

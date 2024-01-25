@@ -85,7 +85,7 @@ collections:
     instruct:
       repo: Muennighoff/natural-instructions
       buffer_size: 1000
-      sample_rate: 0.01
+      sample_rate: 0.1
       val_samples: 1000
 
 # https://huggingface.co/docs/transformers/main_classes/text_generation
@@ -100,7 +100,6 @@ transformers:
       penalty_alpha: 0.6
       top_k: 4
       repetition_penalty: 1.23
-      low_memory: False
     longform:
       do_sample: True
       min_new_tokens: 11
@@ -109,9 +108,8 @@ transformers:
       eta_cutoff: 0.002
       penalty_alpha: 0.59
       top_k: 4
-      repetition_penalty: 1.23
+      repetition_penalty: 1.1
       no_repeat_ngram_size: 9
-      low_memory: False
     lowpenalty:
       do_sample: True
       min_new_tokens: 1

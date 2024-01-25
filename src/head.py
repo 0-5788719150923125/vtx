@@ -49,7 +49,7 @@ def validation(config):
         "profile": {"type": "boolean"},
         "generation_profile": {"type": "string"},
         "gpu_index": {"type": "integer"},
-        "precision": {"type": "integer", "allowed": [4, 8, 16, 32]},
+        "precision": {"type": "integer", "allowed": [4, 8, 16, 32, 64, 128]},
         "low_memory": {"type": "boolean"},
         "max_new_tokens": {"type": "integer"},
         "petals": {"type": "boolean"},

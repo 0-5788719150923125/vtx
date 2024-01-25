@@ -38,7 +38,7 @@ training:
     initializer_range: 0.1
     hidden_size: 48
     intermediate_size: 1472 # heads * layers * value_heads * 2
-    max_position_embeddings: 2048 # context length
+    max_position_embeddings: 4096 # context length
     num_hidden_layers: 23
     num_attention_heads: 4
     num_key_value_heads: 2
@@ -51,4 +51,4 @@ training:
       type: dynamic
       factor: 1.01
     tie_word_embeddings: True
-    vocab_size: 31950
+    vocab_size: 33890

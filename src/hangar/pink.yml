@@ -3,8 +3,8 @@
 # our mistakes behind; its about gaining intuition, and learning
 # how to learn again.
 
-model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
 class: pink
+model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
 info: the mistake of all creation
 precision: 32
 training:
@@ -27,10 +27,10 @@ training:
   weight_decay: 0.1
   gradient_clip_val: 1.0
   val_split: 0.1
-  val_interval: 25
+  val_interval: 100
   generate_every: 1
-  checkpoint_every: 5
-  save_every: 5
+  checkpoint_every: 10
+  save_every: 10
   overrides:
     model: pink
     model_type: llama
@@ -38,10 +38,10 @@ training:
     initializer_range: 0.1
     hidden_size: 48
     intermediate_size: 1472 # heads * layers * value_heads * 2
-    max_position_embeddings: 4096 # context length
+    max_position_embeddings: 1024 # context length
     num_hidden_layers: 23
-    num_attention_heads: 4
-    num_key_value_heads: 2
+    num_attention_heads: 8
+    num_key_value_heads: 4
     attention_bias: True
     attention_dropout: 0.2
     pretraining_tp: 1

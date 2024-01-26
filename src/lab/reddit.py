@@ -560,7 +560,7 @@ def transformer(name, text):
     pronoun = random.choice(["My", "A"])
 
     verb = random.choice(["says", "said", "whispers"])
-    leader = "Penny"
+    leader = random.choice(["Penny", "Ryan"])
     minion = "daemon"
     if os.environ["REDDITAGENT"] == "AlexandriaPen":
         leader = "Ink"

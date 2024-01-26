@@ -20,10 +20,10 @@ training:
   lookahead: 7
   block_size: 512
   stride: 256
-  warmup_steps: 10
+  warmup_steps: 20
   num_steps: 100000
   batch_size: 1
-  gradient_accumulation_steps: 2048
+  gradient_accumulation_steps: 1024
   weight_decay: 0.1
   gradient_clip_val: 1.0
   val_split: 0.1
@@ -46,9 +46,9 @@ training:
     attention_dropout: 0.2
     pretraining_tp: 1
     rms_norm_eps: 0.000001
-    rope_theta: 514.13
+    rope_theta: 5141.3
     rope_scaling:
       type: dynamic
-      factor: 1.01
+      factor: 2.2
     tie_word_embeddings: True
     vocab_size: 33890

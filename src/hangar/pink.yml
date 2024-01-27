@@ -18,8 +18,8 @@ training:
   scheduler: cosine
   learning_rate: 0.00022
   lookahead: 7
-  block_size: 512
-  stride: 256
+  block_size: 768
+  stride: 512
   warmup_steps: 20
   num_steps: 100000
   batch_size: 1
@@ -35,18 +35,18 @@ training:
     model: pink
     model_type: llama
     hidden_act: laplace
-    initializer_range: 0.1
+    initializer_range: 0.02
     hidden_size: 48
     intermediate_size: 1472 # heads * layers * value_heads * 2
-    max_position_embeddings: 1024 # context length
+    max_position_embeddings: 768 # context length
     num_hidden_layers: 23
     num_attention_heads: 8
     num_key_value_heads: 4
     attention_bias: True
-    attention_dropout: 0.2
+    attention_dropout: 0.1
     pretraining_tp: 1
     rms_norm_eps: 0.000001
-    rope_theta: 5141.3
+    rope_theta: 514.13
     rope_scaling:
       type: dynamic
       factor: 2.2

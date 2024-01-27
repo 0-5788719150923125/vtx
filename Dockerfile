@@ -33,6 +33,7 @@ RUN apt-get update -y \
     git \
     libclang-dev \
     libopencv-dev \
+    neofetch \
     ninja-build \
     nodejs \
     openssh-client \

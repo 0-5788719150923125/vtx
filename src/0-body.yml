@@ -9,6 +9,7 @@ frame:
       streaming:
         - c4
         - redpajama2
+        - instruct
     tokenizer: True
     gradient_checkpointing: True
     prune: 0.0

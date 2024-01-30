@@ -30,11 +30,6 @@ heart:
     datasets:
       streaming:
         - c4
-    # type: oft
-    # r: 23
-    # module_dropout: 0.1
-    # coft: True
-    # eps: 0.0000666
     type: lokr
     alpha: 32
     rank_dropout: 0.1

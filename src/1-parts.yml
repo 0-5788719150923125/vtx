@@ -36,13 +36,13 @@ mind:
     num_steps: 100000
     warmup_steps: 100
     batch_size: 1
-    gradient_accumulation_steps: 8
+    gradient_accumulation_steps: 6
     weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
     val_split: 0.01
     val_interval: 1000
-    generate_every: 25
+    generate_every: 10
     save_every: 100
     checkpoint_every: 100
 

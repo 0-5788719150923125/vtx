@@ -1,5 +1,5 @@
 $CONTAINERS = @("lab", "ctx", "uxo", "tbd", "ipf", "pet", "bit")
-$MODELS = @("src", "aura", "frame", "ode", "mind", "heart", "soul", "envy", "chaos", "ghost", "malice", "toe")
+$MODELS = @("src", "aura", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "toe")
 
 # Check for docker
 if (!(Test-Path -Path "docker.exe")) {

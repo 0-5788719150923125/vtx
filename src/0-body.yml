@@ -16,9 +16,9 @@ frame:
     optimizer: Lion
     scheduler: cosine
     strategy: hivemind
-    initial_piers:
-      - /p2p/QmaDVEctc68ppnN1Xu7tSFodDmTjgVXx511vSZbDrmCmDe
-      - /p2p/QmVQHrurMrXmViCDQ4m9Sji9W4XTZxUv2UibFuzYK4rfrH
+    # initial_piers:
+    #   - /p2p/QmaDVEctc68ppnN1Xu7tSFodDmTjgVXx511vSZbDrmCmDe
+    #   - /p2p/QmVQHrurMrXmViCDQ4m9Sji9W4XTZxUv2UibFuzYK4rfrH
     learning_rate: 0.000333
     block_size: 512
     stride: 128

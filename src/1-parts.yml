@@ -7,17 +7,44 @@ aura:
   training:
     type: "lora"
 
-ode:
-  model: microsoft/phi-2
-  info: to things that were
-  training:
-    type: "lora"
-
 mind:
-  model: EleutherAI/gpt-neo-1.3B
+  model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   info: use your heads
+  context_length: 4096
+  precision: 16
+  generation_profile: lowestpenalty
   training:
-    type: "lora"
+    type: lora
+    r: 16
+    lora_alpha: 32
+    lora_dropout: 0
+    use_rslora: True
+    bias: "none"
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+      - gate_proj
+      - up_proj
+      - down_proj
+    gradient_checkpointing: True
+    optimizer: AdamW
+    learning_rate: 0.001
+    block_size: 1536
+    stride: 128
+    num_steps: 30000
+    warmup_steps: 100
+    batch_size: 1
+    gradient_accumulation_steps: 32
+    weight_decay: 0.1
+    gradient_clip_val: 1.0
+    scheduler: cosine
+    val_split: 0.01
+    val_interval: 1000
+    generate_every: 25
+    save_every: 100
+    checkpoint_every: 100
 
 heart:
   model: RWKV/rwkv-4-430m-pile
@@ -96,46 +123,7 @@ envy:
   training:
     type: lora
 
-ghost:
-  model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
-  info: a silent revolution
-  context_length: 4096
-  device_map: auto
-  precision: 16
-  petals: False
-  profile: True
-  generation_profile: lowestpenalty
-  training:
-    type: ia3
-    target_modules:
-      - q_proj
-      - k_proj
-      - v_proj
-      - o_proj
-      - gate_proj
-      - up_proj
-      - down_proj
-    feedforward_modules:
-      - gate_proj
-      - up_proj
-      - down_proj
-    gradient_checkpointing: True
-    optimizer: AdamW
-    learning_rate: 0.001
-    block_size: 1024
-    stride: 512
-    num_steps: 10000
-    warmup_steps: 100
-    batch_size: 1
-    gradient_accumulation_steps: 6
-    weight_decay: 0.1
-    gradient_clip_val: 1.0
-    scheduler: cosine
-    val_split: 0.01
-    val_interval: 250
-    generate_every: 25
-    save_every: 100
-    checkpoint_every: 100
+
 
 malice:
   model: cerebras/Cerebras-GPT-111M

@@ -33,10 +33,10 @@ mind:
     learning_rate: 0.001
     block_size: 1536
     stride: 128
-    num_steps: 30000
+    num_steps: 100000
     warmup_steps: 100
     batch_size: 1
-    gradient_accumulation_steps: 32
+    gradient_accumulation_steps: 8
     weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine

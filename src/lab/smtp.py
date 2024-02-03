@@ -78,8 +78,11 @@ description: {config.get('description', 'A short email and a story, written for 
             message["To"] = subscriber
             message["Subject"] = Header(subject, "utf-8")
 
-            strip_prompt = "\n".join(output.splitlines()[9:])
-            unified = unified_newlines(strip_prompt.replace(r"\r\n|\r|\n", "\n"), 2)
+            strip_prompt = output.splitlines()[9:]
+            strip_last = strip_prompt[:-2]
+            unified = unified_newlines(
+                "\n".join(strip_last).replace(r"\r\n|\r|\n", "\n"), 2
+            )
             redacted = re.sub(
                 r"http\S+",
                 "$REDACTED",

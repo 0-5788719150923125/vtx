@@ -15,7 +15,7 @@ mind:
   generation_profile: lowestpenalty
   training:
     type: lora
-    r: 16
+    r: 32
     lora_alpha: 32
     lora_dropout: 0
     use_rslora: True
@@ -30,7 +30,7 @@ mind:
       - down_proj
     gradient_checkpointing: True
     optimizer: AdamW
-    learning_rate: 0.001
+    learning_rate: 0.00022
     block_size: 1536
     stride: 128
     num_steps: 100000

@@ -110,11 +110,45 @@ soul:
     regen: False
 
 chaos:
-  model: EleutherAI/pythia-70m
-  info: a swarm of small models
+  model: EleutherAI/pythia-1.4b-deduped-v0
+  info: a monstrosity
   generation_profile: lowpenalty
+  precision: 16
   training:
-    type: "lora"
+    type: lora
+    r: 32
+    lora_alpha: 32
+    lora_dropout: 0
+    use_rslora: True
+    bias: "none"
+    target_modules:
+      - embed_in
+      - query_key_value
+      - dense
+      - dense_h_to_4h
+      - dense_4h_to_h
+      - embed_out
+    gradient_checkpointing: True
+    optimizer: AdamW
+    learning_rate: 0.00022
+    block_size: 2048
+    stride: 256
+    num_steps: 60000
+    warmup_steps: 100
+    weight_decay: 0.1
+    gradient_clip_val: 1.0
+    scheduler: cosine
+    batch_size: 1
+    gradient_accumulation_steps: 8
+    val_split: 0.01
+    val_interval: 1000
+    generate_every: 25
+    save_every: 100
+    checkpoint_every: 100
+    datasets:
+      streaming:
+        - instruct
+        - c4
 
 envy:
   model: facebook/opt-350m
@@ -122,8 +156,6 @@ envy:
   generation_profile: lowpenalty
   training:
     type: lora
-
-
 
 malice:
   model: cerebras/Cerebras-GPT-111M

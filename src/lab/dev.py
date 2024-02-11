@@ -7,6 +7,32 @@ if os.environ.get("DEV_MODE", "false") == "true":
     time.sleep(1)
     debugpy.listen(("0.0.0.0", 5678))
 
+
+# ----- RWKV v5 ------ #
+# import torch
+# from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# model = AutoModelForCausalLM.from_pretrained(
+#     "RWKV/rwkv-5-world-1b5", cache_dir="/data/models", trust_remote_code=True
+# ).to(torch.float32)
+# tokenizer = AutoTokenizer.from_pretrained(
+#     "RWKV/rwkv-5-world-1b5", cache_dir="/data/models", trust_remote_code=True
+# )
+
+# prompt = "Once upon a time,"
+
+# inputs = tokenizer(prompt, return_tensors="pt")
+# output = model.generate(
+#     inputs["input_ids"],
+#     max_new_tokens=333,
+#     do_sample=True,
+#     temperature=1.0,
+#     top_p=0.3,
+#     top_k=0,
+# )
+# print(tokenizer.decode(output[0].tolist(), skip_special_tokens=True))
+
+
 # ------ Q Training ------------ #
 
 # import time

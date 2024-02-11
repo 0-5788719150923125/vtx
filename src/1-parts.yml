@@ -12,7 +12,7 @@ mind:
   info: use your heads
   context_length: 4096
   precision: 16
-  generation_profile: lowestpenalty
+  # generation_profile: lowpenalty
   training:
     type: lora
     r: 32
@@ -41,10 +41,10 @@ mind:
     gradient_clip_val: 1.0
     scheduler: cosine
     val_split: 0.01
-    val_interval: 1000
+    val_interval: 2500
     generate_every: 10
-    save_every: 100
-    checkpoint_every: 100
+    save_every: 250
+    checkpoint_every: 250
 
 heart:
   model: RWKV/rwkv-4-430m-pile

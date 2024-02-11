@@ -56,11 +56,11 @@ collections:
     refinedweb:
       repo: tiiuae/falcon-refinedweb
       content_key: content
-      buffer_size: 1000
+      buffer_size: 10000
     redpajama2:
       repo: togethercomputer/RedPajama-Data-V2
       content_key: raw_content
-      buffer_size: 1000
+      buffer_size: 10000
       snapshots:
         - "2023-14"
       subset: default
@@ -72,19 +72,19 @@ collections:
       sequential: True
       subset: en.noblocklist
       content_key: text
-      buffer_size: 1000
+      buffer_size: 10000
       val_samples: 1000
     wikitext:
       repo: wikitext
       sequential: True
       subset: wikitext-103-raw-v1
       content_key: text
-      buffer_size: 1000
+      buffer_size: 10000
       val_samples: 1000
     instruct:
       repo: Muennighoff/natural-instructions
-      buffer_size: 1000
-      sample_rate: 0.05
+      buffer_size: 10000
+      sample_rate: 0.1
       val_samples: 1000
 
 # https://huggingface.co/docs/transformers/main_classes/text_generation

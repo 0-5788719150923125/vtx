@@ -1,0 +1,54 @@
+model: ibm/MoLM-350M-4B
+class: Prism
+precision: 32
+context_length: 6144
+training:
+  type: pretrain
+  datasets:
+    streaming:
+      - c4
+  tokenizer: True
+  gradient_checkpointing: True
+  optimizer: Lion
+  scheduler: cosine
+  learning_rate: 0.00022
+  block_size: 768
+  warmup_steps: 1000
+  num_steps: 500000
+  batch_size: 1
+  gradient_accumulation_steps: 64
+  weight_decay: 0.1
+  gradient_clip_val: 1.0
+  val_split: 0.1
+  val_interval: 250
+  generate_every: 5
+  checkpoint_every: 50
+  save_every: 50
+  overrides:
+    model: Prism
+    universal: True
+    world_size: 666
+    activation_function: laplace
+    gate_type: gmm
+    n_layer: 12
+    n_head: 2
+    k_att: 5
+    k_mlp: 4
+    n_att_experts: 16
+    n_mlp_experts: 8
+    n_embd: 512
+    gating_size: 32
+    block_size: 64
+    history_length: 512
+    att_hidden: 128
+    ffd_hidden: 256
+    aux_loss_type: mi
+    aux_loss_weight: 0.1
+    resid_pdrop: 0
+    embd_pdrop: 0
+    attn_pdrop: 0
+    moe_pdrop: 0
+    sample_topk: 3
+    layer_norm_epsilon: 1e-06
+    vocab_size: 13000
+    tie_word_embeddings: True

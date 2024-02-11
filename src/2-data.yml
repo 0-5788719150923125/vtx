@@ -83,7 +83,7 @@ collections:
       val_samples: 1000
     instruct:
       repo: Muennighoff/natural-instructions
-      buffer_size: 10000
+      buffer_size: 1000
       sample_rate: 0.1
       val_samples: 1000
 
@@ -113,19 +113,18 @@ transformers:
       do_sample: True
       min_new_tokens: 1
       max_new_tokens: 333
-      temperature: 1.1
+      temperature: 0.9
       eta_cutoff: 0.002
       penalty_alpha: 0.59
       top_k: 4
-      repetition_penalty: 1.01
-      encoder_repetition_penalty: 0.95
+      repetition_penalty: 1.023
       no_repeat_ngram_size: 9
     lowestpenalty:
       do_sample: True
       min_new_tokens: 1
       max_new_tokens: 333
-      temperature: 0.7
-      eta_cutoff: 0.0003
+      temperature: 0.9
+      eta_cutoff: 0.002
       penalty_alpha: 0.6
       top_k: 4
       repetition_penalty: 1.0023

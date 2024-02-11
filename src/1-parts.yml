@@ -12,7 +12,7 @@ mind:
   info: use your heads
   context_length: 4096
   precision: 16
-  # generation_profile: lowpenalty
+  generation_profile: lowpenalty
   training:
     type: lora
     r: 32

@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 sys.path.append("/src")
@@ -13,36 +14,61 @@ original_root = "/lab/occult/original"
 original_paths = list_full_paths(original_root)
 new_root = "/lab/occult/train"
 
-if os.path.exists(new_root):
-    shutil.rmtree(new_root)
-if not os.path.exists(new_root):
-    os.makedirs(new_root)
 
-for file in original_paths:
-    new_file = file.replace(original_root, new_root)
+def main():
+    if os.path.exists(new_root):
+        shutil.rmtree(new_root)
+    if not os.path.exists(new_root):
+        os.makedirs(new_root)
 
-    directory_path = os.path.dirname(new_file)
-    if not os.path.exists(directory_path):
-        os.makedirs(directory_path)
+    for file in original_paths:
+        new_file = file.replace(original_root, new_root)
 
-    try:
-        if not file.lower().endswith(".pdf"):
-            shutil.copy(file, new_file)
-            continue
+        directory_path = os.path.dirname(new_file)
+        if not os.path.exists(directory_path):
+            os.makedirs(directory_path)
 
-        reader = PdfReader(file)
+        try:
+            if not file.lower().endswith(".pdf"):
+                shutil.copy(file, new_file)
+                continue
 
-        with open(f"{new_file}.txt", "a") as f:
-            for i, page in enumerate(reader.pages):
-                os.system("clear")
-                print(f"Archiving: {new_file}.txt (p{i})")
+            reader = PdfReader(file)
 
-                try:
-                    page = reader.pages[i]
-                    text = page.extract_text()
+            with open(f"{new_file}.txt", "a") as f:
+                book = ""
+                for i, page in enumerate(reader.pages):
+                    os.system("clear")
+                    try:
+                        print(f"Archiving: {new_file}.txt (p{i})")
+                        page = reader.pages[i]
+                        book += page.extract_text()
+                    except:
+                        continue
 
-                    f.write(text)
-                except:
-                    pass
-    except:
-        pass
+                f.write(repair_line_breaks(book))
+        except Exception as e:
+            pass
+
+
+def repair_line_breaks(text):
+    # Handle mid-word splits with hyphenation
+    text = re.sub(r"-\n", "", text)
+
+    # Handle mid-word splits without hyphenation (lowercase letter followed by a newline and a lowercase letter)
+    text = re.sub(r"([a-z])\n([a-z])", r"\1\2", text)
+
+    # Merge lines that do not end with sentence-ending punctuation, adding a space
+    text = re.sub(r"([^.!?])\n", r"\1 ", text)
+
+    # Convert remaining single line breaks (now only at paragraph ends) to double line breaks
+    text = text.replace("\n", "\n\n")
+
+    # Normalize spaces to a single space, except for the double new lines
+    text = re.sub(r"[^\S\n]+", " ", text)
+
+    return text
+
+
+if __name__ == "__main__":
+    main()

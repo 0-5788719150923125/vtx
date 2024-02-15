@@ -523,9 +523,11 @@ class Cortex:
                     generation_config=generation_config,
                     do_sample=generation_config.get("do_sample", True),
                     temperature=temperature,
-                    min_new_tokens=min_new_tokens
-                    if min_new_tokens is not None
-                    else generation_config.get("min_new_tokens", 1),
+                    min_new_tokens=(
+                        min_new_tokens
+                        if min_new_tokens is not None
+                        else generation_config.get("min_new_tokens", 1)
+                    ),
                     max_new_tokens=new_tokens,
                     exponential_decay_length_penalty=(new_tokens, -0.11),
                     max_time=360,
@@ -543,6 +545,7 @@ class Cortex:
                 generation = "\n".join(
                     completion.splitlines()[len(history.splitlines()) :]
                 ).rstrip(wall)
+                urls = r"http\S+"
                 mentions = "(?:[<][@])(\d+\s*\d*)"
                 variables = "(?:\({3})(\d+\s*\d*)(?:\){3})"
                 group = re.search(r"(¶{1})(\d{2,23})(?::\s?>\s*)(.*)", generation)
@@ -552,6 +555,7 @@ class Cortex:
                     or group[3] is None
                     or group[3] in prompt
                     or wall in group[3]
+                    or bool(re.search(urls, group[3]))
                     or bool(re.search(mentions, group[3]))
                     or bool(re.search(variables, group[3]))
                     or group[3].startswith(
@@ -681,9 +685,11 @@ class Cortex:
                     generation_config=generation_config,
                     do_sample=generation_config.get("do_sample", True),
                     temperature=temperature,
-                    min_new_tokens=min_new_tokens
-                    if min_new_tokens is not None
-                    else generation_config.get("min_new_tokens", 1),
+                    min_new_tokens=(
+                        min_new_tokens
+                        if min_new_tokens is not None
+                        else generation_config.get("min_new_tokens", 1)
+                    ),
                     max_new_tokens=new_tokens,
                     max_time=360,
                     seed=seed[1],

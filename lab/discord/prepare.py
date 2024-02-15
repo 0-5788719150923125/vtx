@@ -18,17 +18,33 @@ style = "original"
 def main():
     # Replace links and @mentions
     def sanitizer(string):
-        sanitized = re.sub(
-            r"http\S+",
-            "((url))",
-            string,
-        )
-        sanitized = re.sub(
+        # sanitized = re.sub(
+        #     r"http\S+",
+        #     "((url))",
+        #     string,
+        # )
+        string = re.sub(
             r"@Unknown",
             "<@" + str(get_identity(style=style)) + ">",
-            sanitized,
+            string,
         )
-        return sanitized
+        return string
+
+    def formatter(obj):
+        if len(obj["embeds"]) > 0:
+            if obj["embeds"][0]["title"]:
+                obj["content"] = (
+                    obj["content"] + " ((" + obj["embeds"][0]["title"] + "))"
+                )
+            if obj["embeds"][0]["description"]:
+                obj["content"] = obj["content"] + " " + obj["embeds"][0]["description"]
+        if len(obj["mentions"]) > 0:
+            for mention in obj["mentions"]:
+                obj["content"] = obj["content"].replace(
+                    "@" + mention["nickname"],
+                    "<@" + str(transform_author(mention)) + ">",
+                )
+        return transform_message(obj["content"])
 
     # Ensure export path exists and is clean
     if os.path.exists(f"{root_dir}/train"):
@@ -40,7 +56,6 @@ def main():
     failures = 0
 
     for filename in os.listdir(f"{root_dir}/source"):
-        # try:
         with open(os.path.join(f"{root_dir}/source", filename), "r") as file:
             data = json.load(file)
 
@@ -55,18 +70,6 @@ def main():
                     if style == "original"
                     else get_identity(seed=str(i["author"]["id"]), style=style)
                 )
-
-                if len(i["embeds"]) > 0:
-                    if i["content"] != "":
-                        i["content"] = i["content"]
-                    if i["embeds"][0]["title"]:
-                        i["content"] = (
-                            i["content"] + " ((" + i["embeds"][0]["title"] + "))"
-                        )
-                    if i["embeds"][0]["description"]:
-                        i["content"] = (
-                            i["content"] + " " + i["embeds"][0]["description"]
-                        )
 
                 if i["author"]["isBot"] == True:
                     author_id = transform_author(i["author"])
@@ -92,50 +95,17 @@ def main():
                                 reply_author_id = transform_author(result["author"])
 
                             if reply_author_id != False:
-                                if result is not None:
-                                    if len(result["embeds"]) > 0:
-                                        if result["content"] != "":
-                                            result["content"] = result["content"]
-                                        if result["embeds"][0]["title"]:
-                                            result["content"] = (
-                                                result["content"]
-                                                + " (("
-                                                + result["embeds"][0]["title"]
-                                                + "))"
-                                            )
-                                        if result["embeds"][0]["description"]:
-                                            result["content"] = (
-                                                result["content"]
-                                                + " "
-                                                + result["embeds"][0]["description"]
-                                            )
-                                    sanitized = sanitizer(result["content"])
-                                    if len(result["mentions"]) > 0:
-                                        for mention in result["mentions"]:
-                                            t = transform_author(mention)
-                                            sanitized = sanitized.replace(
-                                                "@" + mention["nickname"],
-                                                "<@" + str(t) + ">",
-                                            )
-                                    sanitized = transform_message(sanitized)
-                                    content = (
-                                        wall + reply_author_id + ship + " " + sanitized
-                                    )
-                                    try:
-                                        txt_file.write(f"{content}\n".format(content))
-                                        successes += 1
-                                    except Exception as e:
-                                        failures += 1
+                                sanitized = sanitizer(formatter(result))
+                                content = (
+                                    wall + reply_author_id + ship + " " + sanitized
+                                )
+                                try:
+                                    txt_file.write(f"{content}\n".format(content))
+                                    successes += 1
+                                except Exception as e:
+                                    failures += 1
 
-                    sanitized = sanitizer(i["content"])
-                    if len(i["mentions"]) > 0:
-                        for mention in i["mentions"]:
-                            t = transform_author(mention)
-                            sanitized = sanitized.replace(
-                                "@" + mention["nickname"],
-                                "<@" + str(t) + ">",
-                            )
-                    sanitized = transform_message(sanitized)
+                    sanitized = sanitizer(formatter(i))
                     content = wall + author_id + ship + " " + sanitized
                     try:
                         txt_file.write(f"{content}\n".format(content))

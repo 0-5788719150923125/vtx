@@ -31,20 +31,19 @@ def main():
         return string
 
     def formatter(obj):
+        message = str(obj["content"])
         if len(obj["embeds"]) > 0:
             if obj["embeds"][0]["title"]:
-                obj["content"] = (
-                    obj["content"] + " ((" + obj["embeds"][0]["title"] + "))"
-                )
+                message = message + " ((" + obj["embeds"][0]["title"] + "))"
             if obj["embeds"][0]["description"]:
-                obj["content"] = obj["content"] + " " + obj["embeds"][0]["description"]
+                message = message + " " + obj["embeds"][0]["description"]
         if len(obj["mentions"]) > 0:
             for mention in obj["mentions"]:
-                obj["content"] = obj["content"].replace(
+                message = message.replace(
                     "@" + mention["nickname"],
                     "<@" + str(transform_author(mention)) + ">",
                 )
-        return transform_message(obj["content"])
+        return transform_message(message)
 
     # Ensure export path exists and is clean
     if os.path.exists(f"{root_dir}/train"):

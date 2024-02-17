@@ -97,7 +97,9 @@ async def subscribe(user, password, config) -> None:
                 output = await head.ctx.query(question=message, temperature=0.7)
                 success = True
             else:
-                success, bias, output, seeded = await head.ctx.chat(personas=personas)
+                success, bias, output, seeded = await head.ctx.chat(
+                    priority=True, personas=personas
+                )
 
             if success == False:
                 print(output)

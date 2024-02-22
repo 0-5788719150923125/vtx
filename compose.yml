@@ -29,5 +29,5 @@ services:
     environment:
       FOCUS: ${FOCUS:-toe}
       # HIVEMIND_LOGLEVEL: info
-      PETALS_LOGGING: False
+      PETALS_LOGGING: 'false'
       RAY_memory_monitor_refresh_ms: 0

@@ -33,6 +33,7 @@ To create a simple, opinionated and declarative framework for machine learning e
 - [TensorBoard](http://localhost:8883)
 - [Optuna](http://localhost:8884)
 - [Urbit](http://localhost:8885)
+- [Horde](http://localhost:8886)
 - [Chat](https://chat.petals.dev/)
 - [Petals](https://health.petals.dev/)
 

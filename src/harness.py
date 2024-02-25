@@ -141,8 +141,6 @@ def main():
     print_once(tokenizer)
 
     if train_type == "pretrain":
-        # config_class = PretrainedConfig.get_config_dict(model_type=launch_model)[0]
-        # print(config_class)
         pretrain_config = AutoConfig.for_model(model_type=launch_model)
         # pretrain_config = AutoConfig.from_pretrained(train_config.get("type"))
         print_once(f"{colors.RED}original pretrain config:{colors.WHITE}")

@@ -3,6 +3,7 @@ import os
 import random
 import re
 import shutil
+import sys
 import time
 
 from lightning.pytorch import loggers
@@ -13,6 +14,10 @@ from transformers import (
     AutoTokenizer,
     PretrainedConfig,
     PreTrainedTokenizerFast,
+)
+
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".", "aigen"))
 )
 
 try:

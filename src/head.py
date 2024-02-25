@@ -5,6 +5,7 @@ import os
 import random
 import re
 import statistics
+import sys
 import time
 import traceback
 import typing
@@ -18,10 +19,14 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
 from transformers import PreTrainedTokenizerFast
 
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".", "aigen"))
+)
+
 try:
     from aigen.aigen import aigen
 except:
-    from aigen import aigen
+    from aig import aigen
 
 from common import (
     colors,

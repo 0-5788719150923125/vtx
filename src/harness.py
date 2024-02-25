@@ -8,7 +8,12 @@ import time
 from lightning.pytorch import loggers
 from pypdf import PdfReader
 from tokenizers import Tokenizer
-from transformers import AutoConfig, AutoTokenizer, PreTrainedTokenizerFast
+from transformers import (
+    AutoConfig,
+    AutoTokenizer,
+    PretrainedConfig,
+    PreTrainedTokenizerFast,
+)
 
 try:
     from aigen.aigen import aigen
@@ -59,7 +64,7 @@ def main():
     )
     time.sleep(3)
 
-    base_model = model_config["model"]
+    base_model = model_config.get("model")
     model_folder = "/data/models/" + focus
     launch_model = None
     fresh_logs = False
@@ -115,16 +120,18 @@ def main():
         trust_remote_code=True,
     )
 
-    if train_config.get("tokenizer") is not None:
+    if isinstance(train_config.get("tokenizer"), bool):
         tokenizer_model = output_dir
         if not os.path.exists(f"{tokenizer_model}/tokenizer.json"):
             tokenizer = train_tokenizer(
                 files=list_full_paths("/lab/research"),
-                dropout=0.001,
+                dropout=0.9,
                 vocab_size=train_config["overrides"].get("vocab_size"),
                 min_frequency=2,
                 save_path=tokenizer_model,
             )
+    elif isinstance(train_config.get("tokenizer"), str):
+        tokenizer_model = train_config.get("tokenizer")
 
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_model, **tokenizer_config)
 
@@ -134,7 +141,10 @@ def main():
     print_once(tokenizer)
 
     if train_type == "pretrain":
-        pretrain_config = AutoConfig.from_pretrained(launch_model)
+        # config_class = PretrainedConfig.get_config_dict(model_type=launch_model)[0]
+        # print(config_class)
+        pretrain_config = AutoConfig.for_model(model_type=launch_model)
+        # pretrain_config = AutoConfig.from_pretrained(train_config.get("type"))
         print_once(f"{colors.RED}original pretrain config:{colors.WHITE}")
         print_once(pretrain_config)
         setattr(pretrain_config, "_name_or_path", focus)

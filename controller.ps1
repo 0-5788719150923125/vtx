@@ -35,6 +35,7 @@ if ($env:TASK) {
     Write-Host "(train)   Train a model."
     Write-Host "(trial)   Search for optimal hyperparameters."
     Write-Host "(prune)   Prune all unused images, networks, and volumes."
+    Write-Host "(clean)   Delete all checkpoints."
     Write-Host "(key)     Fetch your Urbit access key."
 
     $action = Read-Host "Enter the keyword corresponding to your desired action"
@@ -132,6 +133,9 @@ switch ($action) {
     "prune" {
         docker system prune -f
         docker volume prune -f
+    }
+    "clean" {
+        docker compose -f compose.yml -f compose.dev.yml exec lab python3 /src/edge/clean.py
     }
     "key" {
         docker compose exec urb /bin/get-urbit-code

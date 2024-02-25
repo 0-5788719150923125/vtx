@@ -1,4 +1,4 @@
-model: ibm/MoLM-350M-4B
+model: moduleformer
 class: Prism
 precision: 32
 context_length: 6144
@@ -7,7 +7,7 @@ training:
   datasets:
     streaming:
       - c4
-  tokenizer: True
+  tokenizer: ibm/MoLM-350M-4B
   gradient_checkpointing: True
   optimizer: Lion
   scheduler: cosine

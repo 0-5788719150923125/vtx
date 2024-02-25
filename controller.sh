@@ -38,6 +38,7 @@ else
     echo "(train)   Train a model."
     echo "(trial)   Search for optimal hyperparameters."
     echo "(prune)   Prune all unused images, networks, and volumes."
+    echo "(clean)   Delete all checkpoints."
     echo "(key)     Fetch your Urbit access key."
     echo "(auto)    Turn on autopilot."
     echo "(repair)  Force-fix this workspace."
@@ -151,6 +152,11 @@ case $action in
         docker compose  -f compose.yml -f compose.dev.yml run lab python3 /lab/${DATASET}/fetch.py ;;
     "prune")
         docker system prune -f && docker volume prune -f ;;
+    "clean") 
+        docker compose \
+            -f compose.yml \
+            -f compose.dev.yml \
+            exec lab python3 /src/edge/clean.py ;;
     "key")
         docker compose exec urb /bin/get-urbit-code ;;
     "down")

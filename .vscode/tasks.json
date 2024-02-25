@@ -236,6 +236,15 @@
         }
       },
       {
+        "label": "clean",
+        "detail": "Delete all checkpoints.",
+        "type": "shell",
+        "command": "TASK=clean bash controller.sh",
+        "windows": {
+          "command": "$env:TASK = 'clean'; .\\controller.ps1"
+        }
+      },
+      {
         "label": "key",
         "detail": "Fetch your Urbit access key.",
         "type": "shell",

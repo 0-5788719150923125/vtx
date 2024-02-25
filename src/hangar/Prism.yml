@@ -1,7 +1,7 @@
 model: moduleformer
 class: Prism
 precision: 32
-context_length: 4608
+context_length: 6144
 training:
   type: pretrain
   datasets:
@@ -13,42 +13,42 @@ training:
   scheduler: cosine
   learning_rate: 0.00022
   block_size: 768
-  warmup_steps: 200
-  num_steps: 200000
+  warmup_steps: 10
+  num_steps: 10000
   batch_size: 1
-  gradient_accumulation_steps: 128
+  gradient_accumulation_steps: 1024
   weight_decay: 0.1
   gradient_clip_val: 1.0
   val_split: 0.1
-  val_interval: 250
-  generate_every: 5
-  checkpoint_every: 50
-  save_every: 50
+  val_interval: 50
+  generate_every: 1
+  checkpoint_every: 5
+  save_every: 5
   overrides:
     model: Prism
     universal: True
     world_size: 666
     activation_function: swish
     gate_type: gmm
-    n_layer: 9
+    n_layer: 12
     n_head: 2
-    k_att: 3
-    k_mlp: 2
-    n_att_experts: 4
-    n_mlp_experts: 8
+    k_att: 2
+    k_mlp: 1
+    n_att_experts: 2
+    n_mlp_experts: 3
     n_embd: 512
     gating_size: 256
     block_size: 512
     history_length: 512
     att_hidden: 256
-    ffd_hidden: 512
+    ffd_hidden: 1024
     aux_loss_type: mi
     aux_loss_weight: 0
     resid_pdrop: 0
     embd_pdrop: 0
     attn_pdrop: 0
     moe_pdrop: 0
-    sample_topk: 2
+    sample_topk: 1
     layer_norm_epsilon: 1e-05
-    vocab_size: 13750
+    vocab_size: 16900
     tie_word_embeddings: True

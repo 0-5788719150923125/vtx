@@ -29,26 +29,26 @@ training:
     universal: True
     world_size: 666
     activation_function: swish
-    gate_type: gmm
+    gate_type: mlp
     n_layer: 12
     n_head: 2
-    k_att: 2
-    k_mlp: 1
-    n_att_experts: 2
+    k_att: 3
+    k_mlp: 2
+    n_att_experts: 9
     n_mlp_experts: 3
     n_embd: 512
     gating_size: 256
     block_size: 512
     history_length: 512
-    att_hidden: 256
+    att_hidden: 64
     ffd_hidden: 1024
     aux_loss_type: mi
-    aux_loss_weight: 0
-    resid_pdrop: 0
-    embd_pdrop: 0
-    attn_pdrop: 0
-    moe_pdrop: 0
-    sample_topk: 1
+    aux_loss_weight: 0.01
+    resid_pdrop: 0.1
+    embd_pdrop: 0.1
+    attn_pdrop: 0.1
+    moe_pdrop: 0.1
+    sample_topk: 2
     layer_norm_epsilon: 1e-05
-    vocab_size: 16900
+    vocab_size: 19800
     tie_word_embeddings: True

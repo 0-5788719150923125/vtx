@@ -4,7 +4,7 @@ import os
 import re
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pprint import pprint
 
 from nio import AsyncClient, MatrixRoom, RoomMessage, RoomMessageText
@@ -43,11 +43,12 @@ if __name__ == "__main__":
 
 async def subscribe(user, password, config) -> None:
     client = AsyncClient("https://matrix.org", user)
-    dt = datetime.utcnow()
+    dt = datetime.now(timezone.utc)
     connected = int(dt.timestamp()) * 1000
 
     async def message_callback(room: MatrixRoom, event: RoomMessage) -> None:
         try:
+
             if event.server_timestamp < connected:
                 return
             if event.source["content"]["msgtype"] != "m.text":

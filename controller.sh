@@ -10,7 +10,7 @@ else
   exit 1
 fi
 
-MODELS='["src", "aura", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "toe"]'MOD
+MODELS='["src", "aura", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "toe"]'
 
 # Check for docker
 if ! command -v docker &> /dev/null; then

@@ -10,8 +10,7 @@ else
   exit 1
 fi
 
-CONTAINERS='["lab", "ctx", "uxo", "tbd", "ipf", "pet", "bit"]'
-MOD
+MODELS='["src", "aura", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "toe"]'MOD
 
 # Check for docker
 if ! command -v docker &> /dev/null; then

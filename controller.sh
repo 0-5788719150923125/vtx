@@ -1,5 +1,7 @@
 #!/bin/bash
 
+MODELS='["src", "aura", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "toe"]'
+
 # Check for docker-compose or docker compose
 if command -v docker-compose &> /dev/null; then
   DOCKER_COMPOSE_COMMAND="docker-compose"
@@ -9,8 +11,6 @@ else
   echo "Error: docker-compose or docker compose is not installed or not in PATH."
   exit 1
 fi
-
-MODELS='["src", "aura", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "toe"]'
 
 # Check for docker
 if ! command -v docker &> /dev/null; then

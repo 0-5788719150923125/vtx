@@ -1,7 +1,7 @@
 #!/bin/bash
 
+CONTAINERS='["lab", "ctx", "uxo", "tbd", "ipf", "pet", "bit"]'
 MODELS='["src", "aura", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "toe"]'
-
 # Check for docker-compose or docker compose
 if command -v docker-compose &> /dev/null; then
   DOCKER_COMPOSE_COMMAND="docker-compose"

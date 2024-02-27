@@ -2,16 +2,19 @@
 
 CONTAINERS='["lab", "ctx", "uxo", "tbd", "ipf", "pet", "bit"]'
 MODELS='["src", "aura", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "toe"]'
+# Check for docker-compose or docker compose
+if command -v docker-compose &> /dev/null; then
+  DOCKER_COMPOSE_COMMAND="docker-compose"
+elif command -v docker compose &> /dev/null; then
+  DOCKER_COMPOSE_COMMAND="docker compose"
+else
+  echo "Error: docker-compose or docker compose is not installed or not in PATH."
+  exit 1
+fi
 
 # Check for docker
 if ! command -v docker &> /dev/null; then
   echo "Error: docker is not installed or not in PATH."
-  exit 1
-fi
-
-# Check for docker-compose
-if ! command -v docker compose &> /dev/null; then
-  echo "Error: docker compose is not installed or not in PATH."
   exit 1
 fi
 
@@ -86,27 +89,27 @@ case $action in
         git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
         ;;
     "ps") 
-        docker compose ps ;;
+        $DOCKER_COMPOSE_COMMAND ps ;;
     "logs") 
-        docker compose logs --follow ;;
+        $DOCKER_COMPOSE_COMMAND logs --follow ;;
     "stats")
         docker stats ;;
     "exec") 
         if [[ -z "$CONTAINER" ]]; then
             read -p "Which container should we enter? ${CONTAINERS} " CONTAINER
         fi
-        docker compose exec ${CONTAINER} /bin/bash ;;
+        $DOCKER_COMPOSE_COMMAND exec ${CONTAINER} /bin/bash ;;
     "test") 
-        docker compose exec lab robot --outputdir /book/static/tests /src/tests ;;
+        $DOCKER_COMPOSE_COMMAND exec lab robot --outputdir /book/static/tests /src/tests ;;
     "eval") 
-        docker compose exec lab sh tests/eval.sh ;;
+        $DOCKER_COMPOSE_COMMAND exec lab sh tests/eval.sh ;;
     "build") 
-        docker compose -f compose.yml $GPU build && docker images | grep /lab ;;
+        $DOCKER_COMPOSE_COMMAND -f compose.yml $GPU build && docker images | grep /lab ;;
         # docker history <image>
     "push") 
-        docker compose push ;;
+        $DOCKER_COMPOSE_COMMAND push ;;
     "pull") 
-        docker compose -f compose.yml -f compose.services.yml pull ;;
+        $DOCKER_COMPOSE_COMMAND -f compose.yml -f compose.services.yml pull ;;
     "up" | "auto")
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we focus on? ${MODELS} " FOCUS
@@ -120,11 +123,11 @@ case $action in
 
         if test "$(docker context show)" = "one"; then
             # FOCUS=${FOCUS} docker compose up
-            FOCUS=${FOCUS} docker compose -f compose.yml -f compose.watch.yml $GPU watch
+            FOCUS=${FOCUS} $DOCKER_COMPOSE_COMMAND -f compose.yml -f compose.watch.yml $GPU watch
             exit 1
         fi
         # nohup docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml watch --no-up >/dev/null 2>&1 &
-        FOCUS=${FOCUS} docker compose \
+        FOCUS=${FOCUS} $DOCKER_COMPOSE_COMMAND \
             -f compose.yml \
             -f compose.dev.yml  \
             -f compose.services.yml \
@@ -133,10 +136,10 @@ case $action in
         if [[ -z "$FOCUS" ]]; then
             read -p "Which model should we train? ${MODELS} " FOCUS
         fi
-        docker compose \
+        $DOCKER_COMPOSE_COMMAND \
             -f compose.yml \
             -f compose.services.yml up tbd ipf -d
-        docker compose \
+        $DOCKER_COMPOSE_COMMAND \
             -f compose.yml \
             -f compose.dev.yml \
             $GPU run -e FOCUS=${FOCUS} -e TASK=${action} lab python3 harness.py ;;
@@ -144,23 +147,23 @@ case $action in
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we prepare? " DIRECTORY
         fi
-        docker compose -f compose.yml -f compose.dev.yml run lab python3 /lab/${DATASET}/prepare.py ;;
+        $DOCKER_COMPOSE_COMMAND -f compose.yml -f compose.dev.yml run lab python3 /lab/${DATASET}/prepare.py ;;
     "fetch")
         if [[ -z "$DATASET" ]]; then
             read -p "Which dataset should we fetch? " DIRECTORY
         fi
-        docker compose  -f compose.yml -f compose.dev.yml run lab python3 /lab/${DATASET}/fetch.py ;;
+        $DOCKER_COMPOSE_COMMAND  -f compose.yml -f compose.dev.yml run lab python3 /lab/${DATASET}/fetch.py ;;
     "prune")
         docker system prune -f && docker volume prune -f ;;
     "clean") 
-        docker compose \
+        $DOCKER_COMPOSE_COMMAND \
             -f compose.yml \
             -f compose.dev.yml \
             exec lab python3 /src/edge/clean.py ;;
     "key")
-        docker compose exec urb /bin/get-urbit-code ;;
+        $DOCKER_COMPOSE_COMMAND exec urb /bin/get-urbit-code ;;
     "down")
-        docker compose down --remove-orphans ;;
+        $DOCKER_COMPOSE_COMMAND down --remove-orphans ;;
     *) 
         echo "Invalid selection." ;;
 esac

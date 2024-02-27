@@ -18,12 +18,6 @@ if ! command -v docker &> /dev/null; then
   exit 1
 fi
 
-# Check for docker-compose
-if ! command -v $DOCKER_COMPOSE_COMMAND &> /dev/null; then
-  echo "Error: $DOCKER_COMPOSE_COMMAND is not installed or not in PATH."
-  exit 1
-fi
-
 # If defined, use the TASK variable.
 if [[ -n "$TASK" ]]; then
     action="$TASK"

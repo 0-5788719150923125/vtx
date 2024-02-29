@@ -39,7 +39,7 @@ aura:
 mind:
   model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   info: use your heads
-  context_length: 4096
+  context_length: 2048
   precision: 16
   generation_profile: lowpenalty
   training:

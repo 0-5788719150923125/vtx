@@ -30,12 +30,12 @@ To create a simple, opinionated and declarative framework for machine learning e
 - [src](http://localhost:8880) ([example](https://src.eco))
 - [api](http://localhost:8881)
 - [book](http://localhost:8882) ([example](https://pen.university))
-- [TensorBoard](http://localhost:8883)
-- [Optuna](http://localhost:8884)
-- [Urbit](http://localhost:8885)
-- [Horde](http://localhost:8886)
-- [Chat](https://chat.petals.dev/)
-- [Petals](https://health.petals.dev/)
+- [metrics](http://localhost:8883)
+- [tuner](http://localhost:8884)
+- [urbit](http://localhost:8885)
+- [horde](http://localhost:8886)
+- [chat](https://chat.petals.dev/)
+- [petals](https://health.petals.dev/)
 
 # tools
 
@@ -44,9 +44,9 @@ To create a simple, opinionated and declarative framework for machine learning e
 # data
 
 - https://ink.university/
-- [https://fate.agency/](https://bafybeigz5tzb7kbxeeb6fd7bka5dk3lxuh4g5hujvszaad4xwyw2yjwhne.ipfs.nftstorage.link/)
+- [https://fate.agency/](https://bafybeigz5tzb7kbxeeb6fd7bka5dk3lxuh4g5hujvszaad4xwyw2yjwhne.ipfs.cf-ipfs.com/)
 - [https://research.src.eco/](https://research.src.eco/#/page/getting%20started)
-- [The Pile](https://bafybeiftud3ppm5n5uudtirm4cf5zgonn44no2qg57isduo5gjeaqvvt2u.ipfs.nftstorage.link/)
+- [The Pile](https://bafybeiftud3ppm5n5uudtirm4cf5zgonn44no2qg57isduo5gjeaqvvt2u.ipfs.cf-ipfs.com/)
 
 # instructions
 

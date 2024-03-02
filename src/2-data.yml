@@ -83,6 +83,7 @@ collections:
       val_samples: 1000
     instruct:
       repo: Muennighoff/natural-instructions
+      instruct: True
       buffer_size: 1000
       sample_rate: 0.25
       val_samples: 1000

@@ -68,7 +68,7 @@ collections:
       languages: 
         - "en"
     c4:
-      repo: c4
+      repo: allenai/c4
       sequential: True
       subset: en.noblocklist
       content_key: text

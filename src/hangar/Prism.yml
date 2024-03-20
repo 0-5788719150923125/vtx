@@ -4,12 +4,12 @@ precision: 32
 context_length: 6144
 training:
   type: pretrain
+  tokenizer: True
+  corpus: /lab/research
   datasets:
     streaming:
       - c4
       - natural
-  tokenizer: True
-  corpus: /lab/research
   gradient_checkpointing: True
   optimizer: Lion
   scheduler: cosine
@@ -50,6 +50,6 @@ training:
     moe_pdrop: 0.1
     sample_topk: 2
     initializer_range: 0.05
-    layer_norm_epsilon: 1e-05
+    layer_norm_epsilon: 0.000001
     vocab_size: 19888
     tie_word_embeddings: True

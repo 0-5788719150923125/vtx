@@ -7,30 +7,29 @@ training:
   datasets:
     streaming:
       - c4
+      - natural
   tokenizer: True
-  corpus: /lab/phi/train
+  corpus: /lab/research
   gradient_checkpointing: True
   optimizer: Lion
   scheduler: cosine
   learning_rate: 0.00022
   block_size: 768
   warmup_steps: 10
-  num_steps: 5000
+  num_steps: 10000
   batch_size: 1
-  gradient_accumulation_steps: 2048
+  gradient_accumulation_steps: 4096
   weight_decay: 0.1
   gradient_clip_val: 1.0
-  val_split: 0.1
   val_interval: 50
   generate_every: 1
   checkpoint_every: 5
   save_every: 5
   overrides:
-    model: Prism
     universal: True
-    world_size: 666
+    world_size: 8888
     activation_function: swish
-    gate_type: mlp
+    gate_type: gmm
     n_layer: 12
     n_head: 2
     k_att: 3
@@ -52,5 +51,5 @@ training:
     sample_topk: 2
     initializer_range: 0.05
     layer_norm_epsilon: 1e-05
-    vocab_size: 19800
+    vocab_size: 19888
     tie_word_embeddings: True

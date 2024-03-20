@@ -135,7 +135,6 @@ def main():
 
     if train_type == "pretrain":
         pretrain_config = AutoConfig.for_model(model_type=launch_model)
-        # pretrain_config = AutoConfig.from_pretrained(train_config.get("type"))
         print_once(f"{colors.RED}original pretrain config:{colors.WHITE}")
         print_once(pretrain_config)
         setattr(pretrain_config, "_name_or_path", focus)
@@ -145,6 +144,8 @@ def main():
         setattr(pretrain_config, "unk_token_id", tokenizer.unk_token_id)
         for k, v in train_config.get("overrides").items():
             setattr(pretrain_config, k, v)
+        if model_config.get("class"):
+            setattr(pretrain_config, "_name_or_path", model_config.get("class"))
 
     static_data = []
     if len(train_config["datasets"].get("static", [])) > 0:

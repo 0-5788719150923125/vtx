@@ -58,3 +58,6 @@
 [submodule "lab/ELIZA"]
 	path = lab/ELIZA
 	url = https://gitlab.com/original-design/eliza
+[submodule "lab/ode"]
+	path = lab/ode
+	url = https://github.com/0-5788719150923125/ode.git

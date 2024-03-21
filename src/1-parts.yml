@@ -193,6 +193,39 @@ malice:
   training:
     type: lora
 
+wisdom:
+  info: of the masses
+  model: state-spaces/mamba-130m-hf
+  training:
+    type: lora
+    r: 8
+    lora_alpha: 16
+    lora_dropout: 0
+    use_rslora: True
+    use_dora: False
+    bias: "none"
+    target_modules:
+      - embeddings
+      - in_proj
+      - x_proj
+      - dt_proj
+      - out_proj
+    gradient_checkpointing: True
+    optimizer: AdamW
+    generate_every: 100
+    learning_rate: 0.001
+    block_size: 2048
+    stride: 0
+    num_steps: 30000
+    warmup_steps: 1000
+    weight_decay: 0.01
+    gradient_clip_val: 1.0
+    scheduler: cosine
+    batch_size: 1
+    gradient_accumulation_steps: 16
+    val_split: 0.05
+    val_interval: 10000
+
 toe:
   info: nailed to the foot
   model: EleutherAI/gpt-neo-125M

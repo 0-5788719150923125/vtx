@@ -79,7 +79,7 @@ collections:
       sequential: True
       subset: wikitext-103-raw-v1
       content_key: text
-      buffer_size: 10000
+      buffer_size: 1000
       val_samples: 1000
     natural:
       repo: Muennighoff/natural-instructions

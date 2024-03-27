@@ -29,7 +29,7 @@ training:
     universal: True
     world_size: 8888
     activation_function: swish
-    gate_type: gmm
+    gate_type: mlp
     n_layer: 12
     n_head: 2
     k_att: 3

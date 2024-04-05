@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   opt:
     image: ghcr.io/optuna/optuna-dashboard

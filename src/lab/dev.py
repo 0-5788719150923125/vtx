@@ -75,8 +75,8 @@ if os.environ.get("DEV_MODE", "false") == "true":
 # datasets.logging.set_verbosity_info()
 
 # dataset = datasets.load_dataset(
-#     "safetyllm/daily_conversations",
-#     name="default",
+#     "HuggingFaceTB/cosmopedia",
+#     name="web_samples_v2",
 #     # snapshots=["2023-14"],
 #     # languages=["en"],
 #     # split="validation",

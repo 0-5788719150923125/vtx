@@ -395,6 +395,7 @@ class Cortex:
         ctx=None,
         priority: bool = False,
         bias: int = None,
+        start_with: str = None,
         temperature: float = None,
         min_new_tokens: int = None,
         max_new_tokens: int = None,
@@ -498,6 +499,9 @@ class Cortex:
                 19,
             ], f"The given bias ({str(bias)}) is of the wrong length."
             prompt += str(bias) + ship
+
+        if start_with:
+            prompt += start_with
 
         attempt = 0
         max_attempts = 10

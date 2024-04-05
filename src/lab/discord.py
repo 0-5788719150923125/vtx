@@ -62,6 +62,7 @@ def validation(config):
         "bannedUsers": {"type": "list"},
         "bannedServers": {"type": "list"},
         "horde_enabled": {"type": "boolean"},
+        "musing": {"type": "list"},
         "servers": {
             "type": "dict",
             "keysrules": {"type": "integer"},
@@ -166,6 +167,8 @@ class Client(discord.Client):
             guilds.append(f"{guild.name} ({guild.member_count})")
         print(colors.BLUE + "ONE@DISCORD: " + colors.WHITE + " => ".join(guilds))
 
+        self.brain = self.loop.create_task(self.start_musing())
+
     async def on_guild_join(self, guild):
         await self.check_bans(guild=guild)
 
@@ -200,51 +203,49 @@ class Client(discord.Client):
         except Exception as e:
             logging.error(e)
 
-    # # randomly generate commentary
-    # async def think(self):
-    #     await self.wait_until_ready()
-    #     while not self.is_closed():
-    #         delay = random.randint(900, 86400)
-    #         await asyncio.sleep(delay)
-    #         try:
-    #             channels = await get_all_channels(self)
-    #             channel = random.choice(channels)
-    #             messages = [
-    #                 message
-    #                 async for message in self.get_channel(channel.id).history(limit=16)
-    #             ]
-    #             focus_on = random.randint(0, 7)
-    #             length = 7
-    #             context = []
-    #             i = length
-    #             while i > 0:
-    #                 i = i - 1
-    #                 context.append(
-    #                     wall
-    #                     + str(messages[focus_on + i].author.id)
-    #                     + ship
-    #                     + " "
-    #                     + messages[focus_on + i].content
-    #                 )
-    #             recent_author_id = messages[random.randint(0, 15)].author.id
+    def ignore(self, boolean):
+        self.ignoring = boolean
 
-    #             bias = None
-    #             if str(recent_author_id) != str(self.user.id):
-    #                 bias = recent_author_id
+    # randomly generate commentary
+    async def start_musing(self):
+        musings = self.config["discord"]["musing"]
+        while True:
+            delay = random.randint(60, 66)
+            await asyncio.sleep(delay)
+            for choice in musings:
+                try:
+                    frequency = choice.get("frequency", 0)
 
-    #             success, bias, output, seeded = await head.ctx.chat(
-    #                 bias, context, max_new_tokens=333
-    #             )
-    #             if success == False:
-    #                 return
+                    if random.random() > frequency:
+                        continue
 
-    #             transformed = transformer(bias, output)
+                    self.ignore(True)
 
-    #             await messages[focus_on].reply(transformed)
+                    persona = choice.get("persona")
+                    instruction = choice.get("instruction")
+                    prompt = random.choice(choice.get("prompts"))
+                    channel = self.get_channel(random.choice(choice.get("channels")))
 
-    #         except Exception as e:
-    #             logging.error(e)
-    #             self.discord_task = self.loop.create_task(self.think())
+                    ctx = [{"bias": 806051627198709760, "message": instruction}]
+                    iterations = random.randrange(6, 9)
+                    for i in range(iterations):
+                        await asyncio.sleep(random.randint(9, 18))
+                        async with channel.typing():
+                            success, bias, output, seeded = await head.ctx.chat(
+                                ctx=ctx,
+                                personas=persona,
+                                start_with=prompt,
+                                priority=True,
+                                max_new_tokens=333,
+                            )
+                            prompt = None
+                            await channel.send(output)
+                            ctx.append({"bias": bias, "message": output})
+
+                except Exception as e:
+                    logging.error(e)
+
+            self.ignore(False)
 
     async def analyze_image(self, urls):
         preds = []
@@ -325,6 +326,9 @@ class Client(discord.Client):
             head.ctx.build_context(bias=int(self.user.id), message=pred)
             # await message.channel.send(pred)
             print(colors.GREEN + "ONE@DISCORD: " + colors.WHITE + pred)
+
+        if self.ignoring:
+            return
 
         # We need to place all of the following logic into a dedicated function. We need to
         # check the incoming message for a URL, and if it exists, we need to return. We need
@@ -616,9 +620,11 @@ def send_webhook(
         "embeds": [
             {
                 "title": title,
-                "description": str(description)[:333] + "..."
-                if len(description) > 333
-                else description,
+                "description": (
+                    str(description)[:333] + "..."
+                    if len(description) > 333
+                    else description
+                ),
                 "url": link,
                 "thumbnail": {
                     "url": thumbnail,

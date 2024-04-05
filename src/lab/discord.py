@@ -240,7 +240,9 @@ class Client(discord.Client):
                             )
                             prompt = None
                             await channel.send(output)
+                            head.ctx.build_context(bias=int(bias), message=output)
                             ctx.append({"bias": bias, "message": output})
+                            print(colors.RED + "ONE@DISCORD: " + colors.WHITE + output)
 
                 except Exception as e:
                     logging.error(e)

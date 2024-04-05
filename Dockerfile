@@ -23,8 +23,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash -
 
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
-    # gcc \
-    # clang \
+    gcc \
+    clang \
     containerd.io \
     docker-ce \
     docker-ce-cli \ 

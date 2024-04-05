@@ -4,4 +4,4 @@ peft>=0.10.0
 pydantic<2.0.0
 transformers>=4.39.0
 # causal-conv1d>=1.2.0.post2
-mamba-ssm
+# mamba-ssm

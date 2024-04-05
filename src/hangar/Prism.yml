@@ -10,6 +10,7 @@ training:
     streaming:
       - c4
       - natural
+      - daily
   gradient_checkpointing: True
   optimizer: Lion
   scheduler: cosine

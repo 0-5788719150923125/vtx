@@ -75,8 +75,8 @@ if os.environ.get("DEV_MODE", "false") == "true":
 # datasets.logging.set_verbosity_info()
 
 # dataset = datasets.load_dataset(
-#     "c4",
-#     name="en.noblocklist",
+#     "safetyllm/daily_conversations",
+#     name="default",
 #     # snapshots=["2023-14"],
 #     # languages=["en"],
 #     # split="validation",

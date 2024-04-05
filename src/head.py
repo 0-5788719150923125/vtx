@@ -69,6 +69,7 @@ def validation(config):
                 "devices": {"type": ["string", "list"]},
                 "resume": {"type": "boolean"},
                 "regen": {"type": "boolean"},
+                "corpus": {"type": "string"},
                 "generate_every": {"type": "integer"},
                 "checkpoint_every": {"type": "integer"},
                 "save_every": {"type": "integer"},
@@ -224,6 +225,7 @@ class Cortex:
         tuning_mode = None
         pre_seq_len = 24
         tokenizer = None
+        tokenizer_folder = None
         if "training" in config:
             t = config["training"].get("type", "standard")
             if t not in ["standard", "pretrain"]:
@@ -244,10 +246,13 @@ class Cortex:
                 pre_seq_len = t.get("num_virtual_tokens", pre_seq_len)
             else:
                 model_folder = "/data/models/" + focus
+                if config["training"].get("corpus"):
+                    tokenizer_folder = model_folder
         try:
             prototype = aigen(
                 model=config.get("model"),
                 model_folder=model_folder,
+                tokenizer_folder=tokenizer_folder,
                 device_map=config.get("device_map", "auto"),
                 petals=config.get("petals", False),
                 cache_dir="/data/models",

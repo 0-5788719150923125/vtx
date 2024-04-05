@@ -87,6 +87,13 @@ collections:
       buffer_size: 100000
       sample_rate: 0.1
       val_samples: 10000
+    daily:
+      repo: safetyllm/daily_conversations
+      chat: True
+      content_key: text
+      buffer_size: 100000
+      sample_rate: 0.01
+      val_samples: 10000
 
 # https://huggingface.co/docs/transformers/main_classes/text_generation
 transformers:

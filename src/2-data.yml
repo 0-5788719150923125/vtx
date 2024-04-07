@@ -91,7 +91,7 @@ collections:
       repo: safetyllm/daily_conversations
       chat: True
       content_key: text
-      buffer_size: 100000
+      buffer_size: 1000
       sample_rate: 0.01
       val_samples: 10000
     # web:

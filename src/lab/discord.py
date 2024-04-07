@@ -130,6 +130,7 @@ async def subscribe_events(config):
 class Client(discord.Client):
     def __init__(self, *args, **kwargs):
         self.config = kwargs["config"]
+        self.ignoring = False
         super().__init__(*args, **kwargs)
 
     async def on_ready(self):

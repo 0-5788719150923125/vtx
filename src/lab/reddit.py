@@ -195,11 +195,12 @@ def get_vote(user):
     up = random.random()
     down = random.random()
     use_up = lambda up, down: up > down
+    vote = user.get("vote")
     if up > down:
-        if up < user["vote"].get("up", 0):
+        if up < vote.get("up", 0):
             return True
     if down > up:
-        if down < user["vote"].get("down", 0):
+        if down < vote.get("down", 0):
             return False
 
 

@@ -51,6 +51,10 @@ def validation(config):
                     "stalker": {"type": "string"},
                     "min": {"type": "integer"},
                     "max": {"type": "integer"},
+                    "vote": {
+                        "type": "dict",
+                        "schema": {"up": {"type": "float"}, "down": {"type": "float"}},
+                    },
                 },
             },
         },
@@ -187,12 +191,48 @@ async def manage_submissions(reddit, config):
             traceback.format_exc()
 
 
+def get_vote(user):
+    up = random.random()
+    down = random.random()
+    use_up = lambda up, down: up > down
+    if up > down:
+        if up < user["vote"].get("up", 0):
+            return True
+    if down > up:
+        if down < user["vote"].get("down", 0):
+            return False
+
+
+async def cast_vote(user, content):
+    vote = get_vote(user)
+    if vote in [True, False]:
+        await content.load()
+        if vote:
+            await content.upvote()
+            print(
+                colors.RED
+                + "ONE@REDDIT: "
+                + colors.WHITE
+                + f"(upvoting content from /u/{content.author})"
+            )
+        else:
+            await content.downvote()
+            print(
+                colors.RED
+                + "ONE@REDDIT: "
+                + colors.WHITE
+                + f"(downvoting content from /u/{content.author})"
+            )
+
+
 async def stalker(reddit, config):
     async def watch_submissions(reddit, config, user):
         redditor = await reddit.redditor(user)
         try:
             async for submission in redditor.stream.submissions(skip_existing=True):
                 victim = config["reddit"]["stalk"].get(user)
+
+                await cast_vote(victim, submission)
 
                 frequency = victim.get("frequency", 0.1)
 
@@ -254,6 +294,8 @@ async def stalker(reddit, config):
         try:
             async for comment in redditor.stream.comments(skip_existing=True):
                 victim = config["reddit"]["stalk"].get(user)
+
+                await cast_vote(victim, comment)
 
                 frequency = victim.get("frequency", 0.1)
                 if random.random() > frequency:

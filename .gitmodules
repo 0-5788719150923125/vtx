@@ -3,7 +3,7 @@
 	url = https://github.com/SocioProphet/clymer_research
 [submodule "aitextgen"]
 	path = src/aigen
-	url = https://github.com/LuciferianInk/aigen.git
+	url = https://github.com/Vectorrent/aigen.git
 [submodule "lab/source"]
 	path = lab/source
 	url = https://gitlab.com/the-resistance/src.eco
@@ -36,7 +36,7 @@
 	url = https://github.com/robotframework/robotframework.git
 [submodule "lab/lightning-hivemind"]
 	path = lab/lightning-hivemind
-	url = https://github.com/LuciferianInk/lightning-Hivemind.git
+	url = https://github.com/Vectorrent/lightning-Hivemind.git
 [submodule "lab/ModuleFormer"]
 	path = lab/ModuleFormer
 	url = https://github.com/IBM/ModuleFormer.git

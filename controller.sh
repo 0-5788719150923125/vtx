@@ -46,6 +46,7 @@ else
     echo "(key)     Fetch your Urbit access key."
     echo "(auto)    Turn on autopilot."
     echo "(repair)  Force-fix this workspace."
+    echo "(update)  Pull all updates from git."
     read -p "Enter the keyword corresponding to your desired action: " action
 fi
 
@@ -84,7 +85,7 @@ fi
 
 # Implement the controller
 case $action in
-    "repair" | "init")
+    "repair" | "init" | "update")
         git pull
         git submodule update
         git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'

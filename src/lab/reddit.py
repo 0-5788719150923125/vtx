@@ -53,7 +53,12 @@ def validation(config):
                     "max": {"type": "integer"},
                     "vote": {
                         "type": "dict",
-                        "schema": {"up": {"type": "float"}, "down": {"type": "float"}},
+                        "schema": {
+                            "up": {"type": "float"},
+                            "down": {"type": "float"},
+                            "min": {"type": "integer"},
+                            "max": {"type": "integer"},
+                        },
                     },
                 },
             },
@@ -191,11 +196,12 @@ async def manage_submissions(reddit, config):
             traceback.format_exc()
 
 
-def get_vote(user):
+async def get_vote(user):
     up = random.random()
     down = random.random()
     use_up = lambda up, down: up > down
-    vote = user.get("vote")
+    vote = user.get("vote", {})
+    await asyncio.sleep(random.randint(vote.get("min", 60), vote.get("max", 900)))
     if up > down:
         if up < vote.get("up", 0):
             return True
@@ -205,7 +211,7 @@ def get_vote(user):
 
 
 async def cast_vote(user, content):
-    vote = get_vote(user)
+    vote = await get_vote(user)
     if vote in [True, False]:
         await content.load()
         if vote:
@@ -233,7 +239,8 @@ async def stalker(reddit, config):
             async for submission in redditor.stream.submissions(skip_existing=True):
                 victim = config["reddit"]["stalk"].get(user)
 
-                await cast_vote(victim, submission)
+                asyncio.create_task(cast_vote(victim, submission))
+                print("testing")
 
                 frequency = victim.get("frequency", 0.1)
 
@@ -296,7 +303,7 @@ async def stalker(reddit, config):
             async for comment in redditor.stream.comments(skip_existing=True):
                 victim = config["reddit"]["stalk"].get(user)
 
-                await cast_vote(victim, comment)
+                asyncio.create_task(cast_vote(victim, comment))
 
                 frequency = victim.get("frequency", 0.1)
                 if random.random() > frequency:

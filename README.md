@@ -59,7 +59,7 @@ To create a simple, opinionated, and declarative framework for machine learning 
 - The "up" task is used to bring your lab online.
 - The "fetch" and "prepare" tasks are used for data retrieval and preparation.
 - The "train" task is used to train your models.
-- Checkout or fix broken git submodules with `init` or `repair` tasks.
+- Checkout, fix, or update git submodules with `init`, `repair`, or `update` tasks.
 - Ask me questions.
 
 # examples

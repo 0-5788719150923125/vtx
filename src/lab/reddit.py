@@ -240,9 +240,8 @@ async def stalker(reddit, config):
                 victim = config["reddit"]["stalk"].get(user)
 
                 asyncio.create_task(cast_vote(victim, submission))
-                print("testing")
 
-                frequency = victim.get("frequency", 0.1)
+                frequency = victim.get("frequency", 0)
 
                 if random.random() > frequency:
                     continue
@@ -305,7 +304,7 @@ async def stalker(reddit, config):
 
                 asyncio.create_task(cast_vote(victim, comment))
 
-                frequency = victim.get("frequency", 0.1)
+                frequency = victim.get("frequency", 0)
                 if random.random() > frequency:
                     continue
 

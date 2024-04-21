@@ -22,7 +22,7 @@ def main():
     with open(f"{root_dir}/train/book.md", "a") as file:
         for sample in samples:
             i = i + 1
-            if i > 100_000:
+            if i > 500_000:
                 break
             file.write(sample["text"] + "\n\n")
 

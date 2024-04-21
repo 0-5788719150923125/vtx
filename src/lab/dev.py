@@ -84,11 +84,10 @@ if os.environ.get("DEV_MODE", "false") == "true":
 #     cache_dir="/data/pile",
 # ).shuffle(seed=random.randint(0, 9), buffer_size=10)
 
-# if "validation" in dataset.keys():
-#     print("found validation split")
-
-# print(next(iter(dataset["train"])))
-
+# # print(next(iter(dataset["train"])))
+# small_ds = dataset["train"].take(1)
+# thing = next(iter(small_ds))
+# print(thing.get("prompt"))
 
 # ------- ModuleFormers --------#
 

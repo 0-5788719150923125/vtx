@@ -619,7 +619,7 @@ def transformer(name, text):
         f'{pronoun} {types} {verb}, "{text}"',
         f'{leader} {verb}, "{text}"',
         f'{name} {verb}, "{text}"',
-        f'Other people say, "{text}"',
+        f'People say, "{text}"',
         f"{text}",
         f"{text}",
         f"{text}",

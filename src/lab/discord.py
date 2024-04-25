@@ -239,6 +239,8 @@ class Client(discord.Client):
                                 priority=True,
                                 max_new_tokens=333,
                             )
+                            if not success:
+                                continue
                             prompt = None
                             await channel.send(output)
                             head.ctx.build_context(bias=int(bias), message=output)

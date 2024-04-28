@@ -19,7 +19,6 @@ def main():
         "api",
         "book",
         "ipfs",
-        "urbit",
         "matrix",
         "telegram",
         "reddit",

@@ -32,7 +32,6 @@ To create a simple, opinionated, and declarative framework for machine learning 
 - [book](http://localhost:8882) ([example](https://pen.university))
 - [metrics](http://localhost:8883)
 - [tuner](http://localhost:8884)
-- [urbit](http://localhost:8885)
 - [horde](http://localhost:8886)
 - [chat](https://chat.petals.dev/)
 - [petals](https://health.petals.dev/)

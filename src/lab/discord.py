@@ -273,6 +273,16 @@ class Client(discord.Client):
             await user.send(message)
             print(colors.RED + "ONE@DISCORD: " + colors.WHITE + "DM: " + message)
 
+    def mentioned_me(self, message):
+        normalized = message.content.lower()
+        if (
+            self.user.display_name.lower() in normalized
+            or message.guild.me.nick.lower() in normalized
+        ):
+            return True
+        else:
+            return False
+
     # check every Discord message
     async def on_message(self, message):
         banned = await self.check_bans(guild=message.guild, user=message.author)
@@ -376,6 +386,8 @@ class Client(discord.Client):
                     await message.delete()
             except:
                 pass
+        elif self.mentioned_me(message):
+            roll = 0
         else:
             # increase probability of a response if bot is mentioned
             if self.user.mentioned_in(message):

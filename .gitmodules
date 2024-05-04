@@ -61,3 +61,6 @@
 [submodule "lab/ode"]
 	path = lab/ode
 	url = https://github.com/0-5788719150923125/ode.git
+[submodule "lab/earn-e"]
+	path = lab/earn-e
+	url = https://github.com/Vectorrent/earn-e.git

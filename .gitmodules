@@ -64,3 +64,6 @@
 [submodule "lab/earn-e"]
 	path = lab/earn-e
 	url = https://github.com/Vectorrent/earn-e.git
+[submodule "lab/one"]
+	path = lab/one
+	url = https://github.com/0-5788719150923125/one.git

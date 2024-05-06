@@ -274,13 +274,16 @@ class Client(discord.Client):
             print(colors.RED + "ONE@DISCORD: " + colors.WHITE + "DM: " + message)
 
     def mentioned_me(self, message):
-        normalized = message.content.lower()
-        if (
-            self.user.display_name.lower() in normalized
-            or message.guild.me.nick.lower() in normalized
-        ):
-            return True
-        else:
+        try:
+            normalized = message.content.lower()
+            if (
+                self.user.display_name.lower() in normalized
+                or message.guild.me.nick.lower() in normalized
+            ):
+                return True
+            else:
+                return False
+        except:
             return False
 
     # check every Discord message

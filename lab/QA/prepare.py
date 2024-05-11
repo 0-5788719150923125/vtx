@@ -10,7 +10,7 @@ sys.path.append("/src")
 from common import get_identity, ship, wall
 
 root_dir = "/lab/QA"
-duplicates = 100
+duplicates = 10
 
 
 def main():

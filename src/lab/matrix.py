@@ -54,59 +54,48 @@ async def subscribe(user, password, config) -> None:
             if event.source["content"]["msgtype"] != "m.text":
                 return
 
-            message = event.source["content"]["body"]
+            if "m.relates_to" not in event.source["content"]:
+                return
 
+            if "m.in_reply_to" not in event.source["content"]["m.relates_to"]:
+                return
+
+            profiles = config.get("profiles", [])
+
+            event_id = event.source["content"]["m.relates_to"]["m.in_reply_to"][
+                "event_id"
+            ]
+            response = await client.room_get_event(room.room_id, event_id)
+            original_sender = response.event.source["sender"]
+            if not any(profile["username"] in original_sender for profile in profiles):
+                return
+
+            profile = None
+            for profile in profiles:
+                if profile["username"] in original_sender:
+                    profile = profile
+                    break
+
+            message = event.source["content"]["body"]
             group = re.search(r"^(?:[>].*[\n][\n])(.*)", message)
             if group:
                 message = group[1]
 
-            personas = config.get("personas", [])
-
             sender_id = get_identity(event.sender)
-            bias = 806051627198709760
-
-            if event.sender == client.user:
-                sender_id = str(bias)
-
             head.ctx.build_context(bias=int(sender_id), message=message)
-
-            passed = False
-            if "!Q" in message:
-                passed = True
-            if not passed:
-                if "Architect" not in message:
-                    if "m.relates_to" in event.source["content"]:
-                        if (
-                            "m.in_reply_to"
-                            not in event.source["content"]["m.relates_to"]
-                        ):
-                            return
-                        if "luciferianink" not in event.source["content"]["body"]:
-                            return
-                    else:
-                        return
 
             print(colors.BLUE + "ONE@MATRIX: " + colors.WHITE + message)
 
-            task = asyncio.create_task(client.room_typing(room.room_id))
-            await asyncio.gather(task)
-
-            if "!Q" in message:
-                message = message.replace(" !Q ", " ")
-                message = message.replace("!Q ", "")
-                message = message.replace("!Q", "")
-                output = await head.ctx.query(question=message, temperature=0.7)
-                success = True
-            else:
-                success, bias, output, seeded = await head.ctx.chat(
-                    priority=True, personas=personas
-                )
+            success, bias, output, seeded = await head.ctx.chat(
+                priority=True, personas=profile.get("persona", [])
+            )
 
             if success == False:
                 print(output)
                 return
 
-            response = f"[BOT] {output}"
+            tag = profile.get("tag", "[BOT]")
+            response = f"{tag} {output}"
 
             await client.room_send(
                 room_id=room.room_id,

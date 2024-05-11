@@ -7,7 +7,7 @@ import sys
 
 sys.path.append("/src")
 
-from common import config, get_identity, ship, wall
+from common import config, get_identity, list_full_paths, ship, wall
 
 root_dir = "/lab/discord"
 
@@ -54,8 +54,10 @@ def main():
     successes = 0
     failures = 0
 
-    for filename in os.listdir(f"{root_dir}/source"):
-        with open(os.path.join(f"{root_dir}/source", filename), "r") as file:
+    source_files = list_full_paths(f"{root_dir}/source")
+
+    for filename in source_files:
+        with open(filename, "r") as file:
             data = json.load(file)
 
             data_dict = {obj["id"]: obj for obj in data["messages"]}
@@ -75,7 +77,11 @@ def main():
                     if author_id == False:
                         continue
 
-                with open(f"{root_dir}/train/{filename}.txt", "a") as txt_file:
+                new_file = filename.replace(f"{root_dir}/source/", f"{root_dir}/train/")
+
+                os.makedirs(os.path.dirname(new_file), exist_ok=True)
+
+                with open(f"{new_file}.txt", "a") as txt_file:
                     if i["type"] == "Reply":
                         message_ref_id = i["reference"]["messageId"]
 

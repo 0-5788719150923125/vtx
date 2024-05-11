@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 
 sys.path.append("/src")
@@ -24,31 +25,28 @@ def main():
 
     # Export direct messages
     if config["discord"]["export_dms"] == True:
-        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "{root_dir}/source/dm-%c.json" -f "JSON" --fuck-russia'
+        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportdm -t "{discord_token}" -o "{root_dir}/source/dm/%c - %C (%G).json" -f "JSON" --fuck-russia'
         os.system(command)
 
     # For every server listed in config, iterate over options, and download messages
     for server in config["discord"]["servers"]:
         print("exporting " + str(server))
 
-        skip = False
-        s = config["discord"]["servers"][server]
-        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportguild --guild "{str(server)}" -t "{discord_token}" -o "{root_dir}/source/g-%g-%c.json" -f "JSON" --include-threads "all" --fuck-russia'
-        if s:
-            if "skip" in s:
-                skip = s.get("skip", False)
-            if skip == True:
-                continue
-            if "before" in s:
-                command = command + ' --before "' + s["before"] + '"'
-            if "after" in s:
-                command = command + ' --after "' + s["after"] + '"'
-            if "past" in s:
-                d = get_past_datetime(s["past"])
-                command = command + f' --after "{str(d)}"'
-        for filename in os.listdir(f"{root_dir}/source"):
-            if filename.startswith(f"g-{str(server)}"):
-                os.remove(os.path.join(f"{root_dir}/source", filename))
+        s = config["discord"]["servers"].get(server, {})
+        command = f'dotnet /usr/share/dce/DiscordChatExporter.Cli.dll exportguild --guild "{str(server)}" -t "{discord_token}" -o "{root_dir}/source/%g/%c - %C (%G).json" -f "JSON" --include-threads "all" --fuck-russia'
+
+        if s.get("skip", False):
+            continue
+        if "before" in s:
+            command = command + ' --before "' + s["before"] + '"'
+        if "after" in s:
+            command = command + ' --after "' + s["after"] + '"'
+        if "past" in s:
+            d = get_past_datetime(s["past"])
+            command = command + f' --after "{str(d)}"'
+
+        shutil.rmtree(f"{root_dir}/source/{server}", ignore_errors=True)
+
         os.system(command)
 
 

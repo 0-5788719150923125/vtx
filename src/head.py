@@ -67,6 +67,7 @@ def validation(config):
             "type": "dict",
             "schema": {
                 "devices": {"type": ["string", "list"]},
+                "device_map": {"type": "string" or "dict"},
                 "resume": {"type": "boolean"},
                 "regen": {"type": "boolean"},
                 "corpus": {"type": "string"},
@@ -109,6 +110,7 @@ def validation(config):
                 "lora_alpha": {"type": "integer"},
                 "lora_dropout": {"type": "float"},
                 "use_rslora": {"type": "boolean"},
+                "use_dora": {"type": "boolean"},
                 "bias": {
                     "type": "string",
                     "allowed": ["none", "lora_only", "all"],

@@ -180,11 +180,38 @@ chaos:
         - c4
 
 envy:
-  model: facebook/opt-350m
-  info: a simple transformer
-  generation_profile: lowpenalty
   training:
+    regen: False
     type: lora
+    r: 16
+    lora_alpha: 24
+    lora_dropout: 0.01
+    bias: "all"
+    use_rslora: False
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - out_proj
+      - fc1
+      - fc2
+    gradient_checkpointing: True
+    optimizer: AdamW
+    generate_every: 250
+    learning_rate: 0.001
+    swa_learning_rate: 0.01
+    block_size: 2048
+    stride: 256
+    num_steps: 10000
+    warmup_steps: 100
+    weight_decay: 0.001
+    gradient_clip_val: 1.0
+    scheduler: cosine
+    batch_size: 1
+    gradient_accumulation_steps: 27
+    val_split: 0.05
+    val_interval: 10000
+
 
 malice:
   model: cerebras/Cerebras-GPT-111M

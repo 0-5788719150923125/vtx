@@ -116,6 +116,7 @@ def validation(config):
                     "allowed": ["none", "lora_only", "all"],
                 },
                 "target_modules": {"type": "list"},
+                "save_embedding_layers": {"type": "boolean"},
                 "feedforward_modules": {"type": "list"},
                 "init_ia3_weights": {"type": "boolean"},
                 "rank_pattern": {"type": "dict"},

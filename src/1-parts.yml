@@ -180,6 +180,9 @@ chaos:
         - c4
 
 envy:
+  model: facebook/opt-350m
+  info: a simple transformer
+  generation_profile: lowpenalty
   training:
     regen: False
     type: lora

@@ -128,6 +128,7 @@ def validation(config):
                         "Adan",
                         "AdamW",
                         "Lion",
+                        "Prodigy",
                         "Ranger21",
                         "RMSProp",
                         "SophiaH",

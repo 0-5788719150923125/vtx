@@ -152,7 +152,7 @@
         "label": "upload",
         "detail": "Upload adapters to a remote server via SSH.",
         "type": "shell",
-        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && scp -i one.key -r data/adapters opc@129.159.66.224:/home/opc/vtx/data",
+        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && rsync -avz --exclude='*.ckpt' -e 'ssh -i one.key' data/adapters opc@129.159.66.224:/home/opc/vtx/data",
       },
       {
         "label": "config",

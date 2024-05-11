@@ -54,7 +54,7 @@ To create a simple, opinionated, and declarative framework for machine learning 
 > <i>To clone faster, consider adding `--depth 1` to clone only the most recent commit, reducing download time.</i>
 - Use VSCode tasks with `ctrl + shift + p`, the `controller.sh` script (on Linux/Mac) or the `controller.ps1` script (Windows) to control the AI.
 - Place configurations into a config.yml file. ([example 1](./src/1-parts.yml), [example 2](./src/2-data.yml))
-- Put credentials into a .env file at the root of this project. ([example.env](./examples/inference/.env))
+- Put credentials into a .env file at the root of this project. ([example .env file](./examples/.env))
 - The "up" task is used to bring your lab online.
 - The "fetch" and "prepare" tasks are used for data retrieval and preparation.
 - The "train" task is used to train your models.

@@ -176,9 +176,7 @@ def main():
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
         precision=model_config.get("precision", 32),
-        device_map=train_config.get(
-            "device_map", model_config.get("device_map", "auto")
-        ),
+        device_map=model_config.get("device_map", "auto"),
     )
 
     train_config["static_data"] = static_data

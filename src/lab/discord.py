@@ -139,7 +139,7 @@ class Client(discord.Client):
             tree = app_commands.CommandTree(self)
 
             @tree.command(name="echo", description="Say something.")
-            @app_commands.default_permissions(manage_roles=True)
+            @app_commands.default_permissions(administrator=True)
             async def echo_command(interaction, message: str):
                 await interaction.response.send_message(
                     "Message sent.",

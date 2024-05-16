@@ -11,7 +11,7 @@ from pprint import pprint
 import discord
 import requests
 from cerberus import Validator
-from discord import app_commands
+from discord import Permissions, app_commands
 
 import eye
 import head
@@ -135,26 +135,39 @@ class Client(discord.Client):
 
     async def on_ready(self):
         # Register slash commands
-        tree = app_commands.CommandTree(self)
+        try:
+            tree = app_commands.CommandTree(self)
 
-        if self.config["discord"].get("horde_enabled", False):
-
-            @tree.command(name="x", description="Plant a seed.")
-            async def x_command(interaction):
-                message = await interaction.response.send_message(
-                    "Allow me to create something for you.",
+            @tree.command(name="echo", description="Say something.")
+            @app_commands.default_permissions(manage_roles=True)
+            async def echo_command(interaction, message: str):
+                await interaction.response.send_message(
+                    "Message sent.",
                     ephemeral=True,
-                    delete_after=3600,
+                    delete_after=60,
                 )
-                producer(
-                    {
-                        "event": "generate_image",
-                        "source": "discord",
-                        "channel_id": interaction.channel.id,
-                    },
-                )
+                await interaction.channel.send(message)
 
-        await tree.sync()
+            if self.config["discord"].get("horde_enabled", False):
+
+                @tree.command(name="x", description="Plant a seed.")
+                async def x_command(interaction):
+                    message = await interaction.response.send_message(
+                        "Allow me to create something for you.",
+                        ephemeral=True,
+                        delete_after=3600,
+                    )
+                    producer(
+                        {
+                            "event": "generate_image",
+                            "source": "discord",
+                            "channel_id": interaction.channel.id,
+                        },
+                    )
+
+            await tree.sync()
+        except Exception as e:
+            print(e)
 
         # List all Discord servers on startup
         guilds = []

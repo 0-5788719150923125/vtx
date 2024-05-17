@@ -230,6 +230,7 @@ def create_dataset(
         "/lab/reaper/assets",
         "/lab/reaper/public",
         "/lab/aigen/aigen/static",
+        "/lab/opencog/learn/attic",
         "/lab/opencog/learn/learn-lang-diary",
         "/src/__pycache__",
         "/src/lab/__pycache__",

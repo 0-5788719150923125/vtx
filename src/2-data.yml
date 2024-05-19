@@ -11,10 +11,6 @@ api:
 ipfs:
   enabled: True
 
-urbit:
-  planet: False
-  moon: False
-
 only: toehider
 
 personas:
@@ -114,16 +110,6 @@ transformers:
       penalty_alpha: 0.6
       top_k: 4
       repetition_penalty: 1.23
-    longform:
-      do_sample: True
-      min_new_tokens: 11
-      max_new_tokens: 222
-      temperature: 0.8
-      eta_cutoff: 0.002
-      penalty_alpha: 0.59
-      top_k: 4
-      repetition_penalty: 1.1
-      no_repeat_ngram_size: 13
     lowpenalty:
       do_sample: True
       min_new_tokens: 1
@@ -134,6 +120,16 @@ transformers:
       top_k: 4
       repetition_penalty: 1.1
       no_repeat_ngram_size: 9
+    longform:
+      do_sample: True
+      min_new_tokens: 11
+      max_new_tokens: 222
+      temperature: 0.8
+      eta_cutoff: 0.002
+      penalty_alpha: 0.59
+      top_k: 4
+      repetition_penalty: 1.1
+      no_repeat_ngram_size: 13
 
 reddit:
   enabled: False

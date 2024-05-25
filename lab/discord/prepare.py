@@ -101,6 +101,8 @@ def main():
 
                             if reply_author_id != False:
                                 sanitized = sanitizer(formatter(result))
+                                if "<@False>" in sanitized:
+                                    continue
                                 content = (
                                     wall + reply_author_id + ship + " " + sanitized
                                 )
@@ -111,6 +113,8 @@ def main():
                                     failures += 1
 
                     sanitized = sanitizer(formatter(i))
+                    if "<@False>" in sanitized:
+                        continue
                     content = wall + author_id + ship + " " + sanitized
                     try:
                         txt_file.write(f"{content}\n".format(content))

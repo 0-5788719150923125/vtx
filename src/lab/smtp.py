@@ -52,12 +52,12 @@ def send_email(config):
 title: {subject}
 author: {config.get('author', 'Ink')}
 date: {get_current_date()}
-description: {config.get('description', 'A short email and a story, written for a friend.')}
+prompt: {config.get('prompt', 'Write a short email and a story, for a friend.')}
 ```
 
 # {subject}
 ---
-{config.get('prompt')}""",
+{config.get('prefix')}""",
                 temperature=1.1,
                 min_new_tokens=512,
                 max_new_tokens=768,

@@ -54,27 +54,36 @@ async def subscribe(user, password, config) -> None:
             if event.source["content"]["msgtype"] != "m.text":
                 return
 
-            if "m.relates_to" not in event.source["content"]:
-                return
-
-            if "m.in_reply_to" not in event.source["content"]["m.relates_to"]:
-                return
-
             profiles = config.get("profiles", [])
-
-            event_id = event.source["content"]["m.relates_to"]["m.in_reply_to"][
-                "event_id"
-            ]
-            response = await client.room_get_event(room.room_id, event_id)
-            original_sender = response.event.source["sender"]
-            if not any(profile["username"] in original_sender for profile in profiles):
-                return
-
             profile = None
-            for profile in profiles:
-                if profile["username"] in original_sender:
-                    profile = profile
-                    break
+
+            # For handling @mentions
+            if "m.mentions" in event.source["content"]:
+                for user in event.source["content"]["m.mentions"].get("user_ids", []):
+                    for p in profiles:
+                        if p["username"] in user:
+                            profile = p
+
+            # For handling replies
+            if profile is None:
+                if "m.relates_to" not in event.source["content"]:
+                    return
+
+                if "m.in_reply_to" not in event.source["content"]["m.relates_to"]:
+                    return
+
+                event_id = event.source["content"]["m.relates_to"]["m.in_reply_to"][
+                    "event_id"
+                ]
+                response = await client.room_get_event(room.room_id, event_id)
+                original_sender = response.event.source["sender"]
+                if not any(p["username"] in original_sender for p in profiles):
+                    return
+
+                for p in profiles:
+                    if p["username"] in original_sender:
+                        profile = p
+                        break
 
             message = event.source["content"]["body"]
             group = re.search(r"^(?:[>].*[\n][\n])(.*)", message)
@@ -90,8 +99,7 @@ async def subscribe(user, password, config) -> None:
                 priority=True, personas=profile.get("persona", [])
             )
 
-            if success == False:
-                print(output)
+            if not success:
                 return
 
             tag = profile.get("tag", "[BOT]")

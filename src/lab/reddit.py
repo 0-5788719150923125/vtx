@@ -517,13 +517,19 @@ async def subscribe_comments(reddit, config):
             if filter_response(sub_config, config, submission, comment):
                 continue
 
+            msg = comment.body[:66] + "..." if len(comment.body) > 66 else comment.body
+            print(
+                colors.BLUE
+                + "ONE@REDDIT:"
+                + colors.WHITE
+                + f" ({comment.subreddit.display_name}) "
+                + msg
+            )
+
             success, bias, output, seeded = await head.ctx.chat(
                 ctx=context,
                 personas=persona,
             )
-
-            msg = comment.body[:66] + "..." if len(comment.body) > 66 else comment.body
-            print(colors.BLUE + "ONE@REDDIT: " + colors.WHITE + msg)
 
             if success == False:
                 continue

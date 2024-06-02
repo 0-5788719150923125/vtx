@@ -186,7 +186,7 @@ class Ink:
             self.staged = read_from_file(f)
         else:
             self.new_tokens = 333
-        # self.staged = self.staged.rstrip("```")
+        self.staged = self.staged.rstrip("```")
 
     def chunk_prompt(self):
         partial = math.floor(self.model_max_length * 0.8)

@@ -14,7 +14,7 @@ services:
         DCE_VERSION: 2.42.3
         DOTNET_VERSION: 7.0.10
         HUGO_VERSION: 0.124.1
-        NODEMON_VERSION: 3.0.1
+        NODEMON_VERSION: 3.1.2
         NODE_VERSION: 20
     deploy:
       resources:

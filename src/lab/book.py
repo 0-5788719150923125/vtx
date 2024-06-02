@@ -196,11 +196,13 @@ class Ink:
 
     async def write(self, t, entry):
         try:
+
             self.type = t
             self.tags = entry.get("tags", [])
             # self.bias = entry.get("bias", None)
             self.create_prompt(entry)
             self.chunk_prompt()
+            print(colors.RED + "ONE@KB: " + colors.WHITE + self.title)
             output = await head.ctx.prompt(
                 prompt=self.staged,
                 # bias=self.bias,
@@ -217,13 +219,14 @@ class Ink:
                 file_name=self.file,
                 content=output,
             )
-            pattern = re.compile(r"^(---\n.+\#{2}\sRECORD)", re.DOTALL)
-            group = re.search(pattern, output)
-            clean = output
-            if group is not None and group[0] is not None:
-                clean = output.replace(group[0], "## RECORD")
-            elif self.type == "prose":
+
+            # strip everything before RECORD, including RECORD line
+            pattern = re.compile(r"^(.*?## RECORD.*?\n)", re.DOTALL | re.MULTILINE)
+            clean = re.sub(pattern, "", output, count=1)
+
+            if self.type == "prose":
                 clean = "\n\n".join(output.splitlines()[2:])
+
             producer(
                 {
                     "event": "book_updated",
@@ -233,7 +236,6 @@ class Ink:
                     "tags": self.tags,
                 },
             )
-            print(colors.RED + "ONE@KB: " + colors.WHITE + self.title)
 
         except:
             print(traceback.format_exc())

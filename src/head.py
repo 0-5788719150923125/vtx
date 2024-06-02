@@ -528,7 +528,7 @@ class Cortex:
         while attempt < max_attempts:
             try:
                 if attempt > 0:
-                    temperature *= 0.9
+                    temperature *= 1.1
 
                 attempt += 1
                 seed = nist_beacon()
@@ -741,127 +741,6 @@ class Cortex:
             except Exception as e:
                 logging.error(e)
                 output = False
-
-        self.remove_from_queue(priority)
-        return output
-
-    @to_thread
-    def query(
-        self,
-        question="",
-        priority: bool = False,
-        temperature: float = 0.23,
-        max_new_tokens: int = 333,
-        decay_after_length: int = 66,
-        decay_factor: float = 0.023,
-    ):
-        self.wait_in_queue(priority)
-
-        eos_token = self.teacher.tokenizer.eos_token
-
-        prompt = f"""
-        I am a powerful artificial intelligence, who helps users to answer their questions. Here are some example questions:
-
-        Q:
-
-        What is the meaning of life?
-
-        A:
-
-        {eos_token}
-
-        According to the Hitchhiker's Guide to the Galaxy, the answer to that question is "42".
-
-        Q:
-
-        What is a question?
-
-        A:
-
-        I don't know, but this is an answer!
-
-        {eos_token}
-
-        Q: 
-        
-        What is Docker?
-
-        A:
-
-        Docker is a container runtime.
-
-        {eos_token}
-
-        Q:
-
-        {question}
-
-        A:"""
-
-        # eos = self.teacher.tokenizer(wall, add_special_tokens=False).input_ids[0]
-        # push = {
-        #     self.get_tokens_as_tuple(s): b for s, b in {wall: -5.9, "Q:": 5.9}.items()
-        # }
-        bad = [
-            self.teacher.tokenizer(token, add_special_tokens=False).input_ids
-            for token in [wall]
-        ]
-
-        eos_token_ids = []
-        for token in [eos_token, "Q:", "Q:\n", "Q:\n\n", ":\n", ":\n\n"]:
-            eos_token_ids.append(
-                self.teacher.tokenizer.convert_tokens_to_ids(
-                    self.teacher.tokenizer.tokenize(token)[0]
-                )
-            )
-
-        prompt = dedent(prompt)
-
-        try:
-            seed = nist_beacon()
-
-            # https://huggingface.co/docs/transformers/main_classes/text_generation
-            completion = self.teacher.generate(
-                prompt=prompt,
-                do_sample=True,
-                min_length=23,
-                max_new_tokens=self.config.get("max_new_tokens", max_new_tokens),
-                temperature=temperature,
-                eta_cutoff=0.002,
-                penalty_alpha=0.6,
-                top_k=4,
-                repetition_penalty=1.5,
-                no_repeat_ngram_size=13,
-                encoder_repetition_penalty=0.999,
-                # exponential_decay_length_penalty=(decay_after_length, decay_factor),
-                low_memory=self.config.get("low_memory", False),
-                renormalize_logits=True,
-                remove_invalid_values=True,
-                max_time=360,
-                seed=seed[1],
-                use_cache=True,
-                # suppress_tokens=[eos],
-                # sequence_bias=push,
-                bad_words_ids=bad,
-                eos_token_id=eos_token_ids,
-            )
-
-            generation = "\n".join(completion.splitlines()[len(prompt.splitlines()) :])
-
-            output = (
-                generation.lstrip(" ")
-                .lstrip("\n")
-                .lstrip("\n\r")
-                .rstrip("Q:")
-                .rstrip("Q")
-                .rstrip("\n")
-                .rstrip(r"\n")
-            )
-
-        except Exception as e:
-            logging.error(e)
-            print(traceback.format_exc())
-            output = e
 
         self.remove_from_queue(priority)
         return output

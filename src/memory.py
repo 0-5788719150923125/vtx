@@ -1,14 +1,28 @@
 import logging
 import os
 
-import numpy as np
 from chromadb import Documents, EmbeddingFunction, Embeddings, chromadb
 from chromadb.config import Settings
+from tinydb import Query, TinyDB
 
 import head
 from common import list_full_paths, random_string
 
 focus = os.environ["FOCUS"]
+
+
+class KeyValue:
+    def __init__(self, table):
+        self.db = TinyDB(f"/data/db-{table}.json")
+        self.table = self.db.table(table)
+
+    def insert(self, record):
+        self.table.insert(record)
+
+    def query(self, key, value):
+        q = Query()
+        return self.table.search(q[key] == value)
+
 
 # client = chromadb.EphemeralClient(Settings(anonymized_telemetry=False))
 

@@ -44,16 +44,12 @@ async def client(config) -> None:
             # while message.is_waiting_for_reply:
             await message.answer_chat_action("typing")
 
-            if "!Q" in message["text"]:
-                prompt = message["text"].replace("!Q", "").lstrip(" ")
-                bias = get_identity()
-                output = await head.ctx.query(question=prompt, priority=True)
-            else:
-                success, bias, output, seeded = await head.ctx.chat(
-                    personas=persona, priority=True
-                )
-                if success == False:
-                    return
+            success, bias, output, seeded = await head.ctx.chat(
+                personas=persona, priority=True
+            )
+            if not success:
+                return
+
             await message.answer(output)
             head.ctx.build_context(bias=int(bias), message=output)
             print(colors.RED + "ONE@TELEGRAM: " + colors.WHITE + output)

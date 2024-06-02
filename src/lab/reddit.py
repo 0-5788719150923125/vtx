@@ -16,6 +16,7 @@ from cerberus import Validator
 import head
 from common import colors, get_daemon, get_identity
 from events import consumer, producer
+from memory import KeyValue
 
 
 def main(config) -> None:
@@ -138,8 +139,9 @@ async def follow_victims(reddit, config):
 
 
 async def manage_submissions(reddit, config):
+    db = KeyValue("reddit")
     subreddits = config["reddit"]["subs"]
-    cache_miss = {}
+
     while True:
         try:
             await asyncio.sleep(6.66)
@@ -149,9 +151,6 @@ async def manage_submissions(reddit, config):
 
             title = item["title"]
             content = item["content"]
-
-            if cache_miss.get(title) is None:
-                cache_miss[title] = 0
 
             for name in subreddits:
                 sub = subreddits.get(name, {})
@@ -165,35 +164,28 @@ async def manage_submissions(reddit, config):
                 # We submit to the first tag found
                 subreddit = await reddit.subreddit(name)
 
-                edited = False
-                async for submission in subreddit.search(
-                    query=f"title:'{title}'", syntax="lucene"
-                ):
-                    if submission.title == title:
-                        await submission.edit(body=content)
-                        await submission.mod.approve()
-                        edited = True
-                        cache_miss[title] = 0
-                        break
+                result = db.query("title", title)
 
-                if not edited:
-                    cache_miss[title] += 1
-                    print(f"cache miss {cache_miss[title]}")
-                    if cache_miss[title] <= 10:
-                        continue
-                    cache_miss[title] = 0
-                    try:
-                        submission = await subreddit.submit(
-                            title=title, selftext=content
-                        )
-                        await submission.load()
-                        await submission.mod.approve()
-                    except Exception as e:
-                        logging.error(e)
+                if result:
+                    submission = await fetch_submission_by_id(reddit, result[0]["id"])
+                    await submission.edit(body=content)
+                    await submission.mod.approve()
+                else:
+                    submission = await subreddit.submit(title=title, selftext=content)
+                    await submission.load()
+                    await submission.mod.approve()
+                    db.insert({"id": submission.id, "title": title})
+
                 break
 
         except Exception as e:
             traceback.format_exc()
+
+
+async def fetch_submission_by_id(reddit, submission_id):
+    submission = await reddit.submission(id=submission_id)
+    await submission.load()
+    return submission
 
 
 async def get_vote(user):
@@ -253,10 +245,9 @@ async def stalker(reddit, config):
 
                 context = [
                     {
-                        "bias": get_identity(),
-                        "message": f"/r/{submission.subreddit.display_name}",
+                        "bias": int(op),
+                        "message": f"{submission.title} (/r/{submission.subreddit.display_name})",
                     },
-                    {"bias": int(op), "message": submission.title},
                     {"bias": int(op), "message": submission.selftext},
                 ]
 
@@ -429,10 +420,9 @@ async def subscribe_submissions(reddit, config):
 
             context = [
                 {
-                    "bias": get_identity(),
-                    "message": f"/r/{submission.subreddit.display_name}",
+                    "bias": int(op),
+                    "message": f"{submission.title} (/r/{submission.subreddit.display_name})",
                 },
-                {"bias": int(op), "message": submission.title},
                 {"bias": int(op), "message": submission.selftext},
             ]
 

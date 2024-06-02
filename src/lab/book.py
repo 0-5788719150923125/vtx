@@ -5,6 +5,7 @@ import os
 import random
 import re
 import time
+import traceback
 
 import psutil
 import yaml
@@ -185,7 +186,7 @@ class Ink:
             self.staged = read_from_file(f)
         else:
             self.new_tokens = 333
-        self.staged = self.staged.rstrip("```")
+        # self.staged = self.staged.rstrip("```")
 
     def chunk_prompt(self):
         partial = math.floor(self.model_max_length * 0.8)
@@ -234,10 +235,7 @@ class Ink:
             )
             print(colors.RED + "ONE@KB: " + colors.WHITE + self.title)
 
-        except Exception as e:
-            logging.error(e)
-            import traceback
-
+        except:
             print(traceback.format_exc())
 
 

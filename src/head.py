@@ -39,7 +39,6 @@ from common import (
     wall,
 )
 from extensions import register_models
-from modeling import get_ship_class
 
 register_models()
 
@@ -662,24 +661,7 @@ class Cortex:
         push = {self.get_tokens_as_tuple(s): b for s, b in sequence_biases.items()}
         bad_tokens = [
             self.teacher.tokenizer(token, add_special_tokens=False).input_ids
-            for token in [
-                "{{<",
-                wall,
-                f"\n{wall}",
-                f"\n\n{wall}",
-                # "#",
-                # "##",
-                # "###",
-                # "`",
-                # "---",
-                # "+++",
-                # "\n#",
-                # "\n\n#",
-                # "\n##",
-                # "\n\n##",
-                # "\n###",
-                # "\n\n###",
-            ]
+            for token in ["{{<", wall, f"\n{wall}", f"\n\n{wall}"]
         ]
 
         # suppress_tokens = list(
@@ -694,27 +676,6 @@ class Cortex:
         #                     "#",
         #                     "##",
         #                     "###",
-        #                     "### ",
-        #                     "## ",
-        #                     "# ",
-        #                     "\n#",
-        #                     "\n##",
-        #                     "\n###",
-        #                     "\n### ",
-        #                     "\n## ",
-        #                     "\n# ",
-        #                     "`",
-        #                     "``",
-        #                     "```",
-        #                     "+",
-        #                     "++",
-        #                     "+++",
-        #                     "\n`",
-        #                     "\n``",
-        #                     "\n```",
-        #                     "\n+",
-        #                     "\n++",
-        #                     "\n+++",
         #                 ]
         #             ]
         #         )
@@ -805,10 +766,6 @@ class Cortex:
         self.remove_from_queue(priority)
         return output
 
-
-# load ship designs
-if "class" in config[focus]:
-    config = get_ship_class(config, focus)
 
 # Load the model and schedule periodic reloading
 ctx = Cortex(config, focus)

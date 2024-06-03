@@ -39,6 +39,7 @@ services:
       - ./data/adapters:/data/adapters
     environment:
       HIVEMIND_LOGLEVEL: ERROR
+      PETALS_LOGGING: 'false'
 
   ipf:
     image: ipfs/kubo:latest

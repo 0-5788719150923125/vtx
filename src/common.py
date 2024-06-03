@@ -76,6 +76,26 @@ def merge_dict(old, new):
     return merge({}, old, new, strategy=Strategy.REPLACE)
 
 
+def get_ship_class(config, focus):
+    """Merge model designs into the global configuration."""
+
+    print("loading ship design")
+    time.sleep(5)
+    c = config[focus].get("class")
+    with open(f"/src/hangar/{c}.yml", "r") as file:
+        class_config = yaml.load(file, Loader=yaml.FullLoader)
+        spec = {focus: class_config}
+        print(spec)
+        print(f"class {c} was found")
+        time.sleep(2)
+        return merge_dict(spec, config)
+
+
+# load ship designs
+if "class" in config[focus]:
+    config = get_ship_class(config, focus)
+
+
 # Color codes
 class colors:
     BLUE = "\033[94m"

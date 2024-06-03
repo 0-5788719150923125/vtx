@@ -51,27 +51,30 @@ def send_email(config):
 title: {subject}
 author: {config.get('author', 'Ink')}
 date: {get_current_date()}
-prompt: {config.get('prompt', 'Write a short email and a story, as if for a friend.')}
+instruction: {config.get('instruction', 'Write a short email and a story, as if for a friend.')}
 themes: {config.get('themes', 'lighthearted, comical')}
 ```
 
 # {subject}
 ---
-{config.get('prefix')}"""
-
-        output = asyncio.run(
-            head.ctx.prompt(
-                prompt=prompt,
-                min_new_tokens=512,
-                max_new_tokens=768,
-                generation_profile="longform",
-                temperature=config.get("temperature", 0.9),
-                disposition=config.get("disposition", None),
-                forbidden_chars=["#", "`", "---", "+++", "¶"],
-            )
-        )
+{config.get('prompt')}"""
 
         try:
+            output = asyncio.run(
+                head.ctx.prompt(
+                    prompt=prompt,
+                    min_new_tokens=512,
+                    max_new_tokens=768,
+                    generation_profile="longform",
+                    temperature=config.get("temperature", 0.9),
+                    disposition=config.get("disposition", None),
+                    forbidden_chars=["#", "`", "--", "---", "+", "++", "+++", "¶"],
+                )
+            )
+
+            if not output:
+                continue
+
             server = smtplib.SMTP(smtp_server, smtp_port)
             server.starttls()
 
@@ -88,10 +91,11 @@ themes: {config.get('themes', 'lighthearted, comical')}
                 "\n".join(strip_last).replace(r"\r\n|\r|\n", "\n"), 2
             )
             redacted = re.sub(
-                r"http\S+",
+                r"\bhttp[s]?://[^\s)]+",
                 "$REDACTED",
                 unified,
             )
+
             uniform = textwrap.dedent(redacted)
 
             prepared = MIMEText(uniform, "plain", "utf-8")

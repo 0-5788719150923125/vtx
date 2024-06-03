@@ -41,13 +41,8 @@ from common import (
     nist_beacon,
 )
 from extensions import register_models
-from modeling import get_ship_class
 
 register_models()
-
-# load ship designs
-if "class" in config[focus]:
-    config = get_ship_class(config, focus)
 
 model_config = config[focus]
 train_config = model_config["training"]

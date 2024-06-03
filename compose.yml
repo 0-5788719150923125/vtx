@@ -26,6 +26,5 @@ services:
       - .env
     environment:
       FOCUS: ${FOCUS:-toe}
-      # HIVEMIND_LOGLEVEL: info
-      PETALS_LOGGING: 'false'
       RAY_memory_monitor_refresh_ms: 0
+      RAY_DISABLE_DOCKER_CPU_WARNING: 1

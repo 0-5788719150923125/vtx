@@ -46,24 +46,28 @@ def send_email(config):
         print(
             f"{colors.RED}ONE@SMTP: {colors.WHITE}" + "sending message to " + subscriber
         )
-        output = asyncio.run(
-            head.ctx.prompt(
-                prompt=f"""```
+
+        prompt = f"""```
 title: {subject}
 author: {config.get('author', 'Ink')}
 date: {get_current_date()}
-prompt: {config.get('prompt', 'Write a short email and a story, for a friend.')}
+prompt: {config.get('prompt', 'Write a short email and a story, as if for a friend.')}
+themes: {config.get('themes', 'lighthearted, comical')}
 ```
 
 # {subject}
 ---
-{config.get('prefix')}""",
-                temperature=1.1,
+{config.get('prefix')}"""
+
+        output = asyncio.run(
+            head.ctx.prompt(
+                prompt=prompt,
                 min_new_tokens=512,
                 max_new_tokens=768,
                 generation_profile="longform",
+                temperature=config.get("temperature", 0.9),
                 disposition=config.get("disposition", None),
-                # eos_tokens=["\n", "\n\n", "\\", ".", "?", "!"],
+                forbidden_chars=["#", "`", "---", "+++", "¶"],
             )
         )
 
@@ -78,7 +82,7 @@ prompt: {config.get('prompt', 'Write a short email and a story, for a friend.')}
             message["To"] = subscriber
             message["Subject"] = Header(subject, "utf-8")
 
-            strip_prompt = output.splitlines()[9:]
+            strip_prompt = output.splitlines()[10:]
             strip_last = strip_prompt[:-2]
             unified = unified_newlines(
                 "\n".join(strip_last).replace(r"\r\n|\r|\n", "\n"), 2
@@ -97,10 +101,8 @@ prompt: {config.get('prompt', 'Write a short email and a story, for a friend.')}
             server.sendmail(sender_email, subscriber, message.as_string())
             server.quit()
         except smtplib.SMTPSenderRefused as e:
-            error_code = e.smtp_code
-            error_msg = e.smtp_error
-            print(f"Error Code: {error_code}")
-            print(f"Error Message: {error_msg}")
+            print(f"Error Code: {e.smtp_code}")
+            print(f"Error Message: {e.smtp_error}")
 
 
 if __name__ == "__main__":

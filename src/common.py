@@ -23,6 +23,8 @@ from mergedeep import Strategy, merge
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
+import eye
+
 wall = "¶"
 ship = ":>"
 
@@ -253,6 +255,23 @@ def make_random_deterministic(seed):
 
 def has_unclosed_code_block(s):
     return s.count("```") % 2 != 0
+
+
+def get_image_urls(string):
+    pattern = r"(https?:\/\/.*\.(?:png|jpg|jpeg|gif))"
+    return re.findall(pattern, string)
+
+
+async def analyze_images(urls):
+    preds = []
+    for url in urls:
+        pred = await eye.ctx.analyze_image(url)
+        preds.append(pred)
+    return preds
+
+
+async def predict_images(string):
+    return await analyze_images(get_image_urls(string))
 
 
 # Generate a pseudo-identity, in the Discord ID format

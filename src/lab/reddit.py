@@ -14,7 +14,7 @@ import ray
 from cerberus import Validator
 
 import head
-from common import colors, get_daemon, get_identity
+from common import colors, get_daemon, get_identity, predict_images
 from events import consumer, producer
 from memory import KeyValue
 
@@ -522,7 +522,7 @@ async def subscribe_comments(reddit, config):
                 colors.BLUE
                 + "ONE@REDDIT:"
                 + colors.WHITE
-                + f" ({comment.subreddit.display_name}) "
+                + f" (/r/{comment.subreddit.display_name}) "
                 + msg
             )
 
@@ -586,6 +586,13 @@ async def reply(obj, message, config):
 
 # Build context from a chain of comments.
 async def build_context(comment):
+    msg = comment.body
+    images = await predict_images(msg)
+    if len(images) > 0:
+        print(colors.GREEN + "ONE@REDDIT: attempting to predict images" + colors.WHITE)
+        pred = f"(images: {', '.join(images)})"
+        msg = msg + f"\n{pred}"
+        print(colors.GREEN + "ONE@REDDIT: " + colors.WHITE + pred)
     context = [{"bias": get_identity(), "message": comment.body}]
     parent = await comment.parent()
     await parent.load()
@@ -607,9 +614,7 @@ def transformer(name, text):
     verb = random.choice(["says", "said", "whispers"])
     leader = "Penny"
     minion = "daemon"
-    if os.environ["REDDITAGENT"] == "AlexandriaPen":
-        leader = "Ink"
-        minion = "ghost"
+
     types = random.choice([minion, "friend", "robot"])
     responses = [
         f'{pronoun} {types} {verb}, "{text}"',

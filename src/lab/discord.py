@@ -13,9 +13,8 @@ import requests
 from cerberus import Validator
 from discord import Permissions, app_commands
 
-import eye
 import head
-from common import bullets, colors, get_identity, ship, wall
+from common import analyze_images, bullets, colors, get_identity, ship, wall
 from events import consumer, producer
 
 
@@ -265,13 +264,6 @@ class Client(discord.Client):
 
             self.ignore(False)
 
-    async def analyze_image(self, urls):
-        preds = []
-        for url in urls:
-            pred = await eye.ctx.analyze_image(url)
-            preds.append(pred)
-        return preds
-
     async def send_dm(self, bias):
         user = self.get_user(bias)
         message = random.choice(
@@ -343,19 +335,15 @@ class Client(discord.Client):
             for seq in watched:
                 if seq in embed.url.lower():
                     urls.append(embed.url)
-        if len(urls) > 0:
-            preds = await self.analyze_image(urls)
-            pred = f"(This image appears to be: {', '.join(preds)})"
-            head.ctx.build_context(bias=int(self.user.id), message=pred)
-            # await message.channel.send(pred)
-            print(colors.GREEN + "ONE@DISCORD: " + colors.WHITE + pred)
-        elif len(message.attachments) > 0:
+
+        if len(message.attachments) > 0:
             for attachment in message.attachments:
                 urls.append(attachment.url)
-            preds = await self.analyze_image(urls)
+
+        if len(urls) > 0:
+            preds = await analyze_images(urls)
             pred = f"(This image appears to be: {', '.join(preds)})"
             head.ctx.build_context(bias=int(self.user.id), message=pred)
-            # await message.channel.send(pred)
             print(colors.GREEN + "ONE@DISCORD: " + colors.WHITE + pred)
 
         if self.ignoring:

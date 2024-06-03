@@ -557,6 +557,7 @@ class Cortex:
                     bad_words_ids=bad_tokens,
                     suppress_tokens=suppress_tokens,
                     eos_token_id=eos_token_ids,
+                    # stop_strings=[wall],
                     assistant=self.assistant.model if self.assistant else None,
                 )
 
@@ -645,6 +646,7 @@ class Cortex:
         eos_tokens: list | None = None,
         cleanup: bool = False,
         generation_profile: str = "longform",
+        forbidden_chars: list = [],
     ):
         self.wait_in_queue(priority)
 
@@ -658,10 +660,66 @@ class Cortex:
             sequence_biases = {**sequence_biases, **traits}
 
         push = {self.get_tokens_as_tuple(s): b for s, b in sequence_biases.items()}
-        bad = [
+        bad_tokens = [
             self.teacher.tokenizer(token, add_special_tokens=False).input_ids
-            for token in ["{{<", wall]
+            for token in [
+                "{{<",
+                wall,
+                f"\n{wall}",
+                f"\n\n{wall}",
+                # "#",
+                # "##",
+                # "###",
+                # "`",
+                # "---",
+                # "+++",
+                # "\n#",
+                # "\n\n#",
+                # "\n##",
+                # "\n\n##",
+                # "\n###",
+                # "\n\n###",
+            ]
         ]
+
+        # suppress_tokens = list(
+        #     set(
+        #         chain.from_iterable(
+        #             [
+        #                 self.teacher.tokenizer(
+        #                     token, add_special_tokens=False
+        #                 ).input_ids
+        #                 # Suppress ugly patterns the model may sometimes bias towards.
+        #                 for token in [
+        #                     "#",
+        #                     "##",
+        #                     "###",
+        #                     "### ",
+        #                     "## ",
+        #                     "# ",
+        #                     "\n#",
+        #                     "\n##",
+        #                     "\n###",
+        #                     "\n### ",
+        #                     "\n## ",
+        #                     "\n# ",
+        #                     "`",
+        #                     "``",
+        #                     "```",
+        #                     "+",
+        #                     "++",
+        #                     "+++",
+        #                     "\n`",
+        #                     "\n``",
+        #                     "\n```",
+        #                     "\n+",
+        #                     "\n++",
+        #                     "\n+++",
+        #                 ]
+        #             ]
+        #         )
+        #     )
+        # )
 
         eos_token_ids = [
             self.teacher.tokenizer.convert_tokens_to_ids(
@@ -691,8 +749,7 @@ class Cortex:
                 seed = nist_beacon()
 
                 if attempt > 0:
-                    # decay_factor = decay_factor / 2
-                    temperature = temperature / 2
+                    temperature *= 1.1
 
                 attempt += 1
 
@@ -715,8 +772,11 @@ class Cortex:
                     renormalize_logits=True,
                     remove_invalid_values=True,
                     sequence_bias=push,
-                    bad_words_ids=bad,
+                    # suppress_tokens=suppress_tokens,
+                    bad_words_ids=bad_tokens,
                     eos_token_id=eos_token_ids,
+                    forbidden_chars=forbidden_chars,
+                    # stop_strings=["#", "`", "---", "+++"],
                 )
 
                 if completion:

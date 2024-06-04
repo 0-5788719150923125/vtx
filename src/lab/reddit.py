@@ -314,10 +314,11 @@ async def stalker(reddit, config):
                     if len(comment.body) > 66
                     else comment.body
                 )
-                print(colors.BLUE + "ONE@REDDIT: " + colors.WHITE + msg)
 
                 if success == False:
                     continue
+
+                print(colors.BLUE + "ONE@REDDIT: " + colors.WHITE + msg)
 
                 if not stalker:
                     daemon = get_daemon(bias)
@@ -586,14 +587,15 @@ async def reply(obj, message, config):
 
 # Build context from a chain of comments.
 async def build_context(comment):
-    msg = comment.body
-    images = await predict_images(msg)
+    target_message = comment.body
+
+    images = await predict_images(target_message)
     if len(images) > 0:
-        print(colors.GREEN + "ONE@REDDIT: attempting to predict images" + colors.WHITE)
-        pred = f"(images: {', '.join(images)})"
-        msg = msg + f"\n{pred}"
+        pred = f"(contains images: {', '.join(images)})"
         print(colors.GREEN + "ONE@REDDIT: " + colors.WHITE + pred)
-    context = [{"bias": get_identity(), "message": comment.body}]
+        target_message += f"\n{pred}"
+
+    context = [{"bias": get_identity(), "message": target_message}]
     parent = await comment.parent()
     await parent.load()
     while isinstance(parent, asyncpraw.models.Comment):

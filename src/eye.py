@@ -23,9 +23,25 @@ class Vision:
     # Function to convert and preprocess the image
     def preprocess_image(self, image, target_size=(224, 224)):
         try:
-            if "imgur.com" in image:
+            if (
+                "imgur.com" in image
+                and not image.lower().endswith(".png")
+                and not image.lower().endswith(".jpg")
+                and not image.lower().endswith(".jpeg")
+                and not image.lower().endswith(".gif")
+            ):
                 image = image + ".png"
-            raw = Image.open(requests.get(image, stream=True).raw)
+            print(f"Fetching image link was: {image}")
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+            }
+            response = requests.get(image, stream=True, headers=headers)
+            raw = None
+            if response.status_code == 200:
+                raw = Image.open(io.BytesIO(response.content))
+            else:
+                raise Exception("failed to retrieve image: ", image)
+            # raw = Image.open(requests.get(image, stream=True, headers=headers).raw)
             image = raw.convert("RGB")
             image = image.resize(target_size)  # Resize to the expected dimensions
             # image = (image - 128) / 128.0  # Normalize the image (example normalization)
@@ -43,7 +59,10 @@ class Vision:
     async def analyze_image(self, image):
         try:
             url = image
-            response = requests.get(url)
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+            }
+            response = requests.get(url, headers=headers)
             if response.status_code != 200:
                 raise Exception(f"Error downloading image: {response.status_code}")
             data = base64.b64encode(response.content).decode("utf-8")
@@ -52,7 +71,7 @@ class Vision:
             )
             count = 0
             while count < 30:
-                await asyncio.sleep(6.66)
+                await asyncio.sleep(2)
                 count += 1
                 item = consumer("publish_caption")
                 if item:

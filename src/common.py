@@ -278,15 +278,17 @@ def has_unclosed_code_block(s):
 
 
 def get_image_urls(string):
-    pattern = r"(https?:\/\/.*\.(?:png|jpg|jpeg|gif))"
-    return re.findall(pattern, string)
+    pattern = r"(https?://[^\s]+?\.(?:png|jpg|jpeg|gif))(?:[\s\])]|\b)"
+    urls = re.findall(pattern, string)
+    return list(set(urls))
 
 
 async def analyze_images(urls):
     preds = []
     for url in urls:
         pred = await eye.ctx.analyze_image(url)
-        preds.append(pred)
+        if pred:
+            preds.append(pred)
     return preds
 
 

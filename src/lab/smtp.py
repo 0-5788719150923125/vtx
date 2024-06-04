@@ -98,6 +98,9 @@ themes: {config.get('themes', 'lighthearted, comical')}
 
             uniform = textwrap.dedent(redacted)
 
+            if len(uniform) < 30:
+                continue
+
             prepared = MIMEText(uniform, "plain", "utf-8")
             encode_7or8bit(prepared)
 

@@ -737,7 +737,7 @@ class Cortex:
                     bad_words_ids=bad_tokens,
                     eos_token_id=eos_token_ids,
                     forbidden_chars=forbidden_chars,
-                    # stop_strings=["#", "`", "---", "+++"],
+                    stop_strings=["void:"],
                 )
 
                 if completion:

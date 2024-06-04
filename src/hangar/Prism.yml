@@ -8,9 +8,9 @@ training:
   corpus: /lab/research
   datasets:
     streaming:
-      - c4
+      # - c4
       - natural
-      - daily
+      # - daily
   gradient_checkpointing: True
   optimizer: Lion
   scheduler: cosine

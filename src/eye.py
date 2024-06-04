@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import io
+import logging
 
 import requests
 from PIL import Image

@@ -81,8 +81,9 @@ collections:
       repo: Muennighoff/natural-instructions
       instruct: True
       buffer_size: 100000
-      sample_rate: 0.1
+      val_split: test
       val_samples: 10000
+      sample_rate: 1.0
     daily:
       repo: safetyllm/daily_conversations
       chat: True

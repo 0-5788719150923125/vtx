@@ -120,7 +120,7 @@ transformers:
       penalty_alpha: 0.6
       top_k: 4
       repetition_penalty: 1.1
-      no_repeat_ngram_size: 9
+      no_repeat_ngram_size: 13
     longform:
       do_sample: True
       min_new_tokens: 11

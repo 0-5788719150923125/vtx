@@ -67,3 +67,6 @@
 [submodule "lab/one"]
 	path = lab/one
 	url = https://github.com/0-5788719150923125/one.git
+[submodule "lab/petals"]
+	path = lab/petals
+	url = https://github.com/bigscience-workshop/petals.git

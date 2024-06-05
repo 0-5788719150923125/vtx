@@ -43,11 +43,19 @@ def send_email(config):
     subject = config.get("subject")
 
     for subscriber in config.get("to"):
-        print(
-            f"{colors.RED}ONE@SMTP: {colors.WHITE}" + "sending message to " + subscriber
-        )
 
-        prompt = f"""```
+        attempt = 0
+        max_attempts = 3
+
+        while attempt < max_attempts:
+
+            print(
+                f"{colors.RED}ONE@SMTP: {colors.WHITE}"
+                + "sending message to "
+                + subscriber
+            )
+
+            prompt = f"""```
 title: {subject}
 author: {config.get('author', 'Ink')}
 date: {get_current_date()}
@@ -59,57 +67,61 @@ themes: {config.get('themes', 'lighthearted, comical')}
 ---
 {config.get('prompt')}"""
 
-        try:
-            output = asyncio.run(
-                head.ctx.prompt(
-                    prompt=prompt,
-                    min_new_tokens=512,
-                    max_new_tokens=768,
-                    generation_profile="longform",
-                    temperature=config.get("temperature", 0.9),
-                    disposition=config.get("disposition", None),
-                    forbidden_chars=["#", "`", "--", "---", "+", "++", "+++", "¶"],
+            try:
+                output = asyncio.run(
+                    head.ctx.prompt(
+                        prompt=prompt,
+                        min_new_tokens=512,
+                        max_new_tokens=768,
+                        generation_profile="longform",
+                        temperature=config.get("temperature", 0.9),
+                        disposition=config.get("disposition", None),
+                        forbidden_chars=["#", "`", "--", "---", "+", "++", "+++", "¶"],
+                    )
                 )
-            )
 
-            if not output:
-                continue
+                if not output:
+                    attempt += 1
+                    continue
 
-            server = smtplib.SMTP(smtp_server, smtp_port)
-            server.starttls()
+                server = smtplib.SMTP(smtp_server, smtp_port)
+                server.starttls()
 
-            server.login(sender_user, password)
+                server.login(sender_user, password)
 
-            message = MIMEMultipart()
-            message["From"] = sender_email
-            message["To"] = subscriber
-            message["Subject"] = Header(subject, "utf-8")
+                message = MIMEMultipart()
+                message["From"] = sender_email
+                message["To"] = subscriber
+                message["Subject"] = Header(subject, "utf-8")
 
-            strip_prompt = output.splitlines()[10:]
-            strip_last = strip_prompt[:-2]
-            unified = unified_newlines(
-                "\n".join(strip_last).replace(r"\r\n|\r|\n", "\n"), 2
-            )
-            redacted = re.sub(
-                r"\bhttp[s]?://[^\s)]+",
-                "$REDACTED",
-                unified,
-            )
+                strip_prompt = output.splitlines()[10:]
+                strip_last = strip_prompt[:-2]
+                unified = unified_newlines(
+                    "\n".join(strip_last).replace(r"\r\n|\r|\n", "\n"), 2
+                )
+                redacted = re.sub(
+                    r"\bhttp[s]?://[^\s)]+",
+                    "$REDACTED",
+                    unified,
+                )
 
-            uniform = textwrap.dedent(redacted)
+                uniform = textwrap.dedent(redacted)
 
-            if len(uniform) < 30:
-                continue
+                if len(uniform) < 30:
+                    attempt += 1
+                    continue
 
-            prepared = MIMEText(uniform, "plain", "utf-8")
-            encode_7or8bit(prepared)
+                prepared = MIMEText(uniform, "plain", "utf-8")
+                encode_7or8bit(prepared)
 
-            message.attach(prepared)
-            server.sendmail(sender_email, subscriber, message.as_string())
-            server.quit()
-        except smtplib.SMTPSenderRefused as e:
-            print(f"Error Code: {e.smtp_code}")
-            print(f"Error Message: {e.smtp_error}")
+                message.attach(prepared)
+                server.sendmail(sender_email, subscriber, message.as_string())
+                server.quit()
+                break
+            except smtplib.SMTPSenderRefused as e:
+                print(f"Error Code: {e.smtp_code}")
+                print(f"Error Message: {e.smtp_error}")
+                attempt += 1
 
 
 if __name__ == "__main__":

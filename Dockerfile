@@ -90,6 +90,7 @@ RUN python3 prepare.py
 ARG NODEMON_VERSION
 RUN npm i -g nodemon@$NODEMON_VERSION
 
+COPY lab/petals/ /lab/petals
 COPY lab/lightning-hivemind/ /lab/lightning-hivemind
 COPY lab/ModuleFormer/ /lab/ModuleFormer
 
@@ -128,6 +129,6 @@ ENV PYTHONPYCACHEPREFIX='/tmp/__pycache__'
 ENV CUDA_DEVICE_ORDER=PCI_BUS_ID
 ENV FOCUS='toe'
 
-CMD ["nodemon", "--watch", "/src", "--watch", "/env", "--ext", "*.py,*.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]
-
 LABEL maintainer="R"
+
+CMD ["nodemon", "--watch", "/src", "--watch", "/env", "--ext", "*.py,*.yml", "--ignore", "models/*", "--ignore", "*.json", "--exec", "python3", "main.py"]

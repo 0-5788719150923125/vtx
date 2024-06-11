@@ -2,6 +2,7 @@ __pycache__
 .env
 !examples/lab/.env
 data/*
+venv
 config.yml
 book/content/**/
 book/static/tests

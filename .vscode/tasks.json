@@ -5,7 +5,7 @@
         "type": "pickString",
         "id": "model",
         "description": "Which model should I focus on?",
-        "options": ["src", "aura", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "wisdom", "toe"]
+        "options": ["src", "aura", "genus", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "wisdom", "toe"]
       },
       {
         "type": "pickString",

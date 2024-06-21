@@ -6,6 +6,7 @@ import shutil
 import sys
 import time
 
+import chardet
 from lightning.pytorch import loggers
 from pypdf import PdfReader
 from tokenizers import Tokenizer
@@ -111,12 +112,33 @@ def main():
     if isinstance(train_config.get("tokenizer"), bool):
         tokenizer_model = output_dir
         if not os.path.exists(f"{tokenizer_model}/tokenizer.json"):
+            files = list_full_paths(train_config.get("corpus", "/lab/research"))
+            existing_files = []
+            # Iterate over each file in the list
+            for file in files:
+                # Check if the file exists
+                if os.path.isfile(file):
+                    # If the file exists, add it to the existing_files list
+                    try:
+                        # Try to open the file as UTF-8
+                        with open(file, "rb") as f:
+                            # Read the contents of the file
+                            header = f.read(4)
+                            # Detect the encoding of the file
+                            result = chardet.detect(header)
+                            if result["encoding"] == "utf-8":
+                                existing_files.append(file)
+                        # If no exception is raised, the file is valid UTF-8
+                        existing_files.append(file)
+                    except UnicodeDecodeError:
+                        continue
             tokenizer = train_tokenizer(
-                files=list_full_paths(train_config.get("corpus", "/lab/research")),
+                files=existing_files,
                 dropout=0.9,
                 vocab_size=train_config["overrides"].get("vocab_size"),
                 min_frequency=2,
                 save_path=tokenizer_model,
+                max_token_length=5,
             )
     elif isinstance(train_config.get("tokenizer"), str):
         tokenizer_model = train_config.get("tokenizer")
@@ -171,7 +193,9 @@ def main():
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
         precision=model_config.get("precision", 32),
-        device_map=model_config.get("device_map", "auto"),
+        device_map=train_config.get(
+            "device_map", model_config.get("device_map", "auto")
+        ),
     )
 
     train_config["static_data"] = static_data

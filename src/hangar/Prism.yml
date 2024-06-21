@@ -51,6 +51,6 @@ training:
     moe_pdrop: 0.1
     sample_topk: 2
     initializer_range: 0.05
-    layer_norm_epsilon: 0.000001
+    layer_norm_epsilon: 0.00001
     vocab_size: 19888
     tie_word_embeddings: True

@@ -42,11 +42,11 @@ genus:
   precision: 16
   training:
     type: lora
-    r: 4
+    r: 8
     lora_alpha: 16
     lora_dropout: 0
-    use_rslora: True
-    use_dora: True
+    use_rslora: False
+    use_dora: False
     bias: "none"
     target_modules:
       - q_proj
@@ -56,7 +56,7 @@ genus:
       - gate_proj
       - up_proj
       - down_proj
-    gradient_checkpointing: True
+    gradient_checkpointing: False
     optimizer: Prodigy
     learning_rate: 1.0
     block_size: 2048
@@ -228,6 +228,7 @@ envy:
     lora_dropout: 0.01
     bias: "all"
     use_rslora: False
+    use_dora: False
     target_modules:
       - q_proj
       - k_proj

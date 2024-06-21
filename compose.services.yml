@@ -33,7 +33,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.2'
+          cpus: '0.5'
     volumes:
       - ./data/models:/data/models
       - ./data/adapters:/data/adapters

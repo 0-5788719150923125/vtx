@@ -12,6 +12,9 @@ from common import get_identity, ship, wall
 root_dir = "/lab/QA"
 duplicates = 3
 
+method = "standard"
+# method = "chaos"
+
 
 def main():
     if os.path.exists(f"{root_dir}/train"):
@@ -27,9 +30,16 @@ def main():
             random.shuffle(json_lines)
             for obj in json_lines:
                 try:
+                    question = ""
+                    answer = ""
+                    ship = ""
+                    if method in ["standard"]:
+                        question = get_identity()
+                        answer = get_identity()
+                        ship = ":>"
                     extracted = list(obj.values())
-                    string = f"""{wall}{get_identity()}{ship} {extracted[0]}
-{wall}{get_identity()}{ship} {extracted[1]}"""
+                    string = f"""{wall}{question}{ship} {extracted[0]}
+{wall}{answer}{ship} {extracted[1]}"""
                     with open(f"{root_dir}/train/question{el}.txt", "w") as f:
                         el = el + 1
 

@@ -5,7 +5,7 @@
         "type": "pickString",
         "id": "model",
         "description": "Which model should I focus on?",
-        "options": ["src", "aura", "genus", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "wisdom", "toe"]
+        "options": ["src", "aura", "genus", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "wisdom", "toe", "rot"]
       },
       {
         "type": "pickString",
@@ -137,7 +137,7 @@
         },
         "runOptions": {
           "instanceLimit": 2
-        },
+        }
       },
       {
         "label": "context",
@@ -152,7 +152,7 @@
         "label": "upload",
         "detail": "Upload adapters to a remote server via SSH.",
         "type": "shell",
-        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && rsync -avz --exclude='*.ckpt' -e 'ssh -i one.key' data/adapters opc@129.159.66.224:/home/opc/vtx/data",
+        "command": "eval \"$(ssh-agent -s)\" && ssh-add one.key && rsync -avz --exclude='*.ckpt' -e 'ssh -i one.key' data/adapters opc@129.159.66.224:/home/opc/vtx/data"
       },
       {
         "label": "config",
@@ -171,6 +171,7 @@
         "runOptions": {
           "instanceLimit": 5
         },
+        "problemMatcher": []
       },
       {
         "label": "trial",
@@ -182,7 +183,7 @@
         },
         "runOptions": {
           "instanceLimit": 5
-        },
+        }
       },
       {
         "label": "deploy",
@@ -203,7 +204,7 @@
         },
         "runOptions": {
           "instanceLimit": 3
-        },
+        }
       },
       {
         "label": "fetch",
@@ -215,7 +216,7 @@
         },
         "runOptions": {
           "instanceLimit": 3
-        },
+        }
       },
       {
         "label": "auto",
@@ -260,7 +261,8 @@
         "command": "TASK=down bash controller.sh",
         "windows": {
           "command": "$env:TASK = 'down'; .\\controller.ps1"
-        }
+        },
+        "problemMatcher": []
       }
     ]
   }

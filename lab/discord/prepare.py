@@ -12,10 +12,16 @@ from common import config, get_identity, list_full_paths, ship, wall
 root_dir = "/lab/discord"
 
 style = "original"
+# style = "chaos"
 
 
 # Format Discord messages for training
 def main():
+
+    if style in ["chaos"]:
+        alt()
+        return
+
     # Replace links and @mentions
     def sanitizer(string):
         # sanitized = re.sub(
@@ -173,6 +179,81 @@ def transform_message(message):
             message = group[1]
             break
     return message
+
+
+# Format Discord messages for training
+def alt():
+    def formatter(obj):
+        message = str(obj["content"])
+        if len(obj["embeds"]) > 0:
+            if obj["embeds"][0]["title"]:
+                message = message + " ((" + obj["embeds"][0]["title"] + "))"
+            if obj["embeds"][0]["description"]:
+                message = message + " " + obj["embeds"][0]["description"]
+        if len(obj["mentions"]) > 0:
+            for mention in obj["mentions"]:
+                message = message.replace(
+                    "@" + mention["nickname"],
+                    "<@" + str(True) + ">",
+                )
+        # return transform_message(message)
+        return message
+
+    # Ensure export path exists and is clean
+    if os.path.exists(f"{root_dir}/train"):
+        shutil.rmtree(f"{root_dir}/train")
+
+    os.makedirs(f"{root_dir}/train")
+
+    successes = 0
+    failures = 0
+
+    source_files = list_full_paths(f"{root_dir}/source")
+
+    for filename in source_files:
+        with open(filename, "r") as file:
+            data = json.load(file)
+
+            data_dict = {obj["id"]: obj for obj in data["messages"]}
+
+            for i in data_dict.values():
+                if i["type"] not in ["Default", "Reply"]:
+                    continue
+
+                new_file = filename.replace(f"{root_dir}/source/", f"{root_dir}/train/")
+
+                os.makedirs(os.path.dirname(new_file), exist_ok=True)
+
+                with open(f"{new_file}.txt", "a") as txt_file:
+                    if i["type"] == "Reply":
+                        message_ref_id = i["reference"]["messageId"]
+
+                        result = data_dict.get(message_ref_id, None)
+
+                        if result is not None:
+                            sanitized = formatter(result)
+                            if "<@False>" in sanitized:
+                                continue
+                            content = wall + " " + sanitized
+                            try:
+                                txt_file.write(f"{content}\n".format(content))
+                                successes += 1
+                            except Exception as e:
+                                failures += 1
+
+                    sanitized = formatter(i)
+                    if "<@False>" in sanitized:
+                        continue
+                    content = wall + " " + sanitized
+                    try:
+                        txt_file.write(f"{content}\n".format(content))
+                        successes += 1
+                    except Exception as e:
+                        failures += 1
+
+        os.system("clear")
+        print("preparing Discord messages")
+        print(f"{successes} successes, {failures} failures")
 
 
 if __name__ == "__main__":

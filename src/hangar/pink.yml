@@ -4,7 +4,7 @@
 # how to learn again.
 
 class: pink
-model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
+model: llama
 info: the mistake of all creation
 precision: 32
 training:
@@ -12,7 +12,7 @@ training:
   datasets:
     streaming:
       - wikitext
-  tokenizer: True
+  tokenizer: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   gradient_checkpointing: True
   optimizer: Lion
   scheduler: cosine

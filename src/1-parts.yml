@@ -304,6 +304,8 @@ rot:
   model: apple/OpenELM-270M-Instruct
   info: in the core
   precision: 16
+  tokenizer: "NousResearch/Llama-2-7b-hf"
+  mode: chaos
   training:
     type: lora
     r: 16

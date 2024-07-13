@@ -17,7 +17,7 @@ from typing import List, Union
 import numpy as np
 from apscheduler.schedulers.background import BackgroundScheduler
 from cerberus import Validator
-from transformers import PreTrainedTokenizerFast
+from transformers import AutoTokenizer, PreTrainedTokenizerFast
 
 sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".", "aigen"))
@@ -62,6 +62,8 @@ def validation(config):
         "reload_interval": {"type": "integer"},
         "adapters": {"type": "list"},
         "assistant": {"type": "dict"},
+        "tokenizer": {"type": ["boolean", "string"]},
+        "mode": {"type": "string"},
         "training": {
             "type": "dict",
             "schema": {
@@ -165,7 +167,7 @@ def validation(config):
                 "batch_size": {"type": "integer"},
                 "target_batch_size": {"type": "integer"},
                 "gradient_accumulation_steps": {"type": "integer"},
-                "tokenizer": {"type": "boolean"},
+                "tokenizer": {"type": ["boolean", "string"]},
                 "equalize_datasets": {"type": "boolean"},
                 "datasets": {"type": "dict"},
                 "val_split": {"type": "float"},
@@ -251,10 +253,14 @@ class Cortex:
                 model_folder = "/data/models/" + focus
                 if config["training"].get("corpus"):
                     tokenizer_folder = model_folder
+
+        if "tokenizer" in config:
+            tokenizer = AutoTokenizer.from_pretrained(config["tokenizer"])
         try:
             prototype = aigen(
                 model=config.get("model"),
                 model_folder=model_folder,
+                tokenizer=tokenizer,
                 tokenizer_folder=tokenizer_folder,
                 device_map=config.get("device_map", "auto"),
                 petals=config.get("petals", False),

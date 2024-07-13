@@ -57,6 +57,7 @@ fi
 
 . './.env'
 
+
 # Setup config file
 if [ ! -f 'config.yml' ]; then
     touch config.yml
@@ -87,7 +88,7 @@ fi
 case $action in
     "repair" | "init" | "update")
         git pull
-        git submodule update
+        git submodule update --init --recursive
         git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
         ;;
     "ps") 

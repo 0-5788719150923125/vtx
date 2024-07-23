@@ -74,6 +74,7 @@ switch ($action) {
         git pull
         git submodule update --init --recursive
         git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
+        docker compose -f compose.yml -f compose.services.yml pull
     }
     "ps" {
         docker compose ps

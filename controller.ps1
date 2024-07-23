@@ -2,13 +2,13 @@ $CONTAINERS = @("lab", "ctx", "uxo", "tbd", "ipf", "pet", "bit")
 $MODELS = @("src", "aura", "genus", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "wisdom", "toe", "rot")
 
 # Check for docker
-if (!(Test-Path -Path "docker.exe")) {
+if (!(Get-Command "docker" -ErrorAction SilentlyContinue)) {
   Write-Error "Error: docker is not installed or not in PATH."
   exit 1
 }
 
 # Check for docker-compose
-if (!(Test-Path -Path "docker-compose.exe")) {
+if (!(Get-Command "docker-compose" -ErrorAction SilentlyContinue)) {
   Write-Error "Error: docker-compose is not installed or not in PATH."
   exit 1
 }
@@ -70,7 +70,7 @@ if ($env:ARCH -eq "ARM") {
 
 # Implement the controller
 switch ($action) {
-    "repair", "init", "update" {
+    {"repair","init","update" -contains $_} {
         git pull
         git submodule update --init --recursive
         git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
@@ -106,7 +106,7 @@ switch ($action) {
     "pull" {
         docker compose -f compose.yml -f compose.services.yml pull
     }
-    "up", "auto" {
+    {"up","auto" -contains $_} {
         if (-not $env:FOCUS) {
             $FOCUS = Read-Host "Which model should we focus on? $($MODELS -join ', ')"
         }
@@ -117,10 +117,9 @@ switch ($action) {
             $ARG1 = '-d'
         }
         $env:FOCUS = $FOCUS
-        # Start-Process docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml watch --no-up -NoNewWindow -RedirectStandardOutput /dev/null -RedirectStandardError /dev/null
         docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml $GPU up $ARG1
     }
-    "train", "trial" {
+    {"train","trial" -contains $_} {
         if (-not $env:FOCUS) {
             $FOCUS = Read-Host "Which model should we train? $($MODELS -join ', ')"
         }

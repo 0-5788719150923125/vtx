@@ -60,9 +60,9 @@ if (-not (Test-Path 'config.yml')) {
 # Set GPU mode
 if ($env:ARCH -eq "ARM") {
     $GPU = '-f compose.ARM.yml'
-} else if ($env:DEVICE -eq "amd") {
+} elseif ($env:DEVICE -eq "amd") {
     $GPU = '-f compose.amd.yml'
-} else if ($env:DEVICE -eq "intel") {
+} elseif ($env:DEVICE -eq "intel") {
     $GPU = '-f compose.intel.yml'
 } else {
     $GPU = '-f compose.nvidia.yml'

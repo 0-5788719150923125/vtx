@@ -19,6 +19,7 @@ if ($env:TASK) {
 } else {
     # Prompt for input.
     Write-Host "Use keywords to control the VTX:"
+    Write-Host "(init)    Prepare this workspace."
     Write-Host "(ps)      View a list of all running containers."
     Write-Host "(stats)   View live Docker stats."
     Write-Host "(logs)    View logs for all services."
@@ -37,6 +38,9 @@ if ($env:TASK) {
     Write-Host "(prune)   Prune all unused images, networks, and volumes."
     Write-Host "(clean)   Delete all checkpoints."
     Write-Host "(key)     Fetch your Urbit access key."
+    Write-Host "(auto)    Turn on autopilot."
+    Write-Host "(repair)  Force-fix this workspace."
+    Write-Host "(update)  Pull all updates from git."
 
     $action = Read-Host "Enter the keyword corresponding to your desired action"
 }
@@ -66,6 +70,11 @@ if ($env:ARCH -e "ARM") {
 
 # Implement the controller
 switch ($action) {
+    "repair", "init", "update" {
+        git pull
+        git submodule update --init --recursive
+        git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
+    }
     "ps" {
         docker compose ps
     }

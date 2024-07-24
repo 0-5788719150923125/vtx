@@ -118,7 +118,17 @@ switch ($action) {
             $ARG1 = '-d'
         }
         $env:FOCUS = $FOCUS
-        docker compose -f compose.yml -f compose.dev.yml -f compose.services.yml $GPU up $ARG1
+        $composeCommand = @(
+            "docker", "compose",
+            "-f", "compose.yml",
+            "-f", "compose.dev.yml",
+            "-f", "compose.services.yml"
+        )
+        if ($GPU) {
+            $composeCommand += $GPU.Split()
+        }
+        $composeCommand += @("up", $ARG1)
+        & $composeCommand
     }
     {"train","trial" -contains $_} {
         if (-not $env:FOCUS) {

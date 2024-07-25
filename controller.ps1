@@ -24,7 +24,7 @@ if (Test-Command "docker compose") {
 
 Write-Host "Docker and Docker Compose are properly set up."
 
-# Function to create docker compose command
+# Function to create and execute docker compose command
 function Get-DockerComposeCommand {
     param (
         [string[]]$AdditionalArgs
@@ -44,8 +44,8 @@ function Get-DockerComposeCommand {
     
     Write-Host "Executing command: $commandString" -ForegroundColor Yellow
     
-    # Return a scriptblock that can be invoked
-    return [ScriptBlock]::Create($commandString)
+    # Execute the command
+    Invoke-Expression $commandString
 }
 
 # If defined, use the TASK variable.

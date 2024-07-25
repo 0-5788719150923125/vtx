@@ -37,7 +37,13 @@ function Get-DockerComposeCommand {
     if ($GPU) {
         $baseCommand += $GPU.Split()
     }
-    return $baseCommand + $AdditionalArgs
+    $fullCommand = $baseCommand + $AdditionalArgs
+    
+    # Join the command parts into a single string
+    $commandString = $fullCommand -join ' '
+    
+    # Return a scriptblock that can be invoked
+    return [ScriptBlock]::Create($commandString)
 }
 
 # If defined, use the TASK variable.
@@ -167,19 +173,15 @@ switch ($action) {
     "pull" {
         & (Get-DockerComposeCommand @("pull"))
     }
-    {"up","auto" -contains $_} {
+    "up","auto" {
         if (-not $env:FOCUS) {
-            $FOCUS = Read-Host "Which model should we focus on? $($MODELS -join ', ')"
+            $env:FOCUS = Read-Host "Which model should we focus on? $($MODELS -join ', ')"
         }
-        if ($action -eq "auto") {
-            $DETACHED = $true
-        }
-        $env:FOCUS = $FOCUS
         $upArgs = @("up")
-        if ($DETACHED) {
+        if ($action -eq "auto") {
             $upArgs += "-d"
         }
-        & (Get-DockerComposeCommand $upArgs)
+        & Get-DockerComposeCommand $upArgs
     }
     {"train","trial" -contains $_} {
         if (-not $env:FOCUS) {

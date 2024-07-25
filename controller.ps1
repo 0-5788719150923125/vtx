@@ -115,6 +115,15 @@ if (-not (Test-Path 'config.yml')) {
     New-Item -Path 'config.yml' -ItemType 'file' -Force
 }
 
+function Get-UserFocus {
+    $userFocus = $env:FOCUS
+    if ([string]::IsNullOrWhiteSpace($userFocus)) {
+        $userFocus = Read-Host "Which model should we focus on? $($MODELS -join ', ')"
+        $env:FOCUS = $userFocus
+    }
+    return $userFocus
+}
+
 # Set GPU mode
 if ($env:ARCH -eq "ARM") {
     $GPU = '-f compose.ARM.yml'
@@ -168,9 +177,7 @@ switch ($action) {
         & Get-DockerComposeCommand "pull"
     }
     {$_ -in "up","auto"} {
-        if (-not $env:FOCUS) {
-            $env:FOCUS = Read-Host "Which model should we focus on? $($MODELS -join ', ')"
-        }
+        $focus = Get-UserFocus
         $upArgs = @("up")
         if ($action -eq "auto") {
             $upArgs += "-d"

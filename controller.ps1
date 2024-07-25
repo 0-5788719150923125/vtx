@@ -14,9 +14,19 @@ if (-not (Test-Command "docker")) {
 # Check for docker compose
 if (Test-Command "docker-compose") {
     if (-not (Test-Command "docker compose")) {
-        # Create an alias for "docker-compose" to "docker compose"
-        Set-Alias -Name "docker compose" -Value "docker-compose"
-        Write-Host "Created alias: 'docker compose' now points to 'docker-compose'"
+        # Create a function to handle 'docker compose' commands
+        function global:docker {
+            param([Parameter(ValueFromRemainingArguments)]$params)
+            if ($params[0] -eq "compose") {
+                $composePlaceholder, $restParams = $params
+                & docker-compose $restParams
+            } else {
+                & $env:COMSPEC /c "docker $params"
+            }
+        }
+        Write-Host "Created function: 'docker compose' now routes to 'docker-compose'"
+    } else {
+        Write-Host "'docker compose' command is already available."
     }
 } elseif (Test-Command "docker compose") {
     Write-Host "'docker compose' command is available."
@@ -25,6 +35,7 @@ if (Test-Command "docker-compose") {
 }
 
 Write-Host "Docker and Docker Compose are properly set up."
+
 # If defined, use the TASK variable.
 if ($env:TASK) {
     $action = $env:TASK

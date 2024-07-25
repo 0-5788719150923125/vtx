@@ -42,17 +42,10 @@ function Get-DockerComposeCommand {
     # Join the command parts into a single string
     $commandString = $fullCommand -join ' '
     
+    Write-Host "Executing command: $commandString" -ForegroundColor Yellow
+    
     # Return a scriptblock that can be invoked
     return [ScriptBlock]::Create($commandString)
-}
-
-# If defined, use the TASK variable.
-if ($env:TASK) {
-    $action = $env:TASK
-} else {
-    # Prompt for input (same as before)
-    # ...
-    $action = Read-Host "Enter the keyword corresponding to your desired action"
 }
 
 # If defined, use the TASK variable.
@@ -136,44 +129,44 @@ if ($env:ARCH -eq "ARM") {
 
 # Implement the controller
 switch ($action) {
-    {"repair","init","update" -contains $_} {
+    {$_ -in "repair","init","update"} {
         git pull
         git submodule update --init --recursive
         git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
-        & (Get-DockerComposeCommand @("pull"))
+        & Get-DockerComposeCommand "pull"
     }
     "ps" {
-        & (Get-DockerComposeCommand @("ps"))
+        & Get-DockerComposeCommand "ps"
     }
     "logs" {
-        & (Get-DockerComposeCommand @("logs", "--follow"))
+        & Get-DockerComposeCommand "logs" "--follow"
     }
     "stats" {
         docker stats
     }
     "exec" {
         if (-not $env:CONTAINER) {
-            $CONTAINER = Read-Host "Which container should we enter? $($CONTAINERS -join ', ')"
+            $env:CONTAINER = Read-Host "Which container should we enter? $($CONTAINERS -join ', ')"
         }
-        & (Get-DockerComposeCommand @("exec", $CONTAINER, "/bin/bash"))
+        & Get-DockerComposeCommand "exec" $env:CONTAINER "/bin/bash"
     }
     "test" {
-        & (Get-DockerComposeCommand @("exec", "lab", "robot", "--outputdir", "/book/static/tests", "/src/tests"))
+        & Get-DockerComposeCommand "exec" "lab" "robot" "--outputdir" "/book/static/tests" "/src/tests"
     }
     "eval" {
-        & (Get-DockerComposeCommand @("exec", "lab", "sh", "tests/eval.sh"))
+        & Get-DockerComposeCommand "exec" "lab" "sh" "tests/eval.sh"
     }
     "build" {
-        & (Get-DockerComposeCommand @("build"))
+        & Get-DockerComposeCommand "build"
         docker images | Select-String "/lab"
     }
     "push" {
-        & (Get-DockerComposeCommand @("push"))
+        & Get-DockerComposeCommand "push"
     }
     "pull" {
-        & (Get-DockerComposeCommand @("pull"))
+        & Get-DockerComposeCommand "pull"
     }
-    "up","auto" {
+    {$_ -in "up","auto"} {
         if (-not $env:FOCUS) {
             $env:FOCUS = Read-Host "Which model should we focus on? $($MODELS -join ', ')"
         }
@@ -183,37 +176,37 @@ switch ($action) {
         }
         & Get-DockerComposeCommand $upArgs
     }
-    {"train","trial" -contains $_} {
+    {$_ -in "train","trial"} {
         if (-not $env:FOCUS) {
-            $FOCUS = Read-Host "Which model should we train? $($MODELS -join ', ')"
+            $env:FOCUS = Read-Host "Which model should we train? $($MODELS -join ', ')"
         }
-        & (Get-DockerComposeCommand @("up", "-d", "tbd", "ipf"))
-        & (Get-DockerComposeCommand @("run", "-e", "FOCUS=$FOCUS", "-e", "TASK=$action", "lab", "python3", "harness.py"))
+        & Get-DockerComposeCommand "up" "-d" "tbd" "ipf"
+        & Get-DockerComposeCommand "run" "-e" "FOCUS=$env:FOCUS" "-e" "TASK=$action" "lab" "python3" "harness.py"
     }
     "prepare" {
         if (-not $env:DATASET) {
-            $DATASET = Read-Host "Which dataset should we prepare?"
+            $env:DATASET = Read-Host "Which dataset should we prepare?"
         }
-        & (Get-DockerComposeCommand @("run", "lab", "python3", "/lab/$DATASET/prepare.py"))
+        & Get-DockerComposeCommand "run" "lab" "python3" "/lab/$env:DATASET/prepare.py"
     }
     "fetch" {
         if (-not $env:DATASET) {
-            $DATASET = Read-Host "Which dataset should we fetch?"
+            $env:DATASET = Read-Host "Which dataset should we fetch?"
         }
-        & (Get-DockerComposeCommand @("run", "lab", "python3", "/lab/$DATASET/fetch.py"))
+        & Get-DockerComposeCommand "run" "lab" "python3" "/lab/$env:DATASET/fetch.py"
     }
     "prune" {
         docker system prune -f
         docker volume prune -f
     }
     "clean" {
-        & (Get-DockerComposeCommand @("exec", "lab", "python3", "/src/edge/clean.py"))
+        & Get-DockerComposeCommand "exec" "lab" "python3" "/src/edge/clean.py"
     }
     "key" {
-        & (Get-DockerComposeCommand @("exec", "urb", "/bin/get-urbit-code"))
+        & Get-DockerComposeCommand "exec" "urb" "/bin/get-urbit-code"
     }
     "down" {
-        & (Get-DockerComposeCommand @("down", "--remove-orphans"))
+        & Get-DockerComposeCommand "down" "--remove-orphans"
     }
     Default {
         Write-Host "Invalid selection."

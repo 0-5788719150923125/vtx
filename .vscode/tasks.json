@@ -38,8 +38,8 @@
     ],
     "tasks": [
       {
-        "label": "init",
-        "detail": "Prepare this workspace.",
+        "label": "update",
+        "detail": "Initialize, update and/or repair this workspace.",
         "type": "shell",
         "command": "TASK=init bash controller.sh",
         "windows": {

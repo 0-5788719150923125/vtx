@@ -79,6 +79,8 @@ elif [[ "$DEVICE" == "amd" ]]; then
     GPU='-f compose.amd.yml'
 elif [[ "$DEVICE" == "intel" ]]; then
     GPU='-f compose.intel.yml'
+elif [[ "$DEVICE" == "cpu" ]]; then
+    GPU=''
 else
     GPU='-f compose.nvidia.yml'
 fi

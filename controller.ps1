@@ -11,25 +11,13 @@ if (-not (Test-Command "docker")) {
     throw "Error: docker is not installed or not in PATH."
 }
 
-# Check for docker compose
-if (Test-Command "docker-compose") {
-    if (-not (Test-Command "docker compose")) {
-        # Create a function to handle 'docker compose' commands
-        function global:docker {
-            param([Parameter(ValueFromRemainingArguments)]$params)
-            if ($params[0] -eq "compose") {
-                $composePlaceholder, $restParams = $params
-                & docker-compose $restParams
-            } else {
-                & $env:COMSPEC /c "docker $params"
-            }
-        }
-        Write-Host "Created function: 'docker compose' now routes to 'docker-compose'"
-    } else {
-        Write-Host "'docker compose' command is already available."
-    }
-} elseif (Test-Command "docker compose") {
+# Check for docker compose and set $DOCKERCOMPOSE
+if (Test-Command "docker compose") {
+    $DOCKERCOMPOSE = @("docker", "compose")
     Write-Host "'docker compose' command is available."
+} elseif (Test-Command "docker-compose") {
+    $DOCKERCOMPOSE = @("docker-compose")
+    Write-Host "'docker-compose' command is available."
 } else {
     throw "Error: Neither 'docker-compose' nor 'docker compose' is installed or in PATH."
 }
@@ -73,7 +61,31 @@ if (-not (Test-Path '.env')) {
     New-Item -Path '.env' -ItemType 'file' -Force
 }
 
-. '.env'
+# Function to read .env file and set environment variables
+function Set-EnvFromFile {
+    param (
+        [string]$EnvFile = ".env"
+    )
+    if (Test-Path $EnvFile) {
+        Get-Content $EnvFile | ForEach-Object {
+            if ($_ -match '^([^=]+)=(.*)$') {
+                $name = $matches[1].Trim()
+                $value = $matches[2].Trim()
+                # Remove surrounding quotes if present
+                $value = $value -replace '^["''](.*)["'']$', '$1'
+                # Set as environment variable
+                [Environment]::SetEnvironmentVariable($name, $value, "Process")
+                Write-Host "Set $name=$value"
+            }
+        }
+    } else {
+        Write-Host "Warning: .env file not found. Creating an empty one."
+        New-Item -Path $EnvFile -ItemType File -Force
+    }
+}
+
+# Import variables from .env file
+Set-EnvFromFile
 
 # Setup config file
 if (-not (Test-Path 'config.yml')) {
@@ -97,13 +109,13 @@ switch ($action) {
         git pull
         git submodule update --init --recursive
         git submodule foreach 'git reset --hard && git checkout . && git clean -fdx'
-        docker compose -f compose.yml -f compose.services.yml pull
+        & (Get-DockerComposeCommand @("pull"))
     }
     "ps" {
-        docker compose ps
+        & (Get-DockerComposeCommand @("ps"))
     }
     "logs" {
-        docker compose logs --follow
+        & (Get-DockerComposeCommand @("logs", "--follow"))
     }
     "stats" {
         docker stats
@@ -112,23 +124,23 @@ switch ($action) {
         if (-not $env:CONTAINER) {
             $CONTAINER = Read-Host "Which container should we enter? $($CONTAINERS -join ', ')"
         }
-        docker compose exec $CONTAINER /bin/bash
+        & (Get-DockerComposeCommand @("exec", $CONTAINER, "/bin/bash"))
     }
     "test" {
-        docker compose exec lab robot --outputdir /book/static/tests /src/tests
+        & (Get-DockerComposeCommand @("exec", "lab", "robot", "--outputdir", "/book/static/tests", "/src/tests"))
     }
     "eval" {
-        docker compose exec lab sh tests/eval.sh
+        & (Get-DockerComposeCommand @("exec", "lab", "sh", "tests/eval.sh"))
     }
     "build" {
-        docker compose build
+        & (Get-DockerComposeCommand @("build"))
         docker images | Select-String "/lab"
     }
     "push" {
-        docker compose push
+        & (Get-DockerComposeCommand @("push"))
     }
     "pull" {
-        docker compose -f compose.yml -f compose.services.yml pull
+        & (Get-DockerComposeCommand @("pull"))
     }
     {"up","auto" -contains $_} {
         if (-not $env:FOCUS) {
@@ -137,53 +149,44 @@ switch ($action) {
         if ($action -eq "auto") {
             $DETACHED = $true
         }
-        if ($DETACHED) {
-            $ARG1 = '-d'
-        }
         $env:FOCUS = $FOCUS
-        $composeCommand = @(
-            "docker", "compose",
-            "-f", "compose.yml",
-            "-f", "compose.dev.yml",
-            "-f", "compose.services.yml"
-        )
-        if ($GPU) {
-            $composeCommand += $GPU.Split()
+        $upArgs = @("up")
+        if ($DETACHED) {
+            $upArgs += "-d"
         }
-        $composeCommand += @("up", $ARG1)
-        & $composeCommand
+        & (Get-DockerComposeCommand $upArgs)
     }
     {"train","trial" -contains $_} {
         if (-not $env:FOCUS) {
             $FOCUS = Read-Host "Which model should we train? $($MODELS -join ', ')"
         }
-        docker compose -f compose.yml -f compose.services.yml up -d tbd ipf
-        docker compose -f compose.yml -f compose.dev.yml $GPU run -e FOCUS=$FOCUS -e TASK=$action lab python3 harness.py
+        & (Get-DockerComposeCommand @("up", "-d", "tbd", "ipf"))
+        & (Get-DockerComposeCommand @("run", "-e", "FOCUS=$FOCUS", "-e", "TASK=$action", "lab", "python3", "harness.py"))
     }
     "prepare" {
         if (-not $env:DATASET) {
             $DATASET = Read-Host "Which dataset should we prepare?"
         }
-        docker compose -f compose.yml -f compose.dev.yml run lab python3 /lab/$DATASET/prepare.py
+        & (Get-DockerComposeCommand @("run", "lab", "python3", "/lab/$DATASET/prepare.py"))
     }
     "fetch" {
         if (-not $env:DATASET) {
             $DATASET = Read-Host "Which dataset should we fetch?"
         }
-        docker compose -f compose.yml -f compose.dev.yml run lab python3 /lab/$DATASET/fetch.py
+        & (Get-DockerComposeCommand @("run", "lab", "python3", "/lab/$DATASET/fetch.py"))
     }
     "prune" {
         docker system prune -f
         docker volume prune -f
     }
     "clean" {
-        docker compose -f compose.yml -f compose.dev.yml exec lab python3 /src/edge/clean.py
+        & (Get-DockerComposeCommand @("exec", "lab", "python3", "/src/edge/clean.py"))
     }
     "key" {
-        docker compose exec urb /bin/get-urbit-code
+        & (Get-DockerComposeCommand @("exec", "urb", "/bin/get-urbit-code"))
     }
     "down" {
-        docker compose down --remove-orphans
+        & (Get-DockerComposeCommand @("down", "--remove-orphans"))
     }
     Default {
         Write-Host "Invalid selection."

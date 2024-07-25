@@ -43,7 +43,6 @@ else
     echo "(trial)   Search for optimal hyperparameters."
     echo "(prune)   Prune all unused images, networks, and volumes."
     echo "(clean)   Delete all checkpoints."
-    echo "(key)     Fetch your Urbit access key."
     echo "(auto)    Turn on autopilot."
     echo "(repair)  Force-fix this workspace."
     echo "(update)  Pull all updates from git."
@@ -164,8 +163,6 @@ case $action in
             -f compose.yml \
             -f compose.dev.yml \
             exec lab python3 /src/edge/clean.py ;;
-    "key")
-        $DOCKER_COMPOSE_COMMAND exec urb /bin/get-urbit-code ;;
     "down")
         $DOCKER_COMPOSE_COMMAND down --remove-orphans ;;
     *) 

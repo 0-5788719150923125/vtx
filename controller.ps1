@@ -72,7 +72,6 @@ if ($env:TASK) {
     Write-Host "(trial)   Search for optimal hyperparameters."
     Write-Host "(prune)   Prune all unused images, networks, and volumes."
     Write-Host "(clean)   Delete all checkpoints."
-    Write-Host "(key)     Fetch your Urbit access key."
     Write-Host "(auto)    Turn on autopilot."
     Write-Host "(repair)  Force-fix this workspace."
     Write-Host "(update)  Pull all updates from git."
@@ -123,6 +122,8 @@ if ($env:ARCH -eq "ARM") {
     $GPU = '-f compose.amd.yml'
 } elseif ($env:DEVICE -eq "intel") {
     $GPU = '-f compose.intel.yml'
+} elseif ($env:DEVICE -eq "cpu") {
+    $GPU = ''
 } else {
     $GPU = '-f compose.nvidia.yml'
 }
@@ -201,9 +202,6 @@ switch ($action) {
     }
     "clean" {
         & Get-DockerComposeCommand "exec" "lab" "python3" "/src/edge/clean.py"
-    }
-    "key" {
-        & Get-DockerComposeCommand "exec" "urb" "/bin/get-urbit-code"
     }
     "down" {
         & Get-DockerComposeCommand "down" "--remove-orphans"

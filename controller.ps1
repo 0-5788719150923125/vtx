@@ -1,18 +1,30 @@
 $CONTAINERS = @("lab", "ctx", "uxo", "tbd", "ipf", "pet", "bit")
 $MODELS = @("src", "aura", "genus", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "wisdom", "toe", "rot")
 
+# Function to check if a command exists
+function Test-Command($cmdName) {
+    return $null -ne (Get-Command -Name $cmdName -ErrorAction Ignore)
+}
+
 # Check for docker
-if (!(Get-Command "docker" -ErrorAction SilentlyContinue)) {
-  Write-Error "Error: docker is not installed or not in PATH."
-  exit 1
+if (-not (Test-Command "docker")) {
+    throw "Error: docker is not installed or not in PATH."
 }
 
-# Check for docker-compose
-if (!(Get-Command "docker-compose" -ErrorAction SilentlyContinue)) {
-  Write-Error "Error: docker-compose is not installed or not in PATH."
-  exit 1
+# Check for docker compose
+if (Test-Command "docker-compose") {
+    if (-not (Test-Command "docker compose")) {
+        # Create an alias for "docker-compose" to "docker compose"
+        Set-Alias -Name "docker compose" -Value "docker-compose"
+        Write-Host "Created alias: 'docker compose' now points to 'docker-compose'"
+    }
+} elseif (Test-Command "docker compose") {
+    Write-Host "'docker compose' command is available."
+} else {
+    throw "Error: Neither 'docker-compose' nor 'docker compose' is installed or in PATH."
 }
 
+Write-Host "Docker and Docker Compose are properly set up."
 # If defined, use the TASK variable.
 if ($env:TASK) {
     $action = $env:TASK

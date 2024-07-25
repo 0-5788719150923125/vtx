@@ -24,6 +24,31 @@ if (Test-Command "docker compose") {
 
 Write-Host "Docker and Docker Compose are properly set up."
 
+# Function to create docker compose command
+function Get-DockerComposeCommand {
+    param (
+        [string[]]$AdditionalArgs
+    )
+    $baseCommand = $DOCKERCOMPOSE + @(
+        "-f", "compose.yml",
+        "-f", "compose.dev.yml",
+        "-f", "compose.services.yml"
+    )
+    if ($GPU) {
+        $baseCommand += $GPU.Split()
+    }
+    return $baseCommand + $AdditionalArgs
+}
+
+# If defined, use the TASK variable.
+if ($env:TASK) {
+    $action = $env:TASK
+} else {
+    # Prompt for input (same as before)
+    # ...
+    $action = Read-Host "Enter the keyword corresponding to your desired action"
+}
+
 # If defined, use the TASK variable.
 if ($env:TASK) {
     $action = $env:TASK

@@ -9,13 +9,19 @@ herd:
   training:
     type: lora
     r: 64
-    lora_alpha: 16
+    lora_alpha: 32
     lora_dropout: 0
     use_rslora: True
     use_dora: true
-    # target_modules:
-    #   - key
-    #   - receptance
+    bias: "none"
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+      - up_proj
+      - gate_proj
+      - down_proj
     gradient_checkpointing: True
     optimizer: Lion
     learning_rate: 0.0001
@@ -30,9 +36,9 @@ herd:
     gradient_accumulation_steps: 16
     val_split: 0.01
     val_interval: 500
-    generate_every: 50
-    save_every: 250
-    checkpoint_every: 250
+    generate_every: 10
+    save_every: 100
+    checkpoint_every: 100
     datasets:
       streaming:
         - c4

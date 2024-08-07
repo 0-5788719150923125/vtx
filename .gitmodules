@@ -70,3 +70,6 @@
 [submodule "lab/petals"]
 	path = lab/petals
 	url = https://github.com/bigscience-workshop/petals.git
+[submodule "lab/dima/net"]
+	path = lab/dima/net
+	url = https://github.com/dimalmfao/dimanet.git

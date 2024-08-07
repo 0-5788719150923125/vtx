@@ -1,28 +1,29 @@
 src:
   info: of all creation
 
-aura:
-  model: RWKV/rwkv-5-world-1b5
-  info: a modern recurrent neural network
+herd:
+  model: HuggingFaceTB/SmolLM-360M-Instruct
+  info: a derelict hivemind
   precision: 16
   context_length: 4096
   training:
     type: lora
-    r: 16
+    r: 64
     lora_alpha: 16
     lora_dropout: 0
     use_rslora: True
-    target_modules:
-      - key
-      - receptance
-    gradient_checkpointing: False
-    optimizer: AdamW
-    learning_rate: 0.001
+    use_dora: true
+    # target_modules:
+    #   - key
+    #   - receptance
+    gradient_checkpointing: True
+    optimizer: Lion
+    learning_rate: 0.0001
+    weight_decay: 0.00001
     block_size: 1024
-    stride: 128
+    stride: 0
     num_steps: 10000
     warmup_steps: 100
-    weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
     batch_size: 1

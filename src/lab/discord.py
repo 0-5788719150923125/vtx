@@ -56,6 +56,7 @@ def validation(config):
         "export_dms": {"type": "boolean"},
         "debug": {"type": "boolean"},
         "frequency": {"type": "float"},
+        "reply_frequency": {"type": "float"},
         "mention_self_frequency": {"type": "float"},
         "mention_any_frequency": {"type": "float"},
         "bannedUsers": {"type": "list"},
@@ -297,7 +298,8 @@ class Client(discord.Client):
         if banned:
             return
 
-        reply = random.choice([True, False])
+        reply_frequency = self.config["discord"].get("reply_frequency", 0.333)
+        reply = lambda weights: random.choices([True, False], weights=[reply_frequency, 1.0 - reply_frequency], k=1)[0]
 
         if (
             message.author == self.user

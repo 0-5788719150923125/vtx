@@ -2,10 +2,11 @@ src:
   info: of all creation
 
 herd:
-  model: HuggingFaceTB/SmolLM-360M-Instruct
+  model: HuggingFaceTB/SmolLM-135M-Instruct
   info: a derelict hivemind
   precision: 16
-  context_length: 4096
+  context_length: 2048
+  generation_profile: lowpenalty
   training:
     type: lora
     r: 64

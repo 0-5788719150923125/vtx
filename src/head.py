@@ -69,6 +69,7 @@ def validation(config):
             "schema": {
                 "devices": {"type": ["string", "list"]},
                 "device_map": {"type": "string" or "dict"},
+                "precision": {"type": "integer", "allowed": [4, 8, 16, 32, 64, 128]},
                 "resume": {"type": "boolean"},
                 "regen": {"type": "boolean"},
                 "corpus": {"type": "string"},
@@ -780,7 +781,7 @@ if reload_interval > 0:
     scheduler = BackgroundScheduler()
     scheduler.add_job(
         Cortex,
-        args=(config[focus], focus),
+        args=(config, focus),
         trigger="interval",
         minutes=reload_interval,
     )

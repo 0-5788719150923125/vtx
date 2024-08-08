@@ -146,7 +146,7 @@ class Ink:
 
             title = self.role.replace("-", " ").title()
             self.title = f"{self.type.title()}: The {title}"
-            self.prompt = read_from_file(f"/src/lab/templates/{self.type}.tpl")
+            self.prompt = read_from_file(f"/src/modules/templates/{self.type}.tpl")
             for key in list(entry):
                 value = entry.get(key)
                 if key == "role":
@@ -162,7 +162,7 @@ class Ink:
         elif self.type == "assertion":
             title = entry.get("title")
             self.title = f"{self.type.title()}: {title}"
-            self.prompt = read_from_file(f"/src/lab/templates/{self.type}.tpl")
+            self.prompt = read_from_file(f"/src/modules/templates/{self.type}.tpl")
             for key in list(entry):
                 value = entry.get(key)
                 if key == "frequency":

@@ -250,7 +250,7 @@ def create_dataset(
         "/lab/opencog/learn/attic",
         "/lab/opencog/learn/learn-lang-diary",
         "/src/__pycache__",
-        "/src/lab/__pycache__",
+        "/src/modules/__pycache__",
     ]
 
     suffixes = [

@@ -7,7 +7,7 @@ import memory
 from common import colorize_yaml, colors, config
 
 # test code in production here
-from lab import dev
+from modules import dev
 
 print(colorize_yaml(config))
 
@@ -45,7 +45,7 @@ def main():
                 if config[service].get("enabled", True) == False:
                     continue
             if service not in tasks:
-                module = importlib.import_module(f"lab.{service}")
+                module = importlib.import_module(f"modules.{service}")
                 partial = {service: config.get(service), "personas": config["personas"]}
                 task = threading.Thread(
                     target=getattr(module, "main"),

@@ -10,7 +10,7 @@ from twitchAPI.twitch import Twitch
 from twitchAPI.type import AuthScope, ChatEvent
 
 import head
-import lab.source
+import modules.source
 from common import colors, get_identity
 
 
@@ -71,7 +71,7 @@ async def client(config):
                     personas = config["twitch"].get("personas")
                     name = random.choice(personas)
 
-                    lab.source.send(message.text, focus, "sin")
+                    modules.source.send(message.text, focus, "sin")
 
                     success, bias, output, seeded = await head.ctx.chat(
                         personas=personas, max_new_tokens=222

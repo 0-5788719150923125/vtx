@@ -5,11 +5,6 @@ from transformers import (
 )
 
 
-def register_models():
-    register_moduleformer()
-    register_mamba()
-
-
 def register_moduleformer():
     from moduleformer import (
         ModuleFormerConfig,
@@ -33,3 +28,11 @@ def register_mamba():
 
     # AutoConfig.register("mamba", MambaConfig)
     # AutoModelForCausalLM.register(MambaConfig, MambaLMHeadModel)
+
+
+def register_models():
+    register_moduleformer()
+    register_mamba()
+
+
+register_models()

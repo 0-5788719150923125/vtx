@@ -41,9 +41,7 @@ from common import (
     list_full_paths,
     nist_beacon,
 )
-from extensions import register_models
-
-register_models()
+import extensions
 
 model_config = config[focus]
 train_config = model_config["training"]

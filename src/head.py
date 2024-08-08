@@ -38,9 +38,7 @@ from common import (
     ship,
     wall,
 )
-from extensions import register_models
-
-register_models()
+import extensions
 
 
 def validation(config):

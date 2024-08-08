@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 
-class SimpleNeuralNetwork:
+class EvolutionaryNeuralNetwork:
     def __init__(self, input_size, hidden_size, output_size):
         self.weights1 = np.random.randn(input_size, hidden_size)
         self.weights2 = np.random.randn(hidden_size, output_size)
@@ -42,7 +42,7 @@ def evaluate_fitness(network, X, y):
 def evolutionary_training(population_size, generations, X, y):
     input_size, hidden_size, output_size = X.shape[1], 5, y.shape[1]
     population = [
-        SimpleNeuralNetwork(input_size, hidden_size, output_size)
+        EvolutionaryNeuralNetwork(input_size, hidden_size, output_size)
         for _ in range(population_size)
     ]
 
@@ -64,9 +64,9 @@ def evolutionary_training(population_size, generations, X, y):
                 crossover(parent2.get_weights(), parent1.get_weights())
             )
 
-            child1, child2 = SimpleNeuralNetwork(
+            child1, child2 = EvolutionaryNeuralNetwork(
                 input_size, hidden_size, output_size
-            ), SimpleNeuralNetwork(input_size, hidden_size, output_size)
+            ), EvolutionaryNeuralNetwork(input_size, hidden_size, output_size)
             child1.set_weights(child1_weights)
             child2.set_weights(child2_weights)
 

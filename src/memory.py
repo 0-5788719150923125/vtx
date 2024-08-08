@@ -8,8 +8,6 @@ from tinydb import Query, TinyDB
 import head
 from common import list_full_paths, random_string
 
-focus = os.environ["FOCUS"]
-
 
 class KeyValue:
     def __init__(self, table):

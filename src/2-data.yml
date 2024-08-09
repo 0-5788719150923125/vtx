@@ -91,13 +91,32 @@ collections:
       buffer_size: 1000
       sample_rate: 0.01
       val_samples: 10000
-    # web:
-    #   repo: HuggingFaceTB/cosmopedia
-    #   instruct: True
-    #   content_key: text
-    #   buffer_size: 100000
-    #   sample_rate: 0.01
-    #   val_samples: 10000
+    cosmopedia-stories:
+      hf: True
+      repo: HuggingFaceTB/cosmopedia
+      split: train
+      subset: stories
+      schema: 
+        prompt: '¶{user1}:> '
+        text: '¶{user2}:> '
+      patterns:
+        - '{user1}'
+        - '{user2}'
+      delimiter: '\n'
+      buffer_size: 10000
+    cosmopedia-web:
+      hf: True
+      repo: HuggingFaceTB/cosmopedia
+      split: train
+      subset: web_samples_v2
+      schema: 
+        prompt: '¶{user1}:> '
+        text: '¶{user2}:> '
+      patterns:
+        - '{user1}'
+        - '{user2}'
+      delimiter: '\n'
+      buffer_size: 10000
 
 # https://huggingface.co/docs/transformers/main_classes/text_generation
 transformers:

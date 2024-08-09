@@ -134,6 +134,8 @@ def validation(config):
                         "Prodigy",
                         "Ranger21",
                         "RMSProp",
+                        "Signum",
+                        "SignSGD",
                         "SophiaH",
                     ],
                 },

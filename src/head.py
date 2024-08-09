@@ -129,6 +129,7 @@ def validation(config):
                         "AdaBelief",
                         "Adan",
                         "AdamW",
+                        "Kate",
                         "Lion",
                         "Prodigy",
                         "Ranger21",

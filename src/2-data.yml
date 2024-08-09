@@ -88,6 +88,19 @@ collections:
         - '{output}'
       delimiter: '\n'
       buffer_size: 10000
+    wikipedia:
+      hf: True
+      repo: wikimedia/wikipedia
+      split: train
+      subset: 20231101.en
+      schema:
+        title: ':> '
+        # url: ''
+        text: '¶{assistant}:> '
+      patterns:
+        - '{assistant}'
+      delimiter: '\n'
+      buffer_size: 10000
     instruct:
       hf: True
       repo: Muennighoff/natural-instructions

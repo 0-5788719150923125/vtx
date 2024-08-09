@@ -332,6 +332,7 @@ rot:
     tokenizer: "NousResearch/Llama-2-7b-hf"
     gradient_checkpointing: True
     optimizer: Prodigy
+    scheduler: constant
     learning_rate: 1.0
     weight_decay: 0.00001
     block_size: 1024
@@ -341,7 +342,6 @@ rot:
     batch_size: 1
     gradient_accumulation_steps: 16
     gradient_clip_val: 1.23
-    scheduler: constant
     val_split: 0.01
     val_interval: 500
     generate_every: 50

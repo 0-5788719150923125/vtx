@@ -27,7 +27,7 @@ training:
   weight_decay: 0.1
   gradient_clip_val: 1.0
   val_split: 0.1
-  val_interval: 100
+  val_interval: 25
   generate_every: 10
   checkpoint_every: 10
   save_every: 10

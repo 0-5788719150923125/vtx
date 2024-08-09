@@ -213,6 +213,7 @@ def main():
 
     print("training on the following collections:")
     print(f"static data: {static_data}")
+    print(f"local data: {local_data['train']}")
     print(f"streaming data: {streaming_data}")
 
     time.sleep(3)

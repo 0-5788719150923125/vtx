@@ -311,19 +311,19 @@ toe:
 rot:
   model: apple/OpenELM-270M-Instruct
   info: in the core
-  precision: 16
+  precision: 32
   tokenizer: "NousResearch/Llama-2-7b-hf"
-  mode: chaos
+  # mode: chaos
   training:
     type: lora
-    r: 16
-    lora_alpha: 8
+    r: 128
+    lora_alpha: 32
     lora_dropout: 0
-    use_rslora: False
-    use_dora: False
+    use_rslora: True
+    use_dora: True
     bias: "none"
     target_modules:
-      - token_embeddings
+      # - token_embeddings
       - qkv_proj
       # - pos_embedding
       - out_proj
@@ -333,16 +333,16 @@ rot:
     gradient_checkpointing: True
     optimizer: Prodigy
     learning_rate: 1.0
-    block_size: 2048
-    stride: 128
-    num_steps: 1000
+    weight_decay: 0.00001
+    block_size: 1024
+    stride: 0
+    num_steps: 10000
     warmup_steps: 10
     batch_size: 1
     gradient_accumulation_steps: 16
-    weight_decay: 0.1
     gradient_clip_val: 1.0
     scheduler: cosine
     val_split: 0.01
-    val_interval: 100
-    generate_every: 10
+    val_interval: 500
+    generate_every: 50
     save_every: 250

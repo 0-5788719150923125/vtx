@@ -7,6 +7,13 @@ import sys
 import time
 
 import chardet
+import torch
+from torch.utils.data import (
+    ConcatDataset,
+    DataLoader,
+    WeightedRandomSampler,
+    random_split,
+)
 from lightning.pytorch import loggers
 from pypdf import PdfReader
 from tokenizers import Tokenizer
@@ -166,6 +173,10 @@ def main():
     if len(train_config["datasets"].get("static", [])) > 0:
         static_data.append(build_static_datasets(train_config, tokenizer))
 
+    local_data = []
+    if len(train_config["datasets"].get("local", [])) > 0:
+        local_data.append(build_local_datasets(train_config, tokenizer))
+
     streaming_data = []
     if train_config["datasets"].get("streaming"):
         for dataset in train_config["datasets"].get("streaming", []):
@@ -197,6 +208,7 @@ def main():
     )
 
     train_config["static_data"] = static_data
+    train_config["local_data"] = local_data
     train_config["streaming_data"] = streaming_data
 
     print("training on the following collections:")
@@ -291,7 +303,6 @@ def create_dataset(
 
     intermediate_path = "/tmp/intermediate.txt"
 
-    datasets = {}
     for file in files:
         try:
             # Skip files we can't process
@@ -306,10 +317,6 @@ def create_dataset(
                     break
 
             if skip == True:
-                with open(intermediate_path, "a") as intermediate:
-                    # redact stuff we cannot use
-                    intermediate.write(f"void:{file}{tokenizer.eos_token}")
-                    print(f"skipping: {colors.RED}{file}{colors.WHITE}")
                 continue
 
             with open(file, "r") as content:
@@ -420,6 +427,83 @@ def build_static_datasets(train_config, tokenizer):
         )
     else:
         return collected[0]
+
+
+def build_local_datasets(train_config, tokenizer):
+    staging = {}
+    block_size = train_config.get("block_size")
+    stride = train_config.get("stride", 0)
+    collections = config["collections"]["local"]
+    datasets = train_config["datasets"]["local"]
+    for collection in datasets:
+        for dataset in collections[collection]:
+            if dataset not in staging:
+                ds_config = collections[collection][dataset] or {}
+
+                cache_path = f"{focus}/{str(block_size)}/{dataset}"
+                hashed = hash_directory("/" + dataset)
+
+                print(f"loading: {colors.BLUE}{cache_path}{colors.WHITE}")
+
+                cached = f"/data/datasets/{cache_path}/{hashed}.tar.gz"
+
+                if os.path.exists(cached):
+                    ds = StaticDataset(
+                        cached,
+                        block_size=block_size,
+                        from_cache=True,
+                    )
+                else:
+                    shutil.rmtree(f"/data/datasets/{cache_path}", ignore_errors=True)
+                    os.makedirs(f"/data/datasets/{cache_path}", exist_ok=True)
+
+                    ds = create_dataset(
+                        path="/" + dataset,
+                        tokenizer=tokenizer,
+                        block_size=block_size,
+                        stride=ds_config.get("stride", stride),
+                    )
+
+                    ds.save(cache_destination=cached)
+
+                val_split = ds_config.get("val_split", train_config.get("val_split", 0))
+                train_split = 1.0 - val_split
+
+                train_data, val_data = torch.utils.data.random_split(
+                    ds, [train_split, val_split]
+                )
+
+                weight = ds_config.get("weight", 1.0)
+                staging[dataset] = {
+                    "train": train_data,
+                    "val": val_data,
+                    "weight": weight,
+                }
+
+            else:
+                print(
+                    colors.GREEN
+                    + dataset
+                    + colors.WHITE
+                    + " is already loaded into memory"
+                )
+
+    # Merge all tokenized datasets into a single dataset for training
+    collected_train = []
+    collected_val = []
+    weights = []
+    for collection in staging:
+        train_data = staging[collection]["train"]
+        val_data = staging[collection]["val"]
+        collected_train.append(train_data)
+        collected_val.append(val_data)
+        weights += [staging[collection]["weight"]] * len(train_data)
+
+    return {
+        "train": ConcatDataset(collected_train),
+        "val": ConcatDataset(collected_val),
+        "weights": weights,
+    }
 
 
 if __name__ == "__main__":

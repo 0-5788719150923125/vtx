@@ -77,13 +77,6 @@ collections:
       content_key: text
       buffer_size: 1000
       val_samples: 1000
-    natural:
-      repo: Muennighoff/natural-instructions
-      instruct: True
-      buffer_size: 100000
-      val_split: test
-      val_samples: 10000
-      sample_rate: 1.0
     daily:
       repo: safetyllm/daily_conversations
       chat: True
@@ -91,6 +84,19 @@ collections:
       buffer_size: 1000
       sample_rate: 0.01
       val_samples: 10000
+    instruct:
+      hf: True
+      repo: Muennighoff/natural-instructions
+      split: train
+      schema: 
+        definition: ':> '
+        inputs: '¶{human}:> '
+        targets: '¶{robot}:> '
+      patterns:
+        - '{human}'
+        - '{robot}'
+      delimiter: '\n'
+      buffer_size: 10000
     cosmopedia-stories:
       hf: True
       repo: HuggingFaceTB/cosmopedia

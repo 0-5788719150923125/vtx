@@ -11,7 +11,7 @@ training:
   type: "pretrain"
   datasets:
     streaming:
-      - wikitext
+      - c4
   tokenizer: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   gradient_checkpointing: True
   optimizer: Lion
@@ -27,7 +27,7 @@ training:
   weight_decay: 0.1
   gradient_clip_val: 1.0
   val_split: 0.1
-  val_interval: 500
+  val_interval: 50
   generate_every: 100
   checkpoint_every: 500
   save_every: 500

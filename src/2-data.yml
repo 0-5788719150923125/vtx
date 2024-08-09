@@ -49,41 +49,44 @@ collections:
       lab/research:
       lab/pages:
   streaming:
-    refinedweb:
-      repo: tiiuae/falcon-refinedweb
-      content_key: content
-      buffer_size: 10000
     redpajama2:
+      hf: True
       repo: togethercomputer/RedPajama-Data-V2
-      content_key: raw_content
-      buffer_size: 10000
-      snapshots:
-        - "2023-14"
+      split: train
       subset: default
-      sequential: True
+      schema: 
+        raw_content: ''
+      buffer_size: 10000
       languages: 
         - "en"
+        - "de"
+        - "fr"
+        - "es"
+        - "it"
+      snapshots:
+        - "2023-14"
     c4:
+      hf: True
       repo: allenai/c4
-      sequential: True
-      subset: en.noblocklist
-      content_key: text
-      buffer_size: 100000
-      val_samples: 10000
-    wikitext:
-      repo: wikitext
-      sequential: True
-      subset: wikitext-103-raw-v1
-      content_key: text
-      buffer_size: 1000
-      val_samples: 1000
-    daily:
-      repo: safetyllm/daily_conversations
-      chat: True
-      content_key: text
-      buffer_size: 1000
-      sample_rate: 0.01
-      val_samples: 10000
+      split: train
+      val_split: validation
+      subset: multilingual
+      schema: 
+        text: ''
+      buffer_size: 10000
+    fineweb:
+      hf: True
+      repo: HuggingFaceFW/fineweb
+      split: train
+      subset: CC-MAIN-2024-10
+      schema: 
+        url: '¶{input}:> '
+        text: '¶{output}:> '
+      patterns:
+        - '{input}'
+        - '{output}'
+      delimiter: '\n'
+      buffer_size: 10000
     instruct:
       hf: True
       repo: Muennighoff/natural-instructions

@@ -14,7 +14,7 @@ training:
   type: "pretrain"
   datasets:
     streaming:
-      - wikitext
+      - c4
   tokenizer: True
   gradient_checkpointing: True
   optimizer: Lion

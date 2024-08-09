@@ -337,11 +337,11 @@ rot:
     block_size: 1024
     stride: 0
     num_steps: 10000
-    warmup_steps: 10
+    warmup_steps: 0
     batch_size: 1
     gradient_accumulation_steps: 16
-    gradient_clip_val: 1.0
-    scheduler: cosine
+    gradient_clip_val: 1.23
+    scheduler: constant
     val_split: 0.01
     val_interval: 500
     generate_every: 50

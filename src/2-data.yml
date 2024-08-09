@@ -68,11 +68,12 @@ collections:
     c4:
       hf: True
       repo: allenai/c4
-      split: train
-      val_split: validation
       subset: multilingual
       schema: 
         text: ''
+      split: train
+      val_split: validation
+      val_samples: 1000
       buffer_size: 10000
     fineweb:
       hf: True

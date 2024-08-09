@@ -1,6 +1,10 @@
 import logging
 import os
 import shutil
+import sys
+
+sys.path.append("/src")
+from common import get_identity, ship, wall
 
 root_path = "/lab/EVIL"
 
@@ -24,7 +28,9 @@ def main():
             )
             for i, v in enumerate(l):
                 try:
-                    string = f"## INPUT\n\n{l[i]}\n\n## OUTPUT\n\n```\n{r[i]}\n```\n"
+                    inp = get_identity()
+                    out = get_identity()
+                    string = f"{wall}{inp}{ship} {l[i]}\n{wall}{out}{ship} {r[i]}"
                     with open(
                         f"{root_path}/train/cmd{str(i)}.md", "w", newline=""
                     ) as file:

@@ -316,7 +316,7 @@ rot:
   # mode: chaos
   training:
     type: lora
-    r: 128
+    r: 64
     lora_alpha: 32
     lora_dropout: 0
     use_rslora: True

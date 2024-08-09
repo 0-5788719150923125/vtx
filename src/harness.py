@@ -8,15 +8,15 @@ import time
 
 import chardet
 import torch
+from lightning.pytorch import loggers
+from pypdf import PdfReader
+from tokenizers import Tokenizer
 from torch.utils.data import (
     ConcatDataset,
     DataLoader,
     WeightedRandomSampler,
     random_split,
 )
-from lightning.pytorch import loggers
-from pypdf import PdfReader
-from tokenizers import Tokenizer
 from transformers import (
     AutoConfig,
     AutoTokenizer,
@@ -39,6 +39,7 @@ except:
     from aigen.tokenizers import train_tokenizer
     from aigen.tuners import optimize_hparams
 
+import extensions
 from common import (
     colors,
     config,
@@ -48,7 +49,6 @@ from common import (
     list_full_paths,
     nist_beacon,
 )
-import extensions
 
 model_config = config[focus]
 train_config = model_config["training"]
@@ -73,7 +73,7 @@ def main():
     base_model = model_config.get("model")
     model_folder = "/data/models/" + focus
     launch_model = None
-    fresh_logs = False
+    fresh_logs = train_config.get("refresh_logs", False)
     resume = train_config.get("resume", False)
     use_petals = model_config.get("petals", False)
     adapter = train_config.get("name", "base")
@@ -213,7 +213,7 @@ def main():
 
     print("training on the following collections:")
     print(f"static data: {static_data}")
-    print(f"local data: {local_data['train']}")
+    print(f"local data: {len(local_data)} sets")
     print(f"streaming data: {streaming_data}")
 
     time.sleep(3)

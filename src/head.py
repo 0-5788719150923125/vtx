@@ -28,6 +28,7 @@ try:
 except:
     from aig import aigen
 
+import extensions
 from common import (
     colors,
     config,
@@ -38,7 +39,6 @@ from common import (
     ship,
     wall,
 )
-import extensions
 
 
 def validation(config):
@@ -70,6 +70,7 @@ def validation(config):
                 "precision": {"type": "integer", "allowed": [4, 8, 16, 32, 64, 128]},
                 "resume": {"type": "boolean"},
                 "regen": {"type": "boolean"},
+                "refresh_logs": {"type": "boolean"},
                 "corpus": {"type": "string"},
                 "generate_every": {"type": "integer"},
                 "checkpoint_every": {"type": "integer"},

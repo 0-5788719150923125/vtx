@@ -169,10 +169,6 @@ def main():
         if model_config.get("class"):
             setattr(pretrain_config, "_name_or_path", model_config.get("class"))
 
-    static_data = []
-    if len(train_config["datasets"].get("static", [])) > 0:
-        static_data.append(build_static_datasets(train_config, tokenizer))
-
     local_data = []
     if len(train_config["datasets"].get("local", [])) > 0:
         local_data.append(build_local_datasets(train_config, tokenizer))
@@ -207,12 +203,10 @@ def main():
         ),
     )
 
-    train_config["static_data"] = static_data
     train_config["local_data"] = local_data
     train_config["streaming_data"] = streaming_data
 
     print("training on the following collections:")
-    print(f"static data: {static_data}")
     print(f"local data: {len(local_data)} sets")
     print(f"streaming data: {streaming_data}")
 
@@ -360,76 +354,6 @@ def create_dataset(
 
 
 # Create a tokenized dataset from every directory specified in config file
-def build_static_datasets(train_config, tokenizer):
-    datasets = {}
-    block_size = train_config.get("block_size")
-    stride = train_config.get("stride", 0)
-    for collection in train_config["datasets"]["static"]:
-        for dataset in config["collections"]["static"][collection]:
-            if dataset not in datasets:
-                ds_config = config["collections"]["static"][collection][dataset] or {}
-
-                duplicate = ds_config.get("duplicate", 0)
-
-                cache_path = f"{focus}/{str(block_size)}/{dataset}"
-                hashed = hash_directory("/" + dataset)
-                while duplicate >= 0:
-                    new_path = f"{cache_path}/{str(duplicate)}"
-                    print(f"loading: {colors.BLUE}{new_path}{colors.WHITE}")
-
-                    cached = f"/data/datasets/{new_path}/{hashed}.tar.gz"
-
-                    if os.path.exists(cached):
-                        datasets[dataset + str(duplicate)] = StaticDataset(
-                            cached,
-                            block_size=block_size,
-                            from_cache=True,
-                        )
-                        duplicate -= 1
-                        continue
-
-                    shutil.rmtree(f"/data/datasets/{new_path}", ignore_errors=True)
-
-                    os.makedirs(f"/data/datasets/{new_path}", exist_ok=True)
-
-                    ds = create_dataset(
-                        path="/" + dataset,
-                        tokenizer=tokenizer,
-                        block_size=block_size,
-                        stride=ds_config.get("stride", stride),
-                        samples=ds_config.get("samples", 1.0),
-                    )
-
-                    ds.save(cache_destination=cached)
-
-                    datasets[dataset + str(duplicate)] = ds
-
-                    duplicate -= 1
-
-            else:
-                print(
-                    colors.GREEN
-                    + dataset
-                    + colors.WHITE
-                    + " is already loaded into memory"
-                )
-
-    # Merge all tokenized datasets into a single dataset for training
-    collected = []
-    for collection in train_config["datasets"]["static"]:
-        for dataset in config["collections"]["static"][collection]:
-            duplicate = 0
-            while dataset + str(duplicate) in datasets:
-                collected.append(datasets[dataset + str(duplicate)])
-                duplicate = duplicate + 1
-    if len(collected) > 1:
-        return merge_datasets(
-            collected, equalize=train_config.get("equalize_datasets", False)
-        )
-    else:
-        return collected[0]
-
-
 def build_local_datasets(train_config, tokenizer):
     staging = {}
     block_size = train_config.get("block_size")

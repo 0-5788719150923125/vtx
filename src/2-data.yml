@@ -37,7 +37,7 @@ source:
       passive_frequency: 0.01
 
 collections:
-  static:
+  local:
     default:
       src:
       env:

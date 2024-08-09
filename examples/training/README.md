@@ -108,7 +108,7 @@ Now, let's make sure our `config.yml` file is aware of our prepared dataset. For
 
 ```yml
 collections:
-  static:
+  local:
     test:
       lab/ghosts/train:
 ```
@@ -147,7 +147,7 @@ toe:
     save_every: 1000
     generate_every: 250
     datasets:
-      static:
+      local:
         - test
 ```
 

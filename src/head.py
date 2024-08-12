@@ -51,7 +51,10 @@ def validation(config):
         "profile": {"type": "boolean"},
         "generation_profile": {"type": "string"},
         "gpu_index": {"type": "integer"},
-        "precision": {"type": "integer", "allowed": [4, 8, 16, 32, 64, 128]},
+        "precision": {
+            "type": ["integer", "string"],
+            "allowed": [4, 8, 16, "b16", 32, 64, 128],
+        },
         "low_memory": {"type": "boolean"},
         "max_new_tokens": {"type": "integer"},
         "petals": {"type": "boolean"},
@@ -66,8 +69,11 @@ def validation(config):
             "type": "dict",
             "schema": {
                 "devices": {"type": ["string", "list"]},
-                "device_map": {"type": "string" or "dict"},
-                "precision": {"type": "integer", "allowed": [4, 8, 16, 32, 64, 128]},
+                "device_map": {"type": ["string", "dict"]},
+                "precision": {
+                    "type": ["integer", "string"],
+                    "allowed": [4, 8, 16, "b16", 32, 64, 128],
+                },
                 "resume": {"type": "boolean"},
                 "regen": {"type": "boolean"},
                 "refresh_logs": {"type": "boolean"},

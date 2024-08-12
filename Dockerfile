@@ -1,4 +1,4 @@
-ARG SOURCE_IMAGE
+ARG SOURCE_IMAGE='nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04'
 FROM $SOURCE_IMAGE
 
 ENV DEBIAN_FRONTEND="noninteractive"

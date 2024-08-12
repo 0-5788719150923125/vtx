@@ -4,7 +4,7 @@ src:
 herd:
   model: HuggingFaceTB/SmolLM-135M-Instruct
   info: a derelict hivemind
-  precision: 16
+  precision: b16
   context_length: 2048
   generation_profile: lowpenalty
   training:
@@ -47,7 +47,7 @@ herd:
 genus:
   model: Qwen/Qwen1.5-0.5B-Chat
   info: it's in the DNA
-  precision: 16
+  precision: b16
   training:
     type: lora
     r: 8
@@ -85,7 +85,7 @@ mind:
   model: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   info: use your heads
   context_length: 2048
-  precision: 16
+  precision: b16
   generation_profile: lowpenalty
   training:
     type: lora
@@ -184,19 +184,20 @@ soul:
     regen: False
 
 chaos:
-  model: EleutherAI/pythia-1.4b-deduped-v0
+  model: EleutherAI/pythia-410m-deduped-v0
   info: a monstrosity
   generation_profile: lowpenalty
-  precision: 16
+  precision: 32
   training:
     type: lora
-    r: 32
+    r: 8
     lora_alpha: 32
     lora_dropout: 0
     use_rslora: True
-    bias: "none"
+    use_dora: True
+    bias: "lora_only"
     target_modules:
-      - embed_in
+      # - embed_in
       - query_key_value
       - dense
       - dense_h_to_4h
@@ -204,25 +205,24 @@ chaos:
       - embed_out
     gradient_checkpointing: True
     optimizer: AdamW
-    learning_rate: 0.00022
-    block_size: 2048
-    stride: 256
-    num_steps: 60000
-    warmup_steps: 100
-    weight_decay: 0.1
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    block_size: 1024
+    stride: 0
+    num_steps: 1000
+    warmup_steps: 10
     gradient_clip_val: 1.0
     scheduler: cosine
     batch_size: 1
-    gradient_accumulation_steps: 8
+    gradient_accumulation_steps: 16
     val_split: 0.01
-    val_interval: 1000
-    generate_every: 25
-    save_every: 100
-    checkpoint_every: 100
+    val_interval: 100
+    generate_every: 5
+    save_every: 250
+    checkpoint_every: 250
     datasets:
       streaming:
         - instruct
-        - c4
 
 envy:
   model: facebook/opt-350m
@@ -278,10 +278,10 @@ wisdom:
     lora_alpha: 16
     lora_dropout: 0
     use_rslora: True
-    use_dora: False
+    use_dora: True
     bias: "none"
     target_modules:
-      - embeddings
+      # - embeddings
       - in_proj
       - x_proj
       - dt_proj
@@ -292,15 +292,15 @@ wisdom:
     learning_rate: 0.001
     block_size: 2048
     stride: 0
-    num_steps: 30000
-    warmup_steps: 1000
-    weight_decay: 0.01
+    num_steps: 1000
+    warmup_steps: 10
+    weight_decay: 0.0001
     gradient_clip_val: 1.0
     scheduler: cosine
     batch_size: 1
     gradient_accumulation_steps: 16
     val_split: 0.05
-    val_interval: 10000
+    val_interval: 100
 
 toe:
   info: nailed to the foot
@@ -313,19 +313,18 @@ rot:
   info: in the core
   precision: 32
   tokenizer: "NousResearch/Llama-2-7b-hf"
+  generation_profile: lowpenalty
   # mode: chaos
   training:
     type: lora
-    r: 64
-    lora_alpha: 32
+    r: 128
+    lora_alpha: 16
     lora_dropout: 0
     use_rslora: True
     use_dora: True
-    bias: "none"
+    bias: "lora_only"
     target_modules:
-      # - token_embeddings
       - qkv_proj
-      # - pos_embedding
       - out_proj
       - proj_1
       - proj_2
@@ -334,14 +333,14 @@ rot:
     optimizer: Prodigy
     scheduler: constant
     learning_rate: 1.0
-    weight_decay: 0.00001
+    weight_decay: 0.0001
     block_size: 1024
     stride: 0
     num_steps: 10000
     warmup_steps: 0
     batch_size: 1
     gradient_accumulation_steps: 16
-    gradient_clip_val: 1.23
+    gradient_clip_val: 1.0
     val_split: 0.01
     val_interval: 500
     generate_every: 50

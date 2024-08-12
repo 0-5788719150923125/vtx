@@ -10,11 +10,11 @@ herd:
   training:
     type: lora
     r: 64
-    lora_alpha: 32
+    lora_alpha: 16
     lora_dropout: 0
     use_rslora: True
-    use_dora: true
-    bias: "none"
+    use_dora: True
+    bias: "all"
     target_modules:
       - q_proj
       - k_proj
@@ -24,15 +24,15 @@ herd:
       - gate_proj
       - down_proj
     gradient_checkpointing: True
-    optimizer: Lion
-    learning_rate: 0.0001
+    optimizer: Prodigy
+    learning_rate: 1.0
     weight_decay: 0.00001
     block_size: 1024
     stride: 0
     num_steps: 10000
-    warmup_steps: 10
+    warmup_steps: 0
     gradient_clip_val: 1.0
-    scheduler: cosine
+    scheduler: constant
     batch_size: 1
     gradient_accumulation_steps: 16
     val_split: 0.01
@@ -42,7 +42,7 @@ herd:
     checkpoint_every: 100
     datasets:
       streaming:
-        - c4
+        - instruct
 
 genus:
   model: Qwen/Qwen1.5-0.5B-Chat
@@ -187,15 +187,16 @@ chaos:
   model: EleutherAI/pythia-410m-deduped-v0
   info: a monstrosity
   generation_profile: lowpenalty
-  precision: 32
+  precision: 16
   training:
+    precision: 16
     type: lora
-    r: 8
-    lora_alpha: 32
+    r: 64
+    lora_alpha: 16
     lora_dropout: 0
     use_rslora: True
     use_dora: True
-    bias: "lora_only"
+    bias: "all"
     target_modules:
       # - embed_in
       - query_key_value
@@ -204,20 +205,20 @@ chaos:
       - dense_4h_to_h
       - embed_out
     gradient_checkpointing: True
-    optimizer: AdamW
-    learning_rate: 0.001
-    weight_decay: 0.0001
+    optimizer: Prodigy
+    learning_rate: 1.0
+    weight_decay: 0.00001
     block_size: 1024
     stride: 0
-    num_steps: 1000
-    warmup_steps: 10
+    num_steps: 10000
+    warmup_steps: 0
     gradient_clip_val: 1.0
-    scheduler: cosine
+    scheduler: constant
     batch_size: 1
     gradient_accumulation_steps: 16
     val_split: 0.01
-    val_interval: 100
-    generate_every: 5
+    val_interval: 500
+    generate_every: 25
     save_every: 250
     checkpoint_every: 250
     datasets:

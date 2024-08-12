@@ -7,6 +7,30 @@ if os.environ.get("DEV_MODE", "false") == "true":
     time.sleep(1)
     debugpy.listen(("0.0.0.0", 5678))
 
+# ------ OPT ----------
+# import torch
+# from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+
+# model = AutoModelForCausalLM.from_pretrained(
+#     "facebook/opt-1.3b",
+#     cache_dir="/data/models",
+#     trust_remote_code=True,
+#     device_map="cpu",
+# )
+# tokenizer = AutoTokenizer.from_pretrained(
+#     "facebook/opt-1.3b", cache_dir="/data/models", trust_remote_code=True
+# )
+
+# prompt = "Once upon a time,"
+
+# print("starting generation")
+# inputs = tokenizer(prompt, return_tensors="pt")
+# output = model.generate(
+#     inputs["input_ids"], max_new_tokens=100, do_sample=True, temperature=0.7
+# )
+# print(tokenizer.decode(output[0].tolist(), skip_special_tokens=True))
+
+
 # ----- Mamba ------ #
 # from transformers import MambaConfig, MambaForCausalLM, AutoTokenizer
 # import torch

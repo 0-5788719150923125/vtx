@@ -1,7 +1,7 @@
 src:
   info: of all creation
 
-herd:
+pain:
   model: HuggingFaceTB/SmolLM-135M-Instruct
   info: a derelict hivemind
   precision: b16

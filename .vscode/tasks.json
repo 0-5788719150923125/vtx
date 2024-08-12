@@ -5,13 +5,13 @@
         "type": "pickString",
         "id": "model",
         "description": "Which model should I focus on?",
-        "options": ["src", "herd", "genus", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "wisdom", "toe", "rot"]
+        "options": ["src", "genus", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "wisdom", "pain", "toe", "rot"]
       },
       {
         "type": "pickString",
         "id": "container",
         "description": "Which container should I enter?",
-        "options": ["lab", "ctx", "uxo", "tbd", "ipf", "pet", "pen", "bit"]
+        "options": ["lab", "ctx", "uxo", "tbd", "ipf", "pet"]
       },
       {
         "type": "promptString",

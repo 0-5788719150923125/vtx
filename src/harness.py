@@ -197,6 +197,7 @@ def main():
         embeddings_dir="/data/embeddings/" + focus,
         tuning_mode=tuning_mode,
         pre_seq_len=pre_seq_len,
+        merge_adapters=False,
         precision=train_config.get("precision", model_config.get("precision", 32)),
         device_map=train_config.get(
             "device_map", model_config.get("device_map", "auto")

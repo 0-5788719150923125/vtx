@@ -278,6 +278,7 @@ class Cortex:
                 embeddings_dir=embeddings_dir,
                 adapter_dir=adapter_dir,
                 adapters=adapters,
+                merge_adapters=True,
                 precision=config.get("precision", 32),
                 pre_seq_len=pre_seq_len,
             )

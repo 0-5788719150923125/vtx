@@ -2,12 +2,13 @@ src:
   info: of all creation
 
 pain:
-  model: HuggingFaceTB/SmolLM-135M-Instruct
-  info: a derelict hivemind
+  model: HuggingFaceTB/SmolLM-360M
+  info: a derelict herd
   precision: b16
   context_length: 2048
   generation_profile: lowpenalty
   training:
+    precision: b16
     type: lora
     r: 64
     lora_alpha: 16
@@ -26,7 +27,7 @@ pain:
     gradient_checkpointing: True
     optimizer: Prodigy
     learning_rate: 1.0
-    weight_decay: 0.00001
+    weight_decay: 0.0001
     block_size: 1024
     stride: 0
     num_steps: 10000

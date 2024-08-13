@@ -134,6 +134,7 @@ def validation(config):
                     "allowed": [
                         "AdaBelief",
                         "Adan",
+                        "AdamG",
                         "AdamW",
                         "Kate",
                         "Lion",

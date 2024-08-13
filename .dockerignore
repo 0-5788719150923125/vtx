@@ -17,6 +17,7 @@ lab/
 !lab/lightning-hivemind
 lab/lightning-hivemind/venv
 !lab/ModuleFormer
+!lab/pytorch_optimizer
 *.ckpt
 **/*.ckpt
 *.key

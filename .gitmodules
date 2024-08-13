@@ -73,3 +73,6 @@
 [submodule "lab/dimanet"]
 	path = lab/dimanet
 	url = https://github.com/dimalmfao/dimanet.git
+[submodule "lab/pytorch_optimizer"]
+	path = lab/pytorch_optimizer
+	url = https://github.com/kozistr/pytorch_optimizer.git

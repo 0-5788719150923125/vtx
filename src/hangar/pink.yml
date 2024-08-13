@@ -14,9 +14,9 @@ training:
       - c4
   tokenizer: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   gradient_checkpointing: True
-  optimizer: Lion
-  scheduler: cosine
-  learning_rate: 0.00022
+  optimizer: Prodigy
+  scheduler: constant
+  learning_rate: 1.0
   lookahead: 7
   block_size: 768
   stride: 512

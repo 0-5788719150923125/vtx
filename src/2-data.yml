@@ -107,12 +107,13 @@ collections:
       split: train
       val_split: test
       schema: 
-        definition: ':> '
-        inputs: '¶{human}:> '
-        targets: '¶{robot}:> '
+        definition: '¶{context}:> '
+        inputs: '¶{user}:> '
+        targets: '¶{assistant}:> '
       patterns:
-        - '{human}'
-        - '{robot}'
+        - '{context}'
+        - '{user}'
+        - '{assistant}'
       delimiter: '\n'
       buffer_size: 10000
       val_samples: 1000
@@ -149,7 +150,7 @@ transformers:
     default:
       do_sample: True
       min_new_tokens: 1
-      max_new_tokens: 333
+      max_new_tokens: 512
       temperature: 0.95
       eta_cutoff: 0.002
       penalty_alpha: 0.6
@@ -158,7 +159,7 @@ transformers:
     lowpenalty:
       do_sample: True
       min_new_tokens: 1
-      max_new_tokens: 333
+      max_new_tokens: 512
       temperature: 0.95
       eta_cutoff: 0.002
       penalty_alpha: 0.6
@@ -168,7 +169,7 @@ transformers:
     longform:
       do_sample: True
       min_new_tokens: 11
-      max_new_tokens: 222
+      max_new_tokens: 512
       temperature: 0.8
       eta_cutoff: 0.002
       penalty_alpha: 0.59

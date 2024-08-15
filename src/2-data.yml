@@ -161,16 +161,16 @@ transformers:
       do_sample: True
       min_new_tokens: 1
       max_new_tokens: 512
-      temperature: 0.95
+      temperature: 0.7
       eta_cutoff: 0.002
       penalty_alpha: 0.6
       top_k: 4
-      repetition_penalty: 1.23
+      repetition_penalty: 1.25
     lowpenalty:
       do_sample: True
       min_new_tokens: 1
       max_new_tokens: 512
-      temperature: 0.95
+      temperature: 0.7
       eta_cutoff: 0.002
       penalty_alpha: 0.6
       top_k: 4

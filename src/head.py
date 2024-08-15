@@ -389,6 +389,22 @@ class Cortex:
                     return
         self.queue.pop(0)
 
+    def truncate_long_sequences(self, text, max_length=20):
+        result = ""
+        current_sequence = ""
+
+        for char in text:
+            if char.isspace():
+                result += current_sequence + char
+                current_sequence = ""
+            else:
+                current_sequence += char
+
+                if len(current_sequence) > max_length:
+                    return result.rstrip()
+
+        return result + current_sequence
+
     def check_similarity(self, ctx, message, threshold=0.7):
         for memory in ctx:
             score = cosine_similarity(memory["message"], message)
@@ -616,6 +632,9 @@ class Cortex:
                     continue
                 if output == "(":
                     continue
+
+                output = self.truncate_long_sequences(output, 20)
+
                 bias = group[2]
                 success = True
                 break

@@ -264,12 +264,11 @@ pain:
   info: a derelict herd
   precision: 32
   context_length: 2048
-  generation_profile: lowpenalty
   training:
     precision: b16
     type: lora
     r: 64
-    lora_alpha: 4
+    lora_alpha: 256
     lora_dropout: 0.1
     use_rslora: True
     use_dora: True

@@ -14,10 +14,10 @@ class Vision:
     def __init__(self):
         model = "facebook/deit-tiny-patch16-224"
         self.image_processor = AutoImageProcessor.from_pretrained(
-            model, cache_dir="/data/models"
+            model, cache_dir="/data/models", device_map="cpu"
         )
         self.model = ViTForImageClassification.from_pretrained(
-            model, cache_dir="/data/models"
+            model, cache_dir="/data/models", device_map="cpu"
         )
 
     # Function to convert and preprocess the image

@@ -1,51 +1,6 @@
 src:
   info: of all creation
 
-pain:
-  model: HuggingFaceTB/SmolLM-360M
-  info: a derelict herd
-  precision: 32
-  context_length: 2048
-  generation_profile: lowpenalty
-  training:
-    precision: b16
-    type: lora
-    r: 64
-    lora_alpha: 4
-    lora_dropout: 0.1
-    use_rslora: True
-    use_dora: True
-    bias: "all"
-    init_lora_weights: olora
-    target_modules:
-      - q_proj
-      - k_proj
-      - v_proj
-      - o_proj
-      - up_proj
-      - gate_proj
-      - down_proj
-    gradient_checkpointing: True
-    optimizer: Prodigy
-    learning_rate: 1.0
-    weight_decay: 0.001
-    block_size: 1024
-    stride: 0
-    num_steps: 10000
-    warmup_steps: 0
-    gradient_clip_val: 1.0
-    scheduler: constant
-    batch_size: 1
-    gradient_accumulation_steps: 16
-    val_split: 0.01
-    val_interval: 500
-    generate_every: 10
-    save_every: 100
-    checkpoint_every: 100
-    datasets:
-      streaming:
-        - instruct
-
 genus:
   model: Qwen/Qwen1.5-0.5B-Chat
   info: it's in the DNA
@@ -185,6 +140,76 @@ soul:
     batch_size: 6
     regen: False
 
+wisdom:
+  info: of the masses
+  model: state-spaces/mamba-130m-hf
+  training:
+    type: lora
+    r: 8
+    lora_alpha: 16
+    lora_dropout: 0
+    use_rslora: True
+    use_dora: True
+    bias: "none"
+    target_modules:
+      # - embeddings
+      - in_proj
+      - x_proj
+      - dt_proj
+      - out_proj
+    gradient_checkpointing: True
+    optimizer: AdamW
+    generate_every: 100
+    learning_rate: 0.001
+    block_size: 2048
+    stride: 0
+    num_steps: 1000
+    warmup_steps: 10
+    weight_decay: 0.0001
+    gradient_clip_val: 1.0
+    scheduler: cosine
+    batch_size: 1
+    gradient_accumulation_steps: 16
+    val_split: 0.05
+    val_interval: 100
+
+envy:
+  model: facebook/opt-350m
+  info: a simple transformer
+  generation_profile: lowpenalty
+  training:
+    regen: False
+    type: lora
+    r: 16
+    lora_alpha: 24
+    lora_dropout: 0.01
+    bias: "all"
+    use_rslora: False
+    use_dora: False
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - out_proj
+      - fc1
+      - fc2
+    gradient_checkpointing: True
+    optimizer: AdamW
+    generate_every: 250
+    learning_rate: 0.001
+    swa_learning_rate: 0.01
+    block_size: 2048
+    stride: 256
+    num_steps: 10000
+    warmup_steps: 100
+    weight_decay: 0.001
+    gradient_clip_val: 1.0
+    scheduler: cosine
+    batch_size: 1
+    gradient_accumulation_steps: 27
+    val_split: 0.05
+    val_interval: 10000
+
 chaos:
   model: EleutherAI/pythia-410m-deduped-v0
   info: a monstrosity
@@ -227,44 +252,6 @@ chaos:
       streaming:
         - instruct
 
-envy:
-  model: facebook/opt-350m
-  info: a simple transformer
-  generation_profile: lowpenalty
-  training:
-    regen: False
-    type: lora
-    r: 16
-    lora_alpha: 24
-    lora_dropout: 0.01
-    bias: "all"
-    use_rslora: False
-    use_dora: False
-    target_modules:
-      - q_proj
-      - k_proj
-      - v_proj
-      - out_proj
-      - fc1
-      - fc2
-    gradient_checkpointing: True
-    optimizer: AdamW
-    generate_every: 250
-    learning_rate: 0.001
-    swa_learning_rate: 0.01
-    block_size: 2048
-    stride: 256
-    num_steps: 10000
-    warmup_steps: 100
-    weight_decay: 0.001
-    gradient_clip_val: 1.0
-    scheduler: cosine
-    batch_size: 1
-    gradient_accumulation_steps: 27
-    val_split: 0.05
-    val_interval: 10000
-
-
 malice:
   model: cerebras/Cerebras-GPT-111M
   info: a GPT-2 clone
@@ -272,44 +259,51 @@ malice:
   training:
     type: lora
 
-wisdom:
-  info: of the masses
-  model: state-spaces/mamba-130m-hf
+pain:
+  model: HuggingFaceTB/SmolLM-360M
+  info: a derelict herd
+  precision: 32
+  context_length: 2048
+  generation_profile: lowpenalty
   training:
+    precision: b16
     type: lora
-    r: 8
-    lora_alpha: 16
-    lora_dropout: 0
+    r: 64
+    lora_alpha: 4
+    lora_dropout: 0.1
     use_rslora: True
     use_dora: True
-    bias: "none"
+    bias: "all"
+    init_lora_weights: olora
     target_modules:
-      # - embeddings
-      - in_proj
-      - x_proj
-      - dt_proj
-      - out_proj
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+      - up_proj
+      - gate_proj
+      - down_proj
     gradient_checkpointing: True
-    optimizer: AdamW
-    generate_every: 100
-    learning_rate: 0.001
-    block_size: 2048
+    optimizer: Prodigy
+    learning_rate: 1.0
+    weight_decay: 0.001
+    bias_correction: True
+    block_size: 1024
     stride: 0
-    num_steps: 1000
-    warmup_steps: 10
-    weight_decay: 0.0001
+    num_steps: 10000
+    warmup_steps: 0
     gradient_clip_val: 1.0
-    scheduler: cosine
+    scheduler: constant
     batch_size: 1
     gradient_accumulation_steps: 16
-    val_split: 0.05
-    val_interval: 100
-
-toe:
-  info: nailed to the foot
-  model: EleutherAI/gpt-neo-125M
-  training:
-    type: "loha"
+    val_split: 0.01
+    val_interval: 500
+    generate_every: 10
+    save_every: 100
+    checkpoint_every: 100
+    datasets:
+      streaming:
+        - instruct
 
 rot:
   model: apple/OpenELM-270M-Instruct
@@ -348,3 +342,9 @@ rot:
     val_interval: 500
     generate_every: 50
     save_every: 250
+
+toe:
+  info: nailed to the foot
+  model: EleutherAI/gpt-neo-125M
+  training:
+    type: "loha"

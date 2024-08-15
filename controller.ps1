@@ -1,5 +1,5 @@
 $CONTAINERS = @("lab", "ctx", "uxo", "tbd", "ipf", "pet", "bit")
-$MODELS = @("src", "genus", "frame", "mind", "heart", "soul", "envy", "chaos", "malice", "wisdom", "pain", "toe", "rot")
+$MODELS = @("src", "genus", "frame", "mind", "heart", "soul", "wisdom", "envy", "chaos", "malice", "pain", "rot", "toe")
 
 # Function to check if a command exists
 function Test-Command($cmdName) {

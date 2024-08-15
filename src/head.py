@@ -137,6 +137,8 @@ def validation(config):
                 "momentum": {"type": "float"},
                 "use_lookahead": {"type": "boolean"},
                 "k": {"type": "integer"},
+                "bias_correction": {"type": "boolean"},
+                "init_lora_weights": {"type": "string"},
                 "swa_learning_rate": {"type": "float"},
                 "stride": {"type": "integer"},
                 "update_period": {"type": "integer"},

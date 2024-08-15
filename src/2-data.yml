@@ -138,6 +138,21 @@ collections:
         - '{user2}'
       delimiter: '\n'
       buffer_size: 10000
+    dolly:
+      hf: True
+      repo: databricks/databricks-dolly-15k
+      split: train
+      schema:
+      schema: 
+        context: '¶{context}:> '
+        instruction: '¶{instruction}:> '
+        response: '¶{response}:> '
+      patterns:
+        - '{context}'
+        - '{instruction}'
+        - '{response}'
+      delimiter: '\n'
+      buffer_size: 10000
 
 # https://huggingface.co/docs/transformers/main_classes/text_generation
 transformers:

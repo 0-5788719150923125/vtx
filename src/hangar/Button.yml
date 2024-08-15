@@ -20,7 +20,8 @@ training:
   optimizer: Lion
   scheduler: cosine
   learning_rate: 0.000333
-  lookahead: 11
+  use_lookahead: True
+  k: 11
   block_size: 512
   warmup_steps: 100
   num_steps: 100000

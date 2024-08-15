@@ -17,7 +17,8 @@ training:
   optimizer: Prodigy
   scheduler: constant
   learning_rate: 1.0
-  lookahead: 7
+  use_lookahead: False
+  k: 7
   block_size: 768
   stride: 512
   warmup_steps: 20

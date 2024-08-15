@@ -19,7 +19,8 @@ training:
   optimizer: Lion
   scheduler: cosine
   learning_rate: 0.000333
-  lookahead: 5
+  use_lookahead: True
+  k: 5
   weight_decay: 0.1
   stride: 128
   block_size: 512

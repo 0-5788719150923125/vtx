@@ -31,6 +31,7 @@ RUN apt-get update -y \
     docker-buildx-plugin \
     docker-compose-plugin \
     git \
+    libaio-dev \
     libclang-dev \
     libopencv-dev \
     ninja-build \

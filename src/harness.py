@@ -177,7 +177,6 @@ def main():
     if train_config["datasets"].get("streaming"):
         for dataset in train_config["datasets"].get("streaming", []):
             streaming_config = config["collections"]["streaming"][dataset.lower()]
-            streaming_config["identity_function"] = get_identity
             streaming_data.append(streaming_config)
 
     # Erase old logs

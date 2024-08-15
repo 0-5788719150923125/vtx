@@ -81,11 +81,7 @@ collections:
       split: train
       subset: CC-MAIN-2024-10
       schema: 
-        url: '¶{input}:> '
-        text: '¶{output}:> '
-      patterns:
-        - '{input}'
-        - '{output}'
+        text: ''
       delimiter: '\n'
       buffer_size: 10000
     wikipedia:
@@ -94,11 +90,10 @@ collections:
       split: train
       subset: 20231101.en
       schema:
-        title: ':> '
-        # url: ''
-        text: '¶{assistant}:> '
+        title: ''
+        text: '¶{text}:> '
       patterns:
-        - '{assistant}'
+        - '{text}'
       delimiter: '\n'
       buffer_size: 10000
     instruct:

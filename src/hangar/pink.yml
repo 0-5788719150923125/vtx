@@ -11,9 +11,9 @@ training:
   type: "pretrain"
   tokenizer: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
   gradient_checkpointing: True
-  optimizer: Lion
-  scheduler: cosine
-  learning_rate: 0.0001
+  optimizer: Prodigy
+  scheduler: constant
+  learning_rate: 1.0
   use_lookahead: True
   k: 7
   block_size: 768

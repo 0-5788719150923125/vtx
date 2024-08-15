@@ -10,7 +10,7 @@
     "--line-length", 
     "88", 
     "--force-exclude", 
-    "moduleformer/(.*).py|lightning_hivemind/(.*).py|tests/test_strategy.py",
+    "moduleformer/(.*).py|lightning_hivemind/(.*).py|tests/test_strategy.py|pytorch_optimizer/(.*).py",
   ],
   "isort.args":[
     "--profile", 
@@ -18,7 +18,9 @@
     "--skip-glob",
     "lab/ModuleFormer/**",
     "--extend-skip-glob",
-    "lab/lightning-hivemind/**"
+    "lab/lightning-hivemind/**",
+    "--extend-skip-glob",
+    "lab/pytorch_optimizer/**"
   ],
   "isort.check": true,
   "prettier.enable": true,

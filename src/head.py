@@ -30,14 +30,14 @@ except:
 
 import extensions
 from common import (
-    colors,
-    config,
-    cosine_similarity,
-    focus,
-    nist_beacon,
-    remove_invisible_characters,
-    ship,
-    wall,
+  colors,
+  config,
+  cosine_similarity,
+  focus,
+  nist_beacon,
+  remove_invisible_characters,
+  ship,
+  wall,
 )
 
 
@@ -90,7 +90,7 @@ def validation(config):
                 },
                 "name": {"type": "string"},
                 "strategy": {"type": "string"},
-                "initial_piers": {"type": "list"},
+                "initial_peers": {"type": "list"},
                 "alpha": {"type": "integer"},
                 "module_dropout": {"type": "float"},
                 "rank_dropout": {"type": "float"},

@@ -12,7 +12,7 @@ from nltk.corpus import stopwords, wordnet
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-nltk.download("punkt_tab")
+nltk.download("punkt")
 nltk.download("stopwords")
 nltk.download("wordnet")
 

@@ -297,7 +297,7 @@ pain:
     gradient_accumulation_steps: 16
     val_split: 0.01
     val_interval: 2500
-    generate_every: 50
+    generate_every: 25
     save_every: 500
     checkpoint_every: 500
     datasets:

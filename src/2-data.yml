@@ -142,7 +142,6 @@ collections:
       hf: True
       repo: databricks/databricks-dolly-15k
       split: train
-      schema:
       schema: 
         context: '¶{context}:> '
         instruction: '¶{instruction}:> '
@@ -176,6 +175,15 @@ transformers:
       top_k: 4
       repetition_penalty: 1.1
       no_repeat_ngram_size: 13
+    chaotic:
+      do_sample: True
+      min_new_tokens: 1
+      max_new_tokens: 512
+      temperature: 0.9
+      eta_cutoff: 0.0003
+      penalty_alpha: 0.6
+      top_k: 4
+      repetition_penalty: 1.1
     longform:
       do_sample: True
       min_new_tokens: 11

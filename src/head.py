@@ -425,7 +425,6 @@ class Cortex:
         personas: List[str] = [],
         eos_tokens: list | None = None,
         generation_profile: str = "default",
-        dola_layers: str = "high",
     ):
         self.wait_in_queue(priority)
 
@@ -670,7 +669,6 @@ class Cortex:
         cleanup: bool = False,
         generation_profile: str = "longform",
         forbidden_chars: list = [],
-        dola_layers: str = "low",
     ):
         self.wait_in_queue(priority)
 

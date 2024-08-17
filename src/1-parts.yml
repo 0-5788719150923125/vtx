@@ -284,25 +284,25 @@ pain:
       - down_proj
     gradient_checkpointing: True
     optimizer: Lion
+    scheduler: cosine
     learning_rate: 0.0001
     weight_decay: 0.001
     use_gc: True
     block_size: 512
     stride: 0
-    num_steps: 10000
+    num_steps: 40000
     warmup_steps: 10
     gradient_clip_val: 1.0
-    scheduler: cosine
     batch_size: 1
     gradient_accumulation_steps: 16
     val_split: 0.01
-    val_interval: 500
-    generate_every: 10
-    save_every: 100
-    checkpoint_every: 100
-    # datasets:
-    #   streaming:
-    #     - instruct
+    val_interval: 2500
+    generate_every: 50
+    save_every: 500
+    checkpoint_every: 500
+    datasets:
+      streaming:
+        - instruct
 
 rot:
   model: apple/OpenELM-270M-Instruct

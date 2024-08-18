@@ -244,7 +244,6 @@ def create_dataset(
     tokenizer=None,
     block_size: int = 1024,
     stride: int = 0,
-    samples: float = 1.0,
 ):
     prefixes = [
         ".git",
@@ -292,8 +291,6 @@ def create_dataset(
     files = list_full_paths(path)
     random.shuffle(files)
 
-    files = [item for item in files if random.random() < samples]
-
     intermediate_path = "/tmp/intermediate.txt"
 
     for file in files:
@@ -322,13 +319,12 @@ def create_dataset(
                             string += page + "\n"
                     else:
                         string = content.read()
-                    intermediate.write(string + f"{tokenizer.eos_token}")
+
+                    if len(string) > 0:
+                        intermediate.write(string + f"{tokenizer.eos_token}")
 
         except Exception as e:
-            with open(intermediate_path, "a") as intermediate:
-                intermediate.write(f"failed:{file}{tokenizer.eos_token}")
             print(f"failed: {colors.RED}{file}{colors.WHITE}")
-            logging.error(e)
 
     print(f"tokenizing: {colors.BLUE}{path}{colors.WHITE}")
 

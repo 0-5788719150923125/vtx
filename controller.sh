@@ -117,7 +117,8 @@ case $action in
         $DOCKER_COMPOSE_COMMAND -f compose.yml -f compose.services.yml pull ;;
     "up" | "auto")
         if [[ -z "$FOCUS" ]]; then
-            read -p "Which model should we focus on? ${MODELS} " FOCUS
+            echo "MODELS = ${MODELS}"
+            read -p "Which model should we focus on? " FOCUS
         fi
         if [[ "$action" == "auto" ]]; then
             DETACHED="true"
@@ -139,7 +140,8 @@ case $action in
             $GPU up ${ARG1} ;;
     "train" | "trial") 
         if [[ -z "$FOCUS" ]]; then
-            read -p "Which model should we train? ${MODELS} " FOCUS
+            echo "MODELS = ${MODELS}"
+            read -p "Which model should we train? " FOCUS
         fi
         $DOCKER_COMPOSE_COMMAND \
             -f compose.yml \

@@ -118,7 +118,8 @@ if (-not (Test-Path 'config.yml')) {
 function Get-UserFocus {
     $userFocus = $env:FOCUS
     if ([string]::IsNullOrWhiteSpace($userFocus)) {
-        $userFocus = Read-Host "Which model should we focus on? $($MODELS -join ', ')"
+        Write-Host "MODELS = $($MODELS -join ', ')"
+        $userFocus = Read-Host "Which model should we focus on? "
         $env:FOCUS = $userFocus
     }
     return $userFocus
@@ -186,7 +187,8 @@ switch ($action) {
     }
     {$_ -in "train","trial"} {
         if (-not $env:FOCUS) {
-            $env:FOCUS = Read-Host "Which model should we train? $($MODELS -join ', ')"
+            Write-Host "MODELS = $($MODELS -join ', ')"
+            $env:FOCUS = Read-Host "Which model should we train? "
         }
         & Get-DockerComposeCommand "up" "-d" "tbd" "ipf"
         & Get-DockerComposeCommand "run" "-e" "FOCUS=$env:FOCUS" "-e" "TASK=$action" "lab" "python3" "harness.py"

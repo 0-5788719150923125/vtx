@@ -21,4 +21,5 @@ lab/lightning-hivemind/venv
 *.ckpt
 **/*.ckpt
 *.key
+*.pub
 *.db

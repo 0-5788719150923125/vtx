@@ -14,7 +14,7 @@ variable "username" {
 }
 
 variable "public_key" {
-  default     = "./pub.key"
+  default     = "./one.pub"
   description = "The public key for the admin user."
 }
 

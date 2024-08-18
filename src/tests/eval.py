@@ -8,12 +8,12 @@ sys.path.insert(
 
 try:
     from aigen.aigen import aigen
-    from aigen.aigen.datasets import StaticDataset, merge_datasets
+    from aigen.aigen.datasets import StaticDataset
     from aigen.aigen.tokenizers import train_tokenizer
     from aigen.aigen.tuners import optimize_hparams
 except:
     from aigen import aigen
-    from aigen.datasets import StaticDataset, merge_datasets
+    from aigen.datasets import StaticDataset
     from aigen.tokenizers import train_tokenizer
     from aigen.tuners import optimize_hparams
 

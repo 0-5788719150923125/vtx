@@ -11,12 +11,7 @@ import torch
 from lightning.pytorch import loggers
 from pypdf import PdfReader
 from tokenizers import Tokenizer
-from torch.utils.data import (
-    ConcatDataset,
-    DataLoader,
-    WeightedRandomSampler,
-    random_split,
-)
+from torch.utils.data import ConcatDataset, random_split
 from transformers import (
     AutoConfig,
     AutoTokenizer,
@@ -40,15 +35,7 @@ except:
     from aigen.tuners import optimize_hparams
 
 import extensions
-from common import (
-    colors,
-    config,
-    focus,
-    get_identity,
-    hash_directory,
-    list_full_paths,
-    nist_beacon,
-)
+from common import colors, config, focus, hash_directory, list_full_paths, nist_beacon
 
 model_config = config[focus]
 train_config = model_config["training"]
@@ -169,15 +156,15 @@ def main():
         if model_config.get("class"):
             setattr(pretrain_config, "_name_or_path", model_config.get("class"))
 
-    local_data = []
+    train_config["local_data"] = []
     if len(train_config["datasets"].get("local", [])) > 0:
-        local_data.append(build_local_datasets(train_config, tokenizer))
+        train_config["local_data"].append(build_local_datasets(train_config, tokenizer))
 
-    streaming_data = []
+    train_config["streaming_data"] = []
     if train_config["datasets"].get("streaming"):
         for dataset in train_config["datasets"].get("streaming", []):
             streaming_config = config["collections"]["streaming"][dataset.lower()]
-            streaming_data.append(streaming_config)
+            train_config["streaming_data"].append(streaming_config)
 
     # Erase old logs
     train_config["log_path"] = "/data/logs/" + focus
@@ -200,15 +187,6 @@ def main():
         precision=train_config.get("precision", model_config.get("precision", 32)),
         device_map=train_config.get("device_map", "auto"),
     )
-
-    train_config["local_data"] = local_data
-    train_config["streaming_data"] = streaming_data
-
-    print("training on the following collections:")
-    print(f"local data: {len(local_data)} sets")
-    print(f"streaming data: {streaming_data}")
-
-    time.sleep(3)
 
     if os.environ.get("TASK") == "trial":
         optimize_hparams(init_kwargs, train_config)

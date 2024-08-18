@@ -33,7 +33,7 @@ def main():
                 text = row["Text"]
 
                 with open(f"{root_dir}/train/excerpt{count}.md", "a") as target:
-                    target.write(f"{book} {chapter}:{verse} - {text}")
+                    target.write(f"{text} ({book} {chapter}:{verse})")
                     count += 1
 
 

@@ -244,17 +244,15 @@ def create_dataset(
     tokenizer=None,
     block_size: int = 1024,
     stride: int = 0,
+    exclude_suffixes=[],
 ):
     prefixes = [
         ".git",
         "/lab/reaper/logseq",
         "/lab/reaper/assets",
         "/lab/reaper/public",
-        "/lab/aigen/aigen/static",
         "/lab/opencog/learn/attic",
         "/lab/opencog/learn/learn-lang-diary",
-        "/src/__pycache__",
-        "/src/modules/__pycache__",
     ]
 
     suffixes = [
@@ -286,7 +284,7 @@ def create_dataset(
         "woff2",
         "xlsx",
         "zip",
-    ]
+    ] + exclude_suffixes
 
     files = list_full_paths(path)
     random.shuffle(files)
@@ -307,6 +305,7 @@ def create_dataset(
                     break
 
             if skip == True:
+                print(f"excluding: {colors.RED}{file}{colors.WHITE}")
                 continue
 
             with open(file, "r") as content:
@@ -381,6 +380,7 @@ def build_local_datasets(train_config, tokenizer):
                         tokenizer=tokenizer,
                         block_size=block_size,
                         stride=ds_config.get("stride", stride),
+                        exclude_suffixes=ds_config.get("exclude", []),
                     )
 
                     ds.save(cache_destination=cached)

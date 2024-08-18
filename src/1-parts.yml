@@ -272,7 +272,7 @@ pain:
     lora_dropout: 0.1
     use_rslora: True
     use_dora: True
-    bias: "lora_only"
+    bias: "all"
     init_lora_weights: olora
     target_modules:
       - q_proj

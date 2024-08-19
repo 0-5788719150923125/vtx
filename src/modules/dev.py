@@ -12,13 +12,15 @@ if os.environ.get("DEV_MODE", "false") == "true":
 # from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 # model = AutoModelForCausalLM.from_pretrained(
-#     "facebook/opt-1.3b",
+#     "HuggingFaceTB/SmolLM-360M-Instruct",
 #     cache_dir="/data/models",
 #     trust_remote_code=True,
 #     device_map="cpu",
 # )
 # tokenizer = AutoTokenizer.from_pretrained(
-#     "facebook/opt-1.3b", cache_dir="/data/models", trust_remote_code=True
+#     "HuggingFaceTB/SmolLM-360M-Instruct",
+#     cache_dir="/data/models",
+#     trust_remote_code=True,
 # )
 
 # prompt = "Once upon a time,"
@@ -26,9 +28,9 @@ if os.environ.get("DEV_MODE", "false") == "true":
 # print("starting generation")
 # inputs = tokenizer(prompt, return_tensors="pt")
 # output = model.generate(
-#     inputs["input_ids"], max_new_tokens=100, do_sample=True, temperature=0.7
+#     inputs["input_ids"], max_new_tokens=32, do_sample=True, temperature=0.7
 # )
-# print(tokenizer.decode(output[0].tolist(), skip_special_tokens=True))
+# print(tokenizer.decode(output[0].tolist(), skip_special_tokens=False))
 
 
 # ----- Mamba ------ #

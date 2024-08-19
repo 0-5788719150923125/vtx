@@ -137,6 +137,9 @@ def main():
 
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_model, **tokenizer_config)
 
+    for k, v in model_config.get("token_map", {}).items():
+        setattr(tokenizer, k, tokenizer.convert_ids_to_tokens(v))
+
     if hasattr(tokenizer, "pad_token") and tokenizer.pad_token is None:
         setattr(tokenizer, "pad_token", tokenizer.eos_token)
 

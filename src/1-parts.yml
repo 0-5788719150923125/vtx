@@ -260,10 +260,13 @@ malice:
     type: lora
 
 pain:
-  model: HuggingFaceTB/SmolLM-360M
+  model: HuggingFaceTB/SmolLM-360M-Instruct
   info: a derelict herd
   precision: 32
   generation_profile: chaotic
+  token_map:
+    bos_token: 0
+    eos_token: 0
   training:
     precision: b16
     type: lora
@@ -272,7 +275,7 @@ pain:
     lora_dropout: 0.1
     use_rslora: True
     use_dora: True
-    bias: "all"
+    bias: "none"
     init_lora_weights: olora
     target_modules:
       - q_proj

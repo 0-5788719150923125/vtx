@@ -30,14 +30,14 @@ except:
 
 import extensions
 from common import (
-  colors,
-  config,
-  cosine_similarity,
-  focus,
-  nist_beacon,
-  remove_invisible_characters,
-  ship,
-  wall,
+    colors,
+    config,
+    cosine_similarity,
+    focus,
+    nist_beacon,
+    remove_invisible_characters,
+    ship,
+    wall,
 )
 
 
@@ -64,6 +64,7 @@ def validation(config):
         "adapters": {"type": "list"},
         "assistant": {"type": "dict"},
         "tokenizer": {"type": ["boolean", "string"]},
+        "token_map": {"type": "dict"},
         "mode": {"type": "string"},
         "training": {
             "type": "dict",
@@ -270,6 +271,11 @@ class Cortex:
                 precision=config.get("precision", 32),
                 pre_seq_len=pre_seq_len,
             )
+
+            for k, v in config.get("token_map", {}).items():
+                setattr(
+                    prototype.tokenizer, k, prototype.tokenizer.convert_ids_to_tokens(v)
+                )
 
             if config.get("context_length") is not None:
                 setattr(

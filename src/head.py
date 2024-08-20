@@ -139,6 +139,8 @@ def validation(config):
                 "use_lookahead": {"type": "boolean"},
                 "k": {"type": "integer"},
                 "bias_correction": {"type": "boolean"},
+                "use_gc": {"type": "boolean"},
+                "adanorm": {"type": "boolean"},
                 "init_lora_weights": {"type": "string"},
                 "swa_learning_rate": {"type": "float"},
                 "stride": {"type": "integer"},

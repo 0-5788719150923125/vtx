@@ -213,7 +213,7 @@ envy:
 chaos:
   model: EleutherAI/pythia-410m-deduped-v0
   info: a monstrosity
-  generation_profile: lowpenalty
+  generation_profile: chaotic
   precision: 16
   training:
     precision: 16

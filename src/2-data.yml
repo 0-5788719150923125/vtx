@@ -175,11 +175,11 @@ transformers:
       top_k: 4
       repetition_penalty: 1.1
       no_repeat_ngram_size: 13
-    chaotic:
+    predictable:
       do_sample: True
       min_new_tokens: 1
       max_new_tokens: 512
-      temperature: 0.8
+      temperature: 0.3
       eta_cutoff: 0.002
       penalty_alpha: 0.6
       top_k: 4

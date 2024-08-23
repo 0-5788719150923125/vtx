@@ -220,12 +220,11 @@ chaos:
     type: lora
     r: 64
     lora_alpha: 16
-    lora_dropout: 0
+    lora_dropout: 0.1
     use_rslora: True
     use_dora: True
     bias: "all"
     target_modules:
-      # - embed_in
       - query_key_value
       - dense
       - dense_h_to_4h
@@ -234,20 +233,22 @@ chaos:
     gradient_checkpointing: True
     optimizer: Prodigy
     learning_rate: 1.0
-    weight_decay: 0.00001
+    weight_decay: 0.001
+    safeguard_warmup: True
+    bias_correction: True
     block_size: 1024
     stride: 0
-    num_steps: 10000
-    warmup_steps: 0
+    num_steps: 20000
+    warmup_steps: 100
     gradient_clip_val: 1.0
-    scheduler: constant
+    scheduler: cosine
     batch_size: 1
     gradient_accumulation_steps: 16
     val_split: 0.01
-    val_interval: 500
-    generate_every: 25
-    save_every: 250
-    checkpoint_every: 250
+    val_interval: 1000
+    generate_every: 10
+    save_every: 100
+    checkpoint_every: 100
     datasets:
       streaming:
         - instruct
@@ -263,7 +264,7 @@ pain:
   model: HuggingFaceTB/SmolLM-360M-Instruct
   info: a derelict herd
   precision: 32
-  generation_profile: chaotic
+  generation_profile: predictable
   token_map:
     bos_token: 0
     eos_token: 0
@@ -313,15 +314,14 @@ rot:
   info: in the core
   precision: 32
   tokenizer: "NousResearch/Llama-2-7b-hf"
-  generation_profile: lowpenalty
   training:
     type: lora
-    r: 128
-    lora_alpha: 16
-    lora_dropout: 0
+    r: 64
+    lora_alpha: 12
+    lora_dropout: 0.1
     use_rslora: True
     use_dora: True
-    bias: "lora_only"
+    bias: "none"
     target_modules:
       - qkv_proj
       - out_proj
@@ -329,21 +329,22 @@ rot:
       - proj_2
     tokenizer: "NousResearch/Llama-2-7b-hf"
     gradient_checkpointing: True
-    optimizer: Prodigy
-    scheduler: constant
-    learning_rate: 1.0
-    weight_decay: 0.0001
-    block_size: 1024
+    optimizer: Lion
+    scheduler: cosine
+    learning_rate: 0.0001
+    weight_decay: 0.001
+    block_size: 512
     stride: 0
-    num_steps: 10000
+    num_steps: 40000
     warmup_steps: 0
     batch_size: 1
     gradient_accumulation_steps: 16
     gradient_clip_val: 1.0
     val_split: 0.01
-    val_interval: 500
-    generate_every: 50
-    save_every: 250
+    val_interval: 2500
+    generate_every: 25
+    save_every: 500
+    checkpoint_every: 500
 
 toe:
   info: nailed to the foot

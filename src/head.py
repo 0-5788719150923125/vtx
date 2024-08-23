@@ -141,6 +141,7 @@ def validation(config):
                 "bias_correction": {"type": "boolean"},
                 "use_gc": {"type": "boolean"},
                 "adanorm": {"type": "boolean"},
+                "safeguard_warmup": {"type": "boolean"},
                 "init_lora_weights": {"type": "string"},
                 "swa_learning_rate": {"type": "float"},
                 "stride": {"type": "integer"},

@@ -4,6 +4,7 @@ matrix-nio[e2e]>=0.24.0
 # peft>=0.5.0
 # petals>=2.2.0.post1
 # pydantic<2.0.0
-/lab/petals
+# /lab/petals
+petals @ git+https://github.com/bigscience-workshop/petals.git@22afba627a7eb4fcfe9418c49472c6a51334b8ac
 /lab/ModuleFormer
 /lab/lightning-hivemind

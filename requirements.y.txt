@@ -1,5 +1,7 @@
 /src/aigen
-/lab/hivemind
+# /lab/hivemind
+hivemind @ git+https://github.com/learning-at-home/hivemind.git@213bff98a62accb91f254e2afdccbf1d69ebdea9
+# petals @ git+https://github.com/bigscience-workshop/petals.git@22afba627a7eb4fcfe9418c49472c6a51334b8ac
 # /lab/pytorch_optimizer
 peft>=0.11.1
 chardet>=5.2.0

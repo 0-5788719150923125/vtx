@@ -134,7 +134,7 @@ async def subscribe_events(config):
 class Client(discord.Client):
     def __init__(self, *args, **kwargs):
         self.config = kwargs["config"]
-        self.ignoring = False
+        self.ignoring = {}
         self.last_response_times = {}
         super().__init__(*args, **kwargs)
 
@@ -222,8 +222,14 @@ class Client(discord.Client):
         except Exception as e:
             logging.error(e)
 
-    def ignore(self, boolean):
-        self.ignoring = boolean
+    def should_ignore(self, target="global"):
+        self.ignoring[target] = True
+
+    def should_not_ignore(self, target="global"):
+        self.ignoring[target] = False
+
+    def is_ignoring(self, target="global"):
+        return self.ignoring.get(target, False)
 
     # randomly generate commentary
     async def start_musing(self):
@@ -238,7 +244,7 @@ class Client(discord.Client):
                     if random.random() > frequency:
                         continue
 
-                    self.ignore(True)
+                    self.should_ignore()
 
                     persona = choice.get("persona")
                     instruction = choice.get("instruction")
@@ -268,7 +274,7 @@ class Client(discord.Client):
                 except Exception as e:
                     logging.error(e)
 
-            self.ignore(False)
+            self.should_not_ignore()
 
     async def send_dm(self, bias):
         user = self.get_user(bias)
@@ -376,7 +382,7 @@ class Client(discord.Client):
             head.ctx.build_context(bias=int(self.user.id), message=pred)
             print(colors.GREEN + "ONE@DISCORD: " + colors.WHITE + pred)
 
-        if self.ignoring:
+        if self.is_ignoring(message.channel.id):
             return
 
         # We need to place all of the following logic into a dedicated function. We need to
@@ -450,6 +456,8 @@ class Client(discord.Client):
         if roll > frequency:
             return
 
+        self.should_ignore(message.channel.id)
+
         # generate a response from context and bias
         await asyncio.sleep(random.randint(2, 13))
         try:
@@ -507,6 +515,8 @@ class Client(discord.Client):
             import traceback
 
             print(traceback.format_exc())
+
+        self.should_not_ignore(message.channel.id)
 
     # Handle bots that update messages token-by-token
     async def on_message_edit(self, before, after):

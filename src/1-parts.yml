@@ -244,7 +244,7 @@ chaos:
     scheduler: cosine
     batch_size: 1
     gradient_accumulation_steps: 16
-    val_split: 0.01
+    val_split: 0.001
     val_interval: 1000
     generate_every: 10
     save_every: 100

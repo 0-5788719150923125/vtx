@@ -152,6 +152,14 @@ collections:
         - '{response}'
       delimiter: '\n'
       buffer_size: 10000
+    phi:
+      hf: True
+      repo: open-phi/textbooks
+      split: train
+      schema:
+        markdown: ''
+      delimiter: '\n'
+      buffer_size: 10000
 
 # https://huggingface.co/docs/transformers/main_classes/text_generation
 transformers:

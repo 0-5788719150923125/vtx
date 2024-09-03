@@ -71,6 +71,7 @@ def main():
 
     # Resume training on an existing model, or start with a fresh base model
     if resume == True:
+        fresh_logs = False
         if not os.path.exists(
             "/data/models/" + focus + "/pytorch_model.bin"
         ) or not os.path.exists("/data/models/" + focus + "/model.safetensors"):

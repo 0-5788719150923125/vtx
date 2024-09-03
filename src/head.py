@@ -30,14 +30,14 @@ except:
 
 import extensions
 from common import (
-    colors,
-    config,
-    cosine_similarity,
-    focus,
-    nist_beacon,
-    remove_invisible_characters,
-    ship,
-    wall,
+  colors,
+  config,
+  cosine_similarity,
+  focus,
+  nist_beacon,
+  remove_invisible_characters,
+  ship,
+  wall,
 )
 
 

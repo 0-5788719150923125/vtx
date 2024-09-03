@@ -2,12 +2,12 @@ import asyncio
 import base64
 import io
 import logging
+import math
 import os
 import random
-import time
-import math
 import re
 import threading
+import time
 from pprint import pprint
 
 import discord

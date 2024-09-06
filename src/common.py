@@ -71,6 +71,9 @@ else:
     )
     config = default_config
 
+if not isinstance(config, dict):
+    raise Exception("Your config.yml file is a valid YAML file. Please fix it.")
+
 
 def merge_dict(old, new):
     return merge({}, old, new, strategy=Strategy.REPLACE)

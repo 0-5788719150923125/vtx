@@ -214,7 +214,7 @@ chaos:
   model: EleutherAI/pythia-410m-deduped-v0
   info: a monstrosity
   generation_profile: chaotic
-  precision: 16
+  precision: 32
   training:
     precision: 16
     type: lora

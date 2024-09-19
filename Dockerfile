@@ -112,7 +112,6 @@ COPY lab/ /lab
 
 COPY requirements.y.txt ./
 
-COPY lab/pytorch_optimizer/ /lab/pytorch_optimizer
 COPY src/aigen /src/aigen
 
 RUN pip install -r requirements.y.txt && \

@@ -54,8 +54,8 @@ collections:
       repo: togethercomputer/RedPajama-Data-V2
       split: train
       subset: default
-      schema: 
-        raw_content: ''
+      schemas: 
+        - raw_content: ''
       buffer_size: 10000
       languages: 
         - "en"
@@ -69,8 +69,8 @@ collections:
       hf: True
       repo: allenai/c4
       subset: multilingual
-      schema: 
-        text: ''
+      schemas: 
+        - text: ''
       split: train
       val_split: validation
       val_samples: 1000
@@ -80,8 +80,8 @@ collections:
       repo: HuggingFaceFW/fineweb
       split: train
       subset: CC-MAIN-2024-10
-      schema: 
-        text: ''
+      schemas: 
+        - text: ''
       delimiter: '\n'
       buffer_size: 10000
     wikipedia:
@@ -89,9 +89,9 @@ collections:
       repo: wikimedia/wikipedia
       split: train
       subset: 20231101.en
-      schema:
-        title: ''
-        text: '¶{text}:> '
+      schemas:
+        - title: ''
+          text: '¶{text}:> '
       patterns:
         - '{text}'
       delimiter: '\n'
@@ -101,10 +101,10 @@ collections:
       repo: Muennighoff/natural-instructions
       split: train
       val_split: test
-      schema: 
-        definition: '¶{context}:> '
-        inputs: '¶{user}:> '
-        targets: '¶{assistant}:> '
+      schemas: 
+        - definition: '¶{context}:> '
+          inputs: '¶{user}:> '
+          targets: '¶{assistant}:> '
       patterns:
         - '{context}'
         - '{user}'
@@ -117,9 +117,9 @@ collections:
       repo: HuggingFaceTB/cosmopedia
       split: train
       subset: stories
-      schema: 
-        prompt: '¶{user1}:> '
-        text: '¶{user2}:> '
+      schemas: 
+        - prompt: '¶{user1}:> '
+          text: '¶{user2}:> '
       patterns:
         - '{user1}'
         - '{user2}'
@@ -130,9 +130,9 @@ collections:
       repo: HuggingFaceTB/cosmopedia
       split: train
       subset: web_samples_v2
-      schema: 
-        prompt: '¶{user1}:> '
-        text: '¶{user2}:> '
+      schemas: 
+        - prompt: '¶{user1}:> '
+          text: '¶{user2}:> '
       patterns:
         - '{user1}'
         - '{user2}'
@@ -142,10 +142,10 @@ collections:
       hf: True
       repo: databricks/databricks-dolly-15k
       split: train
-      schema: 
-        context: '¶{context}:> '
-        instruction: '¶{instruction}:> '
-        response: '¶{response}:> '
+      schemas: 
+        - context: '¶{context}:> '
+          instruction: '¶{instruction}:> '
+          response: '¶{response}:> '
       patterns:
         - '{context}'
         - '{instruction}'
@@ -156,8 +156,8 @@ collections:
       hf: True
       repo: open-phi/textbooks
       split: train
-      schema:
-        markdown: ''
+      schemas:
+        - markdown: ''
       delimiter: '\n'
       buffer_size: 10000
 

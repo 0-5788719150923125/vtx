@@ -138,6 +138,21 @@ collections:
         - '{user2}'
       delimiter: '\n'
       buffer_size: 10000
+    cosmopedia-python-edu:
+      hf: True
+      repo: HuggingFaceTB/smollm-corpus
+      split: train
+      subset: python-edu
+      schemas: 
+        - prompt: '¶{user1}:> '
+          text: '¶{user2}:> '
+        - prompt: 'INPUT: '
+          text: 'OUTPUT: '
+      patterns:
+        - '{user1}'
+        - '{user2}'
+      delimiter: '\n'
+      buffer_size: 10000
     dolly:
       hf: True
       repo: databricks/databricks-dolly-15k

@@ -17,3 +17,4 @@ book/static/tests
 *.pub
 *.db
 .wrangler
+src/data

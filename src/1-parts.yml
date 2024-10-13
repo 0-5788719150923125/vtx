@@ -346,6 +346,30 @@ rot:
     save_every: 500
     checkpoint_every: 500
 
+sick:
+  model: UNSAFE/Mixtress-135M
+  info: and tired
+  generation_profile: predictable
+  training:
+    type: standard
+    gradient_checkpointing: True
+    optimizer: GrokFastAdamW
+    scheduler: cosine
+    learning_rate: 0.001
+    weight_decay: 0.1
+    block_size: 768
+    stride: 0
+    num_steps: 2000
+    warmup_steps: 200
+    grokfast_after_step: 100
+    batch_size: 1
+    gradient_accumulation_steps: 16
+    gradient_clip_val: 1.0
+    val_split: 0.01
+    val_interval: 250
+    generate_every: 25
+    save_every: 500
+
 toe:
   info: nailed to the foot
   model: EleutherAI/gpt-neo-125M

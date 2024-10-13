@@ -161,6 +161,12 @@ collections:
         - context: '¶{context}:> '
           instruction: '¶{instruction}:> '
           response: '¶{response}:> '
+        - context: 'SYSTEM: '
+          instruction: 'USER: '
+          response: 'ASSISTANT: '
+        - context: 'CONTEXT: '
+          instruction: 'INPUT: '
+          response: 'OUTPUT: '
       patterns:
         - '{context}'
         - '{instruction}'

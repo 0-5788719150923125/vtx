@@ -10,4 +10,5 @@ system.packages.install:
       - gcc
       - git
       - gnupg
+      - python3-venv
       - vim

@@ -30,14 +30,14 @@ except:
 
 import extensions
 from common import (
-  colors,
-  config,
-  cosine_similarity,
-  focus,
-  nist_beacon,
-  remove_invisible_characters,
-  ship,
-  wall,
+    colors,
+    config,
+    cosine_similarity,
+    focus,
+    nist_beacon,
+    remove_invisible_characters,
+    ship,
+    wall,
 )
 
 
@@ -421,6 +421,13 @@ class Cortex:
                 return False
         return True
 
+    def _remove_words_and_right(self, text, words_to_remove):
+        for word in words_to_remove:
+            index = text.lower().find(word.lower())
+            if index != -1:
+                text = text[:index]
+        return text.strip()
+
     @to_thread
     def chat(
         self,
@@ -642,6 +649,10 @@ class Cortex:
                     continue
 
                 output = self.truncate_long_sequences(output, 20)
+                output = self._remove_words_and_right(
+                    output,
+                    ["CONTEXT:", "INPUT:", "OUTPUT:", "SYSTEM:", "USER:", "ASSISTANT:"],
+                )
 
                 bias = group[2]
                 success = True

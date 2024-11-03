@@ -349,26 +349,25 @@ rot:
 sick:
   model: UNSAFE/Mixtress-135M
   info: and tired
-  generation_profile: predictable
+  generation_profile: lowpenalty
   training:
     type: standard
     gradient_checkpointing: True
-    optimizer: GrokFastAdamW
+    optimizer: Lion
     scheduler: cosine
-    learning_rate: 0.001
-    weight_decay: 0.1
-    block_size: 768
+    learning_rate: 0.0001
+    weight_decay: 0.001
+    block_size: 512
     stride: 0
-    num_steps: 2000
-    warmup_steps: 200
-    grokfast_after_step: 100
+    num_steps: 1000
+    warmup_steps: 100
     batch_size: 1
     gradient_accumulation_steps: 16
     gradient_clip_val: 1.0
     val_split: 0.01
     val_interval: 250
     generate_every: 25
-    save_every: 500
+    save_every: 250
 
 toe:
   info: nailed to the foot

@@ -56,7 +56,7 @@ collections:
       subset: default
       schemas: 
         - raw_content: ''
-      buffer_size: 10000
+      buffer_size: 1000
       languages: 
         - "en"
         - "de"
@@ -74,7 +74,7 @@ collections:
       split: train
       val_split: validation
       val_samples: 1000
-      buffer_size: 10000
+      buffer_size: 1000
     fineweb:
       hf: True
       repo: HuggingFaceFW/fineweb
@@ -83,7 +83,7 @@ collections:
       schemas: 
         - text: ''
       delimiter: '\n'
-      buffer_size: 10000
+      buffer_size: 1000
     wikipedia:
       hf: True
       repo: wikimedia/wikipedia
@@ -95,7 +95,7 @@ collections:
       patterns:
         - '{text}'
       delimiter: '\n'
-      buffer_size: 10000
+      buffer_size: 1000
     instruct:
       hf: True
       repo: Muennighoff/natural-instructions
@@ -110,7 +110,7 @@ collections:
         - '{user}'
         - '{assistant}'
       delimiter: '\n'
-      buffer_size: 10000
+      buffer_size: 1000
       val_samples: 1000
     cosmopedia-stories:
       hf: True
@@ -124,7 +124,7 @@ collections:
         - '{user1}'
         - '{user2}'
       delimiter: '\n'
-      buffer_size: 10000
+      buffer_size: 1000
     cosmopedia-web:
       hf: True
       repo: HuggingFaceTB/cosmopedia
@@ -137,7 +137,7 @@ collections:
         - '{user1}'
         - '{user2}'
       delimiter: '\n'
-      buffer_size: 10000
+      buffer_size: 1000
     cosmopedia-python-edu:
       hf: True
       repo: HuggingFaceTB/smollm-corpus
@@ -152,7 +152,7 @@ collections:
         - '{user1}'
         - '{user2}'
       delimiter: '\n'
-      buffer_size: 10000
+      buffer_size: 1000
     dolly:
       hf: True
       repo: databricks/databricks-dolly-15k
@@ -172,7 +172,7 @@ collections:
         - '{instruction}'
         - '{response}'
       delimiter: '\n'
-      buffer_size: 10000
+      buffer_size: 1000
     phi:
       hf: True
       repo: open-phi/textbooks
@@ -180,7 +180,7 @@ collections:
       schemas:
         - markdown: ''
       delimiter: '\n'
-      buffer_size: 10000
+      buffer_size: 1000
 
 # https://huggingface.co/docs/transformers/main_classes/text_generation
 transformers:

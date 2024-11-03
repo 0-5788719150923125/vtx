@@ -128,8 +128,11 @@ resource "azurerm_linux_virtual_machine" "main" {
     on_failure = fail
     inline = [
       "set -o errexit",
-      "sudo curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring.gpg https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/3005/salt-archive-keyring.gpg",
-      "echo 'deb [signed-by=/etc/apt/keyrings/salt-archive-keyring.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/3005 jammy main' | sudo tee /etc/apt/sources.list.d/salt.list",
+      "mkdir -p /etc/apt/keyrings",
+      # "sudo curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring.gpg https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/3005/salt-archive-keyring.gpg",
+      "curl -fsSL https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public | sudo tee /etc/apt/keyrings/salt-archive-keyring.pgp",
+      "curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources",
+      # "echo 'deb [signed-by=/etc/apt/keyrings/salt-archive-keyring.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/3005 jammy main' | sudo tee /etc/apt/sources.list.d/salt.list",
       "export DEBIAN_FRONTEND='noninteractive'",
       "sudo apt-get update",
       "echo 'pausing until cloud-init is complete'",

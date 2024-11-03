@@ -10,6 +10,7 @@ sys.path.append("/src")
 from common import config, get_identity, list_full_paths, ship, wall
 
 root_dir = "/lab/discord"
+output_dir = "train"
 
 style = "original"
 # style = "chaos"
@@ -52,10 +53,10 @@ def main():
         return transform_message(message)
 
     # Ensure export path exists and is clean
-    if os.path.exists(f"{root_dir}/train"):
-        shutil.rmtree(f"{root_dir}/train")
+    if os.path.exists(f"{root_dir}/{output_dir}"):
+        shutil.rmtree(f"{root_dir}/{output_dir}")
 
-    os.makedirs(f"{root_dir}/train")
+    os.makedirs(f"{root_dir}/{output_dir}")
 
     successes = 0
     failures = 0
@@ -83,7 +84,9 @@ def main():
                     if author_id == False:
                         continue
 
-                new_file = filename.replace(f"{root_dir}/source/", f"{root_dir}/train/")
+                new_file = filename.replace(
+                    f"{root_dir}/source/", f"{root_dir}/{output_dir}/"
+                )
 
                 os.makedirs(os.path.dirname(new_file), exist_ok=True)
 
@@ -200,10 +203,10 @@ def alt():
         return message
 
     # Ensure export path exists and is clean
-    if os.path.exists(f"{root_dir}/train"):
-        shutil.rmtree(f"{root_dir}/train")
+    if os.path.exists(f"{root_dir}/{output_dir}"):
+        shutil.rmtree(f"{root_dir}/{output_dir}")
 
-    os.makedirs(f"{root_dir}/train")
+    os.makedirs(f"{root_dir}/{output_dir}")
 
     successes = 0
     failures = 0
@@ -220,7 +223,9 @@ def alt():
                 if i["type"] not in ["Default", "Reply"]:
                     continue
 
-                new_file = filename.replace(f"{root_dir}/source/", f"{root_dir}/train/")
+                new_file = filename.replace(
+                    f"{root_dir}/source/", f"{root_dir}/{output_dir}/"
+                )
 
                 os.makedirs(os.path.dirname(new_file), exist_ok=True)
 

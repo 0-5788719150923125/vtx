@@ -261,50 +261,50 @@ malice:
     type: lora
 
 pain:
-  model: HuggingFaceTB/SmolLM-360M-Instruct
+  model: HuggingFaceTB/SmolLM2-135M-Instruct
   info: a derelict herd
   precision: 32
-  generation_profile: predictable
-  token_map:
-    bos_token: 0
-    eos_token: 0
+  generation_profile: gentle
+  # token_map:
+  #   bos_token: 0
+  #   eos_token: 0
   training:
-    precision: b16
+    # precision: b16
     type: lora
-    r: 64
-    lora_alpha: 12
-    lora_dropout: 0.1
+    r: 4
+    lora_alpha: 8
+    lora_dropout: 0.0
     use_rslora: True
     use_dora: True
     bias: "none"
     init_lora_weights: olora
     target_modules:
       - q_proj
-      - k_proj
-      - v_proj
-      - o_proj
+      # - k_proj
+      # - v_proj
+      # - o_proj
       - up_proj
       - gate_proj
-      - down_proj
+      # - down_proj
     gradient_checkpointing: True
-    optimizer: Lion
+    optimizer: GrokFastAdamW
     scheduler: cosine
-    learning_rate: 0.0001
-    weight_decay: 0.001
-    use_gc: True
-    adanorm: True
+    learning_rate: 0.0003
+    weight_decay: 0.01
+    # use_gc: True
+    # adanorm: True
     block_size: 512
     stride: 0
-    num_steps: 40000
+    num_steps: 10000
     warmup_steps: 10
     gradient_clip_val: 1.0
     batch_size: 1
-    gradient_accumulation_steps: 16
+    gradient_accumulation_steps: 64
     val_split: 0.01
-    val_interval: 2500
+    val_interval: 1000
     generate_every: 25
-    save_every: 500
-    checkpoint_every: 500
+    save_every: 250
+    checkpoint_every: 250
     datasets:
       streaming:
         - instruct

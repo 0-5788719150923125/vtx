@@ -654,6 +654,9 @@ class Cortex:
                     ["CONTEXT:", "INPUT:", "OUTPUT:", "SYSTEM:", "USER:", "ASSISTANT:"],
                 )
 
+                if output == "":
+                    continue
+
                 bias = group[2]
                 success = True
                 break
@@ -763,6 +766,7 @@ class Cortex:
                     mode=self.config.get("mode", "transformer"),
                     generation_config=generation_config,
                     do_sample=generation_config.get("do_sample", True),
+                    dola_layers=generation_config.get("dola_layers", None),
                     temperature=temperature,
                     min_new_tokens=(
                         min_new_tokens

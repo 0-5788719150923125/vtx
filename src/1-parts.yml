@@ -261,7 +261,7 @@ malice:
     type: lora
 
 pain:
-  model: HuggingFaceTB/SmolLM2-135M-Instruct
+  model: HuggingFaceTB/SmolLM2-360M-Instruct
   info: a derelict herd
   precision: 32
   generation_profile: gentle
@@ -271,8 +271,8 @@ pain:
   training:
     # precision: b16
     type: lora
-    r: 4
-    lora_alpha: 8
+    r: 8
+    lora_alpha: 16
     lora_dropout: 0.0
     use_rslora: True
     use_dora: True
